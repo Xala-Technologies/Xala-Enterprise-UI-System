@@ -92,37 +92,70 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
   return classificationStyles[classification] || {}; };
 
 // Arrow component
-const TooltipArrow = ({ placement,
-  classification, }: { placement: string;
-  classification?: string; }): React.ReactElement => { return (
+const TooltipArrow = ({ 
+  placement,
+  classification 
+}: { 
+  placement: string;
+  classification?: string; 
+}): React.ReactElement => {
+  return (
     <span
-      style={{ fontSize: 'var(--font-size-xs)',
+      style={{ 
+        fontSize: 'var(--font-size-xs)',
         marginRight: 'var(--spacing-1)',
-        opacity: '0.9', }}
+        opacity: '0.9' 
+      }}
+      aria-label={`Placement: ${placement}`}
+    >
+      ▲
+    </span>
+  );
+};
+
+// Classification indicator
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
+  return (
+    <span
+      style={{ 
+        fontSize: 'var(--font-size-xs)',
+        marginRight: 'var(--spacing-1)',
+        opacity: '0.9' 
+      }}
       aria-label={`Classification: ${level}`}
     >
       {getClassificationIcon(level)}
     </span>
-  ); };
+  );
+};
 
 // Help category indicator
-const HelpCategoryIndicator = ({ category }: { category?: string }): React.ReactElement => { return (
+const HelpCategoryIndicator = ({ category }: { category?: string }): React.ReactElement => {
+  return (
     <span
-      style={{ fontSize: 'var(--font-size-xs)',
+      style={{ 
+        fontSize: 'var(--font-size-xs)',
         marginRight: 'var(--spacing-1)',
-        opacity: '0.8', }}
+        opacity: '0.8' 
+      }}
       aria-label={`Help category: ${category}`}
     >
-      {getCategoryIcon(category)}
+      {getCategoryIcon(category || '')}
     </span>
-  ); };
+  );
+};
 
 // Tooltip content component
-const TooltipContent = ({ contentKey,
+const TooltipContent = ({ 
+  contentKey,
   content,
-  norwegian, }: { contentKey?: string;
+  norwegian 
+}: { 
+  contentKey?: string;
   content?: unknown;
-  norwegian?: TooltipProps['norwegian']; }): React.ReactElement => { return (
+  norwegian?: TooltipProps['norwegian']; 
+}): React.ReactElement => {
+  return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-1)' }}>
       {/* Classification indicator */}
       {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
@@ -135,10 +168,41 @@ const TooltipContent = ({ contentKey,
         {content || (contentKey ? /* TODO: Replace with actual localization */ contentKey : '')}
       </span>
     </div>
-  ); };
+  );
+};
 
 // Tooltip component with forwardRef
-export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): React.ReactElement => { return () => { return (
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): React.ReactElement => {
+  const {
+    children,
+    content,
+    contentKey,
+    placement = 'top',
+    arrow = true,
+    interactive = false,
+    className,
+    norwegian,
+    ariaLabel,
+    testId = 'tooltip',
+    ...divProps
+  } = props;
+
+  const [isVisible, setIsVisible] = React.useState(false);
+  const triggerRef = React.useRef<HTMLDivElement>(null);
+  const tooltipRef = React.useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = (): void => setIsVisible(true);
+  const handleMouseLeave = (): void => setIsVisible(false);
+  const handleClick = (): void => setIsVisible(!isVisible);
+  const handleFocus = (): void => setIsVisible(true);
+  const handleBlur = (): void => setIsVisible(false);
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Escape') setIsVisible(false);
+  };
+
+  const combinedStyles = React.useMemo(() => getTooltipStyles(props), [props]);
+
+  return (
     <>
       {/* Trigger element */}
       <div

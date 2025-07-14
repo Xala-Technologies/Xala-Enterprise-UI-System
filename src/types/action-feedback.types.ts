@@ -56,6 +56,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
 export interface ModalProps extends ActionFeedbackComponentProps {
   isOpen: boolean;
   title?: string; // Modal title text
+  titleKey?: string; // Translation key for title
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   centered?: boolean;
@@ -63,6 +64,10 @@ export interface ModalProps extends ActionFeedbackComponentProps {
   closeOnEscape?: boolean;
   closeOnOverlay?: boolean;
   showOverlay?: boolean;
+  scrollable?: boolean; // Allow modal content to scroll
+  persistent?: boolean; // Prevent closing by clicking outside
+  norwegian?: NorwegianFeedbackConfig; // Norwegian compliance configuration
+  ariaLabel?: string; // Accessibility label
   features?: {
     scrollable?: boolean;
     autoFocus?: boolean;
@@ -293,3 +298,39 @@ export interface ProgressIndicatorProps extends ComponentProps {
     showSpeed?: boolean;
   };
 }
+
+// Button group props
+export interface ButtonGroupProps extends ComponentProps {
+  buttons: ButtonProps[];
+  orientation?: 'horizontal' | 'vertical';
+  spacing?: 'sm' | 'md' | 'lg';
+  variant?: 'primary' | 'secondary' | 'tertiary';
+  size?: 'sm' | 'md' | 'lg';
+}
+
+// Norwegian feedback configuration
+export interface NorwegianFeedbackConfig {
+  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  category?: string;
+  complianceLevel?: 'NSM' | 'DigDir' | 'WCAG_2_2_AAA';
+  auditRequired?: boolean;
+  language?: 'no' | 'nb' | 'nn' | 'en';
+}
+
+// Norwegian action context
+export interface NorwegianActionContext {
+  classification: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  category: string;
+  userRole?: string;
+  permissions?: string[];
+  auditLog?: boolean;
+}
+
+// Action feedback types union
+export type ActionFeedbackTypes = 
+  | 'button'
+  | 'modal'
+  | 'toast'
+  | 'alert'
+  | 'progress'
+  | 'buttonGroup';

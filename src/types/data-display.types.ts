@@ -142,6 +142,13 @@ export interface BadgeProps extends DataDisplayComponentProps {
   count?: number;
   showZero?: boolean;
   max?: number;
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'; // Badge position
+  pulse?: boolean; // Animated pulse effect
+  maxCount?: number; // Maximum count to display
+  dot?: boolean; // Show as dot instead of count
+  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG'; // Norwegian classification
+  priority?: 'low' | 'medium' | 'high' | 'critical'; // Priority level
+  accessible?: boolean; // Enhanced accessibility features
 }
 
 // Tooltip component props

@@ -20,6 +20,15 @@ const logger = Logger.create({
 // Global tokens (primitive values)
 export * from './global-tokens';
 
+// NEW: Semantic tokens (industry-standard structure)
+export * from './semantic';
+
+// Alias tokens (semantic layer) - DEPRECATED: Use semantic tokens instead
+export * from './alias-tokens';
+
+// Component tokens (component-specific)
+export * from './component-tokens';
+
 // Semantic token system
 export * from './semantic-token-system';
 
@@ -48,12 +57,12 @@ export { DynamicTokenLoader } from './dynamic-token-loader';
 
 // Accessibility utilities
 export {
-  accessibilityPresets,
-  generateAccessibilityTokens,
-  getAriaAttributes,
-  getKeyboardAttributes,
-  meetsContrastRequirements,
-  meetsTouchTargetRequirements,
+    accessibilityPresets,
+    generateAccessibilityTokens,
+    getAriaAttributes,
+    getKeyboardAttributes,
+    meetsContrastRequirements,
+    meetsTouchTargetRequirements
 } from './accessibility-tokens';
 
 // =============================================================================
@@ -128,25 +137,25 @@ export {
 // =============================================================================
 
 export type {
-  // Core token types
-  TokenPath,
-  TokenValue,
+    // Core token types
+    TokenPath,
+    TokenValue
 } from './semantic-token-system';
 
 export type {
-  // Accessibility types
-  AccessibilityConfig,
-  AccessibilityLevel,
-  AccessibilityPreset,
-  AccessibilityTokens,
+    // Accessibility types
+    AccessibilityConfig,
+    AccessibilityLevel,
+    AccessibilityPreset,
+    AccessibilityTokens
 } from './accessibility-tokens';
 
 export type {
-  BrandingConfig,
-  // Dynamic loading types
-  TenantTokenConfig,
-  TokenOverrideConfig,
-  WhiteLabelConfig,
+    BrandingConfig,
+    // Dynamic loading types
+    TenantTokenConfig,
+    TokenOverrideConfig,
+    WhiteLabelConfig
 } from './dynamic-token-loader';
 
 // =============================================================================

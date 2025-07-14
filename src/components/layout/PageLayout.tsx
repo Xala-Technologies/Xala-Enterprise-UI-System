@@ -29,7 +29,36 @@ export function PageLayout({
   ...props
 }: PageLayoutProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const pageClasses = React.useMemo((): React.ReactElement => {
+  const pageClasses = React.useMemo((): string => {
+    const classes = ['page-layout'];
+    
+    // Variant class
+    classes.push(`page-layout--${variant}`);
+    
+    // Full width class
+    if (fullWidth) {
+      classes.push('page-layout--full-width');
+    }
+    
+    // Background class
+    classes.push(`page-layout--bg-${background}`);
+    
+    // Padding class
+    classes.push(`page-layout--padding-${padding}`);
+    
+    // Margin class
+    if (margin !== 'none') {
+      classes.push(`page-layout--margin-${margin}`);
+    }
+    
+    // Custom class
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, fullWidth, background, padding, margin, className]);
+
   return (
     <div className={pageClasses} data-testid={testId} {...props}>
       {header && <header className="page-layout__header">{header}</header>}

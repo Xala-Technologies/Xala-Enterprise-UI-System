@@ -3,10 +3,9 @@
  * Comprehensive mobile-first layout system with touch optimization
  */
 
-import { xalaAccessibility } from '@/lib/accessibility/wcag-aaa';
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useEffect, useState, type ReactNode } from 'react';
+import React, { forwardRef, useState, type ReactNode } from 'react';
 import { BaseLayout } from '../BaseLayout';
 
 /**
@@ -141,28 +140,20 @@ const mobileContentVariants = cva(
 export interface MobileHeaderProps extends React.HTMLAttributes<HTMLElement> {
   /** Header content */
   readonly children?: ReactNode;
-
   /** Header variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'transparent';
-
   /** Header size */
   readonly size?: 'sm' | 'md' | 'lg';
-
   /** Left action (usually menu button) */
   readonly leftAction?: ReactNode;
-
   /** Right action (usually profile/settings) */
   readonly rightAction?: ReactNode;
-
   /** Center content (usually title) */
   readonly centerContent?: ReactNode;
-
   /** Header title */
   readonly title?: string;
-
   /** Show back button */
   readonly showBackButton?: boolean;
-
   /** Back button handler */
   readonly onBack?: () => void;
 }
@@ -180,13 +171,10 @@ export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLEl
     readonly onClick?: () => void;
     readonly badge?: string | number;
   }>;
-
   /** Bottom navigation variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'transparent';
-
   /** Active item index */
   readonly activeIndex?: number;
-
   /** Navigation change handler */
   readonly onNavigate?: (index: number) => void;
 }
@@ -197,22 +185,16 @@ export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLEl
 export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> {
   /** Drawer content */
   readonly children: ReactNode;
-
   /** Drawer position */
   readonly position?: 'left' | 'right';
-
   /** Open state */
   readonly open?: boolean;
-
   /** Close handler */
   readonly onClose?: () => void;
-
   /** Drawer title */
   readonly title?: string;
-
   /** Header content */
   readonly header?: ReactNode;
-
   /** Footer content */
   readonly footer?: ReactNode;
 }
@@ -223,19 +205,14 @@ export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> {
 export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> {
   /** Content */
   readonly children: ReactNode;
-
   /** Content padding */
   readonly padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-
   /** Bottom safe area */
   readonly bottomSafe?: boolean;
-
   /** Content title */
   readonly title?: string;
-
   /** Pull to refresh */
   readonly pullToRefresh?: boolean;
-
   /** Refresh handler */
   readonly onRefresh?: () => void;
 }
@@ -246,22 +223,16 @@ export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> {
 export interface MobileLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Layout content */
   readonly children: ReactNode;
-
   /** Header component */
   readonly header?: ReactNode;
-
   /** Bottom navigation component */
   readonly bottomNavigation?: ReactNode;
-
   /** Drawer component */
   readonly drawer?: ReactNode;
-
   /** Drawer open state */
   readonly drawerOpen?: boolean;
-
   /** Drawer close handler */
   readonly onDrawerClose?: () => void;
-
   /** Status bar style */
   readonly statusBarStyle?: 'default' | 'light' | 'dark';
 }
@@ -286,7 +257,7 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    return (
       <header
         ref={ref}
         role="banner"
@@ -336,8 +307,11 @@ MobileHeader.displayName = 'MobileHeader';
  * Mobile Bottom Navigation Component
  */
 export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNavigationProps>(
-  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): React.ReactElement => {
-  return (
+  (
+    { items, variant = 'default', activeIndex = 0, onNavigate, className, ...props },
+    ref
+  ): React.ReactElement => {
+    return (
       <nav
         ref={ref}
         role="navigation"
@@ -348,8 +322,56 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
         {items.map((item, index) => (
           <button
             key={index}
-            onClick={(): React.ReactElement => {
-  return (
+            onClick={() => {
+              item.onClick?.();
+              onNavigate?.(index);
+            }}
+            className={cn(
+              'flex flex-col items-center justify-center p-2 rounded-md transition-colors',
+              'hover:bg-accent hover:text-accent-foreground',
+              'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+              activeIndex === index ? 'text-primary' : 'text-muted-foreground'
+            )}
+            aria-label={item.label}
+            aria-current={activeIndex === index ? 'page' : undefined}
+          >
+            <div className="relative">
+              {item.icon}
+              {item.badge && (
+                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  {item.badge}
+                </span>
+              )}
+            </div>
+            <span className="text-xs mt-1 truncate">{item.label}</span>
+          </button>
+        ))}
+      </nav>
+    );
+  }
+);
+
+MobileBottomNavigation.displayName = 'MobileBottomNavigation';
+
+/**
+ * Mobile Drawer Component
+ */
+export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
+  (
+    {
+      children,
+      position = 'left',
+      open = false,
+      onClose,
+      title,
+      header,
+      footer,
+      className,
+      ...props
+    },
+    ref
+  ): React.ReactElement => {
+    return (
       <>
         {/* Overlay */}
         {open && (
@@ -415,7 +437,17 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    const [refreshing, setRefreshing] = useState(false);
+
+    const handleRefresh = async (): Promise<void> => {
+      if (onRefresh && !refreshing) {
+        setRefreshing(true);
+        await onRefresh();
+        setRefreshing(false);
+      }
+    };
+
+    return (
       <main
         ref={ref}
         role="main"
@@ -459,7 +491,7 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    return (
       <BaseLayout
         ref={ref}
         platform="mobile"

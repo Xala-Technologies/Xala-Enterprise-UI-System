@@ -137,7 +137,77 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    const handleRowSelect = (rowId: string): void => {
+      if (onRowSelect) {
+        const isSelected = selectedRows.includes(rowId);
+        if (isSelected) {
+          onRowSelect(selectedRows.filter(id => id !== rowId));
+        } else {
+          onRowSelect([...selectedRows, rowId]);
+        }
+      }
+    };
+
+    const handleSort = (columnKey: string): void => {
+      if (onSort) {
+        const newDirection = sortBy === columnKey && sortDirection === 'asc' ? 'desc' : 'asc';
+        onSort(columnKey, newDirection);
+      }
+    };
+
+    const renderHeader = (): React.ReactElement => (
+      <thead className="bg-muted/50">
+        <tr className="border-b border-border">
+          {onRowSelect && (
+            <th className="w-12 p-3">
+              <input
+                type="checkbox"
+                checked={selectedRows.length === data.length && data.length > 0}
+                onChange={() => {
+                  if (selectedRows.length === data.length) {
+                    onRowSelect([]);
+                  } else {
+                    onRowSelect(data.map((_, index) => rowKey(_, index)));
+                  }
+                }}
+                className="rounded border-border focus:ring-ring"
+                aria-label="Select all rows"
+              />
+            </th>
+          )}
+          {columns.map(column => (
+            <th
+              key={column.key}
+              className={cn(
+                'p-3 text-left font-medium text-muted-foreground',
+                column.sortable && 'cursor-pointer hover:text-foreground'
+              )}
+              onClick={() => column.sortable && handleSort(column.key)}
+            >
+              <div className="flex items-center gap-2">
+                {column.header}
+                {column.sortable && sortBy === column.key && (
+                  <span className="text-xs">
+                    {sortDirection === 'asc' ? '↑' : '↓'}
+                  </span>
+                )}
+              </div>
+            </th>
+          ))}
+          {actions.length > 0 && (
+            <th className="w-20 p-3 text-right">Actions</th>
+          )}
+        </tr>
+      </thead>
+    );
+
+    const renderBody = (): React.ReactElement => (
+      <tbody>
+        {data.map((item, index) => {
+          const rowId = rowKey(item, index);
+          const isSelected = selectedRows.includes(rowId);
+
+          return (
             <tr
               key={rowId}
               className={cn(

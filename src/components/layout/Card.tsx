@@ -44,7 +44,42 @@ export function Card({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const cardClasses = React.useMemo((): React.ReactElement => {
+  const cardClasses = React.useMemo((): string => {
+    const classes = ['card'];
+    
+    // Variant class
+    classes.push(`card--${variant}`);
+    
+    // Shadow class
+    classes.push(`card--shadow-${shadow}`);
+    
+    // Border radius class
+    classes.push(`card--radius-${borderRadius}`);
+    
+    // Interactive class
+    if (interactive) {
+      classes.push('card--interactive');
+    }
+    
+    // Background class
+    classes.push(`card--bg-${background}`);
+    
+    // Padding class
+    classes.push(`card--padding-${padding}`);
+    
+    // Margin class
+    if (margin !== 'none') {
+      classes.push(`card--margin-${margin}`);
+    }
+    
+    // Custom class
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, shadow, borderRadius, interactive, background, padding, margin, className]);
+
   return (
     <div
       className={cardClasses}
@@ -67,7 +102,10 @@ export function Card({
 /**
  * Metadata section component
  */
-const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): React.ReactElement => {
+const MetadataSection: React.FC<{ metadata?: CardProps['metadata'] }> = ({ metadata }): React.ReactElement | null => {
+  const { t } = useLocalization();
+  if (!metadata) return null;
+  
   return (
     <div className="card__metadata">
       {metadata.lastUpdated && (

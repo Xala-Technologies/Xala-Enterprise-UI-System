@@ -139,7 +139,14 @@ const TableHeader: React.FC<{
 }> = ({ columns, sorting, onSortChange, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const handleSort = (column: TableColumn): React.ReactElement => {
+  const handleSort = (column: TableColumn): void => {
+    if (column.sortable && onSortChange) {
+      const currentOrder = sorting?.defaultSortBy === column.key ? sorting.defaultSortOrder : 'asc';
+      const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+      onSortChange(column.key, newOrder);
+    }
+  };
+
   return (
     <thead className="datatable__header">
       <tr className="datatable__header-row">
@@ -328,6 +335,29 @@ const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.
 };
 
 // Utility formatting functions (simplified for enterprise standards)
+const formatCellValue = (value: unknown, column: TableColumn, row: TableData): React.ReactNode => {
+  if (value === null || value === undefined) {
+    return '-';
+  }
+
+  switch (column.type) {
+    case 'personal-number':
+      return formatPersonalNumber(String(value));
+    case 'organization-number':
+      return formatOrganizationNumber(String(value));
+    case 'date':
+      return formatDate(value, column.format as string || 'DD.MM.YYYY');
+    case 'currency':
+      return formatCurrency(Number(value), column.currency || 'NOK');
+    case 'number':
+      return formatNumber(Number(value), column.format);
+    case 'boolean':
+      return formatBoolean(Boolean(value), column.format as { trueKey: string; falseKey: string });
+    default:
+      return String(value);
+  }
+};
+
 function formatPersonalNumber(value: string): string {
   const cleaned = value.replace(/\D/g, '');
   if (cleaned.length === 11) {

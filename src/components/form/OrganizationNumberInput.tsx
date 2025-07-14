@@ -25,9 +25,52 @@ const validateOrganizationNumber = (value: string) => ({
   mainOrganization: value,
 });
 
-const formatOrganizationNumber = (value: string): React.ReactElement => {
-  return () => {
-  return (
+const formatOrganizationNumber = (value: string): string => {
+  const cleaned = value.replace(/\D/g, '');
+  if (cleaned.length === 9) {
+    return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
+  }
+  return value;
+};
+
+// Main component
+export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, OrganizationNumberInputProps>(
+  (props, ref): React.ReactElement => {
+    const {
+      label,
+      required,
+      testId = 'org-number-input',
+      helpText,
+      norwegian,
+      ...inputProps
+    } = props;
+
+    const [currentValue, setCurrentValue] = React.useState('');
+    const [validationResult, setValidationResult] = React.useState(validateOrganizationNumber(''));
+    const [isValidating, setIsValidating] = React.useState(false);
+    const [isFetchingData, setIsFetchingData] = React.useState(false);
+    const [orgData, setOrgData] = React.useState<any>(null);
+
+    const inputId = `${testId}-input`;
+    const hasValidationErrors = !validationResult.isValid;
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const value = e.target.value;
+      setCurrentValue(value);
+      setValidationResult(validateOrganizationNumber(value));
+    };
+
+    const handleBlur = (): void => {
+      // Additional validation on blur
+    };
+
+    const handleFocus = (): void => {
+      // Handle focus events
+    };
+
+    const inputClasses = `organization-number-input ${hasValidationErrors ? 'organization-number-input--error' : ''}`;
+
+    return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={inputId} />}
@@ -35,23 +78,20 @@ const formatOrganizationNumber = (value: string): React.ReactElement => {
       {/* Input with validation indicator */}
       <div className="organization-number-field__input-wrapper">
         <input
+          ref={ref}
           id={inputId}
-          name={name}
           type="text"
           value={currentValue}
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          placeholder={placeholder || 'Enter organization number'}
+          placeholder="Enter organization number"
           required={required}
-          disabled={disabled}
-          readOnly={readOnly}
-          maxLength={norwegian.displayFormat === 'nnn nnn nnn' ? 11 : 9}
+          maxLength={9}
           className={inputClasses}
           aria-invalid={hasValidationErrors}
           aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-validation`}
           aria-required={required}
-          data-variant={variant}
           {...inputProps}
         />
 
@@ -82,7 +122,10 @@ const formatOrganizationNumber = (value: string): React.ReactElement => {
       </div>
     </div>
   );
-}
+  }
+);
+
+OrganizationNumberInput.displayName = 'OrganizationNumberInput';
 
 /**
  * Organization data display component
@@ -90,8 +133,9 @@ const formatOrganizationNumber = (value: string): React.ReactElement => {
 const OrganizationDisplay: React.FC<{
   orgData?: unknown; // Changed type to any as OrganizationData is removed
   isLoading: boolean;
-}> = ({ orgData, _isLoading }): React.ReactElement => {
-  return (
+}> = ({ orgData, isLoading }): React.ReactElement => {
+  if (isLoading) {
+    return (
       <div className="organization-display organization-display--loading">
         <span className="organization-display__loading-icon" aria-hidden="true">
           ⏳
@@ -102,7 +146,7 @@ const OrganizationDisplay: React.FC<{
   }
 
   if (!orgData) {
-    return null;
+    return <></>;
   }
 
   const getStatusIcon = (status: string): string => {
@@ -114,30 +158,32 @@ const OrganizationDisplay: React.FC<{
     return icons[status as keyof typeof icons] || '❓';
   };
 
+  const data = orgData as any;
+  
   return (
     <div className="organization-display">
       <div className="organization-display__header">
-        <span className="organization-display__name">{orgData.name}</span>
+        <span className="organization-display__name">{data?.name || 'Unknown'}</span>
         <span className="organization-display__status">
           <span className="organization-display__status-icon" aria-hidden="true">
-            {getStatusIcon(orgData.status)}
+            {getStatusIcon(data?.status || 'unknown')}
           </span>
-          <span className="organization-display__status-text">{orgData.status}</span>
+          <span className="organization-display__status-text">{data?.status || 'Unknown'}</span>
         </span>
       </div>
 
       <div className="organization-display__details">
-        <span className="organization-display__form">{orgData.organizationForm}</span>
+        <span className="organization-display__form">{data?.organizationForm || 'Unknown'}</span>
         <span className="organization-display__location">
-          {orgData.municipality}, {orgData.county}
+          {data?.municipality || 'Unknown'}, {data?.county || 'Unknown'}
         </span>
       </div>
 
-      {orgData.industry && (
+      {data?.industry && (
         <div className="organization-display__industry">
-          <span className="organization-display__industry-code">{orgData.industry.code}</span>
+          <span className="organization-display__industry-code">{data.industry.code}</span>
           <span className="organization-display__industry-description">
-            {orgData.industry.description}
+            {data.industry.description}
           </span>
         </div>
       )}
@@ -153,7 +199,8 @@ const ValidationIndicator: React.FC<{
   isValidating: boolean;
   type?: string;
 }> = ({ isValid, isValidating, type }): React.ReactElement => {
-  return (
+  if (isValidating) {
+    return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
@@ -174,7 +221,7 @@ const ValidationIndicator: React.FC<{
     );
   }
 
-  return null;
+  return <></>;
 };
 
 /**
@@ -240,5 +287,3 @@ const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null>
 
   return mockData[orgNumber] || null;
 };
-
-OrganizationNumberInput.displayName = 'OrganizationNumberInput';
