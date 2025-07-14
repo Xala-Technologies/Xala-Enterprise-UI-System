@@ -13,10 +13,16 @@ export type { StackAlign, StackDirection, StackGap, StackJustify, StackProps } f
 
 // Grid components
 export { Grid, GridItem } from './Grid';
-export type { GridCols, GridGap, GridItemProps, GridItemSpan, GridItemStart, GridProps } from './Grid';
+export type {
+  GridCols,
+  GridGap,
+  GridItemProps,
+  GridItemSpan,
+  GridItemStart,
+  GridProps,
+} from './Grid';
 
 // Legacy components (maintained for backward compatibility)
 export { Card } from './Card';
 export { PageLayout } from './PageLayout';
 export { Section } from './Section';
-

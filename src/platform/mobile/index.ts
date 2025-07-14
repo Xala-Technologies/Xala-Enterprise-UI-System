@@ -10,8 +10,8 @@ export { MobileHeaderButton } from './components/MobileHeaderButton';
 // export { MobileContainer } from './layouts/MobileContainer';
 
 // Export types
-export type { } from // Will be exported once components are properly typed
-    '../types/mobile.types';
+export type {} from // Will be exported once components are properly typed
+'../types/mobile.types';
 
 // Mobile platform utilities
 export const mobileUtils = {

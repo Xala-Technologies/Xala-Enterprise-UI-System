@@ -8,10 +8,12 @@ export * from './mobile';
 export * from './desktop';
 
 // Platform utility types
-export type { PlatformComponentProps,
+export type {
+  PlatformComponentProps,
   TouchFriendlyProps,
   HoverFriendlyProps,
   NorwegianPlatformConfig,
   ResponsiveBreakpoints,
   PlatformDetection,
-  PlatformTypes, } from '../../types/platform.types';
+  PlatformTypes,
+} from '../../types/platform.types';

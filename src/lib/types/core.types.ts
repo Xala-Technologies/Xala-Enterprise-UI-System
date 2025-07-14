@@ -4,7 +4,6 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-
 import type { CSSProperties as ReactCSSProperties } from 'react';
 import type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/accessibility-tokens';
 
@@ -72,12 +71,28 @@ export interface CSSProperties extends ReactCSSProperties {
 /**
  * Supported languages for UI system
  */
-export type SupportedLanguage = 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'nl' | 'sv' | 'da' | 'fi' | 'no';
+export type SupportedLanguage =
+  | 'en'
+  | 'es'
+  | 'fr'
+  | 'de'
+  | 'it'
+  | 'pt'
+  | 'nl'
+  | 'sv'
+  | 'da'
+  | 'fi'
+  | 'no';
 
 /**
  * Accessibility levels
  */
-export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' | 'WCAG_2_2_AAA' | 'none';
+export type AccessibilityLevel =
+  | 'WCAG_2_1_AA'
+  | 'WCAG_2_1_AAA'
+  | 'WCAG_2_2_AA'
+  | 'WCAG_2_2_AAA'
+  | 'none';
 
 /**
  * Main UI System configuration
@@ -85,16 +100,16 @@ export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' 
 export interface UISystemConfig {
   /** System name/identifier */
   readonly name: string;
-  
+
   /** System version */
   readonly version: string;
-  
+
   /** Default language */
   readonly defaultLanguage: SupportedLanguage;
-  
+
   /** Accessibility configuration (optional) */
   readonly accessibility?: AccessibilityConfig | AccessibilityPreset;
-  
+
   /** Theme configuration */
   readonly theme?: {
     readonly mode?: 'light' | 'dark' | 'auto';
@@ -102,7 +117,7 @@ export interface UISystemConfig {
     readonly secondary?: string;
     readonly customTokens?: Record<string, string>;
   };
-  
+
   /** Performance configuration */
   readonly performance?: {
     readonly enableVirtualization?: boolean;
@@ -110,7 +125,7 @@ export interface UISystemConfig {
     readonly enableMemoization?: boolean;
     readonly bundleSize?: 'minimal' | 'standard' | 'full';
   };
-  
+
   /** Development configuration */
   readonly development?: {
     readonly enableDebugMode?: boolean;
@@ -126,16 +141,16 @@ export interface UISystemConfig {
 export interface UISystemOptions {
   /** Configuration object */
   readonly config: UISystemConfig;
-  
+
   /** Custom CSS injection */
   readonly customCSS?: string;
-  
+
   /** Custom token overrides */
   readonly tokenOverrides?: Record<string, string>;
-  
+
   /** Container element for the UI system */
   readonly container?: HTMLElement;
-  
+
   /** Initialization callbacks */
   readonly onInitialized?: () => void;
   readonly onError?: (error: Error) => void;
@@ -147,16 +162,16 @@ export interface UISystemOptions {
 export interface ComponentProps {
   /** Custom CSS class names */
   readonly className?: string;
-  
+
   /** Inline styles (discouraged, use tokens instead) */
   readonly style?: CSSProperties;
-  
+
   /** Test identifier for automated testing */
   readonly testId?: string;
-  
+
   /** Custom data attributes */
   readonly [key: `data-${string}`]: string | undefined;
-  
+
   /** ARIA attributes for accessibility */
   readonly [key: `aria-${string}`]: string | boolean | undefined;
 }
@@ -189,25 +204,25 @@ export interface EventHandlers {
 export interface AccessibilityProps {
   /** ARIA label */
   readonly 'aria-label'?: string;
-  
+
   /** ARIA described by */
   readonly 'aria-describedby'?: string;
-  
+
   /** ARIA required */
   readonly 'aria-required'?: boolean;
-  
+
   /** ARIA invalid */
   readonly 'aria-invalid'?: boolean;
-  
+
   /** ARIA expanded */
   readonly 'aria-expanded'?: boolean;
-  
+
   /** ARIA hidden */
   readonly 'aria-hidden'?: boolean;
-  
+
   /** Tab index */
   readonly tabIndex?: number;
-  
+
   /** Role */
   readonly role?: string;
 }
@@ -256,11 +271,11 @@ export interface ComponentDefinition {
 /**
  * Component type enumeration
  */
-export type ComponentType = 
+export type ComponentType =
   | 'button'
   | 'input'
   | 'select'
-  | 'textarea' 
+  | 'textarea'
   | 'checkbox'
   | 'radio'
   | 'modal'

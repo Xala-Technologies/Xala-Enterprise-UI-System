@@ -3,7 +3,7 @@ module.exports = {
     '@xala-technologies/enterprise-standards/configs/eslint/ai-optimized.js'
   ],
   parserOptions: {
-    project: './tsconfig.json',
+    project: './tsconfig.lint.json',
     tsconfigRootDir: __dirname,
   },
   rules: {

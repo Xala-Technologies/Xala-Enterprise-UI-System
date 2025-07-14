@@ -7,7 +7,6 @@ import type React from 'react';
 
 import type { ComponentProps } from '../lib/types/core.types';
 
-
 // Base data display component props
 export interface DataDisplayComponentProps extends ComponentProps {
   loading?: boolean;
@@ -57,7 +56,15 @@ export interface TableColumn {
   id: string;
   label: string; // Column header text
   key: string; // Data key to access from row object
-  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'personalNumber' | 'organizationNumber' | 'status';
+  type?:
+    | 'text'
+    | 'number'
+    | 'date'
+    | 'boolean'
+    | 'currency'
+    | 'personalNumber'
+    | 'organizationNumber'
+    | 'status';
   width?: number;
   minWidth?: number;
   maxWidth?: number;
@@ -97,7 +104,14 @@ export interface KeyValueItem {
   key: string;
   label: string; // Label text for the key
   value: unknown;
-  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'personalNumber' | 'organizationNumber';
+  type?:
+    | 'text'
+    | 'number'
+    | 'date'
+    | 'boolean'
+    | 'currency'
+    | 'personalNumber'
+    | 'organizationNumber';
   _format?: {
     currency?: string;
     dateFormat?: string;
@@ -167,7 +181,7 @@ export const formatters = {
     return new Intl.NumberFormat('en-US', options).format(_value);
   },
   boolean: (_value: boolean, options?: { trueText: string; falseText: string }): string => {
-    return _value ? (options?.trueText || 'Yes') : (options?.falseText || 'No');
+    return _value ? options?.trueText || 'Yes' : options?.falseText || 'No';
   },
   personalNumber: (_value: string): string => {
     // Generic formatting - can be customized per locale

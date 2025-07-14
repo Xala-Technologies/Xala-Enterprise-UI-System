@@ -12,13 +12,13 @@ import type { TokenCacheEntry } from './types';
 export interface CacheConfig {
   /** Maximum cache size in entries */
   maxSize: number;
-  
+
   /** Time-to-live in milliseconds */
   ttl: number;
-  
+
   /** Enable cache persistence */
   persistent: boolean;
-  
+
   /** Storage key prefix */
   storagePrefix: string;
 }
@@ -47,17 +47,17 @@ export class TokenCacheManager {
    */
   get(tenantId: string): TokenCacheEntry | null {
     const entry = this.cache.get(tenantId);
-    
+
     if (!entry) {
       return null;
     }
-    
+
     // Check if entry is expired
     if (Date.now() - entry.timestamp > this.config.ttl) {
       this.delete(tenantId);
       return null;
     }
-    
+
     return entry;
   }
 
@@ -72,23 +72,23 @@ export class TokenCacheManager {
         this.delete(oldestKey);
       }
     }
-    
+
     const entry: TokenCacheEntry = {
       tokens,
       timestamp: Date.now(),
       tenantId,
       version,
     };
-    
+
     this.cache.set(tenantId, entry);
-    
+
     // Set TTL timer
     const timer = setTimeout(() => {
       this.delete(tenantId);
     }, this.config.ttl);
-    
+
     this.timers.set(tenantId, timer);
-    
+
     // Persist to storage if enabled
     if (this.config.persistent) {
       this.persistToStorage(tenantId, entry);
@@ -100,19 +100,19 @@ export class TokenCacheManager {
    */
   delete(tenantId: string): boolean {
     const deleted = this.cache.delete(tenantId);
-    
+
     // Clear timer
     const timer = this.timers.get(tenantId);
     if (timer) {
       clearTimeout(timer);
       this.timers.delete(tenantId);
     }
-    
+
     // Remove from storage if persistent
     if (this.config.persistent && typeof localStorage !== 'undefined') {
       localStorage.removeItem(`${this.config.storagePrefix}${tenantId}`);
     }
-    
+
     return deleted;
   }
 
@@ -121,14 +121,14 @@ export class TokenCacheManager {
    */
   clear(): void {
     this.cache.clear();
-    
+
     // Clear all timers
-    this.timers.forEach((timer) => clearTimeout(timer));
+    this.timers.forEach(timer => clearTimeout(timer));
     this.timers.clear();
-    
+
     // Clear storage if persistent
     if (this.config.persistent && typeof localStorage !== 'undefined') {
-      Object.keys(localStorage).forEach((key) => {
+      Object.keys(localStorage).forEach(key => {
         if (key.startsWith(this.config.storagePrefix)) {
           localStorage.removeItem(key);
         }
@@ -174,7 +174,7 @@ export class TokenCacheManager {
     if (typeof localStorage === 'undefined') {
       return;
     }
-    
+
     try {
       const serialized = JSON.stringify(entry);
       localStorage.setItem(`${this.config.storagePrefix}${tenantId}`, serialized);
@@ -190,13 +190,13 @@ export class TokenCacheManager {
     if (typeof localStorage === 'undefined') {
       return null;
     }
-    
+
     try {
       const serialized = localStorage.getItem(`${this.config.storagePrefix}${tenantId}`);
       if (!serialized) {
         return null;
       }
-      
+
       return JSON.parse(serialized) as TokenCacheEntry;
     } catch (error) {
       console.warn('Failed to load token cache:', error);
@@ -211,16 +211,16 @@ export class TokenCacheManager {
     if (!this.config.persistent || typeof localStorage === 'undefined') {
       return;
     }
-    
-    Object.keys(localStorage).forEach((key) => {
+
+    Object.keys(localStorage).forEach(key => {
       if (key.startsWith(this.config.storagePrefix)) {
         const tenantId = key.replace(this.config.storagePrefix, '');
         const entry = this.loadFromStorage(tenantId);
-        
+
         if (entry && Date.now() - entry.timestamp < this.config.ttl) {
           this.cache.set(tenantId, entry);
         }
       }
     });
   }
-} 
+}

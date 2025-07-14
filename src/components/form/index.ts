@@ -13,7 +13,15 @@ export { TextArea } from './TextArea';
 
 // Form component types
 export type {
-    FormComponentProps, FormProps,
-    InputProps, OrganizationData, OrganizationNumberInputProps, PersonalNumberInputProps, SelectOption, SelectProps, TextAreaProps, ValidationError, ValidationResult
+  FormComponentProps,
+  FormProps,
+  InputProps,
+  OrganizationData,
+  OrganizationNumberInputProps,
+  PersonalNumberInputProps,
+  SelectOption,
+  SelectProps,
+  TextAreaProps,
+  ValidationError,
+  ValidationResult,
 } from '../../types/form.types';
-

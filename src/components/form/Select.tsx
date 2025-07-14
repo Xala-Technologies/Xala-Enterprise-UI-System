@@ -1,17 +1,19 @@
 // React mock for development
 import React from 'react';
 
-
 // Select option interface
-interface SelectOption { value: string;
+interface SelectOption {
+  value: string;
   labelKey?: string;
   label?: string;
   disabled?: boolean;
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  group?: string; }
+  group?: string;
+}
 
 // Select - Norwegian government-compliant select dropdown component
-interface SelectProps { labelKey?: string;
+interface SelectProps {
+  labelKey?: string;
   label?: string;
   placeholderKey?: string;
   placeholder?: string;
@@ -29,19 +31,22 @@ interface SelectProps { labelKey?: string;
   size?: 'small' | 'medium' | 'large';
   variant?: 'default' | 'filled' | 'outlined';
   status?: 'default' | 'error' | 'warning' | 'success';
-  norwegian?: { classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  norwegian?: {
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
     municipality?: string;
     includeMunicipalities?: boolean;
     includeCounties?: boolean;
     sortOrder?: 'alphabetical' | 'code' | 'population';
-    filterByRegion?: string; };
+    filterByRegion?: string;
+  };
   onChange?: (_event: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (_event: React.MouseEvent<HTMLElement>) => void;
   onFocus?: (_event: React.MouseEvent<HTMLElement>) => void;
   style?: React.CSSProperties;
   'aria-describedby'?: string;
   'aria-labelledby'?: string;
-  id?: string; }
+  id?: string;
+}
 
 /**
  * Select - Norwegian government-compliant dropdown selection
@@ -60,28 +65,32 @@ interface SelectProps { labelKey?: string;
  * - DigDir form guidelines compliance
  * - Norwegian sorting and filtering
  */
-export const Select = React.forwardRef((props: SelectProps, ref: unknown): React.ReactElement => { return (
+export const Select = React.forwardRef((props: SelectProps, ref: unknown): React.ReactElement => {
+  return (
     <div
-      style={{ display: 'flex',
+      style={{
+        display: 'flex',
         flexDirection: 'column',
         gap: 'var(--spacing-2)',
         width: '100%',
-        ...style, }}
+        ...style,
+      }}
     >
       {/* Label */}
       {(label || labelKey) && (
         <label
           htmlFor={selectId}
-          style={{ fontSize: 'var(--font-size-sm)',
+          style={{
+            fontSize: 'var(--font-size-sm)',
             fontWeight: 'var(--font-weight-medium)',
             color: disabled ? 'var(--color-text-disabled)' : 'var(--color-text-primary)',
-            lineHeight: 'var(--line-height-normal)', }}
+            lineHeight: 'var(--line-height-normal)',
+          }}
         >
           {labelKey ? t(labelKey) : label}
           {required && (
             <span
-              style={{ color: 'var(--color-danger-500)',
-                marginLeft: 'var(--spacing-1)', }}
+              style={{ color: 'var(--color-danger-500)', marginLeft: 'var(--spacing-1)' }}
               aria-label={'form.required'}
             >
               *
@@ -90,11 +99,13 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
           {/* NSM Classification indicator */}
           {norwegian?.classification && (
             <span
-              style={{ fontSize: 'var(--font-size-xs)',
+              style={{
+                fontSize: 'var(--font-size-xs)',
                 fontWeight: 'var(--font-weight-normal)',
                 color: 'var(--color-text-secondary)',
                 marginLeft: 'var(--spacing-2)',
-                textTransform: 'uppercase', }}
+                textTransform: 'uppercase',
+              }}
             >
               ({norwegian.classification})
             </span>
@@ -116,7 +127,8 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
         aria-invalid={status === 'error'}
         data-classification={norwegian?.classification}
         data-municipality={norwegian?.municipality}
-        style={{ width: '100%',
+        style={{
+          width: '100%',
           border: '1px solid',
           borderRadius: 'var(--border-radius-md)',
           backgroundColor: disabled
@@ -130,7 +142,8 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
           cursor: disabled ? 'not-allowed' : 'pointer',
           ...sizeStyles,
           ...statusStyles,
-          ...classificationStyles, }}
+          ...classificationStyles,
+        }}
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
@@ -151,9 +164,11 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
       {(helpText || helpTextKey) && (
         <div
           id={helpTextId}
-          style={{ fontSize: 'var(--font-size-xs)',
+          style={{
+            fontSize: 'var(--font-size-xs)',
             color: 'var(--color-text-secondary)',
-            lineHeight: 'var(--line-height-normal)', }}
+            lineHeight: 'var(--line-height-normal)',
+          }}
         >
           {helpTextKey ? t(helpTextKey) : helpText}
         </div>
@@ -164,15 +179,18 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
         <div
           id={errorId}
           role="alert"
-          style={{ fontSize: 'var(--font-size-xs)',
+          style={{
+            fontSize: 'var(--font-size-xs)',
             color: 'var(--color-danger-600)',
             fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-normal)', }}
+            lineHeight: 'var(--line-height-normal)',
+          }}
         >
           {errorMessageKey ? t(errorMessageKey) : errorMessage}
         </div>
       )}
     </div>
-  ); });
+  );
+});
 
 Select.displayName = 'Select';

@@ -11,7 +11,12 @@
 /**
  * Accessibility levels supported by the UI system
  */
-export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' | 'WCAG_2_2_AAA' | 'none';
+export type AccessibilityLevel =
+  | 'WCAG_2_1_AA'
+  | 'WCAG_2_1_AAA'
+  | 'WCAG_2_2_AA'
+  | 'WCAG_2_2_AAA'
+  | 'none';
 
 /**
  * Main accessibility configuration
@@ -19,34 +24,34 @@ export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' 
 export interface AccessibilityConfig {
   /** Global accessibility level */
   level: AccessibilityLevel;
-  
+
   /** High contrast mode */
   highContrast: boolean;
-  
+
   /** Reduced motion preferences */
   reduceMotion: boolean;
-  
+
   /** Screen reader optimizations */
   screenReader: boolean;
-  
+
   /** Keyboard navigation support */
   keyboardNavigation: boolean;
-  
+
   /** Focus management */
   focusManagement: boolean;
-  
+
   /** Color contrast requirements */
   colorContrast: {
     normal: number; // 4.5:1 for AA, 7:1 for AAA
-    large: number;  // 3:1 for AA, 4.5:1 for AAA
+    large: number; // 3:1 for AA, 4.5:1 for AAA
   };
-  
+
   /** Touch target sizes */
   touchTargets: {
     minimum: number; // 44px for AA, 48px for AAA
     recommended: number;
   };
-  
+
   /** Text spacing requirements */
   textSpacing: {
     lineHeight: number; // 1.5 for AA
@@ -54,14 +59,14 @@ export interface AccessibilityConfig {
     letterSpacing: number; // 0.12x font size
     wordSpacing: number; // 0.16x font size
   };
-  
+
   /** Animation preferences */
   animation: {
     duration: number; // Max 5 seconds
     flickerThreshold: number; // 3 times per second
     pauseControl: boolean;
   };
-  
+
   /** Custom accessibility features */
   custom?: {
     announcements?: boolean;
@@ -138,7 +143,7 @@ export const enhancedAccessibilityConfig: AccessibilityConfig = {
     lineHeight: 1.8,
     paragraphSpacing: 2.5,
     letterSpacing: 0.15,
-    wordSpacing: 0.20,
+    wordSpacing: 0.2,
   },
   animation: {
     duration: 3000,
@@ -215,7 +220,7 @@ export interface AccessibilityTokens {
       readonly border: string;
     };
   };
-  
+
   // Spacing tokens
   readonly spacing: {
     readonly focus: string;
@@ -223,7 +228,7 @@ export interface AccessibilityTokens {
     readonly textSpacing: string;
     readonly skipLink: string;
   };
-  
+
   // Typography tokens
   readonly typography: {
     readonly lineHeight: string;
@@ -234,14 +239,14 @@ export interface AccessibilityTokens {
       readonly xlarge: string;
     };
   };
-  
+
   // Animation tokens
   readonly animation: {
     readonly duration: string;
     readonly timing: string;
     readonly disabled: boolean;
   };
-  
+
   // Z-index tokens
   readonly zIndex: {
     readonly skipLink: number;
@@ -316,10 +321,7 @@ export function meetsContrastRequirements(
 /**
  * Check if touch target size meets requirements
  */
-export function meetsTouchTargetRequirements(
-  size: number,
-  config: AccessibilityConfig
-): boolean {
+export function meetsTouchTargetRequirements(size: number, config: AccessibilityConfig): boolean {
   return size >= config.touchTargets.minimum;
 }
 
@@ -328,16 +330,16 @@ export function meetsTouchTargetRequirements(
  */
 export function getAriaAttributes(config: AccessibilityConfig): Record<string, string> {
   const attributes: Record<string, string> = {};
-  
+
   if (config.screenReader) {
     attributes['aria-live'] = 'polite';
     attributes['aria-atomic'] = 'true';
   }
-  
+
   if (config.custom?.announcements) {
     attributes['aria-describedby'] = 'accessibility-announcements';
   }
-  
+
   return attributes;
 }
 
@@ -346,12 +348,12 @@ export function getAriaAttributes(config: AccessibilityConfig): Record<string, s
  */
 export function getKeyboardAttributes(config: AccessibilityConfig): Record<string, string> {
   const attributes: Record<string, string> = {};
-  
+
   if (config.keyboardNavigation) {
     attributes['tabindex'] = '0';
     attributes['role'] = 'button';
   }
-  
+
   return attributes;
 }
 
@@ -401,7 +403,9 @@ export const accessibilityPresets = {
 export type AccessibilityPreset = keyof typeof accessibilityPresets;
 
 export {
-    meetsContrastRequirements as checkContrast,
-    meetsTouchTargetRequirements as checkTouchTarget, generateAccessibilityTokens as generateA11yTokens, getAriaAttributes as getA11yAttributes,
-    getKeyboardAttributes as getKeyboardA11y
+  meetsContrastRequirements as checkContrast,
+  meetsTouchTargetRequirements as checkTouchTarget,
+  generateAccessibilityTokens as generateA11yTokens,
+  getAriaAttributes as getA11yAttributes,
+  getKeyboardAttributes as getKeyboardA11y,
 };

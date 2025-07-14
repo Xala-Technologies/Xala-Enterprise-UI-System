@@ -11,24 +11,24 @@ import type { TokenValue } from '../semantic-token-system';
 export interface TenantTokenConfig {
   /** Tenant unique identifier */
   tenantId: string;
-  
+
   /** Tenant display name */
   name: string;
-  
+
   /** Primary brand colors */
   primaryColors: {
     brand: string;
     brandHover: string;
     brandActive: string;
   };
-  
+
   /** Secondary brand colors */
   secondaryColors: {
     background: string;
     surface: string;
     text: string;
   };
-  
+
   /** Company information */
   company: {
     name: string;
@@ -36,7 +36,7 @@ export interface TenantTokenConfig {
     logoAlt: string;
     website?: string;
   };
-  
+
   /** Typography overrides */
   typography: {
     fontFamily: string;
@@ -44,7 +44,7 @@ export interface TenantTokenConfig {
     bodyFont?: string;
     monoFont?: string;
   };
-  
+
   /** Custom token overrides */
   customTokens?: Record<string, TokenValue>;
 }
@@ -55,7 +55,7 @@ export interface TenantTokenConfig {
 export interface WhiteLabelConfig {
   /** White label identifier */
   brandId: string;
-  
+
   /** Complete color palette override */
   colors: {
     primary: string;
@@ -66,17 +66,17 @@ export interface WhiteLabelConfig {
     error: string;
     info: string;
   };
-  
+
   /** Typography system override */
   typography: {
     fontFamily: string;
     weights: Record<string, number>;
     sizes: Record<string, string>;
   };
-  
+
   /** Spacing system override */
   spacing: Record<string, string>;
-  
+
   /** Brand assets */
   assets: {
     logo: string;
@@ -84,7 +84,7 @@ export interface WhiteLabelConfig {
     favicon: string;
     brandImages: Record<string, string>;
   };
-  
+
   /** Theme customization */
   theme: {
     mode: 'light' | 'dark' | 'auto';
@@ -99,13 +99,13 @@ export interface WhiteLabelConfig {
 export interface TokenOverrideConfig {
   /** Override scope */
   scope: 'global' | 'tenant' | 'user' | 'session';
-  
+
   /** Token path to value mapping */
   overrides: Record<string, TokenValue>;
-  
+
   /** Priority level for conflict resolution */
   priority: number;
-  
+
   /** Expiration timestamp */
   expiresAt?: number;
 }
@@ -116,28 +116,28 @@ export interface TokenOverrideConfig {
 export interface BrandingConfig {
   /** Brand identifier */
   brandId: string;
-  
+
   /** Brand colors */
   colors: {
     primary: string;
     secondary: string;
     accent: string;
   };
-  
+
   /** Typography */
   typography: {
     fontFamily: string;
     fontSize: Record<string, string>;
     fontWeight: Record<string, number>;
   };
-  
+
   /** Brand assets */
   assets: {
     logo: string;
     logoAlt: string;
     watermark?: string;
   };
-  
+
   /** Theme preferences */
   theme: {
     mode: 'light' | 'dark' | 'auto';
@@ -151,23 +151,23 @@ export interface BrandingConfig {
 export interface DynamicTokenLoaderConfig {
   /** Default tenant configuration */
   defaultTenant?: TenantTokenConfig;
-  
+
   /** White label configuration */
   whiteLabel?: WhiteLabelConfig;
-  
+
   /** Token overrides */
   overrides?: TokenOverrideConfig[];
-  
+
   /** Branding configuration */
   branding?: BrandingConfig;
-  
+
   /** Cache configuration */
   cache?: {
     enabled: boolean;
     ttl: number;
     maxSize: number;
   };
-  
+
   /** Remote configuration */
   remote?: {
     enabled: boolean;
@@ -175,7 +175,7 @@ export interface DynamicTokenLoaderConfig {
     headers: Record<string, string>;
     refreshInterval: number;
   };
-  
+
   /** Development mode settings */
   development?: {
     hotReload: boolean;
@@ -202,4 +202,4 @@ export interface TokenCacheEntry {
   timestamp: number;
   tenantId: string;
   version: string;
-} 
+}

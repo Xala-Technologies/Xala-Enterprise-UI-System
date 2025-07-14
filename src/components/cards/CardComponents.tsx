@@ -184,7 +184,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    return (
       <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
         {/* Card Header */}
         {(header || title || description) && (
@@ -229,7 +229,10 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    const getChangeIcon = (changeType?: string): React.ReactNode => {
+      switch (changeType) {
+        case 'increase':
+          return (
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -258,6 +261,19 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
           );
         default:
           return null;
+      }
+    };
+
+    const getChangeColor = (changeType?: string): string => {
+      switch (changeType) {
+        case 'increase':
+          return 'text-green-600';
+        case 'decrease':
+          return 'text-red-600';
+        case 'neutral':
+          return 'text-gray-600';
+        default:
+          return 'text-gray-600';
       }
     };
 
@@ -307,7 +323,7 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    return (
       <div ref={ref} className={cn(chartCardVariants({ variant, size }), className)} {...props}>
         {/* Chart Header */}
         <div className="flex items-center justify-between mb-4">

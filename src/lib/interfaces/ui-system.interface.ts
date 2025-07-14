@@ -8,7 +8,6 @@
 
 import type { AuditTrailEntry, PerformanceMetrics } from '../types/core.types';
 
-
 interface ValidationResult<T> {
   success: boolean;
   data?: T;

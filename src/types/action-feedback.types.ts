@@ -216,7 +216,13 @@ export interface NotificationProps extends ActionFeedbackComponentProps {
   message?: string;
   variant?: 'info' | 'success' | 'warning' | 'error';
   duration?: number;
-  position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+  position?:
+    | 'top-left'
+    | 'top-center'
+    | 'top-right'
+    | 'bottom-left'
+    | 'bottom-center'
+    | 'bottom-right';
   closable?: boolean;
   actions?: NotificationAction[];
   features?: {

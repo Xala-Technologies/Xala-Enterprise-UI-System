@@ -6,20 +6,20 @@
  */
 
 import {
-    globalAnimationDurations,
-    globalAnimationEasings,
-    globalBorderRadius,
-    globalBorderWidths,
-    globalBreakpoints,
-    globalColorPrimitives,
-    globalFontFamilies,
-    globalFontSizes,
-    globalFontWeights,
-    globalLetterSpacing,
-    globalLineHeights,
-    globalShadows,
-    globalSpacingPrimitives,
-    globalZIndices,
+  globalAnimationDurations,
+  globalAnimationEasings,
+  globalBorderRadius,
+  globalBorderWidths,
+  globalBreakpoints,
+  globalColorPrimitives,
+  globalFontFamilies,
+  globalFontSizes,
+  globalFontWeights,
+  globalLetterSpacing,
+  globalLineHeights,
+  globalShadows,
+  globalSpacingPrimitives,
+  globalZIndices,
 } from './global-tokens';
 
 // =============================================================================
@@ -40,7 +40,7 @@ export const aliasColorTokens = {
     'primary-subtle': globalColorPrimitives.xala[50],
     'primary-emphasis': globalColorPrimitives.xala[700],
   },
-  
+
   // Background colors
   background: {
     primary: globalColorPrimitives.neutral[0],
@@ -53,7 +53,7 @@ export const aliasColorTokens = {
     'overlay-light': 'rgba(0, 0, 0, 0.1)',
     'overlay-dark': 'rgba(0, 0, 0, 0.8)',
   },
-  
+
   // Foreground colors
   foreground: {
     primary: globalColorPrimitives.neutral[900],
@@ -65,7 +65,7 @@ export const aliasColorTokens = {
     'on-brand': globalColorPrimitives.neutral[0],
     'on-accent': globalColorPrimitives.neutral[0],
   },
-  
+
   // Border colors
   border: {
     primary: globalColorPrimitives.neutral[200],
@@ -77,7 +77,7 @@ export const aliasColorTokens = {
     'focus-visible': globalColorPrimitives.xala[600],
     interactive: globalColorPrimitives.xala[300],
   },
-  
+
   // State colors
   state: {
     // Success states
@@ -89,7 +89,7 @@ export const aliasColorTokens = {
     'success-emphasis': globalColorPrimitives.green[700],
     'success-foreground': globalColorPrimitives.green[700],
     'success-border': globalColorPrimitives.green[200],
-    
+
     // Warning states
     'warning-primary': globalColorPrimitives.yellow[500],
     'warning-hover': globalColorPrimitives.yellow[600],
@@ -99,7 +99,7 @@ export const aliasColorTokens = {
     'warning-emphasis': globalColorPrimitives.yellow[700],
     'warning-foreground': globalColorPrimitives.yellow[800],
     'warning-border': globalColorPrimitives.yellow[200],
-    
+
     // Error states
     'error-primary': globalColorPrimitives.red[500],
     'error-hover': globalColorPrimitives.red[600],
@@ -109,7 +109,7 @@ export const aliasColorTokens = {
     'error-emphasis': globalColorPrimitives.red[700],
     'error-foreground': globalColorPrimitives.red[700],
     'error-border': globalColorPrimitives.red[200],
-    
+
     // Info states
     'info-primary': globalColorPrimitives.blue[500],
     'info-hover': globalColorPrimitives.blue[600],
@@ -120,7 +120,7 @@ export const aliasColorTokens = {
     'info-foreground': globalColorPrimitives.blue[700],
     'info-border': globalColorPrimitives.blue[200],
   },
-  
+
   // Interactive colors
   interactive: {
     primary: globalColorPrimitives.xala[500],
@@ -128,17 +128,17 @@ export const aliasColorTokens = {
     'primary-active': globalColorPrimitives.xala[700],
     'primary-disabled': globalColorPrimitives.xala[300],
     'primary-loading': globalColorPrimitives.xala[400],
-    
+
     secondary: globalColorPrimitives.neutral[100],
     'secondary-hover': globalColorPrimitives.neutral[200],
     'secondary-active': globalColorPrimitives.neutral[300],
     'secondary-disabled': globalColorPrimitives.neutral[100],
-    
+
     tertiary: globalColorPrimitives.transparent,
     'tertiary-hover': globalColorPrimitives.neutral[50],
     'tertiary-active': globalColorPrimitives.neutral[100],
     'tertiary-disabled': globalColorPrimitives.transparent,
-    
+
     // Link colors
     link: globalColorPrimitives.xala[500],
     'link-hover': globalColorPrimitives.xala[600],
@@ -146,7 +146,7 @@ export const aliasColorTokens = {
     'link-visited': globalColorPrimitives.xala[800],
     'link-disabled': globalColorPrimitives.neutral[400],
   },
-  
+
   // Utility colors
   utility: {
     transparent: globalColorPrimitives.transparent,
@@ -172,7 +172,7 @@ export const aliasSpacingTokens = {
     lg: globalSpacingPrimitives[6],
     xl: globalSpacingPrimitives[8],
   },
-  
+
   // Component margins
   'component-margin': {
     xs: globalSpacingPrimitives[1],
@@ -181,7 +181,7 @@ export const aliasSpacingTokens = {
     lg: globalSpacingPrimitives[6],
     xl: globalSpacingPrimitives[8],
   },
-  
+
   // Gap spacing (for flexbox/grid)
   'component-gap': {
     xs: globalSpacingPrimitives[1],
@@ -190,7 +190,7 @@ export const aliasSpacingTokens = {
     lg: globalSpacingPrimitives[6],
     xl: globalSpacingPrimitives[8],
   },
-  
+
   // Layout spacing
   'layout-spacing': {
     xs: globalSpacingPrimitives[4],
@@ -201,7 +201,7 @@ export const aliasSpacingTokens = {
     '2xl': globalSpacingPrimitives[20],
     '3xl': globalSpacingPrimitives[24],
   },
-  
+
   // Container spacing
   'container-padding': {
     xs: globalSpacingPrimitives[4],
@@ -210,14 +210,14 @@ export const aliasSpacingTokens = {
     lg: globalSpacingPrimitives[12],
     xl: globalSpacingPrimitives[16],
   },
-  
+
   // Touch target sizes (WCAG AAA compliance)
   'touch-target': {
     minimum: globalSpacingPrimitives[11], // 44px minimum
     comfortable: globalSpacingPrimitives[12], // 48px comfortable
     large: globalSpacingPrimitives[14], // 56px large
   },
-  
+
   // Focus ring spacing
   'focus-ring': {
     offset: globalSpacingPrimitives[1],
@@ -239,7 +239,7 @@ export const aliasTypographyTokens = {
     secondary: globalFontFamilies.serif,
     mono: globalFontFamilies.mono,
   },
-  
+
   // Headings
   heading: {
     h1: {
@@ -279,7 +279,7 @@ export const aliasTypographyTokens = {
       letterSpacing: globalLetterSpacing.normal,
     },
   },
-  
+
   // Body text
   body: {
     large: {
@@ -301,7 +301,7 @@ export const aliasTypographyTokens = {
       letterSpacing: globalLetterSpacing.normal,
     },
   },
-  
+
   // UI text
   ui: {
     large: {
@@ -329,7 +329,7 @@ export const aliasTypographyTokens = {
       letterSpacing: globalLetterSpacing.wide,
     },
   },
-  
+
   // Code text
   code: {
     inline: {
@@ -366,7 +366,7 @@ export const aliasBorderTokens = {
     'extra-large': globalBorderRadius.xl,
     full: globalBorderRadius.full,
   },
-  
+
   // Border widths
   width: {
     none: globalBorderWidths[0],
@@ -374,7 +374,7 @@ export const aliasBorderTokens = {
     medium: globalBorderWidths[2],
     thick: globalBorderWidths[4],
   },
-  
+
   // Common border combinations
   style: {
     none: 'none',
@@ -400,7 +400,7 @@ export const aliasShadowTokens = {
     high: globalShadows.lg,
     'extra-high': globalShadows.xl,
   },
-  
+
   // Component shadows
   component: {
     card: globalShadows.base,
@@ -410,7 +410,7 @@ export const aliasShadowTokens = {
     tooltip: globalShadows.md,
     popover: globalShadows.lg,
   },
-  
+
   // Focus shadows
   focus: {
     default: `0 0 0 2px ${aliasColorTokens.interactive.primary}40`,
@@ -418,7 +418,7 @@ export const aliasShadowTokens = {
     success: `0 0 0 2px ${aliasColorTokens.state['success-primary']}40`,
     warning: `0 0 0 2px ${aliasColorTokens.state['warning-primary']}40`,
   },
-  
+
   // Inner shadows
   inner: {
     default: globalShadows.inner,
@@ -436,13 +436,13 @@ export const aliasShadowTokens = {
 export const aliasAnimationTokens = {
   // Duration tokens
   duration: {
-    'instant': '0ms',
+    instant: '0ms',
     'extra-fast': globalAnimationDurations.fast,
-    'fast': globalAnimationDurations.normal,
-    'normal': globalAnimationDurations.slow,
-    'slow': globalAnimationDurations.slower,
+    fast: globalAnimationDurations.normal,
+    normal: globalAnimationDurations.slow,
+    slow: globalAnimationDurations.slower,
   },
-  
+
   // Easing tokens
   easing: {
     'ease-in': globalAnimationEasings['ease-in'],
@@ -452,7 +452,7 @@ export const aliasAnimationTokens = {
     'bounce-out': globalAnimationEasings['ease-out-back'],
     'bounce-in-out': globalAnimationEasings['ease-in-out-back'],
   },
-  
+
   // Common animations
   transition: {
     'fade-in': `opacity ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
@@ -461,7 +461,7 @@ export const aliasAnimationTokens = {
     'slide-out': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in']}`,
     'scale-in': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
     'scale-out': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in']}`,
-    'all': `all ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in-out']}`,
+    all: `all ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in-out']}`,
   },
 } as const;
 
@@ -481,7 +481,7 @@ export const aliasBreakpointTokens = {
     'wide-desktop': globalBreakpoints.xl,
     'ultra-wide': globalBreakpoints['2xl'],
   },
-  
+
   // Container breakpoints
   container: {
     small: globalBreakpoints.sm,
@@ -506,7 +506,7 @@ export const aliasZIndexTokens = {
     floating: globalZIndices.dropdown,
     sticky: globalZIndices.sticky,
   },
-  
+
   // Overlay layers
   overlay: {
     backdrop: globalZIndices.overlay,
@@ -549,4 +549,4 @@ export const aliasTokens = {
   zIndex: aliasZIndexTokens,
 } as const;
 
-export type AliasTokens = typeof aliasTokens; 
+export type AliasTokens = typeof aliasTokens;

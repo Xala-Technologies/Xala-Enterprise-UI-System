@@ -4,12 +4,10 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-
 import { EventCore, Logger } from '@xala-technologies/enterprise-standards';
 
 import type { UISystemService } from '../interfaces/ui-system.interface';
 import type { ComponentRegistry, ThemeRegistry, UISystemConfig } from '../types/core.types';
-
 
 // Local types
 interface ValidationResult<T> {

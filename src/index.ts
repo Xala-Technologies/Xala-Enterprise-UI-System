@@ -22,9 +22,22 @@ export * from './tokens';
 
 // Core types
 export type {
-    AccessibilityLevel, AccessibilityProps, AuditTrailEntry, CSSProperties, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps,
-    ComponentState, ComponentType, EventHandlers, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
-    UISystemOptions
+  AccessibilityLevel,
+  AccessibilityProps,
+  AuditTrailEntry,
+  CSSProperties,
+  ComponentAccessibilityConfig,
+  ComponentDefinition,
+  ComponentProps,
+  ComponentState,
+  ComponentType,
+  EventHandlers,
+  PerformanceMetrics,
+  SupportedLanguage,
+  ThemeColors,
+  ThemeDefinition,
+  UISystemConfig,
+  UISystemOptions,
 } from './lib/types/core.types';
 
 // =============================================================================
@@ -33,11 +46,12 @@ export type {
 
 // Platform types (only export those not already in components)
 export type {
-    HoverFriendlyProps, PlatformComponentProps,
-    PlatformDetection,
-    PlatformTypes,
-    ResponsiveBreakpoints,
-    TouchFriendlyProps
+  HoverFriendlyProps,
+  PlatformComponentProps,
+  PlatformDetection,
+  PlatformTypes,
+  ResponsiveBreakpoints,
+  TouchFriendlyProps,
 } from './types/platform.types';
 
 // =============================================================================
@@ -45,7 +59,12 @@ export type {
 // =============================================================================
 
 // Re-export UISystemProvider
-export { UISystemProvider, useAccessibility, useAccessibilityFeature, useUISystem } from './components/UISystemProvider';
+export {
+  UISystemProvider,
+  useAccessibility,
+  useAccessibilityFeature,
+  useUISystem,
+} from './components/UISystemProvider';
 
 // =============================================================================
 // PACKAGE INFORMATION

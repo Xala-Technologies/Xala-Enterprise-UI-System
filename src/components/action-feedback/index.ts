@@ -7,7 +7,8 @@ export { Toast } from './Toast';
 export { Modal } from './Modal';
 
 // Re-export types for convenience
-export type { ButtonProps,
+export type {
+  ButtonProps,
   AlertProps,
   ToastProps,
   ModalProps,
@@ -20,4 +21,5 @@ export type { ButtonProps,
   ActionFeedbackComponentProps,
   NorwegianFeedbackConfig,
   NorwegianActionContext,
-  ActionFeedbackTypes, } from '../../types/action-feedback.types';
+  ActionFeedbackTypes,
+} from '../../types/action-feedback.types';

@@ -4,7 +4,6 @@
  * @description Centralized export of all design tokens and token utilities
  */
 
-
 import { Logger } from '@xala-technologies/enterprise-standards';
 
 const logger = Logger.create({
@@ -49,9 +48,12 @@ export { DynamicTokenLoader } from './dynamic-token-loader';
 
 // Accessibility utilities
 export {
-    accessibilityPresets, generateAccessibilityTokens, getAriaAttributes,
-    getKeyboardAttributes, meetsContrastRequirements,
-    meetsTouchTargetRequirements
+  accessibilityPresets,
+  generateAccessibilityTokens,
+  getAriaAttributes,
+  getKeyboardAttributes,
+  meetsContrastRequirements,
+  meetsTouchTargetRequirements,
 } from './accessibility-tokens';
 
 // =============================================================================
@@ -62,10 +64,10 @@ export {
  * @example Basic Token Usage
  * ```typescript
  * import { tokenSystem } from '@your-org/ui-system';
- * 
+ *
  * // Get a token value
  * const primaryColor = tokenSystem.getGlobalToken('color.primary.500');
- * 
+ *
  * // Use in component
  * const Button = () => (
  *   <button style={{ backgroundColor: primaryColor }}>
@@ -79,17 +81,17 @@ export {
  * @example Accessibility Configuration
  * ```typescript
  * import { UISystemProvider, accessibilityPresets } from '@your-org/ui-system';
- * 
+ *
  * // Basic accessibility
  * <UISystemProvider accessibility="basic">
  *   <App />
  * </UISystemProvider>
- * 
+ *
  * // Enhanced accessibility
  * <UISystemProvider accessibility="enhanced">
  *   <App />
  * </UISystemProvider>
- * 
+ *
  * // Custom accessibility
  * <UISystemProvider accessibility={{
  *   level: 'WCAG_2_2_AA',
@@ -107,13 +109,13 @@ export {
  * @example Dynamic Token Loading
  * ```typescript
  * import { DynamicTokenLoader } from '@your-org/ui-system';
- * 
+ *
  * // Load tokens from URL
  * const loader = new DynamicTokenLoader();
  * await loader.loadFromURL('https://api.example.com/tokens');
- * 
+ *
  * // Load from JSON
- * const config = { 
+ * const config = {
  *   tenantId: 'acme-corp',
  *   branding: { primaryColor: '#ff0000' }
  * };
@@ -126,23 +128,25 @@ export {
 // =============================================================================
 
 export type {
-    // Core token types
-    TokenPath,
-    TokenValue
+  // Core token types
+  TokenPath,
+  TokenValue,
 } from './semantic-token-system';
 
 export type {
-    // Accessibility types
-    AccessibilityConfig,
-    AccessibilityLevel,
-    AccessibilityPreset,
-    AccessibilityTokens
+  // Accessibility types
+  AccessibilityConfig,
+  AccessibilityLevel,
+  AccessibilityPreset,
+  AccessibilityTokens,
 } from './accessibility-tokens';
 
 export type {
-    BrandingConfig,
-    // Dynamic loading types
-    TenantTokenConfig, TokenOverrideConfig, WhiteLabelConfig
+  BrandingConfig,
+  // Dynamic loading types
+  TenantTokenConfig,
+  TokenOverrideConfig,
+  WhiteLabelConfig,
 } from './dynamic-token-loader';
 
 // =============================================================================
@@ -160,10 +164,14 @@ export const devUtils = {
   validateAccessibility: (config: { level?: string; [key: string]: unknown }): void => {
     if (process.env['NODE_ENV'] === 'development') {
       // Basic validation - extend as needed
-      if (!config.level || !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(config.level)) {
+      if (
+        !config.level ||
+        !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(
+          config.level
+        )
+      ) {
         logger.warn('Invalid accessibility level:', { level: config.level });
       }
     }
   },
 };
-

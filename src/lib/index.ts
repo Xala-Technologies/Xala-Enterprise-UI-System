@@ -6,29 +6,50 @@
 
 // Core system exports
 export {
-    UISystemCore, createDevelopmentUISystem, createProductionUISystem,
-    createTestUISystem
+  UISystemCore,
+  createDevelopmentUISystem,
+  createProductionUISystem,
+  createTestUISystem,
 } from './core/index';
 
 // Core types and interfaces
 export type {
-    AccessibilityConfig, AccessibilityLevel, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition,
-    ComponentType, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
-    UISystemOptions, ValidationError
+  AccessibilityConfig,
+  AccessibilityLevel,
+  AuditTrailEntry,
+  ComponentAccessibilityConfig,
+  ComponentDefinition,
+  ComponentType,
+  PerformanceMetrics,
+  SupportedLanguage,
+  ThemeColors,
+  ThemeDefinition,
+  UISystemConfig,
+  UISystemOptions,
+  ValidationError,
 } from './types/core.types';
 
 // Interfaces
 export type {
-    AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory,
-    ComponentFactoryFunction, ConfigurationService,
-    EventPublisher,
-    LocalizationService, PerformanceMonitor, ThemeManager, UISystemService
+  AccessibilityService,
+  AuditTrailFilter,
+  AuditTrailService,
+  ComponentFactory,
+  ComponentFactoryFunction,
+  ConfigurationService,
+  EventPublisher,
+  LocalizationService,
+  PerformanceMonitor,
+  ThemeManager,
+  UISystemService,
 } from './interfaces/ui-system.interface';
 
 // Validation utilities
 export {
-    createValidationResult, isValidEmail,
-    isValidUrl, safeArrayAccess, safeGet
+  createValidationResult,
+  isValidEmail,
+  isValidUrl,
+  safeArrayAccess,
+  safeGet,
 } from './utils/validation';
 export type { ValidationResult } from './utils/validation';
-

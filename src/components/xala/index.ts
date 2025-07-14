@@ -68,4 +68,4 @@ export const XALA_COMPONENTS = {
     wcagCompliant: true,
     touchOptimized: true,
   },
-} as const; 
+} as const;

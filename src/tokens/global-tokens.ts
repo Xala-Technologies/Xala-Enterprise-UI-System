@@ -27,7 +27,7 @@ export const globalColorPrimitives = {
     800: '#003366',
     900: '#001a33',
   },
-  
+
   // Neutral Color Scale
   neutral: {
     0: '#ffffff',
@@ -44,7 +44,7 @@ export const globalColorPrimitives = {
     950: '#0a0a0a',
     1000: '#000000',
   },
-  
+
   // Semantic Color Scales
   green: {
     50: '#f0fdf4',
@@ -58,7 +58,7 @@ export const globalColorPrimitives = {
     800: '#166534',
     900: '#14532d',
   },
-  
+
   yellow: {
     50: '#fffbeb',
     100: '#fef3c7',
@@ -71,7 +71,7 @@ export const globalColorPrimitives = {
     800: '#92400e',
     900: '#78350f',
   },
-  
+
   red: {
     50: '#fef2f2',
     100: '#fee2e2',
@@ -84,7 +84,7 @@ export const globalColorPrimitives = {
     800: '#991b1b',
     900: '#7f1d1d',
   },
-  
+
   blue: {
     50: '#eff6ff',
     100: '#dbeafe',
@@ -97,7 +97,7 @@ export const globalColorPrimitives = {
     800: '#1e40af',
     900: '#1e3a8a',
   },
-  
+
   // Special colors
   transparent: 'transparent',
   current: 'currentColor',
@@ -163,19 +163,8 @@ export const globalFontFamilies = {
     'Arial',
     'sans-serif',
   ],
-  serif: [
-    'Georgia',
-    'Times New Roman',
-    'serif',
-  ],
-  mono: [
-    'JetBrains Mono',
-    'Fira Code',
-    'Consolas',
-    'Liberation Mono',
-    'Menlo',
-    'monospace',
-  ],
+  serif: ['Georgia', 'Times New Roman', 'serif'],
+  mono: ['JetBrains Mono', 'Fira Code', 'Consolas', 'Liberation Mono', 'Menlo', 'monospace'],
 } as const;
 
 /**
@@ -367,4 +356,4 @@ export type GlobalShadow = typeof globalShadows;
 export type GlobalBreakpoint = typeof globalBreakpoints;
 export type GlobalAnimationDuration = typeof globalAnimationDurations;
 export type GlobalAnimationEasing = typeof globalAnimationEasings;
-export type GlobalZIndex = typeof globalZIndices; 
+export type GlobalZIndex = typeof globalZIndices;

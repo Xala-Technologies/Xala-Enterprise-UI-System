@@ -185,4 +185,4 @@ export type DesktopHeaderVariant = VariantProps<typeof desktopHeaderVariants>;
 export type DesktopSidebarVariant = VariantProps<typeof desktopSidebarVariants>;
 export type DesktopMainContentVariant = VariantProps<typeof desktopMainContentVariants>;
 export type DesktopToolbarVariant = VariantProps<typeof desktopToolbarVariants>;
-export type DesktopStatusBarVariant = VariantProps<typeof desktopStatusBarVariants>; 
+export type DesktopStatusBarVariant = VariantProps<typeof desktopStatusBarVariants>;

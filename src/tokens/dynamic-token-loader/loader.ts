@@ -20,14 +20,14 @@ export class DynamicTokenLoader {
 
   constructor(config: DynamicTokenLoaderConfig = {}) {
     this.config = config;
-    
+
     this.tenantLoader = new TenantConfigurationLoader({
       endpoint: config.remote?.endpoint,
       headers: config.remote?.headers,
       timeout: 5000,
       cache: config.cache,
     });
-    
+
     this.cache = new TokenCacheManager({
       maxSize: config.cache?.maxSize ?? 100,
       ttl: config.cache?.ttl ?? 5 * 60 * 1000,
@@ -43,16 +43,16 @@ export class DynamicTokenLoader {
     if (this.isInitialized) {
       return;
     }
-    
+
     try {
       // Initialize cache from storage
       this.cache.initializeFromStorage();
-      
+
       // Load default tenant if configured
       if (this.config.defaultTenant) {
         await this.tenantLoader.loadFromJSON(this.config.defaultTenant);
       }
-      
+
       this.isInitialized = true;
     } catch (error) {
       console.error('Failed to initialize dynamic token loader:', error);
@@ -67,7 +67,7 @@ export class DynamicTokenLoader {
     if (!this.isInitialized) {
       await this.initialize();
     }
-    
+
     return this.tenantLoader.loadTenant(tenantId);
   }
 
@@ -78,7 +78,7 @@ export class DynamicTokenLoader {
     if (!this.isInitialized) {
       await this.initialize();
     }
-    
+
     return this.tenantLoader.loadFromJSON(config);
   }
 
@@ -141,7 +141,7 @@ export class DynamicTokenLoader {
     if (this.config.development?.verbose) {
       console.log(`Injecting token: ${path} = ${value}`);
     }
-    
+
     // TODO: Integrate with semantic token system
     // tokenSystem.setToken(path, value);
   }
@@ -153,13 +153,13 @@ export class DynamicTokenLoader {
     if (config.remote?.enabled && !config.remote?.endpoint) {
       throw new Error('Remote endpoint is required when remote loading is enabled');
     }
-    
+
     if (config.cache?.maxSize && config.cache.maxSize <= 0) {
       throw new Error('Cache max size must be greater than 0');
     }
-    
+
     if (config.cache?.ttl && config.cache.ttl <= 0) {
       throw new Error('Cache TTL must be greater than 0');
     }
   }
-} 
+}

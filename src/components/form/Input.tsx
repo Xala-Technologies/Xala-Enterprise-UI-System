@@ -14,6 +14,43 @@ import type { InputProps } from '../../types/form.types';
  */
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (props, ref): React.ReactElement => {
+    const {
+      testId = 'input',
+      label,
+      required,
+      inputId,
+      name,
+      type = 'text',
+      value,
+      defaultValue,
+      onChange,
+      onBlur,
+      onFocus,
+      placeholder,
+      disabled,
+      readOnly,
+      maxLength,
+      minLength,
+      pattern,
+      autoComplete,
+      variant = 'default',
+      size = 'medium',
+      helpText,
+      error,
+      validationErrors = [],
+      isValidating = false,
+      className,
+      ...inputProps
+    } = props;
+
+    const handleChange = onChange || (() => {});
+    const handleBlur = onBlur || (() => {});
+    const handleFocus = onFocus || (() => {});
+    const inputClasses = className || 'input';
+    const hasValidationErrors = !!error || validationErrors.length > 0;
+    const helpTextId = inputId ? `${inputId}-help` : undefined;
+    const errorId = inputId ? `${inputId}-error` : undefined;
+
     return (
       <div className="input-field" data-testid={testId}>
         {/* Label */}

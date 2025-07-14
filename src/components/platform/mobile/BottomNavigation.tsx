@@ -5,12 +5,13 @@ import React from 'react';
 
 import type { BottomNavigationProps, BottomNavigationItem } from '../../../types/platform.types';
 
-
 // Helper function to generate CSS using design tokens
-const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => { const { height = 'standard', safeAreaBottom = true, norwegian } = props;
+const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => {
+  const { height = 'standard', safeAreaBottom = true, norwegian } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = { display: 'flex',
+  const baseStyles: React.CSSProperties = {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
@@ -22,7 +23,8 @@ const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSPrope
     left: 0,
     right: 0,
     zIndex: 'var(--z-index-navigation)',
-    boxShadow: 'var(--shadow-lg)', };
+    boxShadow: 'var(--shadow-lg)',
+  };
 
   // Height-based styles
   const heightStyles = getHeightStyles(height);
@@ -33,31 +35,40 @@ const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSPrope
   // Emergency styling
   const emergencyStyles = getEmergencyStyles(norwegian?.emergencyTab);
 
-  return { ...baseStyles,
-    ...heightStyles,
-    ...safeAreaStyles,
-    ...emergencyStyles, }; };
+  return { ...baseStyles, ...heightStyles, ...safeAreaStyles, ...emergencyStyles };
+};
 
 // Get height-based styles
-const getHeightStyles = (height: string): React.CSSProperties => { const heights = { compact: { height: 'var(--mobile-navigation-height-compact)',
-      padding: 'var(--spacing-2) 0', },
-    standard: { height: 'var(--mobile-navigation-height-standard)',
-      padding: 'var(--spacing-3) 0', },
-    extended: { height: 'var(--mobile-navigation-height-extended)',
-      padding: 'var(--spacing-4) 0', }, };
-  return heights[height as keyof typeof heights] || heights.standard; };
+const getHeightStyles = (height: string): React.CSSProperties => {
+  const heights = {
+    compact: { height: 'var(--mobile-navigation-height-compact)', padding: 'var(--spacing-2) 0' },
+    standard: { height: 'var(--mobile-navigation-height-standard)', padding: 'var(--spacing-3) 0' },
+    extended: { height: 'var(--mobile-navigation-height-extended)', padding: 'var(--spacing-4) 0' },
+  };
+  return heights[height as keyof typeof heights] || heights.standard;
+};
 
 // Get safe area styles for Norwegian mobile compliance
-const getSafeAreaStyles = (safeAreaBottom: boolean): React.CSSProperties => { if (!safeAreaBottom) { return {}; }
+const getSafeAreaStyles = (safeAreaBottom: boolean): React.CSSProperties => {
+  if (!safeAreaBottom) {
+    return {};
+  }
 
-  return { paddingBottom: 'env(safe-area-inset-bottom)',
+  return {
+    paddingBottom: 'env(safe-area-inset-bottom)',
     paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)', }; };
+    paddingRight: 'env(safe-area-inset-right)',
+  };
+};
 
 // Get emergency styles
-const getEmergencyStyles = (hasEmergencyTab?: boolean): React.CSSProperties => { if (!hasEmergencyTab) { return {}; }
+const getEmergencyStyles = (hasEmergencyTab?: boolean): React.CSSProperties => {
+  if (!hasEmergencyTab) {
+    return {};
+  }
 
-  return { borderTop: 'var(--border-width-thick) solid var(--color-red-300)', }; };
+  return { borderTop: 'var(--border-width-thick) solid var(--color-red-300)' };
+};
 
 // Tab item styles
 const getTabItemStyles = (
@@ -65,7 +76,9 @@ const getTabItemStyles = (
   isActive: boolean,
   showLabels: boolean,
   showBadges: boolean
-): React.CSSProperties => { const baseStyles: React.CSSProperties = { display: 'flex',
+): React.CSSProperties => {
+  const baseStyles: React.CSSProperties = {
+    display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -80,37 +93,54 @@ const getTabItemStyles = (
     cursor: item.disabled ? 'not-allowed' : 'pointer',
     opacity: item.disabled ? 0.5 : 1,
     transition: 'all var(--transition-duration-fast) ease',
-    position: 'relative', };
+    position: 'relative',
+  };
 
   // Emergency tab styling
-  if (item.norwegian?.priority === 'emergency') { return { ...baseStyles,
+  if (item.norwegian?.priority === 'emergency') {
+    return {
+      ...baseStyles,
       backgroundColor: isActive ? 'var(--color-red-600)' : 'var(--color-red-100)',
       color: isActive ? 'var(--color-white)' : 'var(--color-red-800)',
       borderRadius: 'var(--border-radius-lg)',
       margin: '0 var(--spacing-2)',
-      animation: 'emergency-pulse 2s infinite', }; }
+      animation: 'emergency-pulse 2s infinite',
+    };
+  }
 
   // Classification styling
-  if (item.norwegian?.classification) { const classificationColors = { ÅPEN: 'var(--color-green-500)',
+  if (item.norwegian?.classification) {
+    const classificationColors = {
+      ÅPEN: 'var(--color-green-500)',
       BEGRENSET: 'var(--color-orange-500)',
       KONFIDENSIELT: 'var(--color-red-500)',
-      HEMMELIG: 'var(--color-red-800)', };
+      HEMMELIG: 'var(--color-red-800)',
+    };
 
-    return { ...baseStyles,
-      borderTop: `var(--border-width-thick) solid ${classificationColors[item.norwegian.classification]}`, }; }
+    return {
+      ...baseStyles,
+      borderTop: `var(--border-width-thick) solid ${classificationColors[item.norwegian.classification]}`,
+    };
+  }
 
-  return baseStyles; };
+  return baseStyles;
+};
 
 // Navigation tab component
-const NavigationTab = ({ item,
+const NavigationTab = ({
+  item,
   isActive,
   showLabels,
   showBadges,
-  onPress, }: { item: BottomNavigationItem;
+  onPress,
+}: {
+  item: BottomNavigationItem;
   isActive: boolean;
   showLabels: boolean;
   showBadges: boolean;
-  onPress: () => void; }): React.ReactElement => { return (
+  onPress: () => void;
+}): React.ReactElement => {
+  return (
     <button
       style={tabStyles}
       onClick={onPress}
@@ -119,23 +149,34 @@ const NavigationTab = ({ item,
       aria-label={item.labelKey}
       aria-selected={isActive}
       role="tab"
-      onMouseEnter={e => { if (!item.disabled && item.norwegian?.priority !== 'emergency') { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)'; } }}
-      onMouseLeave={e => { if (!item.disabled && item.norwegian?.priority !== 'emergency') { (e.target as HTMLElement).style.backgroundColor = 'transparent'; } }}
+      onMouseEnter={e => {
+        if (!item.disabled && item.norwegian?.priority !== 'emergency') {
+          (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!item.disabled && item.norwegian?.priority !== 'emergency') {
+          (e.target as HTMLElement).style.backgroundColor = 'transparent';
+        }
+      }}
     >
       {/* Tab icon */}
       <div
-        style={{ fontSize: 'var(--font-size-xl)',
+        style={{
+          fontSize: 'var(--font-size-xl)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          position: 'relative', }}
+          position: 'relative',
+        }}
       >
         {isActive && item.activeIcon ? item.activeIcon : item.icon}
 
         {/* Badge for notifications */}
         {showBadges && item.badgeCount !== undefined && item.badgeCount > 0 && (
           <span
-            style={{ position: 'absolute',
+            style={{
+              position: 'absolute',
               top: 'calc(-1 * var(--spacing-2))',
               right: 'calc(-1 * var(--spacing-2))',
               backgroundColor: item.badgeColor || 'var(--color-red-500)',
@@ -148,7 +189,8 @@ const NavigationTab = ({ item,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '0 var(--spacing-1)', }}
+              padding: '0 var(--spacing-1)',
+            }}
             aria-label={`${item.badgeCount} notification${item.badgeCount === 1 ? '' : 's'}`}
           >
             {item.badgeCount > 99 ? '99+' : item.badgeCount}
@@ -158,10 +200,12 @@ const NavigationTab = ({ item,
         {/* Classification indicator */}
         {item.norwegian?.classification && (
           <span
-            style={{ position: 'absolute',
+            style={{
+              position: 'absolute',
               bottom: 'calc(-1 * var(--spacing-1))',
               right: 'calc(-1 * var(--spacing-1))',
-              fontSize: 'var(--font-size-xs)', }}
+              fontSize: 'var(--font-size-xs)',
+            }}
             aria-label={`Classification: ${item.norwegian.classification}`}
             title={`Klassifisering: ${item.norwegian.classification}`}
           >
@@ -172,11 +216,13 @@ const NavigationTab = ({ item,
         {/* Emergency indicator */}
         {item.norwegian?.priority === 'emergency' && (
           <span
-            style={{ position: 'absolute',
+            style={{
+              position: 'absolute',
               top: 'calc(-1 * var(--spacing-1))',
               left: 'calc(-1 * var(--spacing-1))',
               fontSize: 'var(--font-size-xs)',
-              animation: 'emergency-blink 1s infinite', }}
+              animation: 'emergency-blink 1s infinite',
+            }}
             aria-label="Emergency"
           >
             🚨
@@ -187,14 +233,16 @@ const NavigationTab = ({ item,
       {/* Tab label */}
       {showLabels && (
         <span
-          style={{ fontSize: 'var(--font-size-xs)',
+          style={{
+            fontSize: 'var(--font-size-xs)',
             fontWeight: isActive ? 'var(--font-weight-semibold)' : 'var(--font-weight-medium)',
             textAlign: 'center',
             lineHeight: 'var(--line-height-tight)',
             maxWidth: '100%',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap', }}
+            whiteSpace: 'nowrap',
+          }}
         >
           {/* TODO: Replace with actual localization */}
           {item.labelKey}
@@ -204,11 +252,13 @@ const NavigationTab = ({ item,
       {/* Auth required indicator */}
       {item.norwegian?.requiresAuth && !isActive && (
         <span
-          style={{ position: 'absolute',
+          style={{
+            position: 'absolute',
             top: 'var(--spacing-1)',
             right: 'var(--spacing-1)',
             fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-orange-600)', }}
+            color: 'var(--color-orange-600)',
+          }}
           aria-label="Authentication required"
           title="Krever autentisering"
         >
@@ -216,19 +266,21 @@ const NavigationTab = ({ item,
         </span>
       )}
     </button>
-  ); };
+  );
+};
 
 // Get classification icon
-const getClassificationIcon = (classification: string): string => { const icons = { ÅPEN: '🟢',
-    BEGRENSET: '🟡',
-    KONFIDENSIELT: '🔴',
-    HEMMELIG: '⚫', };
-  return icons[classification as keyof typeof icons] || '❓'; };
+const getClassificationIcon = (classification: string): string => {
+  const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
+  return icons[classification as keyof typeof icons] || '❓';
+};
 
 // Municipality context indicator
-const MunicipalityIndicator = ({ municipality }: { municipality: string }): React.ReactElement => { return (
+const MunicipalityIndicator = ({ municipality }: { municipality: string }): React.ReactElement => {
+  return (
     <div
-      style={{ position: 'absolute',
+      style={{
+        position: 'absolute',
         top: 'calc(-1 * var(--spacing-8))',
         left: '50%',
         transform: 'translateX(-50%)',
@@ -238,17 +290,21 @@ const MunicipalityIndicator = ({ municipality }: { municipality: string }): Reac
         fontSize: 'var(--font-size-xs)',
         borderRadius: 'var(--border-radius-sm)',
         border: 'var(--border-width) solid var(--color-blue-300)',
-        whiteSpace: 'nowrap', }}
+        whiteSpace: 'nowrap',
+      }}
       aria-label={`Municipality: ${municipality}`}
     >
       🏛️ {municipality}
     </div>
-  ); };
+  );
+};
 
 // Emergency banner component
-const EmergencyBanner = (): React.ReactElement => { return (
+const EmergencyBanner = (): React.ReactElement => {
+  return (
     <div
-      style={{ position: 'absolute',
+      style={{
+        position: 'absolute',
         top: 'calc(-1 * var(--spacing-6))',
         left: 0,
         right: 0,
@@ -258,17 +314,20 @@ const EmergencyBanner = (): React.ReactElement => { return (
         fontSize: 'var(--font-size-xs)',
         textAlign: 'center',
         fontWeight: 'var(--font-weight-semibold)',
-        animation: 'emergency-pulse 2s infinite', }}
+        animation: 'emergency-pulse 2s infinite',
+      }}
       role="alert"
       aria-live="assertive"
     >
       🚨 NØDTJENESTER TILGJENGELIG
     </div>
-  ); };
+  );
+};
 
 // BottomNavigation component with forwardRef
 export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
-  (props, ref): React.ReactElement => { return (
+  (props, ref): React.ReactElement => {
+    return (
       <nav
         ref={ref}
         style={combinedStyles}
@@ -304,12 +363,14 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
         {/* Classification indicators overlay */}
         {norwegian?.classificationIndicators && (
           <div
-            style={{ position: 'absolute',
+            style={{
+              position: 'absolute',
               top: 'calc(-1 * var(--spacing-1))',
               left: '50%',
               transform: 'translateX(-50%)',
               display: 'flex',
-              gap: 'var(--spacing-1)', }}
+              gap: 'var(--spacing-1)',
+            }}
             aria-hidden="true"
           >
             {Array.from(
@@ -317,8 +378,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
             ).map(classification => (
               <span
                 key={classification}
-                style={{ fontSize: 'var(--font-size-xs)',
-                  opacity: '0.7', }}
+                style={{ fontSize: 'var(--font-size-xs)', opacity: '0.7' }}
                 title={`System supports: ${classification}`}
               >
                 {getClassificationIcon(classification!)}
@@ -330,7 +390,8 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
         {/* Norwegian compliance footer */}
         {norwegian?.auditLog && (
           <div
-            style={{ position: 'absolute',
+            style={{
+              position: 'absolute',
               bottom: 'calc(-1 * var(--spacing-4))',
               left: 0,
               right: 0,
@@ -339,14 +400,16 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
               fontSize: 'var(--font-size-xs)',
               color: 'var(--text-tertiary)',
               textAlign: 'center',
-              borderTop: 'var(--border-width) solid var(--border-tertiary)', }}
+              borderTop: 'var(--border-width) solid var(--border-tertiary)',
+            }}
             aria-hidden="true"
           >
             📝 Navigasjon logger for revisjon
           </div>
         )}
       </nav>
-    ); }
+    );
+  }
 );
 
 BottomNavigation.displayName = 'BottomNavigation';

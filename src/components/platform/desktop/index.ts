@@ -4,8 +4,10 @@
 export { DesktopSidebar } from './DesktopSidebar';
 
 // Re-export types for convenience
-export type { DesktopSidebarProps,
+export type {
+  DesktopSidebarProps,
   TopNavigationProps,
   ResizableTableProps,
   ResizableTableColumn,
-  BreadcrumbItem, } from '../../../types/platform.types';
+  BreadcrumbItem,
+} from '../../../types/platform.types';

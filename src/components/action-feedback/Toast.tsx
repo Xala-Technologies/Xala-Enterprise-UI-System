@@ -87,18 +87,31 @@ const getVariantStyles = (variant: string): React.CSSProperties => { const varia
   return variants[variant as keyof typeof variants] || variants.info; };
 
 // Get priority styles
-const getPriorityStyles = (priority?: string): React.CSSProperties => { if (!priority) { return {}; }
+const getPriorityStyles = (priority?: string): React.CSSProperties => {
+  if (!priority) {
+    return {};
+  }
 
-  const priorityStyles: Record<string, React.CSSProperties> = { low: { opacity: '0.9', },
-    medium: { // Default styling },
-    high: { borderWidth: 'var(--border-width-thick)',
-      boxShadow: 'var(--shadow-2xl)', },
-    critical: { borderWidth: 'var(--border-width-thick)',
+  const priorityStyles: Record<string, React.CSSProperties> = {
+    low: {
+      opacity: '0.9',
+    },
+    medium: {
+      // Default styling
+    },
+    high: {
+      borderWidth: 'var(--border-width-thick)',
       boxShadow: 'var(--shadow-2xl)',
-      animation:
-        'toast-pulse 2s infinite, toast-slide-in var(--transition-duration-normal) ease-out', }, };
+    },
+    critical: {
+      borderWidth: 'var(--border-width-thick)',
+      boxShadow: 'var(--shadow-2xl)',
+      animation: 'toast-pulse 2s infinite, toast-slide-in var(--transition-duration-normal) ease-out',
+    },
+  };
 
-  return priorityStyles[priority] || {}; };
+  return priorityStyles[priority] || {};
+};
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
@@ -208,35 +221,59 @@ const ToastActionButton = ({ action }: { action: { label: string; handler: () =>
       {/* TODO: Replace with actual localization */}
       {action.labelKey}
     </button>
-  ); };
+  );
+};
 
 // Progress bar for timed toasts
-const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }): React.ReactElement => { return () => clearInterval(interval); }, [duration, paused]);
+const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }): React.ReactElement => {
+  const [progress, setProgress] = React.useState(0);
 
-  if (duration <= 0) { return null; }
+  React.useEffect(() => {
+    if (!paused && duration > 0) {
+      const interval = setInterval(() => {
+        setProgress((prev) => {
+          const next = prev + (100 / (duration / 100));
+          return next >= 100 ? 100 : next;
+        });
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [duration, paused]);
+
+  if (duration <= 0) {
+    return null;
+  }
 
   return (
     <div
-      style={{ position: 'absolute',
+      style={{
+        position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
         height: 'var(--spacing-1)',
         backgroundColor: 'var(--color-white-alpha-20)',
         borderRadius: '0 0 var(--border-radius-lg) var(--border-radius-lg)',
-        overflow: 'hidden', }}
+        overflow: 'hidden',
+      }}
     >
       <div
-        style={{ width: `${progress}%`,
+        style={{
+          width: `${progress}%`,
           height: '100%',
           backgroundColor: 'var(--color-white)',
-          transition: paused ? 'none' : 'width 0.1s linear', }}
+          transition: paused ? 'none' : 'width 0.1s linear',
+        }}
       />
     </div>
-  ); };
+  );
+};
 
 // Priority indicator
-const getPriorityIcon = (priority: string): string => { const icons = { low: '▪',
+const getPriorityIcon = (priority: string): string => {
+  const icons = {
+    low: '▪',
     medium: '■',
     high: '◆',
     critical: '⬛', };

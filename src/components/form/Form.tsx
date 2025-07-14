@@ -13,9 +13,10 @@ import type { FormProps } from '../../types/form.types';
  * Follows enterprise standards - no inline styles, design token props only
  */
 export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.ReactElement => {
+  const { className, onSubmit, testId = 'form', children, accessibility, ...formProps } = props;
+
   const formClasses = className || '';
   const handleSubmit = onSubmit || (() => {});
-  const accessibility = {};
 
   return (
     <form

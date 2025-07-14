@@ -126,10 +126,10 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
       config: { ...defaultConfig, ...initialConfig },
       accessibility: accessibilityConfig,
       accessibilityTokens: generateAccessibilityTokens(accessibilityConfig),
-      updateConfig: (_updates: Partial<UISystemConfig>): void => {
+      updateConfig: (updates: Partial<UISystemConfig>): void => {
         logger.debug('Config update requested', { updates });
       },
-      updateAccessibility: (_accessibility: AccessibilityConfig | AccessibilityPreset): void => {
+      updateAccessibility: (accessibility: AccessibilityConfig | AccessibilityPreset): void => {
         logger.debug('Accessibility update requested', { accessibility });
       },
     }),

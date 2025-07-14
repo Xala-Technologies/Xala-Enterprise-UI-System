@@ -13,20 +13,20 @@ import type { TenantTokenConfig, TokenLoadResult } from './types';
 export interface TenantLoaderConfig {
   /** Remote API endpoint */
   endpoint?: string;
-  
+
   /** Request headers */
   headers?: Record<string, string>;
-  
+
   /** Request timeout in milliseconds */
   timeout?: number;
-  
+
   /** Retry configuration */
   retry?: {
     attempts: number;
     delay: number;
     exponentialBackoff: boolean;
   };
-  
+
   /** Cache configuration */
   cache?: {
     enabled: boolean;
@@ -59,7 +59,7 @@ export class TenantConfigurationLoader {
       },
       ...config,
     };
-    
+
     this.cache = new TokenCacheManager(this.config.cache);
   }
 
@@ -81,10 +81,10 @@ export class TenantConfigurationLoader {
           };
         }
       }
-      
+
       // Load from remote or local source
       const tenantConfig = await this.fetchTenantConfig(tenantId);
-      
+
       if (!tenantConfig) {
         return {
           success: false,
@@ -93,16 +93,16 @@ export class TenantConfigurationLoader {
           skippedTokens: 0,
         };
       }
-      
+
       // Process and cache the configuration
       const tokens = this.processTokens(tenantConfig);
-      
+
       if (this.config.cache?.enabled) {
         this.cache.set(tenantId, tokens, tenantConfig.tenantId);
       }
-      
+
       this.currentTenant = tenantId;
-      
+
       return {
         success: true,
         loadedTokens: Object.keys(tokens).length,
@@ -125,13 +125,13 @@ export class TenantConfigurationLoader {
   async loadFromJSON(config: TenantTokenConfig): Promise<TokenLoadResult> {
     try {
       const tokens = this.processTokens(config);
-      
+
       if (this.config.cache?.enabled) {
         this.cache.set(config.tenantId, tokens, config.tenantId);
       }
-      
+
       this.currentTenant = config.tenantId;
-      
+
       return {
         success: true,
         loadedTokens: Object.keys(tokens).length,
@@ -179,9 +179,9 @@ export class TenantConfigurationLoader {
       // Return null if no endpoint configured
       return null;
     }
-    
+
     const url = `${this.config.endpoint}/tenants/${tenantId}`;
-    
+
     for (let attempt = 0; attempt < (this.config.retry?.attempts ?? 1); attempt++) {
       try {
         const response = await fetch(url, {
@@ -192,27 +192,27 @@ export class TenantConfigurationLoader {
           },
           signal: AbortSignal.timeout(this.config.timeout ?? 5000),
         });
-        
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        
+
         const config = await response.json();
         return this.validateTenantConfig(config);
       } catch (error) {
         if (attempt === (this.config.retry?.attempts ?? 1) - 1) {
           throw error;
         }
-        
+
         // Wait before retry
         const delay = this.config.retry?.exponentialBackoff
           ? (this.config.retry.delay ?? 1000) * Math.pow(2, attempt)
           : (this.config.retry.delay ?? 1000);
-          
+
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
-    
+
     return null;
   }
 
@@ -221,21 +221,21 @@ export class TenantConfigurationLoader {
    */
   private processTokens(config: TenantTokenConfig): Record<string, TokenValue> {
     const tokens: Record<string, TokenValue> = {};
-    
+
     // Process primary colors
     if (config.primaryColors) {
       tokens['alias.color.brand.primary'] = config.primaryColors.brand;
       tokens['alias.color.brand.primaryHover'] = config.primaryColors.brandHover;
       tokens['alias.color.brand.primaryActive'] = config.primaryColors.brandActive;
     }
-    
+
     // Process secondary colors
     if (config.secondaryColors) {
       tokens['alias.color.brand.secondaryBackground'] = config.secondaryColors.background;
       tokens['alias.color.brand.secondarySurface'] = config.secondaryColors.surface;
       tokens['alias.color.brand.secondaryText'] = config.secondaryColors.text;
     }
-    
+
     // Process typography
     if (config.typography) {
       tokens['global.typography.fontFamily.primary'] = config.typography.fontFamily;
@@ -249,7 +249,7 @@ export class TenantConfigurationLoader {
         tokens['global.typography.fontFamily.mono'] = config.typography.monoFont;
       }
     }
-    
+
     // Process company information
     if (config.company) {
       tokens['custom.company.name'] = config.company.name;
@@ -259,14 +259,14 @@ export class TenantConfigurationLoader {
         tokens['custom.company.website'] = config.company.website;
       }
     }
-    
+
     // Process custom tokens
     if (config.customTokens) {
       Object.entries(config.customTokens).forEach(([key, value]) => {
         tokens[key] = value;
       });
     }
-    
+
     return tokens;
   }
 
@@ -277,17 +277,17 @@ export class TenantConfigurationLoader {
     if (!config || typeof config !== 'object') {
       throw new Error('Invalid tenant configuration: must be an object');
     }
-    
+
     const typedConfig = config as Partial<TenantTokenConfig>;
-    
+
     if (!typedConfig.tenantId || typeof typedConfig.tenantId !== 'string') {
       throw new Error('Invalid tenant configuration: tenantId is required');
     }
-    
+
     if (!typedConfig.name || typeof typedConfig.name !== 'string') {
       throw new Error('Invalid tenant configuration: name is required');
     }
-    
+
     return typedConfig as TenantTokenConfig;
   }
-} 
+}

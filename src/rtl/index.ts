@@ -4,9 +4,17 @@
 export * from './tokens/rtl-design-tokens';
 
 // RTL utility functions
-export const RTLUtils = { isRTL: (language: string): boolean => { return ['ar', 'he', 'fa', 'ur'].includes(language); },
+export const RTLUtils = {
+  isRTL: (language: string): boolean => {
+    return ['ar', 'he', 'fa', 'ur'].includes(language);
+  },
 
-  getDirection: (language: string): 'ltr' | 'rtl' => { return RTLUtils.isRTL(language) ? 'rtl' : 'ltr'; },
+  getDirection: (language: string): 'ltr' | 'rtl' => {
+    return RTLUtils.isRTL(language) ? 'rtl' : 'ltr';
+  },
 
   // Mock validation function for RTL components
-  validateRTLColorContrast: (_element: HTMLElement): boolean => { return true; }, };
+  validateRTLColorContrast: (_element: HTMLElement): boolean => {
+    return true;
+  },
+};

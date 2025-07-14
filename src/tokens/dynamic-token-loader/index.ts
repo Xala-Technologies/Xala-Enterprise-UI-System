@@ -10,8 +10,13 @@ export { TenantConfigurationLoader } from './tenant-loader';
 
 // Types
 export type {
-    BrandingConfig,
-    DynamicTokenLoaderConfig, TenantTokenConfig, TokenCacheEntry, TokenLoadResult, TokenOverrideConfig, WhiteLabelConfig
+  BrandingConfig,
+  DynamicTokenLoaderConfig,
+  TenantTokenConfig,
+  TokenCacheEntry,
+  TokenLoadResult,
+  TokenOverrideConfig,
+  WhiteLabelConfig,
 } from './types';
 
 // Default instance
@@ -40,4 +45,4 @@ export function getCurrentTenant(): string | null {
 export async function initializeDynamicTokens(config: DynamicTokenLoaderConfig): Promise<void> {
   const loader = new DynamicTokenLoader(config);
   await loader.initialize();
-} 
+}

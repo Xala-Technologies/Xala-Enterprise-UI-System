@@ -3,7 +3,6 @@
  * @module LayoutTypes
  */
 
-
 import type { ReactNode } from 'react';
 import type { ComponentProps } from '../lib/types/core.types';
 
