@@ -26,8 +26,7 @@ const getButtonStyles = (props: ButtonProps): React.CSSProperties => {
     fullWidth = false,
     disabled = false,
     loading = false,
-    norwegian,
-  , label } = props;
+    norwegian } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {

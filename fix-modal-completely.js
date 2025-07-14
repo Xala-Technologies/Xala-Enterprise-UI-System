@@ -1,4 +1,11 @@
-// Modal component for @xala-mock/ui-system
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+
+// Fix Modal.tsx completely
+const modalPath = path.join(__dirname, 'src/components/action-feedback/Modal.tsx');
+const modalContent = `// Modal component for @xala-mock/ui-system
 // Norwegian-compliant modal with accessibility and focus management
 
 import React, { useEffect } from 'react';
@@ -26,7 +33,6 @@ const getCategoryIcon = (category: string): string => {
   };
   return icons[category as keyof typeof icons] || '📋';
 };
-
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
@@ -154,7 +160,7 @@ const ModalHeader = ({
   titleKey?: string;
   title?: string;
   closable: boolean;
-  norwegian?: { classification?: string };
+  norwegian?: { classification?: string; category?: string };
   onClose: () => void;
 }): React.ReactElement => {
   return (
@@ -176,6 +182,7 @@ const ModalHeader = ({
         }}
       >
         <h2
+          id="modal-title"
           style={{
             fontSize: 'var(--font-size-xl)',
             fontWeight: 'var(--font-weight-semibold)',
@@ -240,8 +247,8 @@ const ClassificationIndicator = ({ level }: { level: string }): React.ReactEleme
         borderRadius: 'var(--border-radius-sm)',
         border: 'var(--border-width) solid var(--border-secondary)',
       }}
-      aria-label={`Classification: ${level}`}
-      title={`Klassifisering: ${level}`}
+      aria-label={\`Classification: \${level}\`}
+      title={\`Klassifisering: \${level}\`}
     >
       {getClassificationIcon(level)} {level}
     </span>
@@ -259,8 +266,8 @@ const CategoryIndicator = ({ category }: { category: string }): React.ReactEleme
         color: 'var(--color-blue-800)',
         borderRadius: 'var(--border-radius-sm)',
       }}
-      aria-label={`Category: ${category}`}
-      title={`Kategori: ${category}`}
+      aria-label={\`Category: \${category}\`}
+      title={\`Kategori: \${category}\`}
     >
       {getCategoryIcon(category)} {category}
     </span>
@@ -284,7 +291,7 @@ const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scroll
   );
 };
 
-// Focus trap hook (simplified implementation)
+// Focus trap hook
 const useFocusTrap = (
   isOpen: boolean,
   enabled: boolean,
@@ -323,7 +330,7 @@ const useFocusTrap = (
   }, [isOpen, enabled, containerRef]);
 };
 
-// Modal component proper implementation
+// Modal component
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): React.ReactElement => {
   const {
     isOpen,
@@ -353,7 +360,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
   const contentRef = React.useRef<HTMLDivElement>(null);
 
   // Handle escape key
-  React.useEffect(() => {
+  useEffect(() => {
     const handleEscape = (event: KeyboardEvent): void => {
       if (event.key === 'Escape' && closeOnEscape && !persistent) {
         onEscapeKey?.();
@@ -368,9 +375,30 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
-  // Handle modal opening
-  useEffect((): React.ReactElement => {
-  return () => {
+  // Use focus trap
+  useFocusTrap(isOpen, true, contentRef);
+
+  const handleClose = (): void => {
+    if (!persistent) {
+      onClose?.();
+    }
+  };
+
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>): void => {
+    if (closeOnOverlay && !persistent && event.target === event.currentTarget) {
+      onOverlayClick?.();
+      onClose?.();
+    }
+  };
+
+  if (!isOpen) {
+    return <></>;
+  }
+
+  const overlayStyles = getModalStyles(props);
+  const contentStyles = getModalContentStyles(props);
+  const combinedOverlayStyles = { ...overlayStyles, ...style };
+
   return (
     <>
       {/* Modal overlay */}
@@ -378,7 +406,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
         <div
           style={combinedOverlayStyles}
           onClick={handleOverlayClick}
-          data-testid={`${testId}-overlay`}
+          data-testid={\`\${testId}-overlay\`}
         />
       )}
 
@@ -435,7 +463,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
             >
               <span>
                 🔒 Klassifisering: {norwegian.classification}
-                {norwegian.municipality && ` • ${norwegian.municipality}`}
+                {norwegian.municipality && \` • \${norwegian.municipality}\`}
               </span>
               {norwegian.auditLog && <span>📝 Revisjon aktivert</span>}
             </div>
@@ -447,3 +475,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
 });
 
 Modal.displayName = 'Modal';
+`;
+
+fs.writeFileSync(modalPath, modalContent);
+console.log('Fixed Modal.tsx completely');

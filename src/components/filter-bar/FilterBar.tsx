@@ -105,6 +105,18 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
 export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
   (
     {
+  const handleSearchChange = (_value: string): void => {
+    // Handle search change
+  };
+
+  const handleFilterChange = (_filterId: string, _value: unknown): void => {
+    // Handle filter change
+  };
+
+  const handleViewChange = (_viewId: string): void => {
+    // Handle view change
+  };
+
       variant = 'default',
       size = 'md',
       searchPlaceholder = 'Search...',
