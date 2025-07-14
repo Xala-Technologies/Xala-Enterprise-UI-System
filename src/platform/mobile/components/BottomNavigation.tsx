@@ -1,5 +1,6 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
+import { useLocalization } from '../../../localization/hooks/useLocalization';
 
 const logger = Logger.create({
   serviceName: 'ui-system-bottom-navigation',
@@ -50,8 +51,53 @@ interface BottomNavigationProps {
  * - Emergency access support
  * - Accessibility announcements in Norwegian
  */
-export const BottomNavigation = React.forwardRef(
-  (props: BottomNavigationProps, ref: unknown): React.ReactElement => {
+export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
+  (props: BottomNavigationProps, ref): React.ReactElement => {
+    const {
+      items,
+      activeIndex = 0,
+      showLabels = true,
+      showBadges = true,
+      height = 'standard',
+      safeAreaBottom = true,
+      classification,
+      onItemPress,
+      style,
+      ...restProps
+    } = props;
+    
+    const { t } = useLocalization();
+    
+    const handleItemPress = (index: number, item: BottomNavigationItem): void => {
+      if (!item.disabled && onItemPress) {
+        onItemPress(index, item);
+      }
+    };
+    
+    const getHeightStyle = (): string => {
+      switch (height) {
+        case 'compact': return 'var(--spacing-12)';
+        case 'extended': return 'var(--spacing-16)';
+        default: return 'var(--spacing-14)';
+      }
+    };
+    
+    const getClassificationStyle = (): React.CSSProperties => {
+      if (!classification) return {};
+      
+      const classificationColors = {
+        'ÅPEN': 'var(--color-success-500)',
+        'BEGRENSET': 'var(--color-warning-500)', 
+        'KONFIDENSIELT': 'var(--color-danger-500)',
+        'HEMMELIG': 'var(--color-danger-700)'
+      };
+      
+      return {
+        borderTopColor: classificationColors[classification] || 'var(--color-border-subtle)',
+        borderTopWidth: '2px'
+      };
+    };
+    
     return (
       <nav
         ref={ref}
@@ -79,6 +125,9 @@ export const BottomNavigation = React.forwardRef(
         {...restProps}
       >
         {items.map((item, index): React.ReactElement => {
+          const isActive = index === activeIndex;
+          const itemClassification = item.classification;
+          
           return (
             <button
               key={index}

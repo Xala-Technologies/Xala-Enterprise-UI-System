@@ -14,6 +14,7 @@ export interface PlatformComponentProps extends ComponentProps {
 // Mobile Header component props
 export interface MobileHeaderProps extends PlatformComponentProps {
   title?: string; // Header title text
+  titleKey?: string; // Localization key for title
   showBackButton?: boolean;
   showMenu?: boolean;
   showSearch?: boolean;
@@ -21,29 +22,62 @@ export interface MobileHeaderProps extends PlatformComponentProps {
   notificationCount?: number;
   searchPlaceholder?: string;
   onBackClick?: () => void;
+  onBack?: () => void;
   onMenuClick?: () => void;
+  onMenuToggle?: () => void;
   onSearchFocus?: () => void;
   onNotificationClick?: () => void;
+  height?: 'standard' | 'compact' | 'extended';
+  sticky?: boolean;
+  transparent?: boolean;
+  ariaLabel?: string;
+  norwegian?: {
+    municipalityLogo?: boolean;
+    municipality?: string;
+    showClassificationBadge?: boolean;
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+    emergencyContactAccess?: boolean;
+    governmentBranding?: boolean;
+  };
 }
 
 // Bottom Navigation component props
 export interface BottomNavigationProps extends PlatformComponentProps {
   items: BottomNavigationItem[];
+  activeIndex?: number;
   activeItem?: string;
   onItemClick?: (item: BottomNavigationItem, index: number) => void;
   showLabels?: boolean;
   showBadges?: boolean;
+  height?: 'standard' | 'compact' | 'extended';
+  ariaLabel?: string;
+  norwegian?: {
+    emergencyTab?: boolean;
+    municipalityContext?: boolean;
+    municipality?: string;
+    classificationIndicators?: boolean;
+    auditLog?: boolean;
+    governmentBranding?: boolean;
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  };
 }
 
 // Bottom navigation item configuration
 export interface BottomNavigationItem {
   label: string; // Tab label text
+  labelKey?: string; // Localization key for label
   icon: ReactNode;
   activeIcon?: ReactNode;
   badgeCount?: number;
   badgeColor?: string;
   disabled?: boolean;
   testId?: string;
+  norwegian?: {
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+    priority?: 'normal' | 'high' | 'emergency';
+    requiresAuth?: boolean;
+    municipality?: string;
+  };
 }
 
 // Mobile Drawer component props

@@ -1,23 +1,28 @@
 // MobileHeader component for @xala-mock/ui-system
 // Norwegian-compliant mobile header with government branding and accessibility
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import type { MobileHeaderProps } from '../../../types/platform.types';
 
-// Helper function
-const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
-    'BEGRENSET': '🟡',
-    'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫', };
-  return icons[level as keyof typeof icons] || '📋'; };
-
+// Helper function to get classification icon
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    ÅPEN: '🟢',
+    BEGRENSET: '🟡',
+    KONFIDENSIELT: '🔴',
+    HEMMELIG: '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
 
 // Helper function to generate CSS using design tokens
-const getMobileHeaderStyles = (props: MobileHeaderProps): React.CSSProperties => { const { height = 'standard', sticky = true, transparent = false, norwegian } = props;
+const getMobileHeaderStyles = (props: MobileHeaderProps): React.CSSProperties => {
+  const { height = 'standard', sticky = true, transparent = false, norwegian } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = { display: 'flex',
+  const baseStyles: React.CSSProperties = {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
@@ -28,344 +33,426 @@ const getMobileHeaderStyles = (props: MobileHeaderProps): React.CSSProperties =>
     top: sticky ? 0 : 'auto',
     zIndex: 'var(--z-index-header)',
     boxShadow: transparent ? 'none' : 'var(--shadow-sm)',
-    transition: 'all var(--transition-duration-fast) ease', };
+    transition: 'all var(--transition-duration-fast) ease',
+  };
 
   // Height-based styles
   const heightStyles = getHeightStyles(height);
 
   // Safe area handling for Norwegian mobile standards
-  const safeAreaStyles = getSafeAreaStyles(norwegian?.safeAreaHandling);
+  const safeAreaStyles = getSafeAreaStyles(true);
 
   // Classification styling
   const classificationStyles = getClassificationStyles(norwegian?.classification);
 
-  return { ...baseStyles,
+  return {
+    ...baseStyles,
     ...heightStyles,
     ...safeAreaStyles,
-    ...classificationStyles, }; };
+    ...classificationStyles,
+  };
+};
 
 // Get height-based styles
-const getHeightStyles = (height: string): React.CSSProperties => { const heights = { compact: { height: 'var(--mobile-header-height-compact)',
-      padding: '0 var(--spacing-3)', },
-    standard: { height: 'var(--mobile-header-height-standard)',
-      padding: '0 var(--spacing-4)', },
-    extended: { height: 'var(--mobile-header-height-extended)',
+const getHeightStyles = (height: string): React.CSSProperties => {
+  const heights = {
+    compact: {
+      height: 'var(--mobile-header-height-compact)',
+      padding: '0 var(--spacing-3)',
+    },
+    standard: {
+      height: 'var(--mobile-header-height-standard)',
       padding: '0 var(--spacing-4)',
-      flexDirection: 'column' as const,
-      gap: 'var(--spacing-2)', }, };
-  return heights[height as keyof typeof heights] || heights.standard; };
+    },
+    extended: {
+      height: 'var(--mobile-header-height-extended)',
+      padding: '0 var(--spacing-4)',
+    },
+  };
+  return heights[height as keyof typeof heights] || heights.standard;
+};
 
-// Get safe area styles for Norwegian mobile compliance
-const getSafeAreaStyles = (safeAreaHandling?: boolean): React.CSSProperties => { if (!safeAreaHandling) { return {}; }
+// Get safe area styles
+const getSafeAreaStyles = (safeAreaHandling: boolean): React.CSSProperties => {
+  if (!safeAreaHandling) return {};
 
-  return { paddingTop: 'env(safe-area-inset-top)',
+  return {
+    paddingTop: 'env(safe-area-inset-top)',
     paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)', }; };
+    paddingRight: 'env(safe-area-inset-right)',
+  };
+};
 
-// Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
+// Get classification styles
+const getClassificationStyles = (classification?: string): React.CSSProperties => {
+  if (!classification) return {};
 
-  const classificationStyles: Record<string, React.CSSProperties> = { ÅPEN: { borderTop: 'var(--border-accent-width) solid var(--color-green-500)', },
-    BEGRENSET: { borderTop: 'var(--border-accent-width) solid var(--color-orange-500)', },
-    KONFIDENSIELT: { borderTop: 'var(--border-accent-width) solid var(--color-red-500)',
-      backgroundColor: 'var(--color-red-25)', },
-    HEMMELIG: { borderTop: 'var(--border-accent-width) solid var(--color-red-800)',
-      backgroundColor: 'var(--color-red-50)',
-      color: 'var(--color-red-900)', }, };
+  const classificationColors = {
+    ÅPEN: 'var(--color-green-500)',
+    BEGRENSET: 'var(--color-orange-500)',
+    KONFIDENSIELT: 'var(--color-red-500)',
+    HEMMELIG: 'var(--color-red-800)',
+  };
 
-  return classificationStyles[classification] || {}; };
+  return {
+    borderTop: `3px solid ${classificationColors[classification as keyof typeof classificationColors]}`,
+  };
+};
 
 // Header button component
-const HeaderButton = ({ icon,
+interface HeaderButtonProps {
+  icon: React.ReactNode;
+  onPress: () => void;
+  testId?: string;
+  ariaLabel?: string;
+  disabled?: boolean;
+}
+
+const HeaderButton: React.FC<HeaderButtonProps> = ({
+  icon,
   onPress,
   testId,
   ariaLabel,
-  badgeCount, }: { icon: React.ReactNode;
-  onPress?: () => void;
-  testId?: string;
-  ariaLabel?: string;
-  badgeCount?: number; }): React.ReactElement => { return (
+  disabled = false,
+}) => {
+  const buttonStyles: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '44px', // Norwegian accessibility requirement
+    height: '44px',
+    backgroundColor: 'transparent',
+    border: 'none',
+    borderRadius: 'var(--radius-md)',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    color: 'var(--text-primary)',
+    fontSize: 'var(--font-size-lg)',
+    opacity: disabled ? 0.5 : 1,
+    transition: 'all 0.2s ease',
+  };
+
+  return (
     <button
-      style={{ width: 'var(--touch-target-min-height)', // Norwegian accessibility: 44px
-        height: 'var(--touch-target-min-height)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        border: 'none',
-        borderRadius: 'var(--border-radius-base)',
-        backgroundColor: 'transparent',
-        color: 'var(--text-primary)',
-        cursor: 'pointer',
-        fontSize: 'var(--font-size-lg)',
-        transition: 'all var(--transition-duration-fast) ease',
-        position: 'relative', }}
+      type="button"
+      style={buttonStyles}
       onClick={onPress}
+      disabled={disabled}
       data-testid={testId}
       aria-label={ariaLabel}
-      onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)'; }}
-      onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'transparent'; }}
+      onMouseEnter={e => {
+        if (!disabled) {
+          (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!disabled) {
+          (e.target as HTMLElement).style.backgroundColor = 'transparent';
+        }
+      }}
     >
       {icon}
-
-      {/* Badge for notifications */}
-      {badgeCount !== undefined && badgeCount > 0 && (
-        <span
-          style={{ position: 'absolute',
-            top: 'var(--spacing-1)',
-            right: 'var(--spacing-1)',
-            backgroundColor: 'var(--color-red-500)',
-            color: 'var(--color-white)',
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: 'var(--font-weight-semibold)',
-            borderRadius: 'var(--border-radius-full)',
-            minWidth: 'var(--spacing-4)',
-            height: 'var(--spacing-4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0 var(--spacing-1)', }}
-          aria-label={`${badgeCount} notification${badgeCount === 1 ? '' : 's'}`}
-        >
-          {badgeCount > 99 ? '99+' : badgeCount}
-        </span>
-      )}
     </button>
-  ); };
-
-// Classification badge component
-const ClassificationBadge = ({ level }: { level: string }): React.ReactElement => { return (
-    <div
-      style={{ display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-1)',
-        padding: 'var(--spacing-1) var(--spacing-2)',
-        backgroundColor: 'var(--color-gray-100)',
-        borderRadius: 'var(--border-radius-sm)',
-        fontSize: 'var(--font-size-xs)',
-        fontWeight: 'var(--font-weight-medium)',
-        color: 'var(--text-secondary)', }}
-      aria-label={`Classification: ${level}`}
-    >
-      <span>{getClassificationIcon(level)}</span>
-      <span>{level}</span>
-    </div>
-  ); };
+  );
+};
 
 // Municipality logo component
-const MunicipalityLogo = ({ municipality }: { municipality: string }): React.ReactElement => { return (
-    <div
-      style={{ display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-2)',
-        fontSize: 'var(--font-size-sm)',
-        fontWeight: 'var(--font-weight-medium)',
-        color: 'var(--text-secondary)', }}
-    >
-      <span>🏛️</span>
-      <span>{municipality}</span>
-    </div>
-  ); };
+interface MunicipalityLogoProps {
+  municipality: string;
+}
 
-// Emergency contact access component
-const EmergencyAccess = ({ onPress }: { onPress?: () => void }): React.ReactElement => { return (
-    <button
-      style={{ display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-1)',
-        padding: 'var(--spacing-1) var(--spacing-2)',
-        backgroundColor: 'var(--color-red-100)',
-        color: 'var(--color-red-800)',
-        border: 'var(--border-width) solid var(--color-red-300)',
-        borderRadius: 'var(--border-radius-base)',
+const MunicipalityLogo: React.FC<MunicipalityLogoProps> = ({ municipality }) => (
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--spacing-2)',
+      padding: 'var(--spacing-1) var(--spacing-2)',
+      backgroundColor: 'var(--color-blue-50)',
+      borderRadius: 'var(--radius-sm)',
+      border: '1px solid var(--color-blue-200)',
+    }}
+  >
+    <span style={{ fontSize: 'var(--font-size-sm)' }}>🏛️</span>
+    <span
+      style={{
         fontSize: 'var(--font-size-xs)',
-        fontWeight: 'var(--font-weight-semibold)',
-        cursor: 'pointer',
-        transition: 'all var(--transition-duration-fast) ease', }}
-      onClick={onPress}
-      aria-label="Emergency contacts"
-      title="Nødkontakter"
+        fontWeight: 'var(--font-weight-medium)',
+        color: 'var(--color-blue-700)',
+      }}
     >
-      <span>🚨</span>
-      <span>Nødhjelp</span>
-    </button>
-  ); };
+      {municipality}
+    </span>
+  </div>
+);
 
-// Search bar component
-const SearchBar = ({ placeholderKey,
-  onFocus, }: { placeholderKey?: string;
-  onFocus?: () => void; }): React.ReactElement => { return (
-    <div
-      style={{ flex: 1,
-        maxWidth: 'var(--search-max-width)',
-        position: 'relative', }}
-    >
-      <input
-        type="text"
-        placeholder={placeholderKey || 'Søk...'}
-        style={{ width: '100%',
-          height: 'var(--input-height-sm)',
-          padding: '0 var(--spacing-3) 0 var(--spacing-8)',
-          backgroundColor: 'var(--color-gray-50)',
-          border: 'var(--border-width) solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-full)',
-          fontSize: 'var(--font-size-sm)',
-          color: 'var(--text-primary)',
-          outline: 'none',
-          transition: 'all var(--transition-duration-fast) ease', }}
-        onFocus={onFocus}
-        aria-label="Search"
-      />
+// Classification badge component
+interface ClassificationBadgeProps {
+  level: string;
+}
 
-      <span
-        style={{ position: 'absolute',
-          left: 'var(--spacing-3)',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          color: 'var(--text-tertiary)',
-          fontSize: 'var(--font-size-base)',
-          pointerEvents: 'none', }}
-      >
-        🔍
-      </span>
-    </div>
-  ); };
+const ClassificationBadge: React.FC<ClassificationBadgeProps> = ({ level }) => (
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 'var(--spacing-1)',
+      padding: 'var(--spacing-1) var(--spacing-2)',
+      backgroundColor: 'var(--color-gray-100)',
+      borderRadius: 'var(--radius-sm)',
+      fontSize: 'var(--font-size-xs)',
+      fontWeight: 'var(--font-weight-medium)',
+    }}
+  >
+    <span>{getClassificationIcon(level)}</span>
+    <span>{level}</span>
+  </div>
+);
+
+// Emergency contact component
+const EmergencyContact: React.FC = () => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 'calc(100% + var(--spacing-1))',
+      right: 'var(--spacing-4)',
+      padding: 'var(--spacing-2)',
+      backgroundColor: 'var(--color-red-600)',
+      color: 'var(--color-white)',
+      borderRadius: 'var(--radius-md)',
+      fontSize: 'var(--font-size-xs)',
+      fontWeight: 'var(--font-weight-semibold)',
+      whiteSpace: 'nowrap',
+      animation: 'emergency-pulse 2s infinite',
+    }}
+    role="button"
+    tabIndex={0}
+  >
+    🚨 NØDNUMMER: 112
+  </div>
+);
+
+// Government branding component
+const GovernmentBranding: React.FC = () => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 'calc(100% + var(--spacing-1))',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      padding: 'var(--spacing-1) var(--spacing-2)',
+      backgroundColor: 'var(--color-gray-900)',
+      color: 'var(--color-white)',
+      borderRadius: 'var(--radius-sm)',
+      fontSize: 'var(--font-size-xs)',
+      fontWeight: 'var(--font-weight-medium)',
+    }}
+    aria-hidden="true"
+  >
+    🇳🇴 REGJERINGEN.NO
+  </div>
+);
 
 // MobileHeader component with forwardRef
-export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref): React.ReactElement => { return (
-      <div
-        style={{ display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--spacing-2)',
-          flex: 1, }}
-      >
-        {/* Back button */}
+export const MobileHeader = React.forwardRef<HTMLDivElement, MobileHeaderProps>(
+  (props, ref): React.ReactElement => {
+    const {
+      title,
+      titleKey,
+      showBackButton = false,
+      showMenu = false,
+      showSearch = false,
+      showNotifications = false,
+      notificationCount,
+      searchPlaceholder,
+      onBackClick,
+      onBack,
+      onMenuClick,
+      onMenuToggle,
+      onSearchFocus,
+      onNotificationClick,
+      height = 'standard',
+      sticky = true,
+      transparent = false,
+      norwegian,
+      className,
+      testId,
+      ariaLabel,
+      ...restProps
+    } = props;
+
+    // Handle back button click
+    const handleBackClick = useCallback(() => {
+      onBackClick?.();
+      onBack?.();
+    }, [onBackClick, onBack]);
+
+    // Handle menu toggle
+    const handleMenuToggle = useCallback(() => {
+      onMenuClick?.();
+      onMenuToggle?.();
+    }, [onMenuClick, onMenuToggle]);
+
+    // Get combined styles
+    const combinedStyles = getMobileHeaderStyles(props);
+
+    // Render left section
+    const renderLeftSection = (): React.ReactElement => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
         {showBackButton && (
-          <HeaderButton icon="←" onPress={onBack} testId={`${testId}-back`} ariaLabel="Go back" />
+          <HeaderButton
+            icon="←"
+            onPress={handleBackClick}
+            testId={`${testId}-back`}
+            ariaLabel="Go back"
+          />
         )}
 
-        {/* Menu button */}
         {showMenu && (
           <HeaderButton
             icon="☰"
-            onPress={onMenuToggle}
+            onPress={handleMenuToggle}
             testId={`${testId}-menu`}
             ariaLabel="Open menu"
           />
         )}
 
-        {/* Municipality logo */}
         {norwegian?.municipalityLogo && norwegian.municipality && (
           <MunicipalityLogo municipality={norwegian.municipality} />
         )}
       </div>
-    ); };
+    );
 
-  const renderCenterSection = (): React.ReactElement => { return (
-      <div
-        style={{ flex: 2,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 'var(--spacing-2)', }}
-      >
-        {/* Title */}
-        {(title || titleKey) && (
+    // Render center section
+    const renderCenterSection = (): React.ReactElement | null => {
+      if (!(title || titleKey)) return null;
+
+      return (
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 var(--spacing-4)',
+          }}
+        >
           <h1
-            style={{ fontSize: 'var(--font-size-lg)',
+            style={{
+              fontSize: 'var(--font-size-lg)',
               fontWeight: 'var(--font-weight-semibold)',
               color: 'var(--text-primary)',
               margin: 0,
               textAlign: 'center',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap', }}
+              whiteSpace: 'nowrap',
+            }}
           >
-            {/* TODO: Replace with actual localization */}
             {title || titleKey}
           </h1>
-        )}
+        </div>
+      );
+    };
 
-        {/* Classification badge */}
+    // Render right section
+    const renderRightSection = (): React.ReactElement => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
         {norwegian?.showClassificationBadge && norwegian.classification && (
           <ClassificationBadge level={norwegian.classification} />
         )}
+
+        {showSearch && (
+          <HeaderButton
+            icon="🔍"
+            onPress={() => onSearchFocus?.()}
+            testId={`${testId}-search`}
+            ariaLabel="Search"
+          />
+        )}
+
+        {showNotifications && (
+          <div style={{ position: 'relative' }}>
+            <HeaderButton
+              icon="🔔"
+              onPress={() => onNotificationClick?.()}
+              testId={`${testId}-notifications`}
+              ariaLabel="Notifications"
+            />
+            {notificationCount && notificationCount > 0 && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 'var(--spacing-1)',
+                  right: 'var(--spacing-1)',
+                  backgroundColor: 'var(--color-red-500)',
+                  color: 'var(--color-white)',
+                  borderRadius: '50%',
+                  minWidth: '18px',
+                  height: '18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 'var(--font-size-xs)',
+                  fontWeight: 'var(--font-weight-bold)',
+                }}
+              >
+                {notificationCount > 99 ? '99+' : notificationCount}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-    ); };
+    );
 
-  const renderRightSection = (): React.ReactElement => { return (
+    return (
       <div
-        style={{ display: 'flex',
-          alignItems: 'center',
-          gap: 'var(--spacing-1)',
-          flex: 1,
-          justifyContent: 'flex-end', }}
+        ref={ref}
+        style={combinedStyles}
+        className={className}
+        data-testid={testId}
+        data-platform="mobile"
+        data-height={height}
+        data-classification={norwegian?.classification}
+        data-municipality={norwegian?.municipality}
+        aria-label={ariaLabel || 'Mobile header'}
+        role="banner"
+        {...restProps}
       >
-        {/* Emergency access */}
-        {norwegian?.emergencyContactAccess && (
-          <EmergencyAccess
-            onPress={(): React.ReactElement => { return (
-    <header
-      ref={ref}
-      style={combinedStyles}
-      className={className}
-      data-testid={testId}
-      data-platform="mobile"
-      data-height={height}
-      data-classification={norwegian?.classification}
-      data-municipality={norwegian?.municipality}
-      aria-label={ariaLabel || 'Mobile header'}
-      role="banner"
-      {...headerProps}
-    >
-      {height === 'extended' ? (
-        <>
-          {/* Top row */}
-          <div
-            style={{ display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%', }}
-          >
+        {height === 'extended' ? (
+          <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              {renderLeftSection()}
+              {renderRightSection()}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingTop: 'var(--spacing-2)',
+              }}
+            >
+              {renderCenterSection()}
+            </div>
+          </div>
+        ) : (
+          <>
             {renderLeftSection()}
-            {renderRightSection()}
-          </div>
-
-          {/* Bottom row */}
-          <div
-            style={{ display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '100%', }}
-          >
             {renderCenterSection()}
-          </div>
-        </>
-      ) : (
-        <>
-          {renderLeftSection()}
-          {renderCenterSection()}
-          {renderRightSection()}
-        </>
-      )}
+            {renderRightSection()}
+          </>
+        )}
 
-      {/* Government branding footer (for HEMMELIG classification) */}
-      {norwegian?.governmentBranding && norwegian.classification === 'HEMMELIG' && (
-        <div
-          style={{ position: 'absolute',
-            bottom: 'calc(-1 * var(--spacing-6))',
-            left: 0,
-            right: 0,
-            padding: 'var(--spacing-2) var(--spacing-4)',
-            backgroundColor: 'var(--color-red-900)',
-            color: 'var(--color-white)',
-            fontSize: 'var(--font-size-xs)',
-            textAlign: 'center',
-            borderTop: 'var(--border-width) solid var(--color-red-700)', }}
-        >
-          🔒 HEMMELIG DOKUMENT - BEGRENSET TILGANG
-        </div>
-      )}
-    </header>
-  ); });
+        {/* Emergency contact access */}
+        {norwegian?.emergencyContactAccess && <EmergencyContact />}
+
+        {/* Government branding for classified content */}
+        {norwegian?.governmentBranding && norwegian.classification === 'HEMMELIG' && (
+          <GovernmentBranding />
+        )}
+      </div>
+    );
+  }
+);
 
 MobileHeader.displayName = 'MobileHeader';

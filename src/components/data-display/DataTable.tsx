@@ -315,7 +315,7 @@ const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.Re
       <div className="datatable__empty-icon" aria-hidden="true">
         📊
       </div>
-      <span className="datatable__empty-message">{t(messageKey || 'table.noData')}</span>
+      <span className="datatable__empty-message">{'No data available'}</span>
     </div>
   );
 };
@@ -329,7 +329,7 @@ const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.
       <div className="datatable__loading-icon" aria-hidden="true">
         ⏳
       </div>
-      <span className="datatable__loading-message">{t(messageKey || 'table.loading')}</span>
+      <span className="datatable__loading-message">{'Loading...'}</span>
     </div>
   );
 };
@@ -416,4 +416,3 @@ function formatBoolean(value: boolean, format?: { trueKey: string; falseKey: str
 
 DataTable.displayName = 'DataTable';
 
-export { DataTable };

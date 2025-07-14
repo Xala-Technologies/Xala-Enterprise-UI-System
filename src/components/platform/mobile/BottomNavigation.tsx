@@ -1,13 +1,13 @@
 // BottomNavigation component for @xala-mock/ui-system
 // Norwegian-compliant mobile bottom navigation with accessibility and emergency features
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import type { BottomNavigationProps, BottomNavigationItem } from '../../../types/platform.types';
+import type { BottomNavigationItem, BottomNavigationProps } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
 const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => {
-  const { height = 'standard', safeAreaBottom = true, norwegian } = props;
+  const { height = 'standard', norwegian } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {
@@ -30,7 +30,7 @@ const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSPrope
   const heightStyles = getHeightStyles(height);
 
   // Safe area handling for Norwegian mobile standards
-  const safeAreaStyles = getSafeAreaStyles(safeAreaBottom);
+  const safeAreaStyles = getSafeAreaStyles(true);
 
   // Emergency styling
   const emergencyStyles = getEmergencyStyles(norwegian?.emergencyTab);
@@ -48,259 +48,222 @@ const getHeightStyles = (height: string): React.CSSProperties => {
   return heights[height as keyof typeof heights] || heights.standard;
 };
 
-// Get safe area styles for Norwegian mobile compliance
+// Get safe area styles
 const getSafeAreaStyles = (safeAreaBottom: boolean): React.CSSProperties => {
-  if (!safeAreaBottom) {
-    return {};
-  }
+  if (!safeAreaBottom) return {};
 
   return {
     paddingBottom: 'env(safe-area-inset-bottom)',
-    paddingLeft: 'env(safe-area-inset-left)',
-    paddingRight: 'env(safe-area-inset-right)',
+    minHeight: 'calc(var(--mobile-navigation-height-standard) + env(safe-area-inset-bottom))',
   };
 };
 
 // Get emergency styles
-const getEmergencyStyles = (hasEmergencyTab?: boolean): React.CSSProperties => {
-  if (!hasEmergencyTab) {
-    return {};
-  }
+const getEmergencyStyles = (emergencyTab?: boolean): React.CSSProperties => {
+  if (!emergencyTab) return {};
 
-  return { borderTop: 'var(--border-width-thick) solid var(--color-red-300)' };
+  return {
+    borderTop: '2px solid var(--color-red-500)',
+    boxShadow: '0 -2px 8px rgba(239, 68, 68, 0.2), var(--shadow-lg)',
+  };
 };
 
-// Tab item styles
-const getTabItemStyles = (
-  item: BottomNavigationItem,
-  isActive: boolean,
-  showLabels: boolean,
-  showBadges: boolean
-): React.CSSProperties => {
-  const baseStyles: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 'var(--spacing-1)',
-    flex: 1,
-    minHeight: 'var(--touch-target-min-height)', // Norwegian accessibility: 44px
-    padding: 'var(--spacing-2)',
-    backgroundColor: 'transparent',
-    border: 'none',
-    borderRadius: 'var(--border-radius-base)',
-    color: isActive ? 'var(--color-primary-600)' : 'var(--text-secondary)',
-    cursor: item.disabled ? 'not-allowed' : 'pointer',
-    opacity: item.disabled ? 0.5 : 1,
-    transition: 'all var(--transition-duration-fast) ease',
-    position: 'relative',
+// Get classification icon
+const getClassificationIcon = (classification: string): string => {
+  const icons = {
+    ÅPEN: '🔓',
+    BEGRENSET: '🔒',
+    KONFIDENSIELT: '🔐',
+    HEMMELIG: '🛡️',
   };
-
-  // Emergency tab styling
-  if (item.norwegian?.priority === 'emergency') {
-    return {
-      ...baseStyles,
-      backgroundColor: isActive ? 'var(--color-red-600)' : 'var(--color-red-100)',
-      color: isActive ? 'var(--color-white)' : 'var(--color-red-800)',
-      borderRadius: 'var(--border-radius-lg)',
-      margin: '0 var(--spacing-2)',
-      animation: 'emergency-pulse 2s infinite',
-    };
-  }
-
-  // Classification styling
-  if (item.norwegian?.classification) {
-    const classificationColors = {
-      ÅPEN: 'var(--color-green-500)',
-      BEGRENSET: 'var(--color-orange-500)',
-      KONFIDENSIELT: 'var(--color-red-500)',
-      HEMMELIG: 'var(--color-red-800)',
-    };
-
-    return {
-      ...baseStyles,
-      borderTop: `var(--border-width-thick) solid ${classificationColors[item.norwegian.classification]}`,
-    };
-  }
-
-  return baseStyles;
+  return icons[classification as keyof typeof icons] || '🔓';
 };
 
 // Navigation tab component
-const NavigationTab = ({
-  item,
-  isActive,
-  showLabels,
-  showBadges,
-  onPress,
-}: {
+interface NavigationTabProps {
   item: BottomNavigationItem;
   isActive: boolean;
   showLabels: boolean;
   showBadges: boolean;
   onPress: () => void;
-}): React.ReactElement => {
+}
+
+const NavigationTab: React.FC<NavigationTabProps> = ({
+  item,
+  isActive,
+  showLabels,
+  showBadges,
+  onPress,
+}) => {
+  const tabStyles: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    padding: 'var(--spacing-2)',
+    backgroundColor: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    color: isActive ? 'var(--color-primary)' : 'var(--text-secondary)',
+    fontSize: 'var(--font-size-sm)',
+    fontWeight: isActive ? 'var(--font-weight-semibold)' : 'var(--font-weight-normal)',
+    transition: 'all 0.2s ease',
+    minHeight: '44px', // Norwegian accessibility requirement
+    position: 'relative',
+  };
+
+  const iconStyles: React.CSSProperties = {
+    fontSize: 'var(--font-size-xl)',
+    marginBottom: showLabels ? 'var(--spacing-1)' : 0,
+  };
+
+  const labelStyles: React.CSSProperties = {
+    fontSize: 'var(--font-size-xs)',
+    lineHeight: 1.2,
+    textAlign: 'center',
+    maxWidth: '100%',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  };
+
+  const badgeStyles: React.CSSProperties = {
+    position: 'absolute',
+    top: 'var(--spacing-1)',
+    right: 'var(--spacing-2)',
+    backgroundColor: 'var(--color-red-500)',
+    color: 'var(--color-white)',
+    borderRadius: '50%',
+    minWidth: '18px',
+    height: '18px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 'var(--font-size-xs)',
+    fontWeight: 'var(--font-weight-bold)',
+  };
+
   return (
     <button
+      type="button"
       style={tabStyles}
       onClick={onPress}
       disabled={item.disabled}
-      data-testid={item.testId}
-      aria-label={item.labelKey}
+      aria-label={item.labelKey || item.label}
       aria-selected={isActive}
       role="tab"
-      onMouseEnter={e => {
-        if (!item.disabled && item.norwegian?.priority !== 'emergency') {
-          (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
-        }
-      }}
-      onMouseLeave={e => {
-        if (!item.disabled && item.norwegian?.priority !== 'emergency') {
-          (e.target as HTMLElement).style.backgroundColor = 'transparent';
-        }
-      }}
+      data-testid={item.testId}
     >
-      {/* Tab icon */}
-      <div
-        style={{
-          fontSize: 'var(--font-size-xl)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-        }}
-      >
-        {isActive && item.activeIcon ? item.activeIcon : item.icon}
-
-        {/* Badge for notifications */}
-        {showBadges && item.badgeCount !== undefined && item.badgeCount > 0 && (
-          <span
-            style={{
-              position: 'absolute',
-              top: 'calc(-1 * var(--spacing-2))',
-              right: 'calc(-1 * var(--spacing-2))',
-              backgroundColor: item.badgeColor || 'var(--color-red-500)',
-              color: 'var(--color-white)',
-              fontSize: 'var(--font-size-xs)',
-              fontWeight: 'var(--font-weight-semibold)',
-              borderRadius: 'var(--border-radius-full)',
-              minWidth: 'var(--spacing-4)',
-              height: 'var(--spacing-4)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '0 var(--spacing-1)',
-            }}
-            aria-label={`${item.badgeCount} notification${item.badgeCount === 1 ? '' : 's'}`}
-          >
-            {item.badgeCount > 99 ? '99+' : item.badgeCount}
-          </span>
-        )}
-
-        {/* Classification indicator */}
-        {item.norwegian?.classification && (
-          <span
-            style={{
-              position: 'absolute',
-              bottom: 'calc(-1 * var(--spacing-1))',
-              right: 'calc(-1 * var(--spacing-1))',
-              fontSize: 'var(--font-size-xs)',
-            }}
-            aria-label={`Classification: ${item.norwegian.classification}`}
-            title={`Klassifisering: ${item.norwegian.classification}`}
-          >
-            {getClassificationIcon(item.norwegian.classification)}
-          </span>
-        )}
-
-        {/* Emergency indicator */}
-        {item.norwegian?.priority === 'emergency' && (
-          <span
-            style={{
-              position: 'absolute',
-              top: 'calc(-1 * var(--spacing-1))',
-              left: 'calc(-1 * var(--spacing-1))',
-              fontSize: 'var(--font-size-xs)',
-              animation: 'emergency-blink 1s infinite',
-            }}
-            aria-label="Emergency"
-          >
-            🚨
-          </span>
-        )}
-      </div>
-
-      {/* Tab label */}
-      {showLabels && (
-        <span
+      {/* Emergency priority indicator */}
+      {item.norwegian?.priority === 'emergency' && (
+        <div
           style={{
-            fontSize: 'var(--font-size-xs)',
-            fontWeight: isActive ? 'var(--font-weight-semibold)' : 'var(--font-weight-medium)',
-            textAlign: 'center',
-            lineHeight: 'var(--line-height-tight)',
-            maxWidth: '100%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            backgroundColor: 'var(--color-red-500)',
+            animation: 'emergency-pulse 1s infinite',
           }}
-        >
-          {/* TODO: Replace with actual localization */}
-          {item.labelKey}
-        </span>
+          aria-hidden="true"
+        />
       )}
 
-      {/* Auth required indicator */}
-      {item.norwegian?.requiresAuth && !isActive && (
-        <span
+      {/* Icon */}
+      <div style={iconStyles}>{isActive && item.activeIcon ? item.activeIcon : item.icon}</div>
+
+      {/* Classification badge */}
+      {item.norwegian?.classification && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 'var(--spacing-1)',
+            left: 'var(--spacing-1)',
+            fontSize: 'var(--font-size-xs)',
+            opacity: 0.7,
+          }}
+          aria-label={`Classification: ${item.norwegian.classification}`}
+          title={`Klassifisering: ${item.norwegian.classification}`}
+        >
+          {getClassificationIcon(item.norwegian.classification)}
+        </div>
+      )}
+
+      {/* Emergency indicator */}
+      {item.norwegian?.priority === 'emergency' && (
+        <div
           style={{
             position: 'absolute',
             top: 'var(--spacing-1)',
             right: 'var(--spacing-1)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-orange-600)',
+            color: 'var(--color-red-500)',
+            fontSize: 'var(--font-size-sm)',
+            fontWeight: 'var(--font-weight-bold)',
           }}
-          aria-label="Authentication required"
+          aria-hidden="true"
+        >
+          🚨
+        </div>
+      )}
+
+      {/* Label */}
+      {showLabels && <span style={labelStyles}>{item.labelKey || item.label}</span>}
+
+      {/* Badge */}
+      {showBadges && item.badgeCount && item.badgeCount > 0 && (
+        <div style={badgeStyles}>{item.badgeCount > 99 ? '99+' : item.badgeCount}</div>
+      )}
+
+      {/* Auth required indicator */}
+      {item.norwegian?.requiresAuth && !isActive && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 'var(--spacing-1)',
+            right: 'var(--spacing-1)',
+            fontSize: 'var(--font-size-xs)',
+            opacity: 0.5,
+          }}
+          aria-hidden="true"
           title="Krever autentisering"
         >
           🔐
-        </span>
+        </div>
       )}
     </button>
   );
 };
 
-// Get classification icon
-const getClassificationIcon = (classification: string): string => {
-  const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
-  return icons[classification as keyof typeof icons] || '❓';
-};
+// Municipality indicator component
+interface MunicipalityIndicatorProps {
+  municipality: string;
+}
 
-// Municipality context indicator
-const MunicipalityIndicator = ({ municipality }: { municipality: string }): React.ReactElement => {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: 'calc(-1 * var(--spacing-8))',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        padding: 'var(--spacing-1) var(--spacing-2)',
-        backgroundColor: 'var(--color-blue-100)',
-        color: 'var(--color-blue-800)',
-        fontSize: 'var(--font-size-xs)',
-        borderRadius: 'var(--border-radius-sm)',
-        border: 'var(--border-width) solid var(--color-blue-300)',
-        whiteSpace: 'nowrap',
-      }}
-      aria-label={`Municipality: ${municipality}`}
-    >
-      🏛️ {municipality}
-    </div>
-  );
-};
+const MunicipalityIndicator: React.FC<MunicipalityIndicatorProps> = ({ municipality }) => (
+  <div
+    style={{
+      position: 'absolute',
+      top: 'calc(-1 * var(--spacing-5))',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      padding: 'var(--spacing-1) var(--spacing-2)',
+      backgroundColor: 'var(--color-blue-50)',
+      color: 'var(--color-blue-700)',
+      fontSize: 'var(--font-size-xs)',
+      borderRadius: 'var(--radius-sm)',
+      fontWeight: 'var(--font-weight-medium)',
+      border: '1px solid var(--color-blue-200)',
+    }}
+    aria-hidden="true"
+  >
+    {municipality}
+  </div>
+);
 
 // Emergency banner component
-const EmergencyBanner = (): React.ReactElement => {
+const EmergencyBanner: React.FC = () => {
   return (
     <div
       style={{
@@ -327,6 +290,33 @@ const EmergencyBanner = (): React.ReactElement => {
 // BottomNavigation component with forwardRef
 export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
   (props, ref): React.ReactElement => {
+    const {
+      items,
+      activeIndex = 0,
+      activeItem,
+      onItemClick,
+      showLabels = true,
+      showBadges = true,
+      height = 'standard',
+      norwegian,
+      className,
+      testId,
+      ariaLabel,
+      ...restProps
+    } = props;
+
+    // Handle item press
+    const handleItemPress = useCallback(
+      (index: number, item: BottomNavigationItem) => {
+        if (item.disabled) return;
+        onItemClick?.(item, index);
+      },
+      [onItemClick]
+    );
+
+    // Get combined styles
+    const combinedStyles = getBottomNavigationStyles(props);
+
     return (
       <nav
         ref={ref}
@@ -338,7 +328,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
         data-municipality={norwegian?.municipality}
         aria-label={ariaLabel || 'Bottom navigation'}
         role="tablist"
-        {...navProps}
+        {...restProps}
       >
         {/* Emergency banner */}
         {norwegian?.emergencyTab && <EmergencyBanner />}

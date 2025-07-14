@@ -114,19 +114,54 @@ const KeyValueItemComponent: React.FC<{
   showDividers?: boolean;
   norwegian?: KeyValueListProps['norwegian'];
 }> = ({ item, showDividers, norwegian }): React.ReactElement => {
+  const { t } = useLocalization();
+  
+  const itemClasses = React.useMemo(() => {
+    const classes = ['keyvalue-item'];
+    
+    if (item.changed) {
+      classes.push('keyvalue-item--changed');
+    }
+    
+    if (item.onClick) {
+      classes.push('keyvalue-item--clickable');
+    }
+    
+    if (showDividers) {
+      classes.push('keyvalue-item--with-divider');
+    }
+    
+    return classes.join(' ');
+  }, [item.changed, item.onClick, showDividers]);
+  
+  const handleClick = (): void => {
+    if (item.onClick) {
+      item.onClick();
+    }
+  };
+  
+  const handleCopy = async (): Promise<void> => {
+    try {
+      const valueText = formatValue(item.value, item, norwegian);
+      await navigator.clipboard.writeText(valueText);
+    } catch (error) {
+      logger.error('Failed to copy value to clipboard', { error });
+    }
+  };
+  
   return (
     <div
       className={itemClasses}
       onClick={handleClick}
       role={item.onClick ? 'button' : undefined}
       tabIndex={item.onClick ? 0 : undefined}
-      aria-label={item.onClick ? t('keyvalue.clickable', { label: t(item.labelKey) }) : undefined}
+      aria-label={item.onClick ? 'Clickable item' : undefined}
     >
       <div className="keyvalue-item__label">
         {norwegian?.showClassificationIcons && item.norwegian?.classification && (
           <ClassificationIcon classification={item.norwegian.classification} />
         )}
-        <span className="keyvalue-item__label-text">{t(item.labelKey)}</span>
+        <span className="keyvalue-item__label-text">{item.labelKey ? t(item.labelKey) : item.label}</span>
       </div>
 
       <div className="keyvalue-item__value">
@@ -138,7 +173,7 @@ const KeyValueItemComponent: React.FC<{
           <button
             className="keyvalue-item__copy-button"
             onClick={handleCopy}
-            aria-label={t('keyvalue.copy', { value: formatValue(item.value, item, norwegian) })}
+            aria-label={'Copy value'}
             type="button"
           >
             📋

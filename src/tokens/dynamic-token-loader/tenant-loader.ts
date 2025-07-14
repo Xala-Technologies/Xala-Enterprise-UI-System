@@ -206,8 +206,8 @@ export class TenantConfigurationLoader {
 
         // Wait before retry
         const delay = this.config.retry?.exponentialBackoff
-          ? (this.config.retry.delay ?? 1000) * Math.pow(2, attempt)
-          : (this.config.retry.delay ?? 1000);
+          ? (this.config.retry?.delay ?? 1000) * Math.pow(2, attempt)
+          : (this.config.retry?.delay ?? 1000);
 
         await new Promise(resolve => setTimeout(resolve, delay));
       }
