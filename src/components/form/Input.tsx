@@ -1,238 +1,112 @@
-// Input component for @xala-mock/ui-system
-// Norwegian-compliant input with accessibility and validation
+/**
+ * @fileoverview Input Component - Enterprise Standards Compliant
+ * @module Input
+ * @description Input component using design tokens (no inline styles)
+ */
 
 import React, { forwardRef, useState, useCallback } from 'react';
+import type { InputProps } from '../../types/form.types';
+import { useLocalization } from '../../localization/hooks/useLocalization';
 
-import { InputProps } from '../../types/form.types';
-
-// Helper function to generate CSS using design tokens
-const getInputStyles = (props: InputProps): React.CSSProperties => {
-  const {
-    variant = 'default',
-    size = 'md',
-    hasError = false,
-    disabled = false,
-    readOnly = false,
-  } = props;
-
-  // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'block',
-    width: '100%',
-    fontFamily: 'var(--font-family-sans)',
-    fontSize: getSizeStyles(size).fontSize,
-    lineHeight: 'var(--line-height-normal)',
-    padding: getSizeStyles(size).padding,
-    border: getBorderStyles(variant, hasError),
-    borderRadius: 'var(--border-radius-base)',
-    backgroundColor: getBackgroundStyles(variant, disabled, readOnly),
-    color: getTextStyles(disabled, readOnly),
-    transition: 'all 0.2s ease-in-out',
-    outline: 'none',
-  };
-
-  // Focus styles
-  const focusStyles: React.CSSProperties = {
-    ':focus': {
-      borderColor: hasError ? 'var(--color-red-500)' : 'var(--color-primary-500)',
-      boxShadow: hasError ? 'var(--shadow-focus-error)' : 'var(--shadow-focus)',
-      outline: 'var(--focus-ring-width) solid var(--shadow-focus)',
-      outlineOffset: 'var(--focus-ring-offset)',
-    },
-  };
-
-  // Norwegian accessibility enhancements
-  const norwegianStyles = getNorwegianStyles(props.norwegian);
-
-  return { ...baseStyles, ...focusStyles, ...norwegianStyles };
-};
-
-// Get size-based styles
-const getSizeStyles = (size: string) => {
-  const sizes = {
-    sm: {
-      fontSize: 'var(--font-size-sm)',
-      padding: 'var(--spacing-2) var(--spacing-3)',
-    },
-    md: {
-      fontSize: 'var(--font-size-base)',
-      padding: 'var(--spacing-3) var(--spacing-4)',
-    },
-    lg: {
-      fontSize: 'var(--font-size-lg)',
-      padding: 'var(--spacing-4) var(--spacing-5)',
-    },
-  };
-  return sizes[size as keyof typeof sizes] || sizes.md;
-};
-
-// Get border styles
-const getBorderStyles = (variant: string, hasError: boolean): string => {
-  if (hasError) {
-    return 'var(--border-width) solid var(--color-red-500)';
-  }
-
-  const borders = {
-    default: 'var(--border-width) solid var(--border-primary)',
-    government: 'var(--border-width) solid var(--color-gray-400)',
-    municipal: 'var(--border-width) solid var(--color-primary-300)',
-  };
-  return borders[variant as keyof typeof borders] || borders.default;
-};
-
-// Get background styles
-const getBackgroundStyles = (variant: string, disabled: boolean, readOnly: boolean): string => {
-  if (disabled) { return 'var(--color-gray-100)'; }
-  if (readOnly) { return 'var(--color-gray-50)'; }
-
-  const backgrounds = {
-    default: 'var(--background-primary)',
-    government: 'var(--color-white)',
-    municipal: 'var(--background-primary)',
-  };
-  return backgrounds[variant as keyof typeof backgrounds] || backgrounds.default;
-};
-
-// Get text color styles
-const getTextStyles = (disabled: boolean, readOnly: boolean): string => {
-  if (disabled) { return 'var(--text-disabled)'; }
-  if (readOnly) { return 'var(--text-secondary)'; }
-  return 'var(--text-primary)';
-};
-
-// Get Norwegian-specific styles
-const getNorwegianStyles = (norwegian?: InputProps['norwegian']): React.CSSProperties => {
-  if (!norwegian) { return {}; }
-
-  const styles: React.CSSProperties = {};
-
-  // Enhanced accessibility spacing for WCAG 2.2 AA
-  if (norwegian.accessibility === 'WCAG_2_2_AAA') {
-    styles.minHeight = 'var(--touch-target-min-height)'; // Norwegian minimum
-    styles.padding = 'var(--spacing-4) var(--spacing-5)'; // Enhanced padding
-  }
-
-  return styles;
-};
-
-// Label component for accessibility
-const Label = ({
-  labelKey,
-  required,
-  htmlFor,
-}: {
-  labelKey: string;
-  required?: boolean;
-  htmlFor: string;
-}) => {
-  return (
-    <label
-      htmlFor={htmlFor}
-      style={{
-        display: 'block',
-        marginBottom: 'var(--spacing-2)',
-        fontSize: 'var(--font-size-sm)',
-        fontWeight: 'var(--font-weight-medium)',
-        color: 'var(--text-primary)',
-        lineHeight: 'var(--line-height-tight)',
-      }}
-    >
-      {/* TODO: Replace with actual localization */}
-      {labelKey}
-      {required && (
-        <span
-          style={{
-            color: 'var(--color-red-500)',
-            marginLeft: 'var(--spacing-1)',
-          }}
-          aria-label='påkrevd'
-        >
-          *
-        </span>
-      )}
-    </label>
-  );
-};
-
-// Error message component
-const ErrorMessage = ({ errorKey, hasError }: { errorKey?: string; hasError: boolean }) => {
-  if (!hasError || !errorKey) { return null; }
-
-  return (
-    <div
-      role='alert'
-      aria-live='polite'
-      style={{
-        marginTop: 'var(--spacing-1)',
-        fontSize: 'var(--font-size-sm)',
-        color: 'var(--color-red-600)',
-        lineHeight: 'var(--line-height-tight)',
-      }}
-    >
-      {/* TODO: Replace with actual localization */}
-      {errorKey}
-    </div>
-  );
-};
-
-// Help text component
-const HelpText = ({ helpKey }: { helpKey?: string }) => {
-  if (!helpKey) { return null; }
-
-  return (
-    <div
-      style={{
-        marginTop: 'var(--spacing-1)',
-        fontSize: 'var(--font-size-sm)',
-        color: 'var(--text-secondary)',
-        lineHeight: 'var(--line-height-tight)',
-      }}
-    >
-      {/* TODO: Replace with actual localization */}
-      {helpKey}
-    </div>
-  );
-};
-
-// Input component with forwardRef for className/style props
+/**
+ * Input component using design tokens and semantic props
+ * Follows enterprise standards - no inline styles, design token props only
+ */
 export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
     labelKey,
     errorKey,
     helpKey,
-    required = false,
-    disabled = false,
-    readOnly = false,
-    placeholder,
-    name,
-    id,
     type = 'text',
     value,
     defaultValue,
     onChange,
     onBlur,
     onFocus,
+    required = false,
+    disabled = false,
+    readOnly = false,
+    placeholder,
+    name,
+    id,
     maxLength,
     minLength,
     pattern,
     autoComplete,
+    variant = 'default',
+    size = 'md',
     hasError = false,
     validation,
-    className,
-    style,
+    norwegian,
+    className = '',
     testId,
-    'aria-label': ariaLabel,
     ...inputProps
   } = props;
 
+  const { t } = useLocalization();
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
+  const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
 
-  const inputId = id || `input-${name || 'field'}`;
-  const inputStyles = getInputStyles(props);
-  const combinedStyles = { ...inputStyles, ...style };
+  // Generate unique ID if not provided
+  const inputId = id || `input-${name || Math.random().toString(36).substr(2, 9)}`;
 
-  // Handle input change with validation
+  // Build CSS classes using design tokens
+  const inputClasses = React.useMemo(() => {
+    const classes = ['input'];
+    
+    // Variant classes
+    classes.push(`input--variant-${variant}`);
+    
+    // Size classes
+    classes.push(`input--size-${size}`);
+    
+    // State classes
+    if (hasError || validationError) {
+      classes.push('input--error');
+    }
+    
+    if (disabled) {
+      classes.push('input--disabled');
+    }
+    
+    if (readOnly) {
+      classes.push('input--readonly');
+    }
+    
+    if (required) {
+      classes.push('input--required');
+    }
+    
+    if (isValidating) {
+      classes.push('input--validating');
+    }
+    
+    // Type classes
+    classes.push(`input--type-${type}`);
+    
+    // Norwegian compliance classes
+    if (norwegian?.accessibility) {
+      classes.push(`input--accessibility-${norwegian.accessibility.replace('_', '-').toLowerCase()}`);
+    }
+    
+    if (norwegian?.format) {
+      classes.push(`input--format-${norwegian.format}`);
+    }
+    
+    if (norwegian?.validation) {
+      classes.push(`input--validation-${norwegian.validation}`);
+    }
+    
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, size, hasError, validationError, disabled, readOnly, required, isValidating, type, norwegian, className]);
+
+  // Handle input change
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value;
@@ -240,70 +114,177 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
       // Custom validation
       if (validation?.custom) {
-        const error = validation.custom(newValue);
-        setValidationError(error);
+        setIsValidating(true);
+        
+        setTimeout(async () => {
+          try {
+            const error = await validation.custom!(newValue);
+            setValidationError(error);
+          } catch (err) {
+            setValidationError(t('input.validationError'));
+          } finally {
+            setIsValidating(false);
+          }
+        }, validation.debounceMs || 300);
       }
 
-      if (onChange) {
-        onChange(newValue, event);
-      }
+      onChange?.(newValue, event);
     },
-    [onChange, validation]
+    [onChange, validation, t]
   );
 
-  const currentHasError = hasError || !!validationError;
+  // Handle blur event
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      onBlur?.(event);
+    },
+    [onBlur]
+  );
+
+  // Handle focus event
+  const handleFocus = useCallback(
+    (event: React.FocusEvent<HTMLInputElement>) => {
+      onFocus?.(event);
+    },
+    [onFocus]
+  );
+
+  const currentValue = value !== undefined ? value : internalValue;
+  const currentError = hasError || !!validationError;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-      }}
-      data-testid={testId}
-    >
+    <div className="input-field" data-testid={testId}>
       {/* Label */}
-      <Label labelKey={labelKey} required={required} htmlFor={inputId} />
+      {labelKey && (
+        <Label labelKey={labelKey} required={required} htmlFor={inputId} />
+      )}
 
-      {/* Input field */}
+      {/* Input element */}
       <input
         ref={ref}
-        className={className}
-        style={combinedStyles}
-        type={type}
         id={inputId}
         name={name}
-        value={value !== undefined ? value : internalValue}
+        type={type}
+        value={currentValue}
         onChange={handleChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        placeholder={placeholder ? t(placeholder) : undefined}
+        required={required}
         disabled={disabled}
         readOnly={readOnly}
-        required={required}
-        placeholder={placeholder}
         maxLength={maxLength}
         minLength={minLength}
         pattern={pattern}
         autoComplete={autoComplete}
-        aria-label={ariaLabel}
-        aria-required={required}
-        aria-invalid={currentHasError}
+        className={inputClasses}
+        aria-invalid={currentError}
         aria-describedby={`${inputId}-help ${inputId}-error`}
-        data-variant={props.variant}
-        data-size={props.size}
+        aria-required={required}
+        data-variant={variant}
+        data-size={size}
+        {...inputProps}
       />
 
+      {/* Validation indicator */}
+      {isValidating && (
+        <div className="input__validation-indicator" aria-hidden="true">
+          ⏳
+        </div>
+      )}
+
       {/* Help text */}
-      <div id={`${inputId}-help`}>
-        <HelpText helpKey={helpKey} />
-      </div>
+      {helpKey && <HelpText helpKey={helpKey} inputId={inputId} />}
 
       {/* Error message */}
-      <div id={`${inputId}-error`}>
-        <ErrorMessage errorKey={validationError || errorKey} hasError={currentHasError} />
-      </div>
+      <ErrorMessage
+        errorKey={errorKey}
+        validationError={validationError}
+        hasError={currentError}
+        inputId={inputId}
+      />
     </div>
   );
 });
+
+/**
+ * Label component
+ */
+const Label: React.FC<{
+  labelKey: string;
+  required?: boolean;
+  htmlFor: string;
+}> = ({ labelKey, required, htmlFor }) => {
+  const { t } = useLocalization();
+
+  return (
+    <label className="input__label" htmlFor={htmlFor}>
+      <span className="input__label-text">
+        {t(labelKey)}
+      </span>
+      {required && (
+        <span className="input__required-indicator" aria-label={t('input.required')}>
+          *
+        </span>
+      )}
+    </label>
+  );
+};
+
+/**
+ * Error message component
+ */
+const ErrorMessage: React.FC<{
+  errorKey?: string;
+  validationError?: string | null;
+  hasError: boolean;
+  inputId: string;
+}> = ({ errorKey, validationError, hasError, inputId }) => {
+  const { t } = useLocalization();
+
+  if (!hasError && !validationError) return null;
+
+  const errorMessage = validationError || (errorKey ? t(errorKey) : t('input.error.generic'));
+
+  return (
+    <div
+      id={`${inputId}-error`}
+      className="input__error-message"
+      role="alert"
+      aria-live="polite"
+    >
+      <span className="input__error-icon" aria-hidden="true">
+        ⚠️
+      </span>
+      <span className="input__error-text">
+        {errorMessage}
+      </span>
+    </div>
+  );
+};
+
+/**
+ * Help text component
+ */
+const HelpText: React.FC<{
+  helpKey: string;
+  inputId: string;
+}> = ({ helpKey, inputId }) => {
+  const { t } = useLocalization();
+
+  return (
+    <div
+      id={`${inputId}-help`}
+      className="input__help-text"
+    >
+      <span className="input__help-icon" aria-hidden="true">
+        ℹ️
+      </span>
+      <span className="input__help-content">
+        {t(helpKey)}
+      </span>
+    </div>
+  );
+};
 
 Input.displayName = 'Input';

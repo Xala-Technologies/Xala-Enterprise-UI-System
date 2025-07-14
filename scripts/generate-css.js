@@ -5,9 +5,9 @@
 const fs = require('fs');
 const path = require('path');
 
-// Import design tokens (we'll simulate this for the build script)
+// Generate CSS with design tokens (static generation for build process)
 const generateCSS = () => {
-  const tokens = require('../dist/tokens');
+  // Note: Using static CSS generation for build compatibility
   
   let css = `/* Norwegian-compliant design tokens for @xala-mock/ui-system */
 /* Generated automatically - do not edit manually */

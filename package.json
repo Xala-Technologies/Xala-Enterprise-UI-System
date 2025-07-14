@@ -1,7 +1,7 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "1.0.1",
-  "description": "Norwegian-compliant UI component library with WCAG 2.2 AA, NSM, and GDPR compliance",
+  "version": "2.0.0",
+  "description": "Enterprise-compliant UI system with Norwegian accessibility standards, design tokens, and zero inline styles following @xala-technologies/enterprise-standards v6.0.2",
   "main": "dist/lib-index.js",
   "module": "dist/lib-index.js",
   "types": "dist/lib-index.d.ts",

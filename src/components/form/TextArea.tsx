@@ -127,7 +127,7 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
         textArea.removeEventListener('change', updateCounts);
       };
     }
-    
+
     // Return empty cleanup function for cases where textArea is not available
     return () => {};
   }, [value]);

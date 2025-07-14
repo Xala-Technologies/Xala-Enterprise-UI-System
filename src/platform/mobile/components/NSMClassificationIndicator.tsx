@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useLocalization } from '../../../localization/hooks/useLocalization';
 
 // NSMClassificationIndicator - Norwegian Security Authority classification display

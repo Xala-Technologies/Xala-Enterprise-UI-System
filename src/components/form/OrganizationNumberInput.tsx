@@ -1,11 +1,10 @@
 /**
- * @fileoverview Organization Number Input Component
+ * @fileoverview Organization Number Input Component - Enterprise Standards Compliant
  * @module OrganizationNumberInput
- * @description Specialized input for organization numbers with validation
+ * @description Specialized input for organization numbers using design tokens (no inline styles)
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { OrganizationNumberInputProps, OrganizationData } from '../../types/form.types';
 
@@ -22,308 +21,412 @@ const formatOrganizationNumber = (value: string) => {
   return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
 };
 
-// Helper function to generate CSS using design tokens
-const getOrganizationInputStyles = (props: OrganizationNumberInputProps): React.CSSProperties => {
-  const { variant = 'default', hasError = false, disabled = false, readOnly = false } = props;
+/**
+ * Organization Number Input component using design tokens and semantic props
+ * Follows enterprise standards - no inline styles, design token props only
+ */
+export function OrganizationNumberInput({
+  labelKey,
+  errorKey,
+  helpKey,
+  value,
+  defaultValue,
+  onChange,
+  onValidationChange,
+  onBlur,
+  onFocus,
+  required = false,
+  disabled = false,
+  readOnly = false,
+  placeholder,
+  name,
+  id,
+  variant = 'default',
+  hasError = false,
+  validation = {},
+  norwegian = {},
+  className = '',
+  testId,
+  ...inputProps
+}: OrganizationNumberInputProps): JSX.Element {
+  const { t } = useLocalization();
+  
+  // State management
+  const [internalValue, setInternalValue] = useState(value || defaultValue || '');
+  const [validationResult, setValidationResult] = useState<{ isValid: boolean; errors: string[]; type: 'enterprise'; mainOrganization: string }>({ 
+    isValid: false, 
+    errors: [], 
+    type: 'enterprise', 
+    mainOrganization: '' 
+  });
+  const [isValidating, setIsValidating] = useState(false);
+  const [orgData, setOrgData] = useState<OrganizationData | undefined>();
+  const [isFetchingData, setIsFetchingData] = useState(false);
+  const debounceRef = useRef<NodeJS.Timeout>();
 
-  // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'block',
-    width: '100%',
-    fontFamily: 'var(--font-family-mono)', // Monospace for number display
-    fontSize: 'var(--font-size-base)',
-    lineHeight: 'var(--line-height-normal)',
-    padding: 'var(--spacing-3) var(--spacing-4)',
-    border: getBorderStyles(variant, hasError),
-    borderRadius: 'var(--border-radius-base)',
-    backgroundColor: getBackgroundStyles(variant, disabled, readOnly),
-    color: getTextStyles(disabled, readOnly),
-    transition: 'all 0.2s ease-in-out',
-    outline: 'none',
-    letterSpacing: 'var(--letter-spacing-wide)', // Better number readability
+  // Generate unique ID
+  const inputId = id || `org-number-${name || Math.random().toString(36).substr(2, 9)}`;
+
+  // Build CSS classes using design tokens
+  const inputClasses = useMemo(() => {
+    const classes = ['organization-number-input'];
+    
+    // Variant classes
+    classes.push(`organization-number-input--variant-${variant}`);
+    
+    // State classes
+    if (hasError || validationResult.errors.length > 0) {
+      classes.push('organization-number-input--error');
+    }
+    
+    if (disabled) {
+      classes.push('organization-number-input--disabled');
+    }
+    
+    if (readOnly) {
+      classes.push('organization-number-input--readonly');
+    }
+    
+    if (required) {
+      classes.push('organization-number-input--required');
+    }
+    
+    if (isValidating) {
+      classes.push('organization-number-input--validating');
+    }
+    
+    if (validationResult.isValid) {
+      classes.push('organization-number-input--valid');
+    }
+    
+    // Norwegian compliance classes
+    if (norwegian?.displayFormat) {
+      classes.push(`organization-number-input--format-${norwegian.displayFormat.replace(/\s/g, '-')}`);
+    }
+    
+    if (norwegian?.maskInput) {
+      classes.push('organization-number-input--masked');
+    }
+    
+    if (norwegian?.autoFormat) {
+      classes.push('organization-number-input--auto-format');
+    }
+    
+    if (norwegian?.fetchOrganizationData) {
+      classes.push('organization-number-input--fetch-data');
+    }
+    
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, hasError, validationResult, disabled, readOnly, required, isValidating, norwegian, className]);
+
+  // Validation and formatting
+  useEffect(() => {
+    const currentValue = value !== undefined ? value : internalValue;
+    const cleaned = currentValue.replace(/\D/g, '');
+    
+    if (cleaned.length === 0) {
+      setValidationResult({ isValid: false, errors: [], type: 'enterprise', mainOrganization: '' });
+      setOrgData(undefined);
+      return;
+    }
+
+    // Debounced validation
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = setTimeout(async () => {
+      setIsValidating(true);
+      
+      try {
+        const result = validateOrganizationNumber(cleaned);
+        setValidationResult(result);
+        
+        // Fetch organization data if enabled and valid
+        if (result.isValid && norwegian?.fetchOrganizationData && validation?.brreg) {
+          setIsFetchingData(true);
+          try {
+            const data = await mockFetchOrganizationData(cleaned);
+            setOrgData(data || undefined);
+          } catch (error) {
+            console.warn('Failed to fetch organization data:', error);
+          } finally {
+            setIsFetchingData(false);
+          }
+        }
+        
+        onValidationChange?.(result.isValid, result.errors, orgData);
+      } catch (error) {
+        const errorResult = { isValid: false, errors: [t('organizationNumber.validationError')], type: 'enterprise' as const, mainOrganization: '' };
+        setValidationResult(errorResult);
+        onValidationChange?.(false, errorResult.errors);
+      } finally {
+        setIsValidating(false);
+      }
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
+    };
+  }, [value, internalValue, validation, norwegian, onValidationChange, orgData, t]);
+
+  // Handle input change
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newValue = event.target.value;
+    
+    // Auto-formatting
+    if (norwegian?.autoFormat) {
+      const cleaned = newValue.replace(/\D/g, '');
+      if (cleaned.length <= 9) {
+        newValue = formatOrganizationNumber(cleaned);
+      }
+    }
+    
+    setInternalValue(newValue);
+    onChange?.(newValue, validationResult.isValid, event);
   };
 
-  // Norwegian accessibility enhancements
-  const norwegianStyles = getNorwegianStyles(props.norwegian);
-
-  // Focus styles
-  const focusStyles: React.CSSProperties = {
-    ':focus': {
-      borderColor: hasError ? 'var(--color-red-500)' : 'var(--color-primary-500)',
-      boxShadow: hasError ? 'var(--shadow-focus-error)' : 'var(--shadow-focus)',
-      outline: 'var(--focus-ring-width) solid var(--shadow-focus)',
-      outlineOffset: 'var(--focus-ring-offset)',
-    },
+  // Handle blur
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    onBlur?.(event);
   };
 
-  return { ...baseStyles, ...norwegianStyles, ...focusStyles };
-};
-
-// Get border styles
-const getBorderStyles = (variant: string, hasError: boolean): string => {
-  if (hasError) {
-    return 'var(--border-width) solid var(--color-red-500)';
-  }
-
-  const borders = {
-    default: 'var(--border-width) solid var(--border-primary)',
-    government: 'var(--border-width) solid var(--color-gray-400)',
-    municipal: 'var(--border-width) solid var(--color-primary-300)',
+  // Handle focus
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    onFocus?.(event);
   };
-  return borders[variant as keyof typeof borders] || borders.default;
-};
 
-// Get background styles
-const getBackgroundStyles = (variant: string, disabled: boolean, readOnly: boolean): string => {
-  if (disabled) { return 'var(--color-gray-100)'; }
-  if (readOnly) { return 'var(--color-gray-50)'; }
+  const currentValue = value !== undefined ? value : internalValue;
+  const hasValidationErrors = hasError || validationResult.errors.length > 0;
 
-  const backgrounds = {
-    default: 'var(--background-primary)',
-    government: 'var(--color-white)',
-    municipal: 'var(--background-primary)',
-  };
-  return backgrounds[variant as keyof typeof backgrounds] || backgrounds.default;
-};
+  return (
+    <div className="organization-number-field" data-testid={testId}>
+      {/* Label */}
+      {labelKey && (
+        <Label labelKey={labelKey} required={required} htmlFor={inputId} />
+      )}
 
-// Get text color styles
-const getTextStyles = (disabled: boolean, readOnly: boolean): string => {
-  if (disabled) { return 'var(--text-disabled)'; }
-  if (readOnly) { return 'var(--text-secondary)'; }
-  return 'var(--text-primary)';
-};
+      {/* Input with validation indicator */}
+      <div className="organization-number-field__input-wrapper">
+        <input
+          id={inputId}
+          name={name}
+          type="text"
+          value={currentValue}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          placeholder={placeholder ? t(placeholder) : t('organizationNumber.placeholder')}
+          required={required}
+          disabled={disabled}
+          readOnly={readOnly}
+          maxLength={norwegian?.displayFormat === 'nnn nnn nnn' ? 11 : 9}
+          className={inputClasses}
+          aria-invalid={hasValidationErrors}
+          aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-validation`}
+          aria-required={required}
+          data-variant={variant}
+          {...inputProps}
+        />
+        
+        {/* Validation indicator */}
+        <ValidationIndicator
+          isValid={validationResult.isValid}
+          isValidating={isValidating}
+          type={validationResult.type}
+        />
+      </div>
 
-// Get Norwegian-specific styles
-const getNorwegianStyles = (
-  norwegian?: OrganizationNumberInputProps['norwegian']
-): React.CSSProperties => {
-  if (!norwegian) { return {}; }
+      {/* Organization data display */}
+      {orgData && (
+        <OrganizationDisplay orgData={orgData} isLoading={isFetchingData} />
+      )}
 
-  const styles: React.CSSProperties = {};
+      {/* Help text */}
+      {helpKey && (
+        <div id={`${inputId}-help`} className="organization-number-field__help">
+          <span className="organization-number-field__help-icon" aria-hidden="true">ℹ️</span>
+          <span className="organization-number-field__help-text">
+            {t(helpKey)}
+          </span>
+        </div>
+      )}
 
-  // Enhanced accessibility spacing for WCAG 2.2 AA
-  if (norwegian.accessibility === 'WCAG_2_2_AAA') {
-    styles.minHeight = 'var(--touch-target-min-height)'; // Norwegian minimum
-    styles.padding = 'var(--spacing-4) var(--spacing-5)'; // Enhanced padding
-  }
+      {/* Error messages */}
+      <div id={`${inputId}-error`}>
+        <ErrorMessage errors={validationResult.errors} />
+      </div>
+    </div>
+  );
+}
 
-  return styles;
-};
-
-// Organization data display component
-const OrganizationDisplay = ({
-  orgData,
-  isLoading,
-}: {
+/**
+ * Organization data display component
+ */
+const OrganizationDisplay: React.FC<{
   orgData?: OrganizationData;
   isLoading: boolean;
-}) => {
+}> = ({ orgData, isLoading }) => {
+  const { t } = useLocalization();
+
   if (isLoading) {
     return (
-      <div
-        style={{
-          marginTop: 'var(--spacing-2)',
-          padding: 'var(--spacing-3)',
-          backgroundColor: 'var(--color-gray-50)',
-          borderRadius: 'var(--border-radius-sm)',
-          fontSize: 'var(--font-size-sm)',
-          color: 'var(--text-secondary)',
-        }}
-      >
-        🔍 Henter organisasjonsdata...
+      <div className="organization-display organization-display--loading">
+        <span className="organization-display__loading-icon" aria-hidden="true">⏳</span>
+        <span className="organization-display__loading-text">
+          {t('organizationNumber.fetchingData')}
+        </span>
       </div>
     );
   }
 
-  if (!orgData) { return null; }
+  if (!orgData) return null;
 
-  const getStatusColor = (status: string): string => {
-    const colors = {
-      active: 'var(--color-green-600)',
-      inactive: 'var(--color-orange-600)',
-      dissolved: 'var(--color-red-600)',
+  const getStatusIcon = (status: string): string => {
+    const icons = {
+      'active': '✅',
+      'inactive': '⚪',
+      'dissolved': '❌',
     };
-    return colors[status as keyof typeof colors] || 'var(--text-secondary)';
-  };
-
-  const getStatusText = (status: string): string => {
-    const texts = {
-      active: 'Aktiv',
-      inactive: 'Inaktiv',
-      dissolved: 'Oppløst',
-    };
-    return texts[status as keyof typeof texts] || status;
+    return icons[status as keyof typeof icons] || '❓';
   };
 
   return (
-    <div
-      style={{
-        marginTop: 'var(--spacing-2)',
-        padding: 'var(--spacing-3)',
-        backgroundColor: 'var(--color-gray-50)',
-        borderRadius: 'var(--border-radius-sm)',
-        fontSize: 'var(--font-size-sm)',
-        lineHeight: 'var(--line-height-relaxed)',
-      }}
-    >
-      <div
-        style={{
-          fontWeight: 'var(--font-weight-semibold)',
-          marginBottom: 'var(--spacing-1)',
-          color: 'var(--text-primary)',
-        }}
-      >
-        {orgData.name}
-      </div>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--spacing-3)' }}>
-        <span>
-          <strong>Status:</strong>{' '}
-          <span style={{ color: getStatusColor(orgData.status) }}>
-            {getStatusText(orgData.status)}
+    <div className="organization-display">
+      <div className="organization-display__header">
+        <span className="organization-display__name">
+          {orgData.name}
+        </span>
+        <span className="organization-display__status">
+          <span className="organization-display__status-icon" aria-hidden="true">
+            {getStatusIcon(orgData.status)}
+          </span>
+          <span className="organization-display__status-text">
+            {t(`organizationNumber.status.${orgData.status}`)}
           </span>
         </span>
-
-        <span>
-          <strong>Form:</strong> {orgData.organizationForm}
-        </span>
-
-        <span>
-          <strong>Kommune:</strong> {orgData.municipality}
-        </span>
-
-        {orgData.industry && (
-          <span>
-            <strong>Bransje:</strong> {orgData.industry.description}
-          </span>
-        )}
       </div>
+      
+      <div className="organization-display__details">
+        <span className="organization-display__form">
+          {orgData.organizationForm}
+        </span>
+        <span className="organization-display__location">
+          {orgData.municipality}, {orgData.county}
+        </span>
+      </div>
+      
+      {orgData.industry && (
+        <div className="organization-display__industry">
+          <span className="organization-display__industry-code">
+            {orgData.industry.code}
+          </span>
+          <span className="organization-display__industry-description">
+            {orgData.industry.description}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
 
-// Validation indicator component
-const ValidationIndicator = ({
-  isValid,
-  isValidating,
-  type,
-}: {
+/**
+ * Validation indicator component
+ */
+const ValidationIndicator: React.FC<{
   isValid: boolean;
   isValidating: boolean;
   type?: string;
-}) => {
+}> = ({ isValid, isValidating, type }) => {
+  const { t } = useLocalization();
+
   if (isValidating) {
     return (
-      <span
-        style={{
-          color: 'var(--color-orange-500)',
-          fontSize: 'var(--font-size-sm)',
-        }}
-        aria-label='Validerer'
-      >
-        ⏳
-      </span>
+      <div className="validation-indicator validation-indicator--validating">
+        <span className="validation-indicator__icon" aria-hidden="true">⏳</span>
+        <span className="validation-indicator__text sr-only">
+          {t('validation.checking')}
+        </span>
+      </div>
     );
   }
 
-  if (isValid && type) {
-    const icons = {
-      enterprise: '🏢',
-      'sub-organization': '🏬',
-    };
+  if (isValid) {
     return (
-      <span
-        style={{
-          color: 'var(--color-green-600)',
-          fontSize: 'var(--font-size-sm)',
-        }}
-        aria-label={`Gyldig ${type === 'enterprise' ? 'organisasjon' : 'underorganisasjon'}`}
-      >
-        {icons[type as keyof typeof icons] || '✅'}
-      </span>
+      <div className="validation-indicator validation-indicator--valid">
+        <span className="validation-indicator__icon" aria-hidden="true">✅</span>
+        <span className="validation-indicator__text sr-only">
+          {t('validation.valid')}
+        </span>
+      </div>
     );
   }
 
   return null;
 };
 
-// Label component for accessibility
-const Label = ({
-  labelKey,
-  required,
-  htmlFor,
-}: {
+/**
+ * Label component
+ */
+const Label: React.FC<{
   labelKey: string;
   required?: boolean;
   htmlFor: string;
-}) => {
+}> = ({ labelKey, required, htmlFor }) => {
+  const { t } = useLocalization();
+
   return (
-    <label
-      htmlFor={htmlFor}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--spacing-2)',
-        marginBottom: 'var(--spacing-2)',
-        fontSize: 'var(--font-size-sm)',
-        fontWeight: 'var(--font-weight-medium)',
-        color: 'var(--text-primary)',
-        lineHeight: 'var(--line-height-tight)',
-      }}
-    >
-      <span>
-        {/* TODO: Replace with actual localization */}
-        {labelKey}
-        {required && (
-          <span
-            style={{
-              color: 'var(--color-red-500)',
-              marginLeft: 'var(--spacing-1)',
-            }}
-            aria-label='påkrevd'
-          >
-            *
-          </span>
-        )}
+    <label className="organization-number-field__label" htmlFor={htmlFor}>
+      <span className="organization-number-field__label-text">
+        {t(labelKey)}
       </span>
+      {required && (
+        <span className="organization-number-field__required-indicator" aria-label={t('field.required')}>
+          *
+        </span>
+      )}
     </label>
   );
 };
 
-// Error message component
-const ErrorMessage = ({ errors }: { errors: string[] }) => {
-  if (errors.length === 0) { return null; }
+/**
+ * Error message component
+ */
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
+  const { t } = useLocalization();
+
+  if (errors.length === 0) return null;
 
   return (
-    <div
-      role='alert'
-      aria-live='polite'
-      style={{
-        marginTop: 'var(--spacing-1)',
-        fontSize: 'var(--font-size-sm)',
-        color: 'var(--color-red-600)',
-        lineHeight: 'var(--line-height-tight)',
-      }}
-    >
+    <div className="organization-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (
-        <div key={index}>
-          {/* TODO: Replace with actual localization */}
-          {error}
+        <div key={index} className="organization-number-field__error-item">
+          <span className="organization-number-field__error-icon" aria-hidden="true">⚠️</span>
+          <span className="organization-number-field__error-text">
+            {t(`organizationNumber.error.${error}`) || error}
+          </span>
         </div>
       ))}
     </div>
   );
 };
 
-// Mock BRREG data fetch (in real implementation, this would call actual BRREG API)
+// Mock function for fetching organization data
 const mockFetchOrganizationData = async (orgNumber: string): Promise<OrganizationData | null> => {
   // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // Mock data for common test organizations
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  // Mock data
   const mockData: Record<string, OrganizationData> = {
     '123456789': {
-      name: 'TESTORGANISASJON AS',
+      name: 'Test Bedrift AS',
       organizationForm: 'Aksjeselskap',
       municipality: 'Oslo',
       county: 'Oslo',
@@ -331,257 +434,12 @@ const mockFetchOrganizationData = async (orgNumber: string): Promise<Organizatio
       registrationDate: '2020-01-15',
       industry: {
         code: '62.010',
-        description: 'Utvikling av programvare',
+        description: 'Programmering og systemutvikling',
       },
-    },
-    '987654321': {
-      name: 'KOMMUNE TESTBED',
-      organizationForm: 'Kommunalt foretak',
-      municipality: 'Drammen',
-      county: 'Buskerud',
-      status: 'active',
-      registrationDate: '2010-03-20',
     },
   };
-
+  
   return mockData[orgNumber] || null;
 };
-
-// OrganizationNumberInput component with forwardRef
-export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, OrganizationNumberInputProps>(
-  (props, ref) => {
-    const {
-      labelKey,
-      errorKey,
-      helpKey,
-      required = false,
-      disabled = false,
-      readOnly = false,
-      placeholder = 'NNN NNN NNN',
-      name,
-      id,
-      value,
-      defaultValue,
-      onChange,
-      onValidationChange,
-      validation = {
-        checksum: true,
-        brreg: false,
-        realTimeValidation: true,
-        allowInactive: true,
-      },
-      norwegian = {
-        displayFormat: 'nnn nnn nnn',
-        maskInput: true,
-        autoFormat: true,
-        fetchOrganizationData: false,
-      },
-      hasError = false,
-      className,
-      style,
-      testId,
-      'aria-label': ariaLabel,
-      ...inputProps
-    } = props;
-
-    const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-    const [validationResult, setValidationResult] = useState({
-      isValid: false,
-      errors: [],
-      type: undefined,
-    });
-    const [isValidating, setIsValidating] = useState(false);
-    const [orgData, setOrgData] = useState<OrganizationData | null>(null);
-    const [isLoadingOrgData, setIsLoadingOrgData] = useState(false);
-
-    const inputId = id || `organization-number-${name || 'field'}`;
-    const inputStyles = getOrganizationInputStyles(props);
-    const combinedStyles = { ...inputStyles, ...style };
-
-    // Validate organization number
-    const validateInput = useMemo(
-      () => async (inputValue: string) => {
-        if (!inputValue.trim()) {
-          setValidationResult({ isValid: false, errors: [], type: undefined });
-          setOrgData(null);
-          return;
-        }
-
-        setIsValidating(true);
-
-        const result = validateOrganizationNumber(inputValue);
-
-        setValidationResult(result);
-
-        // Fetch organization data if enabled and validation passes
-        if (result.isValid && norwegian.fetchOrganizationData) {
-          setIsLoadingOrgData(true);
-          try {
-            const data = await mockFetchOrganizationData(inputValue.replace(/\s/g, ''));
-            setOrgData(data);
-
-            // Check if inactive organizations are allowed
-            if (data && data.status !== 'active' && !validation.allowInactive) {
-              result.errors.push('organization_inactive_not_allowed');
-              result.isValid = false;
-            }
-          } catch (error) {
-            console.error('Failed to fetch organization data:', error);
-          } finally {
-            setIsLoadingOrgData(false);
-          }
-        }
-
-        setIsValidating(false);
-
-        if (onValidationChange) {
-          onValidationChange(result.isValid, result.errors, orgData || undefined);
-        }
-      },
-      [validation, norwegian.fetchOrganizationData, onValidationChange, orgData]
-    );
-
-    // Handle input change with formatting and validation
-    const handleChange = useMemo(
-      () => (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newValue = event.target.value;
-
-        // Remove non-numeric characters and limit length
-        const cleaned = newValue.replace(/\D/g, '');
-        if (cleaned.length > 9) {
-          return; // Don't allow more than 9 digits
-        }
-
-        // Auto-format during typing
-        if (norwegian.autoFormat && norwegian.displayFormat === 'nnn nnn nnn') {
-          if (cleaned.length > 6) {
-            newValue = `${cleaned.substring(0, 3)} ${cleaned.substring(3, 6)} ${cleaned.substring(6)}`;
-          } else if (cleaned.length > 3) {
-            newValue = `${cleaned.substring(0, 3)} ${cleaned.substring(3)}`;
-          } else {
-            newValue = cleaned;
-          }
-        } else {
-          newValue = cleaned;
-        }
-
-        setInternalValue(newValue);
-
-        // Real-time validation
-        if (validation.realTimeValidation && cleaned.length === 9) {
-          validateInput(cleaned);
-        }
-
-        if (onChange) {
-          onChange(newValue, validationResult.isValid, event);
-        }
-      },
-      [norwegian, validation, onChange, validationResult.isValid, validateInput]
-    );
-
-    // Validate on blur for complete inputs
-    const handleBlur = useMemo(
-      () => (event: React.FocusEvent<HTMLInputElement>) => {
-        const cleaned = internalValue.replace(/\D/g, '');
-        if (cleaned.length === 9) {
-          validateInput(cleaned);
-        }
-
-        if (props.onBlur) {
-          props.onBlur(event);
-        }
-      },
-      [internalValue, validateInput, props]
-    );
-
-    // Effect to validate controlled value changes
-    useEffect(() => {
-      if (value !== undefined) {
-        setInternalValue(value);
-        const cleaned = value.replace(/\D/g, '');
-        if (cleaned.length === 9) {
-          validateInput(cleaned);
-        }
-      }
-    }, [value, validateInput]);
-
-    const currentValue = value !== undefined ? value : internalValue;
-    const currentHasError = hasError || validationResult.errors.length > 0;
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-        }}
-        data-testid={testId}
-      >
-        {/* Label with validation indicator */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
-          <Label labelKey={labelKey} required={required} htmlFor={inputId} />
-          <ValidationIndicator
-            isValid={validationResult.isValid}
-            isValidating={isValidating}
-            type={validationResult.type}
-          />
-        </div>
-
-        {/* Input field */}
-        <input
-          ref={ref}
-          className={className}
-          style={combinedStyles}
-          type='text'
-          id={inputId}
-          name={name}
-          value={currentValue}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onFocus={props.onFocus}
-          disabled={disabled}
-          readOnly={readOnly}
-          required={required}
-          placeholder={placeholder}
-          maxLength={norwegian.displayFormat === 'nnn nnn nnn' ? 11 : 9} // Include spaces
-          autoComplete='organization'
-          inputMode='numeric'
-          aria-label={ariaLabel || 'Organisasjonsnummer'}
-          aria-required={required}
-          aria-invalid={currentHasError}
-          aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-org-data`}
-          data-variant={props.variant}
-          data-type='organization-number'
-        />
-
-        {/* Organization data display */}
-        <div id={`${inputId}-org-data`}>
-          <OrganizationDisplay orgData={orgData} isLoading={isLoadingOrgData} />
-        </div>
-
-        {/* Help text */}
-        {helpKey && (
-          <div
-            id={`${inputId}-help`}
-            style={{
-              marginTop: 'var(--spacing-1)',
-              fontSize: 'var(--font-size-sm)',
-              color: 'var(--text-secondary)',
-              lineHeight: 'var(--line-height-tight)',
-            }}
-          >
-            {/* TODO: Replace with actual localization */}
-            {helpKey}
-          </div>
-        )}
-
-        {/* Error messages */}
-        <div id={`${inputId}-error`}>
-          <ErrorMessage errors={validationResult.errors} />
-        </div>
-      </div>
-    );
-  }
-);
 
 OrganizationNumberInput.displayName = 'OrganizationNumberInput';
