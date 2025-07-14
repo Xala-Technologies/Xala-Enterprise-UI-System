@@ -9,6 +9,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
 
+
 const logger = Logger.create({
   serviceName: 'ui-system-org-number-input',
   logLevel: 'info',
@@ -25,7 +26,7 @@ const validateOrganizationNumber = (value: string) => ({
 });
 
 const formatOrganizationNumber = (value: string): React.ReactElement => {
-  return (): React.ReactElement => {
+  return () => {
   return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}

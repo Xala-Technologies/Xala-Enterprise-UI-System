@@ -7,6 +7,7 @@ import type React from 'react';
 
 import type { ComponentProps } from '../lib/types/core.types';
 
+
 // Base data display component props
 export interface DataDisplayComponentProps extends ComponentProps {
   loading?: boolean;
@@ -45,10 +46,10 @@ export interface DataTableProps extends DataDisplayComponentProps {
     formats?: ('csv' | 'xlsx' | 'pdf')[];
     filename?: string;
   };
-  onRowClick?: (row: TableData, index: number) => void;
-  onSelectionChange?: (selectedRows: string[]) => void;
-  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
-  onPageChange?: (page: number, pageSize: number) => void;
+  onRowClick?: (_row: TableData, index: number) => void;
+  onSelectionChange?: (_selectedRows: string[]) => void;
+  onSortChange?: (_sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  onPageChange?: (_page: number, pageSize: number) => void;
 }
 
 // Table column definition
@@ -73,7 +74,7 @@ export interface TableColumn {
       falseText: string; // Text for false value
     };
   };
-  render?: (value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
+  render?: (_value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
 }
 
 // Table data row definition
@@ -151,28 +152,28 @@ export interface StatusIndicatorProps extends DataDisplayComponentProps {
 
 // Utility functions for data formatting
 export const formatters = {
-  currency: (value: number, currency: string = 'USD'): string => {
+  currency: (_value: number, currency: string = 'USD'): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
     }).format(value);
   },
-  date: (value: Date | string, format: string = 'DD.MM.YYYY'): string => {
+  date: (_value: Date | string, format: string = 'DD.MM.YYYY'): string => {
     const date = typeof value === 'string' ? new Date(value) : value;
     // Implementation depends on date library
     return date.toLocaleDateString();
   },
-  number: (value: number, options?: Intl.NumberFormatOptions): string => {
+  number: (_value: number, options?: Intl.NumberFormatOptions): string => {
     return new Intl.NumberFormat('en-US', options).format(value);
   },
-  boolean: (value: boolean, options?: { trueText: string; falseText: string }): string => {
+  boolean: (_value: boolean, options?: { trueText: string; falseText: string }): string => {
     return value ? (options?.trueText || 'Yes') : (options?.falseText || 'No');
   },
-  personalNumber: (value: string): string => {
+  personalNumber: (_value: string): string => {
     // Generic formatting - can be customized per locale
     return value.replace(/(\d{6})(\d{5})/, '$1-$2');
   },
-  organizationNumber: (value: string): string => {
+  organizationNumber: (_value: string): string => {
     // Generic formatting - can be customized per locale
     return value.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
   },

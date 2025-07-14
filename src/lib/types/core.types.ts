@@ -4,7 +4,6 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-import React from 'react';
 
 import type { CSSProperties as ReactCSSProperties } from 'react';
 import type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/accessibility-tokens';
@@ -177,11 +176,11 @@ export interface ComponentState {
  * Event handlers interface
  */
 export interface EventHandlers {
-  readonly onClick?: (event: MouseEvent) => void;
-  readonly onKeyDown?: (event: KeyboardEvent) => void;
-  readonly onFocus?: (event: FocusEvent) => void;
-  readonly onBlur?: (event: FocusEvent) => void;
-  readonly onChange?: (value: unknown) => void;
+  readonly onClick?: (_event: MouseEvent) => void;
+  readonly onKeyDown?: (_event: KeyboardEvent) => void;
+  readonly onFocus?: (_event: FocusEvent) => void;
+  readonly onBlur?: (_event: FocusEvent) => void;
+  readonly onChange?: (_value: unknown) => void;
 }
 
 /**

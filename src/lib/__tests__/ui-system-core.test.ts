@@ -5,6 +5,7 @@
  */
 
 import {
+
   UISystemCore,
   createProductionUISystem,
   createTestUISystem,
@@ -156,7 +157,7 @@ describe('@xala-technologies/ui-system - UI System Core', () => {
 
       const registry = uiSystem.getComponentRegistry();
       expect(registry.has('TestComponent')).toBe(true);
-      expect(registry.get('TestComponent')).toBe(mockComponent);
+      expect(registry.ge'TestComponent').toBe(mockComponent);
 
       await uiSystem.dispose();
     });

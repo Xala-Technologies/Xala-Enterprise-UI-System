@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type HTMLAttributes } from 'react';
 
+
 /**
  * Typography variants using class-variance-authority
  */

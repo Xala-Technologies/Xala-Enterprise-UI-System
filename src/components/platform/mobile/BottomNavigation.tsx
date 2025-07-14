@@ -5,6 +5,7 @@ import React from 'react';
 
 import type { BottomNavigationProps, BottomNavigationItem } from '../../../types/platform.types';
 
+
 // Helper function to generate CSS using design tokens
 const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => {
   const { height = 'standard', safeAreaBottom = true, norwegian } = props;

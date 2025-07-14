@@ -1,10 +1,10 @@
-import React from 'react';
 // RTL Component Testing for @xala-mock/ui-system
 // Right-to-left language support testing (Arabic, Hebrew) with Norwegian compliance
 
 import type { TextDirection, SupportedLocale } from '../../types/localization.types';
 import { RTLDesignTokens } from '../../types/localization.types';
 import {
+
   generateRTLTokens,
   RTL_COMPONENT_UTILITIES,
   NORWEGIAN_RTL_TESTING,

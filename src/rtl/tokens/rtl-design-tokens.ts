@@ -1,7 +1,20 @@
-// RTL Design Tokens for @xala-mock/ui-system
-// Right-to-left language support with Norwegian testing capabilities
+/**
+ * RTL Design Tokens
+ * Right-to-left language support design tokens
+ */
 
-import type { RTLDesignTokens, TextDirection } from '../../types/localization.types';
+// Define types locally instead of importing from localization
+export type TextDirection = 'ltr' | 'rtl';
+
+export interface RTLDesignTokens {
+  direction: TextDirection;
+  spacing: Record<string, string>;
+  typography: Record<string, string>;
+  layout: Record<string, string>;
+  positioning: Record<string, string>;
+  borders: Record<string, string>;
+}
+
 
 // RTL-aware spacing tokens
 export const RTL_SPACING_TOKENS = {
@@ -80,6 +93,7 @@ export const RTL_TYPOGRAPHY_TOKENS = {
 // Generate RTL design tokens for a specific direction
 export const generateRTLTokens = (direction: TextDirection): RTLDesignTokens => {
   return {
+    direction,
     spacing: {
       marginStart:
         direction === 'rtl' ? 'var(--spacing-margin-right)' : 'var(--spacing-margin-left)',
@@ -104,6 +118,7 @@ export const generateRTLTokens = (direction: TextDirection): RTLDesignTokens => 
       borderEndColor:
         direction === 'rtl' ? 'var(--border-left-color)' : 'var(--border-right-color)',
     },
+    layout: {},
     typography: {
       direction: direction,
       textAlign: direction === 'rtl' ? 'right' : 'left',
@@ -257,7 +272,7 @@ export const RTL_COMPONENT_UTILITIES = {
     ].some(prop => computedStyle.getPropertyValue(prop) !== '');
 
     const hasDirectionAttribute =
-      component.hasAttribute('dir') || component.closest('[dir]') !== null;
+      component.hasAttribute('dir') || component.closes'[dir]' !== null;
 
     return hasLogicalProperties || hasDirectionAttribute;
   },

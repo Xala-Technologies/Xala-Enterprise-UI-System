@@ -5,9 +5,21 @@ import React from 'react';
 
 import type { MobileHeaderProps } from '../../../types/platform.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 // Helper function to generate CSS using design tokens
 const getMobileHeaderStyles = (props: MobileHeaderProps): React.CSSProperties => {
-  const { height = 'standard', sticky = true, transparent = false, norwegian } = props;
+  const { height = 'standard', sticky = true, transparent = false, norwegian , label } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {

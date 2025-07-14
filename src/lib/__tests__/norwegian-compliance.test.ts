@@ -1,4 +1,3 @@
-import React from 'react';
 /**
  * @fileoverview Norwegian compliance tests
  * @module NorwegianComplianceTests
@@ -6,6 +5,7 @@ import React from 'react';
  */
 
 import {
+
   isValidNorwegianPersonalNumber,
   isValidNorwegianOrganizationNumber,
   isValidNorwegianPostalCode,

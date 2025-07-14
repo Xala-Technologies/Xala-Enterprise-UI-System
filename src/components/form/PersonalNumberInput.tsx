@@ -19,7 +19,7 @@ const validatePersonalNumber = (value: string) => ({
 });
 
 const formatPersonalNumber = (value: string): React.ReactElement => {
-  return (): React.ReactElement => {
+  return () => {
   return (
     <div className="personal-number-field" data-testid={testId}>
       {/* Label */}

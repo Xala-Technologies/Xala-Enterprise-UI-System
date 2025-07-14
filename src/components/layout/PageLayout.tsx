@@ -8,6 +8,7 @@ import React from 'react';
 
 import type { PageLayoutProps } from '../../types/layout.types';
 
+
 /**
  * PageLayout component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only

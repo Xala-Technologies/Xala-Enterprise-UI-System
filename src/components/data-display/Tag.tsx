@@ -9,10 +9,43 @@ import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { TagProps } from '../../types/data-display.types';
 
+
+// Helper function
+const getClassificationText = (level: string): string => {
+  const texts = {
+    'ÅPEN': 'Open',
+    'BEGRENSET': 'Restricted',
+    'KONFIDENSIELT': 'Confidential',
+    'HEMMELIG': 'Secret',
+  };
+  return texts[level as keyof typeof texts] || level;
+};
+
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
 /**
  * Tag component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
+
+const getCategoryIcon = (category: string): string => {
+  const icons = {
+    system: '⚙️',
+    validation: '✅',
+    security: '🔒',
+    process: '🔄',
+    user: '👤',
+  };
+  return icons[category as keyof typeof icons] || '📋';
+};
+
 export function Tag({
   children,
   variant = 'default',

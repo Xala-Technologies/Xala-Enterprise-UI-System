@@ -5,6 +5,29 @@ import React, { useEffect } from 'react';
 
 import type { ModalProps } from '../../types/action-feedback.types';
 
+// Helper functions
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+const getCategoryIcon = (category: string): string => {
+  const icons = {
+    system: '⚙️',
+    validation: '✅',
+    security: '🔒',
+    process: '🔄',
+    user: '👤',
+  };
+  return icons[category as keyof typeof icons] || '📋';
+};
+
+
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
   const { size = 'md', centered = true, norwegian } = props;
@@ -267,13 +290,13 @@ const useFocusTrap = (
   enabled: boolean,
   containerRef: React.RefObject<HTMLElement>
 ): React.ReactElement => {
-  return (): React.ReactElement => {
+  return () => {
   return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
   // Handle modal opening
   useEffect((): React.ReactElement => {
-  return (): React.ReactElement => {
+  return () => {
   return (
     <>
       {/* Modal overlay */}

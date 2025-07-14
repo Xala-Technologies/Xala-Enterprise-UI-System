@@ -5,6 +5,18 @@ import React, { useEffect, useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 // Helper function to generate CSS using design tokens
 const getToastStyles = (props: ToastProps): React.CSSProperties => {
   const { variant = 'info', position = 'bottom-right', norwegian } = props;
@@ -335,6 +347,16 @@ const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }
 };
 
 // Priority indicator
+const getPriorityIcon = (priority: string): string => {
+  const icons = {
+    low: '▪',
+    medium: '■',
+    high: '◆',
+    critical: '⬛',
+  };
+  return icons[priority as keyof typeof icons] || '■';
+};
+
 const PriorityIndicator = ({ priority }: { priority?: string }): React.ReactElement => {
   return (
     <span
@@ -353,123 +375,197 @@ const PriorityIndicator = ({ priority }: { priority?: string }): React.ReactElem
 
 // Toast component with forwardRef
 export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref): React.ReactElement => {
-  return () => clearTimeout(timer);
-  }, [duration, persistent, isPaused]);
+  const {
+    isOpen = true,
+    variant = 'info',
+    title,
+    titleKey,
+    message,
+    messageKey,
+    icon,
+    duration = 5000,
+    position = 'bottom-right',
+    persistent = false,
+    closable = true,
+    pauseOnHover = true,
+    children,
+    className = '',
+    style,
+    actions,
+    norwegian,
+    ariaLabel,
+    testId = 'toast',
+    onClose,
+    onOpen,
+    onActionClick,
+    ...divProps
+  } = props;
 
-  const handleClose = (): React.ReactElement => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+      onOpen?.();
+    } else {
+      setIsVisible(false);
+    }
+  }, [isOpen, onOpen]);
+
+  useEffect(() => {
+    if (!isVisible || persistent || isPaused) return;
+
+    const timer = setTimeout(() => {
+      handleClose();
+    }, duration);
+
+    return () => clearTimeout(timer);
+  }, [isVisible, duration, persistent, isPaused]);
+
+  const handleClose = (): void => {
+    setIsVisible(false);
+    onClose?.();
+  };
+
+  const handleMouseEnter = (): void => {
+    if (pauseOnHover) {
+      setIsPaused(true);
+    }
+  };
+
+  const handleMouseLeave = (): void => {
+    if (pauseOnHover) {
+      setIsPaused(false);
+    }
+  };
+
+  const combinedStyles = {
+    ...getToastStyles(props),
+    ...style,
+  };
+
+  const getToastRole = (): string => {
+    return variant === 'error' || variant === 'warning' ? 'alert' : 'status';
+  };
+
+  const getAriaLive = (): 'polite' | 'assertive' | 'off' => {
+    if (variant === 'error') return 'assertive';
+    if (variant === 'warning') return 'assertive';
+    return 'polite';
+  };
+
+  const getVariantIcon = (variant: string): string => {
+    const icons = {
+      info: 'ℹ️',
+      success: '✅',
+      warning: '⚠️',
+      error: '❌',
+    };
+    return icons[variant as keyof typeof icons] || 'ℹ️';
+  };
+
+  if (!isVisible) {
+    return <></>;
+  }
+
   return (
     <div
       ref={ref}
-      role="status"
+      role={getToastRole()}
       aria-live={getAriaLive()}
       aria-atomic="true"
       className={className}
       style={combinedStyles}
-      onClick={handleToastClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       data-testid={testId}
       data-variant={variant}
       data-position={position}
       data-classification={norwegian?.classification}
-      data-municipality={norwegian?.municipality}
       data-priority={norwegian?.priority}
-      data-category={norwegian?.category}
-      aria-label={
-        ariaLabel || (norwegian?.announceToScreenReader ? message || messageKey : undefined)
-      }
+      aria-label={ariaLabel}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       {...divProps}
     >
       {/* Toast icon */}
-      <ToastIcon variant={variant} icon={icon} />
+      <div style={{ flexShrink: 0 }}>
+        {icon || <span aria-hidden="true">{getVariantIcon(variant)}</span>}
+      </div>
 
       {/* Toast content */}
-      <div
-        style={{
-          flex: 1,
-          minWidth: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 'var(--spacing-1)',
-        }}
-      >
-        {/* Toast message */}
-        <div
-          style={{
-            fontSize: 'var(--font-size-sm)',
-            lineHeight: 'var(--line-height-normal)',
-            color: 'inherit',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--spacing-1)',
-          }}
-        >
-          {/* TODO: Replace with actual localization */}
-          <span>{message || messageKey}</span>
-
-          {/* Classification indicator */}
-          {norwegian?.classification && (
-            <ClassificationIndicator level={norwegian.classification} />
-          )}
-
-          {/* Priority indicator */}
-          <PriorityIndicator priority={norwegian?.priority} />
-        </div>
-
-        {/* Toast action button */}
-        {action && <ToastActionButton action={action} />}
-
-        {/* Norwegian-specific actions */}
-        {norwegian?.retryAction && (
-          <button
+      <div style={{ flex: 1, minWidth: 0 }}>
+        {/* Toast title */}
+        {(title || titleKey) && (
+          <div
             style={{
-              padding: 'var(--spacing-1) var(--spacing-2)',
-              fontSize: 'var(--font-size-xs)',
-              backgroundColor: 'transparent',
-              color: 'currentColor',
-              border: 'var(--border-width) solid currentColor',
-              borderRadius: 'var(--border-radius-sm)',
-              cursor: 'pointer',
-              alignSelf: 'flex-start',
-              marginTop: 'var(--spacing-1)',
-            }}
-            onClick={e => {
-              e.stopPropagation();
-              // TODO: Implement retry logic
+              fontSize: 'var(--font-size-base)',
+              fontWeight: 'var(--font-weight-semibold)',
+              marginBottom: 'var(--spacing-1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--spacing-1)',
             }}
           >
-            🔄 Prøv igjen
-          </button>
+            <span>{title || titleKey}</span>
+
+            {/* Classification indicator */}
+            {norwegian?.classification && (
+              <ClassificationIndicator level={norwegian.classification} />
+            )}
+
+            {/* Priority indicator */}
+            {norwegian?.priority && (
+              <PriorityIndicator priority={norwegian.priority} />
+            )}
+          </div>
         )}
 
-        {norwegian?.undoAction && (
-          <button
+        {/* Toast message */}
+        {(message || messageKey || children) && (
+          <div
             style={{
-              padding: 'var(--spacing-1) var(--spacing-2)',
-              fontSize: 'var(--font-size-xs)',
-              backgroundColor: 'transparent',
-              color: 'currentColor',
-              border: 'var(--border-width) solid currentColor',
-              borderRadius: 'var(--border-radius-sm)',
-              cursor: 'pointer',
-              alignSelf: 'flex-start',
-              marginTop: 'var(--spacing-1)',
-            }}
-            onClick={e => {
-              e.stopPropagation();
-              // TODO: Implement undo logic
+              fontSize: 'var(--font-size-sm)',
+              lineHeight: 'var(--line-height-relaxed)',
+              color: 'inherit',
             }}
           >
-            ↶ Angre
-          </button>
+            {children || message || messageKey}
+          </div>
+        )}
+
+        {/* Action buttons */}
+        {actions && actions.length > 0 && (
+          <div
+            style={{
+              display: 'flex',
+              gap: 'var(--spacing-2)',
+              marginTop: 'var(--spacing-3)',
+            }}
+          >
+            {actions.map((action, index) => (
+              <button
+                key={index}
+                style={{
+                  padding: 'var(--spacing-1) var(--spacing-2)',
+                  fontSize: 'var(--font-size-xs)',
+                  fontWeight: 'var(--font-weight-medium)',
+                  backgroundColor: 'transparent',
+                  color: 'currentColor',
+                  border: 'var(--border-width) solid currentColor',
+                  borderRadius: 'var(--border-radius-sm)',
+                  cursor: 'pointer',
+                }}
+                onClick={() => onActionClick?.(action)}
+              >
+                {action.labelKey}
+              </button>
+            ))}
+          </div>
         )}
       </div>
 
       {/* Close button */}
       {closable && <CloseButton onClose={handleClose} />}
-
-      {/* Progress bar for auto-dismiss */}
-      {!persistent && duration > 0 && <ProgressBar duration={duration} paused={isPaused} />}
     </div>
   );
 });

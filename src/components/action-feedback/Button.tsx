@@ -5,6 +5,18 @@ import React, { useState } from 'react';
 
 import type { ButtonProps } from '../../types/action-feedback.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 // Helper function to generate CSS using design tokens
 const getButtonStyles = (props: ButtonProps): React.CSSProperties => {
   const {
@@ -15,7 +27,7 @@ const getButtonStyles = (props: ButtonProps): React.CSSProperties => {
     disabled = false,
     loading = false,
     norwegian,
-  } = props;
+  , label } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {
@@ -244,6 +256,7 @@ const ClassificationIndicator = ({ level }: { level: string }): React.ReactEleme
 
 // Loading spinner component
 const LoadingSpinner = ({ size }: { size: string }): React.ReactElement => {
+  const spinnerSize = size === 'sm' ? '12px' : size === 'lg' ? '20px' : '16px';
   return (
     <div
       style={{
@@ -368,6 +381,63 @@ const ConfirmationDialog = ({
 
 // Button component with forwardRef
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref): React.ReactElement => {
+  const {
+    variant = 'primary',
+    size = 'md',
+    shape = 'rounded',
+    type = 'button',
+    fullWidth = false,
+    disabled = false,
+    loading = false,
+    children,
+    labelKey,
+    icon,
+    iconPosition = 'start',
+    className = '',
+    style,
+    norwegian,
+    ariaLabel,
+    testId = 'button',
+    onClick,
+    ...buttonProps
+  } = props;
+
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  
+  const isDisabled = disabled || loading;
+  
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    if (norwegian?.requiresConfirmation) {
+      setShowConfirmation(true);
+    } else {
+      onClick?.(event);
+    }
+  };
+  
+  const handleConfirm = (): void => {
+    setShowConfirmation(false);
+    onClick?.({} as React.MouseEvent<HTMLButtonElement>);
+  };
+  
+  const handleCancel = (): void => {
+    setShowConfirmation(false);
+  };
+
+  const combinedStyles = {
+    ...getButtonStyles(props),
+    ...style,
+  };
+
+  const buttonContent = (
+    <>
+      {loading && <LoadingSpinner size={size} />}
+      {icon && iconPosition === 'start' && !loading && icon}
+      {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
+      {children || labelKey}
+      {icon && iconPosition === 'end' && !loading && icon}
+    </>
+  );
+
   return (
     <>
       <button

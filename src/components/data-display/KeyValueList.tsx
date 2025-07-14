@@ -9,6 +9,18 @@ import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 const logger = Logger.create({
   serviceName: 'ui-system-keyvalslist',
   logLevel: 'info',
@@ -117,6 +129,16 @@ const ClassificationIcon: React.FC<{ classification: string }> = ({ classificati
 /**
  * Status indicator component
  */
+const getStatusIcon = (status: string): string => {
+  const icons = {
+    active: '✅',
+    inactive: '⏸️',
+    pending: '⏳',
+    error: '❌',
+  };
+  return icons[status as keyof typeof icons] || '📊';
+};
+
 const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => {
   return (
     <span className="keyvalue-item__status-indicator" aria-hidden="true">
@@ -125,6 +147,7 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactE
   );
 };
 
+// Helper function
 /**
  * Value formatting function
  */

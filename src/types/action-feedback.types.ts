@@ -47,7 +47,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
     confirmationMessage?: string;
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (_event: React.MouseEvent<HTMLButtonElement>) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
@@ -148,7 +148,7 @@ export interface AlertProps extends ActionFeedbackComponentProps {
     requiresAcknowledgment?: boolean;
   };
   onClose?: () => void;
-  onAction?: (action: AlertAction) => void;
+  onAction?: (_action: AlertAction) => void;
 }
 
 // Alert action configuration
@@ -228,7 +228,7 @@ export interface NotificationProps extends ActionFeedbackComponentProps {
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
   onClose?: () => void;
-  onAction?: (action: NotificationAction) => void;
+  onAction?: (_action: NotificationAction) => void;
 }
 
 // Notification action configuration

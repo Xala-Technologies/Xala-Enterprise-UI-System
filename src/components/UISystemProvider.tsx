@@ -15,6 +15,7 @@ import type {
 } from '../tokens/accessibility-tokens';
 import { accessibilityPresets, generateAccessibilityTokens } from '../tokens/accessibility-tokens';
 
+
 const logger = Logger.create({
   serviceName: 'ui-system-provider',
   logLevel: 'info',
@@ -105,6 +106,34 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   config: initialConfig = {},
   accessibility: initialAccessibility = 'basic',
 }): React.ReactElement => {
+  // Initialize accessibility config
+  const accessibilityConfig = useMemo(() => {
+    return typeof initialAccessibility === 'string'
+      ? accessibilityPresets[initialAccessibility] || accessibilityPresets.basic
+      : initialAccessibility;
+  }, [initialAccessibility]);
+
+  // Generate CSS variables
+  const cssVariables = useMemo(() => {
+    const tokens = generateAccessibilityTokens(accessibilityConfig);
+    return Object.entries(tokens)
+      .map(([key, value]) => `--${key}: ${value};`)
+      .join(' ');
+  }, [accessibilityConfig]);
+
+  // Create context value
+  const contextValue = useMemo<UISystemContext>(() => ({
+    config: { ...defaultConfig, ...initialConfig },
+    accessibility: accessibilityConfig,
+    accessibilityTokens: generateAccessibilityTokens(accessibilityConfig),
+    updateConfig: (updates: Partial<UISystemConfig>) => {
+      logger.debug('Config update requested', { updates });
+    },
+    updateAccessibility: (accessibility: AccessibilityConfig | AccessibilityPreset) => {
+      logger.debug('Accessibility update requested', { accessibility });
+    },
+  }), [initialConfig, accessibilityConfig]);
+
   return (
     <UISystemContextInstance.Provider value={contextValue}>
       <div

@@ -9,6 +9,18 @@ import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { DataTableProps, TableColumn, TableData } from '../../types/data-display.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 /**
  * DataTable component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
@@ -269,6 +281,16 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.
 /**
  * Status indicator component
  */
+const getStatusIcon = (status: string): string => {
+  const icons = {
+    active: '✅',
+    inactive: '⏸️',
+    pending: '⏳',
+    error: '❌',
+  };
+  return icons[status as keyof typeof icons] || '📊';
+};
+
 const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => {
   return (
     <span className="datatable__status-indicator" aria-hidden="true">

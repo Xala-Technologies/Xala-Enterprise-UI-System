@@ -1,10 +1,8 @@
-// Mobile platform components for @xala-mock/ui-system
-// Touch-friendly Norwegian UI components
-
-// Export mobile components
-export { MobileHeader } from './components/MobileHeader';
+// Mobile platform components
 export { BottomNavigation } from './components/BottomNavigation';
 export { MobileDrawer } from './components/MobileDrawer';
+export { MobileHeader } from './components/MobileHeader';
+export { MobileHeaderButton } from './components/MobileHeaderButton';
 
 // Export mobile layouts (to be implemented)
 // export { MobileLayout } from './layouts/MobileLayout';
@@ -12,8 +10,8 @@ export { MobileDrawer } from './components/MobileDrawer';
 // export { MobileContainer } from './layouts/MobileContainer';
 
 // Export types
-export type {} from // Will be exported once components are properly typed
-'../types/mobile.types';
+export type { } from // Will be exported once components are properly typed
+    '../types/mobile.types';
 
 // Mobile platform utilities
 export const mobileUtils = {

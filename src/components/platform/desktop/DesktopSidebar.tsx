@@ -14,7 +14,7 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
     persistent = true,
     overlay = false,
     norwegian,
-  } = props;
+  , label } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {

@@ -1,4 +1,5 @@
 /**
+
  * WCAG AAA Accessibility Utilities
  * Comprehensive accessibility functions for the Xala Design System
  */
@@ -171,7 +172,7 @@ export const screenReader = {
    * Announce text to screen readers
    */
   announce: (message: string, priority: 'polite' | 'assertive' = 'polite'): void => {
-    const announcer = document.createElement('div');
+    const announcer = document.createElemen'div';
     announcer.setAttribute('aria-live', priority);
     announcer.setAttribute('aria-atomic', 'true');
     announcer.className = 'sr-only';

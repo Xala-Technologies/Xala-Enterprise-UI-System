@@ -1,8 +1,8 @@
 /**
- * @fileoverview Global Design Tokens - Primitive Values
- * @description Foundation layer of the semantic token system following industry standards
+ * @fileoverview Global Design Tokens - Primitive Layer
+ * @description Foundational design tokens for the UI system
  * @version 3.0.0
- * @compliance WCAG 2.2 AAA, NSM, DigDir
+ * @compliance WCAG 2.2 AAA
  */
 
 // =============================================================================
@@ -26,35 +26,6 @@ export const globalColorPrimitives = {
     700: '#004d99',
     800: '#003366',
     900: '#001a33',
-  },
-  
-  // Norwegian Government Colors (inspired by flag and official standards)
-  norway: {
-    red: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#ef4444', // Norwegian red
-      600: '#dc2626',
-      700: '#b91c1c',
-      800: '#991b1b',
-      900: '#7f1d1d',
-    },
-    blue: {
-      50: '#eff6ff',
-      100: '#dbeafe',
-      200: '#bfdbfe',
-      300: '#93c5fd',
-      400: '#60a5fa',
-      500: '#3b82f6', // Norwegian blue
-      600: '#2563eb',
-      700: '#1d4ed8',
-      800: '#1e40af',
-      900: '#1e3a8a',
-    },
-    white: '#ffffff',
   },
   
   // Neutral Color Scale

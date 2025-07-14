@@ -9,6 +9,7 @@ import React from 'react';
 
 import type { PerformanceMetrics, AuditTrailEntry } from '../types/core.types';
 
+
 interface ValidationResult<T> {
   success: boolean;
   data?: T;

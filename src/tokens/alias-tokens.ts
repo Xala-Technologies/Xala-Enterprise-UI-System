@@ -1,8 +1,8 @@
 /**
  * @fileoverview Alias Design Tokens - Semantic Layer
- * @description Semantic layer that maps primitive values to meaningful names
+ * @description Semantic token assignments using global primitive tokens
  * @version 3.0.0
- * @compliance WCAG 2.2 AAA, NSM, DigDir
+ * @compliance WCAG 2.2 AAA
  */
 
 import {
@@ -39,17 +39,6 @@ export const aliasColorTokens = {
     'primary-disabled': globalColorPrimitives.xala[300],
     'primary-subtle': globalColorPrimitives.xala[50],
     'primary-emphasis': globalColorPrimitives.xala[700],
-  },
-  
-  // Norwegian government brand colors
-  'brand-norway': {
-    primary: globalColorPrimitives.norway.blue[500],
-    'primary-hover': globalColorPrimitives.norway.blue[600],
-    'primary-active': globalColorPrimitives.norway.blue[700],
-    accent: globalColorPrimitives.norway.red[500],
-    'accent-hover': globalColorPrimitives.norway.red[600],
-    'accent-active': globalColorPrimitives.norway.red[700],
-    neutral: globalColorPrimitives.norway.white,
   },
   
   // Background colors

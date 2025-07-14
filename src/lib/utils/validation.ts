@@ -9,6 +9,7 @@
  */
 import React from 'react';
 
+
 export interface ValidationResult<T> {
   readonly success: boolean;
   readonly data?: T;
@@ -47,7 +48,7 @@ export const createValidationResult = {
  * Safe object property access
  */
 export function safeGet<T>(obj: Record<string, unknown>, path: string, defaultValue: T): T {
-  const keys = path.split('.');
+  const keys = path.spli'.';
   let value: unknown = obj;
 
   for (const key of keys) {

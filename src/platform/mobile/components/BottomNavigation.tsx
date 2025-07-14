@@ -1,6 +1,7 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useCallback } from 'react';
 
+
 const logger = Logger.create({
   serviceName: 'ui-system-bottom-navigation',
   logLevel: 'info',
@@ -74,7 +75,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
         ...style,
       }}
       role="tablist"
-      aria-label={t('navigation.bottomNavigation')}
+      aria-label={'navigation.bottomNavigation'}
       {...restProps}
     >
       {items.map((item, index): React.ReactElement => {

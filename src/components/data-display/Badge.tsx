@@ -9,6 +9,18 @@ import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { BadgeProps } from '../../types/data-display.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 /**
  * Badge component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
@@ -124,6 +136,16 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.
 /**
  * Priority indicator component
  */
+const getPriorityIcon = (priority: string): string => {
+  const icons = {
+    low: '▪',
+    medium: '■',
+    high: '◆',
+    critical: '⬛',
+  };
+  return icons[priority as keyof typeof icons] || '■';
+};
+
 const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }): React.ReactElement => {
   return (
     <span className="badge__priority" aria-hidden="true">
@@ -132,4 +154,5 @@ const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }): React.
   );
 };
 
+// Helper function
 Badge.displayName = 'Badge';

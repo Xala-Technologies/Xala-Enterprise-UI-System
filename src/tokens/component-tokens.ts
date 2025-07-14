@@ -2,7 +2,7 @@
  * @fileoverview Component Design Tokens - Component-Specific Layer
  * @description Component-specific token assignments using alias tokens
  * @version 3.0.0
- * @compliance WCAG 2.2 AAA, NSM, DigDir
+ * @compliance WCAG 2.2 AAA
  */
 
 import { aliasTokens } from './alias-tokens';

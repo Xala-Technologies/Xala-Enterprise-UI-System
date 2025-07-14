@@ -9,6 +9,18 @@ import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { CardProps } from '../../types/layout.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
 /**
  * Card component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only

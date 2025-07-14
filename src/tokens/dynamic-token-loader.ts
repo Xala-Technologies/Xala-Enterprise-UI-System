@@ -326,7 +326,7 @@ export class DynamicTokenLoader {
     if (this.config.configPath) {
       // For Node.js environments
       try {
-        const fs = await import('fs');
+        const fs = await impor'fs';
         const configData = await fs.promises.readFile(this.config.configPath, 'utf-8');
         return JSON.parse(configData);
       } catch (error) {
@@ -351,8 +351,9 @@ export class DynamicTokenLoader {
 
     if (this.config.configPath) {
       try {
-        const fs = await import('fs');
-        const path = await import('path');
+        const fs = await impor'fs';
+        const path = await impor'path';
+
         const tenantPath = path.join(path.dirname(this.config.configPath), `tenant-${tenantId}.json`);
         const configData = await fs.promises.readFile(tenantPath, 'utf-8');
         return JSON.parse(configData);

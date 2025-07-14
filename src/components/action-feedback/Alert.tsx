@@ -5,9 +5,52 @@ import React from 'react';
 
 import type { AlertProps } from '../../types/action-feedback.types';
 
+// Helper functions
+const getVariantIcon = (variant: string): string => {
+  const icons = {
+    info: 'ℹ️',
+    success: '✅',
+    warning: '⚠️',
+    error: '❌',
+  };
+  return icons[variant as keyof typeof icons] || 'ℹ️';
+};
+
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+const getSeverityIcon = (severity: string): string => {
+  const icons = {
+    low: '▪',
+    medium: '■',
+    high: '◆',
+    critical: '⬛',
+  };
+  return icons[severity as keyof typeof icons] || '■';
+};
+
+const getCategoryIcon = (category: string): string => {
+  const icons = {
+    system: '⚙️',
+    validation: '✅',
+    security: '🔒',
+    process: '🔄',
+    user: '👤',
+  };
+  return icons[category as keyof typeof icons] || '📋';
+};
+
+
 // Helper function to generate CSS using design tokens
 const getAlertStyles = (props: AlertProps): React.CSSProperties => {
-  const { variant = 'info', severity = 'medium', norwegian } = props;
+  const { variant = 'info', severity = 'medium', norwegian , label } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {
@@ -317,6 +360,60 @@ const CategoryIndicator = ({ category }: { category?: string }): React.ReactElem
 
 // Alert component with forwardRef
 export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): React.ReactElement => {
+  const {
+    variant = 'info',
+    severity = 'medium',
+    title,
+    titleKey,
+    message,
+    messageKey,
+    icon,
+    closable = false,
+    showOverlay = false,
+    children,
+    className = '',
+    style,
+    actions,
+    norwegian,
+    ariaLabel,
+    testId = 'alert',
+    onClose,
+    ...divProps
+  } = props;
+
+  const [isVisible, setIsVisible] = React.useState(true);
+
+  const handleClose = (): void => {
+    setIsVisible(false);
+    onClose?.();
+  };
+
+  const handleAcknowledge = (): void => {
+    // Handle acknowledgment
+    if (norwegian?.onAcknowledgment) {
+      norwegian.onAcknowledgment();
+    }
+  };
+
+  const combinedStyles = {
+    ...getAlertStyles(props),
+    ...style,
+  };
+
+  const getAlertRole = (): string => {
+    return severity === 'critical' || severity === 'high' ? 'alert' : 'status';
+  };
+
+  const getAriaLive = (): 'polite' | 'assertive' | 'off' => {
+    if (severity === 'critical') return 'assertive';
+    if (severity === 'high') return 'assertive';
+    return 'polite';
+  };
+
+  if (!isVisible) {
+    return <></>;
+  }
+
   return (
     <div
       ref={ref}

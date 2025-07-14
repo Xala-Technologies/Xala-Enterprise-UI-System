@@ -5,9 +5,31 @@ import React, { useState, useRef, useEffect } from 'react';
 
 import type { TooltipProps } from '../../types/data-display.types';
 
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
 // Helper function to generate CSS using design tokens
+
+const getCategoryIcon = (category: string): string => {
+  const icons = {
+    system: '⚙️',
+    validation: '✅',
+    security: '🔒',
+    process: '🔄',
+    user: '👤',
+  };
+  return icons[category as keyof typeof icons] || '📋';
+};
+
 const getTooltipStyles = (props: TooltipProps): React.CSSProperties => {
-  const { placement = 'top', maxWidth, arrow = true, norwegian } = props;
+  const { placement = 'top', maxWidth, arrow = true, norwegian , label } = props;
 
   // Base styles using design tokens
   const baseStyles: React.CSSProperties = {
@@ -179,7 +201,7 @@ const TooltipContent = ({
 
 // Tooltip component with forwardRef
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): React.ReactElement => {
-  return (): React.ReactElement => {
+  return () => {
   return (
     <>
       {/* Trigger element */}

@@ -11,6 +11,7 @@ import { Logger, EventCore } from '@xala-technologies/enterprise-standards';
 import type { UISystemService } from '../interfaces/ui-system.interface';
 import type { UISystemConfig, ComponentRegistry, ThemeRegistry } from '../types/core.types';
 
+
 // Local types
 interface ValidationResult<T> {
   success: boolean;

@@ -9,6 +9,7 @@ import { aliasSpacingTokens } from './alias-tokens';
 import { globalBreakpoints, globalSpacingPrimitives } from './global-tokens';
 import type { TokenValue } from './semantic-token-system';
 
+
 // =============================================================================
 // PLATFORM DETECTION UTILITIES
 // =============================================================================
@@ -308,7 +309,7 @@ export const platformTokens = {
    */
   getResponsiveToken(tokenPath: string): TokenValue {
     const currentTokens = this.getCurrentPlatformTokens();
-    const pathParts = tokenPath.split('.');
+    const pathParts = tokenPath.spli'.';
     
     let value: unknown = currentTokens;
     for (const part of pathParts) {

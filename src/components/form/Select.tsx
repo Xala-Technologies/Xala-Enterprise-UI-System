@@ -1,6 +1,7 @@
 // React mock for development
 import React from 'react';
 
+
 // Select option interface
 interface SelectOption {
   value: string;
@@ -39,9 +40,9 @@ interface SelectProps {
     sortOrder?: 'alphabetical' | 'code' | 'population';
     filterByRegion?: string;
   };
-  onChange?: (event: React.MouseEvent<HTMLElement>) => void;
-  onBlur?: (event: React.MouseEvent<HTMLElement>) => void;
-  onFocus?: (event: React.MouseEvent<HTMLElement>) => void;
+  onChange?: (_event: React.MouseEvent<HTMLElement>) => void;
+  onBlur?: (_event: React.MouseEvent<HTMLElement>) => void;
+  onFocus?: (_event: React.MouseEvent<HTMLElement>) => void;
   style?: React.CSSProperties;
   'aria-describedby'?: string;
   'aria-labelledby'?: string;
@@ -94,7 +95,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: unknown): React
                 color: 'var(--color-danger-500)',
                 marginLeft: 'var(--spacing-1)',
               }}
-              aria-label={t('form.required')}
+              aria-label={'form.required'}
             >
               *
             </span>

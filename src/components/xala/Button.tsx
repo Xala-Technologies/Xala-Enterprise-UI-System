@@ -108,6 +108,19 @@ export const SemanticButton: React.FC<ButtonProps> = props => {
  * @example
  * ```tsx
  * import { Button } from '@/components';
+
+// Helper function
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
+
  *
  * function MyComponent() {
  *   return (

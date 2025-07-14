@@ -1,8 +1,8 @@
 /**
- * @fileoverview Semantic Token System - Enterprise-Grade Token Management
- * @description Complete token system with validation, CSS generation, and utilities
+ * Semantic Token System - Universal Design Token Management
+ * Provides semantic layer for design tokens with accessibility support
  * @version 3.0.0
- * @compliance WCAG 2.2 AAA, NSM, DigDir
+ * @compliance WCAG 2.2 AAA
  */
 
 import React from 'react';
@@ -422,3 +422,4 @@ export const migrationUtils = {
 };
 
 export default designTokens; 
+}
