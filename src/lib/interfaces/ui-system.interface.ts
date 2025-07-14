@@ -5,10 +5,7 @@
  */
 
 // Local validation result type
-import type {
-  PerformanceMetrics,
-  AuditTrailEntry,
-} from '../types/core.types';
+import type { PerformanceMetrics, AuditTrailEntry } from '../types/core.types';
 
 interface ValidationResult<T> {
   success: boolean;

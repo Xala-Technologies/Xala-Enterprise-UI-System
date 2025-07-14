@@ -55,8 +55,8 @@ const getModalContentStyles = (props: ModalProps): React.CSSProperties => {
   // Scrollable content handling
   const scrollableStyles = scrollable
     ? {
-      overflow: 'hidden',
-    }
+        overflow: 'hidden',
+      }
     : {};
 
   // Norwegian classification styling
@@ -95,7 +95,9 @@ const getSizeStyles = (size: string): React.CSSProperties => {
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -194,8 +196,8 @@ const ModalHeader = ({
             (e.target as HTMLElement).style.backgroundColor = 'transparent';
             (e.target as HTMLElement).style.color = 'var(--text-secondary)';
           }}
-          aria-label='Lukk modal'
-          title='Lukk'
+          aria-label="Lukk modal"
+          title="Lukk"
         >
           ×
         </button>
@@ -287,7 +289,9 @@ const useFocusTrap = (
   containerRef: React.RefObject<HTMLElement>
 ) => {
   useEffect(() => {
-    if (!isOpen || !enabled || !containerRef.current) { return; }
+    if (!isOpen || !enabled || !containerRef.current) {
+      return;
+    }
 
     const container = containerRef.current;
     const focusableElements = container.querySelectorAll(
@@ -298,7 +302,9 @@ const useFocusTrap = (
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
     const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') { return; }
+      if (e.key !== 'Tab') {
+        return;
+      }
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -357,7 +363,9 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
 
   // Handle escape key
   useEffect(() => {
-    if (!isOpen || !closeOnEscape) { return; }
+    if (!isOpen || !closeOnEscape) {
+      return;
+    }
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -412,7 +420,9 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
     onClose?.();
   };
 
-  if (!isOpen) { return null; }
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <>
@@ -441,8 +451,8 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
         <div
           ref={contentRef}
           style={contentStyles}
-          role='dialog'
-          aria-modal='true'
+          role="dialog"
+          aria-modal="true"
           aria-labelledby={title || titleKey ? 'modal-title' : undefined}
           aria-label={ariaLabel || title || titleKey}
           onClick={e => e.stopPropagation()}

@@ -96,7 +96,9 @@ const getSeverityStyles = (severity: string): React.CSSProperties => {
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -121,7 +123,9 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 
 // Get escalation level styles
 const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => {
-  if (!escalationLevel) { return {}; }
+  if (!escalationLevel) {
+    return {};
+  }
 
   const escalationStyles: Record<string, React.CSSProperties> = {
     info: {
@@ -163,7 +167,7 @@ const AlertIcon = ({ variant }: { variant: string }) => {
         flexShrink: 0,
         marginTop: 'var(--spacing-1)',
       }}
-      aria-hidden='true'
+      aria-hidden="true"
     >
       {getVariantIcon(variant)}
     </span>
@@ -255,8 +259,8 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => {
         (e.target as HTMLElement).style.opacity = '0.7';
         (e.target as HTMLElement).style.backgroundColor = 'transparent';
       }}
-      aria-label='Lukk varsel'
-      title='Lukk'
+      aria-label="Lukk varsel"
+      title="Lukk"
     >
       ×
     </button>
@@ -265,7 +269,9 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => {
 
 // Action buttons component
 const AlertActions = ({ actions }: { actions: any[] }) => {
-  if (!actions || actions.length === 0) { return null; }
+  if (!actions || actions.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -303,7 +309,9 @@ const AlertActions = ({ actions }: { actions: any[] }) => {
 
 // Norwegian category indicator
 const CategoryIndicator = ({ category }: { category?: string }) => {
-  if (!category) { return null; }
+  if (!category) {
+    return null;
+  }
 
   const getCategoryIcon = (category: string): string => {
     const icons = {
@@ -370,7 +378,9 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
 
   // Determine alert role based on variant and severity
   const getAlertRole = (): string => {
-    if (variant === 'error' || severity === 'critical') { return 'alert'; }
+    if (variant === 'error' || severity === 'critical') {
+      return 'alert';
+    }
     return 'status';
   };
 
@@ -391,7 +401,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
       ref={ref}
       role={getAlertRole()}
       aria-live={getAriaLive()}
-      aria-atomic='true'
+      aria-atomic="true"
       className={className}
       style={combinedStyles}
       data-testid={testId}
@@ -448,10 +458,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
           >
             {children ||
               message ||
-              (messageKey
-                ? /* TODO: Replace with actual localization */
-                messageKey
-                : '')}
+              (messageKey ? /* TODO: Replace with actual localization */ messageKey : '')}
           </div>
         )}
 
@@ -489,7 +496,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
             }}
           >
             <a
-              href='#'
+              href="#"
               style={{
                 color: 'currentColor',
                 textDecoration: 'underline',

@@ -99,7 +99,7 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any
     >
       {/* NSM Classification border indicator */}
       {classification && (
-        <NSMClassificationIndicator level={classification} variant='border' position='bottom' />
+        <NSMClassificationIndicator level={classification} variant="border" position="bottom" />
       )}
 
       {/* Left section - Navigation buttons */}
@@ -113,11 +113,11 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any
         }}
       >
         {showBackButton && (
-          <MobileHeaderButton icon='←' labelKey='navigation.back' onClick={onBack} />
+          <MobileHeaderButton icon="←" labelKey="navigation.back" onClick={onBack} />
         )}
 
         {showMenu && (
-          <MobileHeaderButton icon='☰' labelKey='navigation.menu' onClick={onMenuToggle} />
+          <MobileHeaderButton icon="☰" labelKey="navigation.menu" onClick={onMenuToggle} />
         )}
       </div>
 
@@ -152,8 +152,8 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any
         {classification && (
           <NSMClassificationIndicator
             level={classification}
-            variant='badge'
-            size='small'
+            variant="badge"
+            size="small"
             showLabel={true}
             style={{ marginTop: 'var(--spacing-1)' }}
           />
@@ -171,13 +171,13 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any
         }}
       >
         {showSearch && (
-          <MobileHeaderButton icon='🔍' labelKey='navigation.search' onClick={onSearchFocus} />
+          <MobileHeaderButton icon="🔍" labelKey="navigation.search" onClick={onSearchFocus} />
         )}
 
         {showNotifications && (
           <MobileHeaderButton
-            icon='🔔'
-            labelKey='navigation.notifications'
+            icon="🔔"
+            labelKey="navigation.notifications"
             onClick={onNotificationPress}
             showBadge={!!notificationCount}
             badgeCount={notificationCount}

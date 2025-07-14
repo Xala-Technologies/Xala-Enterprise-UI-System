@@ -112,7 +112,9 @@ const getRowsValue = (rows: number | string): string => {
 
 // Get responsive grid styles (Norwegian breakpoints)
 const getResponsiveStyles = (responsive?: GridProps['responsive']): Record<string, any> => {
-  if (!responsive) { return {}; }
+  if (!responsive) {
+    return {};
+  }
 
   const styles: Record<string, any> = {};
 
@@ -147,7 +149,7 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>((props, ref) => {
       style={combinedStyles}
       data-testid={testId}
       aria-label={ariaLabel}
-      role='grid'
+      role="grid"
     >
       {children}
     </div>

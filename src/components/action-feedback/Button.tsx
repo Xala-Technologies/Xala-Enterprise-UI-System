@@ -172,7 +172,9 @@ const getWidthStyles = (fullWidth: boolean): React.CSSProperties => {
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -198,7 +200,9 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 
 // Get priority styles
 const getPriorityStyles = (priority?: string): React.CSSProperties => {
-  if (!priority) { return {}; }
+  if (!priority) {
+    return {};
+  }
 
   const priorityStyles: Record<string, React.CSSProperties> = {
     low: {
@@ -269,8 +273,8 @@ const LoadingSpinner = ({ size }: { size: string }) => {
         borderRadius: 'var(--border-radius-full)',
         animation: 'spin 1s linear infinite',
       }}
-      role='status'
-      aria-label='Laster...'
+      role="status"
+      aria-label="Laster..."
     />
   );
 };
@@ -287,7 +291,9 @@ const ConfirmationDialog = ({
   onConfirm: () => void;
   onCancel: () => void;
 }) => {
-  if (!isOpen) { return null; }
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div
@@ -412,7 +418,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
   const combinedStyles = { ...buttonStyles, ...style };
 
   const handleClick = (event: any) => {
-    if (isDisabled) { return; }
+    if (isDisabled) {
+      return;
+    }
 
     // Check if confirmation is required
     if (norwegian?.requiresConfirmation || norwegian?.actionType === 'destructive') {
@@ -459,11 +467,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
       <span>
         {loading && loadingText
           ? loadingText
-          : children ||
-            (labelKey
-              ? /* TODO: Replace with actual localization */
-              labelKey
-              : '')}
+          : children || (labelKey ? /* TODO: Replace with actual localization */ labelKey : '')}
       </span>
 
       {/* Action type indicator */}

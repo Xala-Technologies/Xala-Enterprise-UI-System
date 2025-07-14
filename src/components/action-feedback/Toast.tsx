@@ -114,7 +114,9 @@ const getVariantStyles = (variant: string): React.CSSProperties => {
 
 // Get priority styles
 const getPriorityStyles = (priority?: string): React.CSSProperties => {
-  if (!priority) { return {}; }
+  if (!priority) {
+    return {};
+  }
 
   const priorityStyles: Record<string, React.CSSProperties> = {
     low: {
@@ -140,7 +142,9 @@ const getPriorityStyles = (priority?: string): React.CSSProperties => {
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -173,7 +177,7 @@ const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }) => {
           flexShrink: 0,
           marginTop: 'var(--spacing-1)',
         }}
-        aria-hidden='true'
+        aria-hidden="true"
       >
         {icon}
       </span>
@@ -197,7 +201,7 @@ const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }) => {
         flexShrink: 0,
         marginTop: 'var(--spacing-1)',
       }}
-      aria-hidden='true'
+      aria-hidden="true"
     >
       {getVariantIcon(variant)}
     </span>
@@ -264,8 +268,8 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => {
         (e.target as HTMLElement).style.opacity = '0.8';
         (e.target as HTMLElement).style.backgroundColor = 'transparent';
       }}
-      aria-label='Lukk varsel'
-      title='Lukk'
+      aria-label="Lukk varsel"
+      title="Lukk"
     >
       ×
     </button>
@@ -311,7 +315,9 @@ const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }
   const [progress, setProgress] = useState(100);
 
   useEffect(() => {
-    if (paused || duration <= 0) { return; }
+    if (paused || duration <= 0) {
+      return;
+    }
 
     const interval = setInterval(() => {
       setProgress(prev => {
@@ -323,7 +329,9 @@ const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }
     return () => clearInterval(interval);
   }, [duration, paused]);
 
-  if (duration <= 0) { return null; }
+  if (duration <= 0) {
+    return null;
+  }
 
   return (
     <div
@@ -352,7 +360,9 @@ const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }
 
 // Priority indicator
 const PriorityIndicator = ({ priority }: { priority?: string }) => {
-  if (!priority || priority === 'medium') { return null; }
+  if (!priority || priority === 'medium') {
+    return null;
+  }
 
   const getPriorityIcon = (priority: string): string => {
     const icons = {
@@ -408,7 +418,9 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) =
 
   // Auto-dismiss logic
   useEffect(() => {
-    if (persistent || duration <= 0 || isPaused) { return; }
+    if (persistent || duration <= 0 || isPaused) {
+      return;
+    }
 
     const timer = setTimeout(() => {
       handleClose();
@@ -447,14 +459,16 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) =
     return 'polite';
   };
 
-  if (!isVisible) { return null; }
+  if (!isVisible) {
+    return null;
+  }
 
   return (
     <div
       ref={ref}
-      role='status'
+      role="status"
       aria-live={getAriaLive()}
-      aria-atomic='true'
+      aria-atomic="true"
       className={className}
       style={combinedStyles}
       onClick={handleToastClick}

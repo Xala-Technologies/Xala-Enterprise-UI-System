@@ -104,12 +104,7 @@ export function DataTable({
           onSortChange={onSortChange}
           norwegian={norwegian}
         />
-        <TableBody
-          data={data}
-          columns={columns}
-          onRowClick={onRowClick}
-          norwegian={norwegian}
-        />
+        <TableBody data={data} columns={columns} onRowClick={onRowClick} norwegian={norwegian} />
       </table>
 
       {norwegian?.classification && (
@@ -133,7 +128,9 @@ const TableHeader: React.FC<{
   const { t } = useLocalization();
 
   const handleSort = (column: TableColumn) => {
-    if (!column.sortable || !onSortChange) { return; }
+    if (!column.sortable || !onSortChange) {
+      return;
+    }
 
     const currentOrder = sorting?.defaultSortOrder || 'asc';
     const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
@@ -143,7 +140,7 @@ const TableHeader: React.FC<{
   return (
     <thead className="datatable__header">
       <tr className="datatable__header-row">
-        {columns.map((column) => (
+        {columns.map(column => (
           <th
             key={column.key}
             className={`datatable__header-cell ${
@@ -158,20 +155,21 @@ const TableHeader: React.FC<{
             tabIndex={column.sortable ? 0 : undefined}
             aria-sort={
               sorting?.defaultSortBy === column.key
-                ? sorting.defaultSortOrder === 'asc' ? 'ascending' : 'descending'
+                ? sorting.defaultSortOrder === 'asc'
+                  ? 'ascending'
+                  : 'descending'
                 : 'none'
             }
           >
-            <span className="datatable__header-text">
-              {t(column.labelKey)}
-            </span>
+            <span className="datatable__header-text">{t(column.labelKey)}</span>
 
             {column.sortable && (
               <span className="datatable__sort-indicator" aria-hidden="true">
                 {sorting?.defaultSortBy === column.key
-                  ? (sorting.defaultSortOrder === 'asc' ? '↑' : '↓')
-                  : '↕'
-                }
+                  ? sorting.defaultSortOrder === 'asc'
+                    ? '↑'
+                    : '↓'
+                  : '↕'}
               </span>
             )}
 
@@ -197,7 +195,9 @@ const TableBody: React.FC<{
   const { t } = useLocalization();
 
   const formatCellValue = (value: any, column: TableColumn, row: TableData): string => {
-    if (value === null || value === undefined) { return '-'; }
+    if (value === null || value === undefined) {
+      return '-';
+    }
 
     // Handle custom render function
     if (column.render) {
@@ -230,9 +230,7 @@ const TableBody: React.FC<{
       {data.map((row, index) => (
         <tr
           key={row.id}
-          className={`datatable__row ${
-            onRowClick ? 'datatable__row--clickable' : ''
-          } ${
+          className={`datatable__row ${onRowClick ? 'datatable__row--clickable' : ''} ${
             row.norwegian?.classification
               ? `datatable__row--classification-${row.norwegian.classification}`
               : ''
@@ -242,7 +240,7 @@ const TableBody: React.FC<{
           tabIndex={onRowClick ? 0 : undefined}
           aria-label={onRowClick ? t('table.clickableRow', { id: String(row.id) }) : undefined}
         >
-          {columns.map((column) => (
+          {columns.map(column => (
             <td
               key={column.key}
               className={`datatable__cell datatable__cell--type-${column.type || 'text'} ${
@@ -253,9 +251,7 @@ const TableBody: React.FC<{
                 {formatCellValue(row[column.key], column, row)}
               </span>
 
-              {column.type === 'status' && (
-                <StatusIndicator status={String(row[column.key])} />
-              )}
+              {column.type === 'status' && <StatusIndicator status={String(row[column.key])} />}
 
               {column.norwegian?.classification && norwegian?.showClassification && (
                 <ClassificationIndicator level={column.norwegian.classification} />
@@ -274,10 +270,10 @@ const TableBody: React.FC<{
 const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[classification as keyof typeof icons] || '🔓';
   };
@@ -295,13 +291,13 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
   const getStatusIcon = (status: string): string => {
     const icons = {
-      'active': '🟢',
-      'inactive': '⚪',
-      'pending': '🟡',
-      'error': '🔴',
-      'success': '✅',
-      'warning': '⚠️',
-      'info': 'ℹ️',
+      active: '🟢',
+      inactive: '⚪',
+      pending: '🟡',
+      error: '🔴',
+      success: '✅',
+      warning: '⚠️',
+      info: 'ℹ️',
     };
     return icons[status as keyof typeof icons] || '❓';
   };
@@ -324,9 +320,7 @@ const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }) => {
       <div className="datatable__empty-icon" aria-hidden="true">
         📊
       </div>
-      <span className="datatable__empty-message">
-        {t(messageKey || 'table.noData')}
-      </span>
+      <span className="datatable__empty-message">{t(messageKey || 'table.noData')}</span>
     </div>
   );
 };
@@ -342,9 +336,7 @@ const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }) => {
       <div className="datatable__loading-icon" aria-hidden="true">
         ⏳
       </div>
-      <span className="datatable__loading-message">
-        {t(messageKey || 'table.loading')}
-      </span>
+      <span className="datatable__loading-message">{t(messageKey || 'table.loading')}</span>
     </div>
   );
 };
@@ -368,7 +360,9 @@ function formatOrganizationNumber(value: string): string {
 
 function formatDate(value: any, format: string): string {
   const date = new Date(value);
-  if (isNaN(date.getTime())) { return String(value); }
+  if (isNaN(date.getTime())) {
+    return String(value);
+  }
 
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');

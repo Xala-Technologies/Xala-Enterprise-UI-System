@@ -231,7 +231,9 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
 
   // NSM Classification styling
   const getClassificationStyles = () => {
-    if (!norwegian?.classification) { return {}; }
+    if (!norwegian?.classification) {
+      return {};
+    }
 
     const classificationColors: Record<string, string> = {
       ÅPEN: 'var(--color-success-500)',
@@ -381,7 +383,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
       >
         {/* Placeholder option */}
         {(placeholder || placeholderKey) && !multiple && (
-          <option value='' disabled hidden>
+          <option value="" disabled hidden>
             {placeholderKey ? t(placeholderKey) : placeholder}
           </option>
         )}
@@ -408,7 +410,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
       {(errorMessage || errorMessageKey) && (
         <div
           id={errorId}
-          role='alert'
+          role="alert"
           style={{
             fontSize: 'var(--font-size-xs)',
             color: 'var(--color-danger-600)',

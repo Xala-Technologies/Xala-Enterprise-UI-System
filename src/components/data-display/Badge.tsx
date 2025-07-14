@@ -35,8 +35,12 @@ export function Badge({
 
   // Format count display
   const displayCount = React.useMemo(() => {
-    if (typeof count !== 'number') { return children; }
-    if (count === 0 && !showZero) { return null; }
+    if (typeof count !== 'number') {
+      return children;
+    }
+    if (count === 0 && !showZero) {
+      return null;
+    }
     return count > maxCount ? `${maxCount}+` : count.toString();
   }, [count, maxCount, showZero, children]);
 
@@ -88,7 +92,9 @@ export function Badge({
 
   // Accessibility props
   const accessibilityProps = React.useMemo(() => {
-    if (!accessible) { return {}; }
+    if (!accessible) {
+      return {};
+    }
 
     const props: Record<string, any> = {
       role: 'status',
@@ -100,7 +106,8 @@ export function Badge({
     }
 
     if (classification) {
-      props['aria-label'] = `${props['aria-label'] || ''} ${t('badge.classification', { level: classification })}`.trim();
+      props['aria-label'] =
+        `${props['aria-label'] || ''} ${t('badge.classification', { level: classification })}`.trim();
     }
 
     return props;
@@ -109,12 +116,7 @@ export function Badge({
   // Render different badge types
   if (dot) {
     return (
-      <span
-        className={badgeClasses}
-        data-testid={testId}
-        {...accessibilityProps}
-        {...props}
-      />
+      <span className={badgeClasses} data-testid={testId} {...accessibilityProps} {...props} />
     );
   }
 
@@ -123,19 +125,10 @@ export function Badge({
   }
 
   return (
-    <span
-      className={badgeClasses}
-      data-testid={testId}
-      {...accessibilityProps}
-      {...props}
-    >
+    <span className={badgeClasses} data-testid={testId} {...accessibilityProps} {...props}>
       {displayCount}
-      {classification && (
-        <ClassificationIndicator level={classification} />
-      )}
-      {priority && (
-        <PriorityIndicator priority={priority} />
-      )}
+      {classification && <ClassificationIndicator level={classification} />}
+      {priority && <PriorityIndicator priority={priority} />}
     </span>
   );
 }
@@ -146,10 +139,10 @@ export function Badge({
 const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[classification as keyof typeof icons] || '🔓';
   };
@@ -167,10 +160,10 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }) => {
   const getPriorityIcon = (priority: string): string => {
     const icons = {
-      'low': '⬇️',
-      'medium': '➡️',
-      'high': '⬆️',
-      'urgent': '🔥',
+      low: '⬇️',
+      medium: '➡️',
+      high: '⬆️',
+      urgent: '🔥',
     };
     return icons[priority as keyof typeof icons] || '➡️';
   };

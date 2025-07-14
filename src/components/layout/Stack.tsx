@@ -27,14 +27,15 @@ export function Stack({
   testId,
   ...props
 }: StackProps): JSX.Element {
-
   // Build CSS classes using design tokens
   const stackClasses = React.useMemo(() => {
     const classes = ['stack'];
 
     // Direction classes (with reverse support)
     const directionClass = reverse
-      ? (direction === 'row' ? 'row-reverse' : 'column-reverse')
+      ? direction === 'row'
+        ? 'row-reverse'
+        : 'column-reverse'
       : direction;
     classes.push(`stack--direction-${directionClass}`);
 
@@ -70,11 +71,7 @@ export function Stack({
   }, [direction, gap, align, justify, wrap, reverse, background, padding, margin, className]);
 
   return (
-    <div
-      className={stackClasses}
-      data-testid={testId}
-      {...props}
-    >
+    <div className={stackClasses} data-testid={testId} {...props}>
       {children}
     </div>
   );

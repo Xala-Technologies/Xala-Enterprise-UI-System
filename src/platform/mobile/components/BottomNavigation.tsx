@@ -64,7 +64,9 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
 
   // Classification styling based on NSM standards
   const getClassificationStyle = () => {
-    if (!classification) { return {}; }
+    if (!classification) {
+      return {};
+    }
 
     const styles: Record<string, any> = {
       ÅPEN: {
@@ -100,7 +102,9 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
 
   // Handle item press with Norwegian compliance audit
   const handleItemPress = (index: number, item: BottomNavigationItem) => {
-    if (item.disabled) { return; }
+    if (item.disabled) {
+      return;
+    }
 
     // Norwegian compliance audit logging
     if (item.classification) {
@@ -136,7 +140,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
         ...getClassificationStyle(),
         ...style,
       }}
-      role='tablist'
+      role="tablist"
       aria-label={t('navigation.bottomNavigation')}
       {...restProps}
     >
@@ -147,8 +151,8 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
         return (
           <button
             key={index}
-            type='button'
-            role='tab'
+            type="button"
+            role="tab"
             aria-selected={isActive}
             aria-label={t(item.labelKey)}
             disabled={item.disabled}

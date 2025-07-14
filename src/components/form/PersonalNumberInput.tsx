@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { PersonalNumberInputProps } from '../../types/form.types';
 
@@ -52,23 +53,23 @@ export function PersonalNumberInput({
   ...inputProps
 }: PersonalNumberInputProps): JSX.Element {
   const { t } = useLocalization();
-  
+
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-  const [validationResult, setValidationResult] = useState<{ 
-    isValid: boolean; 
-    errors: string[]; 
-    type: 'fødselsnummer'; 
-    birthDate: Date; 
-    gender: 'male' | 'female'; 
-    century: number 
-  }>({ 
-    isValid: false, 
-    errors: [], 
-    type: 'fødselsnummer', 
-    birthDate: new Date(), 
-    gender: 'male', 
-    century: 20 
+  const [validationResult, setValidationResult] = useState<{
+    isValid: boolean;
+    errors: string[];
+    type: 'fødselsnummer';
+    birthDate: Date;
+    gender: 'male' | 'female';
+    century: number;
+  }>({
+    isValid: false,
+    errors: [],
+    type: 'fødselsnummer',
+    birthDate: new Date(),
+    gender: 'male',
+    century: 20,
   });
   const [isValidating, setIsValidating] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
@@ -79,69 +80,81 @@ export function PersonalNumberInput({
   // Build CSS classes using design tokens
   const inputClasses = React.useMemo(() => {
     const classes = ['personal-number-input'];
-    
+
     // Variant classes
     classes.push(`personal-number-input--variant-${variant}`);
-    
+
     // State classes
     if (hasError || validationResult.errors.length > 0) {
       classes.push('personal-number-input--error');
     }
-    
+
     if (disabled) {
       classes.push('personal-number-input--disabled');
     }
-    
+
     if (readOnly) {
       classes.push('personal-number-input--readonly');
     }
-    
+
     if (required) {
       classes.push('personal-number-input--required');
     }
-    
+
     if (isValidating) {
       classes.push('personal-number-input--validating');
     }
-    
+
     if (validationResult.isValid) {
       classes.push('personal-number-input--valid');
     }
-    
+
     // Norwegian compliance classes
-    if (norwegian?.displayFormat) {
-      classes.push(`personal-number-input--format-${norwegian.displayFormat.replace(/[-\s]/g, '')}`);
+    if (norwegian.displayFormat) {
+      classes.push(
+        `personal-number-input--format-${norwegian.displayFormat.replace(/[-\s]/g, '')}`
+      );
     }
-    
-    if (norwegian?.maskInput) {
+
+    if (norwegian.maskInput) {
       classes.push('personal-number-input--masked');
     }
-    
-    if (norwegian?.autoFormat) {
+
+    if (norwegian.autoFormat) {
       classes.push('personal-number-input--auto-format');
     }
-    
+
     // Custom classes
     if (className) {
       classes.push(className);
     }
-    
+
     return classes.join(' ');
-  }, [variant, hasError, validationResult, disabled, readOnly, required, isValidating, norwegian, className]);
+  }, [
+    variant,
+    hasError,
+    validationResult,
+    disabled,
+    readOnly,
+    required,
+    isValidating,
+    norwegian,
+    className,
+  ]);
 
   // Validation and formatting
   useEffect(() => {
     const currentValue = value !== undefined ? value : internalValue;
     const cleaned = currentValue.replace(/\D/g, '');
-    
+
     if (cleaned.length === 0) {
-      setValidationResult({ 
-        isValid: false, 
-        errors: [], 
-        type: 'fødselsnummer', 
-        birthDate: new Date(), 
-        gender: 'male', 
-        century: 20 
+      setValidationResult({
+        isValid: false,
+        errors: [],
+        type: 'fødselsnummer',
+        birthDate: new Date(),
+        gender: 'male',
+        century: 20,
       });
       return;
     }
@@ -153,19 +166,19 @@ export function PersonalNumberInput({
 
     debounceRef.current = setTimeout(async () => {
       setIsValidating(true);
-      
+
       try {
         const result = validatePersonalNumber(cleaned);
         setValidationResult(result);
         onValidationChange?.(result.isValid, result.errors);
       } catch (error) {
-        const errorResult = { 
-          isValid: false, 
-          errors: [t('personalNumber.validationError')], 
-          type: 'fødselsnummer' as const, 
-          birthDate: new Date(), 
-          gender: 'male' as const, 
-          century: 20 
+        const errorResult = {
+          isValid: false,
+          errors: [t('personalNumber.validationError')],
+          type: 'fødselsnummer' as const,
+          birthDate: new Date(),
+          gender: 'male' as const,
+          century: 20,
         };
         setValidationResult(errorResult);
         onValidationChange?.(false, errorResult.errors);
@@ -184,15 +197,15 @@ export function PersonalNumberInput({
   // Handle input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = event.target.value;
-    
+
     // Auto-formatting
-    if (norwegian?.autoFormat) {
+    if (norwegian.autoFormat) {
       const cleaned = newValue.replace(/\D/g, '');
       if (cleaned.length <= 11) {
         newValue = formatPersonalNumber(cleaned);
       }
     }
-    
+
     setInternalValue(newValue);
     onChange?.(newValue, validationResult.isValid, event);
   };
@@ -213,9 +226,7 @@ export function PersonalNumberInput({
   return (
     <div className="personal-number-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && (
-        <Label labelKey={labelKey} required={required} htmlFor={inputId} />
-      )}
+      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
 
       {/* Input with validation indicator */}
       <div className="personal-number-field__input-wrapper">
@@ -231,7 +242,7 @@ export function PersonalNumberInput({
           required={required}
           disabled={disabled}
           readOnly={readOnly}
-          maxLength={norwegian?.displayFormat === 'ddmmyy-nnnnn' ? 12 : 11}
+          maxLength={norwegian.displayFormat === 'ddmmyy-nnnnn' ? 12 : 11}
           className={inputClasses}
           aria-invalid={hasValidationErrors}
           aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-validation`}
@@ -239,7 +250,7 @@ export function PersonalNumberInput({
           data-variant={variant}
           {...inputProps}
         />
-        
+
         {/* Validation indicator */}
         <ValidationIndicator
           isValid={validationResult.isValid}
@@ -251,10 +262,10 @@ export function PersonalNumberInput({
       {/* Help text */}
       {helpKey && (
         <div id={`${inputId}-help`} className="personal-number-field__help">
-          <span className="personal-number-field__help-icon" aria-hidden="true">ℹ️</span>
-          <span className="personal-number-field__help-text">
-            {t(helpKey)}
+          <span className="personal-number-field__help-icon" aria-hidden="true">
+            ℹ️
           </span>
+          <span className="personal-number-field__help-text">{t(helpKey)}</span>
         </div>
       )}
 
@@ -279,10 +290,10 @@ const ValidationIndicator: React.FC<{
   if (isValidating) {
     return (
       <div className="validation-indicator validation-indicator--validating">
-        <span className="validation-indicator__icon" aria-hidden="true">⏳</span>
-        <span className="validation-indicator__text sr-only">
-          {t('validation.checking')}
+        <span className="validation-indicator__icon" aria-hidden="true">
+          ⏳
         </span>
+        <span className="validation-indicator__text sr-only">{t('validation.checking')}</span>
       </div>
     );
   }
@@ -290,10 +301,10 @@ const ValidationIndicator: React.FC<{
   if (isValid) {
     return (
       <div className="validation-indicator validation-indicator--valid">
-        <span className="validation-indicator__icon" aria-hidden="true">✅</span>
-        <span className="validation-indicator__text sr-only">
-          {t('validation.valid')}
+        <span className="validation-indicator__icon" aria-hidden="true">
+          ✅
         </span>
+        <span className="validation-indicator__text sr-only">{t('validation.valid')}</span>
       </div>
     );
   }
@@ -313,11 +324,12 @@ const Label: React.FC<{
 
   return (
     <label className="personal-number-field__label" htmlFor={htmlFor}>
-      <span className="personal-number-field__label-text">
-        {t(labelKey)}
-      </span>
+      <span className="personal-number-field__label-text">{t(labelKey)}</span>
       {required && (
-        <span className="personal-number-field__required-indicator" aria-label={t('field.required')}>
+        <span
+          className="personal-number-field__required-indicator"
+          aria-label={t('field.required')}
+        >
           *
         </span>
       )}
@@ -331,13 +343,17 @@ const Label: React.FC<{
 const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
   const { t } = useLocalization();
 
-  if (errors.length === 0) return null;
+  if (errors.length === 0) {
+    return null;
+  }
 
   return (
     <div className="personal-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (
         <div key={index} className="personal-number-field__error-item">
-          <span className="personal-number-field__error-icon" aria-hidden="true">⚠️</span>
+          <span className="personal-number-field__error-icon" aria-hidden="true">
+            ⚠️
+          </span>
           <span className="personal-number-field__error-text">
             {t(`personalNumber.error.${error}`) || error}
           </span>

@@ -27,7 +27,6 @@ export function Container({
   testId,
   ...props
 }: ContainerProps): JSX.Element {
-
   // Build CSS classes using design tokens
   const containerClasses = React.useMemo(() => {
     const classes = ['container'];
@@ -67,7 +66,17 @@ export function Container({
     }
 
     return classes.join(' ');
-  }, [size, background, padding, margin, centerContent, responsive, accessibilityMode, norwegianMaxWidth, className]);
+  }, [
+    size,
+    background,
+    padding,
+    margin,
+    centerContent,
+    responsive,
+    accessibilityMode,
+    norwegianMaxWidth,
+    className,
+  ]);
 
   // CSS custom properties for dynamic max-width
   const containerStyle = React.useMemo(() => {
@@ -81,12 +90,7 @@ export function Container({
   }, [maxWidth]);
 
   return (
-    <div
-      className={containerClasses}
-      style={containerStyle}
-      data-testid={testId}
-      {...props}
-    >
+    <div className={containerClasses} style={containerStyle} data-testid={testId} {...props}>
       {children}
     </div>
   );

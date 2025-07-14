@@ -179,7 +179,9 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
 
   // NSM Classification styling
   const getClassificationStyles = () => {
-    if (!norwegian?.classification) { return {}; }
+    if (!norwegian?.classification) {
+      return {};
+    }
 
     const classificationColors: Record<string, string> = {
       ÅPEN: 'var(--color-success-500)',
@@ -340,7 +342,7 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
       {(errorMessage || errorMessageKey) && (
         <div
           id={errorId}
-          role='alert'
+          role="alert"
           style={{
             fontSize: 'var(--font-size-xs)',
             color: 'var(--color-danger-600)',

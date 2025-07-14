@@ -19,8 +19,12 @@ export const platformUtils = {
 
   // Platform optimization
   getOptimalPlatform: () => {
-    if (window.innerWidth <= 768) { return 'mobile'; }
-    if (window.innerWidth <= 1024) { return 'tablet'; }
+    if (window.innerWidth <= 768) {
+      return 'mobile';
+    }
+    if (window.innerWidth <= 1024) {
+      return 'tablet';
+    }
     return 'desktop';
   },
 

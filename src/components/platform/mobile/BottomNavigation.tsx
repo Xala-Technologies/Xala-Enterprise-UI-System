@@ -64,7 +64,9 @@ const getHeightStyles = (height: string): React.CSSProperties => {
 
 // Get safe area styles for Norwegian mobile compliance
 const getSafeAreaStyles = (safeAreaBottom: boolean): React.CSSProperties => {
-  if (!safeAreaBottom) { return {}; }
+  if (!safeAreaBottom) {
+    return {};
+  }
 
   return {
     paddingBottom: 'env(safe-area-inset-bottom)',
@@ -75,7 +77,9 @@ const getSafeAreaStyles = (safeAreaBottom: boolean): React.CSSProperties => {
 
 // Get emergency styles
 const getEmergencyStyles = (hasEmergencyTab?: boolean): React.CSSProperties => {
-  if (!hasEmergencyTab) { return {}; }
+  if (!hasEmergencyTab) {
+    return {};
+  }
 
   return {
     borderTop: 'var(--border-width-thick) solid var(--color-red-300)',
@@ -162,7 +166,7 @@ const NavigationTab = ({
       data-testid={item.testId}
       aria-label={item.labelKey}
       aria-selected={isActive}
-      role='tab'
+      role="tab"
       onMouseEnter={e => {
         if (!item.disabled && item.norwegian?.priority !== 'emergency') {
           (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
@@ -237,7 +241,7 @@ const NavigationTab = ({
               fontSize: 'var(--font-size-xs)',
               animation: 'emergency-blink 1s infinite',
             }}
-            aria-label='Emergency'
+            aria-label="Emergency"
           >
             🚨
           </span>
@@ -273,8 +277,8 @@ const NavigationTab = ({
             fontSize: 'var(--font-size-xs)',
             color: 'var(--color-orange-600)',
           }}
-          aria-label='Authentication required'
-          title='Krever autentisering'
+          aria-label="Authentication required"
+          title="Krever autentisering"
         >
           🔐
         </span>
@@ -335,8 +339,8 @@ const EmergencyBanner = () => {
         fontWeight: 'var(--font-weight-semibold)',
         animation: 'emergency-pulse 2s infinite',
       }}
-      role='alert'
-      aria-live='assertive'
+      role="alert"
+      aria-live="assertive"
     >
       🚨 NØDTJENESTER TILGJENGELIG
     </div>
@@ -366,7 +370,9 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
     const combinedStyles = { ...navigationStyles, ...style };
 
     const handleItemPress = (index: number, item: BottomNavigationItem) => {
-      if (item.disabled) { return; }
+      if (item.disabled) {
+        return;
+      }
 
       // Norwegian haptic feedback for touch devices
       if (norwegian?.hapticFeedback && 'vibrate' in navigator) {
@@ -387,11 +393,11 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
         style={combinedStyles}
         className={className}
         data-testid={testId}
-        data-platform='mobile'
+        data-platform="mobile"
         data-height={height}
         data-municipality={norwegian?.municipality}
         aria-label={ariaLabel || 'Bottom navigation'}
-        role='tablist'
+        role="tablist"
         {...navProps}
       >
         {/* Emergency banner */}
@@ -425,7 +431,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
               display: 'flex',
               gap: 'var(--spacing-1)',
             }}
-            aria-hidden='true'
+            aria-hidden="true"
           >
             {Array.from(
               new Set(items.map(item => item.norwegian?.classification).filter(Boolean))
@@ -459,7 +465,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
               textAlign: 'center',
               borderTop: 'var(--border-width) solid var(--border-tertiary)',
             }}
-            aria-hidden='true'
+            aria-hidden="true"
           >
             📝 Navigasjon logger for revisjon
           </div>

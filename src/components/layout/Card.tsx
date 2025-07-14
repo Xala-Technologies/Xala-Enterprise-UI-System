@@ -73,7 +73,17 @@ export function Card({
     }
 
     return classes.join(' ');
-  }, [variant, shadow, borderRadius, background, padding, margin, interactive, metadata, className]);
+  }, [
+    variant,
+    shadow,
+    borderRadius,
+    background,
+    padding,
+    margin,
+    interactive,
+    metadata,
+    className,
+  ]);
 
   return (
     <div
@@ -83,25 +93,13 @@ export function Card({
       tabIndex={interactive ? 0 : undefined}
       {...props}
     >
-      {header && (
-        <div className="card__header">
-          {header}
-        </div>
-      )}
+      {header && <div className="card__header">{header}</div>}
 
-      <div className="card__content">
-        {children}
-      </div>
+      <div className="card__content">{children}</div>
 
-      {footer && (
-        <div className="card__footer">
-          {footer}
-        </div>
-      )}
+      {footer && <div className="card__footer">{footer}</div>}
 
-      {metadata && (
-        <MetadataSection metadata={metadata} />
-      )}
+      {metadata && <MetadataSection metadata={metadata} />}
     </div>
   );
 }
@@ -112,29 +110,23 @@ export function Card({
 const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }) => {
   const { t } = useLocalization();
 
-  if (!metadata) { return null; }
+  if (!metadata) {
+    return null;
+  }
 
   return (
     <div className="card__metadata">
       {metadata.lastUpdated && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">
-            {t('card.lastUpdated')}:
-          </span>
-          <span className="card__metadata-value">
-            {metadata.lastUpdated}
-          </span>
+          <span className="card__metadata-label">{t('card.lastUpdated')}:</span>
+          <span className="card__metadata-value">{metadata.lastUpdated}</span>
         </div>
       )}
 
       {metadata.municipality && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">
-            {t('card.municipality')}:
-          </span>
-          <span className="card__metadata-value">
-            {metadata.municipality}
-          </span>
+          <span className="card__metadata-label">{t('card.municipality')}:</span>
+          <span className="card__metadata-value">{metadata.municipality}</span>
         </div>
       )}
 
@@ -149,12 +141,8 @@ const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metada
 
       {metadata.compliance && metadata.compliance.length > 0 && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">
-            {t('card.compliance')}:
-          </span>
-          <span className="card__metadata-value">
-            {metadata.compliance.join(', ')}
-          </span>
+          <span className="card__metadata-label">{t('card.compliance')}:</span>
+          <span className="card__metadata-value">{metadata.compliance.join(', ')}</span>
         </div>
       )}
     </div>
@@ -167,10 +155,10 @@ const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metada
 const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[classification as keyof typeof icons] || '🔓';
   };

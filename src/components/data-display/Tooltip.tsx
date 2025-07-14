@@ -87,7 +87,9 @@ const getAccessibilityStyles = (
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -214,7 +216,9 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 
 // Help category indicator
 const HelpCategoryIndicator = ({ category }: { category?: string }) => {
-  if (!category) { return null; }
+  if (!category) {
+    return null;
+  }
 
   const getCategoryIcon = (category: string): string => {
     const icons = {
@@ -260,11 +264,7 @@ const TooltipContent = ({
 
       {/* Tooltip text */}
       <span>
-        {content ||
-          (contentKey
-            ? /* TODO: Replace with actual localization */
-            contentKey
-            : '')}
+        {content || (contentKey ? /* TODO: Replace with actual localization */ contentKey : '')}
       </span>
     </div>
   );
@@ -434,7 +434,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
         <div
           ref={ref || tooltipRef}
           id={`tooltip-${testId}`}
-          role='tooltip'
+          role="tooltip"
           className={className}
           style={combinedStyles}
           data-testid={testId}

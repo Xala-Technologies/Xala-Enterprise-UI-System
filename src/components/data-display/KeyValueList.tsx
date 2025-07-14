@@ -74,7 +74,9 @@ export function KeyValueList({
 
   // Filter out empty values if requested
   const displayItems = React.useMemo(() => {
-    if (!norwegian?.hideEmptyValues) { return items; }
+    if (!norwegian?.hideEmptyValues) {
+      return items;
+    }
     return items.filter(item => {
       const { value } = item;
       return value !== null && value !== undefined && value !== '';
@@ -82,11 +84,7 @@ export function KeyValueList({
   }, [items, norwegian?.hideEmptyValues]);
 
   return (
-    <div
-      className={listClasses}
-      data-testid={testId}
-      {...props}
-    >
+    <div className={listClasses} data-testid={testId} {...props}>
       {displayItems.map((item, index) => (
         <KeyValueItemComponent
           key={item.key || index}
@@ -180,15 +178,11 @@ const KeyValueItemComponent: React.FC<{
         {norwegian?.showClassificationIcons && item.norwegian?.classification && (
           <ClassificationIcon classification={item.norwegian.classification} />
         )}
-        <span className="keyvalue-item__label-text">
-          {t(item.labelKey)}
-        </span>
+        <span className="keyvalue-item__label-text">{t(item.labelKey)}</span>
       </div>
 
       <div className="keyvalue-item__value">
-        <span className="keyvalue-item__value-text">
-          {formattedValue}
-        </span>
+        <span className="keyvalue-item__value-text">{formattedValue}</span>
 
         {item.copyable && (
           <button
@@ -201,9 +195,7 @@ const KeyValueItemComponent: React.FC<{
           </button>
         )}
 
-        {item.type === 'status' && (
-          <StatusIndicator status={String(item.value)} />
-        )}
+        {item.type === 'status' && <StatusIndicator status={String(item.value)} />}
       </div>
     </div>
   );
@@ -215,10 +207,10 @@ const KeyValueItemComponent: React.FC<{
 const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }) => {
   const getClassificationIcon = (level: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[level as keyof typeof icons] || '🔓';
   };
@@ -236,13 +228,13 @@ const ClassificationIcon: React.FC<{ classification: string }> = ({ classificati
 const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
   const getStatusIcon = (status: string): string => {
     const icons = {
-      'active': '🟢',
-      'inactive': '⚪',
-      'pending': '🟡',
-      'error': '🔴',
-      'success': '✅',
-      'warning': '⚠️',
-      'info': 'ℹ️',
+      active: '🟢',
+      inactive: '⚪',
+      pending: '🟡',
+      error: '🔴',
+      success: '✅',
+      warning: '⚠️',
+      info: 'ℹ️',
     };
     return icons[status as keyof typeof icons] || '❓';
   };
@@ -257,7 +249,11 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
 /**
  * Value formatting function
  */
-function formatValue(value: any, item: KeyValueItem, norwegian?: KeyValueListProps['norwegian']): string {
+function formatValue(
+  value: any,
+  item: KeyValueItem,
+  norwegian?: KeyValueListProps['norwegian']
+): string {
   if (value === null || value === undefined) {
     return '-';
   }
@@ -303,7 +299,9 @@ function formatOrganizationNumber(value: string): string {
 
 function formatDate(value: any, format: string): string {
   const date = new Date(value);
-  if (isNaN(date.getTime())) { return String(value); }
+  if (isNaN(date.getTime())) {
+    return String(value);
+  }
 
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');

@@ -70,7 +70,9 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
 
   // Get Norwegian classification colors and styles
   const getClassificationStyle = () => {
-    if (!classification) { return {}; }
+    if (!classification) {
+      return {};
+    }
 
     const styles: Record<string, any> = {
       ÅPEN: {
@@ -136,14 +138,14 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
             zIndex: 'var(--z-index-overlay)',
           }}
           onClick={handleToggle}
-          aria-hidden='true'
+          aria-hidden="true"
         />
       )}
 
       {/* Sidebar */}
       <aside
         ref={ref}
-        role='complementary'
+        role="complementary"
         aria-label={t('sidebar.navigation')}
         style={{
           display: 'flex',
@@ -183,7 +185,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
           {/* Toggle button */}
           {showToggle && (
             <button
-              type='button'
+              type="button"
               onClick={handleToggle}
               style={{
                 display: 'flex',
@@ -268,7 +270,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
             >
               {/* Emergency contacts */}
               <button
-                type='button'
+                type="button"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -296,7 +298,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
 
               {/* Help desk */}
               <button
-                type='button'
+                type="button"
                 style={{
                   display: 'flex',
                   alignItems: 'center',

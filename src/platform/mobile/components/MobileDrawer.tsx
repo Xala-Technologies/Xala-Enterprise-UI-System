@@ -66,7 +66,9 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
 
   // Classification styling based on NSM standards
   const getClassificationStyle = () => {
-    if (!classification) { return {}; }
+    if (!classification) {
+      return {};
+    }
 
     const styles: Record<string, any> = {
       ÅPEN: {
@@ -142,7 +144,9 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
 
   // Safe area padding
   const getSafeAreaStyle = () => {
-    if (!safeAreaHandling) { return {}; }
+    if (!safeAreaHandling) {
+      return {};
+    }
 
     return {
       paddingTop: placement === 'top' ? 'env(safe-area-inset-top)' : '0',
@@ -171,7 +175,9 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
     onClose?.();
   };
 
-  if (!isOpen) { return null; }
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <>
@@ -190,15 +196,15 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
             transition: 'opacity 0.3s ease-in-out',
           }}
           onClick={handleOverlayClick}
-          aria-hidden='true'
+          aria-hidden="true"
         />
       )}
 
       {/* Drawer */}
       <aside
         ref={ref}
-        role='dialog'
-        aria-modal='true'
+        role="dialog"
+        aria-modal="true"
         aria-label={titleKey ? t(titleKey) : title || t('drawer.defaultTitle')}
         style={{
           display: 'flex',
@@ -261,7 +267,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
 
             {/* Close button */}
             <button
-              type='button'
+              type="button"
               onClick={handleClose}
               style={{
                 display: 'flex',

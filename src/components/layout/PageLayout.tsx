@@ -27,7 +27,6 @@ export function PageLayout({
   testId,
   ...props
 }: PageLayoutProps): JSX.Element {
-
   // Build CSS classes using design tokens
   const pageClasses = React.useMemo(() => {
     const classes = ['page-layout'];
@@ -67,34 +66,16 @@ export function PageLayout({
   }, [variant, municipality, background, padding, margin, fullWidth, sidebar, className]);
 
   return (
-    <div
-      className={pageClasses}
-      data-testid={testId}
-      {...props}
-    >
-      {header && (
-        <header className="page-layout__header">
-          {header}
-        </header>
-      )}
+    <div className={pageClasses} data-testid={testId} {...props}>
+      {header && <header className="page-layout__header">{header}</header>}
 
       <div className="page-layout__body">
-        {sidebar && (
-          <aside className="page-layout__sidebar">
-            {sidebar}
-          </aside>
-        )}
+        {sidebar && <aside className="page-layout__sidebar">{sidebar}</aside>}
 
-        <main className="page-layout__content">
-          {children}
-        </main>
+        <main className="page-layout__content">{children}</main>
       </div>
 
-      {footer && (
-        <footer className="page-layout__footer">
-          {footer}
-        </footer>
-      )}
+      {footer && <footer className="page-layout__footer">{footer}</footer>}
     </div>
   );
 }

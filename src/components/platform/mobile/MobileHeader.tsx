@@ -65,7 +65,9 @@ const getHeightStyles = (height: string): React.CSSProperties => {
 
 // Get safe area styles for Norwegian mobile compliance
 const getSafeAreaStyles = (safeAreaHandling?: boolean): React.CSSProperties => {
-  if (!safeAreaHandling) { return {}; }
+  if (!safeAreaHandling) {
+    return {};
+  }
 
   return {
     paddingTop: 'env(safe-area-inset-top)',
@@ -76,7 +78,9 @@ const getSafeAreaStyles = (safeAreaHandling?: boolean): React.CSSProperties => {
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -241,8 +245,8 @@ const EmergencyAccess = ({ onPress }: { onPress?: () => void }) => {
         transition: 'all var(--transition-duration-fast) ease',
       }}
       onClick={onPress}
-      aria-label='Emergency contacts'
-      title='Nødkontakter'
+      aria-label="Emergency contacts"
+      title="Nødkontakter"
     >
       <span>🚨</span>
       <span>Nødhjelp</span>
@@ -267,7 +271,7 @@ const SearchBar = ({
       }}
     >
       <input
-        type='text'
+        type="text"
         placeholder={placeholderKey || 'Søk...'}
         style={{
           width: '100%',
@@ -282,7 +286,7 @@ const SearchBar = ({
           transition: 'all var(--transition-duration-fast) ease',
         }}
         onFocus={onFocus}
-        aria-label='Search'
+        aria-label="Search"
       />
 
       <span
@@ -343,16 +347,16 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
       >
         {/* Back button */}
         {showBackButton && (
-          <HeaderButton icon='←' onPress={onBack} testId={`${testId}-back`} ariaLabel='Go back' />
+          <HeaderButton icon="←" onPress={onBack} testId={`${testId}-back`} ariaLabel="Go back" />
         )}
 
         {/* Menu button */}
         {showMenu && (
           <HeaderButton
-            icon='☰'
+            icon="☰"
             onPress={onMenuToggle}
             testId={`${testId}-menu`}
-            ariaLabel='Open menu'
+            ariaLabel="Open menu"
           />
         )}
 
@@ -429,20 +433,20 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
         {/* Search button (when not showing search bar) */}
         {!showSearch && showNotifications && (
           <HeaderButton
-            icon='🔍'
+            icon="🔍"
             onPress={onSearchFocus}
             testId={`${testId}-search`}
-            ariaLabel='Search'
+            ariaLabel="Search"
           />
         )}
 
         {/* Notifications */}
         {showNotifications && (
           <HeaderButton
-            icon='🔔'
+            icon="🔔"
             onPress={onNotificationPress}
             testId={`${testId}-notifications`}
-            ariaLabel='Notifications'
+            ariaLabel="Notifications"
             badgeCount={notificationCount}
           />
         )}
@@ -456,12 +460,12 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
       style={combinedStyles}
       className={className}
       data-testid={testId}
-      data-platform='mobile'
+      data-platform="mobile"
       data-height={height}
       data-classification={norwegian?.classification}
       data-municipality={norwegian?.municipality}
       aria-label={ariaLabel || 'Mobile header'}
-      role='banner'
+      role="banner"
       {...headerProps}
     >
       {height === 'extended' ? (

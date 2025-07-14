@@ -4,17 +4,10 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-import {
-  Logger,
-  EventCore,
-} from '@xala-technologies/enterprise-standards';
+import { Logger, EventCore } from '@xala-technologies/enterprise-standards';
 
 import type { UISystemService } from '../interfaces/ui-system.interface';
-import type {
-  UISystemConfig,
-  ComponentRegistry,
-  ThemeRegistry,
-} from '../types/core.types';
+import type { UISystemConfig, ComponentRegistry, ThemeRegistry } from '../types/core.types';
 
 // Local types
 interface ValidationResult<T> {
@@ -62,13 +55,13 @@ export class UISystemCore implements UISystemService {
       serviceName: 'ui-system',
       logLevel: 'info',
       enableConsoleLogging: true,
-      enableFileLogging: false
+      enableFileLogging: false,
     });
 
     this.events = EventCore.create({
       serviceName: 'ui-system',
       enablePerformanceMonitoring: true,
-      enableHistory: true
+      enableHistory: true,
     });
 
     // Initialize registries
@@ -294,8 +287,7 @@ export class UISystemCore implements UISystemService {
       type: 'ui-system:disposed',
       source: 'ui-system',
       timestamp: new Date(),
-      data: {
-      },
+      data: {},
     });
 
     this.logger.info('UISystemCore disposed');

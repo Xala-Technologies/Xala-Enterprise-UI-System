@@ -53,7 +53,9 @@ export function Tag({
     }
 
     if (norwegian?.municipality) {
-      classes.push(`tag--municipality-${norwegian.municipality.toLowerCase().replace(/\s+/g, '-')}`);
+      classes.push(
+        `tag--municipality-${norwegian.municipality.toLowerCase().replace(/\s+/g, '-')}`
+      );
     }
 
     if (norwegian?.category) {
@@ -95,31 +97,26 @@ export function Tag({
       {...props}
     >
       {/* Classification indicator */}
-      {norwegian?.classification && (
-        <ClassificationIndicator level={norwegian.classification} />
-      )}
+      {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
 
       {/* Municipality indicator */}
-      {norwegian?.municipality && (
-        <MunicipalityIndicator municipality={norwegian.municipality} />
-      )}
+      {norwegian?.municipality && <MunicipalityIndicator municipality={norwegian.municipality} />}
 
       {/* Main content */}
-      <span className="tag__content">
-        {children}
-      </span>
+      <span className="tag__content">{children}</span>
 
       {/* Category indicator */}
       {norwegian?.category && (
-        <span className="tag__category-indicator" aria-label={t('tag.category', { category: norwegian.category })}>
+        <span
+          className="tag__category-indicator"
+          aria-label={t('tag.category', { category: norwegian.category })}
+        >
           {getCategoryIcon(norwegian.category)}
         </span>
       )}
 
       {/* Remove button */}
-      {removable && onRemove && (
-        <RemoveButton onRemove={onRemove} size={size} />
-      )}
+      {removable && onRemove && <RemoveButton onRemove={onRemove} size={size} />}
     </span>
   );
 }
@@ -132,20 +129,20 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 
   const getClassificationIcon = (classification: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[classification as keyof typeof icons] || '🔓';
   };
 
   const getClassificationText = (classification: string): string => {
     const texts = {
-      'ÅPEN': 'Åpen',
-      'BEGRENSET': 'Begrenset',
-      'KONFIDENSIELT': 'Konfidensielt',
-      'HEMMELIG': 'Hemmelig',
+      ÅPEN: 'Åpen',
+      BEGRENSET: 'Begrenset',
+      KONFIDENSIELT: 'Konfidensielt',
+      HEMMELIG: 'Hemmelig',
     };
     return texts[classification as keyof typeof texts] || classification;
   };
@@ -208,21 +205,23 @@ const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRem
 const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }) => {
   const { t } = useLocalization();
 
-  if (!municipality) { return null; }
+  if (!municipality) {
+    return null;
+  }
 
   const getMunicipalityIcon = (municipality: string): string => {
     // Norwegian municipality icons mapping
     const icons: Record<string, string> = {
-      'Oslo': '🏛️',
-      'Bergen': '🏔️',
-      'Stavanger': '⚓',
-      'Trondheim': '🏰',
-      'Bærum': '🌲',
-      'Tromsø': '❄️',
-      'Fredrikstad': '🏭',
-      'Drammen': '🌉',
-      'Asker': '🌿',
-      'Lillestrøm': '🚂',
+      Oslo: '🏛️',
+      Bergen: '🏔️',
+      Stavanger: '⚓',
+      Trondheim: '🏰',
+      Bærum: '🌲',
+      Tromsø: '❄️',
+      Fredrikstad: '🏭',
+      Drammen: '🌉',
+      Asker: '🌿',
+      Lillestrøm: '🚂',
     };
     return icons[municipality] || '🏘️';
   };
@@ -243,11 +242,11 @@ const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipali
  */
 function getCategoryIcon(category: string): string {
   const icons = {
-    'status': '📊',
-    'category': '🏷️',
-    'priority': '⭐',
-    'role': '👤',
-    'location': '📍',
+    status: '📊',
+    category: '🏷️',
+    priority: '⭐',
+    role: '👤',
+    location: '📍',
   };
   return icons[category as keyof typeof icons] || '🏷️';
 }

@@ -13,7 +13,7 @@ export { MobileDrawer } from './components/MobileDrawer';
 
 // Export types
 export type {} from // Will be exported once components are properly typed
-  '../types/mobile.types';
+'../types/mobile.types';
 
 // Mobile platform utilities
 export const mobileUtils = {

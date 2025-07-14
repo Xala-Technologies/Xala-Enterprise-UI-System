@@ -5,8 +5,9 @@
  */
 
 import React, { forwardRef, useState, useCallback } from 'react';
-import type { InputProps } from '../../types/form.types';
+
 import { useLocalization } from '../../localization/hooks/useLocalization';
+import type { InputProps } from '../../types/form.types';
 
 /**
  * Input component using design tokens and semantic props
@@ -54,57 +55,71 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   // Build CSS classes using design tokens
   const inputClasses = React.useMemo(() => {
     const classes = ['input'];
-    
+
     // Variant classes
     classes.push(`input--variant-${variant}`);
-    
+
     // Size classes
     classes.push(`input--size-${size}`);
-    
+
     // State classes
     if (hasError || validationError) {
       classes.push('input--error');
     }
-    
+
     if (disabled) {
       classes.push('input--disabled');
     }
-    
+
     if (readOnly) {
       classes.push('input--readonly');
     }
-    
+
     if (required) {
       classes.push('input--required');
     }
-    
+
     if (isValidating) {
       classes.push('input--validating');
     }
-    
+
     // Type classes
     classes.push(`input--type-${type}`);
-    
+
     // Norwegian compliance classes
     if (norwegian?.accessibility) {
-      classes.push(`input--accessibility-${norwegian.accessibility.replace('_', '-').toLowerCase()}`);
+      classes.push(
+        `input--accessibility-${norwegian.accessibility.replace('_', '-').toLowerCase()}`
+      );
     }
-    
+
     if (norwegian?.format) {
       classes.push(`input--format-${norwegian.format}`);
     }
-    
+
     if (norwegian?.validation) {
       classes.push(`input--validation-${norwegian.validation}`);
     }
-    
+
     // Custom classes
     if (className) {
       classes.push(className);
     }
-    
+
     return classes.join(' ');
-  }, [variant, size, hasError, validationError, disabled, readOnly, required, isValidating, type, norwegian, className]);
+  }, [
+    variant,
+    size,
+    hasError,
+    validationError,
+    disabled,
+    readOnly,
+    required,
+    isValidating,
+    type,
+    norwegian,
+    className,
+  ]);
 
   // Handle input change
   const handleChange = useCallback(
@@ -115,7 +130,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       // Custom validation
       if (validation?.custom) {
         setIsValidating(true);
-        
+
         setTimeout(async () => {
           try {
             const error = await validation.custom!(newValue);
@@ -155,9 +170,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <div className="input-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && (
-        <Label labelKey={labelKey} required={required} htmlFor={inputId} />
-      )}
+      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
 
       {/* Input element */}
       <input
@@ -219,9 +232,7 @@ const Label: React.FC<{
 
   return (
     <label className="input__label" htmlFor={htmlFor}>
-      <span className="input__label-text">
-        {t(labelKey)}
-      </span>
+      <span className="input__label-text">{t(labelKey)}</span>
       {required && (
         <span className="input__required-indicator" aria-label={t('input.required')}>
           *
@@ -242,23 +253,18 @@ const ErrorMessage: React.FC<{
 }> = ({ errorKey, validationError, hasError, inputId }) => {
   const { t } = useLocalization();
 
-  if (!hasError && !validationError) return null;
+  if (!hasError && !validationError) {
+    return null;
+  }
 
   const errorMessage = validationError || (errorKey ? t(errorKey) : t('input.error.generic'));
 
   return (
-    <div
-      id={`${inputId}-error`}
-      className="input__error-message"
-      role="alert"
-      aria-live="polite"
-    >
+    <div id={`${inputId}-error`} className="input__error-message" role="alert" aria-live="polite">
       <span className="input__error-icon" aria-hidden="true">
         ⚠️
       </span>
-      <span className="input__error-text">
-        {errorMessage}
-      </span>
+      <span className="input__error-text">{errorMessage}</span>
     </div>
   );
 };
@@ -273,16 +279,11 @@ const HelpText: React.FC<{
   const { t } = useLocalization();
 
   return (
-    <div
-      id={`${inputId}-help`}
-      className="input__help-text"
-    >
+    <div id={`${inputId}-help`} className="input__help-text">
       <span className="input__help-icon" aria-hidden="true">
         ℹ️
       </span>
-      <span className="input__help-content">
-        {t(helpKey)}
-      </span>
+      <span className="input__help-content">{t(helpKey)}</span>
     </div>
   );
 };

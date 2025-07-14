@@ -71,7 +71,7 @@ export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonPro
   return (
     <button
       ref={ref}
-      type='button'
+      type="button"
       onClick={onClick}
       disabled={disabled}
       aria-label={t(labelKey)}

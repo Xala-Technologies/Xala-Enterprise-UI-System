@@ -62,7 +62,9 @@ const getWidthStyles = (width: number, isCollapsed: boolean): React.CSSPropertie
 
 // Get overlay styles
 const getOverlayStyles = (overlay: boolean, persistent: boolean): React.CSSProperties => {
-  if (!overlay || persistent) { return {}; }
+  if (!overlay || persistent) {
+    return {};
+  }
 
   return {
     backgroundColor: 'var(--color-black-alpha-50)',
@@ -72,7 +74,9 @@ const getOverlayStyles = (overlay: boolean, persistent: boolean): React.CSSPrope
 
 // Get Norwegian classification styles
 const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) { return {}; }
+  if (!classification) {
+    return {};
+  }
 
   const classificationStyles: Record<string, React.CSSProperties> = {
     ÅPEN: {
@@ -223,7 +227,7 @@ const ClassificationBanner = ({ level }: { level: string }) => {
         fontSize: 'var(--font-size-xs)',
         fontWeight: 'var(--font-weight-semibold)',
       }}
-      role='banner'
+      role="banner"
       aria-label={`Classification level: ${level}`}
     >
       <span>{classInfo.icon}</span>
@@ -240,7 +244,9 @@ const QuickAccessSection = ({
   quickAccess: any;
   isCollapsed: boolean;
 }) => {
-  if (!quickAccess) { return null; }
+  if (!quickAccess) {
+    return null;
+  }
 
   const accessItems = [
     {
@@ -253,7 +259,9 @@ const QuickAccessSection = ({
     { key: 'systemStatus', icon: '📊', label: 'Systemstatus', enabled: quickAccess.systemStatus },
   ].filter(item => item.enabled);
 
-  if (accessItems.length === 0) { return null; }
+  if (accessItems.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -360,7 +368,9 @@ const ResizeHandle = ({
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing) { return; }
+    if (!isResizing) {
+      return;
+    }
 
     const deltaX = position === 'left' ? e.clientX - startX : startX - e.clientX;
     const newWidth = Math.max(200, Math.min(600, startWidth + deltaX));
@@ -388,15 +398,17 @@ const ResizeHandle = ({
         zIndex: 1,
       }}
       onMouseDown={handleMouseDown}
-      aria-label='Resize sidebar'
-      title='Dra for å endre størrelse'
+      aria-label="Resize sidebar"
+      title="Dra for å endre størrelse"
     />
   );
 };
 
 // Keyboard shortcuts info
 const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }) => {
-  if (isCollapsed) { return null; }
+  if (isCollapsed) {
+    return null;
+  }
 
   return (
     <div
@@ -487,7 +499,9 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
 
   // Keyboard shortcuts
   useEffect(() => {
-    if (!norwegian?.keyboardShortcuts) { return; }
+    if (!norwegian?.keyboardShortcuts) {
+      return;
+    }
 
     const handleKeydown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === 'b') {
@@ -506,13 +520,13 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       style={combinedStyles}
       className={className}
       data-testid={testId}
-      data-platform='desktop'
+      data-platform="desktop"
       data-collapsed={isCollapsed}
       data-position={position}
       data-classification={norwegian?.classification}
       data-municipality={norwegian?.municipality}
       aria-label={ariaLabel || 'Desktop sidebar'}
-      role='complementary'
+      role="complementary"
       {...asideProps}
     >
       {/* Classification banner */}

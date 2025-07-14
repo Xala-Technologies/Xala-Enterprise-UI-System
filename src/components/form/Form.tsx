@@ -5,8 +5,9 @@
  */
 
 import React, { forwardRef } from 'react';
-import type { FormProps } from '../../types/form.types';
+
 import { useLocalization } from '../../localization/hooks/useLocalization';
+import type { FormProps } from '../../types/form.types';
 
 /**
  * Form component using design tokens and semantic props
@@ -31,46 +32,48 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
   // Build CSS classes using design tokens
   const formClasses = React.useMemo(() => {
     const classes = ['form'];
-    
+
     // Layout classes
     classes.push(`form--padding-${padding}`);
     classes.push(`form--margin-${margin}`);
     classes.push(`form--background-${background}`);
-    
+
     // Norwegian compliance classes
     if (norwegian?.classification) {
       classes.push(`form--classification-${norwegian.classification}`);
     }
-    
+
     if (norwegian?.municipality) {
-      classes.push(`form--municipality-${norwegian.municipality.toLowerCase().replace(/\s+/g, '-')}`);
+      classes.push(
+        `form--municipality-${norwegian.municipality.toLowerCase().replace(/\s+/g, '-')}`
+      );
     }
-    
+
     if (norwegian?.submitBehavior) {
       classes.push(`form--submit-${norwegian.submitBehavior}`);
     }
-    
+
     // Accessibility classes
     if (accessibility?.announceErrors) {
       classes.push('form--announce-errors');
     }
-    
+
     if (accessibility?.landmark) {
       classes.push('form--landmark');
     }
-    
+
     // Custom classes
     if (className) {
       classes.push(className);
     }
-    
+
     return classes.join(' ');
   }, [padding, margin, background, norwegian, accessibility, className]);
 
   // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     // Enhanced validation for forms with error announcements
     if (accessibility?.announceErrors) {
       const form = event.currentTarget;
@@ -80,7 +83,7 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
         return;
       }
     }
-    
+
     onSubmit?.(event);
   };
 
@@ -105,27 +108,25 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
           />
         </div>
       )}
-      
+
       {/* Form content */}
-      <div className="form__content">
-        {children}
-      </div>
-      
+      <div className="form__content">{children}</div>
+
       {/* Norwegian compliance footer */}
       {norwegian && norwegian.submitBehavior === 'confirm' && (
         <div className="form__compliance-footer">
           <div className="form__privacy-notice">
-            <span className="form__privacy-icon" aria-hidden="true">🔒</span>
-            <span className="form__privacy-text">
-              {t('form.privacyNotice')}
+            <span className="form__privacy-icon" aria-hidden="true">
+              🔒
             </span>
+            <span className="form__privacy-text">{t('form.privacyNotice')}</span>
           </div>
-          
+
           <div className="form__data-processing">
-            <span className="form__data-icon" aria-hidden="true">📋</span>
-            <span className="form__data-text">
-              {t('form.dataProcessing')}
+            <span className="form__data-icon" aria-hidden="true">
+              📋
             </span>
+            <span className="form__data-text">{t('form.dataProcessing')}</span>
           </div>
         </div>
       )}
@@ -144,37 +145,39 @@ const ClassificationIndicator: React.FC<{
 
   const getClassificationText = (level: string): string => {
     const texts = {
-      'ÅPEN': 'Åpen',
-      'BEGRENSET': 'Begrenset',
-      'KONFIDENSIELT': 'Konfidensielt',
-      'HEMMELIG': 'Hemmelig',
+      ÅPEN: 'Åpen',
+      BEGRENSET: 'Begrenset',
+      KONFIDENSIELT: 'Konfidensielt',
+      HEMMELIG: 'Hemmelig',
     };
     return texts[level as keyof typeof texts] || level;
   };
 
   const getClassificationIcon = (level: string): string => {
     const icons = {
-      'ÅPEN': '🔓',
-      'BEGRENSET': '🔒',
-      'KONFIDENSIELT': '🔐',
-      'HEMMELIG': '🔴',
+      ÅPEN: '🔓',
+      BEGRENSET: '🔒',
+      KONFIDENSIELT: '🔐',
+      HEMMELIG: '🔴',
     };
     return icons[level as keyof typeof icons] || '🔓';
   };
 
-  if (!classification) return null;
+  if (!classification) {
+    return null;
+  }
 
   return (
     <div className="form__classification-indicator">
       <span className="form__classification-icon" aria-hidden="true">
         {getClassificationIcon(classification)}
       </span>
-      
+
       <div className="form__classification-content">
         <span className="form__classification-level">
           {t('form.classification.label')}: {getClassificationText(classification)}
         </span>
-        
+
         {municipality && (
           <span className="form__municipality">
             {t('form.municipality.label')}: {municipality}

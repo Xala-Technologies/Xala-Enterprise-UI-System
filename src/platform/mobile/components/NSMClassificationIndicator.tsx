@@ -105,7 +105,7 @@ export const NSMClassificationIndicator = React.forwardRef(
             ...style,
           }}
           data-classification={level}
-          data-testid='nsm-classification-border'
+          data-testid="nsm-classification-border"
           {...restProps}
         />
       );
@@ -127,7 +127,7 @@ export const NSMClassificationIndicator = React.forwardRef(
             ...style,
           }}
           data-classification={level}
-          data-testid='nsm-classification-background'
+          data-testid="nsm-classification-background"
           aria-label={t('nsm.classification.level', { level })}
           {...restProps}
         >
@@ -166,7 +166,7 @@ export const NSMClassificationIndicator = React.forwardRef(
           ...style,
         }}
         data-classification={level}
-        data-testid='nsm-classification-badge'
+        data-testid="nsm-classification-badge"
         aria-label={`${t('nsm.classification.level')}: ${level}`}
         title={config.description}
         {...restProps}
@@ -180,7 +180,7 @@ export const NSMClassificationIndicator = React.forwardRef(
             borderRadius: 'var(--border-radius-full)',
             marginRight: showLabel ? 'var(--spacing-1)' : '0',
           }}
-          aria-hidden='true'
+          aria-hidden="true"
         />
 
         {/* Classification label */}

@@ -5,6 +5,7 @@
  */
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+
 import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { OrganizationNumberInputProps, OrganizationData } from '../../types/form.types';
 
@@ -50,14 +51,19 @@ export function OrganizationNumberInput({
   ...inputProps
 }: OrganizationNumberInputProps): JSX.Element {
   const { t } = useLocalization();
-  
+
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-  const [validationResult, setValidationResult] = useState<{ isValid: boolean; errors: string[]; type: 'enterprise'; mainOrganization: string }>({ 
-    isValid: false, 
-    errors: [], 
-    type: 'enterprise', 
-    mainOrganization: '' 
+  const [validationResult, setValidationResult] = useState<{
+    isValid: boolean;
+    errors: string[];
+    type: 'enterprise';
+    mainOrganization: string;
+  }>({
+    isValid: false,
+    errors: [],
+    type: 'enterprise',
+    mainOrganization: '',
   });
   const [isValidating, setIsValidating] = useState(false);
   const [orgData, setOrgData] = useState<OrganizationData | undefined>();
@@ -70,65 +76,77 @@ export function OrganizationNumberInput({
   // Build CSS classes using design tokens
   const inputClasses = useMemo(() => {
     const classes = ['organization-number-input'];
-    
+
     // Variant classes
     classes.push(`organization-number-input--variant-${variant}`);
-    
+
     // State classes
     if (hasError || validationResult.errors.length > 0) {
       classes.push('organization-number-input--error');
     }
-    
+
     if (disabled) {
       classes.push('organization-number-input--disabled');
     }
-    
+
     if (readOnly) {
       classes.push('organization-number-input--readonly');
     }
-    
+
     if (required) {
       classes.push('organization-number-input--required');
     }
-    
+
     if (isValidating) {
       classes.push('organization-number-input--validating');
     }
-    
+
     if (validationResult.isValid) {
       classes.push('organization-number-input--valid');
     }
-    
+
     // Norwegian compliance classes
-    if (norwegian?.displayFormat) {
-      classes.push(`organization-number-input--format-${norwegian.displayFormat.replace(/\s/g, '-')}`);
+    if (norwegian.displayFormat) {
+      classes.push(
+        `organization-number-input--format-${norwegian.displayFormat.replace(/\s/g, '-')}`
+      );
     }
-    
-    if (norwegian?.maskInput) {
+
+    if (norwegian.maskInput) {
       classes.push('organization-number-input--masked');
     }
-    
-    if (norwegian?.autoFormat) {
+
+    if (norwegian.autoFormat) {
       classes.push('organization-number-input--auto-format');
     }
-    
-    if (norwegian?.fetchOrganizationData) {
+
+    if (norwegian.fetchOrganizationData) {
       classes.push('organization-number-input--fetch-data');
     }
-    
+
     // Custom classes
     if (className) {
       classes.push(className);
     }
-    
+
     return classes.join(' ');
-  }, [variant, hasError, validationResult, disabled, readOnly, required, isValidating, norwegian, className]);
+  }, [
+    variant,
+    hasError,
+    validationResult,
+    disabled,
+    readOnly,
+    required,
+    isValidating,
+    norwegian,
+    className,
+  ]);
 
   // Validation and formatting
   useEffect(() => {
     const currentValue = value !== undefined ? value : internalValue;
     const cleaned = currentValue.replace(/\D/g, '');
-    
+
     if (cleaned.length === 0) {
       setValidationResult({ isValid: false, errors: [], type: 'enterprise', mainOrganization: '' });
       setOrgData(undefined);
@@ -142,13 +160,13 @@ export function OrganizationNumberInput({
 
     debounceRef.current = setTimeout(async () => {
       setIsValidating(true);
-      
+
       try {
         const result = validateOrganizationNumber(cleaned);
         setValidationResult(result);
-        
+
         // Fetch organization data if enabled and valid
-        if (result.isValid && norwegian?.fetchOrganizationData && validation?.brreg) {
+        if (result.isValid && norwegian.fetchOrganizationData && validation.brreg) {
           setIsFetchingData(true);
           try {
             const data = await mockFetchOrganizationData(cleaned);
@@ -159,10 +177,15 @@ export function OrganizationNumberInput({
             setIsFetchingData(false);
           }
         }
-        
+
         onValidationChange?.(result.isValid, result.errors, orgData);
       } catch (error) {
-        const errorResult = { isValid: false, errors: [t('organizationNumber.validationError')], type: 'enterprise' as const, mainOrganization: '' };
+        const errorResult = {
+          isValid: false,
+          errors: [t('organizationNumber.validationError')],
+          type: 'enterprise' as const,
+          mainOrganization: '',
+        };
         setValidationResult(errorResult);
         onValidationChange?.(false, errorResult.errors);
       } finally {
@@ -180,15 +203,15 @@ export function OrganizationNumberInput({
   // Handle input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = event.target.value;
-    
+
     // Auto-formatting
-    if (norwegian?.autoFormat) {
+    if (norwegian.autoFormat) {
       const cleaned = newValue.replace(/\D/g, '');
       if (cleaned.length <= 9) {
         newValue = formatOrganizationNumber(cleaned);
       }
     }
-    
+
     setInternalValue(newValue);
     onChange?.(newValue, validationResult.isValid, event);
   };
@@ -209,9 +232,7 @@ export function OrganizationNumberInput({
   return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && (
-        <Label labelKey={labelKey} required={required} htmlFor={inputId} />
-      )}
+      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
 
       {/* Input with validation indicator */}
       <div className="organization-number-field__input-wrapper">
@@ -227,7 +248,7 @@ export function OrganizationNumberInput({
           required={required}
           disabled={disabled}
           readOnly={readOnly}
-          maxLength={norwegian?.displayFormat === 'nnn nnn nnn' ? 11 : 9}
+          maxLength={norwegian.displayFormat === 'nnn nnn nnn' ? 11 : 9}
           className={inputClasses}
           aria-invalid={hasValidationErrors}
           aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-validation`}
@@ -235,7 +256,7 @@ export function OrganizationNumberInput({
           data-variant={variant}
           {...inputProps}
         />
-        
+
         {/* Validation indicator */}
         <ValidationIndicator
           isValid={validationResult.isValid}
@@ -245,17 +266,15 @@ export function OrganizationNumberInput({
       </div>
 
       {/* Organization data display */}
-      {orgData && (
-        <OrganizationDisplay orgData={orgData} isLoading={isFetchingData} />
-      )}
+      {orgData && <OrganizationDisplay orgData={orgData} isLoading={isFetchingData} />}
 
       {/* Help text */}
       {helpKey && (
         <div id={`${inputId}-help`} className="organization-number-field__help">
-          <span className="organization-number-field__help-icon" aria-hidden="true">ℹ️</span>
-          <span className="organization-number-field__help-text">
-            {t(helpKey)}
+          <span className="organization-number-field__help-icon" aria-hidden="true">
+            ℹ️
           </span>
+          <span className="organization-number-field__help-text">{t(helpKey)}</span>
         </div>
       )}
 
@@ -279,7 +298,9 @@ const OrganizationDisplay: React.FC<{
   if (isLoading) {
     return (
       <div className="organization-display organization-display--loading">
-        <span className="organization-display__loading-icon" aria-hidden="true">⏳</span>
+        <span className="organization-display__loading-icon" aria-hidden="true">
+          ⏳
+        </span>
         <span className="organization-display__loading-text">
           {t('organizationNumber.fetchingData')}
         </span>
@@ -287,13 +308,15 @@ const OrganizationDisplay: React.FC<{
     );
   }
 
-  if (!orgData) return null;
+  if (!orgData) {
+    return null;
+  }
 
   const getStatusIcon = (status: string): string => {
     const icons = {
-      'active': '✅',
-      'inactive': '⚪',
-      'dissolved': '❌',
+      active: '✅',
+      inactive: '⚪',
+      dissolved: '❌',
     };
     return icons[status as keyof typeof icons] || '❓';
   };
@@ -301,9 +324,7 @@ const OrganizationDisplay: React.FC<{
   return (
     <div className="organization-display">
       <div className="organization-display__header">
-        <span className="organization-display__name">
-          {orgData.name}
-        </span>
+        <span className="organization-display__name">{orgData.name}</span>
         <span className="organization-display__status">
           <span className="organization-display__status-icon" aria-hidden="true">
             {getStatusIcon(orgData.status)}
@@ -313,21 +334,17 @@ const OrganizationDisplay: React.FC<{
           </span>
         </span>
       </div>
-      
+
       <div className="organization-display__details">
-        <span className="organization-display__form">
-          {orgData.organizationForm}
-        </span>
+        <span className="organization-display__form">{orgData.organizationForm}</span>
         <span className="organization-display__location">
           {orgData.municipality}, {orgData.county}
         </span>
       </div>
-      
+
       {orgData.industry && (
         <div className="organization-display__industry">
-          <span className="organization-display__industry-code">
-            {orgData.industry.code}
-          </span>
+          <span className="organization-display__industry-code">{orgData.industry.code}</span>
           <span className="organization-display__industry-description">
             {orgData.industry.description}
           </span>
@@ -350,10 +367,10 @@ const ValidationIndicator: React.FC<{
   if (isValidating) {
     return (
       <div className="validation-indicator validation-indicator--validating">
-        <span className="validation-indicator__icon" aria-hidden="true">⏳</span>
-        <span className="validation-indicator__text sr-only">
-          {t('validation.checking')}
+        <span className="validation-indicator__icon" aria-hidden="true">
+          ⏳
         </span>
+        <span className="validation-indicator__text sr-only">{t('validation.checking')}</span>
       </div>
     );
   }
@@ -361,10 +378,10 @@ const ValidationIndicator: React.FC<{
   if (isValid) {
     return (
       <div className="validation-indicator validation-indicator--valid">
-        <span className="validation-indicator__icon" aria-hidden="true">✅</span>
-        <span className="validation-indicator__text sr-only">
-          {t('validation.valid')}
+        <span className="validation-indicator__icon" aria-hidden="true">
+          ✅
         </span>
+        <span className="validation-indicator__text sr-only">{t('validation.valid')}</span>
       </div>
     );
   }
@@ -384,11 +401,12 @@ const Label: React.FC<{
 
   return (
     <label className="organization-number-field__label" htmlFor={htmlFor}>
-      <span className="organization-number-field__label-text">
-        {t(labelKey)}
-      </span>
+      <span className="organization-number-field__label-text">{t(labelKey)}</span>
       {required && (
-        <span className="organization-number-field__required-indicator" aria-label={t('field.required')}>
+        <span
+          className="organization-number-field__required-indicator"
+          aria-label={t('field.required')}
+        >
           *
         </span>
       )}
@@ -402,13 +420,17 @@ const Label: React.FC<{
 const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
   const { t } = useLocalization();
 
-  if (errors.length === 0) return null;
+  if (errors.length === 0) {
+    return null;
+  }
 
   return (
     <div className="organization-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (
         <div key={index} className="organization-number-field__error-item">
-          <span className="organization-number-field__error-icon" aria-hidden="true">⚠️</span>
+          <span className="organization-number-field__error-icon" aria-hidden="true">
+            ⚠️
+          </span>
           <span className="organization-number-field__error-text">
             {t(`organizationNumber.error.${error}`) || error}
           </span>
@@ -422,7 +444,7 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
 const mockFetchOrganizationData = async (orgNumber: string): Promise<OrganizationData | null> => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
-  
+
   // Mock data
   const mockData: Record<string, OrganizationData> = {
     '123456789': {
@@ -438,7 +460,7 @@ const mockFetchOrganizationData = async (orgNumber: string): Promise<Organizatio
       },
     },
   };
-  
+
   return mockData[orgNumber] || null;
 };
 
