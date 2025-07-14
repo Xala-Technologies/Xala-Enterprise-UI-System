@@ -1,22 +1,78 @@
-// Components for @xala-mock/ui-system
-// Semantic UI components following PASEPAGE architecture
+/**
+ * Components Index
+ * Comprehensive component system exports
+ */
 
-// Provider component
-export { UISystemProvider } from './UISystemProvider';
-
-// Layout components (Story 2: Semantic Layout Components)
-export * from './layout';
-
-// Form components (Story 3: Form Components with Norwegian extensions)
-export * from './form';
-
-// Data display components (Story 4: Data Display Components)
-export * from './data-display';
-
-// Action & feedback components (Story 5: Action & Feedback Components)
+// Existing Components (keep original exports)
 export * from './action-feedback';
-
-// Platform-specific components (Story 6: Platform-Specific Components)
+export * from './data-display';
+export * from './form';
+export * from './layout';
 export * from './platform';
+export * from './UISystemProvider';
 
-// More components will be added in subsequent stories
+// New Components (with specific exports to avoid conflicts)
+export {
+    GlobalSearch,
+    globalSearchVariants,
+    searchInputVariants
+} from './global-search/GlobalSearch';
+
+export {
+    FilterBar,
+    filterBarVariants
+} from './filter-bar/FilterBar';
+
+export {
+    DataTable as XalaDataTable,
+    dataTableVariants
+} from './data-table/DataTable';
+
+export {
+    ProgressBar, Steps, Tabs, progressBarVariants, stepsVariants, tabsVariants
+} from './navigation/NavigationComponents';
+
+export {
+    Notification, Spinner,
+    Alert as XalaAlert,
+    Badge as XalaBadge, alertVariants,
+    badgeVariants,
+    notificationVariants, spinnerVariants
+} from './feedback/FeedbackComponents';
+
+export {
+    ChartCard, StatisticCard, Card as XalaCard, cardVariants, chartCardVariants, statCardVariants
+} from './cards/CardComponents';
+
+// Global Search Types
+export type {
+    GlobalSearchProps, GlobalSearchVariant,
+    SearchInputVariant, SearchResultItem
+} from './global-search/GlobalSearch';
+
+// Filter Bar Types
+export type {
+    FilterBarProps, FilterBarVariant, FilterOption,
+    ViewOption
+} from './filter-bar/FilterBar';
+
+// Data Table Types
+export type {
+    DataTableProps, DataTableVariant, TableAction, TableColumn
+} from './data-table/DataTable';
+
+// Navigation Types
+export type {
+    ProgressBarProps, ProgressBarVariant, StepItem, StepsProps, StepsVariant, TabItem, TabsProps, TabsVariant
+} from './navigation/NavigationComponents';
+
+// Feedback Types
+export type {
+    AlertProps, AlertVariant, BadgeProps, BadgeVariant, NotificationProps, NotificationVariant, SpinnerProps, SpinnerVariant
+} from './feedback/FeedbackComponents';
+
+// Card Types
+export type {
+    CardProps, CardVariant, ChartCardProps, ChartCardVariant, StatisticCardProps, StatisticCardVariant
+} from './cards/CardComponents';
+

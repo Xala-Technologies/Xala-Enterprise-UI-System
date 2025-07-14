@@ -1,11 +1,12 @@
 // Design tokens for @xala-mock/ui-system
 // Norwegian-compliant design system with WCAG 2.2 AA colors
 
+export * from './border-radius';
 export * from './colors';
+export * from './css-variables';
+export * from './shadows';
 export * from './spacing';
 export * from './typography';
-export * from './border-radius';
-export * from './shadows';
 export * from './validation';
 
 // Core design token system
@@ -31,11 +32,11 @@ export type MunicipalityTheme = (typeof municipalityThemes)[keyof typeof municip
 // Complete CSS custom properties collection
 export const designTokens = {
   // Import all token collections
-  colors: async () => import('./colors').then(m => m.colorTokens),
-  spacing: async () => import('./spacing').then(m => m.spacingTokens),
-  typography: async () => import('./typography').then(m => m.typographyTokens),
-  borderRadius: async () => import('./border-radius').then(m => m.borderRadiusTokens),
-  shadows: async () => import('./shadows').then(m => m.shadowTokens),
+  colors: async (): Promise<Record<string, any>> => import('./colors').then(m => m.colorTokens),
+  spacing: async (): Promise<Record<string, any>> => import('./spacing').then(m => m.spacingTokens),
+  typography: async (): Promise<Record<string, any>> => import('./typography').then(m => m.typographyTokens),
+  borderRadius: async (): Promise<Record<string, any>> => import('./border-radius').then(m => m.borderRadiusTokens),
+  shadows: async (): Promise<Record<string, any>> => import('./shadows').then(m => m.shadowTokens),
 };
 
 // Theme configuration for Norwegian municipalities
@@ -47,7 +48,7 @@ export interface NorwegianThemeConfig {
 }
 
 // Generate complete CSS custom properties for a theme
-export const generateThemeTokens = async (config: NorwegianThemeConfig) => {
+export const generateThemeTokens = async (config: NorwegianThemeConfig): Promise<Record<string, any>> => {
   const [colors, spacing, typography, borderRadius, shadows] = await Promise.all([
     designTokens.colors(),
     designTokens.spacing(),
@@ -69,3 +70,7 @@ export const generateThemeTokens = async (config: NorwegianThemeConfig) => {
     '--theme-language': config.language,
   };
 };
+
+// Export theme utilities
+export { cssVars, themeManager, themes } from './css-variables';
+

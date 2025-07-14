@@ -4,68 +4,79 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-// Core system exports
+// =============================================================================
+// CORE SYSTEM EXPORTS
+// =============================================================================
+
+// Core system functionality
 export {
-  UISystemCore,
-  createProductionUISystem,
-  createTestUISystem,
-  createDevelopmentUISystem,
+  createDevelopmentUISystem, createProductionUISystem,
+  createTestUISystem, UISystemCore
 } from './lib/core/index';
 
-// Core types and interfaces
+// =============================================================================
+// CORE TYPES AND INTERFACES
+// =============================================================================
+
+// Core system types
 export type {
-  UISystemConfig,
-  UISystemOptions,
-  SupportedLanguage,
-  AccessibilityLevel,
-  ThemeDefinition,
-  ThemeColors,
-  AccessibilityConfig,
-  ComponentDefinition,
-  ComponentType,
-  ComponentAccessibilityConfig,
-  ValidationError,
-  PerformanceMetrics,
-  AuditTrailEntry,
-  ComponentProps,
-  AccessibilityProps,
-  EventHandlers,
-  ComponentState,
+  AccessibilityConfig, AccessibilityLevel, AccessibilityProps, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps, ComponentState, ComponentType, EventHandlers, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
+  UISystemOptions, ValidationError
 } from './lib/types/core.types';
 
-// Interfaces
+// Service interfaces
 export type {
-  UISystemService,
-  ComponentFactory,
-  ComponentFactoryFunction,
-  ThemeManager,
-  AccessibilityService,
-  PerformanceMonitor,
-  AuditTrailService,
-  AuditTrailFilter,
-  ConfigurationService,
+  AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory,
+  ComponentFactoryFunction, ConfigurationService,
   EventPublisher,
-  LocalizationService,
+  LocalizationService, PerformanceMonitor, ThemeManager, UISystemService
 } from './lib/interfaces/ui-system.interface';
 
+// =============================================================================
+// UTILITIES
+// =============================================================================
+
 // Validation utilities
-export type { ValidationResult } from './lib/utils/validation';
 export {
-  createValidationResult,
-  safeGet,
-  safeArrayAccess,
-  isValidEmail,
-  isValidUrl,
+  createValidationResult, isValidEmail,
+  isValidUrl, safeArrayAccess, safeGet
 } from './lib/utils/validation';
+export type { ValidationResult } from './lib/utils/validation';
 
-// Component exports
-export * from './components';
+// =============================================================================
+// DESIGN TOKENS
+// =============================================================================
 
-// Token exports
+// All design tokens
 export * from './tokens';
 
-// Type exports
-export * from './types';
+// =============================================================================
+// COMPONENTS
+// =============================================================================
+
+// All components (includes their own types)
+export * from './components';
+
+// =============================================================================
+// ADDITIONAL TYPES (non-conflicting)
+// =============================================================================
+
+// Localization types (only export those not already in components)
+export type {
+  LocalizationConfig, NorwegianLocale, RTLAwareProps, SupportedLocale,
+  TextDirection, TranslationFunction, TranslationKeys, UseLocalizationReturn
+} from './types/localization.types';
+
+// Platform types (only export those not already in components)
+export type {
+  HoverFriendlyProps, NorwegianPlatformConfig,
+  PlatformComponentProps, PlatformDetection, PlatformTypes,
+  ResponsiveBreakpoints, TouchFriendlyProps
+} from './types/platform.types';
+
+// =============================================================================
+// PACKAGE INFORMATION
+// =============================================================================
 
 // Version and package info
 export const VERSION = '1.0.1';
@@ -86,4 +97,20 @@ export const PACKAGE_INFO = {
     'enterprise-standards',
     'solid-principles',
   ],
+} as const;
+
+// =============================================================================
+// EXPORT GROUPS FOR EASIER CONSUMPTION
+// =============================================================================
+
+/**
+ * Core system exports grouped for easier consumption
+ * Use these exports directly instead of this bundle
+ */
+export const UI_SYSTEM_BUNDLE_INFO = {
+  coreExports: ['UISystemCore', 'createProductionUISystem', 'createTestUISystem', 'createDevelopmentUISystem'],
+  validationExports: ['createValidationResult', 'safeGet', 'safeArrayAccess', 'isValidEmail', 'isValidUrl'],
+  componentExports: ['All components from ./components'],
+  tokenExports: ['All tokens from ./tokens'],
+  typeExports: ['All types from various modules'],
 } as const;
