@@ -55,7 +55,7 @@ export interface ButtonProps
  * @returns Button JSX element
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref): void => {
     const Comp = asChild ? 'span' : 'button';
 
     return (

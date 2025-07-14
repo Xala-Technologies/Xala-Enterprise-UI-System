@@ -168,7 +168,7 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 };
 
 // Toast icon component
-const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }) => {
+const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }): void => {
   if (icon) {
     return (
       <span
@@ -209,7 +209,7 @@ const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }) => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }) => {
+const ClassificationIndicator = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -236,7 +236,7 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }) => {
+const CloseButton = ({ onClose }: { onClose: () => void }): void => {
   return (
     <button
       style={{
@@ -277,7 +277,7 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => {
 };
 
 // Toast action button
-const ToastActionButton = ({ action }: { action: any }) => {
+const ToastActionButton = ({ action }: { action: any }): void => {
   return (
     <button
       style={{
@@ -311,15 +311,15 @@ const ToastActionButton = ({ action }: { action: any }) => {
 };
 
 // Progress bar for timed toasts
-const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }) => {
+const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }): void => {
   const [progress, setProgress] = useState(100);
 
-  useEffect(() => {
+  useEffect((): void => {
     if (paused || duration <= 0) {
       return;
     }
 
-    const interval = setInterval(() => {
+    const interval = setInterval((): void => {
       setProgress(prev => {
         const newProgress = prev - 100 / (duration / 100);
         return newProgress <= 0 ? 0 : newProgress;
@@ -359,7 +359,7 @@ const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }
 };
 
 // Priority indicator
-const PriorityIndicator = ({ priority }: { priority?: string }) => {
+const PriorityIndicator = ({ priority }: { priority?: string }): void => {
   if (!priority || priority === 'medium') {
     return null;
   }
@@ -389,7 +389,7 @@ const PriorityIndicator = ({ priority }: { priority?: string }) => {
 };
 
 // Toast component with forwardRef
-export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) => {
+export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref): void => {
   const {
     messageKey,
     message,
@@ -417,37 +417,37 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref) =
   const combinedStyles = { ...toastStyles, ...style };
 
   // Auto-dismiss logic
-  useEffect(() => {
+  useEffect((): void => {
     if (persistent || duration <= 0 || isPaused) {
       return;
     }
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout((): void => {
       handleClose();
     }, duration);
 
     return () => clearTimeout(timer);
   }, [duration, persistent, isPaused]);
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setIsVisible(false);
-    setTimeout(() => {
+    setTimeout((): void => {
       onClose?.();
     }, 300); // Allow for exit animation
   };
 
-  const handleToastClick = () => {
+  const handleToastClick = (): void => {
     if (action) {
       action.handler();
       onAction?.();
     }
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (): void => {
     setIsPaused(true);
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (): void => {
     setIsPaused(false);
   };
 

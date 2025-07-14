@@ -180,7 +180,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <nav
         ref={ref}
@@ -219,7 +219,7 @@ WebNavbar.displayName = 'WebNavbar';
  * @returns JSX.Element
  */
 export const WebContent = forwardRef<HTMLElement, WebContentProps>(
-  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref) => {
+  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): void => {
     return (
       <main
         ref={ref}
@@ -247,7 +247,7 @@ WebContent.displayName = 'WebContent';
  * @returns JSX.Element
  */
 export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
-  ({ children, variant = 'default', size = 'md', className, ...props }, ref) => {
+  ({ children, variant = 'default', size = 'md', className, ...props }, ref): void => {
     return (
       <footer
         ref={ref}
@@ -281,7 +281,7 @@ export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}

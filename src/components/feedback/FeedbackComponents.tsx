@@ -190,7 +190,7 @@ export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> 
  * @returns JSX.Element
  */
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ variant = 'default', size = 'md', label, className, ...props }, ref) => {
+  ({ variant = 'default', size = 'md', label, className, ...props }, ref): void => {
     return (
       <div ref={ref} className={cn('flex items-center gap-2', className)} {...props}>
         <div
@@ -227,7 +227,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div ref={ref} className={cn(alertVariants({ variant }), className)} role="alert" {...props}>
         <div className="flex items-start gap-3">
@@ -271,7 +271,7 @@ Alert.displayName = 'Alert';
  * @returns JSX.Element
  */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ variant = 'default', className, children, ...props }, ref) => {
+  ({ variant = 'default', className, children, ...props }, ref): void => {
     return (
       <span ref={ref} className={cn(badgeVariants({ variant }), className)} {...props}>
         {children}
@@ -302,7 +302,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}

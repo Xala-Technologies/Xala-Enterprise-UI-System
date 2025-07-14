@@ -21,7 +21,7 @@ interface DesktopSidebarProps {
   showToggle?: boolean;
   persistent?: boolean;
   overlay?: boolean;
-  children: any;
+  children: React.ReactNode;
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
   municipalityCode?: string;
   showQuickAccess?: boolean;
@@ -51,7 +51,7 @@ interface DesktopSidebarProps {
  * - Norwegian keyboard shortcuts (Alt+S for sidebar)
  * - Municipal branding and context
  */
-export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: any) => {
+export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: any): void => {
   const {
     isCollapsed = false,
     isResizable = true,
@@ -77,7 +77,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
   const { t } = useLocalization();
 
   // Get Norwegian classification colors and styles
-  const getClassificationStyle = () => {
+  const getClassificationStyle = (): void => {
     if (!classification) {
       return {};
     }
@@ -118,7 +118,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
   }, [isCollapsed, onToggle]);
 
   // Handle keyboard navigation
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
     if (event.key === 'Escape' && !persistent) {
       onToggle?.(true); // Collapse on escape
     }

@@ -23,7 +23,7 @@ interface NSMClassificationIndicatorProps {
  * - Design token integration
  */
 export const NSMClassificationIndicator = React.forwardRef(
-  (props: NSMClassificationIndicatorProps, ref: any) => {
+  (props: NSMClassificationIndicatorProps, ref: any): void => {
     const {
       level,
       variant = 'badge',
@@ -37,7 +37,7 @@ export const NSMClassificationIndicator = React.forwardRef(
     const { t } = useLocalization();
 
     // Classification definitions based on NSM standards
-    const getClassificationConfig = () => {
+    const getClassificationConfig = (): void => {
       const configs: Record<string, any> = {
         ÅPEN: {
           color: 'var(--color-success-500)',
@@ -68,7 +68,7 @@ export const NSMClassificationIndicator = React.forwardRef(
     };
 
     // Size configurations
-    const getSizeConfig = () => {
+    const getSizeConfig = (): void => {
       const sizes: Record<string, any> = {
         small: {
           fontSize: 'var(--font-size-xs)',

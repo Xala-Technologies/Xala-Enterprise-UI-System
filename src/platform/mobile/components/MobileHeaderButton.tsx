@@ -25,7 +25,7 @@ interface MobileHeaderButtonProps {
  * - Norwegian accessibility labels
  * - Badge notification support
  */
-export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonProps, ref: any) => {
+export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonProps, ref: any): void => {
   const {
     icon,
     labelKey,
@@ -43,14 +43,14 @@ export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonPro
   const t = (key: string) => key;
 
   // Size variants
-  const getSizeStyle = () => {
+  const getSizeStyle = (): void => {
     return size === 'compact'
       ? { minWidth: 'var(--spacing-10)', minHeight: 'var(--spacing-10)' }
       : { minWidth: 'var(--spacing-11)', minHeight: 'var(--spacing-11)' }; // WCAG 2.2 AA touch target
   };
 
   // Variant styling
-  const getVariantStyle = () => {
+  const getVariantStyle = (): void => {
     const variants: Record<string, any> = {
       default: {
         color: 'var(--color-text-primary)',

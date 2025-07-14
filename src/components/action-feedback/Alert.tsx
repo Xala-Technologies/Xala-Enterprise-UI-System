@@ -149,7 +149,7 @@ const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => {
 };
 
 // Alert icon component
-const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => {
+const AlertIcon = ({ variant }: { variant: string }): void => {
   const getVariantIcon = (variant: string): string => {
     const icons = {
       info: 'ℹ️',
@@ -175,7 +175,7 @@ const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
+const ClassificationIndicator = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -202,7 +202,7 @@ const ClassificationIndicator = ({ level }: { level: string }): React.ReactEleme
 };
 
 // Severity indicator component
-const SeverityIndicator = ({ severity }: { severity: string }): React.ReactElement => {
+const SeverityIndicator = ({ severity }: { severity: string }): void => {
   const getSeverityIcon = (severity: string): string => {
     const icons = {
       low: '🔵',
@@ -229,7 +229,7 @@ const SeverityIndicator = ({ severity }: { severity: string }): React.ReactEleme
 };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => {
+const CloseButton = ({ onClose }: { onClose: () => void }): void => {
   return (
     <button
       style={{
@@ -346,7 +346,7 @@ const CategoryIndicator = ({ category }: { category?: string }): React.ReactElem
 };
 
 // Alert component with forwardRef
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
+export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): void => {
   const {
     titleKey,
     messageKey,

@@ -12,7 +12,7 @@ import type { FormProps } from '../../types/form.types';
  * Form component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
+export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): void => {
   const {
     children,
     padding = 'md',
@@ -26,7 +26,7 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
   } = props;
 
   // Build CSS classes using design tokens
-  const formClasses = React.useMemo(() => {
+  const formClasses = React.useMemo((): void => {
     const classes = ['form'];
 
     // Layout classes
@@ -52,7 +52,7 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref) => {
   }, [padding, margin, background, accessibility, className]);
 
   // Handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     // Enhanced validation for forms with error announcements

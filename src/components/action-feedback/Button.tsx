@@ -226,7 +226,7 @@ const getPriorityStyles = (priority?: string): React.CSSProperties => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
+const ClassificationIndicator = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -253,7 +253,7 @@ const ClassificationIndicator = ({ level }: { level: string }): React.ReactEleme
 };
 
 // Loading spinner component
-const LoadingSpinner = ({ size }: { size: string }): React.ReactElement => {
+const LoadingSpinner = ({ size }: { size: string }): void => {
   const spinnerSize =
     size === 'sm'
       ? 'var(--spacing-3)'
@@ -386,7 +386,7 @@ const ConfirmationDialog = ({
 };
 
 // Button component with forwardRef
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref): void => {
   const {
     labelKey,
     children,

@@ -12,7 +12,7 @@ import type { TextAreaProps } from '../../types/form.types';
  * TextArea component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref): void => {
   const {
     label,
     error,
@@ -50,7 +50,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((pr
   const [wordCount, setWordCount] = useState<number>(0);
 
   // Update counts when value changes
-  useEffect(() => {
+  useEffect((): void => {
     const currentValue = value || '';
     setCurrentLength(currentValue.length);
     setWordCount(
@@ -62,7 +62,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((pr
   }, [value]);
 
   // Build CSS classes using design tokens
-  const textAreaClasses = React.useMemo(() => {
+  const textAreaClasses = React.useMemo((): void => {
     const classes = ['textarea'];
 
     // Variant classes
@@ -97,18 +97,18 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((pr
   }, [variant, resize, hasError, error, disabled, readOnly, required, className]);
 
   // Handle textarea change
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     const newValue = event.target.value;
     onChange?.(newValue, event);
   };
 
   // Handle textarea blur
-  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>): void => {
     onBlur?.(event);
   };
 
   // Handle textarea focus
-  const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+  const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>): void => {
     onFocus?.(event);
   };
 
@@ -185,7 +185,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }) => {
+}> = ({ label, required, htmlFor }): void => {
   return (
     <label className="textarea-field__label" htmlFor={htmlFor}>
       <span className="textarea-field__label-text">{label}</span>

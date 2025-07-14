@@ -407,7 +407,7 @@ export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <header
         ref={ref}
@@ -514,16 +514,16 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const [width, setWidth] = useState(platformTokens.layout.desktop.sidebar.width);
     const [isResizing, setIsResizing] = useState(false);
     const sidebarRef = useRef<HTMLElement>(null);
 
     // Handle resize
-    useEffect(() => {
+    useEffect((): void => {
       if (!resizable) return;
 
-      const handleMouseMove = (e: MouseEvent) => {
+      const handleMouseMove = (e: MouseEvent): void => {
         if (!isResizing) return;
 
         const sidebar = sidebarRef.current;
@@ -537,7 +537,7 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
         }
       };
 
-      const handleMouseUp = () => {
+      const handleMouseUp = (): void => {
         setIsResizing(false);
       };
 
@@ -547,7 +547,7 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
         document.body.style.cursor = 'col-resize';
       }
 
-      return () => {
+      return (): void => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
         document.body.style.cursor = 'default';
@@ -639,7 +639,7 @@ export const DesktopMainContent = forwardRef<HTMLElement, DesktopMainContentProp
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <main
         ref={ref}
@@ -690,7 +690,7 @@ export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}
@@ -735,7 +735,7 @@ export const DesktopStatusBar = forwardRef<HTMLElement, DesktopStatusBarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}
@@ -799,7 +799,7 @@ export const DesktopLayout = forwardRef<HTMLDivElement, DesktopLayoutProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <BaseLayout
         ref={ref}

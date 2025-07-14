@@ -3,6 +3,7 @@
  * @module LayoutTypes
  */
 
+import type { ReactNode } from 'react';
 import type { ComponentProps } from '../lib/types/core.types';
 
 // Base layout component props
@@ -14,9 +15,9 @@ export interface LayoutComponentProps extends ComponentProps {
 
 // PageLayout props - top-level page structure
 export interface PageLayoutProps extends LayoutComponentProps {
-  header?: any;
-  footer?: any;
-  sidebar?: any;
+  header?: ReactNode;
+  footer?: ReactNode;
+  sidebar?: ReactNode;
   variant?: 'government' | 'municipal' | 'modern';
   municipality?: 'drammen' | 'oslo' | 'bergen' | 'trondheim' | 'stavanger';
   fullWidth?: boolean;
@@ -73,8 +74,8 @@ export interface CardProps extends LayoutComponentProps {
   variant?: 'default' | 'outlined' | 'elevated' | 'government' | 'municipal';
   shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'official' | 'municipal';
-  header?: any;
-  footer?: any;
+  header?: ReactNode;
+  footer?: ReactNode;
   metadata?: {
     lastUpdated?: string;
     municipality?: string;
@@ -93,11 +94,11 @@ export interface NorwegianLayoutProps {
 }
 
 // Responsive breakpoint types
-export interface ResponsiveProps {
-  mobile?: any;
-  tablet?: any;
-  desktop?: any;
-  wide?: any;
+export interface ResponsiveProps<T = unknown> {
+  mobile?: T;
+  tablet?: T;
+  desktop?: T;
+  wide?: T;
 }
 
 // CSS-in-JS style object type for design tokens

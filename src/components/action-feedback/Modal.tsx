@@ -131,9 +131,9 @@ const ModalHeader = ({
   titleKey?: string;
   title?: string;
   closable: boolean;
-  norwegian?: any;
+  norwegian?: { classification?: string };
   onClose: () => void;
-}) => {
+}): void => {
   return (
     <div
       style={{
@@ -207,7 +207,7 @@ const ModalHeader = ({
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }) => {
+const ClassificationIndicator = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -236,7 +236,7 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 };
 
 // Category indicator component
-const CategoryIndicator = ({ category }: { category: string }) => {
+const CategoryIndicator = ({ category }: { category: string }): void => {
   const getCategoryIcon = (category: string): string => {
     const icons = {
       form: '📝',
@@ -266,7 +266,7 @@ const CategoryIndicator = ({ category }: { category: string }) => {
 };
 
 // Modal body component
-const ModalBody = ({ children, scrollable }: { children: any; scrollable: boolean }) => {
+const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scrollable: boolean }): void => {
   return (
     <div
       style={{
@@ -287,8 +287,8 @@ const useFocusTrap = (
   isOpen: boolean,
   enabled: boolean,
   containerRef: React.RefObject<HTMLElement>
-) => {
-  useEffect(() => {
+): void => {
+  useEffect((): void => {
     if (!isOpen || !enabled || !containerRef.current) {
       return;
     }
@@ -301,7 +301,7 @@ const useFocusTrap = (
     const firstElement = focusableElements[0] as HTMLElement;
     const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
-    const handleTabKey = (e: KeyboardEvent) => {
+    const handleTabKey = (e: KeyboardEvent): void => {
       if (e.key !== 'Tab') {
         return;
       }
@@ -322,14 +322,14 @@ const useFocusTrap = (
     container.addEventListener('keydown', handleTabKey);
     firstElement.focus();
 
-    return () => {
+    return (): void => {
       container.removeEventListener('keydown', handleTabKey);
     };
   }, [isOpen, enabled, containerRef]);
 };
 
 // Modal component with forwardRef
-export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) => {
+export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): void => {
   const {
     isOpen,
     titleKey,
@@ -362,12 +362,12 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
   useFocusTrap(isOpen, norwegian?.focusTrap !== false, contentRef);
 
   // Handle escape key
-  useEffect(() => {
+  useEffect((): void => {
     if (!isOpen || !closeOnEscape) {
       return;
     }
 
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleEscape = (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         onEscapeKey?.();
         if (!persistent) {
@@ -381,7 +381,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
   }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
   // Handle modal opening
-  useEffect(() => {
+  useEffect((): void => {
     if (isOpen) {
       onOpen?.();
 
@@ -396,7 +396,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
       document.body.style.overflow = '';
     }
 
-    return () => {
+    return (): void => {
       document.body.style.overflow = '';
     };
   }, [isOpen, onOpen, norwegian]);
@@ -405,14 +405,14 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref) =
   const contentStyles = getModalContentStyles(props);
   const combinedOverlayStyles = { ...overlayStyles, ...style };
 
-  const handleOverlayClick = (e: any) => {
+  const handleOverlayClick = (e: React.MouseEvent<HTMLElement>): void => {
     if (e.target === e.currentTarget && closeOnOverlay && !persistent) {
       onOverlayClick?.();
       onClose?.();
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     if (norwegian?.closeConfirmationRequired) {
       // TODO: Show confirmation dialog
       return;

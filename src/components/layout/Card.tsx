@@ -32,7 +32,7 @@ export function Card({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const cardClasses = React.useMemo(() => {
+  const cardClasses = React.useMemo((): void => {
     const classes = ['card'];
 
     // Variant classes
@@ -107,7 +107,7 @@ export function Card({
 /**
  * Metadata section component
  */
-const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }) => {
+const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): void => {
   const { t } = useLocalization();
 
   if (!metadata) {
@@ -152,7 +152,7 @@ const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metada
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🔓',

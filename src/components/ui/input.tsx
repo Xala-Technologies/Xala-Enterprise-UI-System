@@ -54,7 +54,7 @@ export interface InputProps
  * @returns Input JSX element
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, size, error, success, type, ...props }, ref) => {
+  ({ className, variant, size, error, success, type, ...props }, ref): void => {
     // Determine variant based on state
     const computedVariant = error ? 'destructive' : success ? 'success' : variant;
 

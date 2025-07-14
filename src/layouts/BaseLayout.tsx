@@ -166,11 +166,11 @@ const footerVariants = cva(
 /**
  * Platform detection hook
  */
-const usePlatform = () => {
+const usePlatform = (): void => {
   const [platform, setPlatform] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
-  useEffect(() => {
-    const detectPlatform = () => {
+  useEffect((): void => {
+    const detectPlatform = (): void => {
       setPlatform(platformTokens.utils.getCurrentPlatform());
     };
 
@@ -292,7 +292,7 @@ export const BaseLayout = forwardRef<HTMLDivElement, BaseLayoutProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const currentPlatform = usePlatform();
     const effectivePlatform = platform === 'auto' ? currentPlatform : platform;
 
@@ -326,7 +326,7 @@ BaseLayout.displayName = 'BaseLayout';
  * Header Component
  */
 export const Header = forwardRef<HTMLElement, HeaderProps>(
-  ({ children, platform = 'auto', title, navigation, actions, className, ...props }, ref) => {
+  ({ children, platform = 'auto', title, navigation, actions, className, ...props }, ref): void => {
     return (
       <header
         ref={ref}
@@ -378,12 +378,12 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const currentPlatform = usePlatform();
     const isMobile = currentPlatform === 'mobile';
 
     // Focus trap for mobile sidebar
-    useEffect(() => {
+    useEffect((): void => {
       if (isMobile && open) {
         const sidebarElement = ref as React.RefObject<HTMLElement>;
         if (sidebarElement.current) {
@@ -443,7 +443,7 @@ Sidebar.displayName = 'Sidebar';
  * Main Content Component
  */
 export const MainContent = forwardRef<HTMLElement, MainContentProps>(
-  ({ children, platform = 'auto', maxWidth = 'none', title, className, ...props }, ref) => {
+  ({ children, platform = 'auto', maxWidth = 'none', title, className, ...props }, ref): void => {
     return (
       <main
         ref={ref}
@@ -468,7 +468,7 @@ MainContent.displayName = 'MainContent';
  * Footer Component
  */
 export const Footer = forwardRef<HTMLElement, FooterProps>(
-  ({ children, platform = 'auto', className, ...props }, ref) => {
+  ({ children, platform = 'auto', className, ...props }, ref): void => {
     return (
       <footer
         ref={ref}

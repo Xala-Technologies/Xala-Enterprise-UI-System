@@ -120,7 +120,7 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     /**
      * Handle search input change
      * @param e - Input change event

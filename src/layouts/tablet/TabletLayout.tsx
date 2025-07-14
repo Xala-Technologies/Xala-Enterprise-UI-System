@@ -130,7 +130,7 @@ export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <header
         ref={ref}
@@ -160,7 +160,7 @@ TabletHeader.displayName = 'TabletHeader';
  * @returns JSX.Element
  */
 export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
-  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref) => {
+  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): void => {
     return (
       <aside
         ref={ref}
@@ -218,7 +218,7 @@ TabletSidebar.displayName = 'TabletSidebar';
  * @returns JSX.Element
  */
 export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
-  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref) => {
+  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): void => {
     return (
       <div
         ref={ref}

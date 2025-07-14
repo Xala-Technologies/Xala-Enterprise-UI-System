@@ -37,13 +37,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     // Get component tokens for the button
     const buttonTokens = getComponentTokens('button');
     const variantTokens = buttonTokens[variant];
 
     // Create styles using semantic tokens
-    const buttonStyles = React.useMemo(() => {
+    const buttonStyles = React.useMemo((): void => {
       if (!variantTokens) return {};
 
       return {
@@ -79,7 +79,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }, [variant, size, disabled, variantTokens]);
 
     // Handle loading state
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
       if (!loading && !disabled && props.onClick) {
         props.onClick(event);
       }
@@ -123,7 +123,7 @@ Button.displayName = 'Button';
 export const SemanticButton: React.FC<ButtonProps> = props => {
   const { variant = 'primary', size = 'md', className, ...restProps } = props;
 
-  const styles = React.useMemo(() => {
+  const styles = React.useMemo((): void => {
     // Use semantic token system with proper type handling
     const backgroundColor = getToken('alias.color.brand.primary');
     const color = getToken('alias.color.text.inverse');

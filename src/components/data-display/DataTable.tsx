@@ -35,7 +35,7 @@ export function DataTable({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tableClasses = React.useMemo(() => {
+  const tableClasses = React.useMemo((): void => {
     const classes = ['datatable'];
 
     // State classes
@@ -124,10 +124,10 @@ const TableHeader: React.FC<{
   sorting?: DataTableProps['sorting'];
   onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ columns, sorting, onSortChange, norwegian }) => {
+}> = ({ columns, sorting, onSortChange, norwegian }): void => {
   const { t } = useLocalization();
 
-  const handleSort = (column: TableColumn) => {
+  const handleSort = (column: TableColumn): void => {
     if (!column.sortable || !onSortChange) {
       return;
     }
@@ -191,7 +191,7 @@ const TableBody: React.FC<{
   columns: TableColumn[];
   onRowClick?: (row: TableData, index: number) => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ data, columns, onRowClick, norwegian }) => {
+}> = ({ data, columns, onRowClick, norwegian }): void => {
   const { t } = useLocalization();
 
   const formatCellValue = (value: any, column: TableColumn, row: TableData): string => {
@@ -267,7 +267,7 @@ const TableBody: React.FC<{
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🔓',
@@ -288,7 +288,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 /**
  * Status indicator component
  */
-const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
+const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
   const getStatusIcon = (status: string): string => {
     const icons = {
       active: '🟢',
@@ -312,7 +312,7 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
 /**
  * Empty state component
  */
-const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }) => {
+const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): void => {
   const { t } = useLocalization();
 
   return (
@@ -328,7 +328,7 @@ const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }) => {
 /**
  * Loading state component
  */
-const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }) => {
+const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): void => {
   const { t } = useLocalization();
 
   return (

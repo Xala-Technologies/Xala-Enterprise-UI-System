@@ -34,7 +34,7 @@ export function KeyValueList({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const listClasses = React.useMemo(() => {
+  const listClasses = React.useMemo((): void => {
     const classes = ['keyvalue-list'];
 
     // Layout classes
@@ -80,7 +80,7 @@ export function KeyValueList({
   }
 
   // Filter out empty values if requested
-  const displayItems = React.useMemo(() => {
+  const displayItems = React.useMemo((): void => {
     if (!norwegian?.hideEmptyValues) {
       return items;
     }
@@ -111,11 +111,11 @@ const KeyValueItemComponent: React.FC<{
   item: KeyValueItem;
   showDividers?: boolean;
   norwegian?: KeyValueListProps['norwegian'];
-}> = ({ item, showDividers, norwegian }) => {
+}> = ({ item, showDividers, norwegian }): void => {
   const { t } = useLocalization();
 
   // Build item CSS classes
-  const itemClasses = React.useMemo(() => {
+  const itemClasses = React.useMemo((): void => {
     const classes = ['keyvalue-item'];
 
     // Type classes
@@ -150,19 +150,19 @@ const KeyValueItemComponent: React.FC<{
   }, [item, showDividers]);
 
   // Format the value based on type
-  const formattedValue = React.useMemo(() => {
+  const formattedValue = React.useMemo((): void => {
     return formatValue(item.value, item, norwegian);
   }, [item, norwegian]);
 
   // Handle click
-  const handleClick = React.useCallback(() => {
+  const handleClick = React.useCallback((): void => {
     if (item.onClick) {
       item.onClick();
     }
   }, [item]);
 
   // Handle copy
-  const handleCopy = React.useCallback(async () => {
+  const handleCopy = React.useCallback(async (): void => {
     if (item.copyable && navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(String(item.value));
@@ -211,7 +211,7 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
-const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }) => {
+const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): void => {
   const getClassificationIcon = (level: string): string => {
     const icons = {
       ÅPEN: '🔓',
@@ -232,7 +232,7 @@ const ClassificationIcon: React.FC<{ classification: string }> = ({ classificati
 /**
  * Status indicator component
  */
-const StatusIndicator: React.FC<{ status: string }> = ({ status }) => {
+const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
   const getStatusIcon = (status: string): string => {
     const icons = {
       active: '🟢',

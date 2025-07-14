@@ -50,7 +50,7 @@ interface BottomNavigationProps {
  * - Emergency access support
  * - Accessibility announcements in Norwegian
  */
-export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: any) => {
+export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: any): void => {
   const {
     items = [],
     activeIndex = 0,
@@ -68,7 +68,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
   const t = (key: string) => key;
 
   // Classification styling based on NSM standards
-  const getClassificationStyle = () => {
+  const getClassificationStyle = (): void => {
     if (!classification) {
       return {};
     }
@@ -96,7 +96,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
   };
 
   // Height variants
-  const getHeightStyle = () => {
+  const getHeightStyle = (): void => {
     const heights: Record<string, string> = {
       compact: 'var(--spacing-12)', // 48px
       standard: 'var(--spacing-16)', // 64px
@@ -152,7 +152,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
       aria-label={t('navigation.bottomNavigation')}
       {...restProps}
     >
-      {items.map((item, index) => {
+      {items.map((item, index): void => {
         const isActive = index === activeIndex;
         const itemClassification = item.classification || classification;
 

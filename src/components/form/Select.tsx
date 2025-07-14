@@ -41,9 +41,9 @@ interface SelectProps {
     sortOrder?: 'alphabetical' | 'code' | 'population';
     filterByRegion?: string;
   };
-  onChange?: (event: any) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onChange?: (event: React.MouseEvent<HTMLElement>) => void;
+  onBlur?: (event: React.MouseEvent<HTMLElement>) => void;
+  onFocus?: (event: React.MouseEvent<HTMLElement>) => void;
   style?: any;
   'aria-describedby'?: string;
   'aria-labelledby'?: string;
@@ -67,7 +67,7 @@ interface SelectProps {
  * - DigDir form guidelines compliance
  * - Norwegian sorting and filtering
  */
-export const Select = React.forwardRef((props: SelectProps, ref: any) => {
+export const Select = React.forwardRef((props: SelectProps, ref: any): void => {
   const {
     labelKey,
     label,
@@ -150,7 +150,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
 
     // Sort options based on Norwegian preferences
     if (norwegian?.sortOrder === 'alphabetical') {
-      allOptions.sort((a, b) => {
+      allOptions.sort((a, b): void => {
         const aLabel = a.labelKey ? t(a.labelKey) : a.label || '';
         const bLabel = b.labelKey ? t(b.labelKey) : b.label || '';
         return aLabel.localeCompare(bLabel, 'nb-NO');
@@ -173,7 +173,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
 
   // Group options by region/category
   const groupedOptions = completeOptions.reduce(
-    (groups: Record<string, SelectOption[]>, option) => {
+    (groups: Record<string, SelectOption[]>, option): void => {
       const group = option.group || 'default';
       if (!groups[group]) {
         groups[group] = [];
@@ -185,7 +185,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
   );
 
   // Size variants
-  const getSizeStyles = () => {
+  const getSizeStyles = (): void => {
     const sizes: Record<string, any> = {
       small: {
         fontSize: 'var(--font-size-sm)',
@@ -207,7 +207,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
   };
 
   // Status colors
-  const getStatusStyles = () => {
+  const getStatusStyles = (): void => {
     const statuses: Record<string, any> = {
       default: {
         borderColor: 'var(--color-border-default)',
@@ -230,7 +230,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
   };
 
   // NSM Classification styling
-  const getClassificationStyles = () => {
+  const getClassificationStyles = (): void => {
     if (!norwegian?.classification) {
       return {};
     }
@@ -263,7 +263,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any) => {
       .join(' ') || undefined;
 
   // Render options or option groups
-  const renderOptions = () => {
+  const renderOptions = (): void => {
     if (Object.keys(groupedOptions).length > 1 && groupedOptions.default === undefined) {
       // Render with optgroups
       return Object.entries(groupedOptions).map(([groupName, groupOptions]) => (

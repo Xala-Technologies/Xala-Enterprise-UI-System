@@ -135,7 +135,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     /**
      * Handle sort click
      * @param column - Column key
@@ -229,7 +229,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
      */
     const renderBody = (): JSX.Element => (
       <tbody>
-        {data.map((item, index) => {
+        {data.map((item, index): void => {
           const rowId = rowKey(item, index);
           const isSelected = selectedRows.includes(rowId);
 

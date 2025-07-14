@@ -155,7 +155,7 @@ const NavigationTab = ({
   showLabels: boolean;
   showBadges: boolean;
   onPress: () => void;
-}) => {
+}): void => {
   const tabStyles = getTabItemStyles(item, isActive, showLabels, showBadges);
 
   return (
@@ -299,7 +299,7 @@ const getClassificationIcon = (classification: string): string => {
 };
 
 // Municipality context indicator
-const MunicipalityIndicator = ({ municipality }: { municipality: string }) => {
+const MunicipalityIndicator = ({ municipality }: { municipality: string }): void => {
   return (
     <div
       style={{
@@ -323,7 +323,7 @@ const MunicipalityIndicator = ({ municipality }: { municipality: string }) => {
 };
 
 // Emergency banner component
-const EmergencyBanner = () => {
+const EmergencyBanner = (): void => {
   return (
     <div
       style={{
@@ -349,7 +349,7 @@ const EmergencyBanner = () => {
 
 // BottomNavigation component with forwardRef
 export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
-  (props, ref) => {
+  (props, ref): void => {
     const {
       items,
       activeIndex = 0,
@@ -369,7 +369,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
     const navigationStyles = getBottomNavigationStyles(props);
     const combinedStyles = { ...navigationStyles, ...style };
 
-    const handleItemPress = (index: number, item: BottomNavigationItem) => {
+    const handleItemPress = (index: number, item: BottomNavigationItem): void => {
       if (item.disabled) {
         return;
       }

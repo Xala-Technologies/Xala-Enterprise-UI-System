@@ -134,7 +134,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const [inputValue, setInputValue] = useState(value);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [isOpen, setIsOpen] = useState(false);
@@ -205,17 +205,17 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
      * Handle blur
      */
     const handleBlur = (): void => {
-      setTimeout(() => {
+      setTimeout((): void => {
         setIsOpen(false);
         onBlur?.();
       }, 200);
     };
 
-    useEffect(() => {
+    useEffect((): void => {
       setInputValue(value);
     }, [value]);
 
-    useEffect(() => {
+    useEffect((): void => {
       setIsOpen(showResults);
     }, [showResults]);
 

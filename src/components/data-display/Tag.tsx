@@ -29,7 +29,7 @@ export function Tag({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tagClasses = React.useMemo(() => {
+  const tagClasses = React.useMemo((): void => {
     const classes = ['tag'];
 
     // Variant classes
@@ -71,14 +71,14 @@ export function Tag({
   }, [variant, size, interactive, removable, norwegian, className]);
 
   // Handle click events
-  const handleClick = (event: React.MouseEvent<HTMLSpanElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLSpanElement>): void => {
     if (interactive && onClick) {
       onClick();
     }
   };
 
   // Handle keyboard events for accessibility
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>): void => {
     if (interactive && onClick && (event.key === 'Enter' || event.key === ' ')) {
       event.preventDefault();
       onClick();
@@ -124,7 +124,7 @@ export function Tag({
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
   const { t } = useLocalization();
 
   const getClassificationIcon = (classification: string): string => {
@@ -161,15 +161,15 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 /**
  * Remove button component
  */
-const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, size }) => {
+const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, size }): void => {
   const { t } = useLocalization();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     event.stopPropagation();
     onRemove?.();
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       event.stopPropagation();
@@ -177,7 +177,7 @@ const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRem
     }
   };
 
-  const buttonClasses = React.useMemo(() => {
+  const buttonClasses = React.useMemo((): void => {
     const classes = ['tag__remove-button'];
     classes.push(`tag__remove-button--size-${size}`);
     return classes.join(' ');
@@ -202,7 +202,7 @@ const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRem
 /**
  * Municipality indicator component
  */
-const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }) => {
+const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }): void => {
   const { t } = useLocalization();
 
   if (!municipality) {

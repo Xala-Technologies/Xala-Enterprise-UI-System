@@ -34,7 +34,7 @@ export function Badge({
   const { t } = useLocalization();
 
   // Format count display
-  const displayCount = React.useMemo(() => {
+  const displayCount = React.useMemo((): void => {
     if (typeof count !== 'number') {
       return children;
     }
@@ -45,7 +45,7 @@ export function Badge({
   }, [count, maxCount, showZero, children]);
 
   // Build CSS classes using design tokens
-  const badgeClasses = React.useMemo(() => {
+  const badgeClasses = React.useMemo((): void => {
     const classes = ['badge'];
 
     // Variant classes
@@ -91,7 +91,7 @@ export function Badge({
   }, [variant, size, shape, position, pulse, dot, classification, priority, className]);
 
   // Accessibility props
-  const accessibilityProps = React.useMemo(() => {
+  const accessibilityProps = React.useMemo((): void => {
     if (!accessible) {
       return {};
     }
@@ -136,7 +136,7 @@ export function Badge({
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🔓',
@@ -157,7 +157,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }) => {
 /**
  * Priority indicator component
  */
-const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }) => {
+const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }): void => {
   const getPriorityIcon = (priority: string): string => {
     const icons = {
       low: '⬇️',

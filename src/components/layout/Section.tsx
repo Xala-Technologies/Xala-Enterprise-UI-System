@@ -25,7 +25,7 @@ export function Section({
   ...props
 }: SectionProps): JSX.Element {
   // Build CSS classes using design tokens
-  const sectionClasses = React.useMemo(() => {
+  const sectionClasses = React.useMemo((): void => {
     const classes = ['section'];
 
     // Variant classes

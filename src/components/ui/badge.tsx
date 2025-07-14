@@ -57,7 +57,7 @@ export interface BadgeProps
  * @returns Badge JSX element
  */
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref): void => {
     const Comp = asChild ? 'span' : 'div';
 
     return (

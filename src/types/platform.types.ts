@@ -3,6 +3,7 @@
  * @module PlatformTypes
  */
 
+import type { ReactNode } from 'react';
 import type { ComponentProps } from '../lib/types/core.types';
 
 // Base platform component props
@@ -29,7 +30,7 @@ export interface MobileHeaderProps extends PlatformComponentProps {
 export interface BottomNavigationProps extends PlatformComponentProps {
   items: BottomNavigationItem[];
   activeItem?: string;
-  onItemClick?: (item: BottomNavigationItem, index: number) => void;
+  onItemClick?: (_item: BottomNavigationItem, _index: number) => void;
   showLabels?: boolean;
   showBadges?: boolean;
 }
@@ -37,8 +38,8 @@ export interface BottomNavigationProps extends PlatformComponentProps {
 // Bottom navigation item configuration
 export interface BottomNavigationItem {
   label: string; // Tab label text
-  icon: any;
-  activeIcon?: any;
+  icon: ReactNode;
+  activeIcon?: ReactNode;
   badgeCount?: number;
   badgeColor?: string;
   disabled?: boolean;
@@ -49,7 +50,7 @@ export interface BottomNavigationItem {
 export interface MobileDrawerProps extends PlatformComponentProps {
   isOpen: boolean;
   title?: string; // Drawer title text
-  children: any;
+  children: ReactNode;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closable?: boolean;
@@ -60,7 +61,7 @@ export interface MobileDrawerProps extends PlatformComponentProps {
 export interface DesktopSidebarProps extends PlatformComponentProps {
   isOpen: boolean;
   title?: string;
-  children: any;
+  children: ReactNode;
   width?: number;
   minWidth?: number;
   maxWidth?: number;
@@ -72,12 +73,19 @@ export interface DesktopSidebarProps extends PlatformComponentProps {
 }
 
 // Top Navigation component props
+interface NavigationAction {
+  id: string;
+  label: string;
+  icon?: ReactNode;
+  disabled?: boolean;
+}
+
 export interface TopNavigationProps extends PlatformComponentProps {
   title?: string; // Navigation title text
   showBreadcrumbs?: boolean;
   breadcrumbs?: BreadcrumbItem[];
-  actions?: any[];
-  onAction?: (action: any) => void;
+  actions?: NavigationAction[];
+  onAction?: (_action: NavigationAction) => void;
 }
 
 // Breadcrumb item configuration
@@ -90,9 +98,9 @@ export interface BreadcrumbItem {
 }
 
 // Resizable Table component props
-export interface ResizableTableProps extends PlatformComponentProps {
+export interface ResizableTableProps<T = unknown> extends PlatformComponentProps {
   columns: ResizableTableColumn[];
-  data: any[];
+  data: T[];
   sortable?: boolean;
   resizable?: boolean;
   reorderable?: boolean;

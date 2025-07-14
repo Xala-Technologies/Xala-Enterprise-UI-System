@@ -110,7 +110,7 @@ const SidebarHeader = ({
   showToggle: boolean;
   norwegian?: any;
   onToggle?: () => void;
-}) => {
+}): void => {
   return (
     <div
       style={{
@@ -201,8 +201,8 @@ const SidebarHeader = ({
 };
 
 // Classification banner component
-const ClassificationBanner = ({ level }: { level: string }) => {
-  const getClassificationInfo = (classification: string) => {
+const ClassificationBanner = ({ level }: { level: string }): void => {
+  const getClassificationInfo = (classification: string): void => {
     const info = {
       ÅPEN: { icon: '🟢', bg: 'var(--color-green-100)', text: 'var(--color-green-800)' },
       BEGRENSET: { icon: '🟡', bg: 'var(--color-orange-100)', text: 'var(--color-orange-800)' },
@@ -243,7 +243,7 @@ const QuickAccessSection = ({
 }: {
   quickAccess: any;
   isCollapsed: boolean;
-}) => {
+}): void => {
   if (!quickAccess) {
     return null;
   }
@@ -333,7 +333,7 @@ const QuickAccessSection = ({
 };
 
 // Sidebar content area
-const SidebarContent = ({ children, isCollapsed }: { children: any; isCollapsed: boolean }) => {
+const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): void => {
   return (
     <div
       style={{
@@ -354,12 +354,12 @@ const ResizeHandle = ({
 }: {
   onResize: (width: number) => void;
   position: string;
-}) => {
+}): void => {
   const [isResizing, setIsResizing] = useState(false);
   const [startX, setStartX] = useState(0);
   const [startWidth, setStartWidth] = useState(0);
 
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLElement>): void => {
     setIsResizing(true);
     setStartX(e.clientX);
     setStartWidth(280); // Default width
@@ -367,7 +367,7 @@ const ResizeHandle = ({
     document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent): void => {
     if (!isResizing) {
       return;
     }
@@ -377,7 +377,7 @@ const ResizeHandle = ({
     onResize(newWidth);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (): void => {
     setIsResizing(false);
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
@@ -405,7 +405,7 @@ const ResizeHandle = ({
 };
 
 // Keyboard shortcuts info
-const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }) => {
+const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): void => {
   if (isCollapsed) {
     return null;
   }
@@ -447,7 +447,7 @@ const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }) => {
 };
 
 // DesktopSidebar component with forwardRef
-export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref) => {
+export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): void => {
   const {
     isCollapsed = false,
     isResizable = true,
@@ -480,7 +480,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
   });
   const combinedStyles = { ...sidebarStyles, ...style };
 
-  const handleToggle = () => {
+  const handleToggle = (): void => {
     const newCollapsed = !isCollapsed;
     onToggle?.(newCollapsed);
 
@@ -491,19 +491,19 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
     }
   };
 
-  const handleResize = (newWidth: number) => {
+  const handleResize = (newWidth: number): void => {
     const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
     setCurrentWidth(clampedWidth);
     onResize?.(clampedWidth);
   };
 
   // Keyboard shortcuts
-  useEffect(() => {
+  useEffect((): void => {
     if (!norwegian?.keyboardShortcuts) {
       return;
     }
 
-    const handleKeydown = (e: KeyboardEvent) => {
+    const handleKeydown = (e: KeyboardEvent): void => {
       if (e.ctrlKey && e.key === 'b') {
         e.preventDefault();
         handleToggle();

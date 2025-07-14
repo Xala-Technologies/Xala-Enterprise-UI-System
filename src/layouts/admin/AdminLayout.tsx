@@ -182,7 +182,7 @@ export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <nav
         ref={ref}
@@ -224,7 +224,7 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
   (
     { children, variant = 'default', collapsed = false, onCollapse, title, className, ...props },
     ref
-  ) => {
+  ): void => {
     return (
       <aside
         ref={ref}
@@ -286,7 +286,7 @@ AdminSidebar.displayName = 'AdminSidebar';
  * @returns JSX.Element
  */
 export const AdminContent = forwardRef<HTMLElement, AdminContentProps>(
-  ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref) => {
+  ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref): void => {
     return (
       <main
         ref={ref}
@@ -332,7 +332,7 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}

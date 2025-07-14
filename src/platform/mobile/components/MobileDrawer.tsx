@@ -15,7 +15,7 @@ interface MobileDrawerProps {
   isOpen: boolean;
   titleKey?: string;
   title?: string;
-  children: any;
+  children: React.ReactNode;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   size?: 'small' | 'medium' | 'large' | 'full';
   overlay?: boolean;
@@ -50,7 +50,7 @@ interface MobileDrawerProps {
  * - Voice-over support for Norwegian content
  * - Municipal branding and information
  */
-export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any) => {
+export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any): void => {
   const {
     isOpen,
     titleKey,
@@ -73,7 +73,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   const { t } = useLocalization();
 
   // Classification styling based on NSM standards
-  const getClassificationStyle = () => {
+  const getClassificationStyle = (): void => {
     if (!classification) {
       return {};
     }
@@ -101,7 +101,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   };
 
   // Size variants
-  const getSizeStyle = () => {
+  const getSizeStyle = (): void => {
     const isHorizontal = placement === 'left' || placement === 'right';
 
     if (isHorizontal) {
@@ -124,7 +124,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   };
 
   // Position styling
-  const getPositionStyle = () => {
+  const getPositionStyle = (): void => {
     const transform = isOpen
       ? 'translate3d(0, 0, 0)'
       : placement === 'left'
@@ -151,7 +151,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   };
 
   // Safe area padding
-  const getSafeAreaStyle = () => {
+  const getSafeAreaStyle = (): void => {
     if (!safeAreaHandling) {
       return {};
     }
@@ -165,7 +165,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   };
 
   // Handle outside press
-  const handleOverlayClick = () => {
+  const handleOverlayClick = (): void => {
     if (closeOnOutsidePress && onClose) {
       onClose();
     }

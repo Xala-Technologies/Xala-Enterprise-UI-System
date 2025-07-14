@@ -120,7 +120,7 @@ const TooltipArrow = ({
 }: {
   placement: string;
   classification?: string;
-}) => {
+}): void => {
   const getArrowStyles = (): React.CSSProperties => {
     const baseArrowStyles: React.CSSProperties = {
       position: 'absolute',
@@ -189,7 +189,7 @@ const TooltipArrow = ({
 };
 
 // Classification indicator
-const ClassificationIndicator = ({ level }: { level: string }) => {
+const ClassificationIndicator = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -215,7 +215,7 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 };
 
 // Help category indicator
-const HelpCategoryIndicator = ({ category }: { category?: string }) => {
+const HelpCategoryIndicator = ({ category }: { category?: string }): void => {
   if (!category) {
     return null;
   }
@@ -253,7 +253,7 @@ const TooltipContent = ({
   contentKey?: string;
   content?: any;
   norwegian?: TooltipProps['norwegian'];
-}) => {
+}): void => {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-1)' }}>
       {/* Classification indicator */}
@@ -271,7 +271,7 @@ const TooltipContent = ({
 };
 
 // Tooltip component with forwardRef
-export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): void => {
   const {
     contentKey,
     content,
@@ -298,18 +298,18 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
   const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  const showTooltip = () => {
+  const showTooltip = (): void => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    timeoutRef.current = setTimeout(() => {
+    timeoutRef.current = setTimeout((): void => {
       setIsVisible(true);
       onOpen?.();
     }, delay);
   };
 
-  const hideTooltip = () => {
+  const hideTooltip = (): void => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -318,19 +318,19 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
     onClose?.();
   };
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (): void => {
     if (trigger === 'hover') {
       showTooltip();
     }
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (): void => {
     if (trigger === 'hover' && !interactive) {
       hideTooltip();
     }
   };
 
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (trigger === 'click') {
       if (isVisible) {
         hideTooltip();
@@ -340,26 +340,26 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
     }
   };
 
-  const handleFocus = () => {
+  const handleFocus = (): void => {
     if (trigger === 'focus') {
       showTooltip();
     }
   };
 
-  const handleBlur = () => {
+  const handleBlur = (): void => {
     if (trigger === 'focus') {
       hideTooltip();
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
     if (event.key === 'Escape' && isVisible) {
       hideTooltip();
     }
   };
 
   // Calculate position (simplified - real implementation would use more sophisticated positioning)
-  useEffect(() => {
+  useEffect((): void => {
     if (isVisible && triggerRef.current && tooltipRef.current) {
       const triggerRect = triggerRef.current.getBoundingClientRect();
       const tooltipRect = tooltipRef.current.getBoundingClientRect();
@@ -395,8 +395,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
   }, [isVisible, placement]);
 
   // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
+  useEffect((): void => {
+    return (): void => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -443,7 +443,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
           data-municipality={norwegian?.municipality}
           data-help-category={norwegian?.helpCategory}
           aria-label={ariaLabel}
-          onMouseEnter={interactive ? () => {} : undefined}
+          onMouseEnter={interactive ? (): void => {} : undefined}
           onMouseLeave={interactive ? hideTooltip : undefined}
           {...divProps}
         >

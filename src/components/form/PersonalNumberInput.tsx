@@ -18,7 +18,7 @@ const validatePersonalNumber = (value: string) => ({
   century: 20,
 });
 
-const formatPersonalNumber = (value: string) => {
+const formatPersonalNumber = (value: string): void => {
   const cleaned = value.replace(/\D/g, '');
   return cleaned.replace(/(\d{6})(\d{5})/, '$1-$2');
 };
@@ -75,7 +75,7 @@ export function PersonalNumberInput({
   const inputId = id || `personal-number-${name || Math.random().toString(36).substr(2, 9)}`;
 
   // Build CSS classes using design tokens
-  const inputClasses = React.useMemo(() => {
+  const inputClasses = React.useMemo((): void => {
     const classes = ['personal-number-input'];
 
     // Variant classes
@@ -140,7 +140,7 @@ export function PersonalNumberInput({
   ]);
 
   // Validation and formatting
-  useEffect(() => {
+  useEffect((): void => {
     const currentValue = value !== undefined ? value : internalValue;
     const cleaned = currentValue.replace(/\D/g, '');
 
@@ -161,7 +161,7 @@ export function PersonalNumberInput({
       clearTimeout(debounceRef.current);
     }
 
-    debounceRef.current = setTimeout(async () => {
+    debounceRef.current = setTimeout(async (): void => {
       setIsValidating(true);
 
       try {
@@ -184,7 +184,7 @@ export function PersonalNumberInput({
       }
     }, 300);
 
-    return () => {
+    return (): void => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
@@ -192,7 +192,7 @@ export function PersonalNumberInput({
   }, [value, internalValue, validation, norwegian, onValidationChange]);
 
   // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     let newValue = event.target.value;
 
     // Auto-formatting
@@ -208,12 +208,12 @@ export function PersonalNumberInput({
   };
 
   // Handle blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
     onBlur?.(event);
   };
 
   // Handle focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
     onFocus?.(event);
   };
 
@@ -281,7 +281,7 @@ const ValidationIndicator: React.FC<{
   isValid: boolean;
   isValidating: boolean;
   type?: string;
-}> = ({ isValid, isValidating, type }) => {
+}> = ({ isValid, isValidating, type }): void => {
   if (isValidating) {
     return (
       <div className="validation-indicator validation-indicator--validating">
@@ -314,7 +314,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }) => {
+}> = ({ label, required, htmlFor }): void => {
   return (
     <label className="personal-number-field__label" htmlFor={htmlFor}>
       <span className="personal-number-field__label-text">{label}</span>
@@ -330,7 +330,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): void => {
   if (errors.length === 0) {
     return null;
   }

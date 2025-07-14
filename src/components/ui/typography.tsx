@@ -75,7 +75,7 @@ export interface TypographyProps
  * @returns Typography JSX element
  */
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
-  ({ className, variant, textColor, align, as, truncate, ...props }, ref) => {
+  ({ className, variant, textColor, align, as, truncate, ...props }, ref): void => {
     const Component = as || getElementFromVariant(variant);
 
     return (

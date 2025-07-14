@@ -285,7 +285,7 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <header
         ref={ref}
@@ -336,7 +336,7 @@ MobileHeader.displayName = 'MobileHeader';
  * Mobile Bottom Navigation Component
  */
 export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNavigationProps>(
-  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref) => {
+  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): void => {
     return (
       <nav
         ref={ref}
@@ -348,7 +348,7 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
         {items.map((item, index) => (
           <button
             key={index}
-            onClick={() => {
+            onClick={(): void => {
               item.onClick?.();
               onNavigate?.(index);
             }}
@@ -402,9 +402,9 @@ export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     // Focus trap when open
-    useEffect(() => {
+    useEffect((): void => {
       if (open) {
         const drawerElement = ref as React.RefObject<HTMLElement>;
         if (drawerElement.current) {
@@ -478,10 +478,10 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const [refreshing, setRefreshing] = useState(false);
 
-    const handleRefresh = async () => {
+    const handleRefresh = async (): void => {
       if (pullToRefresh && onRefresh) {
         setRefreshing(true);
         await onRefresh();
@@ -532,7 +532,7 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <BaseLayout
         ref={ref}

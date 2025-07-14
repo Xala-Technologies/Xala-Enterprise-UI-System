@@ -183,7 +183,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
         {/* Card Header */}
@@ -228,7 +228,7 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     /**
      * Get change indicator color
      * @param type - Change type
@@ -332,7 +332,7 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div ref={ref} className={cn(chartCardVariants({ variant, size }), className)} {...props}>
         {/* Chart Header */}

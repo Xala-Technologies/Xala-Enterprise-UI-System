@@ -172,7 +172,7 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * @returns JSX.Element
  */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref) => {
+  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): void => {
     const currentActiveKey = activeKey || items[0]?.key;
 
     /**
@@ -254,7 +254,7 @@ export const Steps = forwardRef<HTMLDivElement, StepsProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     return (
       <div
         ref={ref}
@@ -320,7 +320,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
   (
     { variant = 'default', size = 'md', value, label, showPercentage = false, className, ...props },
     ref
-  ) => {
+  ): void => {
     const clampedValue = Math.max(0, Math.min(100, value));
 
     return (

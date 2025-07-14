@@ -116,7 +116,7 @@ const HeaderButton = ({
   testId?: string;
   ariaLabel?: string;
   badgeCount?: number;
-}) => {
+}): void => {
   return (
     <button
       style={{
@@ -175,7 +175,7 @@ const HeaderButton = ({
 };
 
 // Classification badge component
-const ClassificationBadge = ({ level }: { level: string }) => {
+const ClassificationBadge = ({ level }: { level: string }): void => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -208,7 +208,7 @@ const ClassificationBadge = ({ level }: { level: string }) => {
 };
 
 // Municipality logo component
-const MunicipalityLogo = ({ municipality }: { municipality: string }) => {
+const MunicipalityLogo = ({ municipality }: { municipality: string }): void => {
   return (
     <div
       style={{
@@ -227,7 +227,7 @@ const MunicipalityLogo = ({ municipality }: { municipality: string }) => {
 };
 
 // Emergency contact access component
-const EmergencyAccess = ({ onPress }: { onPress?: () => void }) => {
+const EmergencyAccess = ({ onPress }: { onPress?: () => void }): void => {
   return (
     <button
       style={{
@@ -261,7 +261,7 @@ const SearchBar = ({
 }: {
   placeholderKey?: string;
   onFocus?: () => void;
-}) => {
+}): void => {
   return (
     <div
       style={{
@@ -307,7 +307,7 @@ const SearchBar = ({
 };
 
 // MobileHeader component with forwardRef
-export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref) => {
+export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref): void => {
   const {
     titleKey,
     title,
@@ -335,7 +335,7 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
   const headerStyles = getMobileHeaderStyles(props);
   const combinedStyles = { ...headerStyles, ...style };
 
-  const renderLeftSection = () => {
+  const renderLeftSection = (): void => {
     return (
       <div
         style={{
@@ -368,7 +368,7 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
     );
   };
 
-  const renderCenterSection = () => {
+  const renderCenterSection = (): void => {
     if (showSearch) {
       return <SearchBar placeholderKey={searchPlaceholderKey} onFocus={onSearchFocus} />;
     }
@@ -410,7 +410,7 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
     );
   };
 
-  const renderRightSection = () => {
+  const renderRightSection = (): void => {
     return (
       <div
         style={{
@@ -424,7 +424,7 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
         {/* Emergency access */}
         {norwegian?.emergencyContactAccess && (
           <EmergencyAccess
-            onPress={() => {
+            onPress={(): void => {
               // TODO: Implement emergency contacts
             }}
           />

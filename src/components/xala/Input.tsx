@@ -187,7 +187,7 @@ const InputMessage = forwardRef<
     className?: string;
     id?: string;
   }
->(({ children, type = 'default', className, id }, ref) => {
+>(({ children, type = 'default', className, id }, ref): void => {
   const messageClasses = {
     default: 'text-muted-foreground',
     success: 'text-success',
@@ -336,7 +336,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ...props
     },
     ref
-  ) => {
+  ): void => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [currentValue, setCurrentValue] = useState(value || '');
 

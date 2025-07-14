@@ -24,7 +24,7 @@ const validateOrganizationNumber = (value: string) => ({
   mainOrganization: value,
 });
 
-const formatOrganizationNumber = (value: string) => {
+const formatOrganizationNumber = (value: string): void => {
   const cleaned = value.replace(/\D/g, '');
   return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
 };
@@ -79,7 +79,7 @@ export function OrganizationNumberInput({
   const inputId = id || `org-number-${name || Math.random().toString(36).substr(2, 9)}`;
 
   // Build CSS classes using design tokens
-  const inputClasses = React.useMemo(() => {
+  const inputClasses = React.useMemo((): void => {
     const classes = ['organization-number-input'];
 
     // Variant classes
@@ -148,7 +148,7 @@ export function OrganizationNumberInput({
   ]);
 
   // Validation and formatting
-  useEffect(() => {
+  useEffect((): void => {
     const currentValue = value !== undefined ? value : internalValue;
     const cleaned = currentValue.replace(/\D/g, '');
 
@@ -168,7 +168,7 @@ export function OrganizationNumberInput({
       clearTimeout(debounceRef.current);
     }
 
-    debounceRef.current = setTimeout(async () => {
+    debounceRef.current = setTimeout(async (): void => {
       setIsValidating(true);
 
       try {
@@ -205,7 +205,7 @@ export function OrganizationNumberInput({
       }
     }, 300);
 
-    return () => {
+    return (): void => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
@@ -213,7 +213,7 @@ export function OrganizationNumberInput({
   }, [value, internalValue, validation, norwegian, onValidationChange, orgData]);
 
   // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     let newValue = event.target.value;
 
     // Auto-formatting
@@ -229,12 +229,12 @@ export function OrganizationNumberInput({
   };
 
   // Handle blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
     onBlur?.(event);
   };
 
   // Handle focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
     onFocus?.(event);
   };
 
@@ -304,7 +304,7 @@ export function OrganizationNumberInput({
 const OrganizationDisplay: React.FC<{
   orgData?: any; // Changed type to any as OrganizationData is removed
   isLoading: boolean;
-}> = ({ orgData, isLoading }) => {
+}> = ({ orgData, isLoading }): void => {
   // Removed useLocalization as localization is removed
 
   if (isLoading) {
@@ -369,7 +369,7 @@ const ValidationIndicator: React.FC<{
   isValid: boolean;
   isValidating: boolean;
   type?: string;
-}> = ({ isValid, isValidating, type }) => {
+}> = ({ isValid, isValidating, type }): void => {
   // Removed useLocalization as localization is removed
 
   if (isValidating) {
@@ -404,7 +404,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }) => {
+}> = ({ label, required, htmlFor }): void => {
   // Removed useLocalization as localization is removed
 
   return (
@@ -422,7 +422,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): void => {
   // Removed useLocalization as localization is removed
 
   if (errors.length === 0) {

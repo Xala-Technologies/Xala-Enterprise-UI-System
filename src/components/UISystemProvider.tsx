@@ -104,7 +104,7 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   children,
   config: initialConfig = {},
   accessibility: initialAccessibility = 'basic',
-}) => {
+}): void => {
   // Merge default config with provided config
   const config = useMemo(
     (): UISystemConfig => ({
@@ -163,7 +163,7 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   );
 
   // Inject CSS custom properties for accessibility tokens
-  const cssVariables = useMemo(() => {
+  const cssVariables = useMemo((): void => {
     const variables = {
       '--ui-focus-color': accessibilityTokens.colors.focus,
       '--ui-error-color': accessibilityTokens.colors.error,

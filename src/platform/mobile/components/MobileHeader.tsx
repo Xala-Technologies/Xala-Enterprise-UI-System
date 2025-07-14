@@ -44,7 +44,7 @@ interface MobileHeaderProps {
  * - Norwegian keyboard shortcuts support
  * - Municipality-specific adaptations
  */
-export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any) => {
+export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any): void => {
   const {
     titleKey,
     title,
@@ -70,7 +70,7 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any
   const t = (key: string) => key;
 
   // Height variants using design tokens
-  const getHeightStyle = () => {
+  const getHeightStyle = (): void => {
     const heights: Record<string, string> = {
       compact: 'var(--spacing-12)', // 48px
       standard: 'var(--spacing-14)', // 56px

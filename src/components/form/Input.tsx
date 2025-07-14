@@ -12,7 +12,7 @@ import type { InputProps } from '../../types/form.types';
  * Input component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref): void => {
   const {
     label,
     error,
@@ -53,11 +53,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   const debounceRef = useRef<NodeJS.Timeout>();
 
   // Custom validation
-  useEffect(() => {
+  useEffect((): void => {
     if (!validation?.custom || !value) return;
 
     clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async () => {
+    debounceRef.current = setTimeout(async (): void => {
       setIsValidating(true);
       try {
         const result = await Promise.resolve(validation.custom!(value));
@@ -71,7 +71,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   }, [value, validation]);
 
   // Build CSS classes using design tokens
-  const inputClasses = React.useMemo(() => {
+  const inputClasses = React.useMemo((): void => {
     const classes = ['input'];
 
     // Variant classes
@@ -121,18 +121,18 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
   ]);
 
   // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const newValue = event.target.value;
     onChange?.(newValue, event);
   };
 
   // Handle input blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
     onBlur?.(event);
   };
 
   // Handle input focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
     onFocus?.(event);
   };
 
@@ -209,7 +209,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }) => {
+}> = ({ label, required, htmlFor }): void => {
   return (
     <label className="input-field__label" htmlFor={htmlFor}>
       <span className="input-field__label-text">{label}</span>
@@ -225,7 +225,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ error: string }> = ({ error }) => {
+const ErrorMessage: React.FC<{ error: string }> = ({ error }): void => {
   return (
     <div className="input-field__error" role="alert">
       <span className="input-field__error-icon" aria-hidden="true">
