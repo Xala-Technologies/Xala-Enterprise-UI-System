@@ -66,13 +66,17 @@ export interface ContainerProps
  * @returns Container JSX element
  */
 export const Container = forwardRef<HTMLDivElement, ContainerProps>(
-  ({ className, size, padding, center, as: Component = 'div', ...props }, ref) => (
-    <Component
-      ref={ref}
-      className={cn(containerVariants({ size, padding, center }), className)}
-      {...props}
-    />
-  )
+  ({ className, size, padding, center, as: Component = 'div', ...props }, ref) => {
+    const ElementType = Component as React.ElementType;
+
+    return (
+      <ElementType
+        ref={ref}
+        className={cn(containerVariants({ size, padding, center }), className)}
+        {...props}
+      />
+    );
+  }
 );
 
 Container.displayName = 'Container';

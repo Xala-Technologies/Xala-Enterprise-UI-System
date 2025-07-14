@@ -76,13 +76,17 @@ export interface StackProps
  * @returns Stack JSX element
  */
 export const Stack = forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction, gap, align, justify, wrap, as: Component = 'div', ...props }, ref) => (
-    <Component
-      ref={ref}
-      className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)}
-      {...props}
-    />
-  )
+  ({ className, direction, gap, align, justify, wrap, as: Component = 'div', ...props }, ref) => {
+    const ElementType = Component as React.ElementType;
+
+    return (
+      <ElementType
+        ref={ref}
+        className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)}
+        {...props}
+      />
+    );
+  }
 );
 
 Stack.displayName = 'Stack';

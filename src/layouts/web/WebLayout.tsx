@@ -314,7 +314,7 @@ export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
               <div
                 className="fixed right-0 top-0 bottom-0 w-96 bg-card border-l border-border z-50"
                 style={{
-                  padding: platformTokens.layout.desktop.container.padding,
+                  padding: platformTokens.desktop.layout.container.padding,
                 }}
               >
                 {rightDrawer}

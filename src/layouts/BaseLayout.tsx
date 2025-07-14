@@ -3,11 +3,9 @@
  * Comprehensive layout system for all platforms with responsive design
  */
 
-import { xalaAccessibility } from '@/lib/accessibility/wcag-aaa';
 import { cn } from '@/lib/utils/cn';
-import { platformTokens } from '@/tokens/platform-tokens';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useEffect, useState, type ReactNode } from 'react';
+import React, { forwardRef, type ReactNode } from 'react';
 
 /**
  * Base layout variants
@@ -166,8 +164,29 @@ const footerVariants = cva(
 /**
  * Platform detection hook
  */
-const usePlatform = (): React.ReactElement => {
-  return () => window.removeEventListener('resize', detectPlatform);
+const usePlatform = (): 'mobile' | 'tablet' | 'desktop' => {
+  const [platform, setPlatform] = React.useState<'mobile' | 'tablet' | 'desktop'>('desktop');
+
+  React.useEffect(() => {
+    const detectPlatform = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        setPlatform('mobile');
+      } else if (width < 1024) {
+        setPlatform('tablet');
+      } else {
+        setPlatform('desktop');
+      }
+    };
+
+    // Initial detection
+    detectPlatform();
+
+    // Add event listener
+    window.addEventListener('resize', detectPlatform);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', detectPlatform);
   }, []);
 
   return platform;
@@ -284,7 +303,7 @@ export const BaseLayout = forwardRef<HTMLDivElement, BaseLayoutProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    return (
       <div
         ref={ref}
         role="application"
@@ -314,8 +333,11 @@ BaseLayout.displayName = 'BaseLayout';
  * Header Component
  */
 export const Header = forwardRef<HTMLElement, HeaderProps>(
-  ({ children, platform = 'auto', title, navigation, actions, className, ...props }, ref): React.ReactElement => {
-  return (
+  (
+    { children, platform = 'auto', title, navigation, actions, className, ...props },
+    ref
+  ): React.ReactElement => {
+    return (
       <header
         ref={ref}
         role="banner"
@@ -367,7 +389,10 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    const detectedPlatform = usePlatform();
+    const isMobile = detectedPlatform === 'mobile';
+
+    return (
       <>
         {/* Overlay for mobile */}
         {isMobile && open && (
@@ -418,8 +443,11 @@ Sidebar.displayName = 'Sidebar';
  * Main Content Component
  */
 export const MainContent = forwardRef<HTMLElement, MainContentProps>(
-  ({ children, platform = 'auto', maxWidth = 'none', title, className, ...props }, ref): React.ReactElement => {
-  return (
+  (
+    { children, platform = 'auto', maxWidth = 'none', title, className, ...props },
+    ref
+  ): React.ReactElement => {
+    return (
       <main
         ref={ref}
         id="main-content"
@@ -444,7 +472,7 @@ MainContent.displayName = 'MainContent';
  */
 export const Footer = forwardRef<HTMLElement, FooterProps>(
   ({ children, platform = 'auto', className, ...props }, ref): React.ReactElement => {
-  return (
+    return (
       <footer
         ref={ref}
         role="contentinfo"

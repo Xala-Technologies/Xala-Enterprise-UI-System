@@ -15,6 +15,7 @@ export interface LayoutComponentProps extends ComponentProps {
 
 // PageLayout props - top-level page structure
 export interface PageLayoutProps extends LayoutComponentProps {
+  children?: ReactNode;
   header?: ReactNode;
   footer?: ReactNode;
   sidebar?: ReactNode;
@@ -25,6 +26,7 @@ export interface PageLayoutProps extends LayoutComponentProps {
 
 // Section props - semantic page sections
 export interface SectionProps extends LayoutComponentProps {
+  children?: ReactNode;
   as?: 'section' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'main';
   variant?: 'primary' | 'secondary' | 'accent' | 'neutral';
   spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
@@ -71,6 +73,7 @@ export interface StackProps extends LayoutComponentProps {
 
 // Card props - content cards with Norwegian metadata
 export interface CardProps extends LayoutComponentProps {
+  children?: ReactNode;
   variant?: 'default' | 'outlined' | 'elevated' | 'government' | 'municipal';
   shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   borderRadius?: 'none' | 'sm' | 'md' | 'lg' | 'official' | 'municipal';

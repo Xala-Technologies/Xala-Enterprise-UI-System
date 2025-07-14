@@ -232,9 +232,7 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
         aria-label={title || 'Admin sidebar'}
         className={cn(adminSidebarVariants({ variant, collapsed }), className)}
         style={{
-          width: collapsed
-            ? platformTokens.componentSizes.desktop.button.sm.minWidth
-            : platformTokens.layout.desktop.sidebar.width,
+          width: collapsed ? '60px' : platformTokens.desktop.layout.sidebar.width,
         }}
         {...props}
       >
@@ -365,7 +363,7 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
                 <div
                   className="fixed right-0 top-0 bottom-0 w-96 bg-card border-l border-border z-50"
                   style={{
-                    padding: platformTokens.layout.desktop.container.padding,
+                    padding: platformTokens.desktop.layout.container.padding,
                   }}
                 >
                   {rightDrawer}

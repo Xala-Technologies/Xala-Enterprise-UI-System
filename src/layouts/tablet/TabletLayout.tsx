@@ -174,9 +174,7 @@ export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
           className
         )}
         style={{
-          width: collapsed
-            ? platformTokens.componentSizes.tablet.button.sm.minWidth
-            : platformTokens.layout.tablet.sidebar.width,
+          width: collapsed ? '60px' : platformTokens.tablet.layout.sidebar.width,
         }}
         {...props}
       >
@@ -245,7 +243,7 @@ export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
             role="main"
             className="flex-1 overflow-auto"
             style={{
-              padding: platformTokens.layout.tablet.container.padding,
+              padding: platformTokens.tablet.layout.container.padding,
             }}
           >
             {children}
@@ -255,7 +253,7 @@ export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
             <div
               className="w-80 bg-card border-l border-border"
               style={{
-                padding: platformTokens.layout.tablet.container.padding,
+                padding: platformTokens.tablet.layout.container.padding,
               }}
             >
               {rightDrawer}
