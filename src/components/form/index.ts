@@ -12,8 +12,7 @@ export { PersonalNumberInput } from './PersonalNumberInput';
 export { OrganizationNumberInput } from './OrganizationNumberInput';
 
 // Form component types
-export type {
-  FormProps,
+export type { FormProps,
   InputProps,
   TextAreaProps,
   SelectProps,
@@ -23,5 +22,4 @@ export type {
   ValidationResult,
   ValidationError,
   OrganizationData,
-  FormComponentProps,
-} from '../../types/form.types';
+  FormComponentProps, } from '../../types/form.types';

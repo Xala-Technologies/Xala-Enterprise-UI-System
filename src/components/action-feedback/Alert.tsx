@@ -6,55 +6,37 @@ import React from 'react';
 import type { AlertProps } from '../../types/action-feedback.types';
 
 // Helper functions
-const getVariantIcon = (variant: string): string => {
-  const icons = {
-    info: 'ℹ️',
+const getVariantIcon = (variant: string): string => { const icons = { info: 'ℹ️',
     success: '✅',
     warning: '⚠️',
-    error: '❌',
-  };
-  return icons[variant as keyof typeof icons] || 'ℹ️';
-};
+    error: '❌', };
+  return icons[variant as keyof typeof icons] || 'ℹ️'; };
 
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 
-const getSeverityIcon = (severity: string): string => {
-  const icons = {
-    low: '▪',
+const getSeverityIcon = (severity: string): string => { const icons = { low: '▪',
     medium: '■',
     high: '◆',
-    critical: '⬛',
-  };
-  return icons[severity as keyof typeof icons] || '■';
-};
+    critical: '⬛', };
+  return icons[severity as keyof typeof icons] || '■'; };
 
-const getCategoryIcon = (category: string): string => {
-  const icons = {
-    system: '⚙️',
+const getCategoryIcon = (category: string): string => { const icons = { system: '⚙️',
     validation: '✅',
     security: '🔒',
     process: '🔄',
-    user: '👤',
-  };
-  return icons[category as keyof typeof icons] || '📋';
-};
+    user: '👤', };
+  return icons[category as keyof typeof icons] || '📋'; };
 
 
 // Helper function to generate CSS using design tokens
-const getAlertStyles = (props: AlertProps): React.CSSProperties => {
-  const { variant = 'info', severity = 'medium', norwegian , label } = props;
+const getAlertStyles = (props: AlertProps): React.CSSProperties => { const { variant = 'info', severity = 'medium', norwegian } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'flex',
+  const baseStyles: React.CSSProperties = { display: 'flex',
     alignItems: 'flex-start',
     gap: 'var(--spacing-3)',
     padding: 'var(--spacing-4)',
@@ -64,8 +46,7 @@ const getAlertStyles = (props: AlertProps): React.CSSProperties => {
     fontSize: 'var(--font-size-sm)',
     lineHeight: 'var(--line-height-normal)',
     position: 'relative',
-    minHeight: 'var(--touch-target-min-height)', // Norwegian accessibility
-  };
+    minHeight: 'var(--touch-target-min-height)', // Norwegian accessibility };
 
   // Variant-based styles
   const variantStyles = getVariantStyles(variant);
@@ -79,174 +60,105 @@ const getAlertStyles = (props: AlertProps): React.CSSProperties => {
   // Escalation level styling
   const escalationStyles = getEscalationStyles(norwegian?.escalationLevel);
 
-  return {
-    ...baseStyles,
+  return { ...baseStyles,
     ...variantStyles,
     ...severityStyles,
     ...classificationStyles,
-    ...escalationStyles,
-  };
-};
+    ...escalationStyles, }; };
 
 // Get variant-based styles
-const getVariantStyles = (variant: string): React.CSSProperties => {
-  const variants = {
-    info: {
-      backgroundColor: 'var(--color-blue-50)',
+const getVariantStyles = (variant: string): React.CSSProperties => { const variants = { info: { backgroundColor: 'var(--color-blue-50)',
       borderColor: 'var(--color-blue-200)',
-      color: 'var(--color-blue-800)',
-    },
-    success: {
-      backgroundColor: 'var(--color-green-50)',
+      color: 'var(--color-blue-800)', },
+    success: { backgroundColor: 'var(--color-green-50)',
       borderColor: 'var(--color-green-200)',
-      color: 'var(--color-green-800)',
-    },
-    warning: {
-      backgroundColor: 'var(--color-orange-50)',
+      color: 'var(--color-green-800)', },
+    warning: { backgroundColor: 'var(--color-orange-50)',
       borderColor: 'var(--color-orange-200)',
-      color: 'var(--color-orange-800)',
-    },
-    error: {
-      backgroundColor: 'var(--color-red-50)',
+      color: 'var(--color-orange-800)', },
+    error: { backgroundColor: 'var(--color-red-50)',
       borderColor: 'var(--color-red-200)',
-      color: 'var(--color-red-800)',
-    },
-  };
-  return variants[variant as keyof typeof variants] || variants.info;
-};
+      color: 'var(--color-red-800)', }, };
+  return variants[variant as keyof typeof variants] || variants.info; };
 
 // Get severity-based styles
-const getSeverityStyles = (severity: string): React.CSSProperties => {
-  const severities = {
-    low: {
-      borderLeftWidth: 'var(--border-width)',
-    },
-    medium: {
-      borderLeftWidth: 'var(--border-accent-width)',
-    },
-    high: {
-      borderLeftWidth: 'var(--border-thick-width)',
-      boxShadow: 'var(--shadow-sm)',
-    },
-    critical: {
-      borderLeftWidth: 'var(--border-thick-width)',
+const getSeverityStyles = (severity: string): React.CSSProperties => { const severities = { low: { borderLeftWidth: 'var(--border-width)', },
+    medium: { borderLeftWidth: 'var(--border-accent-width)', },
+    high: { borderLeftWidth: 'var(--border-thick-width)',
+      boxShadow: 'var(--shadow-sm)', },
+    critical: { borderLeftWidth: 'var(--border-thick-width)',
       boxShadow: 'var(--shadow-md)',
-      borderWidth: 'var(--border-width-thick)',
-    },
-  };
-  return severities[severity as keyof typeof severities] || severities.medium;
-};
+      borderWidth: 'var(--border-width-thick)', }, };
+  return severities[severity as keyof typeof severities] || severities.medium; };
 
 // Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) {
-    return {};
-  }
+const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
 
-  const classificationStyles: Record<string, React.CSSProperties> = {
-    ÅPEN: {
-      borderTop: 'var(--border-accent-width) solid var(--color-green-500)',
-    },
-    BEGRENSET: {
-      borderTop: 'var(--border-accent-width) solid var(--color-orange-500)',
-    },
-    KONFIDENSIELT: {
-      borderTop: 'var(--border-accent-width) solid var(--color-red-500)',
-      backgroundColor: 'var(--color-red-25)',
-    },
-    HEMMELIG: {
-      borderTop: 'var(--border-accent-width) solid var(--color-red-800)',
+  const classificationStyles: Record<string, React.CSSProperties> = { ÅPEN: { borderTop: 'var(--border-accent-width) solid var(--color-green-500)', },
+    BEGRENSET: { borderTop: 'var(--border-accent-width) solid var(--color-orange-500)', },
+    KONFIDENSIELT: { borderTop: 'var(--border-accent-width) solid var(--color-red-500)',
+      backgroundColor: 'var(--color-red-25)', },
+    HEMMELIG: { borderTop: 'var(--border-accent-width) solid var(--color-red-800)',
       backgroundColor: 'var(--color-red-50)',
-      border: 'var(--border-width) solid var(--color-red-200)',
-    },
-  };
+      border: 'var(--border-width) solid var(--color-red-200)', }, };
 
-  return classificationStyles[classification] || {};
-};
+  return classificationStyles[classification] || {}; };
 
 // Get escalation level styles
-const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => {
-  if (!escalationLevel) {
-    return {};
-  }
+const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => { if (!escalationLevel) { return {}; }
 
-  const escalationStyles: Record<string, React.CSSProperties> = {
-    info: {
-      // Default styling
-    },
-    warning: {
-      borderWidth: 'var(--border-width-thick)',
-    },
-    critical: {
-      borderWidth: 'var(--border-width-thick)',
-      boxShadow: 'var(--shadow-lg)',
-    },
-    emergency: {
-      borderWidth: 'var(--border-width-thick)',
+  const escalationStyles: Record<string, React.CSSProperties> = { info: { // Default styling },
+    warning: { borderWidth: 'var(--border-width-thick)', },
+    critical: { borderWidth: 'var(--border-width-thick)',
+      boxShadow: 'var(--shadow-lg)', },
+    emergency: { borderWidth: 'var(--border-width-thick)',
       boxShadow: 'var(--shadow-xl)',
-      animation: 'alert-pulse 1.5s infinite',
-    },
-  };
+      animation: 'alert-pulse 1.5s infinite', }, };
 
-  return escalationStyles[escalationLevel] || {};
-};
+  return escalationStyles[escalationLevel] || {}; };
 
 // Alert icon component
-const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => {
-  return (
+const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => { return (
     <span
-      style={{
-        fontSize: 'var(--font-size-lg)',
+      style={{ fontSize: 'var(--font-size-lg)',
         flexShrink: 0,
-        marginTop: 'var(--spacing-1)',
-      }}
+        marginTop: 'var(--spacing-1)', }}
       aria-hidden="true"
     >
       {getVariantIcon(variant)}
     </span>
-  );
-};
+  ); };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
-  return (
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => { return (
     <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
+      style={{ fontSize: 'var(--font-size-xs)',
         marginLeft: 'var(--spacing-2)',
-        opacity: '0.8',
-      }}
+        opacity: '0.8', }}
       aria-label={`Classification: ${level}`}
       title={`Klassifisering: ${level}`}
     >
       {getClassificationIcon(level)}
     </span>
-  );
-};
+  ); };
 
 // Severity indicator component
-const SeverityIndicator = ({ severity }: { severity: string }): React.ReactElement => {
-  return (
+const SeverityIndicator = ({ severity }: { severity: string }): React.ReactElement => { return (
     <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
+      style={{ fontSize: 'var(--font-size-xs)',
         marginLeft: 'var(--spacing-1)',
-        opacity: '0.8',
-      }}
+        opacity: '0.8', }}
       aria-label={`Severity: ${severity}`}
       title={`Alvorlighetsgrad: ${severity}`}
     >
       {getSeverityIcon(severity)}
     </span>
-  );
-};
+  ); };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => {
-  return (
+const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => { return (
     <button
-      style={{
-        position: 'absolute',
+      style={{ position: 'absolute',
         top: 'var(--spacing-2)',
         right: 'var(--spacing-2)',
         width: 'var(--spacing-6)',
@@ -261,51 +173,37 @@ const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement =
         cursor: 'pointer',
         fontSize: 'var(--font-size-lg)',
         opacity: '0.7',
-        transition: 'all var(--transition-duration-fast) ease',
-      }}
+        transition: 'all var(--transition-duration-fast) ease', }}
       onClick={onClose}
-      onMouseEnter={e => {
-        (e.target as HTMLElement).style.opacity = '1';
-        (e.target as HTMLElement).style.backgroundColor = 'var(--color-black-alpha-10)';
-      }}
-      onMouseLeave={e => {
-        (e.target as HTMLElement).style.opacity = '0.7';
-        (e.target as HTMLElement).style.backgroundColor = 'transparent';
-      }}
+      onMouseEnter={e => { (e.target as HTMLElement).style.opacity = '1';
+        (e.target as HTMLElement).style.backgroundColor = 'var(--color-black-alpha-10)'; }}
+      onMouseLeave={e => { (e.target as HTMLElement).style.opacity = '0.7';
+        (e.target as HTMLElement).style.backgroundColor = 'transparent'; }}
       aria-label="Lukk varsel"
       title="Lukk"
     >
       ×
     </button>
-  );
-};
+  ); };
 
 // Action buttons component
-interface AlertAction {
-  variant?: string;
+interface AlertAction { variant?: string;
   handler: () => void;
-  labelKey: string;
-}
+  labelKey: string; }
 
-const AlertActions = ({ actions }: { actions: AlertAction[] }): React.ReactElement | null => {
-  if (!actions || actions.length === 0) {
-    return null;
-  }
+const AlertActions = ({ actions }: { actions: AlertAction[] }): React.ReactElement | null => { if (!actions || actions.length === 0) { return null; }
 
   return (
     <div
-      style={{
-        display: 'flex',
+      style={{ display: 'flex',
         gap: 'var(--spacing-2)',
         marginTop: 'var(--spacing-3)',
-        flexWrap: 'wrap',
-      }}
+        flexWrap: 'wrap', }}
     >
       {actions.map((action, index) => (
         <button
           key={index}
-          style={{
-            padding: 'var(--spacing-2) var(--spacing-3)',
+          style={{ padding: 'var(--spacing-2) var(--spacing-3)',
             fontSize: 'var(--font-size-sm)',
             fontWeight: 'var(--font-weight-medium)',
             border: 'var(--border-width) solid currentColor',
@@ -313,8 +211,7 @@ const AlertActions = ({ actions }: { actions: AlertAction[] }): React.ReactEleme
             backgroundColor: action.variant === 'primary' ? 'currentColor' : 'transparent',
             color: action.variant === 'primary' ? 'var(--color-white)' : 'currentColor',
             cursor: 'pointer',
-            transition: 'all var(--transition-duration-fast) ease',
-          }}
+            transition: 'all var(--transition-duration-fast) ease', }}
           onClick={action.handler}
           aria-label={action.labelKey}
         >
@@ -323,45 +220,32 @@ const AlertActions = ({ actions }: { actions: AlertAction[] }): React.ReactEleme
         </button>
       ))}
     </div>
-  );
-};
+  ); };
 
 // Norwegian category indicator
-const CategoryIndicator = ({ category }: { category?: string }): React.ReactElement | null => {
-  if (!category) {
-    return null;
-  }
+const CategoryIndicator = ({ category }: { category?: string }): React.ReactElement | null => { if (!category) { return null; }
 
-  const getCategoryIcon = (category: string): string => {
-    const icons = {
-      system: '⚙️',
+  const getCategoryIcon = (category: string): string => { const icons = { system: '⚙️',
       validation: '✅',
       security: '🔒',
       process: '🔄',
-      user: '👤',
-    };
-    return icons[category as keyof typeof icons] || '📋';
-  };
+      user: '👤', };
+    return icons[category as keyof typeof icons] || '📋'; };
 
   return (
     <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
+      style={{ fontSize: 'var(--font-size-xs)',
         marginLeft: 'var(--spacing-2)',
-        opacity: '0.8',
-      }}
+        opacity: '0.8', }}
       aria-label={`Category: ${category}`}
       title={`Kategori: ${category}`}
     >
       {getCategoryIcon(category)}
     </span>
-  );
-};
+  ); };
 
 // Alert component with forwardRef
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): React.ReactElement => {
-  const {
-    variant = 'info',
+export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): React.ReactElement => { const { variant = 'info',
     severity = 'medium',
     title,
     titleKey,
@@ -369,7 +253,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
     messageKey,
     icon,
     closable = false,
-    showOverlay = false,
+    
     children,
     className = '',
     style,
@@ -378,41 +262,26 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
     ariaLabel,
     testId = 'alert',
     onClose,
-    ...divProps
-  } = props;
+    ...divProps } = props;
 
   const [isVisible, setIsVisible] = React.useState(true);
 
-  const handleClose = (): void => {
-    setIsVisible(false);
-    onClose?.();
-  };
+  const handleClose = (): void => { setIsVisible(false);
+    onClose?.(); };
 
-  const handleAcknowledge = (): void => {
-    // Handle acknowledgment
-    if (norwegian?.onAcknowledgment) {
-      norwegian.onAcknowledgment();
-    }
-  };
+  const handleAcknowledge = (): void => { // Handle acknowledgment
+    if (norwegian?.onAcknowledgment) { norwegian.onAcknowledgment(); } };
 
-  const combinedStyles = {
-    ...getAlertStyles(props),
-    ...style,
-  };
+  const combinedStyles = { ...getAlertStyles(props),
+    ...style, };
 
-  const getAlertRole = (): string => {
-    return severity === 'critical' || severity === 'high' ? 'alert' : 'status';
-  };
+  const getAlertRole = (): string => { return severity === 'critical' || severity === 'high' ? 'alert' : 'status'; };
 
-  const getAriaLive = (): 'polite' | 'assertive' | 'off' => {
-    if (severity === 'critical') return 'assertive';
+  const getAriaLive = (): 'polite' | 'assertive' | 'off' => { if (severity === 'critical') return 'assertive';
     if (severity === 'high') return 'assertive';
-    return 'polite';
-  };
+    return 'polite'; };
 
-  if (!isVisible) {
-    return <></>;
-  }
+  if (!isVisible) { return <></>; }
 
   return (
     <div
@@ -440,14 +309,12 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
         {/* Alert title */}
         {(title || titleKey) && (
           <div
-            style={{
-              fontSize: 'var(--font-size-base)',
+            style={{ fontSize: 'var(--font-size-base)',
               fontWeight: 'var(--font-weight-semibold)',
               marginBottom: 'var(--spacing-1)',
               display: 'flex',
               alignItems: 'center',
-              gap: 'var(--spacing-1)',
-            }}
+              gap: 'var(--spacing-1)', }}
           >
             {/* TODO: Replace with actual localization */}
             <span>{title || titleKey}</span>
@@ -468,11 +335,9 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
         {/* Alert message */}
         {(message || messageKey || children) && (
           <div
-            style={{
-              fontSize: 'var(--font-size-sm)',
+            style={{ fontSize: 'var(--font-size-sm)',
               lineHeight: 'var(--line-height-relaxed)',
-              color: 'inherit',
-            }}
+              color: 'inherit', }}
           >
             {children ||
               message ||
@@ -487,16 +352,14 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
         {norwegian?.requiresAcknowledgment && (
           <div style={{ marginTop: 'var(--spacing-3)' }}>
             <button
-              style={{
-                padding: 'var(--spacing-2) var(--spacing-4)',
+              style={{ padding: 'var(--spacing-2) var(--spacing-4)',
                 fontSize: 'var(--font-size-sm)',
                 fontWeight: 'var(--font-weight-medium)',
                 backgroundColor: 'currentColor',
                 color: 'var(--color-white)',
                 border: 'none',
                 borderRadius: 'var(--border-radius-base)',
-                cursor: 'pointer',
-              }}
+                cursor: 'pointer', }}
               onClick={handleAcknowledge}
             >
               {/* TODO: Replace with actual localization */}
@@ -508,17 +371,13 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
         {/* Related documentation link */}
         {norwegian?.relatedDocumentationKey && (
           <div
-            style={{
-              marginTop: 'var(--spacing-2)',
-              fontSize: 'var(--font-size-xs)',
-            }}
+            style={{ marginTop: 'var(--spacing-2)',
+              fontSize: 'var(--font-size-xs)', }}
           >
             <a
               href="#"
-              style={{
-                color: 'currentColor',
-                textDecoration: 'underline',
-              }}
+              style={{ color: 'currentColor',
+                textDecoration: 'underline', }}
             >
               {/* TODO: Replace with actual localization */}
               📖 {norwegian.relatedDocumentationKey}
@@ -530,7 +389,6 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): 
       {/* Close button */}
       {closable && <CloseButton onClose={handleClose} />}
     </div>
-  );
-});
+  ); });
 
 Alert.displayName = 'Alert';

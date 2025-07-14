@@ -19,24 +19,14 @@ const tabletHeaderVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-      },
-      size: {
-        sm: 'h-16 px-4',
+        secondary: 'bg-secondary text-secondary-foreground', },
+      size: { sm: 'h-16 px-4',
         md: 'h-18 px-6',
-        lg: 'h-20 px-8',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-20 px-8', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -48,30 +38,19 @@ const tabletSidebarVariants = cva(
     'transition-all duration-300 ease-in-out',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-card',
+  { variants: { variant: { default: 'bg-card',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-      },
-      collapsed: {
-        true: 'w-16 overflow-hidden',
-        false: 'w-64',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      collapsed: false,
-    },
-  }
+        secondary: 'bg-secondary text-secondary-foreground', },
+      collapsed: { true: 'w-16 overflow-hidden',
+        false: 'w-64', }, },
+    defaultVariants: { variant: 'default',
+      collapsed: false, }, }
 );
 
 /**
  * Tablet Header Props
  */
-export interface TabletHeaderProps extends React.HTMLAttributes<HTMLElement> {
-  /** Header variant */
+export interface TabletHeaderProps extends React.HTMLAttributes<HTMLElement> { /** Header variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Header size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -80,28 +59,24 @@ export interface TabletHeaderProps extends React.HTMLAttributes<HTMLElement> {
   /** Center content */
   readonly centerContent?: ReactNode;
   /** Right content */
-  readonly rightContent?: ReactNode;
-}
+  readonly rightContent?: ReactNode; }
 
 /**
  * Tablet Sidebar Props
  */
-export interface TabletSidebarProps extends React.HTMLAttributes<HTMLElement> {
-  /** Sidebar content */
+export interface TabletSidebarProps extends React.HTMLAttributes<HTMLElement> { /** Sidebar content */
   readonly children: ReactNode;
   /** Sidebar variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Collapsed state */
   readonly collapsed?: boolean;
   /** Collapse handler */
-  readonly onCollapse?: (collapsed: boolean) => void;
-}
+  readonly onCollapse?: (collapsed: boolean) => void; }
 
 /**
  * Tablet Layout Props
  */
-export interface TabletLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Layout content */
+export interface TabletLayoutProps extends React.HTMLAttributes<HTMLDivElement> { /** Layout content */
   readonly children: ReactNode;
   /** Header component */
   readonly header?: ReactNode;
@@ -110,8 +85,7 @@ export interface TabletLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
   /** Right drawer component */
   readonly rightDrawer?: ReactNode;
   /** Drawer open state */
-  readonly drawerOpen?: boolean;
-}
+  readonly drawerOpen?: boolean; }
 
 /**
  * Tablet Header Component
@@ -120,18 +94,15 @@ export interface TabletLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
  */
 export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       size = 'md',
       leftContent,
       centerContent,
       rightContent,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <header
         ref={ref}
         role="banner"
@@ -148,8 +119,7 @@ export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
 
         <div className="flex items-center space-x-2">{rightContent}</div>
       </header>
-    );
-  }
+    ); }
 );
 
 TabletHeader.displayName = 'TabletHeader';
@@ -160,8 +130,7 @@ TabletHeader.displayName = 'TabletHeader';
  * @returns React.ReactElement
  */
 export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
-  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): React.ReactElement => { return (
       <aside
         ref={ref}
         role="complementary"
@@ -170,11 +139,9 @@ export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
           'h-full flex flex-col',
           className
         )}
-        style={{
-          width: collapsed
+        style={{ width: collapsed
             ? platformTokens.componentSizes.tablet.button.sm.minWidth
-            : platformTokens.layout.tablet.sidebar.width,
-        }}
+            : platformTokens.layout.tablet.sidebar.width, }}
         {...props}
       >
         {onCollapse && (
@@ -206,8 +173,7 @@ export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
 
         <div className="flex-1 overflow-y-auto">{children}</div>
       </aside>
-    );
-  }
+    ); }
 );
 
 TabletSidebar.displayName = 'TabletSidebar';
@@ -218,8 +184,7 @@ TabletSidebar.displayName = 'TabletSidebar';
  * @returns React.ReactElement
  */
 export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
-  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): React.ReactElement => { return (
       <div
         ref={ref}
         className={cn(
@@ -238,9 +203,7 @@ export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
           <main
             role="main"
             className="flex-1 overflow-auto"
-            style={{
-              padding: platformTokens.layout.tablet.container.padding,
-            }}
+            style={{ padding: platformTokens.layout.tablet.container.padding, }}
           >
             {children}
           </main>
@@ -248,17 +211,14 @@ export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
           {rightDrawer && drawerOpen && (
             <div
               className="w-80 bg-card border-l border-border"
-              style={{
-                padding: platformTokens.layout.tablet.container.padding,
-              }}
+              style={{ padding: platformTokens.layout.tablet.container.padding, }}
             >
               {rightDrawer}
             </div>
           )}
         </div>
       </div>
-    );
-  }
+    ); }
 );
 
 TabletLayout.displayName = 'TabletLayout';

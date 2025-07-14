@@ -11,8 +11,7 @@ import type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/acce
 /**
  * Enhanced CSS Properties with pseudo-selectors, keyframes, and custom properties
  */
-export interface CSSProperties extends ReactCSSProperties {
-  // Pseudo-selectors
+export interface CSSProperties extends ReactCSSProperties { // Pseudo-selectors
   ':hover'?: CSSProperties;
   ':focus'?: CSSProperties;
   ':active'?: CSSProperties;
@@ -25,15 +24,9 @@ export interface CSSProperties extends ReactCSSProperties {
   ':nth-child(even)'?: CSSProperties;
 
   // Keyframes and animations
-  '@keyframes badge-pulse'?: {
-    [key: string]: CSSProperties;
-  };
-  '@keyframes fadeIn'?: {
-    [key: string]: CSSProperties;
-  };
-  '@keyframes slideIn'?: {
-    [key: string]: CSSProperties;
-  };
+  '@keyframes badge-pulse'?: { [key: string]: CSSProperties; };
+  '@keyframes fadeIn'?: { [key: string]: CSSProperties; };
+  '@keyframes slideIn'?: { [key: string]: CSSProperties; };
 
   // Custom properties (CSS Variables)
   '--color-primary'?: string;
@@ -66,8 +59,7 @@ export interface CSSProperties extends ReactCSSProperties {
   '@media (max-width: 768px)'?: CSSProperties;
   '@media (min-width: 769px)'?: CSSProperties;
   '@media (min-width: 1024px)'?: CSSProperties;
-  '@media (min-width: 1200px)'?: CSSProperties;
-}
+  '@media (min-width: 1200px)'?: CSSProperties; }
 
 /**
  * Supported languages for UI system
@@ -82,8 +74,7 @@ export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' 
 /**
  * Main UI System configuration
  */
-export interface UISystemConfig {
-  /** System name/identifier */
+export interface UISystemConfig { /** System name/identifier */
   readonly name: string;
   
   /** System version */
@@ -96,35 +87,27 @@ export interface UISystemConfig {
   readonly accessibility?: AccessibilityConfig | AccessibilityPreset;
   
   /** Theme configuration */
-  readonly theme?: {
-    readonly mode?: 'light' | 'dark' | 'auto';
+  readonly theme?: { readonly mode?: 'light' | 'dark' | 'auto';
     readonly primary?: string;
     readonly secondary?: string;
-    readonly customTokens?: Record<string, string>;
-  };
+    readonly customTokens?: Record<string, string>; };
   
   /** Performance configuration */
-  readonly performance?: {
-    readonly enableVirtualization?: boolean;
+  readonly performance?: { readonly enableVirtualization?: boolean;
     readonly enableLazyLoading?: boolean;
     readonly enableMemoization?: boolean;
-    readonly bundleSize?: 'minimal' | 'standard' | 'full';
-  };
+    readonly bundleSize?: 'minimal' | 'standard' | 'full'; };
   
   /** Development configuration */
-  readonly development?: {
-    readonly enableDebugMode?: boolean;
+  readonly development?: { readonly enableDebugMode?: boolean;
     readonly enablePerformanceMonitoring?: boolean;
     readonly enableA11yWarnings?: boolean;
-    readonly logLevel?: 'error' | 'warn' | 'info' | 'debug';
-  };
-}
+    readonly logLevel?: 'error' | 'warn' | 'info' | 'debug'; }; }
 
 /**
  * UI System initialization options
  */
-export interface UISystemOptions {
-  /** Configuration object */
+export interface UISystemOptions { /** Configuration object */
   readonly config: UISystemConfig;
   
   /** Custom CSS injection */
@@ -138,14 +121,12 @@ export interface UISystemOptions {
   
   /** Initialization callbacks */
   readonly onInitialized?: () => void;
-  readonly onError?: (error: Error) => void;
-}
+  readonly onError?: (error: Error) => void; }
 
 /**
  * Base component props
  */
-export interface ComponentProps {
-  /** Custom CSS class names */
+export interface ComponentProps { /** Custom CSS class names */
   readonly className?: string;
   
   /** Inline styles (discouraged, use tokens instead) */
@@ -158,36 +139,30 @@ export interface ComponentProps {
   readonly [key: `data-${string}`]: string | undefined;
   
   /** ARIA attributes for accessibility */
-  readonly [key: `aria-${string}`]: string | boolean | undefined;
-}
+  readonly [key: `aria-${string}`]: string | boolean | undefined; }
 
 /**
  * Component state interface
  */
-export interface ComponentState {
-  readonly isLoading: boolean;
+export interface ComponentState { readonly isLoading: boolean;
   readonly isDisabled: boolean;
   readonly hasError: boolean;
   readonly isFocused: boolean;
-  readonly isVisible: boolean;
-}
+  readonly isVisible: boolean; }
 
 /**
  * Event handlers interface
  */
-export interface EventHandlers {
-  readonly onClick?: (_event: MouseEvent) => void;
+export interface EventHandlers { readonly onClick?: (_event: MouseEvent) => void;
   readonly onKeyDown?: (_event: KeyboardEvent) => void;
   readonly onFocus?: (_event: FocusEvent) => void;
   readonly onBlur?: (_event: FocusEvent) => void;
-  readonly onChange?: (_value: unknown) => void;
-}
+  readonly onChange?: (_value: unknown) => void; }
 
 /**
  * Accessibility props interface
  */
-export interface AccessibilityProps {
-  /** ARIA label */
+export interface AccessibilityProps { /** ARIA label */
   readonly 'aria-label'?: string;
   
   /** ARIA described by */
@@ -209,14 +184,12 @@ export interface AccessibilityProps {
   readonly tabIndex?: number;
   
   /** Role */
-  readonly role?: string;
-}
+  readonly role?: string; }
 
 /**
  * Theme colors interface
  */
-export interface ThemeColors {
-  readonly primary: string;
+export interface ThemeColors { readonly primary: string;
   readonly secondary: string;
   readonly success: string;
   readonly warning: string;
@@ -225,33 +198,28 @@ export interface ThemeColors {
   readonly background: string;
   readonly surface: string;
   readonly text: string;
-  readonly border: string;
-}
+  readonly border: string; }
 
 /**
  * Theme definition interface
  */
-export interface ThemeDefinition {
-  readonly name: string;
+export interface ThemeDefinition { readonly name: string;
   readonly colors: ThemeColors;
   readonly spacing: Record<string, string>;
   readonly typography: Record<string, string>;
   readonly borderRadius: Record<string, string>;
   readonly shadows: Record<string, string>;
-  readonly breakpoints: Record<string, string>;
-}
+  readonly breakpoints: Record<string, string>; }
 
 /**
  * Component definition interface
  */
-export interface ComponentDefinition {
-  readonly name: string;
+export interface ComponentDefinition { readonly name: string;
   readonly type: ComponentType;
   readonly props: ComponentProps;
   readonly state: ComponentState;
   readonly accessibility: AccessibilityProps;
-  readonly theme: Partial<ThemeDefinition>;
-}
+  readonly theme: Partial<ThemeDefinition>; }
 
 /**
  * Component type enumeration
@@ -280,36 +248,30 @@ export type ComponentType =
 /**
  * Accessibility configuration interface
  */
-export interface ComponentAccessibilityConfig {
-  readonly level: AccessibilityLevel;
+export interface ComponentAccessibilityConfig { readonly level: AccessibilityLevel;
   readonly announcements: boolean;
   readonly keyboardNavigation: boolean;
   readonly focusManagement: boolean;
   readonly colorContrast: number;
-  readonly touchTargets: number;
-}
+  readonly touchTargets: number; }
 
 /**
  * Performance metrics interface
  */
-export interface PerformanceMetrics {
-  readonly initializationTime: number;
+export interface PerformanceMetrics { readonly initializationTime: number;
   readonly renderTime: number;
   readonly memoryUsage: number;
   readonly bundleSize: number;
-  readonly componentsLoaded: number;
-}
+  readonly componentsLoaded: number; }
 
 /**
  * Audit trail entry interface
  */
-export interface AuditTrailEntry {
-  readonly timestamp: Date;
+export interface AuditTrailEntry { readonly timestamp: Date;
   readonly action: string;
   readonly component: string;
   readonly user?: string;
-  readonly details: Record<string, unknown>;
-}
+  readonly details: Record<string, unknown>; }
 
 /**
  * Theme registry type

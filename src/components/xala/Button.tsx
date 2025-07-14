@@ -12,14 +12,12 @@ import { getComponentTokens, getToken } from '../../tokens';
 // TYPES
 // =============================================================================
 
-export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'success' | 'warning' | 'danger';
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'success' | 'warning' | 'danger';
   size?: 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
-  className?: string;
-}
+  className?: string; }
 
 // =============================================================================
 // COMPONENT
@@ -27,18 +25,15 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      variant = 'primary',
+    { variant = 'primary',
       size = 'md',
       loading = false,
       disabled = false,
       children,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <button
         ref={ref}
         {...props}
@@ -60,8 +55,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         <span className={loading ? 'opacity-0' : ''}>{children}</span>
       </button>
-    );
-  }
+    ); }
 );
 
 Button.displayName = 'Button';
@@ -73,11 +67,9 @@ Button.displayName = 'Button';
 /**
  * Button with semantic token usage example
  */
-export const SemanticButton: React.FC<ButtonProps> = props => {
-  const { variant = 'primary', size = 'md', className, ...restProps } = props;
+export const SemanticButton: React.FC<ButtonProps> = props => { const { variant = 'primary', size = 'md', className, ...restProps } = props;
 
-  const styles = React.useMemo((): React.ReactElement => {
-  return (
+  const styles = React.useMemo((): React.ReactElement => { return (
     <button
       {...restProps}
       style={styles}
@@ -87,8 +79,7 @@ export const SemanticButton: React.FC<ButtonProps> = props => {
         className
       )}
     />
-  );
-};
+  ); };
 
 // =============================================================================
 // DOCUMENTATION
@@ -110,20 +101,15 @@ export const SemanticButton: React.FC<ButtonProps> = props => {
  * import { Button } from '@/components';
 
 // Helper function
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 
 
  *
- * function MyComponent() {
- *   return (
+ * function MyComponent() { *   return (
  *     <Button variant="primary" size="md" onClick={handleClick}>
  *       Click me
  *     </Button>

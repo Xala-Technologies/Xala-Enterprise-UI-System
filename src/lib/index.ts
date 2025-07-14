@@ -5,16 +5,13 @@
  */
 
 // Core system exports
-export {
-  UISystemCore,
+export { UISystemCore,
   createProductionUISystem,
   createTestUISystem,
-  createDevelopmentUISystem,
-} from './core/index';
+  createDevelopmentUISystem, } from './core/index';
 
 // Core types and interfaces
-export type {
-  UISystemConfig,
+export type { UISystemConfig,
   UISystemOptions,
   SupportedLanguage,
   AccessibilityLevel,
@@ -26,12 +23,10 @@ export type {
   ComponentAccessibilityConfig,
   ValidationError,
   PerformanceMetrics,
-  AuditTrailEntry,
-} from './types/core.types';
+  AuditTrailEntry, } from './types/core.types';
 
 // Interfaces
-export type {
-  UISystemService,
+export type { UISystemService,
   ComponentFactory,
   ComponentFactoryFunction,
   ThemeManager,
@@ -41,15 +36,12 @@ export type {
   AuditTrailFilter,
   ConfigurationService,
   EventPublisher,
-  LocalizationService,
-} from './interfaces/ui-system.interface';
+  LocalizationService, } from './interfaces/ui-system.interface';
 
 // Validation utilities
 export type { ValidationResult } from './utils/validation';
-export {
-  createValidationResult,
+export { createValidationResult,
   safeGet,
   safeArrayAccess,
   isValidEmail,
-  isValidUrl,
-} from './utils/validation';
+  isValidUrl, } from './utils/validation';

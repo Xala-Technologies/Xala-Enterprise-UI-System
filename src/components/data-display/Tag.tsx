@@ -11,43 +11,30 @@ import type { TagProps } from '../../types/data-display.types';
 
 
 // Helper function
-const getClassificationText = (level: string): string => {
-  const texts = {
-    'ÅPEN': 'Open',
+const getClassificationText = (level: string): string => { const texts = { 'ÅPEN': 'Open',
     'BEGRENSET': 'Restricted',
     'KONFIDENSIELT': 'Confidential',
-    'HEMMELIG': 'Secret',
-  };
-  return texts[level as keyof typeof texts] || level;
-};
+    'HEMMELIG': 'Secret', };
+  return texts[level as keyof typeof texts] || level; };
 
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 /**
  * Tag component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
 
-const getCategoryIcon = (category: string): string => {
-  const icons = {
-    system: '⚙️',
+const getCategoryIcon = (category: string): string => { const icons = { system: '⚙️',
     validation: '✅',
     security: '🔒',
     process: '🔄',
-    user: '👤',
-  };
-  return icons[category as keyof typeof icons] || '📋';
-};
+    user: '👤', };
+  return icons[category as keyof typeof icons] || '📋'; };
 
-export function Tag({
-  children,
+export function Tag({ children,
   variant = 'default',
   size = 'md',
   interactive = false,
@@ -57,13 +44,10 @@ export function Tag({
   onRemove,
   className = '',
   testId,
-  ...props
-}: TagProps): React.ReactElement {
-  const { t } = useLocalization();
+  ...props }: TagProps): React.ReactElement { const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tagClasses = React.useMemo((): React.ReactElement => {
-  return (
+  const tagClasses = React.useMemo((): React.ReactElement => { return (
     <span
       className={tagClasses}
       onClick={handleClick}
@@ -96,14 +80,12 @@ export function Tag({
       {/* Remove button */}
       {removable && onRemove && <RemoveButton onRemove={onRemove} size={size} />}
     </span>
-  );
-}
+  ); }
 
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
-  return (
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => { return (
     <span
       className="tag__classification-indicator"
       aria-label={t('tag.classification', { level: getClassificationText(level) })}
@@ -111,14 +93,12 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.
     >
       {getClassificationIcon(level)}
     </span>
-  );
-};
+  ); };
 
 /**
  * Remove button component
  */
-const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, _size }): React.ReactElement => {
-  return (
+const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, _size }): React.ReactElement => { return (
     <button
       type="button"
       className={buttonClasses}
@@ -131,14 +111,12 @@ const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRem
         ✕
       </span>
     </button>
-  );
-};
+  ); };
 
 /**
  * Municipality indicator component
  */
-const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }): React.ReactElement => {
-  return (
+const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }): React.ReactElement => { return (
     <span
       className="tag__municipality-indicator"
       aria-label={t('tag.municipality', { name: municipality })}
@@ -146,21 +124,16 @@ const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipali
     >
       {getMunicipalityIcon(municipality)}
     </span>
-  );
-};
+  ); };
 
 /**
  * Get category icon for Norwegian categories
  */
-function getCategoryIcon(category: string): string {
-  const icons = {
-    status: '📊',
+function getCategoryIcon(category: string): string { const icons = { status: '📊',
     category: '🏷️',
     priority: '⭐',
     role: '👤',
-    location: '📍',
-  };
-  return icons[category as keyof typeof icons] || '🏷️';
-}
+    location: '📍', };
+  return icons[category as keyof typeof icons] || '🏷️'; }
 
 Tag.displayName = 'Tag';

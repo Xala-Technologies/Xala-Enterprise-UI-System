@@ -10,24 +10,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { OrganizationNumberInputProps } from '../../types/form.types';
 
 
-const logger = Logger.create({
-  serviceName: 'ui-system-org-number-input',
+const logger = Logger.create({ serviceName: 'ui-system-org-number-input',
   logLevel: 'info',
   enableConsoleLogging: true,
-  enableFileLogging: false,
-});
+  enableFileLogging: false, });
 
 // Placeholder validation functions (replace with actual validation package)
-const validateOrganizationNumber = (value: string) => ({
-  isValid: value.length === 9,
+const validateOrganizationNumber = (value: string) => ({ isValid: value.length === 9,
   errors: value.length === 9 ? [] : ['Invalid organization number'],
   type: 'organisasjonsnummer' as const,
-  mainOrganization: value,
-});
+  mainOrganization: value, });
 
-const formatOrganizationNumber = (value: string): React.ReactElement => {
-  return () => {
-  return (
+const formatOrganizationNumber = (value: string): React.ReactElement => { return () => { return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={inputId} />}
@@ -81,38 +75,27 @@ const formatOrganizationNumber = (value: string): React.ReactElement => {
         <ErrorMessage errors={validationResult.errors} />
       </div>
     </div>
-  );
-}
+  ); }
 
 /**
  * Organization data display component
  */
-const OrganizationDisplay: React.FC<{
-  orgData?: unknown; // Changed type to any as OrganizationData is removed
-  isLoading: boolean;
-}> = ({ orgData, _isLoading }): React.ReactElement => {
-  return (
+const OrganizationDisplay: React.FC<{ orgData?: unknown; // Changed type to any as OrganizationData is removed
+  isLoading: boolean; }> = ({ orgData, _isLoading }): React.ReactElement => { return (
       <div className="organization-display organization-display--loading">
         <span className="organization-display__loading-icon" aria-hidden="true">
           ⏳
         </span>
         <span className="organization-display__loading-text">Fetching data...</span>
       </div>
-    );
-  }
+    ); }
 
-  if (!orgData) {
-    return null;
-  }
+  if (!orgData) { return null; }
 
-  const getStatusIcon = (status: string): string => {
-    const icons = {
-      active: '✅',
+  const getStatusIcon = (status: string): string => { const icons = { active: '✅',
       inactive: '⚪',
-      dissolved: '❌',
-    };
-    return icons[status as keyof typeof icons] || '❓';
-  };
+      dissolved: '❌', };
+    return icons[status as keyof typeof icons] || '❓'; };
 
   return (
     <div className="organization-display">
@@ -142,50 +125,39 @@ const OrganizationDisplay: React.FC<{
         </div>
       )}
     </div>
-  );
-};
+  ); };
 
 /**
  * Validation indicator component
  */
-const ValidationIndicator: React.FC<{
-  isValid: boolean;
+const ValidationIndicator: React.FC<{ isValid: boolean;
   isValidating: boolean;
-  type?: string;
-}> = ({ isValid, isValidating, type }): React.ReactElement => {
-  return (
+  type?: string; }> = ({ isValid, isValidating, type }): React.ReactElement => { return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
         </span>
         <span className="validation-indicator__text sr-only">Checking...</span>
       </div>
-    );
-  }
+    ); }
 
-  if (isValid) {
-    return (
+  if (isValid) { return (
       <div className="validation-indicator validation-indicator--valid">
         <span className="validation-indicator__icon" aria-hidden="true">
           ✅
         </span>
         <span className="validation-indicator__text sr-only">Valid</span>
       </div>
-    );
-  }
+    ); }
 
-  return null;
-};
+  return null; };
 
 /**
  * Label component
  */
-const Label: React.FC<{
-  label: string;
+const Label: React.FC<{ label: string;
   required?: boolean;
-  htmlFor: string;
-}> = ({ label, required, htmlFor }): React.ReactElement => {
-  return (
+  htmlFor: string; }> = ({ label, required, htmlFor }): React.ReactElement => { return (
     <label className="organization-number-field__label" htmlFor={htmlFor}>
       <span className="organization-number-field__label-text">{label}</span>
       {required && (
@@ -194,14 +166,12 @@ const Label: React.FC<{
         </span>
       )}
     </label>
-  );
-};
+  ); };
 
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => {
-  return (
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => { return (
     <div className="organization-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (
         <div key={index} className="organization-number-field__error-item">
@@ -212,33 +182,24 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactEl
         </div>
       ))}
     </div>
-  );
-};
+  ); };
 
 // Mock function for fetching organization data
-const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null> => {
-  // Changed type to any as OrganizationData is removed
+const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null> => { // Changed type to any as OrganizationData is removed
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
 
   // Mock data
-  const mockData: Record<string, unknown> = {
-    // Changed type to any as OrganizationData is removed
-    '123456789': {
-      name: 'Test Bedrift AS',
+  const mockData: Record<string, unknown> = { // Changed type to any as OrganizationData is removed
+    '123456789': { name: 'Test Bedrift AS',
       organizationForm: 'Aksjeselskap',
       municipality: 'Oslo',
       county: 'Oslo',
       status: 'active',
       registrationDate: '2020-01-15',
-      industry: {
-        code: '62.010',
-        description: 'Programmering og systemutvikling',
-      },
-    },
-  };
+      industry: { code: '62.010',
+        description: 'Programmering og systemutvikling', }, }, };
 
-  return mockData[orgNumber] || null;
-};
+  return mockData[orgNumber] || null; };
 
 OrganizationNumberInput.displayName = 'OrganizationNumberInput';

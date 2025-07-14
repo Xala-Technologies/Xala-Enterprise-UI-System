@@ -6,19 +6,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { DesktopSidebarProps } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
-const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSProperties => {
-  const {
-    isCollapsed = false,
+const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSProperties => { const { isCollapsed = false,
     width = 280,
     position = 'left',
     persistent = true,
     overlay = false,
-    norwegian,
-  , label } = props;
+    norwegian, } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'flex',
+  const baseStyles: React.CSSProperties = { display: 'flex',
     flexDirection: 'column',
     height: '100vh',
     backgroundColor: 'var(--background-secondary)',
@@ -32,8 +28,7 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
     zIndex: persistent ? 'auto' : 'var(--z-index-sidebar)',
     boxShadow: persistent ? 'none' : 'var(--shadow-xl)',
     transition: 'all var(--transition-duration-normal) ease',
-    overflow: 'hidden',
-  };
+    overflow: 'hidden', };
 
   // Width and collapsed styles
   const widthStyles = getWidthStyles(width, isCollapsed);
@@ -44,117 +39,75 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
   // Classification styling
   const classificationStyles = getClassificationStyles(norwegian?.classification);
 
-  return {
-    ...baseStyles,
+  return { ...baseStyles,
     ...widthStyles,
     ...overlayStyles,
-    ...classificationStyles,
-  };
-};
+    ...classificationStyles, }; };
 
 // Get width-based styles
-const getWidthStyles = (width: number, isCollapsed: boolean): React.CSSProperties => {
-  return {
-    width: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`,
-    minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`,
-  };
-};
+const getWidthStyles = (width: number, isCollapsed: boolean): React.CSSProperties => { return { width: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`,
+    minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`, }; };
 
 // Get overlay styles
-const getOverlayStyles = (overlay: boolean, persistent: boolean): React.CSSProperties => {
-  if (!overlay || persistent) {
-    return {};
-  }
+const getOverlayStyles = (overlay: boolean, persistent: boolean): React.CSSProperties => { if (!overlay || persistent) { return {}; }
 
-  return {
-    backgroundColor: 'var(--color-black-alpha-50)',
-    backdropFilter: 'blur(var(--blur-sm))',
-  };
-};
+  return { backgroundColor: 'var(--color-black-alpha-50)',
+    backdropFilter: 'blur(var(--blur-sm))', }; };
 
 // Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) {
-    return {};
-  }
+const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
 
-  const classificationStyles: Record<string, React.CSSProperties> = {
-    ÅPEN: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-green-500)',
-    },
-    BEGRENSET: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-orange-500)',
-    },
-    KONFIDENSIELT: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-500)',
-      backgroundColor: 'var(--color-red-25)',
-    },
-    HEMMELIG: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-800)',
+  const classificationStyles: Record<string, React.CSSProperties> = { ÅPEN: { borderLeft: 'var(--border-accent-width) solid var(--color-green-500)', },
+    BEGRENSET: { borderLeft: 'var(--border-accent-width) solid var(--color-orange-500)', },
+    KONFIDENSIELT: { borderLeft: 'var(--border-accent-width) solid var(--color-red-500)',
+      backgroundColor: 'var(--color-red-25)', },
+    HEMMELIG: { borderLeft: 'var(--border-accent-width) solid var(--color-red-800)',
       backgroundColor: 'var(--color-red-50)',
-      boxShadow: '0 0 0 var(--border-width) var(--color-red-200), var(--shadow-xl)',
-    },
-  };
+      boxShadow: '0 0 0 var(--border-width) var(--color-red-200), var(--shadow-xl)', }, };
 
-  return classificationStyles[classification] || {};
-};
+  return classificationStyles[classification] || {}; };
 
 // Sidebar header component
-const SidebarHeader = ({
-  isCollapsed,
+const SidebarHeader = ({ isCollapsed,
   showToggle,
   norwegian,
-  onToggle,
-}: {
-  isCollapsed: boolean;
+  onToggle, }: { isCollapsed: boolean;
   showToggle: boolean;
   norwegian?: unknown;
-  onToggle?: () => void;
-}): React.ReactElement => {
-  return (
+  onToggle?: () => void; }): React.ReactElement => { return (
     <div
-      style={{
-        display: 'flex',
+      style={{ display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 'var(--spacing-4)',
         borderBottom: 'var(--border-width) solid var(--border-secondary)',
-        minHeight: 'var(--sidebar-header-height)',
-      }}
+        minHeight: 'var(--sidebar-header-height)', }}
     >
       {/* Logo and branding */}
       {!isCollapsed && (
         <div
-          style={{
-            display: 'flex',
+          style={{ display: 'flex',
             alignItems: 'center',
-            gap: 'var(--spacing-3)',
-          }}
+            gap: 'var(--spacing-3)', }}
         >
           {norwegian?.municipalityBranding && (
             <div
-              style={{
-                display: 'flex',
+              style={{ display: 'flex',
                 alignItems: 'center',
-                gap: 'var(--spacing-2)',
-              }}
+                gap: 'var(--spacing-2)', }}
             >
               <span style={{ fontSize: 'var(--font-size-xl)' }}>🏛️</span>
               <div>
                 <div
-                  style={{
-                    fontSize: 'var(--font-size-sm)',
+                  style={{ fontSize: 'var(--font-size-sm)',
                     fontWeight: 'var(--font-weight-semibold)',
-                    color: 'var(--text-primary)',
-                  }}
+                    color: 'var(--text-primary)', }}
                 >
                   {norwegian.municipality || 'Kommune'}
                 </div>
                 <div
-                  style={{
-                    fontSize: 'var(--font-size-xs)',
-                    color: 'var(--text-secondary)',
-                  }}
+                  style={{ fontSize: 'var(--font-size-xs)',
+                    color: 'var(--text-secondary)', }}
                 >
                   Digitale tjenester
                 </div>
@@ -167,8 +120,7 @@ const SidebarHeader = ({
       {/* Toggle button */}
       {showToggle && (
         <button
-          style={{
-            width: 'var(--spacing-8)',
+          style={{ width: 'var(--spacing-8)',
             height: 'var(--spacing-8)',
             display: 'flex',
             alignItems: 'center',
@@ -179,33 +131,25 @@ const SidebarHeader = ({
             color: 'var(--text-secondary)',
             cursor: 'pointer',
             fontSize: 'var(--font-size-lg)',
-            transition: 'all var(--transition-duration-fast) ease',
-          }}
+            transition: 'all var(--transition-duration-fast) ease', }}
           onClick={onToggle}
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={isCollapsed ? 'Utvid sidepanel' : 'Skjul sidepanel'}
-          onMouseEnter={e => {
-            (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
-            (e.target as HTMLElement).style.color = 'var(--text-primary)';
-          }}
-          onMouseLeave={e => {
-            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-            (e.target as HTMLElement).style.color = 'var(--text-secondary)';
-          }}
+          onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
+            (e.target as HTMLElement).style.color = 'var(--text-primary)'; }}
+          onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'transparent';
+            (e.target as HTMLElement).style.color = 'var(--text-secondary)'; }}
         >
           {isCollapsed ? '→' : '←'}
         </button>
       )}
     </div>
-  );
-};
+  ); };
 
 // Classification banner component
-const ClassificationBanner = ({ level }: { level: string }): React.ReactElement => {
-  return (
+const ClassificationBanner = ({ level }: { level: string }): React.ReactElement => { return (
     <div
-      style={{
-        padding: 'var(--spacing-2) var(--spacing-4)',
+      style={{ padding: 'var(--spacing-2) var(--spacing-4)',
         backgroundColor: classInfo.bg,
         color: classInfo.text,
         borderBottom: 'var(--border-width) solid var(--border-secondary)',
@@ -213,60 +157,46 @@ const ClassificationBanner = ({ level }: { level: string }): React.ReactElement 
         alignItems: 'center',
         gap: 'var(--spacing-2)',
         fontSize: 'var(--font-size-xs)',
-        fontWeight: 'var(--font-weight-semibold)',
-      }}
+        fontWeight: 'var(--font-weight-semibold)', }}
       role="banner"
       aria-label={`Classification level: ${level}`}
     >
       <span>{classInfo.icon}</span>
       <span>KLASSIFISERING: {level}</span>
     </div>
-  );
-};
+  ); };
 
 // Quick access section component
-const QuickAccessSection = ({
-  quickAccess,
-  isCollapsed,
-}: {
-  quickAccess: unknown;
-  isCollapsed: boolean;
-}): React.ReactElement => {
-  return (
+const QuickAccessSection = ({ quickAccess,
+  isCollapsed, }: { quickAccess: unknown;
+  isCollapsed: boolean; }): React.ReactElement => { return (
     <div
-      style={{
-        padding: 'var(--spacing-3) var(--spacing-4)',
-        borderBottom: 'var(--border-width) solid var(--border-secondary)',
-      }}
+      style={{ padding: 'var(--spacing-3) var(--spacing-4)',
+        borderBottom: 'var(--border-width) solid var(--border-secondary)', }}
     >
       {!isCollapsed && (
         <h3
-          style={{
-            fontSize: 'var(--font-size-xs)',
+          style={{ fontSize: 'var(--font-size-xs)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--text-secondary)',
             textTransform: 'uppercase',
             letterSpacing: 'var(--letter-spacing-wide)',
-            margin: '0 0 var(--spacing-2) 0',
-          }}
+            margin: '0 0 var(--spacing-2) 0', }}
         >
           Hurtigtilgang
         </h3>
       )}
 
       <div
-        style={{
-          display: 'flex',
+        style={{ display: 'flex',
           flexDirection: isCollapsed ? 'column' : 'row',
           gap: 'var(--spacing-2)',
-          flexWrap: 'wrap',
-        }}
+          flexWrap: 'wrap', }}
       >
         {accessItems.map(item => (
           <button
             key={item.key}
-            style={{
-              display: 'flex',
+            style={{ display: 'flex',
               alignItems: 'center',
               gap: 'var(--spacing-2)',
               padding: 'var(--spacing-2)',
@@ -279,18 +209,13 @@ const QuickAccessSection = ({
               fontWeight: 'var(--font-weight-medium)',
               transition: 'all var(--transition-duration-fast) ease',
               flex: isCollapsed ? 'none' : '1',
-              justifyContent: isCollapsed ? 'center' : 'flex-start',
-            }}
+              justifyContent: isCollapsed ? 'center' : 'flex-start', }}
             aria-label={item.label}
             title={item.label}
-            onMouseEnter={e => {
-              (e.target as HTMLElement).style.backgroundColor = 'var(--color-primary-50)';
-              (e.target as HTMLElement).style.borderColor = 'var(--color-primary-300)';
-            }}
-            onMouseLeave={e => {
-              (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
-              (e.target as HTMLElement).style.borderColor = 'var(--border-secondary)';
-            }}
+            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-primary-50)';
+              (e.target as HTMLElement).style.borderColor = 'var(--color-primary-300)'; }}
+            onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
+              (e.target as HTMLElement).style.borderColor = 'var(--border-secondary)'; }}
           >
             <span>{item.icon}</span>
             {!isCollapsed && <span>{item.label}</span>}
@@ -298,36 +223,25 @@ const QuickAccessSection = ({
         ))}
       </div>
     </div>
-  );
-};
+  ); };
 
 // Sidebar content area
-const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): React.ReactElement => {
-  return (
+const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): React.ReactElement => { return (
     <div
-      style={{
-        flex: 1,
+      style={{ flex: 1,
         overflow: 'auto',
-        padding: isCollapsed ? 'var(--spacing-2)' : 'var(--spacing-4)',
-      }}
+        padding: isCollapsed ? 'var(--spacing-2)' : 'var(--spacing-4)', }}
     >
       {children}
     </div>
-  );
-};
+  ); };
 
 // Resize handle component
-const ResizeHandle = ({
-  onResize,
-  position,
-}: {
-  onResize: (width: number) => void;
-  position: string;
-}): React.ReactElement => {
-  return (
+const ResizeHandle = ({ onResize,
+  position, }: { onResize: (width: number) => void;
+  position: string; }): React.ReactElement => { return (
     <div
-      style={{
-        position: 'absolute',
+      style={{ position: 'absolute',
         top: 0,
         bottom: 0,
         right: position === 'left' ? 0 : 'auto',
@@ -336,57 +250,45 @@ const ResizeHandle = ({
         cursor: 'col-resize',
         backgroundColor: isResizing ? 'var(--color-primary-500)' : 'transparent',
         transition: 'background-color var(--transition-duration-fast) ease',
-        zIndex: 1,
-      }}
+        zIndex: 1, }}
       onMouseDown={handleMouseDown}
       aria-label="Resize sidebar"
       title="Dra for å endre størrelse"
     />
-  );
-};
+  ); };
 
 // Keyboard shortcuts info
-const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.ReactElement => {
-  return (
+const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.ReactElement => { return (
     <div
-      style={{
-        padding: 'var(--spacing-3) var(--spacing-4)',
+      style={{ padding: 'var(--spacing-3) var(--spacing-4)',
         borderTop: 'var(--border-width) solid var(--border-secondary)',
-        backgroundColor: 'var(--color-gray-25)',
-      }}
+        backgroundColor: 'var(--color-gray-25)', }}
     >
       <h4
-        style={{
-          fontSize: 'var(--font-size-xs)',
+        style={{ fontSize: 'var(--font-size-xs)',
           fontWeight: 'var(--font-weight-semibold)',
           color: 'var(--text-secondary)',
-          margin: '0 0 var(--spacing-2) 0',
-        }}
+          margin: '0 0 var(--spacing-2) 0', }}
       >
         Hurtigtaster
       </h4>
 
       <div
-        style={{
-          display: 'flex',
+        style={{ display: 'flex',
           flexDirection: 'column',
           gap: 'var(--spacing-1)',
           fontSize: 'var(--font-size-xs)',
-          color: 'var(--text-tertiary)',
-        }}
+          color: 'var(--text-tertiary)', }}
       >
         <div>Ctrl + B - Skjul/vis sidepanel</div>
         <div>Ctrl + K - Søk</div>
         <div>Alt + H - Hjelp</div>
       </div>
     </div>
-  );
-};
+  ); };
 
 // DesktopSidebar component with forwardRef
-export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): React.ReactElement => {
-  return () => document.removeEventListener('keydown', handleKeydown);
-  }, [norwegian?.keyboardShortcuts, isCollapsed]);
+export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): React.ReactElement => { return () => document.removeEventListener('keydown', handleKeydown); }, [norwegian?.keyboardShortcuts, isCollapsed]);
 
   return (
     <aside
@@ -431,20 +333,17 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       {/* Norwegian compliance footer */}
       {norwegian?.auditLog && !isCollapsed && (
         <div
-          style={{
-            padding: 'var(--spacing-2) var(--spacing-4)',
+          style={{ padding: 'var(--spacing-2) var(--spacing-4)',
             borderTop: 'var(--border-width) solid var(--border-secondary)',
             backgroundColor: 'var(--color-gray-25)',
             fontSize: 'var(--font-size-xs)',
             color: 'var(--text-tertiary)',
-            textAlign: 'center',
-          }}
+            textAlign: 'center', }}
         >
           📝 Handlinger logger for revisjon
         </div>
       )}
     </aside>
-  );
-});
+  ); });
 
 DesktopSidebar.displayName = 'DesktopSidebar';

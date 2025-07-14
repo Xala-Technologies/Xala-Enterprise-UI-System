@@ -18,33 +18,21 @@ const baseLayoutVariants = cva(
     'transition-all duration-300 ease-in-out',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      platform: {
-        mobile: 'flex flex-col',
+  { variants: { platform: { mobile: 'flex flex-col',
         tablet: 'flex flex-col md:flex-row',
         desktop: 'flex flex-col lg:flex-row',
-        auto: 'flex flex-col md:flex-row',
-      },
-      theme: {
-        light: 'bg-background text-foreground',
+        auto: 'flex flex-col md:flex-row', },
+      theme: { light: 'bg-background text-foreground',
         dark: 'bg-background text-foreground',
-        system: 'bg-background text-foreground',
-      },
-      spacing: {
-        none: 'p-0',
+        system: 'bg-background text-foreground', },
+      spacing: { none: 'p-0',
         sm: 'p-2 md:p-4',
         md: 'p-4 md:p-6',
         lg: 'p-6 md:p-8',
-        xl: 'p-8 md:p-12',
-      },
-    },
-    defaultVariants: {
-      platform: 'auto',
+        xl: 'p-8 md:p-12', }, },
+    defaultVariants: { platform: 'auto',
       theme: 'system',
-      spacing: 'md',
-    },
-  }
+      spacing: 'md', }, }
 );
 
 /**
@@ -58,19 +46,11 @@ const headerVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      platform: {
-        mobile: 'h-16 px-4',
+  { variants: { platform: { mobile: 'h-16 px-4',
         tablet: 'h-18 px-6',
         desktop: 'h-20 px-8',
-        auto: 'h-16 px-4 md:h-18 md:px-6 lg:h-20 lg:px-8',
-      },
-    },
-    defaultVariants: {
-      platform: 'auto',
-    },
-  }
+        auto: 'h-16 px-4 md:h-18 md:px-6 lg:h-20 lg:px-8', }, },
+    defaultVariants: { platform: 'auto', }, }
 );
 
 /**
@@ -82,29 +62,17 @@ const sidebarVariants = cva(
     'transition-all duration-300 ease-in-out',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      platform: {
-        mobile: 'fixed inset-y-0 left-0 w-64 transform z-40',
+  { variants: { platform: { mobile: 'fixed inset-y-0 left-0 w-64 transform z-40',
         tablet: 'w-64 flex-shrink-0',
         desktop: 'w-72 flex-shrink-0',
-        auto: 'fixed inset-y-0 left-0 w-64 transform z-40 md:relative md:translate-x-0 md:w-64 lg:w-72',
-      },
-      collapsed: {
-        true: 'w-16 overflow-hidden',
-        false: '',
-      },
-      open: {
-        true: 'translate-x-0',
-        false: '-translate-x-full',
-      },
-    },
-    defaultVariants: {
-      platform: 'auto',
+        auto: 'fixed inset-y-0 left-0 w-64 transform z-40 md:relative md:translate-x-0 md:w-64 lg:w-72', },
+      collapsed: { true: 'w-16 overflow-hidden',
+        false: '', },
+      open: { true: 'translate-x-0',
+        false: '-translate-x-full', }, },
+    defaultVariants: { platform: 'auto',
       collapsed: false,
-      open: false,
-    },
-  }
+      open: false, }, }
 );
 
 /**
@@ -112,16 +80,11 @@ const sidebarVariants = cva(
  */
 const mainContentVariants = cva(
   ['flex-1 overflow-auto', 'transition-all duration-300', 'motion-reduce:transition-none'],
-  {
-    variants: {
-      platform: {
-        mobile: 'p-4',
+  { variants: { platform: { mobile: 'p-4',
         tablet: 'p-6',
         desktop: 'p-8',
-        auto: 'p-4 md:p-6 lg:p-8',
-      },
-      maxWidth: {
-        none: 'max-w-none',
+        auto: 'p-4 md:p-6 lg:p-8', },
+      maxWidth: { none: 'max-w-none',
         sm: 'max-w-sm mx-auto',
         md: 'max-w-md mx-auto',
         lg: 'max-w-lg mx-auto',
@@ -129,14 +92,9 @@ const mainContentVariants = cva(
         '2xl': 'max-w-2xl mx-auto',
         '4xl': 'max-w-4xl mx-auto',
         '6xl': 'max-w-6xl mx-auto',
-        full: 'max-w-full mx-auto',
-      },
-    },
-    defaultVariants: {
-      platform: 'auto',
-      maxWidth: 'none',
-    },
-  }
+        full: 'max-w-full mx-auto', }, },
+    defaultVariants: { platform: 'auto',
+      maxWidth: 'none', }, }
 );
 
 /**
@@ -148,36 +106,24 @@ const footerVariants = cva(
     'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
     'mt-auto',
   ],
-  {
-    variants: {
-      platform: {
-        mobile: 'p-4',
+  { variants: { platform: { mobile: 'p-4',
         tablet: 'p-6',
         desktop: 'p-8',
-        auto: 'p-4 md:p-6 lg:p-8',
-      },
-    },
-    defaultVariants: {
-      platform: 'auto',
-    },
-  }
+        auto: 'p-4 md:p-6 lg:p-8', }, },
+    defaultVariants: { platform: 'auto', }, }
 );
 
 /**
  * Platform detection hook
  */
-const usePlatform = (): React.ReactElement => {
-  return () => window.removeEventListener('resize', detectPlatform);
-  }, []);
+const usePlatform = (): React.ReactElement => { return () => window.removeEventListener('resize', detectPlatform); }, []);
 
-  return platform;
-};
+  return platform; };
 
 /**
  * Base Layout Props
  */
-export interface BaseLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Layout content */
+export interface BaseLayoutProps extends React.HTMLAttributes<HTMLDivElement> { /** Layout content */
   readonly children: ReactNode;
 
   /** Platform variant */
@@ -193,14 +139,12 @@ export interface BaseLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly skipToMainContent?: boolean;
 
   /** Accessibility label */
-  readonly 'aria-label'?: string;
-}
+  readonly 'aria-label'?: string; }
 
 /**
  * Header Props
  */
-export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
-  /** Header content */
+export interface HeaderProps extends React.HTMLAttributes<HTMLElement> { /** Header content */
   readonly children: ReactNode;
 
   /** Platform variant */
@@ -213,14 +157,12 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
   readonly navigation?: ReactNode;
 
   /** Action items */
-  readonly actions?: ReactNode;
-}
+  readonly actions?: ReactNode; }
 
 /**
  * Sidebar Props
  */
-export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
-  /** Sidebar content */
+export interface SidebarProps extends React.HTMLAttributes<HTMLElement> { /** Sidebar content */
   readonly children: ReactNode;
 
   /** Platform variant */
@@ -236,14 +178,12 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLElement> {
   readonly onClose?: () => void;
 
   /** Sidebar title */
-  readonly title?: string;
-}
+  readonly title?: string; }
 
 /**
  * Main Content Props
  */
-export interface MainContentProps extends React.HTMLAttributes<HTMLElement> {
-  /** Main content */
+export interface MainContentProps extends React.HTMLAttributes<HTMLElement> { /** Main content */
   readonly children: ReactNode;
 
   /** Platform variant */
@@ -253,38 +193,32 @@ export interface MainContentProps extends React.HTMLAttributes<HTMLElement> {
   readonly maxWidth?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '4xl' | '6xl' | 'full';
 
   /** Main content title */
-  readonly title?: string;
-}
+  readonly title?: string; }
 
 /**
  * Footer Props
  */
-export interface FooterProps extends React.HTMLAttributes<HTMLElement> {
-  /** Footer content */
+export interface FooterProps extends React.HTMLAttributes<HTMLElement> { /** Footer content */
   readonly children: ReactNode;
 
   /** Platform variant */
-  readonly platform?: 'mobile' | 'tablet' | 'desktop' | 'auto';
-}
+  readonly platform?: 'mobile' | 'tablet' | 'desktop' | 'auto'; }
 
 /**
  * Base Layout Component
  */
 export const BaseLayout = forwardRef<HTMLDivElement, BaseLayoutProps>(
   (
-    {
-      children,
+    { children,
       platform = 'auto',
       theme = 'system',
       spacing = 'md',
       skipToMainContent = true,
       className,
       'aria-label': ariaLabel = 'Main application layout',
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div
         ref={ref}
         role="application"
@@ -304,8 +238,7 @@ export const BaseLayout = forwardRef<HTMLDivElement, BaseLayoutProps>(
 
         {children}
       </div>
-    );
-  }
+    ); }
 );
 
 BaseLayout.displayName = 'BaseLayout';
@@ -314,8 +247,7 @@ BaseLayout.displayName = 'BaseLayout';
  * Header Component
  */
 export const Header = forwardRef<HTMLElement, HeaderProps>(
-  ({ children, platform = 'auto', title, navigation, actions, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, platform = 'auto', title, navigation, actions, className, ...props }, ref): React.ReactElement => { return (
       <header
         ref={ref}
         role="banner"
@@ -344,8 +276,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
           {children}
         </div>
       </header>
-    );
-  }
+    ); }
 );
 
 Header.displayName = 'Header';
@@ -355,19 +286,16 @@ Header.displayName = 'Header';
  */
 export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   (
-    {
-      children,
+    { children,
       platform = 'auto',
       collapsed = false,
       open = false,
       onClose,
       title,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <>
         {/* Overlay for mobile */}
         {isMobile && open && (
@@ -408,8 +336,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           <div className="flex-1 overflow-y-auto p-4">{children}</div>
         </aside>
       </>
-    );
-  }
+    ); }
 );
 
 Sidebar.displayName = 'Sidebar';
@@ -418,8 +345,7 @@ Sidebar.displayName = 'Sidebar';
  * Main Content Component
  */
 export const MainContent = forwardRef<HTMLElement, MainContentProps>(
-  ({ children, platform = 'auto', maxWidth = 'none', title, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, platform = 'auto', maxWidth = 'none', title, className, ...props }, ref): React.ReactElement => { return (
       <main
         ref={ref}
         id="main-content"
@@ -433,8 +359,7 @@ export const MainContent = forwardRef<HTMLElement, MainContentProps>(
 
         {children}
       </main>
-    );
-  }
+    ); }
 );
 
 MainContent.displayName = 'MainContent';
@@ -443,8 +368,7 @@ MainContent.displayName = 'MainContent';
  * Footer Component
  */
 export const Footer = forwardRef<HTMLElement, FooterProps>(
-  ({ children, platform = 'auto', className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, platform = 'auto', className, ...props }, ref): React.ReactElement => { return (
       <footer
         ref={ref}
         role="contentinfo"
@@ -453,8 +377,7 @@ export const Footer = forwardRef<HTMLElement, FooterProps>(
       >
         {children}
       </footer>
-    );
-  }
+    ); }
 );
 
 Footer.displayName = 'Footer';
@@ -462,26 +385,21 @@ Footer.displayName = 'Footer';
 /**
  * Layout composition utilities
  */
-export const LayoutComposition = {
-  /**
+export const LayoutComposition = { /**
    * Standard app layout with header, sidebar, main content, and footer
    */
-  App: ({
-    header,
+  App: ({ header,
     sidebar,
     main,
     footer,
     sidebarOpen = false,
     onSidebarClose,
-    ...props
-  }: {
-    header?: ReactNode;
+    ...props }: { header?: ReactNode;
     sidebar?: ReactNode;
     main: ReactNode;
     footer?: ReactNode;
     sidebarOpen?: boolean;
-    onSidebarClose?: () => void;
-  } & BaseLayoutProps) => (
+    onSidebarClose?: () => void; } & BaseLayoutProps) => (
     <BaseLayout {...props}>
       {header}
       <div className="flex flex-1 overflow-hidden">
@@ -499,20 +417,16 @@ export const LayoutComposition = {
   /**
    * Dashboard layout with collapsible sidebar
    */
-  Dashboard: ({
-    header,
+  Dashboard: ({ header,
     sidebar,
     main,
     footer,
     sidebarCollapsed = false,
-    ...props
-  }: {
-    header?: ReactNode;
+    ...props }: { header?: ReactNode;
     sidebar?: ReactNode;
     main: ReactNode;
     footer?: ReactNode;
-    sidebarCollapsed?: boolean;
-  } & BaseLayoutProps) => (
+    sidebarCollapsed?: boolean; } & BaseLayoutProps) => (
     <BaseLayout {...props}>
       {header}
       <div className="flex flex-1 overflow-hidden">
@@ -526,25 +440,20 @@ export const LayoutComposition = {
   /**
    * Centered layout for forms and content pages
    */
-  Centered: ({
-    header,
+  Centered: ({ header,
     main,
     footer,
     maxWidth = 'md',
-    ...props
-  }: {
-    header?: ReactNode;
+    ...props }: { header?: ReactNode;
     main: ReactNode;
     footer?: ReactNode;
-    maxWidth?: MainContentProps['maxWidth'];
-  } & BaseLayoutProps) => (
+    maxWidth?: MainContentProps['maxWidth']; } & BaseLayoutProps) => (
     <BaseLayout {...props}>
       {header}
       <MainContent maxWidth={maxWidth}>{main}</MainContent>
       {footer}
     </BaseLayout>
-  ),
-};
+  ), };
 
 /**
  * Export layout variants and types
@@ -555,11 +464,9 @@ export type SidebarVariant = VariantProps<typeof sidebarVariants>;
 export type MainContentVariant = VariantProps<typeof mainContentVariants>;
 export type FooterVariant = VariantProps<typeof footerVariants>;
 
-export {
-  baseLayoutVariants,
+export { baseLayoutVariants,
   footerVariants,
   headerVariants,
   mainContentVariants,
   sidebarVariants,
-  usePlatform,
-};
+  usePlatform, };

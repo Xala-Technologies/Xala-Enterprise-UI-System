@@ -10,30 +10,23 @@ import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
 
 // Helper function
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 
 
-const logger = Logger.create({
-  serviceName: 'ui-system-keyvalslist',
+const logger = Logger.create({ serviceName: 'ui-system-keyvalslist',
   logLevel: 'info',
   enableConsoleLogging: true,
-  enableFileLogging: false,
-});
+  enableFileLogging: false, });
 
 /**
  * KeyValue List component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export function KeyValueList({
-  items,
+export function KeyValueList({ items,
   layout = 'vertical',
   spacing = 'comfortable',
   showDividers = false,
@@ -41,24 +34,19 @@ export function KeyValueList({
   norwegian,
   className = '',
   testId,
-  ...props
-}: KeyValueListProps): React.ReactElement {
-  const { t } = useLocalization();
+  ...props }: KeyValueListProps): React.ReactElement { const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const listClasses = React.useMemo((): React.ReactElement => {
-  return (
+  const listClasses = React.useMemo((): React.ReactElement => { return (
       <div className={`${listClasses} keyvalue-list--empty`} data-testid={testId}>
         <span className="keyvalue-list__empty-message">
           {t(norwegian?.hideEmptyValues ? 'keyvalue.noVisibleItems' : 'keyvalue.noItems')}
         </span>
       </div>
-    );
-  }
+    ); }
 
   // Filter out empty values if requested
-  const displayItems = React.useMemo((): React.ReactElement => {
-  return (
+  const displayItems = React.useMemo((): React.ReactElement => { return (
     <div className={listClasses} data-testid={testId} {...props}>
       {displayItems.map((item, index) => (
         <KeyValueItemComponent
@@ -69,18 +57,14 @@ export function KeyValueList({
         />
       ))}
     </div>
-  );
-}
+  ); }
 
 /**
  * Individual KeyValue Item component
  */
-const KeyValueItemComponent: React.FC<{
-  item: KeyValueItem;
+const KeyValueItemComponent: React.FC<{ item: KeyValueItem;
   showDividers?: boolean;
-  norwegian?: KeyValueListProps['norwegian'];
-}> = ({ item, showDividers, norwegian }): React.ReactElement => {
-  return (
+  norwegian?: KeyValueListProps['norwegian']; }> = ({ item, showDividers, norwegian }): React.ReactElement => { return (
     <div
       className={itemClasses}
       onClick={handleClick}
@@ -112,40 +96,31 @@ const KeyValueItemComponent: React.FC<{
         {item.type === 'status' && <StatusIndicator status={String(item.value)} />}
       </div>
     </div>
-  );
-};
+  ); };
 
 /**
  * Classification icon component
  */
-const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): React.ReactElement => {
-  return (
+const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): React.ReactElement => { return (
     <span className="keyvalue-item__classification-icon" aria-hidden="true">
       {getClassificationIcon(classification)}
     </span>
-  );
-};
+  ); };
 
 /**
  * Status indicator component
  */
-const getStatusIcon = (status: string): string => {
-  const icons = {
-    active: '✅',
+const getStatusIcon = (status: string): string => { const icons = { active: '✅',
     inactive: '⏸️',
     pending: '⏳',
-    error: '❌',
-  };
-  return icons[status as keyof typeof icons] || '📊';
-};
+    error: '❌', };
+  return icons[status as keyof typeof icons] || '📊'; };
 
-const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => {
-  return (
+const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => { return (
     <span className="keyvalue-item__status-indicator" aria-hidden="true">
       {getStatusIcon(status)}
     </span>
-  );
-};
+  ); };
 
 // Helper function
 /**
@@ -155,13 +130,9 @@ function formatValue(
   value: unknown,
   item: KeyValueItem,
   norwegian?: KeyValueListProps['norwegian']
-): string {
-  if (value === null || value === undefined) {
-    return '-';
-  }
+): string { if (value === null || value === undefined) { return '-'; }
 
-  switch (item.type) {
-    case 'personalNumber':
+  switch (item.type) { case 'personalNumber':
       return formatPersonalNumber(String(value));
     case 'organizationNumber':
       return formatOrganizationNumber(String(value));
@@ -178,65 +149,39 @@ function formatValue(
     case 'status':
       return String(value);
     default:
-      return String(value);
-  }
-}
+      return String(value); } }
 
 // Utility formatting functions (simplified for enterprise standards)
-function formatPersonalNumber(value: string): string {
-  const cleaned = value.replace(/\D/g, '');
-  if (cleaned.length === 11) {
-    return `${cleaned.slice(0, 6)} ${cleaned.slice(6)}`;
-  }
-  return value;
-}
+function formatPersonalNumber(value: string): string { const cleaned = value.replace(/\D/g, '');
+  if (cleaned.length === 11) { return `${cleaned.slice(0, 6)} ${cleaned.slice(6)}`; }
+  return value; }
 
-function formatOrganizationNumber(value: string): string {
-  const cleaned = value.replace(/\D/g, '');
-  if (cleaned.length === 9) {
-    return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`;
-  }
-  return value;
-}
+function formatOrganizationNumber(value: string): string { const cleaned = value.replace(/\D/g, '');
+  if (cleaned.length === 9) { return `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6)}`; }
+  return value; }
 
-function formatDate(value: unknown, format: string): string {
-  const date = new Date(value);
-  if (isNaN(date.getTime())) {
-    return String(value);
-  }
+function formatDate(value: unknown, format: string): string { const date = new Date(value);
+  if (isNaN(date.getTime())) { return String(value); }
 
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
 
-  switch (format) {
-    case 'DD.MM.YYYY':
+  switch (format) { case 'DD.MM.YYYY':
       return `${day}.${month}.${year}`;
     case 'DD/MM/YYYY':
-      return `${day}/${month}/${year}`;
+      return `${day}${month}${year}`;
     case 'YYYY-MM-DD':
       return `${year}-${month}-${day}`;
     default:
-      return `${day}.${month}.${year}`;
-  }
-}
+      return `${day}.${month}.${year}`; } }
 
-function formatCurrency(value: number, currency: string): string {
-  return new Intl.NumberFormat('nb-NO', {
-    style: 'currency',
-    currency: currency,
-  }).format(value);
-}
+function formatCurrency(value: number, currency: string): string { return new Intl.NumberFormat('nb-NO', { style: 'currency',
+    currency: currency, }).format(value); }
 
-function formatNumber(value: number, format?: unknown): string {
-  return new Intl.NumberFormat('nb-NO', format).format(value);
-}
+function formatNumber(value: number, format?: unknown): string { return new Intl.NumberFormat('nb-NO', format).format(value); }
 
-function formatBoolean(value: boolean, format?: { trueKey: string; falseKey: string }): string {
-  if (format) {
-    return value ? format.trueKey : format.falseKey;
-  }
-  return value ? 'Ja' : 'Nei';
-}
+function formatBoolean(value: boolean, format?: { trueKey: string; falseKey: string }): string { if (format) { return value ? format.trueKey : format.falseKey; }
+  return value ? 'Ja' : 'Nei'; }
 
 KeyValueList.displayName = 'KeyValueList';

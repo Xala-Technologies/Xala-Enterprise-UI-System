@@ -6,35 +6,24 @@ import React, { useEffect } from 'react';
 import type { ModalProps } from '../../types/action-feedback.types';
 
 // Helper functions
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 
-const getCategoryIcon = (category: string): string => {
-  const icons = {
-    system: '⚙️',
+const getCategoryIcon = (category: string): string => { const icons = { system: '⚙️',
     validation: '✅',
     security: '🔒',
     process: '🔄',
-    user: '👤',
-  };
-  return icons[category as keyof typeof icons] || '📋';
-};
-
+    user: '👤', };
+  return icons[category as keyof typeof icons] || '📋'; };
 
 // Helper function to generate CSS using design tokens
-const getModalStyles = (props: ModalProps): React.CSSProperties => {
-  const { size = 'md', centered = true, norwegian } = props;
+const getModalStyles = (props: ModalProps): React.CSSProperties => { const { size = 'md', centered = true, norwegian } = props;
 
   // Base modal overlay styles
-  const overlayStyles: React.CSSProperties = {
-    position: 'fixed',
+  const overlayStyles: React.CSSProperties = { position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
@@ -46,19 +35,15 @@ const getModalStyles = (props: ModalProps): React.CSSProperties => {
     zIndex: 'var(--z-index-modal)',
     padding: 'var(--spacing-4)',
     backdropFilter: 'blur(var(--blur-sm))',
-    animation: 'modal-fade-in var(--transition-duration-normal) ease-out',
-  };
+    animation: 'modal-fade-in var(--transition-duration-normal) ease-out', };
 
-  return overlayStyles;
-};
+  return overlayStyles; };
 
 // Get modal content styles
-const getModalContentStyles = (props: ModalProps): React.CSSProperties => {
-  const { size = 'md', centered = true, scrollable = false, norwegian } = props;
+const getModalContentStyles = (props: ModalProps): React.CSSProperties => { const { size = 'md', centered = true, scrollable = false, norwegian } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    backgroundColor: 'var(--background-primary)',
+  const baseStyles: React.CSSProperties = { backgroundColor: 'var(--background-primary)',
     borderRadius: 'var(--border-radius-lg)',
     boxShadow: 'var(--shadow-2xl)',
     border: 'var(--border-width) solid var(--border-primary)',
@@ -69,119 +54,75 @@ const getModalContentStyles = (props: ModalProps): React.CSSProperties => {
     marginTop: centered ? 0 : 'var(--spacing-4)',
     display: 'flex',
     flexDirection: 'column',
-    animation: 'modal-slide-in var(--transition-duration-normal) ease-out',
-  };
+    animation: 'modal-slide-in var(--transition-duration-normal) ease-out', };
 
   // Size-based styles
   const sizeStyles = getSizeStyles(size);
 
   // Scrollable content handling
   const scrollableStyles = scrollable
-    ? {
-        overflow: 'hidden',
-      }
+    ? { overflow: 'hidden', }
     : {};
 
   // Norwegian classification styling
   const classificationStyles = getClassificationStyles(norwegian?.classification);
 
-  return {
-    ...baseStyles,
+  return { ...baseStyles,
     ...sizeStyles,
     ...scrollableStyles,
-    ...classificationStyles,
-  };
-};
+    ...classificationStyles, }; };
 
 // Get size-based styles
-const getSizeStyles = (size: string): React.CSSProperties => {
-  const sizes = {
-    sm: {
-      maxWidth: 'var(--modal-width-sm)',
-    },
-    md: {
-      maxWidth: 'var(--modal-width-md)',
-    },
-    lg: {
-      maxWidth: 'var(--modal-width-lg)',
-    },
-    xl: {
-      maxWidth: 'var(--modal-width-xl)',
-    },
-    full: {
-      maxWidth: '95vw',
-      maxHeight: '95vh',
-    },
-  };
-  return sizes[size as keyof typeof sizes] || sizes.md;
-};
+const getSizeStyles = (size: string): React.CSSProperties => { const sizes = { sm: { maxWidth: 'var(--modal-width-sm)', },
+    md: { maxWidth: 'var(--modal-width-md)', },
+    lg: { maxWidth: 'var(--modal-width-lg)', },
+    xl: { maxWidth: 'var(--modal-width-xl)', },
+    full: { maxWidth: '95vw',
+      maxHeight: '95vh', }, };
+  return sizes[size as keyof typeof sizes] || sizes.md; };
 
 // Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) {
-    return {};
-  }
+const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
 
-  const classificationStyles: Record<string, React.CSSProperties> = {
-    ÅPEN: {
-      borderTop: 'var(--border-accent-width) solid var(--color-green-500)',
-    },
-    BEGRENSET: {
-      borderTop: 'var(--border-accent-width) solid var(--color-orange-500)',
-    },
-    KONFIDENSIELT: {
-      borderTop: 'var(--border-accent-width) solid var(--color-red-500)',
-      boxShadow: '0 0 0 var(--border-width) var(--color-red-200), var(--shadow-2xl)',
-    },
-    HEMMELIG: {
-      borderTop: 'var(--border-accent-width) solid var(--color-red-800)',
+  const classificationStyles: Record<string, React.CSSProperties> = { ÅPEN: { borderTop: 'var(--border-accent-width) solid var(--color-green-500)', },
+    BEGRENSET: { borderTop: 'var(--border-accent-width) solid var(--color-orange-500)', },
+    KONFIDENSIELT: { borderTop: 'var(--border-accent-width) solid var(--color-red-500)',
+      boxShadow: '0 0 0 var(--border-width) var(--color-red-200), var(--shadow-2xl)', },
+    HEMMELIG: { borderTop: 'var(--border-accent-width) solid var(--color-red-800)',
       boxShadow: '0 0 0 var(--border-width-thick) var(--color-red-400), var(--shadow-2xl)',
-      backgroundColor: 'var(--color-red-50)',
-    },
-  };
+      backgroundColor: 'var(--color-red-50)', }, };
 
-  return classificationStyles[classification] || {};
-};
+  return classificationStyles[classification] || {}; };
 
 // Modal header component
-const ModalHeader = ({
-  titleKey,
+const ModalHeader = ({ titleKey,
   title,
   closable,
   norwegian,
-  onClose,
-}: {
-  titleKey?: string;
+  onClose, }: { titleKey?: string;
   title?: string;
   closable: boolean;
-  norwegian?: { classification?: string };
-  onClose: () => void;
-}): React.ReactElement => {
-  return (
+  norwegian?: { classification?: string; category?: string };
+  onClose: () => void; }): React.ReactElement => { return (
     <div
-      style={{
-        display: 'flex',
+      style={{ display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 'var(--spacing-6)',
         borderBottom: 'var(--border-width) solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-lg) var(--border-radius-lg) 0 0',
-      }}
+        borderRadius: 'var(--border-radius-lg) var(--border-radius-lg) 0 0', }}
     >
       <div
-        style={{
-          display: 'flex',
+        style={{ display: 'flex',
           alignItems: 'center',
-          gap: 'var(--spacing-3)',
-        }}
+          gap: 'var(--spacing-3)', }}
       >
         <h2
-          style={{
-            fontSize: 'var(--font-size-xl)',
+          id="modal-title"
+          style={{ fontSize: 'var(--font-size-xl)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--text-primary)',
-            margin: 0,
-          }}
+            margin: 0, }}
         >
           {/* TODO: Replace with actual localization */}
           {title || titleKey}
@@ -196,8 +137,7 @@ const ModalHeader = ({
 
       {closable && (
         <button
-          style={{
-            width: 'var(--spacing-8)',
+          style={{ width: 'var(--spacing-8)',
             height: 'var(--spacing-8)',
             display: 'flex',
             alignItems: 'center',
@@ -208,17 +148,12 @@ const ModalHeader = ({
             color: 'var(--text-secondary)',
             cursor: 'pointer',
             fontSize: 'var(--font-size-xl)',
-            transition: 'all var(--transition-duration-fast) ease',
-          }}
+            transition: 'all var(--transition-duration-fast) ease', }}
           onClick={onClose}
-          onMouseEnter={e => {
-            (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
-            (e.target as HTMLElement).style.color = 'var(--text-primary)';
-          }}
-          onMouseLeave={e => {
-            (e.target as HTMLElement).style.backgroundColor = 'transparent';
-            (e.target as HTMLElement).style.color = 'var(--text-secondary)';
-          }}
+          onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
+            (e.target as HTMLElement).style.color = 'var(--text-primary)'; }}
+          onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'transparent';
+            (e.target as HTMLElement).style.color = 'var(--text-secondary)'; }}
           aria-label="Lukk modal"
           title="Lukk"
         >
@@ -226,72 +161,57 @@ const ModalHeader = ({
         </button>
       )}
     </div>
-  );
-};
+  ); };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
-  return (
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => { return (
     <span
-      style={{
-        fontSize: 'var(--font-size-sm)',
+      style={{ fontSize: 'var(--font-size-sm)',
         padding: 'var(--spacing-1) var(--spacing-2)',
         backgroundColor: 'var(--color-gray-100)',
         borderRadius: 'var(--border-radius-sm)',
-        border: 'var(--border-width) solid var(--border-secondary)',
-      }}
+        border: 'var(--border-width) solid var(--border-secondary)', }}
       aria-label={`Classification: ${level}`}
       title={`Klassifisering: ${level}`}
     >
       {getClassificationIcon(level)} {level}
     </span>
-  );
-};
+  ); };
 
 // Category indicator component
-const CategoryIndicator = ({ category }: { category: string }): React.ReactElement => {
-  return (
+const CategoryIndicator = ({ category }: { category: string }): React.ReactElement => { return (
     <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
+      style={{ fontSize: 'var(--font-size-xs)',
         padding: 'var(--spacing-1) var(--spacing-2)',
         backgroundColor: 'var(--color-blue-100)',
         color: 'var(--color-blue-800)',
-        borderRadius: 'var(--border-radius-sm)',
-      }}
+        borderRadius: 'var(--border-radius-sm)', }}
       aria-label={`Category: ${category}`}
       title={`Kategori: ${category}`}
     >
       {getCategoryIcon(category)} {category}
     </span>
-  );
-};
+  ); };
 
 // Modal body component
-const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scrollable: boolean }): React.ReactElement => {
-  return (
+const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scrollable: boolean }): React.ReactElement => { return (
     <div
-      style={{
-        flex: 1,
+      style={{ flex: 1,
         padding: 'var(--spacing-6)',
         overflow: scrollable ? 'auto' : 'visible',
         color: 'var(--text-primary)',
-        lineHeight: 'var(--line-height-relaxed)',
-      }}
+        lineHeight: 'var(--line-height-relaxed)', }}
     >
       {children}
     </div>
-  );
-};
+  ); };
 
-// Focus trap hook (simplified implementation)
+// Focus trap hook
 const useFocusTrap = (
   isOpen: boolean,
   enabled: boolean,
   containerRef: React.RefObject<HTMLElement>
-): void => {
-  React.useEffect(() => {
-    if (!isOpen || !enabled || !containerRef.current) return;
+): void => { React.useEffect(() => { if (!isOpen || !enabled || !containerRef.current) return;
 
     const container = containerRef.current;
     const focusableElements = container.querySelectorAll(
@@ -302,31 +222,17 @@ const useFocusTrap = (
 
     firstFocusable?.focus();
 
-    const handleTab = (e: KeyboardEvent): void => {
-      if (e.key !== 'Tab') return;
+    const handleTab = (e: KeyboardEvent): void => { if (e.key !== 'Tab') return;
 
-      if (e.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          e.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          e.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    };
+      if (e.shiftKey) { if (document.activeElement === firstFocusable) { e.preventDefault();
+          lastFocusable?.focus(); } } else { if (document.activeElement === lastFocusable) { e.preventDefault();
+          firstFocusable?.focus(); } } };
 
     container.addEventListener('keydown', handleTab);
-    return () => container.removeEventListener('keydown', handleTab);
-  }, [isOpen, enabled, containerRef]);
-};
+    return () => container.removeEventListener('keydown', handleTab); }, [isOpen, enabled, containerRef]); };
 
-// Modal component proper implementation
-export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): React.ReactElement => {
-  const {
-    isOpen,
+// Modal component
+export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): React.ReactElement => { const { isOpen,
     title,
     titleKey,
     size = 'md',
@@ -346,31 +252,33 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
     onClose,
     onEscapeKey,
     onOverlayClick,
-    ...divProps
-  } = props;
+    ...divProps } = props;
 
   const modalRef = React.useRef<HTMLDivElement>(null);
   const contentRef = React.useRef<HTMLDivElement>(null);
 
   // Handle escape key
-  React.useEffect(() => {
-    const handleEscape = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape' && closeOnEscape && !persistent) {
-        onEscapeKey?.();
-        onClose?.();
-      }
-    };
+  useEffect(() => { const handleEscape = (event: KeyboardEvent): void => { if (event.key === 'Escape' && closeOnEscape && !persistent) { onEscapeKey?.();
+        onClose?.(); } };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
+    if (isOpen) { document.addEventListener('keydown', handleEscape); }
 
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
+    return () => document.removeEventListener('keydown', handleEscape); }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
-  // Handle modal opening
-  useEffect((): React.ReactElement => {
-  return () => {
+  // Use focus trap
+  useFocusTrap(isOpen, true, contentRef);
+
+  const handleClose = (): void => { if (!persistent) { onClose?.(); } };
+
+  const handleOverlayClick = (event: React.MouseEvent<HTMLDivElement>): void => { if (closeOnOverlay && !persistent && event.target === event.currentTarget) { onOverlayClick?.();
+      onClose?.(); } };
+
+  if (!isOpen) { return <></>; }
+
+  const overlayStyles = getModalStyles(props);
+  const contentStyles = getModalContentStyles(props);
+  const combinedOverlayStyles = { ...overlayStyles, ...style };
+
   return (
     <>
       {/* Modal overlay */}
@@ -421,8 +329,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
           {/* Norwegian compliance footer */}
           {norwegian?.classification && (
             <div
-              style={{
-                padding: 'var(--spacing-4) var(--spacing-6)',
+              style={{ padding: 'var(--spacing-4) var(--spacing-6)',
                 borderTop: 'var(--border-width) solid var(--border-secondary)',
                 backgroundColor: 'var(--color-gray-25)',
                 borderRadius: '0 0 var(--border-radius-lg) var(--border-radius-lg)',
@@ -430,8 +337,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
                 color: 'var(--text-tertiary)',
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
+                alignItems: 'center', }}
             >
               <span>
                 🔒 Klassifisering: {norwegian.classification}
@@ -443,7 +349,6 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): 
         </div>
       </div>
     </>
-  );
-});
+  ); });
 
 Modal.displayName = 'Modal';

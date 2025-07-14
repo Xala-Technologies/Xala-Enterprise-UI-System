@@ -17,24 +17,14 @@ const tabsVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'border-border',
+  { variants: { variant: { default: 'border-border',
         primary: 'border-primary/20',
-        secondary: 'border-secondary/20',
-      },
-      size: {
-        sm: 'text-sm',
+        secondary: 'border-secondary/20', },
+      size: { sm: 'text-sm',
         md: 'text-base',
-        lg: 'text-lg',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'text-lg', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -42,23 +32,13 @@ const tabsVariants = cva(
  */
 const stepsVariants = cva(
   ['flex items-center', 'transition-all duration-200', 'motion-reduce:transition-none'],
-  {
-    variants: {
-      variant: {
-        default: 'text-foreground',
+  { variants: { variant: { default: 'text-foreground',
         primary: 'text-primary',
-        secondary: 'text-secondary',
-      },
-      orientation: {
-        horizontal: 'flex-row',
-        vertical: 'flex-col',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      orientation: 'horizontal',
-    },
-  }
+        secondary: 'text-secondary', },
+      orientation: { horizontal: 'flex-row',
+        vertical: 'flex-col', }, },
+    defaultVariants: { variant: 'default',
+      orientation: 'horizontal', }, }
 );
 
 /**
@@ -66,31 +46,20 @@ const stepsVariants = cva(
  */
 const progressBarVariants = cva(
   ['w-full bg-muted rounded-full', 'transition-all duration-200', 'motion-reduce:transition-none'],
-  {
-    variants: {
-      variant: {
-        default: 'bg-muted',
+  { variants: { variant: { default: 'bg-muted',
         primary: 'bg-primary/10',
-        secondary: 'bg-secondary/10',
-      },
-      size: {
-        sm: 'h-1',
+        secondary: 'bg-secondary/10', },
+      size: { sm: 'h-1',
         md: 'h-2',
-        lg: 'h-3',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-3', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
  * Tab item interface
  */
-export interface TabItem {
-  /** Tab key */
+export interface TabItem { /** Tab key */
   readonly key: string;
   /** Tab label */
   readonly label: string;
@@ -99,14 +68,12 @@ export interface TabItem {
   /** Tab disabled state */
   readonly disabled?: boolean;
   /** Tab icon */
-  readonly icon?: ReactNode;
-}
+  readonly icon?: ReactNode; }
 
 /**
  * Step item interface
  */
-export interface StepItem {
-  /** Step key */
+export interface StepItem { /** Step key */
   readonly key: string;
   /** Step title */
   readonly title: string;
@@ -115,14 +82,12 @@ export interface StepItem {
   /** Step status */
   readonly status: 'pending' | 'current' | 'completed' | 'error';
   /** Step icon */
-  readonly icon?: ReactNode;
-}
+  readonly icon?: ReactNode; }
 
 /**
  * Tabs Props
  */
-export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
-  /** Tabs variant */
+export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> { /** Tabs variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Tabs size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -131,14 +96,12 @@ export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'o
   /** Active tab key */
   readonly activeKey?: string;
   /** Tab change handler */
-  readonly onChange?: (key: string) => void;
-}
+  readonly onChange?: (key: string) => void; }
 
 /**
  * Steps Props
  */
-export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Steps variant */
+export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> { /** Steps variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Steps orientation */
   readonly orientation?: 'horizontal' | 'vertical';
@@ -147,14 +110,12 @@ export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Current step key */
   readonly currentKey?: string;
   /** Step click handler */
-  readonly onStepClick?: (key: string) => void;
-}
+  readonly onStepClick?: (key: string) => void; }
 
 /**
  * Progress Bar Props
  */
-export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Progress variant */
+export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> { /** Progress variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Progress size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -163,8 +124,7 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Progress label */
   readonly label?: string;
   /** Show percentage */
-  readonly showPercentage?: boolean;
-}
+  readonly showPercentage?: boolean; }
 
 /**
  * Tabs Component
@@ -172,8 +132,7 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * @returns React.ReactElement
  */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): React.ReactElement => { return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Tab Headers */}
         <div className={cn(tabsVariants({ variant, size }))}>
@@ -221,8 +180,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
           ))}
         </div>
       </div>
-    );
-  }
+    ); }
 );
 
 Tabs.displayName = 'Tabs';
@@ -234,18 +192,15 @@ Tabs.displayName = 'Tabs';
  */
 export const Steps = forwardRef<HTMLDivElement, StepsProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       orientation = 'horizontal',
       items,
       currentKey,
       onStepClick,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div
         ref={ref}
         className={cn(
@@ -295,8 +250,7 @@ export const Steps = forwardRef<HTMLDivElement, StepsProps>(
           </div>
         ))}
       </div>
-    );
-  }
+    ); }
 );
 
 Steps.displayName = 'Steps';
@@ -310,8 +264,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
   (
     { variant = 'default', size = 'md', value, label, showPercentage = false, className, ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Progress Label */}
         {(label || showPercentage) && (
@@ -340,8 +293,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
           />
         </div>
       </div>
-    );
-  }
+    ); }
 );
 
 ProgressBar.displayName = 'ProgressBar';

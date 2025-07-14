@@ -12,19 +12,11 @@ import { forwardRef, type HTMLAttributes } from 'react';
 /**
  * Card variants using class-variance-authority
  */
-const cardVariants = cva('rounded-lg border bg-card text-card-foreground shadow-sm', {
-  variants: {
-    variant: {
-      default: 'border-border',
+const cardVariants = cva('rounded-lg border bg-card text-card-foreground shadow-sm', { variants: { variant: { default: 'border-border',
       outlined: 'border-2 border-border',
       elevated: 'shadow-md',
-      flat: 'shadow-none border-0',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
+      flat: 'shadow-none border-0', }, },
+  defaultVariants: { variant: 'default', }, });
 
 /**
  * Card component props interface

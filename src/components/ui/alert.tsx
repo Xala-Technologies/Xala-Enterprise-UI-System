@@ -14,22 +14,14 @@ import { forwardRef, type HTMLAttributes } from 'react';
  */
 const alertVariants = cva(
   'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
-  {
-    variants: {
-      variant: {
-        default: 'bg-background text-foreground',
+  { variants: { variant: { default: 'bg-background text-foreground',
         destructive:
           'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
         success: 'border-green-500/50 text-green-800 dark:border-green-500 [&>svg]:text-green-800',
         warning:
           'border-yellow-500/50 text-yellow-800 dark:border-yellow-500 [&>svg]:text-yellow-800',
-        info: 'border-blue-500/50 text-blue-800 dark:border-blue-500 [&>svg]:text-blue-800',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
+        info: 'border-blue-500/50 text-blue-800 dark:border-blue-500 [&>svg]:text-blue-800', }, },
+    defaultVariants: { variant: 'default', }, }
 );
 
 /**

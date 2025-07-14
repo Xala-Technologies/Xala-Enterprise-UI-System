@@ -19,36 +19,30 @@ import { desktopMainContentVariants } from '../variants';
  */
 export const DesktopMainContent = forwardRef<HTMLElement, DesktopMainContentProps>(
   (
-    {
-      className,
+    { className,
       variant,
       padding,
       scrollable = true,
       maxWidth = false,
       centered = false,
       children,
-      ...props
-    },
+      ...props },
     ref
-  ) => {
-    return (
+  ) => { return (
       <main
         ref={ref}
         className={cn(
           desktopMainContentVariants({ variant, padding }),
-          {
-            'overflow-y-auto': scrollable,
+          { 'overflow-y-auto': scrollable,
             'max-w-7xl': maxWidth,
-            'mx-auto': centered,
-          },
+            'mx-auto': centered, },
           className
         )}
         {...props}
       >
         {children}
       </main>
-    );
-  }
+    ); }
 );
 
 DesktopMainContent.displayName = 'DesktopMainContent';

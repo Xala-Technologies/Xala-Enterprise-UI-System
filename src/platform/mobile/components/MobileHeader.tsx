@@ -3,8 +3,7 @@ import React from 'react';
 
 import { MobileHeaderButton } from './MobileHeaderButton';
 
-interface MobileHeaderProps {
-  title?: string;
+interface MobileHeaderProps { title?: string;
   showBackButton?: boolean;
   showMenu?: boolean;
   showSearch?: boolean;
@@ -17,12 +16,9 @@ interface MobileHeaderProps {
   onMenuToggle?: () => void;
   onSearchFocus?: () => void;
   onNotificationPress?: () => void;
-  style?: React.CSSProperties;
-}
+  style?: React.CSSProperties; }
 
-export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref) => {
-  const {
-    title,
+export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref) => { const { title,
     showBackButton = false,
     showMenu = false,
     showSearch = false,
@@ -36,24 +32,18 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
     onSearchFocus,
     onNotificationPress,
     style,
-    ...restProps
-  } = props;
+    ...restProps } = props;
 
-  const getHeightStyle = (): string => {
-    const heights = {
-      sm: '48px',
+  const getHeightStyle = (): string => { const heights = { sm: '48px',
       md: '56px',
-      lg: '64px',
-    };
+      lg: '64px', };
 
-    return heights[height];
-  };
+    return heights[height]; };
 
   return (
     <header
       ref={ref}
-      style={{
-        display: 'flex',
+      style={{ display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 var(--spacing-4)',
@@ -63,17 +53,14 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
         position: sticky ? 'sticky' : 'relative',
         top: sticky ? '0' : 'auto',
         zIndex: sticky ? 'var(--z-index-header)' : 'auto',
-        ...style,
-      }}
+        ...style, }}
       {...restProps}
     >
       {/* Left section */}
       <div
-        style={{
-          display: 'flex',
+        style={{ display: 'flex',
           alignItems: 'center',
-          gap: 'var(--spacing-2)',
-        }}
+          gap: 'var(--spacing-2)', }}
       >
         {showBackButton && <MobileHeaderButton icon="←" label="Back" onClick={onBack} />}
         {showMenu && <MobileHeaderButton icon="☰" label="Menu" onClick={onMenuToggle} />}
@@ -81,25 +68,21 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
 
       {/* Center section */}
       <div
-        style={{
-          flex: 1,
+        style={{ flex: 1,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          textAlign: 'center',
-        }}
+          textAlign: 'center', }}
       >
         <h1
-          style={{
-            margin: 0,
+          style={{ margin: 0,
             fontSize: 'var(--font-size-lg)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--color-text-primary)',
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             whiteSpace: 'nowrap',
-            maxWidth: '100%',
-          }}
+            maxWidth: '100%', }}
         >
           {title}
         </h1>
@@ -107,11 +90,9 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
 
       {/* Right section */}
       <div
-        style={{
-          display: 'flex',
+        style={{ display: 'flex',
           alignItems: 'center',
-          gap: 'var(--spacing-2)',
-        }}
+          gap: 'var(--spacing-2)', }}
       >
         {showSearch && <MobileHeaderButton icon="🔍" label="Search" onClick={onSearchFocus} />}
         {showNotifications && (
@@ -125,7 +106,6 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
         )}
       </div>
     </header>
-  );
-});
+  ); });
 
 MobileHeader.displayName = 'MobileHeader';

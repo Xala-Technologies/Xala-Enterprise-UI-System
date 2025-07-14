@@ -8,12 +8,10 @@ import React from 'react';
 
 import { Logger } from '@xala-technologies/enterprise-standards';
 
-const logger = Logger.create({
-  serviceName: 'ui-system-tokens',
+const logger = Logger.create({ serviceName: 'ui-system-tokens',
   logLevel: 'info',
   enableConsoleLogging: true,
-  enableFileLogging: false,
-});
+  enableFileLogging: false, });
 
 // =============================================================================
 // CORE TOKEN SYSTEM
@@ -49,11 +47,9 @@ export { tokenSystem } from './semantic-token-system';
 export { DynamicTokenLoader } from './dynamic-token-loader';
 
 // Accessibility utilities
-export {
-    accessibilityPresets, generateAccessibilityTokens, getAriaAttributes,
+export { accessibilityPresets, generateAccessibilityTokens, getAriaAttributes,
     getKeyboardAttributes, meetsContrastRequirements,
-    meetsTouchTargetRequirements
-} from './accessibility-tokens';
+    meetsTouchTargetRequirements } from './accessibility-tokens';
 
 // =============================================================================
 // USAGE EXAMPLES
@@ -92,8 +88,7 @@ export {
  * </UISystemProvider>
  * 
  * // Custom accessibility
- * <UISystemProvider accessibility={{
- *   level: 'WCAG_2_2_AA',
+ * <UISystemProvider accessibility={{ *   level: 'WCAG_2_2_AA',
  *   highContrast: true,
  *   reduceMotion: false,
  *   keyboardNavigation: true,
@@ -114,8 +109,7 @@ export {
  * await loader.loadFromURL('https://api.example.com/tokens');
  * 
  * // Load from JSON
- * const config = { 
- *   tenantId: 'acme-corp',
+ * const config = { *   tenantId: 'acme-corp',
  *   branding: { primaryColor: '#ff0000' }
  * };
  * await loader.loadFromJSON(config);
@@ -126,25 +120,19 @@ export {
 // TYPE EXPORTS
 // =============================================================================
 
-export type {
-    // Core token types
+export type { // Core token types
     TokenPath,
-    TokenValue
-} from './semantic-token-system';
+    TokenValue } from './semantic-token-system';
 
-export type {
-    // Accessibility types
+export type { // Accessibility types
     AccessibilityConfig,
     AccessibilityLevel,
     AccessibilityPreset,
-    AccessibilityTokens
-} from './accessibility-tokens';
+    AccessibilityTokens } from './accessibility-tokens';
 
-export type {
-    BrandingConfig,
+export type { BrandingConfig,
     // Dynamic loading types
-    TenantTokenConfig, TokenOverrideConfig, WhiteLabelConfig
-} from './dynamic-token-loader';
+    TenantTokenConfig, TokenOverrideConfig, WhiteLabelConfig } from './dynamic-token-loader';
 
 // =============================================================================
 // DEVELOPMENT UTILITIES
@@ -154,17 +142,9 @@ export type {
  * Development mode utilities (stripped in production)
  * Note: These utilities are available for development debugging
  */
-export const devUtils = {
-  /**
+export const devUtils = { /**
    * Validate accessibility configuration
    */
-  validateAccessibility: (config: { level?: string; [key: string]: unknown }): void => {
-    if (process.env['NODE_ENV'] === 'development') {
-      // Basic validation - extend as needed
-      if (!config.level || !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(config.level)) {
-        logger.warn('Invalid accessibility level:', { level: config.level });
-      }
-    }
-  },
-};
+  validateAccessibility: (config: { level?: string; [key: string]: unknown }): void => { if (process.env['NODE_ENV'] === 'development') { // Basic validation - extend as needed
+      if (!config.level || !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(config.level)) { logger.warn('Invalid accessibility level:', { level: config.level }); } } }, };
 

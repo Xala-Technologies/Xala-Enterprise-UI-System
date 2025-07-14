@@ -17,26 +17,16 @@ const spinnerVariants = cva(
     'transition-all duration-200',
     'motion-reduce:animate-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'text-primary',
+  { variants: { variant: { default: 'text-primary',
         primary: 'text-primary',
         secondary: 'text-secondary',
-        muted: 'text-muted-foreground',
-      },
-      size: {
-        sm: 'h-4 w-4',
+        muted: 'text-muted-foreground', },
+      size: { sm: 'h-4 w-4',
         md: 'h-6 w-6',
         lg: 'h-8 w-8',
-        xl: 'h-12 w-12',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        xl: 'h-12 w-12', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -48,20 +38,12 @@ const alertVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background text-foreground border-border',
+  { variants: { variant: { default: 'bg-background text-foreground border-border',
         destructive: 'bg-destructive/15 text-destructive-foreground border-destructive/50',
         success: 'bg-green-50 text-green-900 border-green-200',
         warning: 'bg-yellow-50 text-yellow-900 border-yellow-200',
-        info: 'bg-blue-50 text-blue-900 border-blue-200',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
+        info: 'bg-blue-50 text-blue-900 border-blue-200', }, },
+    defaultVariants: { variant: 'default', }, }
 );
 
 /**
@@ -73,22 +55,14 @@ const badgeVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-primary text-primary-foreground',
+  { variants: { variant: { default: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         destructive: 'bg-destructive text-destructive-foreground',
         success: 'bg-green-100 text-green-800',
         warning: 'bg-yellow-100 text-yellow-800',
         info: 'bg-blue-100 text-blue-800',
-        outline: 'border border-border text-foreground',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
+        outline: 'border border-border text-foreground', }, },
+    defaultVariants: { variant: 'default', }, }
 );
 
 /**
@@ -101,39 +75,28 @@ const notificationVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'border-border',
+  { variants: { variant: { default: 'border-border',
         success: 'border-green-200 bg-green-50 text-green-900',
         warning: 'border-yellow-200 bg-yellow-50 text-yellow-900',
         error: 'border-red-200 bg-red-50 text-red-900',
-        info: 'border-blue-200 bg-blue-50 text-blue-900',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
+        info: 'border-blue-200 bg-blue-50 text-blue-900', }, },
+    defaultVariants: { variant: 'default', }, }
 );
 
 /**
  * Spinner Props
  */
-export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Spinner variant */
+export interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> { /** Spinner variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'muted';
   /** Spinner size */
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
   /** Spinner label */
-  readonly label?: string;
-}
+  readonly label?: string; }
 
 /**
  * Alert Props
  */
-export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Alert variant */
+export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> { /** Alert variant */
   readonly variant?: 'default' | 'destructive' | 'success' | 'warning' | 'info';
   /** Alert title */
   readonly title?: string;
@@ -144,14 +107,12 @@ export interface AlertProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Alert dismissible */
   readonly dismissible?: boolean;
   /** Alert dismiss handler */
-  readonly onDismiss?: () => void;
-}
+  readonly onDismiss?: () => void; }
 
 /**
  * Badge Props
  */
-export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /** Badge variant */
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> { /** Badge variant */
   readonly variant?:
     | 'default'
     | 'secondary'
@@ -161,14 +122,12 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
     | 'info'
     | 'outline';
   /** Badge content */
-  readonly children: ReactNode;
-}
+  readonly children: ReactNode; }
 
 /**
  * Notification Props
  */
-export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Notification variant */
+export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> { /** Notification variant */
   readonly variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
   /** Notification title */
   readonly title?: string;
@@ -181,8 +140,7 @@ export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> 
   /** Notification dismiss handler */
   readonly onDismiss?: () => void;
   /** Notification actions */
-  readonly actions?: ReactNode;
-}
+  readonly actions?: ReactNode; }
 
 /**
  * Spinner Component
@@ -190,8 +148,7 @@ export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> 
  * @returns React.ReactElement
  */
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ variant = 'default', size = 'md', label, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ variant = 'default', size = 'md', label, className, ...props }, ref): React.ReactElement => { return (
       <div ref={ref} className={cn('flex items-center gap-2', className)} {...props}>
         <div
           className={cn(spinnerVariants({ variant, size }))}
@@ -202,8 +159,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
         </div>
         {label && <span className="text-sm text-muted-foreground">{label}</span>}
       </div>
-    );
-  }
+    ); }
 );
 
 Spinner.displayName = 'Spinner';
@@ -215,8 +171,7 @@ Spinner.displayName = 'Spinner';
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       title,
       description,
       icon,
@@ -224,11 +179,9 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       onDismiss,
       className,
       children,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div ref={ref} className={cn(alertVariants({ variant }), className)} role="alert" {...props}>
         <div className="flex items-start gap-3">
           {icon && <div className="flex-shrink-0 mt-0.5">{icon}</div>}
@@ -259,8 +212,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
           )}
         </div>
       </div>
-    );
-  }
+    ); }
 );
 
 Alert.displayName = 'Alert';
@@ -271,13 +223,11 @@ Alert.displayName = 'Alert';
  * @returns React.ReactElement
  */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ variant = 'default', className, children, ...props }, ref): React.ReactElement => {
-  return (
+  ({ variant = 'default', className, children, ...props }, ref): React.ReactElement => { return (
       <span ref={ref} className={cn(badgeVariants({ variant }), className)} {...props}>
         {children}
       </span>
-    );
-  }
+    ); }
 );
 
 Badge.displayName = 'Badge';
@@ -289,8 +239,7 @@ Badge.displayName = 'Badge';
  */
 export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       title,
       description,
       icon,
@@ -299,11 +248,9 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       actions,
       className,
       children,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div
         ref={ref}
         className={cn(notificationVariants({ variant }), className)}
@@ -341,8 +288,7 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
           )}
         </div>
       </div>
-    );
-  }
+    ); }
 );
 
 Notification.displayName = 'Notification';

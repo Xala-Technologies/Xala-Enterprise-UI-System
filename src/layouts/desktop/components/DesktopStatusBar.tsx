@@ -18,8 +18,7 @@ import { desktopStatusBarVariants } from '../variants';
  * - Accessible status updates
  */
 export const DesktopStatusBar = forwardRef<HTMLElement, DesktopStatusBarProps>(
-  ({ className, variant, size, leftItems, centerItems, rightItems, children, ...props }, ref) => {
-    return (
+  ({ className, variant, size, leftItems, centerItems, rightItems, children, ...props }, ref) => { return (
       <div
         ref={ref}
         className={cn(desktopStatusBarVariants({ variant, size }), className)}
@@ -37,8 +36,7 @@ export const DesktopStatusBar = forwardRef<HTMLElement, DesktopStatusBarProps>(
 
         {children}
       </div>
-    );
-  }
+    ); }
 );
 
 DesktopStatusBar.displayName = 'DesktopStatusBar';

@@ -21,24 +21,20 @@ export * from './hooks';
 export * from './tokens';
 
 // Core types
-export type {
-  AccessibilityLevel, AccessibilityProps, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps,
+export type { AccessibilityLevel, AccessibilityProps, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps,
   ComponentState, ComponentType, CSSProperties, EventHandlers, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
-  UISystemOptions
-} from './lib/types/core.types';
+  UISystemOptions } from './lib/types/core.types';
 
 // =============================================================================
 // ADDITIONAL TYPES (non-conflicting)
 // =============================================================================
 
 // Platform types (only export those not already in components)
-export type {
-  HoverFriendlyProps, PlatformComponentProps,
+export type { HoverFriendlyProps, PlatformComponentProps,
   PlatformDetection,
   PlatformTypes,
   ResponsiveBreakpoints,
-  TouchFriendlyProps
-} from './types/platform.types';
+  TouchFriendlyProps } from './types/platform.types';
 
 // =============================================================================
 // PROVIDERS AND HOOKS
@@ -51,8 +47,7 @@ export { UISystemProvider, useAccessibility, useAccessibilityFeature, useUISyste
 // PACKAGE INFORMATION
 // =============================================================================
 
-export const UI_SYSTEM_INFO = {
-  name: 'Generic UI System',
+export const UI_SYSTEM_INFO = { name: 'Generic UI System',
   version: '1.0.0',
   description: 'A generic, accessible UI system built with design tokens',
   features: [
@@ -63,9 +58,6 @@ export const UI_SYSTEM_INFO = {
     'Framework agnostic',
     'Customizable themes',
   ],
-  accessibility: {
-    levels: ['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
+  accessibility: { levels: ['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
     configurable: true,
-    optional: true,
-  },
-} as const;
+    optional: true, }, } as const;

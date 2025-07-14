@@ -12,24 +12,14 @@ import React, { forwardRef, useEffect, useRef, useState, type ReactNode } from '
  */
 const globalSearchVariants = cva(
   ['relative w-full', 'transition-all duration-200', 'motion-reduce:transition-none'],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background border border-border',
+  { variants: { variant: { default: 'bg-background border border-border',
         primary: 'bg-primary/10 border border-primary/20',
-        secondary: 'bg-secondary/10 border border-secondary/20',
-      },
-      size: {
-        sm: 'h-8',
+        secondary: 'bg-secondary/10 border border-secondary/20', },
+      size: { sm: 'h-8',
         md: 'h-10',
-        lg: 'h-12',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-12', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -42,25 +32,16 @@ const searchInputVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      size: {
-        sm: 'px-3 py-1 text-sm',
+  { variants: { size: { sm: 'px-3 py-1 text-sm',
         md: 'px-4 py-2 text-base',
-        lg: 'px-5 py-3 text-lg',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
+        lg: 'px-5 py-3 text-lg', }, },
+    defaultVariants: { size: 'md', }, }
 );
 
 /**
  * Search result item
  */
-export interface SearchResultItem {
-  /** Unique identifier */
+export interface SearchResultItem { /** Unique identifier */
   readonly id: string;
   /** Display title */
   readonly title: string;
@@ -73,15 +54,13 @@ export interface SearchResultItem {
   /** URL */
   readonly url?: string;
   /** Click handler */
-  readonly onClick?: () => void;
-}
+  readonly onClick?: () => void; }
 
 /**
  * Global Search Props
  */
 export interface GlobalSearchProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'results' | 'onChange' | 'onSubmit'> {
-  /** Search variant */
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'results' | 'onChange' | 'onSubmit'> { /** Search variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Search size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -106,8 +85,7 @@ export interface GlobalSearchProps
   /** Left icon */
   readonly leftIcon?: ReactNode;
   /** Right action */
-  readonly rightAction?: ReactNode;
-}
+  readonly rightAction?: ReactNode; }
 
 /**
  * Global Search Component
@@ -116,8 +94,7 @@ export interface GlobalSearchProps
  */
 export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       size = 'md',
       placeholder = 'Search...',
       value = '',
@@ -131,11 +108,9 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       leftIcon,
       rightAction,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div
         ref={ref}
         className={cn(
@@ -226,8 +201,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
           </div>
         )}
       </div>
-    );
-  }
+    ); }
 );
 
 GlobalSearch.displayName = 'GlobalSearch';

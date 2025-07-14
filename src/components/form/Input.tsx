@@ -12,8 +12,7 @@ import type { InputProps } from '../../types/form.types';
  * Input component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref): React.ReactElement => {
-  return (
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref): React.ReactElement => { return (
     <div className="input-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={inputId} />}
@@ -74,18 +73,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref)
         </div>
       )}
     </div>
-  );
-});
+  ); });
 
 /**
  * Label component
  */
-const Label: React.FC<{
-  label: string;
+const Label: React.FC<{ label: string;
   required?: boolean;
-  htmlFor: string;
-}> = ({ label, required, htmlFor }): React.ReactElement => {
-  return (
+  htmlFor: string; }> = ({ label, required, htmlFor }): React.ReactElement => { return (
     <label className="input-field__label" htmlFor={htmlFor}>
       <span className="input-field__label-text">{label}</span>
       {required && (
@@ -94,21 +89,18 @@ const Label: React.FC<{
         </span>
       )}
     </label>
-  );
-};
+  ); };
 
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ error: string }> = ({ error }): React.ReactElement => {
-  return (
+const ErrorMessage: React.FC<{ error: string }> = ({ error }): React.ReactElement => { return (
     <div className="input-field__error" role="alert">
       <span className="input-field__error-icon" aria-hidden="true">
         ❌
       </span>
       <span className="input-field__error-text">{error}</span>
     </div>
-  );
-};
+  ); };
 
 Input.displayName = 'Input';

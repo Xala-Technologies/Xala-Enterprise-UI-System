@@ -12,8 +12,7 @@ import type { TextAreaProps } from '../../types/form.types';
  * TextArea component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref): React.ReactElement => {
-  return (
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref): React.ReactElement => { return (
     <div className="textarea-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={textAreaId} />}
@@ -74,18 +73,14 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((pr
         </div>
       )}
     </div>
-  );
-});
+  ); });
 
 /**
  * Label component
  */
-const Label: React.FC<{
-  label: string;
+const Label: React.FC<{ label: string;
   required?: boolean;
-  htmlFor: string;
-}> = ({ label, required, htmlFor }): React.ReactElement => {
-  return (
+  htmlFor: string; }> = ({ label, required, htmlFor }): React.ReactElement => { return (
     <label className="textarea-field__label" htmlFor={htmlFor}>
       <span className="textarea-field__label-text">{label}</span>
       {required && (
@@ -94,7 +89,6 @@ const Label: React.FC<{
         </span>
       )}
     </label>
-  );
-};
+  ); };
 
 TextArea.displayName = 'TextArea';

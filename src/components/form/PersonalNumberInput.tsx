@@ -9,18 +9,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { PersonalNumberInputProps } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
-const validatePersonalNumber = (value: string) => ({
-  isValid: value.length === 11,
+const validatePersonalNumber = (value: string) => ({ isValid: value.length === 11,
   errors: value.length === 11 ? [] : ['Invalid personal number'],
   type: 'fødselsnummer' as const,
   birthDate: new Date(),
   gender: 'male' as const,
-  century: 20,
-});
+  century: 20, });
 
-const formatPersonalNumber = (value: string): React.ReactElement => {
-  return () => {
-  return (
+const formatPersonalNumber = (value: string): React.ReactElement => { return () => { return (
     <div className="personal-number-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={inputId} />}
@@ -71,50 +67,39 @@ const formatPersonalNumber = (value: string): React.ReactElement => {
         <ErrorMessage errors={validationResult.errors} />
       </div>
     </div>
-  );
-}
+  ); }
 
 /**
  * Validation indicator component
  */
-const ValidationIndicator: React.FC<{
-  isValid: boolean;
+const ValidationIndicator: React.FC<{ isValid: boolean;
   isValidating: boolean;
-  type?: string;
-}> = ({ isValid, isValidating, type }): React.ReactElement => {
-  return (
+  type?: string; }> = ({ isValid, isValidating, type }): React.ReactElement => { return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
         </span>
         <span className="validation-indicator__text sr-only">Checking...</span>
       </div>
-    );
-  }
+    ); }
 
-  if (isValid) {
-    return (
+  if (isValid) { return (
       <div className="validation-indicator validation-indicator--valid">
         <span className="validation-indicator__icon" aria-hidden="true">
           ✅
         </span>
         <span className="validation-indicator__text sr-only">Valid</span>
       </div>
-    );
-  }
+    ); }
 
-  return null;
-};
+  return null; };
 
 /**
  * Label component
  */
-const Label: React.FC<{
-  label: string;
+const Label: React.FC<{ label: string;
   required?: boolean;
-  htmlFor: string;
-}> = ({ label, required, htmlFor }): React.ReactElement => {
-  return (
+  htmlFor: string; }> = ({ label, required, htmlFor }): React.ReactElement => { return (
     <label className="personal-number-field__label" htmlFor={htmlFor}>
       <span className="personal-number-field__label-text">{label}</span>
       {required && (
@@ -123,14 +108,12 @@ const Label: React.FC<{
         </span>
       )}
     </label>
-  );
-};
+  ); };
 
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => {
-  return (
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => { return (
     <div className="personal-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (
         <div key={index} className="personal-number-field__error-item">
@@ -141,7 +124,6 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactEl
         </div>
       ))}
     </div>
-  );
-};
+  ); };
 
 PersonalNumberInput.displayName = 'PersonalNumberInput';

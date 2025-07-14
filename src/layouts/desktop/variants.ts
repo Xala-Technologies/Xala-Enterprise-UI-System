@@ -18,26 +18,16 @@ export const desktopHeaderVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         transparent: 'bg-transparent border-transparent',
-        elevated: 'shadow-lg',
-      },
-      size: {
-        sm: 'h-16 px-6',
+        elevated: 'shadow-lg', },
+      size: { sm: 'h-16 px-6',
         md: 'h-20 px-8',
-        lg: 'h-24 px-10',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-24 px-10', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -51,31 +41,19 @@ export const desktopSidebarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         transparent: 'bg-transparent border-transparent',
-        elevated: 'shadow-lg',
-      },
-      size: {
-        sm: 'w-48',
+        elevated: 'shadow-lg', },
+      size: { sm: 'w-48',
         md: 'w-56',
-        lg: 'w-64',
-      },
-      collapsed: {
-        true: 'w-16',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
+        lg: 'w-64', },
+      collapsed: { true: 'w-16',
+        false: '', }, },
+    defaultVariants: { variant: 'default',
       size: 'md',
-      collapsed: false,
-    },
-  }
+      collapsed: false, }, }
 );
 
 /**
@@ -88,27 +66,17 @@ export const desktopMainContentVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         transparent: 'bg-transparent',
-        elevated: 'shadow-lg',
-      },
-      padding: {
-        none: 'p-0',
+        elevated: 'shadow-lg', },
+      padding: { none: 'p-0',
         sm: 'p-4',
         md: 'p-6',
-        lg: 'p-8',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      padding: 'md',
-    },
-  }
+        lg: 'p-8', }, },
+    defaultVariants: { variant: 'default',
+      padding: 'md', }, }
 );
 
 /**
@@ -123,26 +91,16 @@ export const desktopToolbarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         transparent: 'bg-transparent border-transparent',
-        elevated: 'shadow-lg',
-      },
-      size: {
-        sm: 'h-10 px-3',
+        elevated: 'shadow-lg', },
+      size: { sm: 'h-10 px-3',
         md: 'h-12 px-4',
-        lg: 'h-14 px-6',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-14 px-6', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -158,26 +116,16 @@ export const desktopStatusBarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         transparent: 'bg-transparent border-transparent',
-        elevated: 'shadow-lg',
-      },
-      size: {
-        sm: 'h-6 px-3',
+        elevated: 'shadow-lg', },
+      size: { sm: 'h-6 px-3',
         md: 'h-8 px-4',
-        lg: 'h-10 px-6',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-10 px-6', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 // Export variant prop types

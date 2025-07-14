@@ -27,37 +27,25 @@ export { DesktopLayoutComposition } from './desktop/DesktopLayout';
 export { MobileLayoutComposition } from './mobile/MobileLayout';
 
 // Layout types - Base
-export type {
-    BaseLayoutProps, FooterProps, HeaderProps, MainContentProps, SidebarProps
-} from './BaseLayout';
+export type { BaseLayoutProps, FooterProps, HeaderProps, MainContentProps, SidebarProps } from './BaseLayout';
 
 // Layout types - Mobile
-export type {
-    MobileBottomNavigationProps, MobileContentProps, MobileDrawerProps, MobileHeaderProps, MobileLayoutProps
-} from './mobile/MobileLayout';
+export type { MobileBottomNavigationProps, MobileContentProps, MobileDrawerProps, MobileHeaderProps, MobileLayoutProps } from './mobile/MobileLayout';
 
 // Layout types - Tablet
-export type {
-    TabletHeaderProps, TabletLayoutProps, TabletSidebarProps
-} from './tablet/TabletLayout';
+export type { TabletHeaderProps, TabletLayoutProps, TabletSidebarProps } from './tablet/TabletLayout';
 
 // Layout types - Desktop
-export type {
-    DesktopHeaderProps, DesktopLayoutProps, DesktopMainContentProps, DesktopSidebarProps, DesktopStatusBarProps, DesktopToolbarProps
-} from './desktop/DesktopLayout';
+export type { DesktopHeaderProps, DesktopLayoutProps, DesktopMainContentProps, DesktopSidebarProps, DesktopStatusBarProps, DesktopToolbarProps } from './desktop/DesktopLayout';
 
 // Layout types - Web
-export type {
-    WebContentProps,
+export type { WebContentProps,
     WebFooterProps,
-    WebLayoutProps, WebNavbarProps
-} from './web/WebLayout';
+    WebLayoutProps, WebNavbarProps } from './web/WebLayout';
 
 // Layout types - Admin
-export type {
-    AdminContentProps,
-    AdminLayoutProps, AdminSidebarProps, AdminTopBarProps
-} from './admin/AdminLayout';
+export type { AdminContentProps,
+    AdminLayoutProps, AdminSidebarProps, AdminTopBarProps } from './admin/AdminLayout';
 
 // Platform utilities
 export { usePlatform } from './BaseLayout';

@@ -5,9 +5,7 @@ export { MobileHeader } from './MobileHeader';
 export { BottomNavigation } from './BottomNavigation';
 
 // Re-export types for convenience
-export type {
-  MobileHeaderProps,
+export type { MobileHeaderProps,
   BottomNavigationProps,
   BottomNavigationItem,
-  MobileDrawerProps,
-} from '../../../types/platform.types';
+  MobileDrawerProps, } from '../../../types/platform.types';

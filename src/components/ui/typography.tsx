@@ -11,10 +11,7 @@ import React, { forwardRef, type HTMLAttributes } from 'react';
 /**
  * Typography variants using class-variance-authority
  */
-const typographyVariants = cva('text-foreground', {
-  variants: {
-    variant: {
-      h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
+const typographyVariants = cva('text-foreground', { variants: { variant: { h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
       h2: 'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
       h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
       h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
@@ -28,41 +25,30 @@ const typographyVariants = cva('text-foreground', {
       small: 'text-sm font-medium leading-none',
       muted: 'text-sm text-muted-foreground',
       code: 'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-      blockquote: 'mt-6 border-l-2 pl-6 italic',
-    },
-    textColor: {
-      default: 'text-foreground',
+      blockquote: 'mt-6 border-l-2 pl-6 italic', },
+    textColor: { default: 'text-foreground',
       muted: 'text-muted-foreground',
       primary: 'text-primary',
       secondary: 'text-secondary-foreground',
       destructive: 'text-destructive',
       success: 'text-green-600',
       warning: 'text-yellow-600',
-      info: 'text-blue-600',
-    },
-    align: {
-      left: 'text-left',
+      info: 'text-blue-600', },
+    align: { left: 'text-left',
       center: 'text-center',
       right: 'text-right',
-      justify: 'text-justify',
-    },
-  },
-  defaultVariants: {
-    variant: 'body',
+      justify: 'text-justify', }, },
+  defaultVariants: { variant: 'body',
     textColor: 'default',
-    align: 'left',
-  },
-});
+    align: 'left', }, });
 
 /**
  * Typography component props interface
  */
 export interface TypographyProps
   extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof typographyVariants> {
-  readonly as?: React.ElementType;
-  readonly truncate?: boolean;
-}
+    VariantProps<typeof typographyVariants> { readonly as?: React.ElementType;
+  readonly truncate?: boolean; }
 
 /**
  * Typography component
@@ -76,8 +62,7 @@ export interface TypographyProps
  * @returns Typography JSX element
  */
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
-  ({ className, variant, textColor, align, as, truncate, ...props }, ref): React.ReactElement => {
-  return (
+  ({ className, variant, textColor, align, as, truncate, ...props }, ref): React.ReactElement => { return (
       <Component
         ref={ref}
         className={cn(
@@ -87,8 +72,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
         )}
         {...props}
       />
-    );
-  }
+    ); }
 );
 
 Typography.displayName = 'Typography';
@@ -98,9 +82,7 @@ Typography.displayName = 'Typography';
  * @param variant - Typography variant
  * @returns HTML element tag
  */
-function getElementFromVariant(variant: string | null | undefined): React.ElementType {
-  switch (variant) {
-    case 'h1':
+function getElementFromVariant(variant: string | null | undefined): React.ElementType { switch (variant) { case 'h1':
       return 'h1';
     case 'h2':
       return 'h2';
@@ -124,9 +106,7 @@ function getElementFromVariant(variant: string | null | undefined): React.Elemen
     case 'bodyLarge':
     case 'bodySmall':
     default:
-      return 'p';
-  }
-}
+      return 'p'; } }
 
 /**
  * Convenience components for common typography patterns

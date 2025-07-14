@@ -19,24 +19,14 @@ const webNavbarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-      },
-      size: {
-        sm: 'h-16',
+        secondary: 'bg-secondary text-secondary-foreground', },
+      size: { sm: 'h-16',
         md: 'h-20',
-        lg: 'h-24',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-24', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -44,24 +34,14 @@ const webNavbarVariants = cva(
  */
 const webContentVariants = cva(
   ['flex-1 w-full', 'transition-all duration-300', 'motion-reduce:transition-none'],
-  {
-    variants: {
-      boxed: {
-        true: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
-        false: 'w-full',
-      },
-      padding: {
-        none: 'p-0',
+  { variants: { boxed: { true: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
+        false: 'w-full', },
+      padding: { none: 'p-0',
         sm: 'py-4',
         md: 'py-8',
-        lg: 'py-12',
-      },
-    },
-    defaultVariants: {
-      boxed: true,
-      padding: 'md',
-    },
-  }
+        lg: 'py-12', }, },
+    defaultVariants: { boxed: true,
+      padding: 'md', }, }
 );
 
 /**
@@ -74,31 +54,20 @@ const webFooterVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-      },
-      size: {
-        sm: 'py-4',
+        secondary: 'bg-secondary text-secondary-foreground', },
+      size: { sm: 'py-4',
         md: 'py-8',
-        lg: 'py-12',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'py-12', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
  * Web Navbar Props
  */
-export interface WebNavbarProps extends React.HTMLAttributes<HTMLElement> {
-  /** Navbar variant */
+export interface WebNavbarProps extends React.HTMLAttributes<HTMLElement> { /** Navbar variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Navbar size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -113,40 +82,34 @@ export interface WebNavbarProps extends React.HTMLAttributes<HTMLElement> {
   /** Login button */
   readonly loginButton?: ReactNode;
   /** Profile dropdown */
-  readonly profileDropdown?: ReactNode;
-}
+  readonly profileDropdown?: ReactNode; }
 
 /**
  * Web Content Props
  */
-export interface WebContentProps extends React.HTMLAttributes<HTMLElement> {
-  /** Content */
+export interface WebContentProps extends React.HTMLAttributes<HTMLElement> { /** Content */
   readonly children: ReactNode;
   /** Boxed layout */
   readonly boxed?: boolean;
   /** Content padding */
   readonly padding?: 'none' | 'sm' | 'md' | 'lg';
   /** Content title */
-  readonly title?: string;
-}
+  readonly title?: string; }
 
 /**
  * Web Footer Props
  */
-export interface WebFooterProps extends React.HTMLAttributes<HTMLElement> {
-  /** Footer content */
+export interface WebFooterProps extends React.HTMLAttributes<HTMLElement> { /** Footer content */
   readonly children: ReactNode;
   /** Footer variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Footer size */
-  readonly size?: 'sm' | 'md' | 'lg';
-}
+  readonly size?: 'sm' | 'md' | 'lg'; }
 
 /**
  * Web Layout Props
  */
-export interface WebLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Layout content */
+export interface WebLayoutProps extends React.HTMLAttributes<HTMLDivElement> { /** Layout content */
   readonly children: ReactNode;
   /** Navbar component */
   readonly navbar?: ReactNode;
@@ -157,8 +120,7 @@ export interface WebLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Drawer open state */
   readonly drawerOpen?: boolean;
   /** Drawer close handler */
-  readonly onDrawerClose?: () => void;
-}
+  readonly onDrawerClose?: () => void; }
 
 /**
  * Web Navbar Component
@@ -167,8 +129,7 @@ export interface WebLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
   (
-    {
-      variant = 'default',
+    { variant = 'default',
       size = 'md',
       logo,
       search,
@@ -177,11 +138,9 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
       loginButton,
       profileDropdown,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <nav
         ref={ref}
         role="navigation"
@@ -207,8 +166,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
           </div>
         </div>
       </nav>
-    );
-  }
+    ); }
 );
 
 WebNavbar.displayName = 'WebNavbar';
@@ -219,8 +177,7 @@ WebNavbar.displayName = 'WebNavbar';
  * @returns React.ReactElement
  */
 export const WebContent = forwardRef<HTMLElement, WebContentProps>(
-  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): React.ReactElement => { return (
       <main
         ref={ref}
         role="main"
@@ -235,8 +192,7 @@ export const WebContent = forwardRef<HTMLElement, WebContentProps>(
 
         {children}
       </main>
-    );
-  }
+    ); }
 );
 
 WebContent.displayName = 'WebContent';
@@ -247,8 +203,7 @@ WebContent.displayName = 'WebContent';
  * @returns React.ReactElement
  */
 export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
-  ({ children, variant = 'default', size = 'md', className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ children, variant = 'default', size = 'md', className, ...props }, ref): React.ReactElement => { return (
       <footer
         ref={ref}
         role="contentinfo"
@@ -257,8 +212,7 @@ export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
       </footer>
-    );
-  }
+    ); }
 );
 
 WebFooter.displayName = 'WebFooter';
@@ -270,19 +224,16 @@ WebFooter.displayName = 'WebFooter';
  */
 export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
   (
-    {
-      children,
+    { children,
       navbar,
       footer,
       rightDrawer,
       drawerOpen = false,
       onDrawerClose,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <div
         ref={ref}
         className={cn(
@@ -307,9 +258,7 @@ export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
               />
               <div
                 className="fixed right-0 top-0 bottom-0 w-96 bg-card border-l border-border z-50"
-                style={{
-                  padding: platformTokens.layout.desktop.container.padding,
-                }}
+                style={{ padding: platformTokens.layout.desktop.container.padding, }}
               >
                 {rightDrawer}
               </div>
@@ -319,8 +268,7 @@ export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
 
         {footer}
       </div>
-    );
-  }
+    ); }
 );
 
 WebLayout.displayName = 'WebLayout';

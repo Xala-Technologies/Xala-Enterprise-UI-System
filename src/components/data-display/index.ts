@@ -8,8 +8,7 @@ export { Badge } from './Badge';
 export { Tooltip } from './Tooltip';
 
 // Export all types
-export type {
-  DataTableProps,
+export type { DataTableProps,
   KeyValueListProps,
   TagProps,
   BadgeProps,
@@ -22,5 +21,4 @@ export type {
   SortingConfig,
   SelectionConfig,
   SearchConfig,
-  ExportConfig,
-} from '../../types/data-display.types';
+  ExportConfig, } from '../../types/data-display.types';

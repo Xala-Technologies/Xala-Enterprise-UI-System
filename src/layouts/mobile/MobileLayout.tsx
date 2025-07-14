@@ -22,25 +22,15 @@ const mobileHeaderVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
-        transparent: 'bg-transparent border-transparent',
-      },
-      size: {
-        sm: 'h-12 px-3',
+        transparent: 'bg-transparent border-transparent', },
+      size: { sm: 'h-12 px-3',
         md: 'h-16 px-4',
-        lg: 'h-20 px-6',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-    },
-  }
+        lg: 'h-20 px-6', }, },
+    defaultVariants: { variant: 'default',
+      size: 'md', }, }
 );
 
 /**
@@ -57,19 +47,11 @@ const mobileBottomNavVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
+  { variants: { variant: { default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
-        transparent: 'bg-transparent border-transparent',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
+        transparent: 'bg-transparent border-transparent', }, },
+    defaultVariants: { variant: 'default', }, }
 );
 
 /**
@@ -84,22 +66,12 @@ const mobileDrawerVariants = cva(
     'motion-reduce:transition-none',
     'overflow-y-auto',
   ],
-  {
-    variants: {
-      position: {
-        left: 'left-0',
-        right: 'right-0',
-      },
-      open: {
-        true: 'translate-x-0',
-        false: '-translate-x-full',
-      },
-    },
-    defaultVariants: {
-      position: 'left',
-      open: false,
-    },
-  }
+  { variants: { position: { left: 'left-0',
+        right: 'right-0', },
+      open: { true: 'translate-x-0',
+        false: '-translate-x-full', }, },
+    defaultVariants: { position: 'left',
+      open: false, }, }
 );
 
 /**
@@ -114,32 +86,21 @@ const mobileContentVariants = cva(
     'transition-all duration-300',
     'motion-reduce:transition-none',
   ],
-  {
-    variants: {
-      padding: {
-        none: 'p-0',
+  { variants: { padding: { none: 'p-0',
         sm: 'p-2',
         md: 'p-4',
         lg: 'p-6',
-        xl: 'p-8',
-      },
-      bottomSafe: {
-        true: 'pb-20 safe-area-inset-bottom',
-        false: 'pb-4',
-      },
-    },
-    defaultVariants: {
-      padding: 'md',
-      bottomSafe: true,
-    },
-  }
+        xl: 'p-8', },
+      bottomSafe: { true: 'pb-20 safe-area-inset-bottom',
+        false: 'pb-4', }, },
+    defaultVariants: { padding: 'md',
+      bottomSafe: true, }, }
 );
 
 /**
  * Mobile Header Props
  */
-export interface MobileHeaderProps extends React.HTMLAttributes<HTMLElement> {
-  /** Header content */
+export interface MobileHeaderProps extends React.HTMLAttributes<HTMLElement> { /** Header content */
   readonly children?: ReactNode;
 
   /** Header variant */
@@ -164,22 +125,18 @@ export interface MobileHeaderProps extends React.HTMLAttributes<HTMLElement> {
   readonly showBackButton?: boolean;
 
   /** Back button handler */
-  readonly onBack?: () => void;
-}
+  readonly onBack?: () => void; }
 
 /**
  * Mobile Bottom Navigation Props
  */
-export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLElement> {
-  /** Navigation items */
-  readonly items: Array<{
-    readonly icon: ReactNode;
+export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLElement> { /** Navigation items */
+  readonly items: Array<{ readonly icon: ReactNode;
     readonly label: string;
     readonly href?: string;
     readonly active?: boolean;
     readonly onClick?: () => void;
-    readonly badge?: string | number;
-  }>;
+    readonly badge?: string | number; }>;
 
   /** Bottom navigation variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'transparent';
@@ -188,14 +145,12 @@ export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLEl
   readonly activeIndex?: number;
 
   /** Navigation change handler */
-  readonly onNavigate?: (index: number) => void;
-}
+  readonly onNavigate?: (index: number) => void; }
 
 /**
  * Mobile Drawer Props
  */
-export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> {
-  /** Drawer content */
+export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> { /** Drawer content */
   readonly children: ReactNode;
 
   /** Drawer position */
@@ -214,14 +169,12 @@ export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> {
   readonly header?: ReactNode;
 
   /** Footer content */
-  readonly footer?: ReactNode;
-}
+  readonly footer?: ReactNode; }
 
 /**
  * Mobile Content Props
  */
-export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> {
-  /** Content */
+export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> { /** Content */
   readonly children: ReactNode;
 
   /** Content padding */
@@ -237,14 +190,12 @@ export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> {
   readonly pullToRefresh?: boolean;
 
   /** Refresh handler */
-  readonly onRefresh?: () => void;
-}
+  readonly onRefresh?: () => void; }
 
 /**
  * Mobile Layout Props
  */
-export interface MobileLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Layout content */
+export interface MobileLayoutProps extends React.HTMLAttributes<HTMLDivElement> { /** Layout content */
   readonly children: ReactNode;
 
   /** Header component */
@@ -263,16 +214,14 @@ export interface MobileLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
   readonly onDrawerClose?: () => void;
 
   /** Status bar style */
-  readonly statusBarStyle?: 'default' | 'light' | 'dark';
-}
+  readonly statusBarStyle?: 'default' | 'light' | 'dark'; }
 
 /**
  * Mobile Header Component
  */
 export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
   (
-    {
-      children,
+    { children,
       variant = 'default',
       size = 'md',
       leftAction,
@@ -282,11 +231,9 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
       showBackButton = false,
       onBack,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <header
         ref={ref}
         role="banner"
@@ -326,8 +273,7 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
         {/* Custom content */}
         {children}
       </header>
-    );
-  }
+    ); }
 );
 
 MobileHeader.displayName = 'MobileHeader';
@@ -336,8 +282,7 @@ MobileHeader.displayName = 'MobileHeader';
  * Mobile Bottom Navigation Component
  */
 export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNavigationProps>(
-  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): React.ReactElement => {
-  return (
+  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): React.ReactElement => { return (
       <nav
         ref={ref}
         role="navigation"
@@ -348,8 +293,7 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
         {items.map((item, index) => (
           <button
             key={index}
-            onClick={(): React.ReactElement => {
-  return (
+            onClick={(): React.ReactElement => { return (
       <>
         {/* Overlay */}
         {open && (
@@ -392,8 +336,7 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
           {footer && <div className="p-4 border-t border-border">{footer}</div>}
         </aside>
       </>
-    );
-  }
+    ); }
 );
 
 MobileDrawer.displayName = 'MobileDrawer';
@@ -403,19 +346,16 @@ MobileDrawer.displayName = 'MobileDrawer';
  */
 export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
   (
-    {
-      children,
+    { children,
       padding = 'md',
       bottomSafe = true,
       title,
       pullToRefresh = false,
       onRefresh,
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <main
         ref={ref}
         role="main"
@@ -435,8 +375,7 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
 
         {children}
       </main>
-    );
-  }
+    ); }
 );
 
 MobileContent.displayName = 'MobileContent';
@@ -446,8 +385,7 @@ MobileContent.displayName = 'MobileContent';
  */
 export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
   (
-    {
-      children,
+    { children,
       header,
       bottomNavigation,
       drawer,
@@ -455,11 +393,9 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       onDrawerClose,
       statusBarStyle = 'default',
       className,
-      ...props
-    },
+      ...props },
     ref
-  ): React.ReactElement => {
-  return (
+  ): React.ReactElement => { return (
       <BaseLayout
         ref={ref}
         platform="mobile"
@@ -478,8 +414,7 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
         {/* Drawer */}
         {drawer}
       </BaseLayout>
-    );
-  }
+    ); }
 );
 
 MobileLayout.displayName = 'MobileLayout';
@@ -487,26 +422,21 @@ MobileLayout.displayName = 'MobileLayout';
 /**
  * Mobile layout composition utilities
  */
-export const MobileLayoutComposition = {
-  /**
+export const MobileLayoutComposition = { /**
    * Standard mobile app layout
    */
-  App: ({
-    header,
+  App: ({ header,
     content,
     bottomNavigation,
     drawer,
     drawerOpen = false,
     onDrawerClose,
-    ...props
-  }: {
-    header?: ReactNode;
+    ...props }: { header?: ReactNode;
     content: ReactNode;
     bottomNavigation?: ReactNode;
     drawer?: ReactNode;
     drawerOpen?: boolean;
-    onDrawerClose?: () => void;
-  } & MobileLayoutProps) => (
+    onDrawerClose?: () => void; } & MobileLayoutProps) => (
     <MobileLayout drawerOpen={drawerOpen} onDrawerClose={onDrawerClose} {...props}>
       {header}
       <MobileContent>{content}</MobileContent>
@@ -518,18 +448,14 @@ export const MobileLayoutComposition = {
   /**
    * Modal-like mobile layout
    */
-  Modal: ({
-    header,
+  Modal: ({ header,
     content,
     actions,
     onClose,
-    ...props
-  }: {
-    header?: ReactNode;
+    ...props }: { header?: ReactNode;
     content: ReactNode;
     actions?: ReactNode;
-    onClose?: () => void;
-  } & MobileLayoutProps) => (
+    onClose?: () => void; } & MobileLayoutProps) => (
     <MobileLayout {...props}>
       {header}
       <MobileContent bottomSafe={false}>{content}</MobileContent>
@@ -540,19 +466,14 @@ export const MobileLayoutComposition = {
   /**
    * Fullscreen mobile layout
    */
-  Fullscreen: ({
-    content,
-    ...props
-  }: {
-    content: ReactNode;
-  } & MobileLayoutProps) => (
+  Fullscreen: ({ content,
+    ...props }: { content: ReactNode; } & MobileLayoutProps) => (
     <MobileLayout {...props}>
       <MobileContent padding="none" bottomSafe={false}>
         {content}
       </MobileContent>
     </MobileLayout>
-  ),
-};
+  ), };
 
 /**
  * Export mobile layout variants and types
@@ -562,9 +483,7 @@ export type MobileBottomNavVariant = VariantProps<typeof mobileBottomNavVariants
 export type MobileDrawerVariant = VariantProps<typeof mobileDrawerVariants>;
 export type MobileContentVariant = VariantProps<typeof mobileContentVariants>;
 
-export {
-  mobileBottomNavVariants,
+export { mobileBottomNavVariants,
   mobileContentVariants,
   mobileDrawerVariants,
-  mobileHeaderVariants,
-};
+  mobileHeaderVariants, };

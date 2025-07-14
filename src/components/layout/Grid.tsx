@@ -12,45 +12,30 @@ import { forwardRef, type HTMLAttributes } from 'react';
 /**
  * Grid container variants using class-variance-authority
  */
-const gridVariants = cva('grid w-full', {
-  variants: {
-    cols: {
-      1: 'grid-cols-1',
+const gridVariants = cva('grid w-full', { variants: { cols: { 1: 'grid-cols-1',
       2: 'grid-cols-2',
       3: 'grid-cols-3',
       4: 'grid-cols-4',
       5: 'grid-cols-5',
       6: 'grid-cols-6',
-      12: 'grid-cols-12',
-    },
-    gap: {
-      none: 'gap-0',
+      12: 'grid-cols-12', },
+    gap: { none: 'gap-0',
       xs: 'gap-1',
       sm: 'gap-2',
       md: 'gap-4',
       lg: 'gap-6',
       xl: 'gap-8',
-      '2xl': 'gap-12',
-    },
-    responsive: {
-      true: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
-      false: '',
-    },
-  },
-  defaultVariants: {
-    cols: 1,
+      '2xl': 'gap-12', },
+    responsive: { true: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+      false: '', }, },
+  defaultVariants: { cols: 1,
     gap: 'md',
-    responsive: false,
-  },
-});
+    responsive: false, }, });
 
 /**
  * Grid item variants using class-variance-authority
  */
-const gridItemVariants = cva('w-full', {
-  variants: {
-    span: {
-      1: 'col-span-1',
+const gridItemVariants = cva('w-full', { variants: { span: { 1: 'col-span-1',
       2: 'col-span-2',
       3: 'col-span-3',
       4: 'col-span-4',
@@ -62,10 +47,8 @@ const gridItemVariants = cva('w-full', {
       10: 'col-span-10',
       11: 'col-span-11',
       12: 'col-span-12',
-      full: 'col-span-full',
-    },
-    start: {
-      1: 'col-start-1',
+      full: 'col-span-full', },
+    start: { 1: 'col-start-1',
       2: 'col-start-2',
       3: 'col-start-3',
       4: 'col-start-4',
@@ -76,13 +59,8 @@ const gridItemVariants = cva('w-full', {
       9: 'col-start-9',
       10: 'col-start-10',
       11: 'col-start-11',
-      12: 'col-start-12',
-    },
-  },
-  defaultVariants: {
-    span: 1,
-  },
-});
+      12: 'col-start-12', }, },
+  defaultVariants: { span: 1, }, });
 
 /**
  * Grid component props interface

@@ -2,25 +2,20 @@ import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useCallback } from 'react';
 
 
-const logger = Logger.create({
-  serviceName: 'ui-system-bottom-navigation',
+const logger = Logger.create({ serviceName: 'ui-system-bottom-navigation',
   logLevel: 'info',
   enableConsoleLogging: true,
-  enableFileLogging: false,
-});
+  enableFileLogging: false, });
 
 // BottomNavigation - Norwegian government-compliant mobile bottom navigation component
-interface BottomNavigationItem {
-  labelKey: string;
+interface BottomNavigationItem { labelKey: string;
   icon: string;
   activeIcon?: string;
   badgeCount?: number;
   disabled?: boolean;
-  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-}
+  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG'; }
 
-interface BottomNavigationProps {
-  items: BottomNavigationItem[];
+interface BottomNavigationProps { items: BottomNavigationItem[];
   activeIndex?: number;
   showLabels?: boolean;
   showBadges?: boolean;
@@ -29,8 +24,7 @@ interface BottomNavigationProps {
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
   onItemPress?: (index: number, item: BottomNavigationItem) => void;
   style?: React.CSSProperties;
-  children?: unknown;
-}
+  children?: unknown; }
 
 /**
  * BottomNavigation - Norwegian government-compliant mobile bottom navigation
@@ -51,12 +45,10 @@ interface BottomNavigationProps {
  * - Emergency access support
  * - Accessibility announcements in Norwegian
  */
-export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: unknown): React.ReactElement => {
-  return (
+export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: unknown): React.ReactElement => { return (
     <nav
       ref={ref}
-      style={{
-        display: 'flex',
+      style={{ display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-around',
         padding: 'var(--spacing-2) var(--spacing-4)',
@@ -72,14 +64,12 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
         right: '0',
         zIndex: 'var(--z-index-navigation)',
         ...getClassificationStyle(),
-        ...style,
-      }}
+        ...style, }}
       role="tablist"
       aria-label={'navigation.bottomNavigation'}
       {...restProps}
     >
-      {items.map((item, index): React.ReactElement => {
-  return (
+      {items.map((item, index): React.ReactElement => { return (
           <button
             key={index}
             type="button"
@@ -88,8 +78,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
             aria-label={t(item.labelKey)}
             disabled={item.disabled}
             onClick={() => handleItemPress(index, item)}
-            style={{
-              display: 'flex',
+            style={{ display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
@@ -105,21 +94,16 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
               transition: 'all 0.2s ease',
               position: 'relative',
               flex: 1,
-              maxWidth: 'var(--spacing-20)', // Prevent items from becoming too wide
-            }}
+              maxWidth: 'var(--spacing-20)', // Prevent items from becoming too wide }}
           >
             {/* Icon */}
             <div
-              style={{
-                position: 'relative',
-                marginBottom: showLabels ? 'var(--spacing-1)' : '0',
-              }}
+              style={{ position: 'relative',
+                marginBottom: showLabels ? 'var(--spacing-1)' : '0', }}
             >
               <span
-                style={{
-                  fontSize: 'var(--font-size-xl)',
-                  lineHeight: 1,
-                }}
+                style={{ fontSize: 'var(--font-size-xl)',
+                  lineHeight: 1, }}
               >
                 {isActive && item.activeIcon ? item.activeIcon : item.icon}
               </span>
@@ -127,8 +111,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
               {/* Badge */}
               {showBadges && item.badgeCount && item.badgeCount > 0 && (
                 <span
-                  style={{
-                    position: 'absolute',
+                  style={{ position: 'absolute',
                     top: 'calc(-1 * var(--spacing-1))',
                     right: 'calc(-1 * var(--spacing-1))',
                     backgroundColor: 'var(--color-danger-500)',
@@ -141,8 +124,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    lineHeight: 1,
-                  }}
+                    lineHeight: 1, }}
                 >
                   {item.badgeCount > 99 ? '99+' : item.badgeCount}
                 </span>
@@ -151,8 +133,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
               {/* NSM Classification indicator */}
               {itemClassification && (
                 <div
-                  style={{
-                    position: 'absolute',
+                  style={{ position: 'absolute',
                     bottom: 'calc(-1 * var(--spacing-0-5))',
                     left: '50%',
                     transform: 'translateX(-50%)',
@@ -166,8 +147,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
                           ? 'var(--color-warning-500)'
                           : itemClassification === 'KONFIDENSIELT'
                             ? 'var(--color-danger-500)'
-                            : 'var(--color-danger-700)',
-                  }}
+                            : 'var(--color-danger-700)', }}
                 />
               )}
             </div>
@@ -175,25 +155,21 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
             {/* Label */}
             {showLabels && (
               <span
-                style={{
-                  fontSize: 'var(--font-size-xs)',
+                style={{ fontSize: 'var(--font-size-xs)',
                   fontWeight: isActive ? 'var(--font-weight-medium)' : 'var(--font-weight-normal)',
                   lineHeight: 'var(--line-height-tight)',
                   textAlign: 'center',
                   maxWidth: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
+                  whiteSpace: 'nowrap', }}
               >
                 {t(item.labelKey)}
               </span>
             )}
           </button>
-        );
-      })}
+        ); })}
     </nav>
-  );
-});
+  ); });
 
 BottomNavigation.displayName = 'BottomNavigation';

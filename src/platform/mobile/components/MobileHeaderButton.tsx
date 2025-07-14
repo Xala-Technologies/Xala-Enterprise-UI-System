@@ -2,32 +2,25 @@
 import React from 'react';
 
 // Helper function
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
+    'HEMMELIG': '⚫', };
+  return icons[level as keyof typeof icons] || '📋'; };
 
 
-interface MobileHeaderButtonProps {
-  icon: string;
+interface MobileHeaderButtonProps { icon: string;
   label: string;
   onClick?: (() => void) | undefined;
   variant?: 'default' | 'primary' | 'secondary';
   showBadge?: boolean;
   badgeCount?: number;
   disabled?: boolean;
-  style?: React.CSSProperties;
-}
+  style?: React.CSSProperties; }
 
 export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHeaderButtonProps>(
   (
-    {
-      icon,
+    { icon,
       label,
       onClick,
       variant = 'default',
@@ -35,31 +28,19 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
       badgeCount = 0,
       disabled = false,
       style,
-      ...restProps
-    },
+      ...restProps },
     ref
-  ) => {
-    const getVariantStyle = (): React.CSSProperties => {
-      const variants = {
-        default: {
-          backgroundColor: 'transparent',
+  ) => { const getVariantStyle = (): React.CSSProperties => { const variants = { default: { backgroundColor: 'transparent',
           color: 'var(--color-text-primary)',
-          border: 'none',
-        },
-        primary: {
-          backgroundColor: 'var(--color-primary)',
+          border: 'none', },
+        primary: { backgroundColor: 'var(--color-primary)',
           color: 'var(--color-text-on-primary)',
-          border: 'none',
-        },
-        secondary: {
-          backgroundColor: 'var(--color-secondary)',
+          border: 'none', },
+        secondary: { backgroundColor: 'var(--color-secondary)',
           color: 'var(--color-text-on-secondary)',
-          border: 'none',
-        },
-      };
+          border: 'none', }, };
 
-      return variants[variant];
-    };
+      return variants[variant]; };
 
     return (
       <button
@@ -67,8 +48,7 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
         type="button"
         onClick={onClick}
         disabled={disabled}
-        style={{
-          position: 'relative',
+        style={{ position: 'relative',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -80,8 +60,7 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
           transition: 'all var(--transition-duration-fast) ease-in-out',
           opacity: disabled ? 0.5 : 1,
           ...getVariantStyle(),
-          ...style,
-        }}
+          ...style, }}
         aria-label={label}
         {...restProps}
       >
@@ -89,8 +68,7 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
 
         {showBadge && badgeCount > 0 && (
           <span
-            style={{
-              position: 'absolute',
+            style={{ position: 'absolute',
               top: 'var(--spacing-0-5)',
               right: 'var(--spacing-0-5)',
               minWidth: 'var(--spacing-4)',
@@ -103,15 +81,13 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
               color: 'var(--color-text-on-error)',
               backgroundColor: 'var(--color-error)',
               borderRadius: 'var(--border-radius-full)',
-              border: '2px solid var(--color-surface-primary)',
-            }}
+              border: '2px solid var(--color-surface-primary)', }}
           >
             {badgeCount > 99 ? '99+' : badgeCount}
           </span>
         )}
       </button>
-    );
-  }
+    ); }
 );
 
 MobileHeaderButton.displayName = 'MobileHeaderButton';
