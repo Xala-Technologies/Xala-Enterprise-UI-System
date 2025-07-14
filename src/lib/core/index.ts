@@ -7,7 +7,7 @@
 import { EventCore, Logger } from '@xala-technologies/enterprise-standards';
 
 import type { UISystemService } from '../interfaces/ui-system.interface';
-import type { ComponentRegistry, ThemeRegistry, UISystemConfig } from '../types/core.types';
+import type { ThemeRegistry, UISystemConfig } from '../types/core.types';
 
 // Local types
 interface ValidationResult<T> {
@@ -15,6 +15,8 @@ interface ValidationResult<T> {
   data?: T;
   error?: string;
 }
+
+type ComponentRegistry = Map<string, unknown>;
 
 // Create simple validation result functions
 function createSuccessResult<T>(data: T): ValidationResult<T> {

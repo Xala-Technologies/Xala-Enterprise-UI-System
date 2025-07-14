@@ -69,7 +69,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newValue = e.target.value;
         setCurrentLength(newValue.length);
-        onChange?.(e);
+        onChange?.(newValue, e);
       },
       [onChange]
     );

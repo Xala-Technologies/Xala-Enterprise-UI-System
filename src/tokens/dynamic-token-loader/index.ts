@@ -20,6 +20,7 @@ export type {
 } from './types';
 
 // Default instance
+import { DynamicTokenLoader } from './loader';
 export const dynamicTokenLoader = new DynamicTokenLoader();
 
 // Convenience functions

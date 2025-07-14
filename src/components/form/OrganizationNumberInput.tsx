@@ -5,10 +5,9 @@
  */
 
 import { Logger } from '@xala-technologies/enterprise-standards';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useId, useState } from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
-
 
 const logger = Logger.create({
   serviceName: 'ui-system-org-number-input',
@@ -16,6 +15,9 @@ const logger = Logger.create({
   enableConsoleLogging: true,
   enableFileLogging: false,
 });
+
+// Import the correct OrganizationData type
+import type { OrganizationData } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
 const validateOrganizationNumber = (value: string) => ({
@@ -34,43 +36,79 @@ const formatOrganizationNumber = (value: string): string => {
 };
 
 // Main component
-export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, OrganizationNumberInputProps>(
-  (props, ref): React.ReactElement => {
-    const {
-      label,
-      required,
-      testId = 'org-number-input',
-      helpText,
-      norwegian,
-      ...inputProps
-    } = props;
+export const OrganizationNumberInput = React.forwardRef<
+  HTMLInputElement,
+  OrganizationNumberInputProps
+>((props, ref): React.ReactElement => {
+  const {
+    label,
+    required = false,
+    testId = 'org-number-input',
+    helpText,
+    error,
+    value,
+    defaultValue,
+    onChange,
+    onValidationChange,
+    onBlur,
+    onFocus,
+    variant = 'default',
+    hasError = false,
+    validation,
+    displayFormat = 'nnn nnn nnn',
+    maskInput = false,
+    autoFormat = true,
+    fetchOrganizationData = false,
+    disabled = false,
+    readOnly = false,
+    placeholder = 'Enter organization number',
+    className,
+    ...inputProps
+  } = props;
 
-    const [currentValue, setCurrentValue] = React.useState('');
-    const [validationResult, setValidationResult] = React.useState(validateOrganizationNumber(''));
-    const [isValidating, setIsValidating] = React.useState(false);
-    const [isFetchingData, setIsFetchingData] = React.useState(false);
-    const [orgData, setOrgData] = React.useState<any>(null);
+  const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
+  const [validationResult, setValidationResult] = useState(validateOrganizationNumber(''));
+  const [isValidating, setIsValidating] = useState(false);
+  const [isFetchingData, setIsFetchingData] = useState(false);
+  const [orgData, setOrgData] = useState<OrganizationData | null>(null);
 
-    const inputId = `${testId}-input`;
-    const hasValidationErrors = !validationResult.isValid;
+  // Generate ID if not provided
+  const generatedId = useId();
+  const inputId = `${testId}-input-${generatedId}`;
+  const hasValidationErrors = !validationResult.isValid || hasError;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const value = e.target.value;
-      setCurrentValue(value);
-      setValidationResult(validateOrganizationNumber(value));
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const inputValue = e.target.value;
+    const formattedValue = autoFormat ? formatOrganizationNumber(inputValue) : inputValue;
 
-    const handleBlur = (): void => {
-      // Additional validation on blur
-    };
+    setCurrentValue(formattedValue);
+    const result = validateOrganizationNumber(formattedValue);
+    setValidationResult(result);
 
-    const handleFocus = (): void => {
-      // Handle focus events
-    };
+    if (onChange) {
+      onChange(formattedValue, result.isValid, e);
+    }
 
-    const inputClasses = `organization-number-input ${hasValidationErrors ? 'organization-number-input--error' : ''}`;
+    if (onValidationChange) {
+      onValidationChange(result.isValid, result.errors, orgData || undefined);
+    }
+  };
 
-    return (
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+    if (onBlur) {
+      onBlur(e);
+    }
+  };
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
+    if (onFocus) {
+      onFocus(e);
+    }
+  };
+
+  const inputClasses = `organization-number-input ${hasValidationErrors ? 'organization-number-input--error' : ''} ${className || ''}`;
+
+  return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
       {label && <Label label={label} required={required} htmlFor={inputId} />}
@@ -85,13 +123,16 @@ export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, Organi
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          placeholder="Enter organization number"
+          placeholder={placeholder}
           required={required}
-          maxLength={9}
+          disabled={disabled}
+          readOnly={readOnly}
+          maxLength={displayFormat === 'nnn nnn nnn' ? 11 : 9}
           className={inputClasses}
           aria-invalid={hasValidationErrors}
           aria-describedby={`${inputId}-help ${inputId}-error ${inputId}-validation`}
           aria-required={required}
+          data-variant={variant}
           {...inputProps}
         />
 
@@ -99,12 +140,9 @@ export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, Organi
         <ValidationIndicator
           isValid={validationResult.isValid}
           isValidating={isValidating}
-          type={validationResult.type}
+          errors={validationResult.errors}
         />
       </div>
-
-      {/* Organization data display */}
-      {orgData && <OrganizationDisplay orgData={orgData} isLoading={isFetchingData} />}
 
       {/* Help text */}
       {helpText && (
@@ -117,112 +155,32 @@ export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, Organi
       )}
 
       {/* Error messages */}
-      <div id={`${inputId}-error`}>
-        <ErrorMessage errors={validationResult.errors} />
-      </div>
-    </div>
-  );
-  }
-);
-
-OrganizationNumberInput.displayName = 'OrganizationNumberInput';
-
-/**
- * Organization data display component
- */
-const OrganizationDisplay: React.FC<{
-  orgData?: unknown; // Changed type to any as OrganizationData is removed
-  isLoading: boolean;
-}> = ({ orgData, isLoading }): React.ReactElement => {
-  if (isLoading) {
-    return (
-      <div className="organization-display organization-display--loading">
-        <span className="organization-display__loading-icon" aria-hidden="true">
-          ⏳
-        </span>
-        <span className="organization-display__loading-text">Fetching data...</span>
-      </div>
-    );
-  }
-
-  if (!orgData) {
-    return <></>;
-  }
-
-  const getStatusIcon = (status: string): string => {
-    const icons = {
-      active: '✅',
-      inactive: '⚪',
-      dissolved: '❌',
-    };
-    return icons[status as keyof typeof icons] || '❓';
-  };
-
-  const data = orgData as any;
-  
-  return (
-    <div className="organization-display">
-      <div className="organization-display__header">
-        <span className="organization-display__name">{data?.name || 'Unknown'}</span>
-        <span className="organization-display__status">
-          <span className="organization-display__status-icon" aria-hidden="true">
-            {getStatusIcon(data?.status || 'unknown')}
+      {(error || hasValidationErrors) && (
+        <div id={`${inputId}-error`} className="organization-number-field__error" role="alert">
+          <span className="organization-number-field__error-icon" aria-hidden="true">
+            ❌
           </span>
-          <span className="organization-display__status-text">{data?.status || 'Unknown'}</span>
-        </span>
-      </div>
-
-      <div className="organization-display__details">
-        <span className="organization-display__form">{data?.organizationForm || 'Unknown'}</span>
-        <span className="organization-display__location">
-          {data?.municipality || 'Unknown'}, {data?.county || 'Unknown'}
-        </span>
-      </div>
-
-      {data?.industry && (
-        <div className="organization-display__industry">
-          <span className="organization-display__industry-code">{data.industry.code}</span>
-          <span className="organization-display__industry-description">
-            {data.industry.description}
+          <span className="organization-number-field__error-text">
+            {error || validationResult.errors.join(', ')}
           </span>
+        </div>
+      )}
+
+      {/* Organization data display */}
+      {orgData && (
+        <div className="organization-number-field__org-data">
+          <h4 className="organization-number-field__org-name">{orgData.name}</h4>
+          <p className="organization-number-field__org-details">
+            {orgData.organizationForm} - {orgData.status}
+          </p>
+          <p className="organization-number-field__org-address">
+            {orgData.municipality}, {orgData.county}
+          </p>
         </div>
       )}
     </div>
   );
-};
-
-/**
- * Validation indicator component
- */
-const ValidationIndicator: React.FC<{
-  isValid: boolean;
-  isValidating: boolean;
-  type?: string;
-}> = ({ isValid, isValidating, type }): React.ReactElement => {
-  if (isValidating) {
-    return (
-      <div className="validation-indicator validation-indicator--validating">
-        <span className="validation-indicator__icon" aria-hidden="true">
-          ⏳
-        </span>
-        <span className="validation-indicator__text sr-only">Checking...</span>
-      </div>
-    );
-  }
-
-  if (isValid) {
-    return (
-      <div className="validation-indicator validation-indicator--valid">
-        <span className="validation-indicator__icon" aria-hidden="true">
-          ✅
-        </span>
-        <span className="validation-indicator__text sr-only">Valid</span>
-      </div>
-    );
-  }
-
-  return <></>;
-};
+});
 
 /**
  * Label component
@@ -245,45 +203,43 @@ const Label: React.FC<{
 };
 
 /**
- * Error message component
+ * Validation indicator component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => {
+const ValidationIndicator: React.FC<{
+  isValid: boolean;
+  isValidating: boolean;
+  errors: string[];
+}> = ({ isValid, isValidating, errors }): React.ReactElement => {
+  if (isValidating) {
+    return (
+      <div className="organization-number-field__validation-indicator organization-number-field__validation-indicator--loading">
+        <span className="organization-number-field__validation-icon" aria-hidden="true">
+          ⏳
+        </span>
+        <span className="sr-only">Validating...</span>
+      </div>
+    );
+  }
+
+  if (isValid) {
+    return (
+      <div className="organization-number-field__validation-indicator organization-number-field__validation-indicator--valid">
+        <span className="organization-number-field__validation-icon" aria-hidden="true">
+          ✅
+        </span>
+        <span className="sr-only">Valid</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="organization-number-field__error-message" role="alert" aria-live="polite">
-      {errors.map((error, index) => (
-        <div key={index} className="organization-number-field__error-item">
-          <span className="organization-number-field__error-icon" aria-hidden="true">
-            ⚠️
-          </span>
-          <span className="organization-number-field__error-text">{error}</span>
-        </div>
-      ))}
+    <div className="organization-number-field__validation-indicator organization-number-field__validation-indicator--error">
+      <span className="organization-number-field__validation-icon" aria-hidden="true">
+        ❌
+      </span>
+      <span className="sr-only">Invalid: {errors.join(', ')}</span>
     </div>
   );
 };
 
-// Mock function for fetching organization data
-const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null> => {
-  // Changed type to any as OrganizationData is removed
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 500));
-
-  // Mock data
-  const mockData: Record<string, unknown> = {
-    // Changed type to any as OrganizationData is removed
-    '123456789': {
-      name: 'Test Bedrift AS',
-      organizationForm: 'Aksjeselskap',
-      municipality: 'Oslo',
-      county: 'Oslo',
-      status: 'active',
-      registrationDate: '2020-01-15',
-      industry: {
-        code: '62.010',
-        description: 'Programmering og systemutvikling',
-      },
-    },
-  };
-
-  return mockData[orgNumber] || null;
-};
+OrganizationNumberInput.displayName = 'OrganizationNumberInput';

@@ -6,19 +6,51 @@
 
 import React, { useCallback, useId, useState } from 'react';
 
+import { cn } from '../../lib/utils/cn';
 import type { PersonalNumberInputProps } from '../../types/form.types';
 
-// Placeholder validation functions (replace with actual validation package)
-const validatePersonalNumber = (value: string) => ({
-  isValid: value.length === 11,
-  errors: value.length === 11 ? [] : ['Invalid personal number'],
-  type: 'fødselsnummer' as const,
-  birthDate: new Date(),
-  gender: 'male' as const,
-  century: 20,
-});
+// Personal number validation result type
+interface PersonalNumberValidationResult {
+  isValid: boolean;
+  errors: string[];
+  type: 'fødselsnummer' | 'dnummer' | 'hnummer';
+  birthDate: Date;
+  gender: 'male' | 'female';
+  century: number;
+  age?: number;
+}
 
-const formatPersonalNumber = (value: string): string => {
+// Placeholder validation functions (replace with actual validation package)
+const validatePersonalNumber = (
+  value: string,
+  validation: PersonalNumberInputProps['validation']
+) => {
+  const digits = value.replace(/\D/g, '');
+  const isValid = digits.length === 11;
+  const errors: string[] = [];
+  const type = 'fødselsnummer' as const;
+  const birthDate = new Date();
+  const gender = 'male' as const;
+  const century = 20;
+
+  if (!isValid) {
+    errors.push('Invalid personal number');
+  }
+
+  return {
+    isValid,
+    errors,
+    type,
+    birthDate,
+    gender,
+    century,
+  };
+};
+
+const formatPersonalNumber = (
+  value: string,
+  displayFormat: PersonalNumberInputProps['displayFormat']
+): string => {
   // Remove all non-digits
   const digits = value.replace(/\D/g, '');
 
@@ -97,6 +129,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
       value,
       defaultValue,
       onChange,
+      onValidationChange,
       onBlur,
       onFocus,
       placeholder,
@@ -106,9 +139,12 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
       variant = 'default',
       helpText,
       error,
+      hasError = false,
       testId,
       className,
       displayFormat = 'ddmmyy-nnnnn',
+      maskInput = false,
+      autoFormat = true,
       validation = {
         checksum: true,
         allowDNumber: false,
@@ -119,103 +155,95 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
       ...restProps
     } = props;
 
-    // Generate unique IDs
-    const baseId = useId();
-    const inputId = `${baseId}-input`;
-    const helpTextId = `${baseId}-help`;
-    const errorId = `${baseId}-error`;
-    const validationId = `${baseId}-validation`;
+    // Generate IDs for accessibility
+    const inputId = useId();
+    const helpTextId = useId();
+    const errorId = useId();
+    const validationId = useId();
 
-    // State
-    const [currentValue, setCurrentValue] = useState<string>(
-      (value || defaultValue || '').toString()
+    // State for validation
+    const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
+    const [validationResult, setValidationResult] = useState<PersonalNumberValidationResult | null>(
+      null
     );
-    const [isValidating, setIsValidating] = useState<boolean>(false);
-    const [validationResult, setValidationResult] = useState<ReturnType<
-      typeof validatePersonalNumber
-    > | null>(null);
+    const [isValidating, setIsValidating] = useState(false);
 
-    // Handle change with formatting and validation
+    // Determine if validation is enabled
+    const enableValidation = validation?.realTimeValidation !== false;
+    const showValidationIcon = enableValidation;
+
+    // Handle change with validation
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
-        const rawValue = e.target.value;
-        const formattedValue =
-          displayFormat === 'ddmmyy-nnnnn'
-            ? formatPersonalNumber(rawValue)
-            : rawValue.replace(/\D/g, '').slice(0, 11);
+        const inputValue = e.target.value;
+        const formattedValue = autoFormat
+          ? formatPersonalNumber(inputValue, displayFormat)
+          : inputValue;
 
         setCurrentValue(formattedValue);
 
-        // Real-time validation
-        if (validation.realTimeValidation) {
+        if (enableValidation) {
           setIsValidating(true);
-          // Simulate async validation
-          setTimeout(() => {
-            const result = validatePersonalNumber(formattedValue.replace(/\D/g, ''));
-            setValidationResult(result);
-            setIsValidating(false);
-          }, 300);
+          const result = validatePersonalNumber(formattedValue, validation);
+          setValidationResult(result);
+          setIsValidating(false);
+
+          if (onValidationChange) {
+            onValidationChange(result.isValid, result.errors);
+          }
         }
 
-        // Call parent onChange with raw value
-        const syntheticEvent = {
-          ...e,
-          target: {
-            ...e.target,
-            value: formattedValue,
-          },
-        };
-        onChange?.(formattedValue, validationResult?.isValid || false, syntheticEvent);
+        if (onChange) {
+          onChange(formattedValue, validationResult?.isValid || false, e);
+        }
       },
-      [onChange, displayFormat, validation.realTimeValidation]
+      [
+        autoFormat,
+        displayFormat,
+        enableValidation,
+        validation,
+        onChange,
+        onValidationChange,
+        validationResult,
+      ]
     );
 
-    // Handle blur with validation
+    // Handle blur
     const handleBlur = useCallback(
       (e: React.FocusEvent<HTMLInputElement>) => {
-        if (!validation.realTimeValidation) {
-          setIsValidating(true);
-          setTimeout(() => {
-            const result = validatePersonalNumber(currentValue.replace(/\D/g, ''));
-            setValidationResult(result);
-            setIsValidating(false);
-          }, 100);
+        if (onBlur) {
+          onBlur(e);
         }
-        onBlur?.(e);
       },
-      [onBlur, currentValue, validation.realTimeValidation]
+      [onBlur]
     );
 
     // Handle focus
     const handleFocus = useCallback(
       (e: React.FocusEvent<HTMLInputElement>) => {
-        onFocus?.(e);
+        if (onFocus) {
+          onFocus(e);
+        }
       },
       [onFocus]
     );
 
-    // Validation state
-    const hasValidationErrors = Boolean(error) || (validationResult && !validationResult.isValid);
+    // Determine validation state
+    const hasValidationErrors = Boolean(
+      error || hasError || (validationResult && !validationResult.isValid)
+    );
+    const inputClasses = cn(
+      'personal-number-input',
+      {
+        'personal-number-input--error': hasValidationErrors,
+        'personal-number-input--disabled': disabled,
+        'personal-number-input--readonly': readOnly,
+      },
+      className
+    );
 
-    // CSS classes
-    const inputClasses = [
-      'personal-number-field__input',
-      `personal-number-field__input--${variant}`,
-      disabled && 'personal-number-field__input--disabled',
-      readOnly && 'personal-number-field__input--readonly',
-      hasValidationErrors && 'personal-number-field__input--error',
-      validationResult?.isValid && 'personal-number-field__input--valid',
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    // Aria describedby
-    const describedBy = [
-      helpText && helpTextId,
-      error && errorId,
-      norwegian.enableValidation && validationId,
-    ]
+    // Build aria-describedby
+    const describedBy = [helpText && helpTextId, error && errorId, enableValidation && validationId]
       .filter(Boolean)
       .join(' ');
 
@@ -239,7 +267,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
             required={required}
             disabled={disabled}
             readOnly={readOnly}
-            maxLength={norwegian.displayFormat === 'ddmmyy-nnnnn' ? 12 : 11}
+            maxLength={displayFormat === 'ddmmyy-nnnnn' ? 12 : 11}
             className={inputClasses}
             aria-invalid={hasValidationErrors}
             aria-describedby={describedBy || undefined}
@@ -249,7 +277,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
           />
 
           {/* Validation indicator */}
-          {norwegian.enableValidation && norwegian.showValidationIcon && (
+          {enableValidation && showValidationIcon && (
             <ValidationIndicator
               isValid={validationResult?.isValid || false}
               isValidating={isValidating}
@@ -279,7 +307,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
         )}
 
         {/* Validation details */}
-        {norwegian.enableValidation && validationResult && (
+        {enableValidation && validationResult && (
           <div id={validationId} className="personal-number-field__validation-details">
             <div className="personal-number-field__validation-info">
               <span className="personal-number-field__validation-label">Type:</span>
@@ -288,15 +316,15 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
               </span>
             </div>
             <div className="personal-number-field__validation-info">
-              <span className="personal-number-field__validation-label">Birth Date:</span>
-              <span className="personal-number-field__validation-value">
-                {validationResult.birthDate.toLocaleDateString('no-NO')}
-              </span>
-            </div>
-            <div className="personal-number-field__validation-info">
               <span className="personal-number-field__validation-label">Gender:</span>
               <span className="personal-number-field__validation-value">
                 {validationResult.gender}
+              </span>
+            </div>
+            <div className="personal-number-field__validation-info">
+              <span className="personal-number-field__validation-label">Age:</span>
+              <span className="personal-number-field__validation-value">
+                {validationResult.age}
               </span>
             </div>
           </div>

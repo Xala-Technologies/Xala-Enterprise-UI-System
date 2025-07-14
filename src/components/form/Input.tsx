@@ -4,7 +4,7 @@
  * @description Input component using design tokens (no inline styles)
  */
 
-import React from 'react';
+import React, { useId } from 'react';
 
 import type { InputProps } from '../../types/form.types';
 
@@ -17,8 +17,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const {
       testId = 'input',
       label,
-      required,
-      inputId,
+      required = false,
+      id,
       name,
       type = 'text',
       value,
@@ -27,39 +27,49 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       onBlur,
       onFocus,
       placeholder,
-      disabled,
-      readOnly,
+      disabled = false,
+      readOnly = false,
       maxLength,
       minLength,
       pattern,
       autoComplete,
       variant = 'default',
-      size = 'medium',
+      size = 'md',
       helpText,
       error,
-      validationErrors = [],
-      isValidating = false,
+      hasError = false,
+      validation,
       className,
       ...inputProps
     } = props;
 
-    const handleChange = onChange || (() => {});
+    // Generate ID if not provided
+    const generatedId = useId();
+    const finalInputId = id || generatedId;
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (onChange) {
+        onChange(e.target.value, e);
+      }
+    };
+
     const handleBlur = onBlur || (() => {});
     const handleFocus = onFocus || (() => {});
     const inputClasses = className || 'input';
-    const hasValidationErrors = !!error || validationErrors.length > 0;
-    const helpTextId = inputId ? `${inputId}-help` : undefined;
-    const errorId = inputId ? `${inputId}-error` : undefined;
+    const hasValidationErrors = !!error || hasError;
+
+    const helpTextId = finalInputId ? `${finalInputId}-help` : undefined;
+    const errorId = finalInputId ? `${finalInputId}-error` : undefined;
 
     return (
       <div className="input-field" data-testid={testId}>
         {/* Label */}
-        {label && <Label label={label} required={required} htmlFor={inputId} />}
+        {label && <Label label={label} required={required} htmlFor={finalInputId} />}
 
         {/* Input */}
         <input
           ref={ref}
-          id={inputId}
+          id={finalInputId}
           name={name}
           type={type}
           value={value}
@@ -77,7 +87,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           autoComplete={autoComplete}
           className={inputClasses}
           aria-invalid={hasValidationErrors}
-          aria-describedby={`${helpTextId} ${errorId}`}
+          aria-describedby={`${helpTextId || ''} ${errorId || ''}`.trim()}
           aria-required={required}
           data-variant={variant}
           data-size={size}
@@ -95,15 +105,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {/* Error messages */}
-        <div id={errorId}>
-          {error && <ErrorMessage error={error} />}
-          {validationErrors.map((err, index) => (
-            <ErrorMessage key={index} error={err} />
-          ))}
-        </div>
+        <div id={errorId}>{error && <ErrorMessage error={error} />}</div>
 
         {/* Validation indicator */}
-        {isValidating && (
+        {validation && (
           <div className="input-field__validation-indicator">
             <span className="input-field__validation-icon" aria-hidden="true">
               ⏳

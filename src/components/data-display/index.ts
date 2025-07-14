@@ -17,10 +17,4 @@ export type {
   TableColumn,
   TableData,
   KeyValueItem,
-  TableState,
-  PaginationConfig,
-  SortingConfig,
-  SelectionConfig,
-  SearchConfig,
-  ExportConfig,
 } from '../../types/data-display.types';

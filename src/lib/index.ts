@@ -14,7 +14,6 @@ export {
 
 // Core types and interfaces
 export type {
-  AccessibilityConfig,
   AccessibilityLevel,
   AuditTrailEntry,
   ComponentAccessibilityConfig,
@@ -26,7 +25,6 @@ export type {
   ThemeDefinition,
   UISystemConfig,
   UISystemOptions,
-  ValidationError,
 } from './types/core.types';
 
 // Interfaces

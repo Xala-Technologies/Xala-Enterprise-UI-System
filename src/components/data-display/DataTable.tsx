@@ -240,11 +240,7 @@ const TableBody: React.FC<{
       {data.map((row, index) => (
         <tr
           key={row.id}
-          className={`datatable__row ${onRowClick ? 'datatable__row--clickable' : ''} ${
-            row.norwegian?.classification
-              ? `datatable__row--classification-${row.norwegian.classification}`
-              : ''
-          }`}
+          className={`datatable__row ${onRowClick ? 'datatable__row--clickable' : ''}`}
           onClick={() => onRowClick?.(row, index)}
           role={onRowClick ? 'button' : undefined}
           tabIndex={onRowClick ? 0 : undefined}
@@ -253,9 +249,7 @@ const TableBody: React.FC<{
           {columns.map(column => (
             <td
               key={column.key}
-              className={`datatable__cell datatable__cell--type-${column.type || 'text'} ${
-                column.norwegian?.sensitive ? 'datatable__cell--sensitive' : ''
-              }`}
+              className={`datatable__cell datatable__cell--type-${column.type || 'text'}`}
             >
               <span className="datatable__cell-content">
                 {formatCellValue(row[column.key], column, row)}
@@ -341,18 +335,18 @@ const formatCellValue = (value: unknown, column: TableColumn, row: TableData): R
   }
 
   switch (column.type) {
-    case 'personal-number':
+    case 'personalNumber':
       return formatPersonalNumber(String(value));
-    case 'organization-number':
+    case 'organizationNumber':
       return formatOrganizationNumber(String(value));
     case 'date':
       return formatDate(value, column.format as string || 'DD.MM.YYYY');
     case 'currency':
-      return formatCurrency(Number(value), column.currency || 'NOK');
+      return formatCurrency(Number(value), 'NOK');
     case 'number':
       return formatNumber(Number(value), column.format);
     case 'boolean':
-      return formatBoolean(Boolean(value), column.format as { trueKey: string; falseKey: string });
+      return formatBoolean(Boolean(value));
     default:
       return String(value);
   }
@@ -375,7 +369,7 @@ function formatOrganizationNumber(value: string): string {
 }
 
 function formatDate(value: unknown, format: string): string {
-  const date = new Date(value);
+  const date = new Date(value as string | number | Date);
   if (isNaN(date.getTime())) {
     return String(value);
   }
@@ -403,7 +397,7 @@ function formatCurrency(value: number, currency: string): string {
   }).format(value);
 }
 
-function formatNumber(value: number, format?: unknown): string {
+function formatNumber(value: number, format?: Intl.NumberFormatOptions): string {
   return new Intl.NumberFormat('nb-NO', format).format(value);
 }
 
