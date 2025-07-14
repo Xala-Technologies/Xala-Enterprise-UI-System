@@ -47,7 +47,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
     confirmationMessage?: string;
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
-  onClick?: (_event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
@@ -101,9 +101,23 @@ export interface DrawerProps extends ActionFeedbackComponentProps {
 
 // Toast component props
 export interface ToastProps extends ActionFeedbackComponentProps {
-  message?: string; // Toast message text
+  /** Toast message text */
+  message?: string;
+  /** Toast title text */
+  title?: string;
+  /** i18n key for toast title */
+  titleKey?: string;
+  /** i18n key for toast message */
+  messageKey?: string;
+  /** Custom icon for the toast */
+  icon?: React.ReactNode;
+  /** Toast variant */
   variant?: 'info' | 'success' | 'warning' | 'error';
-  duration?: number; // Auto-dismiss duration in milliseconds
+  /** Auto-dismiss duration in milliseconds */
+  duration?: number;
+  /** Toast open/close state */
+  isOpen?: boolean;
+  /** Toast position on screen */
   position?:
     | 'top-left'
     | 'top-center'
@@ -111,17 +125,31 @@ export interface ToastProps extends ActionFeedbackComponentProps {
     | 'bottom-left'
     | 'bottom-center'
     | 'bottom-right';
+  /** Show close button */
   closable?: boolean;
+  /** Prevent auto-dismiss */
   persistent?: boolean;
-  action?: ToastAction;
-  features?: {
-    showProgress?: boolean;
-    pauseOnHover?: boolean;
-    stackable?: boolean;
+  /** Pause auto-dismiss on hover */
+  pauseOnHover?: boolean;
+  /** Toast children (custom content) */
+  children?: React.ReactNode;
+  /** Action buttons for the toast */
+  actions?: Array<{ labelKey: string; handler: () => void }>;
+  /** Norwegian compliance metadata */
+  norwegian?: {
     priority?: 'low' | 'medium' | 'high' | 'critical';
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
   };
+  /** Test id for testing */
+  testId?: string;
+  /** ARIA label for accessibility */
+  ariaLabel?: string;
+  /** Called when toast closes */
   onClose?: () => void;
-  onAction?: () => void;
+  /** Called when toast opens */
+  onOpen?: () => void;
+  /** Called when an action button is clicked */
+  onActionClick?: (action: { labelKey: string; handler: () => void }) => void;
 }
 
 // Toast action configuration
@@ -148,7 +176,7 @@ export interface AlertProps extends ActionFeedbackComponentProps {
     requiresAcknowledgment?: boolean;
   };
   onClose?: () => void;
-  onAction?: (_action: AlertAction) => void;
+  onAction?: (action: AlertAction) => void;
 }
 
 // Alert action configuration
@@ -234,7 +262,7 @@ export interface NotificationProps extends ActionFeedbackComponentProps {
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
   onClose?: () => void;
-  onAction?: (_action: NotificationAction) => void;
+  onAction?: (action: NotificationAction) => void;
 }
 
 // Notification action configuration

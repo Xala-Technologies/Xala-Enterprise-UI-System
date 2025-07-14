@@ -105,18 +105,6 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
 export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
   (
     {
-  const handleSearchChange = (_value: string): void => {
-    // Handle search change
-  };
-
-  const handleFilterChange = (_filterId: string, _value: unknown): void => {
-    // Handle filter change
-  };
-
-  const handleViewChange = (_viewId: string): void => {
-    // Handle view change
-  };
-
       variant = 'default',
       size = 'md',
       searchPlaceholder = 'Search...',
@@ -133,7 +121,19 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
     },
     ref
   ): React.ReactElement => {
-  return (
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+      onSearchChange?.(e.target.value);
+    };
+
+    const handleFilterChange = (filterId: string, value: unknown): void => {
+      onFilterChange?.(filterId, value);
+    };
+
+    const handleViewChange = (viewId: string): void => {
+      onViewChange?.(viewId);
+    };
+
+    return (
       <div ref={ref} className={cn(filterBarVariants({ variant, size }), className)} {...props}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left Section - Search and Filters */}

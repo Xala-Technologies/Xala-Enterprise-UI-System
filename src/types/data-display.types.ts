@@ -45,10 +45,10 @@ export interface DataTableProps extends DataDisplayComponentProps {
     formats?: ('csv' | 'xlsx' | 'pdf')[];
     filename?: string;
   };
-  onRowClick?: (_row: TableData, index: number) => void;
-  onSelectionChange?: (_selectedRows: string[]) => void;
-  onSortChange?: (_sortBy: string, sortOrder: 'asc' | 'desc') => void;
-  onPageChange?: (_page: number, pageSize: number) => void;
+  onRowClick?: (row: TableData, index: number) => void;
+  onSelectionChange?: (selectedRows: string[]) => void;
+  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+  onPageChange?: (page: number, pageSize: number) => void;
 }
 
 // Table column definition
@@ -81,7 +81,7 @@ export interface TableColumn {
       falseText: string; // Text for false value
     };
   };
-  render?: (_value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
+  render?: (value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
 }
 
 // Table data row definition
@@ -166,28 +166,28 @@ export interface StatusIndicatorProps extends DataDisplayComponentProps {
 
 // Utility functions for data formatting
 export const formatters = {
-  currency: (_value: number, currency: string = 'USD'): string => {
+  currency: (value: number, currency: string = 'USD'): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency,
-    }).format(_value);
+    }).format(value);
   },
-  date: (_value: Date | string, format: string = 'DD.MM.YYYY'): string => {
-    const date = typeof _value === 'string' ? new Date(_value) : value;
+  date: (value: Date | string, format: string = 'DD.MM.YYYY'): string => {
+    const date = typeof value === 'string' ? new Date(value) : value;
     // Implementation depends on date library
     return date.toLocaleDateString();
   },
-  number: (_value: number, options?: Intl.NumberFormatOptions): string => {
-    return new Intl.NumberFormat('en-US', options).format(_value);
+  number: (value: number, options?: Intl.NumberFormatOptions): string => {
+    return new Intl.NumberFormat('en-US', options).format(value);
   },
-  boolean: (_value: boolean, options?: { trueText: string; falseText: string }): string => {
-    return _value ? options?.trueText || 'Yes' : options?.falseText || 'No';
+  boolean: (value: boolean, options?: { trueText: string; falseText: string }): string => {
+    return value ? options?.trueText || 'Yes' : options?.falseText || 'No';
   },
-  personalNumber: (_value: string): string => {
+  personalNumber: (value: string): string => {
     // Generic formatting - can be customized per locale
     return value.replace(/(\d{6})(\d{5})/, '$1-$2');
   },
-  organizationNumber: (_value: string): string => {
+  organizationNumber: (value: string): string => {
     // Generic formatting - can be customized per locale
     return value.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
   },

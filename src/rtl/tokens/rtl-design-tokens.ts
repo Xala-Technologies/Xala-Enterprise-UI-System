@@ -260,21 +260,25 @@ export const RTL_COMPONENT_UTILITIES = {
 
   // Validate RTL support in component
   validateRTLSupport: (component: HTMLElement): boolean => {
-    const computedStyle = window.getComputedStyle(component);
-    const { direction } = computedStyle;
+    const hasExplicitDirection = (component: HTMLElement): boolean => {
+      const computedStyle = window.getComputedStyle(component);
+      const { direction } = computedStyle;
+      
+      return direction === 'rtl' || direction === 'ltr' ||
+        component.hasAttribute('dir') || component.closest('[dir]') !== null;
+    };
 
     // Check if component properly handles RTL
-    const hasLogicalProperties = [
-      'margin-inline-start',
-      'margin-inline-end',
-      'padding-inline-start',
-      'padding-inline-end',
-    ].some(prop => computedStyle.getPropertyValue(prop) !== '');
+    const hasLogicalProperties = 
+      component.style.marginInlineStart !== undefined ||
+      component.style.marginInlineEnd !== undefined ||
+      component.style.paddingInlineStart !== undefined ||
+      component.style.paddingInlineEnd !== undefined;
 
     const hasDirectionAttribute =
-      component.hasAttribute('dir') || component.closes'[dir]' !== null;
+      component.hasAttribute('dir') || component.closest('[dir]') !== null;
 
-    return hasLogicalProperties || hasDirectionAttribute;
+    return hasLogicalProperties || hasDirectionAttribute || hasExplicitDirection(component);
   },
 };
 

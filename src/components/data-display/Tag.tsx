@@ -62,7 +62,40 @@ export function Tag({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tagClasses = React.useMemo((): React.ReactElement => {
+  const tagClasses = React.useMemo(() => {
+    const classes = ['tag'];
+    
+    // Variant class
+    classes.push(`tag--${variant}`);
+    
+    // Size class
+    classes.push(`tag--${size}`);
+    
+    // Interactive class
+    if (interactive || onClick) {
+      classes.push('tag--interactive');
+    }
+    
+    // Removable class
+    if (removable) {
+      classes.push('tag--removable');
+    }
+    
+    // Norwegian classification class
+    if (norwegian?.classification) {
+      classes.push(`tag--classification-${norwegian.classification.toLowerCase()}`);
+    }
+    
+    // Custom class
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, size, interactive, onClick, removable, norwegian?.classification, className]);
+  
+  const handleClick = onClick ? () => onClick() : undefined;
+  
   return (
     <span
       className={tagClasses}
@@ -87,7 +120,7 @@ export function Tag({
       {norwegian?.category && (
         <span
           className="tag__category-indicator"
-          aria-label={t('tag.category', { category: norwegian.category })}
+          aria-label={`Category: ${norwegian.category}`}
         >
           {getCategoryIcon(norwegian.category)}
         </span>
@@ -106,8 +139,8 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.
   return (
     <span
       className="tag__classification-indicator"
-      aria-label={t('tag.classification', { level: getClassificationText(level) })}
-      title={`${t('tag.classification.label')}: ${getClassificationText(level)}`}
+      aria-label={`Classification: ${getClassificationText(level)}`}
+      title={`Classification: ${getClassificationText(level)}`}
     >
       {getClassificationIcon(level)}
     </span>
@@ -117,7 +150,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.
 /**
  * Remove button component
  */
-const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, _size }): React.ReactElement => {
+const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, size }): React.ReactElement => {
   return (
     <button
       type="button"

@@ -103,11 +103,13 @@ export function Badge({
   }, [variant, size, shape, position, pulse, dot, classification, priority, className]);
 
   // Accessibility props
-  const accessibilityProps = React.useMemo((): React.ReactElement => {
-  return (
-      <span className={badgeClasses} data-testid={testId} {...accessibilityProps} {...props} />
-    );
-  }
+  const accessibilityProps = React.useMemo(() => {
+    const props: Record<string, string> = {};
+    if (ariaLabel) {
+      props['aria-label'] = ariaLabel;
+    }
+    return props;
+  }, [ariaLabel]);
 
   if (displayCount === null) {
     return <></>;

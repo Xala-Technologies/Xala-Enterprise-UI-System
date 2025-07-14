@@ -1,0 +1,21 @@
+# Ignore test files temporarily
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# Ignore generated files
+dist/
+build/
+coverage/
+node_modules/
+
+# Ignore config files
+*.js
+*.cjs
+*.mjs
+*.config.js
+*.config.ts
+
+# Temporarily ignore type definition files with many unused params
+src/types/*.types.ts

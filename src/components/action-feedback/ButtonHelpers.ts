@@ -3,6 +3,7 @@
  * Style generation and utility functions for Button component
  */
 
+import type React from 'react';
 import type { ButtonProps } from '../../types/action-feedback.types';
 import type { NorwegianCompliance } from '../../utils/norwegian-compliance';
 

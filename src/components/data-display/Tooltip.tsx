@@ -183,6 +183,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
         </div>
       )}
     </>
-  ); });
+  );
+});
 
 Tooltip.displayName = 'Tooltip';

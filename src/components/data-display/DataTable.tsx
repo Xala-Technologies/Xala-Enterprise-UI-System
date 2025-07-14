@@ -385,3 +385,5 @@ function formatBoolean(value: boolean, format?: { trueKey: string; falseKey: str
 }
 
 DataTable.displayName = 'DataTable';
+
+export { DataTable };

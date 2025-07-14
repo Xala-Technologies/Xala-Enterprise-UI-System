@@ -46,8 +46,45 @@ export function KeyValueList({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const listClasses = React.useMemo((): React.ReactElement => {
-  return (
+  const listClasses = React.useMemo(() => {
+    const classes = ['keyvalue-list'];
+    
+    // Layout variant
+    classes.push(`keyvalue-list--${layout}`);
+    
+    // Spacing variant
+    classes.push(`keyvalue-list--${spacing}`);
+    
+    // Optional features
+    if (showDividers) {
+      classes.push('keyvalue-list--with-dividers');
+    }
+    
+    if (highlightChanges) {
+      classes.push('keyvalue-list--highlight-changes');
+    }
+    
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [layout, spacing, showDividers, highlightChanges, className]);
+
+  // Filter out empty values if requested
+  const displayItems = React.useMemo(() => {
+    if (norwegian?.hideEmptyValues) {
+      return items.filter(item => {
+        return item.value !== null && item.value !== undefined && item.value !== '';
+      });
+    }
+    return items;
+  }, [items, norwegian?.hideEmptyValues]);
+  
+  // Handle empty state
+  if (displayItems.length === 0) {
+    return (
       <div className={`${listClasses} keyvalue-list--empty`} data-testid={testId}>
         <span className="keyvalue-list__empty-message">
           {t(norwegian?.hideEmptyValues ? 'keyvalue.noVisibleItems' : 'keyvalue.noItems')}
@@ -55,9 +92,7 @@ export function KeyValueList({
       </div>
     );
   }
-
-  // Filter out empty values if requested
-  const displayItems = React.useMemo((): React.ReactElement => {
+  
   return (
     <div className={listClasses} data-testid={testId} {...props}>
       {displayItems.map((item, index) => (

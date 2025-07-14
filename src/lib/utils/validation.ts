@@ -7,7 +7,6 @@
 /**
  * Simple ValidationResult implementation
  */
-import React from 'react';
 
 
 export interface ValidationResult<T> { readonly success: boolean;
@@ -35,12 +34,20 @@ export const createValidationResult = { success: createSuccessResult,
 /**
  * Safe object property access
  */
-export function safeGet<T>(obj: Record<string, unknown>, path: string, defaultValue: T): T { const keys = path.spli'.';
-  let value: unknown = obj;
-
-  for (const key of keys) { if (value && typeof value === 'object' && key in value) { value = (value as Record<string, unknown>)[key]; } else { return defaultValue; } }
-
-  return value !== undefined ? (value as T) : defaultValue; }
+export function safeGet<T>(obj: Record<string, unknown>, path: string, defaultValue: T): T {
+  const keys = path.split('.');
+  let current: unknown = obj;
+  
+  for (const key of keys) {
+    if (current && typeof current === 'object' && key in current) {
+      current = (current as Record<string, unknown>)[key];
+    } else {
+      return defaultValue;
+    }
+  }
+  
+  return current as T;
+}
 
 /**
  * Safe array access

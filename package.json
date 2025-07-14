@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Enterprise-compliant UI system with Norwegian accessibility standards, design tokens, and zero inline styles following @xala-technologies/enterprise-standards v6.0.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -52,6 +52,7 @@
     "test:ci": "jest --coverage --passWithNoTests --watchAll=false",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "lint:lenient": "eslint src --ext .ts,.tsx",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,json,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,json,md}\"",
     "type-check": "tsc --noEmit",

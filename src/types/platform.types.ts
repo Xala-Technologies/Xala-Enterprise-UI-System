@@ -30,7 +30,7 @@ export interface MobileHeaderProps extends PlatformComponentProps {
 export interface BottomNavigationProps extends PlatformComponentProps {
   items: BottomNavigationItem[];
   activeItem?: string;
-  onItemClick?: (_item: BottomNavigationItem, _index: number) => void;
+  onItemClick?: (item: BottomNavigationItem, index: number) => void;
   showLabels?: boolean;
   showBadges?: boolean;
 }
@@ -85,7 +85,7 @@ export interface TopNavigationProps extends PlatformComponentProps {
   showBreadcrumbs?: boolean;
   breadcrumbs?: BreadcrumbItem[];
   actions?: NavigationAction[];
-  onAction?: (_action: NavigationAction) => void;
+  onAction?: (action: NavigationAction) => void;
 }
 
 // Breadcrumb item configuration

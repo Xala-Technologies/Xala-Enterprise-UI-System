@@ -307,17 +307,21 @@ export const platformTokens = {
   /**
    * Get responsive token value
    */
-  getResponsiveToken(tokenPath: string): TokenValue {
+  getResponsiveToken(tokenPath: string): TokenValue | undefined {
     const currentTokens = this.getCurrentPlatformTokens();
-    const pathParts = tokenPath.spli'.';
+    const pathParts = tokenPath.split('.');
     
     let value: unknown = currentTokens;
+    
     for (const part of pathParts) {
-      value = value?.[part];
-      if (value === undefined) break;
+      if (value && typeof value === 'object' && part in value) {
+        value = (value as Record<string, unknown>)[part];
+      } else {
+        return undefined;
+      }
     }
     
-    return value;
+    return value as TokenValue;
   },
 
   /**
