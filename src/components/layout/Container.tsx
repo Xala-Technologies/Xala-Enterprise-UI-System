@@ -1,99 +1,84 @@
 /**
- * @fileoverview Container Component - Enterprise Standards Compliant
- * @module Container
- * @description Layout container component using design tokens (no inline styles)
+ * Container layout component with responsive design and enterprise compliance
+ * Uses design tokens and CSS variables for spacing and breakpoints
  */
 
-import React from 'react';
-
-import type { ContainerProps } from '../../types/layout.types';
+import { cn } from '@/lib/utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { forwardRef, type HTMLAttributes } from 'react';
 
 /**
- * Container component using design tokens and semantic props
- * Follows enterprise standards - no inline styles, design token props only
+ * Container variants using class-variance-authority
  */
-export function Container({
-  children,
-  size = 'lg',
-  background = 'transparent',
-  padding = 'md',
-  margin = 'auto',
-  maxWidth,
-  centerContent = false,
-  responsive = true,
-  accessibilityMode = true,
-  norwegianMaxWidth = true,
-  className = '',
-  testId,
-  ...props
-}: ContainerProps): JSX.Element {
-  // Build CSS classes using design tokens
-  const containerClasses = React.useMemo(() => {
-    const classes = ['container'];
+const containerVariants = cva('w-full mx-auto', {
+  variants: {
+    size: {
+      sm: 'max-w-sm',
+      md: 'max-w-md',
+      lg: 'max-w-lg',
+      xl: 'max-w-xl',
+      '2xl': 'max-w-2xl',
+      '3xl': 'max-w-3xl',
+      '4xl': 'max-w-4xl',
+      '5xl': 'max-w-5xl',
+      '6xl': 'max-w-6xl',
+      '7xl': 'max-w-7xl',
+      full: 'max-w-full',
+      screen: 'max-w-screen-xl',
+    },
+    padding: {
+      none: 'px-0',
+      sm: 'px-4',
+      md: 'px-6',
+      lg: 'px-8',
+      xl: 'px-12',
+      '2xl': 'px-16',
+    },
+    center: {
+      true: 'flex items-center justify-center',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    size: 'full',
+    padding: 'md',
+    center: false,
+  },
+});
 
-    // Size classes
-    classes.push(`container--${size}`);
-
-    // Background classes
-    classes.push(`container--bg-${background}`);
-
-    // Padding classes
-    classes.push(`container--padding-${padding}`);
-
-    // Margin classes
-    classes.push(`container--margin-${margin}`);
-
-    // Feature classes
-    if (centerContent) {
-      classes.push('container--center-content');
-    }
-
-    if (responsive) {
-      classes.push('container--responsive');
-    }
-
-    if (accessibilityMode) {
-      classes.push('container--accessibility');
-    }
-
-    if (norwegianMaxWidth) {
-      classes.push('container--norwegian-sizing');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [
-    size,
-    background,
-    padding,
-    margin,
-    centerContent,
-    responsive,
-    accessibilityMode,
-    norwegianMaxWidth,
-    className,
-  ]);
-
-  // CSS custom properties for dynamic max-width
-  const containerStyle = React.useMemo(() => {
-    const style: any = {};
-
-    if (maxWidth) {
-      style['--container-max-width'] = typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth;
-    }
-
-    return style as React.CSSProperties;
-  }, [maxWidth]);
-
-  return (
-    <div className={containerClasses} style={containerStyle} data-testid={testId} {...props}>
-      {children}
-    </div>
-  );
+/**
+ * Container component props interface
+ */
+export interface ContainerProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof containerVariants> {
+  readonly as?: keyof JSX.IntrinsicElements;
 }
 
+/**
+ * Container component
+ * @param size - Container max width
+ * @param padding - Container padding
+ * @param center - Center content
+ * @param className - Additional CSS classes
+ * @param as - HTML element type
+ * @param props - Additional props
+ * @returns Container JSX element
+ */
+export const Container = forwardRef<HTMLDivElement, ContainerProps>(
+  ({ className, size, padding, center, as: Component = 'div', ...props }, ref) => (
+    <Component
+      ref={ref}
+      className={cn(containerVariants({ size, padding, center }), className)}
+      {...props}
+    />
+  )
+);
+
 Container.displayName = 'Container';
+
+/**
+ * Container variants type exports
+ */
+export type ContainerSize = VariantProps<typeof containerVariants>['size'];
+export type ContainerPadding = VariantProps<typeof containerVariants>['padding'];

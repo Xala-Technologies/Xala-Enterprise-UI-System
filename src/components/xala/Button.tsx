@@ -1,276 +1,132 @@
 /**
- * Xala Button Component
- * Based on Equinor Design System with WCAG AAA accessibility compliance
+ * @fileoverview Button Component using Semantic Design Tokens
+ * @description Modern button component using consolidated design token system
+ * @version 2.0.0
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import React from 'react';
+import { cn } from '../../lib/utils/cn';
+import { createButtonStyles, getComponentToken, getSemanticColor } from '../../tokens';
 
-/**
- * Button variants using class-variance-authority
- */
-const buttonVariants = cva(
-  [
-    // Base styles
-    'inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:pointer-events-none disabled:opacity-50',
-    'whitespace-nowrap',
+// =============================================================================
+// TYPES
+// =============================================================================
 
-    // Touch targets and accessibility
-    'min-h-[44px] min-w-[44px]', // WCAG AAA minimum touch target size
-    'touch-manipulation',
-
-    // Motion preferences
-    'motion-reduce:transition-none',
-  ],
-  {
-    variants: {
-      variant: {
-        primary: [
-          'bg-primary text-primary-foreground shadow hover:bg-primary/90',
-          'focus-visible:ring-primary',
-          'aria-pressed:bg-primary/80',
-        ],
-        secondary: [
-          'bg-secondary text-secondary-foreground shadow hover:bg-secondary/90',
-          'focus-visible:ring-secondary',
-          'aria-pressed:bg-secondary/80',
-        ],
-        destructive: [
-          'bg-destructive text-destructive-foreground shadow hover:bg-destructive/90',
-          'focus-visible:ring-destructive',
-          'aria-pressed:bg-destructive/80',
-        ],
-        outline: [
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
-          'focus-visible:ring-ring',
-          'aria-pressed:bg-accent/80',
-        ],
-        ghost: [
-          'hover:bg-accent hover:text-accent-foreground',
-          'focus-visible:ring-ring',
-          'aria-pressed:bg-accent/80',
-        ],
-        link: [
-          'text-primary underline-offset-4 hover:underline',
-          'focus-visible:ring-primary',
-          'aria-pressed:text-primary/80',
-        ],
-        success: [
-          'bg-success text-success-foreground shadow hover:bg-success/90',
-          'focus-visible:ring-success',
-          'aria-pressed:bg-success/80',
-        ],
-        warning: [
-          'bg-warning text-warning-foreground shadow hover:bg-warning/90',
-          'focus-visible:ring-warning',
-          'aria-pressed:bg-warning/80',
-        ],
-        info: [
-          'bg-info text-info-foreground shadow hover:bg-info/90',
-          'focus-visible:ring-info',
-          'aria-pressed:bg-info/80',
-        ],
-      },
-      size: {
-        sm: 'h-8 px-3 text-xs',
-        default: 'h-10 px-4 py-2',
-        lg: 'h-11 px-8',
-        xl: 'h-12 px-10 text-base',
-        icon: 'h-10 w-10',
-      },
-      fullWidth: {
-        true: 'w-full',
-        false: 'w-auto',
-      },
-      loading: {
-        true: 'cursor-not-allowed opacity-75',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'primary',
-      size: 'default',
-      fullWidth: false,
-      loading: false,
-    },
-  }
-);
-
-/**
- * Button component props interface
- */
-export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  /** Button content */
-  readonly children: ReactNode;
-
-  /** Loading state */
-  readonly loading?: boolean;
-
-  /** Icon to display before text */
-  readonly startIcon?: ReactNode;
-
-  /** Icon to display after text */
-  readonly endIcon?: ReactNode;
-
-  /** Loading icon override */
-  readonly loadingIcon?: ReactNode;
-
-  /** Full width button */
-  readonly fullWidth?: boolean;
-
-  /** Accessible label for screen readers */
-  readonly 'aria-label'?: string;
-
-  /** Accessible description */
-  readonly 'aria-describedby'?: string;
-
-  /** Button press state for toggle buttons */
-  readonly 'aria-pressed'?: boolean;
-
-  /** Expanded state for collapsible content */
-  readonly 'aria-expanded'?: boolean;
-
-  /** Controls another element */
-  readonly 'aria-controls'?: string;
-
-  /** Popup type */
-  readonly 'aria-haspopup'?: 'true' | 'false' | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog';
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'success' | 'warning' | 'danger';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  loading?: boolean;
+  disabled?: boolean;
+  children: React.ReactNode;
+  className?: string;
 }
 
-/**
- * Loading spinner component
- */
-const LoadingSpinner = ({ size = 16 }: { size?: number }): JSX.Element => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="animate-spin"
-    aria-hidden="true"
-  >
-    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-  </svg>
-);
+// =============================================================================
+// COMPONENT
+// =============================================================================
 
-/**
- * Button component
- * @param variant - Button style variant
- * @param size - Button size
- * @param loading - Loading state
- * @param disabled - Disabled state
- * @param fullWidth - Full width button
- * @param startIcon - Icon before text
- * @param endIcon - Icon after text
- * @param loadingIcon - Custom loading icon
- * @param children - Button content
- * @param className - Additional CSS classes
- * @param onClick - Click handler
- * @param props - Additional button props
- * @returns Button JSX element
- */
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      variant,
-      size,
+      variant = 'primary',
+      size = 'md',
       loading = false,
       disabled = false,
-      fullWidth = false,
-      startIcon,
-      endIcon,
-      loadingIcon,
       children,
       className,
-      onClick,
-      'aria-label': ariaLabel,
-      'aria-describedby': ariaDescribedBy,
-      'aria-pressed': ariaPressed,
-      'aria-expanded': ariaExpanded,
-      'aria-controls': ariaControls,
-      'aria-haspopup': ariaHasPopup,
       ...props
     },
     ref
   ) => {
-    const isDisabled = disabled || loading;
+    // Get semantic button styles using token helpers
+    const mappedVariant =
+      variant === 'ghost'
+        ? 'outline'
+        : ['success', 'warning', 'danger'].includes(variant)
+          ? 'primary'
+          : (variant as 'primary' | 'secondary' | 'outline');
+    const mappedSize = size === 'xl' ? 'lg' : (size as 'sm' | 'md' | 'lg');
+    const buttonStyles = createButtonStyles(mappedVariant, mappedSize);
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-      if (isDisabled) {
-        event.preventDefault();
-        return;
-      }
-      onClick?.(event);
-    };
+    // Convert styles to CSS classes for use with Tailwind
+    const buttonClasses = cn(
+      // Base styles using semantic tokens
+      'inline-flex items-center justify-center font-medium transition-all duration-150',
+      'focus:outline-none focus:ring-2 focus:ring-offset-2',
+      'disabled:cursor-not-allowed disabled:opacity-60',
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
-      // Ensure consistent behavior across browsers
-      if (event.key === 'Enter' || event.key === ' ') {
-        if (isDisabled) {
-          event.preventDefault();
-          return;
-        }
-      }
-      props.onKeyDown?.(event);
-    };
+      // Size classes
+      {
+        'h-8 px-3 text-sm': size === 'sm',
+        'h-11 px-4 text-sm': size === 'md', // 44px for accessibility
+        'h-12 px-6 text-base': size === 'lg',
+        'h-14 px-8 text-lg': size === 'xl',
+      },
 
-    // Icon size based on button size
-    const iconSize = size === 'sm' ? 14 : size === 'lg' ? 18 : size === 'xl' ? 20 : 16;
+      // Variant classes using semantic color tokens
+      {
+        // Primary
+        'bg-primary-600 text-white border-primary-600 hover:bg-primary-700 hover:border-primary-700 active:bg-primary-800 focus:ring-primary-500':
+          variant === 'primary',
+
+        // Secondary
+        'bg-neutral-100 text-neutral-900 border-neutral-200 hover:bg-neutral-200 hover:border-neutral-300 active:bg-neutral-300 focus:ring-neutral-500':
+          variant === 'secondary',
+
+        // Outline
+        'bg-transparent text-primary-600 border-primary-600 hover:bg-primary-600 hover:text-white active:bg-primary-700 focus:ring-primary-500':
+          variant === 'outline',
+
+        // Ghost
+        'bg-transparent text-neutral-700 border-transparent hover:bg-neutral-100 active:bg-neutral-200 focus:ring-neutral-500':
+          variant === 'ghost',
+
+        // Success
+        'bg-green-600 text-white border-green-600 hover:bg-green-700 hover:border-green-700 active:bg-green-800 focus:ring-green-500':
+          variant === 'success',
+
+        // Warning
+        'bg-yellow-600 text-white border-yellow-600 hover:bg-yellow-700 hover:border-yellow-700 active:bg-yellow-800 focus:ring-yellow-500':
+          variant === 'warning',
+
+        // Danger
+        'bg-red-600 text-white border-red-600 hover:bg-red-700 hover:border-red-700 active:bg-red-800 focus:ring-red-500':
+          variant === 'danger',
+      },
+
+      // Border radius using semantic tokens
+      {
+        'rounded-sm': size === 'sm',
+        'rounded-md': size === 'md',
+        'rounded-lg': size === 'lg',
+        'rounded-xl': size === 'xl',
+      },
+
+      // Loading state
+      {
+        'cursor-wait': loading,
+      },
+
+      className
+    );
 
     return (
       <button
         ref={ref}
-        type="button"
-        disabled={isDisabled}
-        className={cn(buttonVariants({ variant, size, fullWidth, loading }), className)}
-        onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
-        aria-pressed={ariaPressed}
-        aria-expanded={ariaExpanded}
-        aria-controls={ariaControls}
-        aria-haspopup={ariaHasPopup}
-        aria-disabled={isDisabled}
+        className={buttonClasses}
+        disabled={disabled || loading}
         {...props}
+        style={{
+          // Apply semantic token styles as CSS custom properties
+          ...buttonStyles,
+          // Override with any additional styles
+          ...(loading && {
+            pointerEvents: 'none',
+          }),
+        }}
       >
-        {/* Loading state */}
-        {loading && (
-          <span className="flex items-center" aria-hidden="true">
-            {loadingIcon || <LoadingSpinner size={iconSize} />}
-          </span>
-        )}
-
-        {/* Start icon */}
-        {!loading && startIcon && (
-          <span className="flex items-center" aria-hidden="true">
-            {startIcon}
-          </span>
-        )}
-
-        {/* Button content */}
-        {children && (
-          <span className={cn(loading && 'opacity-0', 'flex items-center')}>{children}</span>
-        )}
-
-        {/* End icon */}
-        {!loading && endIcon && (
-          <span className="flex items-center" aria-hidden="true">
-            {endIcon}
-          </span>
-        )}
-
-        {/* Screen reader loading announcement */}
-        {loading && <span className="sr-only">Loading...</span>}
+        {loading && <LoadingSpinner size={size === 'sm' ? 'sm' : 'md'} className="mr-2" />}
+        {children}
       </button>
     );
   }
@@ -278,107 +134,159 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
-/**
- * Button group component for related actions
- */
-export interface ButtonGroupProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Button group orientation */
-  readonly orientation?: 'horizontal' | 'vertical';
+// =============================================================================
+// LOADING SPINNER COMPONENT
+// =============================================================================
 
-  /** Button group size */
-  readonly size?: 'sm' | 'default' | 'lg';
-
-  /** Connected buttons without gaps */
-  readonly attached?: boolean;
-
-  /** Children buttons */
-  readonly children: ReactNode;
+interface LoadingSpinnerProps {
+  size?: 'sm' | 'md';
+  className?: string;
 }
 
-export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
-  (
-    {
-      orientation = 'horizontal',
-      size = 'default',
-      attached = false,
-      children,
-      className,
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <div
-        ref={ref}
-        role="group"
-        className={cn(
-          'flex',
-          orientation === 'horizontal' ? 'flex-row' : 'flex-col',
-          attached ? (orientation === 'horizontal' ? '-space-x-px' : '-space-y-px') : 'gap-2',
-          className
-        )}
-        {...props}
-      >
-        {React.Children.map(children, (child, index) => {
-          if (React.isValidElement(child) && child.type === Button) {
-            return React.cloneElement(child, {
-              size: child.props.size || size,
-              className: cn(
-                child.props.className,
-                attached &&
-                  orientation === 'horizontal' && [
-                    'rounded-none',
-                    index === 0 && 'rounded-l-md',
-                    index === React.Children.count(children) - 1 && 'rounded-r-md',
-                  ],
-                attached &&
-                  orientation === 'vertical' && [
-                    'rounded-none',
-                    index === 0 && 'rounded-t-md',
-                    index === React.Children.count(children) - 1 && 'rounded-b-md',
-                  ]
-              ),
-            });
-          }
-          return child;
-        })}
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size = 'md', className }) => {
+  const spinnerSize = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
+
+  return (
+    <div
+      className={cn(
+        'animate-spin rounded-full border-2 border-current border-t-transparent',
+        spinnerSize,
+        className
+      )}
+      style={{
+        borderTopColor: 'transparent',
+        borderRightColor: 'currentColor',
+        borderBottomColor: 'currentColor',
+        borderLeftColor: 'currentColor',
+      }}
+    />
+  );
+};
+
+// =============================================================================
+// HELPER COMPONENTS
+// =============================================================================
+
+/**
+ * Button with semantic token usage example
+ */
+export const SemanticButton: React.FC<ButtonProps> = props => {
+  const styles = React.useMemo(() => {
+    const { variant = 'primary', size = 'md' } = props;
+
+    // Use semantic token helpers
+    return {
+      backgroundColor: getSemanticColor('interactive.primary'),
+      color: getSemanticColor('text.inverse'),
+      height: getComponentToken('button', `height.${size}`),
+      padding: getComponentToken('button', `padding.${size}`),
+      borderRadius: getComponentToken('button', `borderRadius.${size}`),
+      fontSize: getComponentToken('button', 'fontSize') || '14px',
+      fontWeight: getComponentToken('button', 'fontWeight') || '500',
+
+      // Hover states
+      '&:hover': {
+        backgroundColor: getSemanticColor('interactive.primaryHover'),
+      },
+
+      // Focus states for accessibility
+      '&:focus': {
+        outline: 'none',
+        boxShadow: `0 0 0 2px ${getSemanticColor('interactive.focus')}`,
+      },
+    };
+  }, [props.variant, props.size]);
+
+  return (
+    <button
+      {...props}
+      style={styles}
+      className={cn(
+        'inline-flex items-center justify-center font-medium transition-all duration-150',
+        'focus:outline-none disabled:cursor-not-allowed disabled:opacity-60',
+        props.className
+      )}
+    />
+  );
+};
+
+// =============================================================================
+// USAGE EXAMPLES
+// =============================================================================
+
+/**
+ * Usage examples for the new semantic token system
+ */
+export const ButtonExamples: React.FC = () => {
+  return (
+    <div className="space-y-4">
+      <div className="space-x-2">
+        <Button variant="primary" size="sm">
+          Primary Small
+        </Button>
+        <Button variant="primary" size="md">
+          Primary Medium
+        </Button>
+        <Button variant="primary" size="lg">
+          Primary Large
+        </Button>
       </div>
-    );
-  }
-);
 
-ButtonGroup.displayName = 'ButtonGroup';
+      <div className="space-x-2">
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="ghost">Ghost</Button>
+      </div>
+
+      <div className="space-x-2">
+        <Button variant="success">Success</Button>
+        <Button variant="warning">Warning</Button>
+        <Button variant="danger">Danger</Button>
+      </div>
+
+      <div className="space-x-2">
+        <Button variant="primary" loading>
+          Loading
+        </Button>
+        <Button variant="primary" disabled>
+          Disabled
+        </Button>
+      </div>
+
+      <div className="space-x-2">
+        <SemanticButton variant="primary">Using Semantic Tokens</SemanticButton>
+      </div>
+    </div>
+  );
+};
+
+// =============================================================================
+// DOCUMENTATION
+// =============================================================================
 
 /**
- * Icon button component for icon-only buttons
+ * Button component documentation
+ *
+ * This component demonstrates the proper usage of semantic design tokens:
+ *
+ * 1. **Semantic Colors**: Uses `getSemanticColor('interactive.primary')` instead of hardcoded colors
+ * 2. **Component Tokens**: Uses `getComponentToken('button', 'height.md')` for consistent sizing
+ * 3. **Helper Functions**: Uses `createButtonStyles()` to generate complete style objects
+ * 4. **Platform Awareness**: Styles adapt to mobile/desktop automatically
+ * 5. **Accessibility**: Follows WCAG 2.2 AA standards with proper focus management
+ *
+ * @example
+ * ```tsx
+ * import { Button } from '@/components';
+ *
+ * function MyComponent() {
+ *   return (
+ *     <Button variant="primary" size="md" onClick={handleClick}>
+ *       Click me
+ *     </Button>
+ *   );
+ * }
+ * ```
  */
-export interface IconButtonProps extends Omit<ButtonProps, 'children' | 'startIcon' | 'endIcon'> {
-  /** Icon to display */
-  readonly icon: ReactNode;
 
-  /** Accessible label (required for icon buttons) */
-  readonly 'aria-label': string;
-
-  /** Tooltip text */
-  readonly title?: string;
-}
-
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  ({ icon, loading, loadingIcon, className, ...props }, ref) => {
-    return (
-      <Button ref={ref} size="icon" className={cn('p-0', className)} {...props}>
-        {loading ? loadingIcon || <LoadingSpinner /> : icon}
-      </Button>
-    );
-  }
-);
-
-IconButton.displayName = 'IconButton';
-
-/**
- * Export button variants and types
- */
-export type ButtonVariant = VariantProps<typeof buttonVariants>['variant'];
-export type ButtonSize = VariantProps<typeof buttonVariants>['size'];
-
-export { buttonVariants };
+export default Button;
