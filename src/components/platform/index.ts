@@ -1,19 +1,16 @@
-// Platform-specific components for @xala-mock/ui-system
-// Norwegian-compliant mobile and desktop component exports
+/**
+ * @fileoverview Platform Component Index
+ * @module Platform
+ */
 
-// Mobile components
-export * from './mobile';
-
-// Desktop components
-export * from './desktop';
+// Platform components
+export { DesktopSidebar } from './desktop/DesktopSidebar';
+export { BottomNavigation } from './mobile/BottomNavigation';
+export { MobileHeader } from './mobile/MobileHeader';
 
 // Platform utility types
 export type {
-  PlatformComponentProps,
-  TouchFriendlyProps,
-  HoverFriendlyProps,
-  NorwegianPlatformConfig,
-  ResponsiveBreakpoints,
-  PlatformDetection,
-  PlatformTypes,
+    HoverFriendlyProps, PlatformComponentProps, PlatformDetection,
+    PlatformTypes, ResponsiveBreakpoints, TouchFriendlyProps
 } from '../../types/platform.types';
+

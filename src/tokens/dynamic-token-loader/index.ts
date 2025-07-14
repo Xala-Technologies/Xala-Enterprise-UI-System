@@ -10,17 +10,19 @@ export { TenantConfigurationLoader } from './tenant-loader';
 
 // Types
 export type {
-  BrandingConfig,
-  DynamicTokenLoaderConfig,
-  TenantTokenConfig,
-  TokenCacheEntry,
-  TokenLoadResult,
-  TokenOverrideConfig,
-  WhiteLabelConfig,
+    BrandingConfig,
+    DynamicTokenLoaderConfig,
+    TenantTokenConfig,
+    TokenCacheEntry,
+    TokenLoadResult,
+    TokenOverrideConfig,
+    WhiteLabelConfig
 } from './types';
 
 // Default instance
 import { DynamicTokenLoader } from './loader';
+import type { DynamicTokenLoaderConfig } from './types';
+
 export const dynamicTokenLoader = new DynamicTokenLoader();
 
 // Convenience functions

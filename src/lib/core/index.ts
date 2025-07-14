@@ -1,69 +1,37 @@
 /**
- * @fileoverview Core UI System implementation
- * @module UISystemCore
- * @description Enterprise UI System - Core functionality without compliance overhead
+ * @fileoverview UI System Core Implementation
+ * @description Core system implementation with Norwegian compliance
+ * @version 2.0.0
  */
 
-import { EventCore, Logger } from '@xala-technologies/enterprise-standards';
-
-import type { UISystemService } from '../interfaces/ui-system.interface';
-import type { ThemeRegistry, UISystemConfig } from '../types/core.types';
-
-// Local types
-interface ValidationResult<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-}
-
-type ComponentRegistry = Map<string, unknown>;
-
-// Create simple validation result functions
-function createSuccessResult<T>(data: T): ValidationResult<T> {
-  return { success: true as const, data };
-}
-
-function createFailureResult<T>(error: string): ValidationResult<T> {
-  return { success: false as const, error };
-}
-
-const createValidationResult = {
-  success: createSuccessResult,
-  failure: createFailureResult,
-};
+import { Logger } from '@xala-technologies/enterprise-standards';
+import type {
+    AccessibilityConfig,
+    AccessibilityPreset,
+    ComponentDefinition,
+    SupportedLanguage,
+    ThemeDefinition,
+    UISystemConfig
+} from '../types/core.types';
 
 /**
- * Core UI System service implementing SOLID principles
- * Follows Single Responsibility: Manages UI system lifecycle and coordination
+ * UI System Core class implementing the Singleton pattern
+ * Manages themes, components, and accessibility settings
  */
-export class UISystemCore implements UISystemService {
+export class UISystemCore {
+  private static instance: UISystemCore;
   private readonly logger: Logger;
-  private readonly events: EventCore;
-  private readonly componentRegistry: ComponentRegistry;
-  private readonly themeRegistry: ThemeRegistry;
   private readonly config: UISystemConfig;
-  private initializationPromise: Promise<void> | null = null;
-  private isInitialized = false;
+  private readonly componentRegistry: Map<string, ComponentDefinition>;
+  private readonly themeRegistry: Map<string, ThemeDefinition>;
 
-  /**
-   * Private constructor enforcing proper initialization through factory methods
-   */
   private constructor(config: UISystemConfig) {
-    // Store configuration
     this.config = config;
-
-    // Initialize foundation services
     this.logger = Logger.create({
-      serviceName: 'ui-system',
+      serviceName: 'ui-system-core',
       logLevel: 'info',
       enableConsoleLogging: true,
       enableFileLogging: false,
-    });
-
-    this.events = EventCore.create({
-      serviceName: 'ui-system',
-      enablePerformanceMonitoring: true,
-      enableHistory: true,
     });
 
     // Initialize registries
@@ -73,8 +41,8 @@ export class UISystemCore implements UISystemService {
     // Log initialization
     this.logger.info('UISystemCore initialized', {
       theme: config.theme,
-      locale: config.locale,
-      accessibilityLevel: config.accessibilityLevel,
+      defaultLanguage: config.defaultLanguage,
+      accessibility: config.accessibility,
     });
   }
 
@@ -84,87 +52,118 @@ export class UISystemCore implements UISystemService {
    */
   static create(config: Partial<UISystemConfig> = {}): UISystemCore {
     const defaultConfig: UISystemConfig = {
-      theme: 'default',
-      locale: 'en-US',
-      accessibilityLevel: 'AAA',
+      name: 'xala-ui-system',
+      version: '2.0.0',
+      defaultLanguage: 'nb-NO' as SupportedLanguage,
+      accessibility: 'enhanced' as AccessibilityPreset,
+      theme: {
+        mode: 'light',
+        primary: '#1a365d',
+        secondary: '#2d3748',
+        customTokens: {},
+      },
+      performance: {
+        enableVirtualization: true,
+        enableLazyLoading: true,
+        enableMemoization: true,
+        bundleSize: 'standard',
+      },
+      development: {
+        enableDebugMode: false,
+        enableHotReload: false,
+        enableTypeChecking: true,
+      },
       enableAccessibilityValidation: true,
       enablePerformanceMonitoring: true,
+      enableErrorBoundaries: true,
     };
 
     const mergedConfig = { ...defaultConfig, ...config };
-    return new UISystemCore(mergedConfig);
+    
+    if (!UISystemCore.instance) {
+      UISystemCore.instance = new UISystemCore(mergedConfig);
+    }
+    
+    return UISystemCore.instance;
   }
 
   /**
-   * Initialize the UI system (async initialization pattern)
+   * Get system configuration
    */
-  public async initialize(): Promise<ValidationResult<void>> {
-    if (this.isInitialized) {
-      return createValidationResult.success(undefined);
-    }
-
-    if (this.initializationPromise) {
-      await this.initializationPromise;
-      return createValidationResult.success(undefined);
-    }
-
-    this.initializationPromise = this.performInitialization();
-
-    try {
-      await this.initializationPromise;
-      this.isInitialized = true;
-
-      this.logger.info('UISystemCore initialized successfully', {
-        theme: this.config.theme,
-        locale: this.config.locale,
-        accessibilityLevel: this.config.accessibilityLevel,
-      });
-
-      return createValidationResult.success(undefined);
-    } catch (error) {
-      this.logger.error('UISystemCore initialization failed', {
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
-
-      return createValidationResult.failure(
-        `UI System initialization failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-      );
-    }
+  getConfig(): UISystemConfig {
+    return {
+      ...this.config,
+      theme: this.config.theme || { mode: 'light' },
+      defaultLanguage: this.config.defaultLanguage,
+      accessibility: this.config.accessibility,
+    };
   }
 
   /**
-   * Private initialization implementation
+   * Get system information
    */
-  private async performInitialization(): Promise<void> {
-    const startTime = Date.now();
+  getSystemInfo(): {
+    name: string;
+    version: string;
+    defaultLanguage: SupportedLanguage;
+    accessibility: AccessibilityConfig | AccessibilityPreset | undefined;
+    theme: UISystemConfig['theme'];
+    componentCount: number;
+    themeCount: number;
+  } {
+    return {
+      name: this.config.name,
+      version: this.config.version,
+      defaultLanguage: this.config.defaultLanguage,
+      accessibility: this.config.accessibility,
+      theme: this.config.theme,
+      componentCount: this.componentRegistry.size,
+      themeCount: this.themeRegistry.size,
+    };
+  }
 
-    // Initialize theme registry with Norwegian themes
-    await this.initializeThemeRegistry();
+  /**
+   * Register a component with the system
+   */
+  registerComponent(name: string, component: ComponentDefinition): void {
+    this.componentRegistry.set(name, component);
+    this.logger.info(`Component registered: ${name}`);
+  }
 
-    // Initialize component registry
-    await this.initializeComponentRegistry();
+  /**
+   * Get a registered component
+   */
+  getComponent(name: string): ComponentDefinition | undefined {
+    return this.componentRegistry.get(name);
+  }
 
-    // Register event listeners
-    this.registerEventListeners();
+  /**
+   * Get all registered components
+   */
+  getAllComponents(): Map<string, ComponentDefinition> {
+    return new Map(this.componentRegistry);
+  }
 
-    const initializationTime = Date.now() - startTime;
+  /**
+   * Register a theme with the system
+   */
+  registerTheme(name: string, theme: ThemeDefinition): void {
+    this.themeRegistry.set(name, theme);
+    this.logger.info(`Theme registered: ${name}`);
+  }
 
-    // Enforce <100ms initialization requirement
-    if (initializationTime > 100) {
-      this.logger.warn('Initialization time exceeded 100ms threshold', {
-        initializationTime,
-      });
-    }
+  /**
+   * Get a registered theme
+   */
+  getTheme(name: string): ThemeDefinition | undefined {
+    return this.themeRegistry.get(name);
+  }
 
-    this.events.emit('ui-system:initialized', {
-      id: 'ui-system-init',
-      type: 'ui-system:initialized',
-      source: 'ui-system',
-      timestamp: new Date(),
-      data: {
-        initializationTime,
-      },
-    });
+  /**
+   * Get all registered themes
+   */
+  getAllThemes(): Map<string, ThemeDefinition> {
+    return new Map(this.themeRegistry);
   }
 
   /**
@@ -181,11 +180,38 @@ export class UISystemCore implements UISystemService {
         warning: '#d69e2e',
         error: '#e53e3e',
         info: '#3182ce',
+        background: '#ffffff',
+        surface: '#f7fafc',
+        text: '#1a202c',
+        border: '#e2e8f0',
       },
-      accessibility: {
-        contrastRatio: 7.0, // WCAG AAA
-        focusIndicator: '#005fcc',
-        highContrast: true,
+      spacing: {
+        xs: '0.25rem',
+        sm: '0.5rem',
+        md: '1rem',
+        lg: '1.5rem',
+        xl: '2rem',
+      },
+      typography: {
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '1rem',
+        lineHeight: '1.5',
+      },
+      borderRadius: {
+        sm: '0.25rem',
+        md: '0.375rem',
+        lg: '0.5rem',
+      },
+      shadows: {
+        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      },
+      breakpoints: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
       },
     });
 
@@ -198,12 +224,39 @@ export class UISystemCore implements UISystemService {
         success: '#00ff00',
         warning: '#ffff00',
         error: '#ff0000',
-        info: '#0000ff',
+        info: '#0080ff',
+        background: '#ffffff',
+        surface: '#f0f0f0',
+        text: '#000000',
+        border: '#000000',
       },
-      accessibility: {
-        contrastRatio: 21.0, // Maximum contrast
-        focusIndicator: '#ff0000',
-        highContrast: true,
+      spacing: {
+        xs: '0.25rem',
+        sm: '0.5rem',
+        md: '1rem',
+        lg: '1.5rem',
+        xl: '2rem',
+      },
+      typography: {
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '1.125rem',
+        lineHeight: '1.6',
+      },
+      borderRadius: {
+        sm: '0.25rem',
+        md: '0.375rem',
+        lg: '0.5rem',
+      },
+      shadows: {
+        sm: '0 2px 4px 0 rgba(0, 0, 0, 0.3)',
+        md: '0 6px 8px -1px rgba(0, 0, 0, 0.3)',
+        lg: '0 12px 16px -3px rgba(0, 0, 0, 0.3)',
+      },
+      breakpoints: {
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
       },
     });
   }
@@ -212,125 +265,176 @@ export class UISystemCore implements UISystemService {
    * Initialize component registry
    */
   private async initializeComponentRegistry(): Promise<void> {
-    // Component registry will be populated by component modules
-    // This follows ISP - components register themselves
-    this.logger.debug('Component registry initialized');
-  }
-
-  /**
-   * Register event listeners for system events
-   */
-  private registerEventListeners(): void {
-    this.events.on('component:registered', (data: unknown) => {
-      const eventData = data as { data?: { name?: string } };
-      this.logger.debug('Component registered', {
-        componentName: eventData.data?.name || 'unknown',
-      });
-    });
-
-    this.events.on('theme:changed', (data: unknown) => {
-      const eventData = data as { data?: { theme?: string } };
-      this.logger.info('Theme changed', {
-        newTheme: eventData.data?.theme || 'unknown',
-      });
-    });
-  }
-
-  /**
-   * Get component registry (read-only access)
-   */
-  public getComponentRegistry(): ReadonlyMap<string, unknown> {
-    return this.componentRegistry;
-  }
-
-  /**
-   * Get theme registry (read-only access)
-   */
-  public getThemeRegistry(): ReadonlyMap<string, unknown> {
-    return this.themeRegistry;
-  }
-
-  /**
-   * Register a component in the system
-   */
-  public registerComponent(name: string, component: unknown): ValidationResult<void> {
-    if (this.componentRegistry.has(name)) {
-      return createValidationResult.failure(`Component ${name} is already registered`);
-    }
-
-    this.componentRegistry.set(name, component);
-
-    this.events.emit('component:registered', {
-      id: `component-${name}`,
-      type: 'component:registered',
-      source: 'ui-system',
-      timestamp: new Date(),
-      data: {
-        name,
+    // Register core components
+    this.componentRegistry.set('Button', {
+      name: 'Button',
+      version: '1.0.0',
+      description: 'Interactive button component',
+      props: ['variant', 'size', 'disabled', 'loading'],
+      accessibility: {
+        level: 'AAA',
+        features: ['keyboard-navigation', 'screen-reader', 'focus-management'],
       },
     });
 
-    this.logger.debug('Component registered successfully', {
-      componentName: name,
+    this.componentRegistry.set('Input', {
+      name: 'Input',
+      version: '1.0.0',
+      description: 'Text input component',
+      props: ['type', 'placeholder', 'disabled', 'error'],
+      accessibility: {
+        level: 'AAA',
+        features: ['keyboard-navigation', 'screen-reader', 'validation'],
+      },
     });
-
-    return createValidationResult.success(undefined);
   }
 
   /**
-   * Cleanup resources (proper lifecycle management)
+   * Initialize the UI system
    */
-  public async dispose(): Promise<void> {
+  async initialize(): Promise<void> {
+    try {
+      await this.initializeThemeRegistry();
+      await this.initializeComponentRegistry();
+      
+      this.logger.info('UISystemCore initialization completed');
+    } catch (error) {
+      this.logger.error('UISystemCore initialization failed', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Validate accessibility configuration
+   */
+  validateAccessibility(config: AccessibilityConfig | AccessibilityPreset): boolean {
+    if (typeof config === 'string') {
+      return ['basic', 'enhanced', 'enterprise'].includes(config);
+    }
+    
+    return config.level !== undefined;
+  }
+
+  /**
+   * Get accessibility configuration
+   */
+  getAccessibilityConfig(): AccessibilityConfig | AccessibilityPreset | undefined {
+    return this.config.accessibility;
+  }
+
+  /**
+   * Update theme configuration
+   */
+  updateTheme(theme: UISystemConfig['theme']): void {
+    (this.config as any).theme = theme;
+    this.logger.info('Theme configuration updated', { theme });
+  }
+
+  /**
+   * Destroy the UI system instance
+   */
+  destroy(): void {
     this.componentRegistry.clear();
     this.themeRegistry.clear();
-
-    this.events.emit('ui-system:disposed', {
-      id: 'ui-system-dispose',
-      type: 'ui-system:disposed',
-      source: 'ui-system',
-      timestamp: new Date(),
-      data: {},
-    });
-
-    this.logger.info('UISystemCore disposed');
+    this.logger.info('UISystemCore destroyed');
   }
 }
 
+// =============================================================================
+// FACTORY FUNCTIONS
+// =============================================================================
+
 /**
- * Factory function for production UI System
+ * Create UI system instance with default configuration
  */
-export function createProductionUISystem(): UISystemCore {
-  return UISystemCore.create({
-    theme: 'enterprise',
-    locale: 'en-US',
-    accessibilityLevel: 'AA',
-    enableAccessibilityValidation: true,
-    enablePerformanceMonitoring: true,
-  });
+export function createUISystem(config: Partial<UISystemConfig> = {}): UISystemCore {
+  return UISystemCore.create(config);
 }
 
 /**
- * Factory function for test UI System
+ * Create UI system instance with Norwegian government configuration
  */
-export function createTestUISystem(): UISystemCore {
-  return UISystemCore.create({
-    theme: 'test',
-    locale: 'en-US',
-    accessibilityLevel: 'AAA',
+export function createNorwegianUISystem(config: Partial<UISystemConfig> = {}): UISystemCore {
+  const norwegianConfig: Partial<UISystemConfig> = {
+    name: 'norwegian-government-ui',
+    defaultLanguage: 'nb-NO' as SupportedLanguage,
+    accessibility: 'enterprise' as AccessibilityPreset,
+    theme: {
+      mode: 'light',
+      primary: '#1a365d',
+      secondary: '#2d3748',
+      customTokens: {
+        'gov-primary': '#1a365d',
+        'gov-secondary': '#2d3748',
+      },
+    },
+    enableAccessibilityValidation: true,
+    enablePerformanceMonitoring: true,
+    ...config,
+  };
+
+  return UISystemCore.create(norwegianConfig);
+}
+
+/**
+ * Create UI system instance for testing
+ */
+export function createTestUISystem(config: Partial<UISystemConfig> = {}): UISystemCore {
+  const testConfig: Partial<UISystemConfig> = {
+    name: 'test-ui-system',
+    defaultLanguage: 'en-US' as SupportedLanguage,
+    accessibility: 'basic' as AccessibilityPreset,
+    theme: {
+      mode: 'light',
+      primary: '#007acc',
+      secondary: '#666666',
+      customTokens: {},
+    },
+    development: {
+      enableDebugMode: true,
+      enableHotReload: false,
+      enableTypeChecking: true,
+    },
     enableAccessibilityValidation: false,
     enablePerformanceMonitoring: false,
-  });
+    ...config,
+  };
+
+  return UISystemCore.create(testConfig);
 }
 
 /**
- * Factory function for development UI System
+ * Create UI system instance for development
  */
-export function createDevelopmentUISystem(): UISystemCore {
-  return UISystemCore.create({
-    theme: 'development',
-    locale: 'en-US',
-    accessibilityLevel: 'AAA',
+export function createDevelopmentUISystem(config: Partial<UISystemConfig> = {}): UISystemCore {
+  const developmentConfig: Partial<UISystemConfig> = {
+    name: 'development-ui-system',
+    defaultLanguage: 'en-US' as SupportedLanguage,
+    accessibility: 'enhanced' as AccessibilityPreset,
+    theme: {
+      mode: 'light',
+      primary: '#007acc',
+      secondary: '#666666',
+      customTokens: {},
+    },
+    development: {
+      enableDebugMode: true,
+      enableHotReload: true,
+      enableTypeChecking: true,
+    },
     enableAccessibilityValidation: true,
     enablePerformanceMonitoring: true,
-  });
+    ...config,
+  };
+
+  return UISystemCore.create(developmentConfig);
 }
+
+// =============================================================================
+// EXPORTS
+// =============================================================================
+
+export default UISystemCore;
+export { UISystemCore };
+export type { ComponentDefinition, ThemeDefinition, UISystemConfig };
+
