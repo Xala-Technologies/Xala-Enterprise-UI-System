@@ -407,12 +407,12 @@ export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <header
         ref={ref}
         role="banner"
-        className={cn(desktopHeaderVariants({ _variant, _size }), className)}
+        className={cn(desktopHeaderVariants({ variant, size }), className)}
         {...props}
       >
         {/* Logo */}
@@ -514,47 +514,9 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
       ...props
     },
     ref
-  ): void => {
-    const [width, setWidth] = useState(platformTokens.layout.desktop.sidebar.width);
-    const [isResizing, setIsResizing] = useState(false);
-    const sidebarRef = useRef<HTMLElement>(null);
-
-    // Handle resize
-    useEffect((): void => {
-      if (!resizable) return;
-
-      const handleMouseMove = (e: MouseEvent): void => {
-        if (!isResizing) return;
-
-        const sidebar = sidebarRef.current;
-        if (!sidebar) return;
-
-        const rect = sidebar.getBoundingClientRect();
-        const newWidth = position === 'left' ? e.clientX - rect.left : rect.right - e.clientX;
-
-        if (newWidth >= minWidth && newWidth <= maxWidth) {
-          setWidth(`${newWidth}px`);
-        }
-      };
-
-      const handleMouseUp = (): void => {
-        setIsResizing(false);
-      };
-
-      if (isResizing) {
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', handleMouseUp);
-        document.body.style.cursor = 'col-resize';
-      }
-
-      return (): void => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-        document.body.style.cursor = 'default';
-      };
-    }, [isResizing, minWidth, maxWidth, position]);
-
-    return (
+  ): React.ReactElement => {
+  return (): React.ReactElement => {
+  return (
       <aside
         ref={ref}
         role="complementary"
@@ -639,8 +601,8 @@ export const DesktopMainContent = forwardRef<HTMLElement, DesktopMainContentProp
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <main
         ref={ref}
         role="main"
@@ -690,13 +652,13 @@ export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         role="toolbar"
         aria-label="Toolbar"
-        className={cn(desktopToolbarVariants({ _variant, _position }), className)}
+        className={cn(desktopToolbarVariants({ variant, position }), className)}
         {...props}
       >
         {/* Left Actions */}
@@ -735,8 +697,8 @@ export const DesktopStatusBar = forwardRef<HTMLElement, DesktopStatusBarProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         role="status"
@@ -799,8 +761,8 @@ export const DesktopLayout = forwardRef<HTMLDivElement, DesktopLayoutProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <BaseLayout
         ref={ref}
         platform="desktop"

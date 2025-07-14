@@ -116,7 +116,7 @@ const HeaderButton = ({
   testId?: string;
   ariaLabel?: string;
   badgeCount?: number;
-}): void => {
+}): React.ReactElement => {
   return (
     <button
       style={{
@@ -175,17 +175,7 @@ const HeaderButton = ({
 };
 
 // Classification badge component
-const ClassificationBadge = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+const ClassificationBadge = ({ level }: { level: string }): React.ReactElement => {
   return (
     <div
       style={{
@@ -208,7 +198,7 @@ const ClassificationBadge = ({ level }: { level: string }): void => {
 };
 
 // Municipality logo component
-const MunicipalityLogo = ({ municipality }: { municipality: string }): void => {
+const MunicipalityLogo = ({ municipality }: { municipality: string }): React.ReactElement => {
   return (
     <div
       style={{
@@ -227,7 +217,7 @@ const MunicipalityLogo = ({ municipality }: { municipality: string }): void => {
 };
 
 // Emergency contact access component
-const EmergencyAccess = ({ onPress }: { onPress?: () => void }): void => {
+const EmergencyAccess = ({ onPress }: { onPress?: () => void }): React.ReactElement => {
   return (
     <button
       style={{
@@ -261,7 +251,7 @@ const SearchBar = ({
 }: {
   placeholderKey?: string;
   onFocus?: () => void;
-}): void => {
+}): React.ReactElement => {
   return (
     <div
       style={{
@@ -307,36 +297,8 @@ const SearchBar = ({
 };
 
 // MobileHeader component with forwardRef
-export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref): void => {
-  const {
-    titleKey,
-    title,
-    showBackButton = false,
-    showMenu = false,
-    showSearch = false,
-    showNotifications = false,
-    notificationCount = 0,
-    searchPlaceholderKey,
-    height = 'standard',
-    sticky = true,
-    transparent = false,
-    norwegian,
-    onBack,
-    onMenuToggle,
-    onSearchFocus,
-    onNotificationPress,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...headerProps
-  } = props;
-
-  const headerStyles = getMobileHeaderStyles(props);
-  const combinedStyles = { ...headerStyles, ...style };
-
-  const renderLeftSection = (): void => {
-    return (
+export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref): React.ReactElement => {
+  return (
       <div
         style={{
           display: 'flex',
@@ -368,12 +330,8 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
     );
   };
 
-  const renderCenterSection = (): void => {
-    if (showSearch) {
-      return <SearchBar placeholderKey={searchPlaceholderKey} onFocus={onSearchFocus} />;
-    }
-
-    return (
+  const renderCenterSection = (): React.ReactElement => {
+  return (
       <div
         style={{
           flex: 2,
@@ -410,8 +368,8 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
     );
   };
 
-  const renderRightSection = (): void => {
-    return (
+  const renderRightSection = (): React.ReactElement => {
+  return (
       <div
         style={{
           display: 'flex',
@@ -424,36 +382,7 @@ export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((pr
         {/* Emergency access */}
         {norwegian?.emergencyContactAccess && (
           <EmergencyAccess
-            onPress={(): void => {
-              // TODO: Implement emergency contacts
-            }}
-          />
-        )}
-
-        {/* Search button (when not showing search bar) */}
-        {!showSearch && showNotifications && (
-          <HeaderButton
-            icon="🔍"
-            onPress={onSearchFocus}
-            testId={`${testId}-search`}
-            ariaLabel="Search"
-          />
-        )}
-
-        {/* Notifications */}
-        {showNotifications && (
-          <HeaderButton
-            icon="🔔"
-            onPress={onNotificationPress}
-            testId={`${testId}-notifications`}
-            ariaLabel="Notifications"
-            badgeCount={notificationCount}
-          />
-        )}
-      </div>
-    );
-  };
-
+            onPress={(): React.ReactElement => {
   return (
     <header
       ref={ref}

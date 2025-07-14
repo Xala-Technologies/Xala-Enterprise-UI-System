@@ -25,35 +25,7 @@ export function Section({
   ...props
 }: SectionProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const sectionClasses = React.useMemo((): void => {
-    const classes = ['section'];
-
-    // Variant classes
-    classes.push(`section--${variant}`);
-
-    // Spacing classes
-    classes.push(`section--spacing-${spacing}`);
-
-    // Background classes
-    classes.push(`section--bg-${background}`);
-
-    // Padding classes
-    classes.push(`section--padding-${padding}`);
-
-    // Margin classes
-    classes.push(`section--margin-${margin}`);
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, spacing, background, padding, margin, className]);
-
-  // Create the semantic element
-  const Component = as;
-
+  const sectionClasses = React.useMemo((): React.ReactElement => {
   return (
     <Component className={sectionClasses} data-testid={testId} {...props}>
       {children}

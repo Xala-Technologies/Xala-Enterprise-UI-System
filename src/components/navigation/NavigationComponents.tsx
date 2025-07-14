@@ -172,21 +172,11 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
  * @returns React.ReactElement
  */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): void => {
-    const currentActiveKey = activeKey || items[0]?.key;
-
-    /**
-     * Handle tab click
-     * @param key - Tab key
-     */
-    const handleTabClick = (key: string): void => {
-      onChange?.(key);
-    };
-
-    return (
+  ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): React.ReactElement => {
+  return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Tab Headers */}
-        <div className={cn(tabsVariants({ _variant, _size }))}>
+        <div className={cn(tabsVariants({ variant, size }))}>
           <div className="flex space-x-8">
             {items.map(item => (
               <button
@@ -254,12 +244,12 @@ export const Steps = forwardRef<HTMLDivElement, StepsProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(
-          stepsVariants({ _variant, _orientation }),
+          stepsVariants({ variant, orientation }),
           orientation === 'vertical' && 'space-y-4',
           className
         )}
@@ -320,10 +310,8 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
   (
     { variant = 'default', size = 'md', value, label, showPercentage = false, className, ...props },
     ref
-  ): void => {
-    const clampedValue = Math.max(0, Math.min(100, value));
-
-    return (
+  ): React.ReactElement => {
+  return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Progress Label */}
         {(label || showPercentage) && (
@@ -336,7 +324,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         )}
 
         {/* Progress Bar */}
-        <div className={cn(progressBarVariants({ _variant, _size }))}>
+        <div className={cn(progressBarVariants({ variant, size }))}>
           <div
             className={cn(
               'h-full rounded-full transition-all duration-300',

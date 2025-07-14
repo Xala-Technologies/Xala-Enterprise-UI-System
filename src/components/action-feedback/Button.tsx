@@ -226,17 +226,7 @@ const getPriorityStyles = (priority?: string): React.CSSProperties => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -253,16 +243,7 @@ const ClassificationIndicator = ({ level }: { level: string }): void => {
 };
 
 // Loading spinner component
-const LoadingSpinner = ({ size }: { size: string }): void => {
-  const spinnerSize =
-    size === 'sm'
-      ? 'var(--spacing-3)'
-      : size === 'lg'
-        ? 'var(--spacing-5)'
-        : size === 'xl'
-          ? 'var(--spacing-6)'
-          : 'var(--spacing-4)';
-
+const LoadingSpinner = ({ size }: { size: string }): React.ReactElement => {
   return (
     <div
       style={{
@@ -386,105 +367,7 @@ const ConfirmationDialog = ({
 };
 
 // Button component with forwardRef
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref): void => {
-  const {
-    labelKey,
-    children,
-    variant = 'primary',
-    size = 'md',
-    icon,
-    iconPosition = 'left',
-    loading = false,
-    loadingText,
-    disabled = false,
-    type = 'button',
-    norwegian,
-    onClick,
-    onConfirm,
-    onCancel,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...buttonProps
-  } = props;
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const isDisabled = disabled || loading;
-
-  const buttonStyles = getButtonStyles(props);
-  const combinedStyles = { ...buttonStyles, ...style };
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    if (isDisabled) {
-      return;
-    }
-
-    // Check if confirmation is required
-    if (norwegian?.requiresConfirmation || norwegian?.actionType === 'destructive') {
-      setShowConfirmation(true);
-      return;
-    }
-
-    onClick?.(event);
-  };
-
-  const handleConfirm = (): void => {
-    setShowConfirmation(false);
-    onConfirm?.() || onClick?.(null as unknown as React.MouseEvent<HTMLButtonElement>);
-  };
-
-  const handleCancel = (): void => {
-    setShowConfirmation(false);
-    onCancel?.();
-  };
-
-  const getActionTypeIcon = (actionType?: string): string => {
-    const icons = {
-      safe: '✅',
-      destructive: '⚠️',
-      neutral: 'ℹ️',
-    };
-    return icons[actionType as keyof typeof icons] || '';
-  };
-
-  const buttonContent = (
-    <>
-      {/* Classification indicator */}
-      {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
-
-      {/* Icon (left position) */}
-      {icon && iconPosition === 'left' && !loading && (
-        <span style={{ fontSize: 'var(--font-size-base)' }}>{icon}</span>
-      )}
-
-      {/* Loading spinner */}
-      {loading && <LoadingSpinner size={size} />}
-
-      {/* Button text */}
-      <span>
-        {loading && loadingText
-          ? loadingText
-          : children || (labelKey ? /* TODO: Replace with actual localization */ labelKey : '')}
-      </span>
-
-      {/* Action type indicator */}
-      {norwegian?.actionType && (
-        <span
-          style={{ fontSize: 'var(--font-size-xs)', opacity: '0.8' }}
-          aria-label={`Action type: ${norwegian.actionType}`}
-        >
-          {getActionTypeIcon(norwegian.actionType)}
-        </span>
-      )}
-
-      {/* Icon (right position) */}
-      {icon && iconPosition === 'right' && !loading && (
-        <span style={{ fontSize: 'var(--font-size-base)' }}>{icon}</span>
-      )}
-    </>
-  );
-
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, ref): React.ReactElement => {
   return (
     <>
       <button

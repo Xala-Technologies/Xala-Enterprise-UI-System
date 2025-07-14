@@ -29,62 +29,7 @@ export function Tag({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tagClasses = React.useMemo((): void => {
-    const classes = ['tag'];
-
-    // Variant classes
-    classes.push(`tag--variant-${variant}`);
-
-    // Size classes
-    classes.push(`tag--size-${size}`);
-
-    // Feature classes
-    if (interactive) {
-      classes.push('tag--interactive');
-    }
-
-    if (removable) {
-      classes.push('tag--removable');
-    }
-
-    // Norwegian compliance classes
-    if (norwegian?.classification) {
-      classes.push(`tag--classification-${norwegian.classification}`);
-    }
-
-    if (norwegian?.municipality) {
-      classes.push(
-        `tag--municipality-${norwegian.municipality.toLowerCase().replace(/\s+/g, '-')}`
-      );
-    }
-
-    if (norwegian?.category) {
-      classes.push(`tag--category-${norwegian.category}`);
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, size, interactive, removable, norwegian, className]);
-
-  // Handle click events
-  const handleClick = (event: React.MouseEvent<HTMLSpanElement>): void => {
-    if (interactive && onClick) {
-      onClick();
-    }
-  };
-
-  // Handle keyboard events for accessibility
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>): void => {
-    if (interactive && onClick && (event.key === 'Enter' || event.key === ' ')) {
-      event.preventDefault();
-      onClick();
-    }
-  };
-
+  const tagClasses = React.useMemo((): React.ReactElement => {
   return (
     <span
       className={tagClasses}
@@ -124,29 +69,7 @@ export function Tag({
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
-  const { t } = useLocalization();
-
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🔓',
-      BEGRENSET: '🔒',
-      KONFIDENSIELT: '🔐',
-      HEMMELIG: '🔴',
-    };
-    return icons[classification as keyof typeof icons] || '🔓';
-  };
-
-  const getClassificationText = (classification: string): string => {
-    const texts = {
-      ÅPEN: 'Åpen',
-      BEGRENSET: 'Begrenset',
-      KONFIDENSIELT: 'Konfidensielt',
-      HEMMELIG: 'Hemmelig',
-    };
-    return texts[classification as keyof typeof texts] || classification;
-  };
-
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
   return (
     <span
       className="tag__classification-indicator"
@@ -161,28 +84,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void =
 /**
  * Remove button component
  */
-const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ _onRemove, _size }): void => {
-  const { t } = useLocalization();
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-    event.stopPropagation();
-    onRemove?.();
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      event.stopPropagation();
-      onRemove?.();
-    }
-  };
-
-  const buttonClasses = React.useMemo((): void => {
-    const classes = ['tag__remove-button'];
-    classes.push(`tag__remove-button--size-${size}`);
-    return classes.join(' ');
-  }, [size]);
-
+const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, _size }): React.ReactElement => {
   return (
     <button
       type="button"
@@ -202,30 +104,7 @@ const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ _onRe
 /**
  * Municipality indicator component
  */
-const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }): void => {
-  const { t } = useLocalization();
-
-  if (!municipality) {
-    return null;
-  }
-
-  const getMunicipalityIcon = (municipality: string): string => {
-    // Norwegian municipality icons mapping
-    const icons: Record<string, string> = {
-      Oslo: '🏛️',
-      Bergen: '🏔️',
-      Stavanger: '⚓',
-      Trondheim: '🏰',
-      Bærum: '🌲',
-      Tromsø: '❄️',
-      Fredrikstad: '🏭',
-      Drammen: '🌉',
-      Asker: '🌿',
-      Lillestrøm: '🚂',
-    };
-    return icons[municipality] || '🏘️';
-  };
-
+const MunicipalityIndicator: React.FC<{ municipality?: string }> = ({ municipality }): React.ReactElement => {
   return (
     <span
       className="tag__municipality-indicator"

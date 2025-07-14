@@ -1,10 +1,6 @@
 // React mock for development
 import React from 'react';
 
-const React = {
-  forwardRef: <T, P>(Component: React.ForwardRefRenderFunction<T, P>) => React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<T>>,
-};
-
 // MobileHeaderButton - Reusable button component for mobile headers
 interface MobileHeaderButtonProps {
   icon: string;

@@ -24,223 +24,8 @@ const validateOrganizationNumber = (value: string) => ({
   mainOrganization: value,
 });
 
-const formatOrganizationNumber = (value: string): void => {
-  const cleaned = value.replace(/\D/g, '');
-  return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
-};
-
-/**
- * Organization Number Input component using design tokens and semantic props
- * Follows enterprise standards - no inline styles, design token props only
- */
-export function OrganizationNumberInput({
-  label,
-  error,
-  helpText,
-  value,
-  defaultValue,
-  onChange,
-  onValidationChange,
-  onBlur,
-  onFocus,
-  required = false,
-  disabled = false,
-  readOnly = false,
-  placeholder,
-  name,
-  id,
-  variant = 'default',
-  hasError = false,
-  validation = {},
-  norwegian = {},
-  className = '',
-  testId,
-  ...inputProps
-}: OrganizationNumberInputProps): React.ReactElement {
-  // State management
-  const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-  const [validationResult, setValidationResult] = useState<{
-    isValid: boolean;
-    errors: string[];
-    type: 'organisasjonsnummer';
-    mainOrganization: string;
-  }>({
-    isValid: false,
-    errors: [],
-    type: 'organisasjonsnummer',
-    mainOrganization: '',
-  });
-  const [isValidating, setIsValidating] = useState(false);
-  const [orgData, setOrgData] = useState<any | undefined>(); // Changed type to any as OrganizationData is removed
-  const [isFetchingData, setIsFetchingData] = useState(false);
-  const debounceRef = useRef<NodeJS.Timeout>();
-
-  // Generate unique ID
-  const inputId = id || `org-number-${name || Math.random().toString(36).substr(2, 9)}`;
-
-  // Build CSS classes using design tokens
-  const inputClasses = React.useMemo((): void => {
-    const classes = ['organization-number-input'];
-
-    // Variant classes
-    classes.push(`organization-number-input--variant-${variant}`);
-
-    // State classes
-    if (hasError || validationResult.errors.length > 0) {
-      classes.push('organization-number-input--error');
-    }
-
-    if (disabled) {
-      classes.push('organization-number-input--disabled');
-    }
-
-    if (readOnly) {
-      classes.push('organization-number-input--readonly');
-    }
-
-    if (required) {
-      classes.push('organization-number-input--required');
-    }
-
-    if (isValidating) {
-      classes.push('organization-number-input--validating');
-    }
-
-    if (validationResult.isValid) {
-      classes.push('organization-number-input--valid');
-    }
-
-    // Norwegian compliance classes
-    if (norwegian.displayFormat) {
-      classes.push(
-        `organization-number-input--format-${norwegian.displayFormat.replace(/\s/g, '-')}`
-      );
-    }
-
-    if (norwegian.maskInput) {
-      classes.push('organization-number-input--masked');
-    }
-
-    if (norwegian.autoFormat) {
-      classes.push('organization-number-input--auto-format');
-    }
-
-    if (norwegian.fetchOrganizationData) {
-      classes.push('organization-number-input--fetch-data');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [
-    variant,
-    hasError,
-    validationResult,
-    disabled,
-    readOnly,
-    required,
-    isValidating,
-    norwegian,
-    className,
-  ]);
-
-  // Validation and formatting
-  useEffect((): void => {
-    const currentValue = value !== undefined ? value : internalValue;
-    const cleaned = currentValue.replace(/\D/g, '');
-
-    if (cleaned.length === 0) {
-      setValidationResult({
-        isValid: false,
-        errors: [],
-        type: 'organisasjonsnummer',
-        mainOrganization: '',
-      });
-      setOrgData(undefined);
-      return;
-    }
-
-    // Debounced validation
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    debounceRef.current = setTimeout(async (): void => {
-      setIsValidating(true);
-
-      try {
-        const result = validateOrganizationNumber(cleaned);
-        setValidationResult(result);
-
-        // Fetch organization data if enabled and valid
-        if (result.isValid && norwegian.fetchOrganizationData && validation.brreg) {
-          setIsFetchingData(true);
-          try {
-            const data = await mockFetchOrganizationData(cleaned);
-            setOrgData(data || undefined);
-          } catch (error) {
-            logger.warn('Failed to fetch organization data:', {
-              error: error instanceof Error ? error.message : String(error),
-            });
-          } finally {
-            setIsFetchingData(false);
-          }
-        }
-
-        onValidationChange?.(result.isValid, result.errors, orgData);
-      } catch (error) {
-        const errorResult = {
-          isValid: false,
-          errors: ['Invalid organization number'], // Changed to direct text
-          type: 'organisasjonsnummer' as const,
-          mainOrganization: '',
-        };
-        setValidationResult(errorResult);
-        onValidationChange?.(false, errorResult.errors);
-      } finally {
-        setIsValidating(false);
-      }
-    }, 300);
-
-    return (): void => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [value, internalValue, validation, norwegian, onValidationChange, orgData]);
-
-  // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    let newValue = event.target.value;
-
-    // Auto-formatting
-    if (norwegian.autoFormat) {
-      const cleaned = newValue.replace(/\D/g, '');
-      if (cleaned.length <= 9) {
-        newValue = formatOrganizationNumber(cleaned);
-      }
-    }
-
-    setInternalValue(newValue);
-    onChange?.(newValue, validationResult.isValid, event);
-  };
-
-  // Handle blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onBlur?.(event);
-  };
-
-  // Handle focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onFocus?.(event);
-  };
-
-  const currentValue = value !== undefined ? value : internalValue;
-  const hasValidationErrors = hasError || validationResult.errors.length > 0;
-
+const formatOrganizationNumber = (value: string): React.ReactElement => {
+  return (): React.ReactElement => {
   return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
@@ -304,11 +89,8 @@ export function OrganizationNumberInput({
 const OrganizationDisplay: React.FC<{
   orgData?: unknown; // Changed type to any as OrganizationData is removed
   isLoading: boolean;
-}> = ({ _orgData, _isLoading }): void => {
-  // Removed useLocalization as localization is removed
-
-  if (isLoading) {
-    return (
+}> = ({ orgData, _isLoading }): React.ReactElement => {
+  return (
       <div className="organization-display organization-display--loading">
         <span className="organization-display__loading-icon" aria-hidden="true">
           ⏳
@@ -369,11 +151,8 @@ const ValidationIndicator: React.FC<{
   isValid: boolean;
   isValidating: boolean;
   type?: string;
-}> = ({ isValid, isValidating, type }): void => {
-  // Removed useLocalization as localization is removed
-
-  if (isValidating) {
-    return (
+}> = ({ isValid, isValidating, type }): React.ReactElement => {
+  return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
@@ -404,9 +183,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }): void => {
-  // Removed useLocalization as localization is removed
-
+}> = ({ label, required, htmlFor }): React.ReactElement => {
   return (
     <label className="organization-number-field__label" htmlFor={htmlFor}>
       <span className="organization-number-field__label-text">{label}</span>
@@ -422,13 +199,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): void => {
-  // Removed useLocalization as localization is removed
-
-  if (errors.length === 0) {
-    return null;
-  }
-
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => {
   return (
     <div className="organization-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (

@@ -1,5 +1,5 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
-import React, { _useRef, _useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { useLocalization } from '../../../localization/hooks/useLocalization';
 
@@ -51,86 +51,7 @@ interface DesktopSidebarProps {
  * - Norwegian keyboard shortcuts (Alt+S for sidebar)
  * - Municipal branding and context
  */
-export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: unknown): void => {
-  const {
-    isCollapsed = false,
-    isResizable = true,
-    width = 280,
-    minWidth = 200,
-    maxWidth = 400,
-    position = 'left',
-    showToggle = true,
-    persistent = true,
-    overlay = false,
-    children,
-    classification,
-    municipalityCode,
-    showQuickAccess = true,
-    onToggle,
-    onResize,
-    style,
-    ...restProps
-  } = props;
-
-  const [sidebarWidth, setSidebarWidth] = useState<number>(width);
-  const sidebarRef = useRef<HTMLDivElement>(null);
-  const { t } = useLocalization();
-
-  // Get Norwegian classification colors and styles
-  const getClassificationStyle = (): void => {
-    if (!classification) {
-      return {};
-    }
-
-    const styles: Record<string, unknown> = {
-      ÅPEN: {
-        borderColor: 'var(--color-success-500)',
-        backgroundColor: 'var(--color-success-25)',
-      },
-      BEGRENSET: {
-        borderColor: 'var(--color-warning-500)',
-        backgroundColor: 'var(--color-warning-25)',
-      },
-      KONFIDENSIELT: {
-        borderColor: 'var(--color-danger-500)',
-        backgroundColor: 'var(--color-danger-25)',
-      },
-      HEMMELIG: {
-        borderColor: 'var(--color-danger-700)',
-        backgroundColor: 'var(--color-danger-50)',
-      },
-    };
-
-    return styles[classification] || {};
-  };
-
-  // Handle toggle
-  const handleToggle = useCallback((): void => {
-    setIsCollapsed(!isCollapsed);
-    onToggle?.(!isCollapsed);
-
-    // Audit log for user interaction
-    logger.info('Sidebar toggled', {
-      collapsed: !isCollapsed,
-      timestamp: new Date().toISOString(),
-      userId: 'current-user', // Replace with actual user ID
-    });
-  }, [isCollapsed, onToggle]);
-
-  // Handle keyboard navigation
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>): void => {
-    if (event.key === 'Escape' && !persistent) {
-      onToggle?.(true); // Collapse on escape
-    }
-    if (event.key === 'Tab') {
-      // Focus management for accessibility
-      event.preventDefault();
-    }
-  };
-
-  // Sidebar width with collapse support
-  // const sidebarWidth = isCollapsed ? 60 : width;
-
+export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: unknown): React.ReactElement => {
   return (
     <>
       {/* Overlay for non-persistent sidebar */}

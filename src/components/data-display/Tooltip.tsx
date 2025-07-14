@@ -120,86 +120,7 @@ const TooltipArrow = ({
 }: {
   placement: string;
   classification?: string;
-}): void => {
-  const getArrowStyles = (): React.CSSProperties => {
-    const baseArrowStyles: React.CSSProperties = {
-      position: 'absolute',
-      width: 0,
-      height: 0,
-      border: 'var(--tooltip-arrow-size) solid transparent',
-    };
-
-    const arrowColor = classification
-      ? getClassificationColor(classification)
-      : 'var(--color-gray-900)';
-
-    switch (placement) {
-      case 'top':
-        return {
-          ...baseArrowStyles,
-          top: '100%',
-          left: '50%',
-          marginLeft: 'calc(-1 * var(--tooltip-arrow-size))',
-          borderTopColor: arrowColor,
-          borderBottomWidth: 0,
-        };
-      case 'bottom':
-        return {
-          ...baseArrowStyles,
-          bottom: '100%',
-          left: '50%',
-          marginLeft: 'calc(-1 * var(--tooltip-arrow-size))',
-          borderBottomColor: arrowColor,
-          borderTopWidth: 0,
-        };
-      case 'left':
-        return {
-          ...baseArrowStyles,
-          left: '100%',
-          top: '50%',
-          marginTop: 'calc(-1 * var(--tooltip-arrow-size))',
-          borderLeftColor: arrowColor,
-          borderRightWidth: 0,
-        };
-      case 'right':
-        return {
-          ...baseArrowStyles,
-          right: '100%',
-          top: '50%',
-          marginTop: 'calc(-1 * var(--tooltip-arrow-size))',
-          borderRightColor: arrowColor,
-          borderLeftWidth: 0,
-        };
-      default:
-        return baseArrowStyles;
-    }
-  };
-
-  const getClassificationColor = (classification: string): string => {
-    const colors = {
-      ÅPEN: 'var(--color-gray-900)',
-      BEGRENSET: 'var(--color-orange-900)',
-      KONFIDENSIELT: 'var(--color-red-900)',
-      HEMMELIG: 'var(--color-red-950)',
-    };
-    return colors[classification as keyof typeof colors] || 'var(--color-gray-900)';
-  };
-
-  return <div style={getArrowStyles()} />;
-};
-
-// Classification indicator
-const ClassificationIndicator = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+}): React.ReactElement => {
   return (
     <span
       style={{
@@ -215,21 +136,7 @@ const ClassificationIndicator = ({ level }: { level: string }): void => {
 };
 
 // Help category indicator
-const HelpCategoryIndicator = ({ category }: { category?: string }): void => {
-  if (!category) {
-    return null;
-  }
-
-  const getCategoryIcon = (category: string): string => {
-    const icons = {
-      field: '📝',
-      action: '⚡',
-      status: '📊',
-      navigation: '🧭',
-    };
-    return icons[category as keyof typeof icons] || 'ℹ️';
-  };
-
+const HelpCategoryIndicator = ({ category }: { category?: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -253,7 +160,7 @@ const TooltipContent = ({
   contentKey?: string;
   content?: unknown;
   norwegian?: TooltipProps['norwegian'];
-}): void => {
+}): React.ReactElement => {
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-1)' }}>
       {/* Classification indicator */}
@@ -271,147 +178,8 @@ const TooltipContent = ({
 };
 
 // Tooltip component with forwardRef
-export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): void => {
-  const {
-    contentKey,
-    content,
-    children,
-    placement = 'top',
-    trigger = 'hover',
-    delay = 200,
-    maxWidth,
-    interactive = false,
-    arrow = true,
-    norwegian,
-    onOpen,
-    onClose,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...divProps
-  } = props;
-
-  const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const timeoutRef = useRef<NodeJS.Timeout>();
-
-  const showTooltip = (): void => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout((): void => {
-      setIsVisible(true);
-      onOpen?.();
-    }, delay);
-  };
-
-  const hideTooltip = (): void => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    setIsVisible(false);
-    onClose?.();
-  };
-
-  const handleMouseEnter = (): void => {
-    if (trigger === 'hover') {
-      showTooltip();
-    }
-  };
-
-  const handleMouseLeave = (): void => {
-    if (trigger === 'hover' && !interactive) {
-      hideTooltip();
-    }
-  };
-
-  const handleClick = (): void => {
-    if (trigger === 'click') {
-      if (isVisible) {
-        hideTooltip();
-      } else {
-        showTooltip();
-      }
-    }
-  };
-
-  const handleFocus = (): void => {
-    if (trigger === 'focus') {
-      showTooltip();
-    }
-  };
-
-  const handleBlur = (): void => {
-    if (trigger === 'focus') {
-      hideTooltip();
-    }
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Escape' && isVisible) {
-      hideTooltip();
-    }
-  };
-
-  // Calculate position (simplified - real implementation would use more sophisticated positioning)
-  useEffect((): void => {
-    if (isVisible && triggerRef.current && tooltipRef.current) {
-      const triggerRect = triggerRef.current.getBoundingClientRect();
-      const tooltipRect = tooltipRef.current.getBoundingClientRect();
-
-      let top = 0;
-      let left = 0;
-
-      switch (placement) {
-        case 'top':
-          top = triggerRect.top - tooltipRect.height - 8;
-          left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-          break;
-        case 'bottom':
-          top = triggerRect.bottom + 8;
-          left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-          break;
-        case 'left':
-          top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-          left = triggerRect.left - tooltipRect.width - 8;
-          break;
-        case 'right':
-          top = triggerRect.top + (triggerRect.height - tooltipRect.height) / 2;
-          left = triggerRect.right + 8;
-          break;
-        default:
-          // Auto placement - simplified
-          top = triggerRect.top - tooltipRect.height - 8;
-          left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
-      }
-
-      setPosition({ _top, _left });
-    }
-  }, [isVisible, placement]);
-
-  // Cleanup timeout on unmount
-  useEffect((): void => {
-    return (): void => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  const tooltipStyles = getTooltipStyles(props);
-  const combinedStyles = {
-    ...tooltipStyles,
-    ...style,
-    top: position.top,
-    left: position.left,
-    display: isVisible ? 'block' : 'none',
-  };
-
+export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, ref): React.ReactElement => {
+  return (): React.ReactElement => {
   return (
     <>
       {/* Trigger element */}

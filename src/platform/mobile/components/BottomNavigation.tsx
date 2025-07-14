@@ -50,82 +50,7 @@ interface BottomNavigationProps {
  * - Emergency access support
  * - Accessibility announcements in Norwegian
  */
-export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: unknown): void => {
-  const {
-    items = [],
-    activeIndex = 0,
-    showLabels = true,
-    showBadges = true,
-    height = 'standard',
-    safeAreaBottom = true,
-    classification,
-    onItemPress,
-    style,
-    ...restProps
-  } = props;
-
-  // Mock translation function
-  const t = (key: string) => key;
-
-  // Classification styling based on NSM standards
-  const getClassificationStyle = (): void => {
-    if (!classification) {
-      return {};
-    }
-
-    const styles: Record<string, unknown> = {
-      ÅPEN: {
-        borderTop: '2px solid var(--color-success-500)',
-        backgroundColor: 'var(--color-success-50)',
-      },
-      BEGRENSET: {
-        borderTop: '2px solid var(--color-warning-500)',
-        backgroundColor: 'var(--color-warning-50)',
-      },
-      KONFIDENSIELT: {
-        borderTop: '2px solid var(--color-danger-500)',
-        backgroundColor: 'var(--color-danger-50)',
-      },
-      HEMMELIG: {
-        borderTop: '2px solid var(--color-danger-700)',
-        backgroundColor: 'var(--color-danger-100)',
-      },
-    };
-
-    return styles[classification] || {};
-  };
-
-  // Height variants
-  const getHeightStyle = (): void => {
-    const heights: Record<string, string> = {
-      compact: 'var(--spacing-12)', // 48px
-      standard: 'var(--spacing-16)', // 64px
-      extended: 'var(--spacing-20)', // 80px
-    };
-    return heights[height];
-  };
-
-  // Handle item press with Norwegian compliance audit
-  const handleItemPress = useCallback(
-    (index: number, item: BottomNavigationItem): void => {
-      if (item.disabled) {
-        return;
-      }
-
-      // Norwegian compliance audit logging
-      if (item.classification) {
-        logger.info('Bottom navigation item pressed', {
-          item: item.labelKey,
-          classification: item.classification,
-          timestamp: new Date().toISOString(),
-        });
-      }
-
-      onItemPress?.(index, item);
-    },
-    [onItemPress]
-  );
-
+export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: unknown): React.ReactElement => {
   return (
     <nav
       ref={ref}
@@ -152,11 +77,8 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
       aria-label={t('navigation.bottomNavigation')}
       {...restProps}
     >
-      {items.map((item, index): void => {
-        const isActive = index === activeIndex;
-        const itemClassification = item.classification || classification;
-
-        return (
+      {items.map((item, index): React.ReactElement => {
+  return (
           <button
             key={index}
             type="button"

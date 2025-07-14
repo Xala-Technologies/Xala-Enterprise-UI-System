@@ -183,9 +183,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
-      <div ref={ref} className={cn(cardVariants({ _variant, _size }), className)} {...props}>
+  ): React.ReactElement => {
+  return (
+      <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
         {/* Card Header */}
         {(header || title || description) && (
           <div className="space-y-1.5 mb-4">
@@ -228,34 +228,8 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
       ...props
     },
     ref
-  ): void => {
-    /**
-     * Get change indicator color
-     * @param type - Change type
-     * @returns Color class
-     */
-    const getChangeColor = (type: 'increase' | 'decrease' | 'neutral'): string => {
-      switch (type) {
-        case 'increase':
-          return 'text-green-600';
-        case 'decrease':
-          return 'text-red-600';
-        case 'neutral':
-          return 'text-muted-foreground';
-        default:
-          return 'text-muted-foreground';
-      }
-    };
-
-    /**
-     * Get change icon
-     * @param type - Change type
-     * @returns Icon JSX
-     */
-    const getChangeIcon = (type: 'increase' | 'decrease' | 'neutral'): ReactNode => {
-      switch (type) {
-        case 'increase':
-          return (
+  ): React.ReactElement => {
+  return (
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -288,7 +262,7 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
     };
 
     return (
-      <div ref={ref} className={cn(statCardVariants({ _variant, _size }), className)} {...props}>
+      <div ref={ref} className={cn(statCardVariants({ variant, size }), className)} {...props}>
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -332,9 +306,9 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
-      <div ref={ref} className={cn(chartCardVariants({ _variant, _size }), className)} {...props}>
+  ): React.ReactElement => {
+  return (
+      <div ref={ref} className={cn(chartCardVariants({ variant, size }), className)} {...props}>
         {/* Chart Header */}
         <div className="flex items-center justify-between mb-4">
           <div>

@@ -18,208 +18,8 @@ const validatePersonalNumber = (value: string) => ({
   century: 20,
 });
 
-const formatPersonalNumber = (value: string): void => {
-  const cleaned = value.replace(/\D/g, '');
-  return cleaned.replace(/(\d{6})(\d{5})/, '$1-$2');
-};
-
-/**
- * Personal Number Input component using design tokens and semantic props
- * Follows enterprise standards - no inline styles, design token props only
- */
-export function PersonalNumberInput({
-  label,
-  error,
-  helpText,
-  value,
-  defaultValue,
-  onChange,
-  onValidationChange,
-  onBlur,
-  onFocus,
-  required = false,
-  disabled = false,
-  readOnly = false,
-  placeholder,
-  name,
-  id,
-  variant = 'default',
-  hasError = false,
-  validation = {},
-  norwegian = {},
-  className = '',
-  testId,
-  ...inputProps
-}: PersonalNumberInputProps): React.ReactElement {
-  // State management
-  const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-  const [validationResult, setValidationResult] = useState<{
-    isValid: boolean;
-    errors: string[];
-    type: 'fødselsnummer';
-    birthDate: Date;
-    gender: 'male' | 'female';
-    century: number;
-  }>({
-    isValid: false,
-    errors: [],
-    type: 'fødselsnummer',
-    birthDate: new Date(),
-    gender: 'male',
-    century: 20,
-  });
-  const [isValidating, setIsValidating] = useState(false);
-  const debounceRef = useRef<NodeJS.Timeout>();
-
-  // Generate unique ID
-  const inputId = id || `personal-number-${name || Math.random().toString(36).substr(2, 9)}`;
-
-  // Build CSS classes using design tokens
-  const inputClasses = React.useMemo((): void => {
-    const classes = ['personal-number-input'];
-
-    // Variant classes
-    classes.push(`personal-number-input--variant-${variant}`);
-
-    // State classes
-    if (hasError || validationResult.errors.length > 0) {
-      classes.push('personal-number-input--error');
-    }
-
-    if (disabled) {
-      classes.push('personal-number-input--disabled');
-    }
-
-    if (readOnly) {
-      classes.push('personal-number-input--readonly');
-    }
-
-    if (required) {
-      classes.push('personal-number-input--required');
-    }
-
-    if (isValidating) {
-      classes.push('personal-number-input--validating');
-    }
-
-    if (validationResult.isValid) {
-      classes.push('personal-number-input--valid');
-    }
-
-    // Norwegian compliance classes
-    if (norwegian.displayFormat) {
-      classes.push(
-        `personal-number-input--format-${norwegian.displayFormat.replace(/[-\s]/g, '')}`
-      );
-    }
-
-    if (norwegian.maskInput) {
-      classes.push('personal-number-input--masked');
-    }
-
-    if (norwegian.autoFormat) {
-      classes.push('personal-number-input--auto-format');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [
-    variant,
-    hasError,
-    validationResult,
-    disabled,
-    readOnly,
-    required,
-    isValidating,
-    norwegian,
-    className,
-  ]);
-
-  // Validation and formatting
-  useEffect((): void => {
-    const currentValue = value !== undefined ? value : internalValue;
-    const cleaned = currentValue.replace(/\D/g, '');
-
-    if (cleaned.length === 0) {
-      setValidationResult({
-        isValid: false,
-        errors: [],
-        type: 'fødselsnummer',
-        birthDate: new Date(),
-        gender: 'male',
-        century: 20,
-      });
-      return;
-    }
-
-    // Debounced validation
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    debounceRef.current = setTimeout(async (): void => {
-      setIsValidating(true);
-
-      try {
-        const result = validatePersonalNumber(cleaned);
-        setValidationResult(result);
-        onValidationChange?.(result.isValid, result.errors);
-      } catch (error) {
-        const errorResult = {
-          isValid: false,
-          errors: ['Invalid personal number'],
-          type: 'fødselsnummer' as const,
-          birthDate: new Date(),
-          gender: 'male' as const,
-          century: 20,
-        };
-        setValidationResult(errorResult);
-        onValidationChange?.(false, errorResult.errors);
-      } finally {
-        setIsValidating(false);
-      }
-    }, 300);
-
-    return (): void => {
-      if (debounceRef.current) {
-        clearTimeout(debounceRef.current);
-      }
-    };
-  }, [value, internalValue, validation, norwegian, onValidationChange]);
-
-  // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    let newValue = event.target.value;
-
-    // Auto-formatting
-    if (norwegian.autoFormat) {
-      const cleaned = newValue.replace(/\D/g, '');
-      if (cleaned.length <= 11) {
-        newValue = formatPersonalNumber(cleaned);
-      }
-    }
-
-    setInternalValue(newValue);
-    onChange?.(newValue, validationResult.isValid, event);
-  };
-
-  // Handle blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onBlur?.(event);
-  };
-
-  // Handle focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onFocus?.(event);
-  };
-
-  const currentValue = value !== undefined ? value : internalValue;
-  const hasValidationErrors = hasError || validationResult.errors.length > 0;
-
+const formatPersonalNumber = (value: string): React.ReactElement => {
+  return (): React.ReactElement => {
   return (
     <div className="personal-number-field" data-testid={testId}>
       {/* Label */}
@@ -281,9 +81,8 @@ const ValidationIndicator: React.FC<{
   isValid: boolean;
   isValidating: boolean;
   type?: string;
-}> = ({ isValid, isValidating, type }): void => {
-  if (isValidating) {
-    return (
+}> = ({ isValid, isValidating, type }): React.ReactElement => {
+  return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
@@ -314,7 +113,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }): void => {
+}> = ({ label, required, htmlFor }): React.ReactElement => {
   return (
     <label className="personal-number-field__label" htmlFor={htmlFor}>
       <span className="personal-number-field__label-text">{label}</span>
@@ -330,11 +129,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): void => {
-  if (errors.length === 0) {
-    return null;
-  }
-
+const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }): React.ReactElement => {
   return (
     <div className="personal-number-field__error-message" role="alert" aria-live="polite">
       {errors.map((error, index) => (

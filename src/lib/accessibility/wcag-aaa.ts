@@ -63,26 +63,8 @@ export const focusManagement = {
     const firstFocusableElement = focusableElements[0] as HTMLElement;
     const lastFocusableElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
-    const handleTabKey = (e: KeyboardEvent): void => {
-      if (e.key === 'Tab' && document.activeElement) {
-        if (e.shiftKey) {
-          if (document.activeElement === firstFocusableElement) {
-            lastFocusableElement.focus();
-            e.preventDefault();
-          }
-        } else {
-          if (document.activeElement === lastFocusableElement) {
-            firstFocusableElement.focus();
-            e.preventDefault();
-          }
-        }
-      }
-    };
-
-    container.addEventListener('keydown', handleTabKey);
-    firstFocusableElement.focus();
-
-    return () => {
+    const handleTabKey = (e: KeyboardEvent): React.ReactElement => {
+  return () => {
       container.removeEventListener('keydown', handleTabKey);
     };
   },
@@ -170,44 +152,9 @@ export const keyboardNavigation = {
   handleArrowKeys: (items: HTMLElement[], currentIndex: number, direction: 'horizontal' | 'vertical' = 'horizontal') => {
     const isHorizontal = direction === 'horizontal';
     
-    return (e: KeyboardEvent): void => {
-      const { key } = e;
-      const prevKeys = isHorizontal ? ['ArrowLeft'] : ['ArrowUp'];
-      const nextKeys = isHorizontal ? ['ArrowRight'] : ['ArrowDown'];
-      
-      if (prevKeys.includes(key)) {
-        e.preventDefault();
-        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
-        if (items[prevIndex]) {
-          items[prevIndex].focus();
-        }
-      } else if (nextKeys.includes(key)) {
-        e.preventDefault();
-        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
-        if (items[nextIndex]) {
-          items[nextIndex].focus();
-        }
-      }
-    };
-  },
-
-  /**
-   * Handle Enter and Space key activation
-   */
-  handleActivation: (callback: () => void) => {
-    return (e: KeyboardEvent): void => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        callback();
-      }
-    };
-  },
-
-  /**
-   * Handle Escape key
-   */
-  handleEscape: (callback: () => void) => {
-    return (e: KeyboardEvent): void => {
+    return (e: KeyboardEvent): React.ReactElement => {
+  return (e: KeyboardEvent): React.ReactElement => {
+  return (e: KeyboardEvent): void => {
       if (e.key === 'Escape') {
         e.preventDefault();
         callback();

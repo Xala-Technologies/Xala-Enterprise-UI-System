@@ -285,12 +285,12 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <header
         ref={ref}
         role="banner"
-        className={cn(mobileHeaderVariants({ _variant, _size }), className)}
+        className={cn(mobileHeaderVariants({ variant, size }), className)}
         {...props}
       >
         {/* Left Section */}
@@ -336,8 +336,8 @@ MobileHeader.displayName = 'MobileHeader';
  * Mobile Bottom Navigation Component
  */
 export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNavigationProps>(
-  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): void => {
-    return (
+  ({ items, variant = 'default', activeIndex = 0, onNavigate, className, ...props }, ref): React.ReactElement => {
+  return (
       <nav
         ref={ref}
         role="navigation"
@@ -348,72 +348,8 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
         {items.map((item, index) => (
           <button
             key={index}
-            onClick={(): void => {
-              item.onClick?.();
-              onNavigate?.(index);
-            }}
-            className={cn(
-              'flex flex-col items-center justify-center',
-              'min-h-[44px] min-w-[44px] p-1',
-              'rounded-md transition-colors',
-              'hover:bg-accent hover:text-accent-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-              'relative',
-              index === activeIndex ? 'text-primary' : 'text-muted-foreground'
-            )}
-            aria-label={item.label}
-            aria-current={index === activeIndex ? 'page' : undefined}
-          >
-            {/* Icon */}
-            <div className="flex items-center justify-center w-6 h-6 mb-1">{item.icon}</div>
-
-            {/* Label */}
-            <span className="text-xs font-medium truncate max-w-16">{item.label}</span>
-
-            {/* Badge */}
-            {item.badge && (
-              <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full px-1 min-w-[18px] h-[18px] flex items-center justify-center">
-                {item.badge}
-              </span>
-            )}
-          </button>
-        ))}
-      </nav>
-    );
-  }
-);
-
-MobileBottomNavigation.displayName = 'MobileBottomNavigation';
-
-/**
- * Mobile Drawer Component
- */
-export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
-  (
-    {
-      children,
-      position = 'left',
-      open = false,
-      onClose,
-      title,
-      header,
-      footer,
-      className,
-      ...props
-    },
-    ref
-  ): void => {
-    // Focus trap when open
-    useEffect((): void => {
-      if (open) {
-        const drawerElement = ref as React.RefObject<HTMLElement>;
-        if (drawerElement.current) {
-          return xalaAccessibility.focusManagement.trapFocus(drawerElement.current);
-        }
-      }
-    }, [open, ref]);
-
-    return (
+            onClick={(): React.ReactElement => {
+  return (
       <>
         {/* Overlay */}
         {open && (
@@ -424,7 +360,7 @@ export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
           ref={ref}
           role="complementary"
           aria-label={title || 'Navigation drawer'}
-          className={cn(mobileDrawerVariants({ _position, _open }), className)}
+          className={cn(mobileDrawerVariants({ position, open }), className)}
           {...props}
         >
           {/* Header */}
@@ -478,23 +414,13 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
       ...props
     },
     ref
-  ): void => {
-    const [refreshing, setRefreshing] = useState(false);
-
-    const handleRefresh = async (): void => {
-      if (pullToRefresh && onRefresh) {
-        setRefreshing(true);
-        await onRefresh();
-        setRefreshing(false);
-      }
-    };
-
-    return (
+  ): React.ReactElement => {
+  return (
       <main
         ref={ref}
         role="main"
         aria-label={title || 'Main content'}
-        className={cn(mobileContentVariants({ _padding, _bottomSafe }), className)}
+        className={cn(mobileContentVariants({ padding, bottomSafe }), className)}
         {...props}
       >
         {/* Pull to refresh indicator */}
@@ -532,8 +458,8 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <BaseLayout
         ref={ref}
         platform="mobile"

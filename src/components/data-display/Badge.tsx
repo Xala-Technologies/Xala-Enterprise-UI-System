@@ -91,31 +91,8 @@ export function Badge({
   }, [variant, size, shape, position, pulse, dot, classification, priority, className]);
 
   // Accessibility props
-  const accessibilityProps = React.useMemo((): void => {
-    if (!accessible) {
-      return {};
-    }
-
-    const props: Record<string, unknown> = {
-      role: 'status',
-      'aria-live': 'polite',
-    };
-
-    if (typeof count === 'number') {
-      props['aria-label'] = t('badge.count', { count });
-    }
-
-    if (classification) {
-      props['aria-label'] =
-        `${props['aria-label'] || ''} ${t('badge.classification', { level: classification })}`.trim();
-    }
-
-    return props;
-  }, [accessible, count, classification, t]);
-
-  // Render different badge types
-  if (dot) {
-    return (
+  const accessibilityProps = React.useMemo((): React.ReactElement => {
+  return (
       <span className={badgeClasses} data-testid={testId} {...accessibilityProps} {...props} />
     );
   }
@@ -136,17 +113,7 @@ export function Badge({
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🔓',
-      BEGRENSET: '🔒',
-      KONFIDENSIELT: '🔐',
-      HEMMELIG: '🔴',
-    };
-    return icons[classification as keyof typeof icons] || '🔓';
-  };
-
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
   return (
     <span className="badge__classification" aria-hidden="true">
       {getClassificationIcon(level)}
@@ -157,17 +124,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void =
 /**
  * Priority indicator component
  */
-const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }): void => {
-  const getPriorityIcon = (priority: string): string => {
-    const icons = {
-      low: '⬇️',
-      medium: '➡️',
-      high: '⬆️',
-      urgent: '🔥',
-    };
-    return icons[priority as keyof typeof icons] || '➡️';
-  };
-
+const PriorityIndicator: React.FC<{ priority: string }> = ({ priority }): React.ReactElement => {
   return (
     <span className="badge__priority" aria-hidden="true">
       {getPriorityIcon(priority)}

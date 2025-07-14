@@ -134,7 +134,7 @@ const InputWrapper = forwardRef<
     children: ReactNode;
     className?: string;
   }
->(({ _children, _className }, ref) => (
+>(({ _children, className }, ref) => (
   <div ref={ref} className={cn('relative', className)}>
     {children}
   </div>
@@ -187,14 +187,7 @@ const InputMessage = forwardRef<
     className?: string;
     id?: string;
   }
->(({ children, type = 'default', className, id }, ref): void => {
-  const messageClasses = {
-    default: 'text-muted-foreground',
-    success: 'text-success',
-    warning: 'text-warning',
-    error: 'text-destructive',
-  };
-
+>(({ children, type = 'default', className, id }, ref): React.ReactElement => {
   return (
     <p
       ref={ref}
@@ -336,46 +329,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       ...props
     },
     ref
-  ): void => {
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [currentValue, setCurrentValue] = useState(value || '');
-
-    // Generate unique IDs for accessibility
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
-    const helperTextId = `${inputId}-helper`;
-    const errorId = `${inputId}-error`;
-    const successId = `${inputId}-success`;
-    const warningId = `${inputId}-warning`;
-
-    // Determine input type based on password toggle
-    const inputType =
-      type === 'password' && showPasswordToggle && isPasswordVisible ? 'text' : type;
-
-    // Determine variant based on validation state
-    const computedVariant = error ? 'error' : success ? 'success' : warning ? 'warning' : variant;
-
-    // Handle input change
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const newValue = e.target.value;
-      setCurrentValue(newValue);
-      onChange?.(e);
-    };
-
-    // Character count
-    const charCount = String(currentValue).length;
-    const isOverLimit = maxLength && charCount > maxLength;
-
-    // Aria describedby
-    const describedBy = [
-      helperText && helperTextId,
-      error && errorId,
-      success && successId,
-      warning && warningId,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    return (
+  ): React.ReactElement => {
+  return (
       <div className={cn('space-y-2', containerClassName)}>
         {/* Label */}
         {label && (

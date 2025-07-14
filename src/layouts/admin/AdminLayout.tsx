@@ -182,13 +182,13 @@ export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <nav
         ref={ref}
         role="navigation"
         aria-label="Admin navigation"
-        className={cn(adminTopBarVariants({ _variant, _size }), className)}
+        className={cn(adminTopBarVariants({ variant, size }), className)}
         {...props}
       >
         <div className="px-6 h-full">
@@ -224,13 +224,13 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
   (
     { children, variant = 'default', collapsed = false, onCollapse, title, className, ...props },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <aside
         ref={ref}
         role="complementary"
         aria-label={title || 'Admin sidebar'}
-        className={cn(adminSidebarVariants({ _variant, _collapsed }), className)}
+        className={cn(adminSidebarVariants({ variant, collapsed }), className)}
         style={{
           width: collapsed
             ? platformTokens.componentSizes.desktop.button.sm.minWidth
@@ -286,8 +286,8 @@ AdminSidebar.displayName = 'AdminSidebar';
  * @returns React.ReactElement
  */
 export const AdminContent = forwardRef<HTMLElement, AdminContentProps>(
-  ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref): void => {
-    return (
+  ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref): React.ReactElement => {
+  return (
       <main
         ref={ref}
         role="main"
@@ -332,8 +332,8 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(

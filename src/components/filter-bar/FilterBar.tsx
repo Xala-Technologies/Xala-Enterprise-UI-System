@@ -120,34 +120,9 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
       ...props
     },
     ref
-  ): void => {
-    /**
-     * Handle search input change
-     * @param e - Input change event
-     */
-    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      onSearchChange?.(e.target.value);
-    };
-
-    /**
-     * Handle filter change
-     * @param filterId - Filter identifier
-     * @param value - Selected value
-     */
-    const handleFilterChange = (filterId: string, value: string): void => {
-      onFilterChange?.(filterId, value);
-    };
-
-    /**
-     * Handle view change
-     * @param value - Selected view value
-     */
-    const handleViewChange = (value: string): void => {
-      onViewChange?.(value);
-    };
-
-    return (
-      <div ref={ref} className={cn(filterBarVariants({ _variant, _size }), className)} {...props}>
+  ): React.ReactElement => {
+  return (
+      <div ref={ref} className={cn(filterBarVariants({ variant, size }), className)} {...props}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left Section - Search and Filters */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">

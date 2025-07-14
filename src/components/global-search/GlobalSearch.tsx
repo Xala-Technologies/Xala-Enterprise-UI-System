@@ -134,96 +134,12 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       ...props
     },
     ref
-  ): void => {
-    const [inputValue, setInputValue] = useState(value);
-    const [selectedIndex, setSelectedIndex] = useState(-1);
-    const [isOpen, setIsOpen] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const resultsRef = useRef<HTMLDivElement>(null);
-
-    /**
-     * Handle input change
-     * @param e - Input change event
-     */
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const newValue = e.target.value;
-      setInputValue(newValue);
-      onChange?.(newValue);
-      setSelectedIndex(-1);
-    };
-
-    /**
-     * Handle keyboard navigation
-     * @param e - Keyboard event
-     */
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-      if (!showResults || results.length === 0) return;
-
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault();
-          setSelectedIndex(prev => (prev < results.length - 1 ? prev + 1 : 0));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          setSelectedIndex(prev => (prev > 0 ? prev - 1 : results.length - 1));
-          break;
-        case 'Enter':
-          e.preventDefault();
-          if (selectedIndex >= 0 && results[selectedIndex]) {
-            handleResultClick(results[selectedIndex]);
-          } else {
-            onSubmit?.(inputValue);
-          }
-          break;
-        case 'Escape':
-          setIsOpen(false);
-          inputRef.current?.blur();
-          break;
-      }
-    };
-
-    /**
-     * Handle result click
-     * @param result - Selected result
-     */
-    const handleResultClick = (result: SearchResultItem): void => {
-      result.onClick?.();
-      setIsOpen(false);
-      setInputValue(result.title);
-    };
-
-    /**
-     * Handle focus
-     */
-    const handleFocus = (): void => {
-      setIsOpen(true);
-      onFocus?.();
-    };
-
-    /**
-     * Handle blur
-     */
-    const handleBlur = (): void => {
-      setTimeout((): void => {
-        setIsOpen(false);
-        onBlur?.();
-      }, 200);
-    };
-
-    useEffect((): void => {
-      setInputValue(value);
-    }, [value]);
-
-    useEffect((): void => {
-      setIsOpen(showResults);
-    }, [showResults]);
-
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(
-          globalSearchVariants({ _variant, _size }),
+          globalSearchVariants({ variant, size }),
           'rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
           className
         )}
@@ -322,4 +238,4 @@ GlobalSearch.displayName = 'GlobalSearch';
 export type GlobalSearchVariant = VariantProps<typeof globalSearchVariants>;
 export type SearchInputVariant = VariantProps<typeof searchInputVariants>;
 
-export { _globalSearchVariants, _searchInputVariants };
+export { globalSearchVariants, searchInputVariants };

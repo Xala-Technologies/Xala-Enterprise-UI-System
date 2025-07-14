@@ -7,13 +7,13 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
-import type { _AccessibilityLevel, _UISystemConfig } from '../lib/types/core.types';
+import type { AccessibilityLevel, UISystemConfig } from '../lib/types/core.types';
 import type {
   AccessibilityConfig,
   AccessibilityPreset,
   AccessibilityTokens,
 } from '../tokens/accessibility-tokens';
-import { _accessibilityPresets, _generateAccessibilityTokens } from '../tokens/accessibility-tokens';
+import { accessibilityPresets, generateAccessibilityTokens } from '../tokens/accessibility-tokens';
 
 const logger = Logger.create({
   serviceName: 'ui-system-provider',
@@ -104,90 +104,7 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   children,
   config: initialConfig = {},
   accessibility: initialAccessibility = 'basic',
-}): void => {
-  // Merge default config with provided config
-  const config = useMemo(
-    (): UISystemConfig => ({
-      ...defaultConfig,
-      ...initialConfig,
-      accessibility: initialAccessibility,
-    }),
-    [initialConfig, initialAccessibility]
-  );
-
-  // Get accessibility configuration
-  const accessibilityConfig = useMemo((): AccessibilityConfig => {
-    if (typeof config.accessibility === 'string') {
-      return accessibilityPresets[config.accessibility];
-    }
-    return config.accessibility || accessibilityPresets.basic;
-  }, [config.accessibility]);
-
-  // Generate accessibility tokens
-  const accessibilityTokens = useMemo((): AccessibilityTokens => {
-    return generateAccessibilityTokens(accessibilityConfig);
-  }, [accessibilityConfig]);
-
-  // Update configuration function
-  const updateConfig = useMemo(
-    () =>
-      (_updates: Partial<UISystemConfig>): void => {
-        // In a real implementation, this would update state
-        // For now, we'll just log the update
-        logger.warn('UISystemProvider: Configuration updates not implemented in read-only mode');
-      },
-    []
-  );
-
-  // Update accessibility function
-  const updateAccessibility = useMemo(
-    () =>
-      (_accessibility: AccessibilityConfig | AccessibilityPreset): void => {
-        // In a real implementation, this would update state
-        // For now, we'll just log the update
-        logger.warn('UISystemProvider: Accessibility updates not implemented in read-only mode');
-      },
-    []
-  );
-
-  // Context value
-  const contextValue = useMemo(
-    (): UISystemContext => ({
-      config,
-      accessibility: accessibilityConfig,
-      accessibilityTokens,
-      updateConfig,
-      updateAccessibility,
-    }),
-    [config, accessibilityConfig, accessibilityTokens, updateConfig, updateAccessibility]
-  );
-
-  // Inject CSS custom properties for accessibility tokens
-  const cssVariables = useMemo((): void => {
-    const variables = {
-      '--ui-focus-color': accessibilityTokens.colors.focus,
-      '--ui-error-color': accessibilityTokens.colors.error,
-      '--ui-success-color': accessibilityTokens.colors.success,
-      '--ui-warning-color': accessibilityTokens.colors.warning,
-      '--ui-info-color': accessibilityTokens.colors.info,
-      '--ui-contrast-text': accessibilityTokens.colors.contrast.text,
-      '--ui-contrast-background': accessibilityTokens.colors.contrast.background,
-      '--ui-contrast-border': accessibilityTokens.colors.contrast.border,
-      '--ui-focus-spacing': accessibilityTokens.spacing.focus,
-      '--ui-touch-target': accessibilityTokens.spacing.touchTarget,
-      '--ui-text-spacing': accessibilityTokens.spacing.textSpacing,
-      '--ui-line-height': accessibilityTokens.typography.lineHeight,
-      '--ui-letter-spacing': accessibilityTokens.typography.letterSpacing,
-      '--ui-word-spacing': accessibilityTokens.typography.wordSpacing,
-      '--ui-animation-duration': accessibilityTokens.animation.duration,
-      '--ui-animation-timing': accessibilityTokens.animation.timing,
-    };
-
-    return Object.entries(variables)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join('; ');
-  }, [accessibilityTokens]);
-
+}): React.ReactElement => {
   return (
     <UISystemContextInstance.Provider value={contextValue}>
       <div
@@ -227,7 +144,7 @@ export const useAccessibility = (): {
   level: AccessibilityLevel;
   isEnabled: boolean;
 } => {
-  const { _accessibility, _accessibilityTokens } = useUISystem();
+  const { accessibility, accessibilityTokens } = useUISystem();
 
   return {
     config: accessibility,

@@ -13,7 +13,7 @@ import { type ButtonHTMLAttributes, forwardRef } from 'react';
  * Button variants using class-variance-authority
  */
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&svg]:pointer-events-none [&svg]:size-4 [&svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -57,10 +57,8 @@ export interface ButtonProps
  * @returns Button JSX element
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref): void => {
-    const Comp = asChild ? 'span' : 'button';
-
-    return (
+  ({ className, variant, size, asChild = false, ...props }, ref): React.ReactElement => {
+  return (
       <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
     );
   }

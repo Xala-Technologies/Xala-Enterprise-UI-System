@@ -69,7 +69,7 @@ export interface TableAction<T = unknown> {
   /** Action handler */
   readonly onClick: (_item: T, index: number) => void;
   /** Action disabled check */
-  readonly disabled?: (_item: T, _index: number) => boolean;
+  readonly disabled?: (_item: T, index: number) => boolean;
   /** Action variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive';
 }
@@ -104,9 +104,9 @@ export interface DataTableProps<T = unknown>
   /** Row selection handler */
   readonly onRowSelect?: (selectedRows: readonly string[]) => void;
   /** Row key extractor */
-  readonly rowKey?: (_item: T, _index: number) => string;
+  readonly rowKey?: (_item: T, index: number) => string;
   /** Row click handler */
-  readonly onRowClick?: (_item: T, _index: number) => void;
+  readonly onRowClick?: (_item: T, index: number) => void;
 }
 
 /**
@@ -135,105 +135,8 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       ...props
     },
     ref
-  ): void => {
-    /**
-     * Handle sort click
-     * @param column - Column key
-     */
-    const handleSort = (column: string): void => {
-      if (!onSort) return;
-
-      const newDirection = sortBy === column && sortDirection === 'asc' ? 'desc' : 'asc';
-      onSort(column, newDirection);
-    };
-
-    /**
-     * Handle row selection
-     * @param rowId - Row identifier
-     */
-    const handleRowSelect = (rowId: string): void => {
-      if (!onRowSelect) return;
-
-      const newSelection = selectedRows.includes(rowId)
-        ? selectedRows.filter(id => id !== rowId)
-        : [...selectedRows, rowId];
-
-      onRowSelect(newSelection);
-    };
-
-    /**
-     * Handle select all
-     */
-    const handleSelectAll = (): void => {
-      if (!onRowSelect) return;
-
-      const allRowIds = data.map(rowKey);
-      const newSelection = selectedRows.length === data.length ? [] : allRowIds;
-      onRowSelect(newSelection);
-    };
-
-    /**
-     * Render table header
-     * @returns React.ReactElement
-     */
-    const renderHeader = (): React.ReactElement => (
-      <thead className="bg-muted/50">
-        <tr>
-          {onRowSelect && (
-            <th className="w-12 p-3 text-left">
-              <input
-                type="checkbox"
-                checked={selectedRows.length === data.length && data.length > 0}
-                onChange={handleSelectAll}
-                className="rounded border-border focus:ring-ring"
-                aria-label="Select all rows"
-              />
-            </th>
-          )}
-          {columns.map(column => (
-            <th
-              key={column.key}
-              className={cn(
-                'p-3 text-left font-medium text-foreground',
-                column.align === 'center' && 'text-center',
-                column.align === 'right' && 'text-right'
-              )}
-              style={{ width: column.width }}
-            >
-              {column.sortable ? (
-                <button
-                  onClick={() => handleSort(column.key)}
-                  className="flex items-center gap-1 hover:text-primary transition-colors"
-                  aria-label={`Sort by ${column.header}`}
-                >
-                  {column.header}
-                  {sortBy === column.key && (
-                    <span className="text-xs">{sortDirection === 'asc' ? '↑' : '↓'}</span>
-                  )}
-                </button>
-              ) : (
-                column.header
-              )}
-            </th>
-          ))}
-          {actions.length > 0 && (
-            <th className="p-3 text-right font-medium text-foreground">Actions</th>
-          )}
-        </tr>
-      </thead>
-    );
-
-    /**
-     * Render table body
-     * @returns React.ReactElement
-     */
-    const renderBody = (): React.ReactElement => (
-      <tbody>
-        {data.map((item, index): void => {
-          const rowId = rowKey(item, index);
-          const isSelected = selectedRows.includes(rowId);
-
-          return (
+  ): React.ReactElement => {
+  return (
             <tr
               key={rowId}
               className={cn(
@@ -304,7 +207,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
     );
 
     return (
-      <div ref={ref} className={cn(dataTableVariants({ _variant, _size }), className)} {...props}>
+      <div ref={ref} className={cn(dataTableVariants({ variant, size }), className)} {...props}>
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>

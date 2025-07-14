@@ -32,59 +32,7 @@ export function Card({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const cardClasses = React.useMemo((): void => {
-    const classes = ['card'];
-
-    // Variant classes
-    classes.push(`card--${variant}`);
-
-    // Shadow classes
-    classes.push(`card--shadow-${shadow}`);
-
-    // Border radius classes
-    classes.push(`card--radius-${borderRadius}`);
-
-    // Background classes
-    classes.push(`card--bg-${background}`);
-
-    // Padding classes
-    classes.push(`card--padding-${padding}`);
-
-    // Margin classes
-    classes.push(`card--margin-${margin}`);
-
-    // Feature classes
-    if (interactive) {
-      classes.push('card--interactive');
-    }
-
-    if (metadata) {
-      classes.push('card--with-metadata');
-    }
-
-    // Metadata classification classes
-    if (metadata?.classification) {
-      classes.push(`card--classification-${metadata.classification}`);
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [
-    variant,
-    shadow,
-    borderRadius,
-    background,
-    padding,
-    margin,
-    interactive,
-    metadata,
-    className,
-  ]);
-
+  const cardClasses = React.useMemo((): React.ReactElement => {
   return (
     <div
       className={cardClasses}
@@ -107,13 +55,7 @@ export function Card({
 /**
  * Metadata section component
  */
-const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): void => {
-  const { t } = useLocalization();
-
-  if (!metadata) {
-    return null;
-  }
-
+const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): React.ReactElement => {
   return (
     <div className="card__metadata">
       {metadata.lastUpdated && (
@@ -152,17 +94,7 @@ const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metada
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🔓',
-      BEGRENSET: '🔒',
-      KONFIDENSIELT: '🔐',
-      HEMMELIG: '🔴',
-    };
-    return icons[classification as keyof typeof icons] || '🔓';
-  };
-
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
   return (
     <span className="card__classification-indicator" aria-hidden="true">
       {getClassificationIcon(level)}

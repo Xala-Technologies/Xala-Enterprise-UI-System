@@ -180,13 +180,13 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <nav
         ref={ref}
         role="navigation"
         aria-label="Main navigation"
-        className={cn(webNavbarVariants({ _variant, _size }), className)}
+        className={cn(webNavbarVariants({ variant, size }), className)}
         {...props}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -219,12 +219,12 @@ WebNavbar.displayName = 'WebNavbar';
  * @returns React.ReactElement
  */
 export const WebContent = forwardRef<HTMLElement, WebContentProps>(
-  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): void => {
-    return (
+  ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): React.ReactElement => {
+  return (
       <main
         ref={ref}
         role="main"
-        className={cn(webContentVariants({ _boxed, _padding }), className)}
+        className={cn(webContentVariants({ boxed, padding }), className)}
         {...props}
       >
         {title && (
@@ -247,12 +247,12 @@ WebContent.displayName = 'WebContent';
  * @returns React.ReactElement
  */
 export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
-  ({ children, variant = 'default', size = 'md', className, ...props }, ref): void => {
-    return (
+  ({ children, variant = 'default', size = 'md', className, ...props }, ref): React.ReactElement => {
+  return (
       <footer
         ref={ref}
         role="contentinfo"
-        className={cn(webFooterVariants({ _variant, _size }), className)}
+        className={cn(webFooterVariants({ variant, size }), className)}
         {...props}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
@@ -281,8 +281,8 @@ export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(

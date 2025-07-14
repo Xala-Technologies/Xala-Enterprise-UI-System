@@ -1,7 +1,7 @@
 // Toast component for @xala-mock/ui-system
 // Norwegian-compliant toast notification with accessibility and positioning
 
-import React, { _useEffect, _useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
 
@@ -168,7 +168,7 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 };
 
 // Toast icon component
-const ToastIcon = ({ _variant, _icon }: { variant: string; icon?: React.ReactNode }): React.ReactElement => {
+const ToastIcon = ({ _variant, icon }: { variant: string; icon?: React.ReactNode }): React.ReactElement => {
   if (icon) {
     return (
       <span
@@ -209,17 +209,7 @@ const ToastIcon = ({ _variant, _icon }: { variant: string; icon?: React.ReactNod
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -236,7 +226,7 @@ const ClassificationIndicator = ({ level }: { level: string }): void => {
 };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }): void => {
+const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => {
   return (
     <button
       style={{
@@ -311,22 +301,8 @@ const ToastActionButton = ({ action }: { action: { label: string; handler: () =>
 };
 
 // Progress bar for timed toasts
-const ProgressBar = ({ _duration, _paused }: { duration: number; paused: boolean }): void => {
-  const [progress, setProgress] = useState(100);
-
-  useEffect((): void => {
-    if (paused || duration <= 0) {
-      return;
-    }
-
-    const interval = setInterval((): void => {
-      setProgress(prev => {
-        const newProgress = prev - 100 / (duration / 100);
-        return newProgress <= 0 ? 0 : newProgress;
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
+const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }): React.ReactElement => {
+  return () => clearInterval(interval);
   }, [duration, paused]);
 
   if (duration <= 0) {
@@ -359,20 +335,7 @@ const ProgressBar = ({ _duration, _paused }: { duration: number; paused: boolean
 };
 
 // Priority indicator
-const PriorityIndicator = ({ priority }: { priority?: string }): void => {
-  if (!priority || priority === 'medium') {
-    return null;
-  }
-
-  const getPriorityIcon = (priority: string): string => {
-    const icons = {
-      low: '🔵',
-      high: '🟠',
-      critical: '🔴',
-    };
-    return icons[priority as keyof typeof icons] || '';
-  };
-
+const PriorityIndicator = ({ priority }: { priority?: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -389,80 +352,11 @@ const PriorityIndicator = ({ priority }: { priority?: string }): void => {
 };
 
 // Toast component with forwardRef
-export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref): void => {
-  const {
-    messageKey,
-    message,
-    variant = 'info',
-    duration = 5000,
-    position = 'bottom-right',
-    persistent = false,
-    closable = true,
-    icon,
-    action,
-    norwegian,
-    onClose,
-    onAction,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...divProps
-  } = props;
-
-  const [isVisible, setIsVisible] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const toastStyles = getToastStyles(props);
-  const combinedStyles = { ...toastStyles, ...style };
-
-  // Auto-dismiss logic
-  useEffect((): void => {
-    if (persistent || duration <= 0 || isPaused) {
-      return;
-    }
-
-    const timer = setTimeout((): void => {
-      handleClose();
-    }, duration);
-
-    return () => clearTimeout(timer);
+export const Toast = React.forwardRef<HTMLDivElement, ToastProps>((props, ref): React.ReactElement => {
+  return () => clearTimeout(timer);
   }, [duration, persistent, isPaused]);
 
-  const handleClose = (): void => {
-    setIsVisible(false);
-    setTimeout((): void => {
-      onClose?.();
-    }, 300); // Allow for exit animation
-  };
-
-  const handleToastClick = (): void => {
-    if (action) {
-      action.handler();
-      onAction?.();
-    }
-  };
-
-  const handleMouseEnter = (): void => {
-    setIsPaused(true);
-  };
-
-  const handleMouseLeave = (): void => {
-    setIsPaused(false);
-  };
-
-  // Determine ARIA attributes based on variant and priority
-  const getAriaLive = (): 'polite' | 'assertive' => {
-    if (variant === 'error' || norwegian?.priority === 'critical') {
-      return 'assertive';
-    }
-    return 'polite';
-  };
-
-  if (!isVisible) {
-    return null;
-  }
-
+  const handleClose = (): React.ReactElement => {
   return (
     <div
       ref={ref}

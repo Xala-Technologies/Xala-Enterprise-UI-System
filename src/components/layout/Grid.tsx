@@ -125,7 +125,7 @@ export interface GridItemProps
  */
 export const GridItem = forwardRef<HTMLDivElement, GridItemProps>(
   ({ className, span, start, ...props }, ref) => (
-    <div ref={ref} className={cn(gridItemVariants({ _span, _start }), className)} {...props} />
+    <div ref={ref} className={cn(gridItemVariants({ span, start }), className)} {...props} />
   )
 );
 

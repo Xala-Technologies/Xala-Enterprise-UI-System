@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import type { _BottomNavigationProps, _BottomNavigationItem } from '../../../types/platform.types';
+import type { BottomNavigationProps, BottomNavigationItem } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
 const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => {
@@ -155,9 +155,7 @@ const NavigationTab = ({
   showLabels: boolean;
   showBadges: boolean;
   onPress: () => void;
-}): void => {
-  const tabStyles = getTabItemStyles(item, isActive, showLabels, showBadges);
-
+}): React.ReactElement => {
   return (
     <button
       style={tabStyles}
@@ -299,7 +297,7 @@ const getClassificationIcon = (classification: string): string => {
 };
 
 // Municipality context indicator
-const MunicipalityIndicator = ({ municipality }: { municipality: string }): void => {
+const MunicipalityIndicator = ({ municipality }: { municipality: string }): React.ReactElement => {
   return (
     <div
       style={{
@@ -323,7 +321,7 @@ const MunicipalityIndicator = ({ municipality }: { municipality: string }): void
 };
 
 // Emergency banner component
-const EmergencyBanner = (): void => {
+const EmergencyBanner = (): React.ReactElement => {
   return (
     <div
       style={{
@@ -349,45 +347,8 @@ const EmergencyBanner = (): void => {
 
 // BottomNavigation component with forwardRef
 export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationProps>(
-  (props, ref): void => {
-    const {
-      items,
-      activeIndex = 0,
-      showLabels = true,
-      showBadges = true,
-      height = 'standard',
-      safeAreaBottom = true,
-      norwegian,
-      onItemPress,
-      className,
-      style,
-      testId,
-      'aria-label': ariaLabel,
-      ...navProps
-    } = props;
-
-    const navigationStyles = getBottomNavigationStyles(props);
-    const combinedStyles = { ...navigationStyles, ...style };
-
-    const handleItemPress = (index: number, item: BottomNavigationItem): void => {
-      if (item.disabled) {
-        return;
-      }
-
-      // Norwegian haptic feedback for touch devices
-      if (norwegian?.hapticFeedback && 'vibrate' in navigator) {
-        navigator.vibrate([10]);
-      }
-
-      // Accessibility announcement
-      if (norwegian?.accessibilityAnnouncements) {
-        // TODO: Implement screen reader announcement
-      }
-
-      onItemPress?.(index, item);
-    };
-
-    return (
+  (props, ref): React.ReactElement => {
+  return (
       <nav
         ref={ref}
         style={combinedStyles}

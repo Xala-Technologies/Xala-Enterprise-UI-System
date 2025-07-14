@@ -130,13 +130,13 @@ export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <header
         ref={ref}
         role="banner"
         className={cn(
-          tabletHeaderVariants({ _variant, _size }),
+          tabletHeaderVariants({ variant, size }),
           'flex items-center justify-between',
           className
         )}
@@ -160,13 +160,13 @@ TabletHeader.displayName = 'TabletHeader';
  * @returns React.ReactElement
  */
 export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
-  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): void => {
-    return (
+  ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): React.ReactElement => {
+  return (
       <aside
         ref={ref}
         role="complementary"
         className={cn(
-          tabletSidebarVariants({ _variant, _collapsed }),
+          tabletSidebarVariants({ variant, collapsed }),
           'h-full flex flex-col',
           className
         )}
@@ -218,8 +218,8 @@ TabletSidebar.displayName = 'TabletSidebar';
  * @returns React.ReactElement
  */
 export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
-  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): void => {
-    return (
+  ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(
@@ -269,4 +269,4 @@ TabletLayout.displayName = 'TabletLayout';
 export type TabletHeaderVariant = VariantProps<typeof tabletHeaderVariants>;
 export type TabletSidebarVariant = VariantProps<typeof tabletSidebarVariants>;
 
-export { _tabletHeaderVariants, _tabletSidebarVariants };
+export { tabletHeaderVariants, tabletSidebarVariants };

@@ -149,17 +149,7 @@ const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => {
 };
 
 // Alert icon component
-const AlertIcon = ({ variant }: { variant: string }): void => {
-  const getVariantIcon = (variant: string): string => {
-    const icons = {
-      info: 'ℹ️',
-      success: '✅',
-      warning: '⚠️',
-      error: '❌',
-    };
-    return icons[variant as keyof typeof icons] || 'ℹ️';
-  };
-
+const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -175,17 +165,7 @@ const AlertIcon = ({ variant }: { variant: string }): void => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -202,17 +182,7 @@ const ClassificationIndicator = ({ level }: { level: string }): void => {
 };
 
 // Severity indicator component
-const SeverityIndicator = ({ severity }: { severity: string }): void => {
-  const getSeverityIcon = (severity: string): string => {
-    const icons = {
-      low: '🔵',
-      medium: '🟡',
-      high: '🟠',
-      critical: '🔴',
-    };
-    return icons[severity as keyof typeof icons] || '🔵';
-  };
-
+const SeverityIndicator = ({ severity }: { severity: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -229,7 +199,7 @@ const SeverityIndicator = ({ severity }: { severity: string }): void => {
 };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }): void => {
+const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => {
   return (
     <button
       style={{
@@ -346,62 +316,7 @@ const CategoryIndicator = ({ category }: { category?: string }): React.ReactElem
 };
 
 // Alert component with forwardRef
-export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): void => {
-  const {
-    titleKey,
-    messageKey,
-    title,
-    message,
-    children,
-    variant = 'info',
-    severity = 'medium',
-    closable = false,
-    icon,
-    actions,
-    norwegian,
-    onClose,
-    onAcknowledge,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...divProps
-  } = props;
-
-  const alertStyles = getAlertStyles(props);
-  const combinedStyles = { ...alertStyles, ...style };
-
-  const handleClose = (): void => {
-    onClose?.();
-  };
-
-  const handleAcknowledge = (): void => {
-    onAcknowledge?.();
-    if (norwegian?.requiresAcknowledgment) {
-      // TODO: Log acknowledgment for audit purposes
-    }
-  };
-
-  // Determine alert role based on variant and severity
-  const getAlertRole = (): string => {
-    if (variant === 'error' || severity === 'critical') {
-      return 'alert';
-    }
-    return 'status';
-  };
-
-  // Generate live region announcement
-  const getAriaLive = (): 'polite' | 'assertive' => {
-    if (
-      variant === 'error' ||
-      severity === 'critical' ||
-      norwegian?.escalationLevel === 'emergency'
-    ) {
-      return 'assertive';
-    }
-    return 'polite';
-  };
-
+export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref): React.ReactElement => {
   return (
     <div
       ref={ref}

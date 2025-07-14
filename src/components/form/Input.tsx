@@ -12,132 +12,7 @@ import type { InputProps } from '../../types/form.types';
  * Input component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref): void => {
-  const {
-    label,
-    error,
-    helpText,
-    type = 'text',
-    value,
-    defaultValue,
-    onChange,
-    onBlur,
-    onFocus,
-    required = false,
-    disabled = false,
-    readOnly = false,
-    placeholder,
-    name,
-    id,
-    maxLength,
-    minLength,
-    pattern,
-    autoComplete,
-    variant = 'default',
-    size = 'md',
-    hasError = false,
-    validation,
-    className = '',
-    testId,
-    ...inputProps
-  } = props;
-
-  // Generate unique ID if not provided
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
-  const helpTextId = `${inputId}-help`;
-  const errorId = `${inputId}-error`;
-
-  // State for validation
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<string[]>([]);
-  const debounceRef = useRef<NodeJS.Timeout>();
-
-  // Custom validation
-  useEffect((): void => {
-    if (!validation?.custom || !value) return;
-
-    clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(async (): void => {
-      setIsValidating(true);
-      try {
-        const result = await Promise.resolve(validation.custom!(value));
-        setValidationErrors(result ? [result] : []);
-      } catch (err) {
-        setValidationErrors(['Validation error']);
-      } finally {
-        setIsValidating(false);
-      }
-    }, validation.debounceMs || 300);
-  }, [value, validation]);
-
-  // Build CSS classes using design tokens
-  const inputClasses = React.useMemo((): void => {
-    const classes = ['input'];
-
-    // Variant classes
-    classes.push(`input--variant-${variant}`);
-
-    // Size classes
-    classes.push(`input--size-${size}`);
-
-    // State classes
-    if (hasError || error || validationErrors.length > 0) {
-      classes.push('input--error');
-    }
-
-    if (disabled) {
-      classes.push('input--disabled');
-    }
-
-    if (readOnly) {
-      classes.push('input--readonly');
-    }
-
-    if (required) {
-      classes.push('input--required');
-    }
-
-    if (isValidating) {
-      classes.push('input--validating');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [
-    variant,
-    size,
-    hasError,
-    error,
-    validationErrors,
-    disabled,
-    readOnly,
-    required,
-    isValidating,
-    className,
-  ]);
-
-  // Handle input change
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const newValue = event.target.value;
-    onChange?.(newValue, event);
-  };
-
-  // Handle input blur
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onBlur?.(event);
-  };
-
-  // Handle input focus
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
-    onFocus?.(event);
-  };
-
-  const hasValidationErrors = hasError || error || validationErrors.length > 0;
-
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref): React.ReactElement => {
   return (
     <div className="input-field" data-testid={testId}>
       {/* Label */}
@@ -209,7 +84,7 @@ const Label: React.FC<{
   label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ label, required, htmlFor }): void => {
+}> = ({ label, required, htmlFor }): React.ReactElement => {
   return (
     <label className="input-field__label" htmlFor={htmlFor}>
       <span className="input-field__label-text">{label}</span>
@@ -225,7 +100,7 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{ error: string }> = ({ error }): void => {
+const ErrorMessage: React.FC<{ error: string }> = ({ error }): React.ReactElement => {
   return (
     <div className="input-field__error" role="alert">
       <span className="input-field__error-icon" aria-hidden="true">

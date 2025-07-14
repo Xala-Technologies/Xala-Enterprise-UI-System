@@ -12,62 +12,7 @@ import type { FormProps } from '../../types/form.types';
  * Form component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): void => {
-  const {
-    children,
-    padding = 'md',
-    margin = 'none',
-    background = 'transparent',
-    accessibility,
-    onSubmit,
-    className = '',
-    testId,
-    ...formProps
-  } = props;
-
-  // Build CSS classes using design tokens
-  const formClasses = React.useMemo((): void => {
-    const classes = ['form'];
-
-    // Layout classes
-    classes.push(`form--padding-${padding}`);
-    classes.push(`form--margin-${margin}`);
-    classes.push(`form--background-${background}`);
-
-    // Accessibility classes
-    if (accessibility?.announceErrors) {
-      classes.push('form--announce-errors');
-    }
-
-    if (accessibility?.landmark) {
-      classes.push('form--landmark');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [padding, margin, background, accessibility, className]);
-
-  // Handle form submission
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-
-    // Enhanced validation for forms with error announcements
-    if (accessibility?.announceErrors) {
-      const form = event.currentTarget;
-      const firstError = form.querySelector('[aria-invalid="true"]') as HTMLElement;
-      if (firstError) {
-        firstError.focus();
-        return;
-      }
-    }
-
-    onSubmit?.(event);
-  };
-
+export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.ReactElement => {
   return (
     <form
       ref={ref}

@@ -20,7 +20,7 @@ export function DataTable({
   sorting,
   selection,
   search: _search,
-  export: _exportConfig,
+  export: exportConfig,
   norwegian,
   loading = false,
   empty = false,
@@ -127,16 +127,7 @@ const TableHeader: React.FC<{
 }> = ({ columns, sorting, onSortChange, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const handleSort = (column: TableColumn): void => {
-    if (!column.sortable || !onSortChange) {
-      return;
-    }
-
-    const currentOrder = sorting?.defaultSortOrder || 'asc';
-    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-    onSortChange(column.key, newOrder);
-  };
-
+  const handleSort = (column: TableColumn): React.ReactElement => {
   return (
     <thead className="datatable__header">
       <tr className="datatable__header-row">
@@ -267,17 +258,7 @@ const TableBody: React.FC<{
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🔓',
-      BEGRENSET: '🔒',
-      KONFIDENSIELT: '🔐',
-      HEMMELIG: '🔴',
-    };
-    return icons[classification as keyof typeof icons] || '🔓';
-  };
-
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
   return (
     <span className="datatable__classification-indicator" aria-hidden="true">
       {getClassificationIcon(level)}
@@ -288,20 +269,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void =
 /**
  * Status indicator component
  */
-const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
-  const getStatusIcon = (status: string): string => {
-    const icons = {
-      active: '🟢',
-      inactive: '⚪',
-      pending: '🟡',
-      error: '🔴',
-      success: '✅',
-      warning: '⚠️',
-      info: 'ℹ️',
-    };
-    return icons[status as keyof typeof icons] || '❓';
-  };
-
+const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => {
   return (
     <span className="datatable__status-indicator" aria-hidden="true">
       {getStatusIcon(status)}
@@ -312,9 +280,7 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
 /**
  * Empty state component
  */
-const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): void => {
-  const { t } = useLocalization();
-
+const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.ReactElement => {
   return (
     <div className="datatable__empty-state">
       <div className="datatable__empty-icon" aria-hidden="true">
@@ -328,9 +294,7 @@ const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): void => 
 /**
  * Loading state component
  */
-const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): void => {
-  const { t } = useLocalization();
-
+const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.ReactElement => {
   return (
     <div className="datatable__loading-state">
       <div className="datatable__loading-icon" aria-hidden="true">

@@ -28,43 +28,7 @@ export function PageLayout({
   ...props
 }: PageLayoutProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const pageClasses = React.useMemo((): void => {
-    const classes = ['page-layout'];
-
-    // Variant classes
-    classes.push(`page-layout--${variant}`);
-
-    // Municipality classes
-    if (municipality) {
-      classes.push(`page-layout--municipality-${municipality}`);
-    }
-
-    // Background classes
-    classes.push(`page-layout--bg-${background}`);
-
-    // Padding classes
-    classes.push(`page-layout--padding-${padding}`);
-
-    // Margin classes
-    classes.push(`page-layout--margin-${margin}`);
-
-    // Feature classes
-    if (fullWidth) {
-      classes.push('page-layout--full-width');
-    }
-
-    if (sidebar) {
-      classes.push('page-layout--with-sidebar');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, municipality, background, padding, margin, fullWidth, sidebar, className]);
-
+  const pageClasses = React.useMemo((): React.ReactElement => {
   return (
     <div className={pageClasses} data-testid={testId} {...props}>
       {header && <header className="page-layout__header">{header}</header>}

@@ -190,11 +190,11 @@ export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> 
  * @returns React.ReactElement
  */
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ variant = 'default', size = 'md', label, className, ...props }, ref): void => {
-    return (
+  ({ variant = 'default', size = 'md', label, className, ...props }, ref): React.ReactElement => {
+  return (
       <div ref={ref} className={cn('flex items-center gap-2', className)} {...props}>
         <div
-          className={cn(spinnerVariants({ _variant, _size }))}
+          className={cn(spinnerVariants({ variant, size }))}
           role="status"
           aria-label={label || 'Loading'}
         >
@@ -227,8 +227,8 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div ref={ref} className={cn(alertVariants({ variant }), className)} role="alert" {...props}>
         <div className="flex items-start gap-3">
           {icon && <div className="flex-shrink-0 mt-0.5">{icon}</div>}
@@ -271,8 +271,8 @@ Alert.displayName = 'Alert';
  * @returns React.ReactElement
  */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ variant = 'default', className, children, ...props }, ref): void => {
-    return (
+  ({ variant = 'default', className, children, ...props }, ref): React.ReactElement => {
+  return (
       <span ref={ref} className={cn(badgeVariants({ variant }), className)} {...props}>
         {children}
       </span>
@@ -302,8 +302,8 @@ export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
       ...props
     },
     ref
-  ): void => {
-    return (
+  ): React.ReactElement => {
+  return (
       <div
         ref={ref}
         className={cn(notificationVariants({ variant }), className)}

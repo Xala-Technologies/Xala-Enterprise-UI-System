@@ -6,10 +6,10 @@
  * with comprehensive coverage following SOLID principles
  */
 
-import { _render, _screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Logger } from '@xala-technologies/enterprise-standards';
-import { _axe, _toHaveNoViolations } from 'jest-axe';
+import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
 import type { AccessibilityConfig } from '../../tokens/accessibility-tokens';
@@ -44,7 +44,7 @@ jest.mock('@xala-technologies/enterprise-standards', () => ({
 /**
  * Test component that uses UISystemProvider context
  */
-const TestComponent: React.FC = (): void => {
+const TestComponent: React.FC = (): React.ReactElement => {
   return (
     <div data-testid="test-component">
       <button type="button">Test Button</button>

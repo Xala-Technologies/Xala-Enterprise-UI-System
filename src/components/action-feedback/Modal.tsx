@@ -133,7 +133,7 @@ const ModalHeader = ({
   closable: boolean;
   norwegian?: { classification?: string };
   onClose: () => void;
-}): void => {
+}): React.ReactElement => {
   return (
     <div
       style={{
@@ -207,17 +207,7 @@ const ModalHeader = ({
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }): void => {
-  const getClassificationIcon = (classification: string): string => {
-    const icons = {
-      ÅPEN: '🟢',
-      BEGRENSET: '🟡',
-      KONFIDENSIELT: '🔴',
-      HEMMELIG: '⚫',
-    };
-    return icons[classification as keyof typeof icons] || '❓';
-  };
-
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -236,18 +226,7 @@ const ClassificationIndicator = ({ level }: { level: string }): void => {
 };
 
 // Category indicator component
-const CategoryIndicator = ({ category }: { category: string }): void => {
-  const getCategoryIcon = (category: string): string => {
-    const icons = {
-      form: '📝',
-      confirmation: '✔️',
-      information: 'ℹ️',
-      warning: '⚠️',
-      error: '❌',
-    };
-    return icons[category as keyof typeof icons] || '📋';
-  };
-
+const CategoryIndicator = ({ category }: { category: string }): React.ReactElement => {
   return (
     <span
       style={{
@@ -266,7 +245,7 @@ const CategoryIndicator = ({ category }: { category: string }): void => {
 };
 
 // Modal body component
-const ModalBody = ({ _children, _scrollable }: { children: React.ReactNode; scrollable: boolean }): void => {
+const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scrollable: boolean }): React.ReactElement => {
   return (
     <div
       style={{
@@ -287,143 +266,14 @@ const useFocusTrap = (
   isOpen: boolean,
   enabled: boolean,
   containerRef: React.RefObject<HTMLElement>
-): void => {
-  useEffect((): void => {
-    if (!isOpen || !enabled || !containerRef.current) {
-      return;
-    }
-
-    const container = containerRef.current;
-    const focusableElements = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-
-    const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-    const handleTabKey = (e: KeyboardEvent): void => {
-      if (e.key !== 'Tab') {
-        return;
-      }
-
-      if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
-          lastElement.focus();
-          e.preventDefault();
-        }
-      } else {
-        if (document.activeElement === lastElement) {
-          firstElement.focus();
-          e.preventDefault();
-        }
-      }
-    };
-
-    container.addEventListener('keydown', handleTabKey);
-    firstElement.focus();
-
-    return (): void => {
-      container.removeEventListener('keydown', handleTabKey);
-    };
-  }, [isOpen, enabled, containerRef]);
-};
-
-// Modal component with forwardRef
-export const Modal = React.forwardRef<HTMLDivElement, ModalProps>((props, ref): void => {
-  const {
-    isOpen,
-    titleKey,
-    title,
-    children,
-    size = 'md',
-    centered = true,
-    closable = true,
-    closeOnEscape = true,
-    closeOnOverlay = true,
-    showOverlay = true,
-    persistent = false,
-    scrollable = false,
-    norwegian,
-    onOpen,
-    onClose,
-    onEscapeKey,
-    onOverlayClick,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...divProps
-  } = props;
-
-  const modalRef = React.useRef<HTMLDivElement>(null);
-  const contentRef = React.useRef<HTMLDivElement>(null);
-
-  // Focus trap management
-  useFocusTrap(isOpen, norwegian?.focusTrap !== false, contentRef);
-
-  // Handle escape key
-  useEffect((): void => {
-    if (!isOpen || !closeOnEscape) {
-      return;
-    }
-
-    const handleEscape = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape') {
-        onEscapeKey?.();
-        if (!persistent) {
-          onClose?.();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+): React.ReactElement => {
+  return (): React.ReactElement => {
+  return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
   // Handle modal opening
-  useEffect((): void => {
-    if (isOpen) {
-      onOpen?.();
-
-      // Announce to screen readers
-      if (norwegian?.announceOnOpen && norwegian.announceMessageKey) {
-        // TODO: Implement screen reader announcement
-      }
-
-      // Prevent body scroll
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-
-    return (): void => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, onOpen, norwegian]);
-
-  const overlayStyles = getModalStyles(props);
-  const contentStyles = getModalContentStyles(props);
-  const combinedOverlayStyles = { ...overlayStyles, ...style };
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLElement>): void => {
-    if (e.target === e.currentTarget && closeOnOverlay && !persistent) {
-      onOverlayClick?.();
-      onClose?.();
-    }
-  };
-
-  const handleClose = (): void => {
-    if (norwegian?.closeConfirmationRequired) {
-      // TODO: Show confirmation dialog
-      return;
-    }
-    onClose?.();
-  };
-
-  if (!isOpen) {
-    return null;
-  }
-
+  useEffect((): React.ReactElement => {
+  return (): React.ReactElement => {
   return (
     <>
       {/* Modal overlay */}

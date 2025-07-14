@@ -90,7 +90,7 @@ export interface AlertDescriptionProps extends HTMLAttributes<HTMLParagraphEleme
  */
 export const AlertDescription = forwardRef<HTMLParagraphElement, AlertDescriptionProps>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('text-sm [&_p]:leading-relaxed', className)} {...props} />
+    <div ref={ref} className={cn('text-sm [&p]:leading-relaxed', className)} {...props} />
   )
 );
 

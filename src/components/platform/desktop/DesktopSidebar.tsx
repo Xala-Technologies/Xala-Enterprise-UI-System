@@ -110,7 +110,7 @@ const SidebarHeader = ({
   showToggle: boolean;
   norwegian?: unknown;
   onToggle?: () => void;
-}): void => {
+}): React.ReactElement => {
   return (
     <div
       style={{
@@ -201,19 +201,7 @@ const SidebarHeader = ({
 };
 
 // Classification banner component
-const ClassificationBanner = ({ level }: { level: string }): void => {
-  const getClassificationInfo = (classification: string): void => {
-    const info = {
-      ÅPEN: { icon: '🟢', bg: 'var(--color-green-100)', text: 'var(--color-green-800)' },
-      BEGRENSET: { icon: '🟡', bg: 'var(--color-orange-100)', text: 'var(--color-orange-800)' },
-      KONFIDENSIELT: { icon: '🔴', bg: 'var(--color-red-100)', text: 'var(--color-red-800)' },
-      HEMMELIG: { icon: '⚫', bg: 'var(--color-red-200)', text: 'var(--color-red-900)' },
-    };
-    return info[classification as keyof typeof info] || info['ÅPEN'];
-  };
-
-  const classInfo = getClassificationInfo(level);
-
+const ClassificationBanner = ({ level }: { level: string }): React.ReactElement => {
   return (
     <div
       style={{
@@ -243,26 +231,7 @@ const QuickAccessSection = ({
 }: {
   quickAccess: unknown;
   isCollapsed: boolean;
-}): void => {
-  if (!quickAccess) {
-    return null;
-  }
-
-  const accessItems = [
-    {
-      key: 'emergencyContacts',
-      icon: '🚨',
-      label: 'Nødkontakter',
-      enabled: quickAccess.emergencyContacts,
-    },
-    { key: 'helpDesk', icon: '💬', label: 'Hjelp', enabled: quickAccess.helpDesk },
-    { key: 'systemStatus', icon: '📊', label: 'Systemstatus', enabled: quickAccess.systemStatus },
-  ].filter(item => item.enabled);
-
-  if (accessItems.length === 0) {
-    return null;
-  }
-
+}): React.ReactElement => {
   return (
     <div
       style={{
@@ -333,7 +302,7 @@ const QuickAccessSection = ({
 };
 
 // Sidebar content area
-const SidebarContent = ({ _children, _isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): void => {
+const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): React.ReactElement => {
   return (
     <div
       style={{
@@ -354,35 +323,7 @@ const ResizeHandle = ({
 }: {
   onResize: (width: number) => void;
   position: string;
-}): void => {
-  const [isResizing, setIsResizing] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [startWidth, setStartWidth] = useState(0);
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLElement>): void => {
-    setIsResizing(true);
-    setStartX(e.clientX);
-    setStartWidth(280); // Default width
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-
-  const handleMouseMove = (e: MouseEvent): void => {
-    if (!isResizing) {
-      return;
-    }
-
-    const deltaX = position === 'left' ? e.clientX - startX : startX - e.clientX;
-    const newWidth = Math.max(200, Math.min(600, startWidth + deltaX));
-    onResize(newWidth);
-  };
-
-  const handleMouseUp = (): void => {
-    setIsResizing(false);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  };
-
+}): React.ReactElement => {
   return (
     <div
       style={{
@@ -405,11 +346,7 @@ const ResizeHandle = ({
 };
 
 // Keyboard shortcuts info
-const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): void => {
-  if (isCollapsed) {
-    return null;
-  }
-
+const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.ReactElement => {
   return (
     <div
       style={{
@@ -447,71 +384,8 @@ const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): void => {
 };
 
 // DesktopSidebar component with forwardRef
-export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): void => {
-  const {
-    isCollapsed = false,
-    isResizable = true,
-    width = 280,
-    minWidth = 200,
-    maxWidth = 600,
-    position = 'left',
-    showToggle = true,
-    persistent = true,
-    overlay = false,
-    children,
-    norwegian,
-    onToggle,
-    onResize,
-    onCollapse,
-    onExpand,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...asideProps
-  } = props;
-
-  const [currentWidth, setCurrentWidth] = useState(width);
-  const sidebarRef = useRef<HTMLElement>(null);
-
-  const sidebarStyles = getDesktopSidebarStyles({
-    ...props,
-    width: currentWidth,
-  });
-  const combinedStyles = { ...sidebarStyles, ...style };
-
-  const handleToggle = (): void => {
-    const newCollapsed = !isCollapsed;
-    onToggle?.(newCollapsed);
-
-    if (newCollapsed) {
-      onCollapse?.();
-    } else {
-      onExpand?.();
-    }
-  };
-
-  const handleResize = (newWidth: number): void => {
-    const clampedWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
-    setCurrentWidth(clampedWidth);
-    onResize?.(clampedWidth);
-  };
-
-  // Keyboard shortcuts
-  useEffect((): void => {
-    if (!norwegian?.keyboardShortcuts) {
-      return;
-    }
-
-    const handleKeydown = (e: KeyboardEvent): void => {
-      if (e.ctrlKey && e.key === 'b') {
-        e.preventDefault();
-        handleToggle();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeydown);
-    return () => document.removeEventListener('keydown', handleKeydown);
+export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): React.ReactElement => {
+  return () => document.removeEventListener('keydown', handleKeydown);
   }, [norwegian?.keyboardShortcuts, isCollapsed]);
 
   return (

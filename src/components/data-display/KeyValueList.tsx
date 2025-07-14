@@ -7,7 +7,7 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
-import type { _KeyValueItem, _KeyValueListProps } from '../../types/data-display.types';
+import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
 
 const logger = Logger.create({
   serviceName: 'ui-system-keyvalslist',
@@ -34,43 +34,8 @@ export function KeyValueList({
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const listClasses = React.useMemo((): void => {
-    const classes = ['keyvalue-list'];
-
-    // Layout classes
-    classes.push(`keyvalue-list--${layout}`);
-
-    // Spacing classes
-    classes.push(`keyvalue-list--spacing-${spacing}`);
-
-    // Feature classes
-    if (showDividers) {
-      classes.push('keyvalue-list--dividers');
-    }
-
-    if (highlightChanges) {
-      classes.push('keyvalue-list--highlight-changes');
-    }
-
-    // Norwegian compliance classes
-    if (norwegian?.classification) {
-      classes.push(`keyvalue-list--classification-${norwegian.classification}`);
-    }
-
-    if (norwegian?.showClassificationIcons) {
-      classes.push('keyvalue-list--show-icons');
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [layout, spacing, showDividers, highlightChanges, norwegian, className]);
-
-  if (!items || items.length === 0) {
-    return (
+  const listClasses = React.useMemo((): React.ReactElement => {
+  return (
       <div className={`${listClasses} keyvalue-list--empty`} data-testid={testId}>
         <span className="keyvalue-list__empty-message">
           {t(norwegian?.hideEmptyValues ? 'keyvalue.noVisibleItems' : 'keyvalue.noItems')}
@@ -80,16 +45,7 @@ export function KeyValueList({
   }
 
   // Filter out empty values if requested
-  const displayItems = React.useMemo((): void => {
-    if (!norwegian?.hideEmptyValues) {
-      return items;
-    }
-    return items.filter(item => {
-      const { value } = item;
-      return value !== null && value !== undefined && value !== '';
-    });
-  }, [items, norwegian?.hideEmptyValues]);
-
+  const displayItems = React.useMemo((): React.ReactElement => {
   return (
     <div className={listClasses} data-testid={testId} {...props}>
       {displayItems.map((item, index) => (
@@ -111,68 +67,7 @@ const KeyValueItemComponent: React.FC<{
   item: KeyValueItem;
   showDividers?: boolean;
   norwegian?: KeyValueListProps['norwegian'];
-}> = ({ item, showDividers, norwegian }): void => {
-  const { t } = useLocalization();
-
-  // Build item CSS classes
-  const itemClasses = React.useMemo((): void => {
-    const classes = ['keyvalue-item'];
-
-    // Type classes
-    if (item.type) {
-      classes.push(`keyvalue-item--type-${item.type}`);
-    }
-
-    // State classes
-    if (item.sensitive) {
-      classes.push('keyvalue-item--sensitive');
-    }
-
-    if (item.copyable) {
-      classes.push('keyvalue-item--copyable');
-    }
-
-    if (item.onClick) {
-      classes.push('keyvalue-item--clickable');
-    }
-
-    // Classification classes
-    if (item.norwegian?.classification) {
-      classes.push(`keyvalue-item--classification-${item.norwegian.classification}`);
-    }
-
-    // Divider classes
-    if (showDividers) {
-      classes.push('keyvalue-item--with-divider');
-    }
-
-    return classes.join(' ');
-  }, [item, showDividers]);
-
-  // Format the value based on type
-  const formattedValue = React.useMemo((): void => {
-    return formatValue(item.value, item, norwegian);
-  }, [item, norwegian]);
-
-  // Handle click
-  const handleClick = React.useCallback((): void => {
-    if (item.onClick) {
-      item.onClick();
-    }
-  }, [item]);
-
-  // Handle copy
-  const handleCopy = React.useCallback(async (): void => {
-    if (item.copyable && navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(String(item.value));
-        // You could add a toast notification here
-      } catch (error) {
-        logger.error('Failed to copy to clipboard:', error);
-      }
-    }
-  }, [item]);
-
+}> = ({ item, showDividers, norwegian }): React.ReactElement => {
   return (
     <div
       className={itemClasses}
@@ -211,17 +106,7 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
-const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): void => {
-  const getClassificationIcon = (level: string): string => {
-    const icons = {
-      ÅPEN: '🔓',
-      BEGRENSET: '🔒',
-      KONFIDENSIELT: '🔐',
-      HEMMELIG: '🔴',
-    };
-    return icons[level as keyof typeof icons] || '🔓';
-  };
-
+const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): React.ReactElement => {
   return (
     <span className="keyvalue-item__classification-icon" aria-hidden="true">
       {getClassificationIcon(classification)}
@@ -232,20 +117,7 @@ const ClassificationIcon: React.FC<{ classification: string }> = ({ classificati
 /**
  * Status indicator component
  */
-const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
-  const getStatusIcon = (status: string): string => {
-    const icons = {
-      active: '🟢',
-      inactive: '⚪',
-      pending: '🟡',
-      error: '🔴',
-      success: '✅',
-      warning: '⚠️',
-      info: 'ℹ️',
-    };
-    return icons[status as keyof typeof icons] || '❓';
-  };
-
+const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactElement => {
   return (
     <span className="keyvalue-item__status-indicator" aria-hidden="true">
       {getStatusIcon(status)}

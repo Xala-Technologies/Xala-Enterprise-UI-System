@@ -2,64 +2,35 @@
 import React from 'react';
 
 import { MobileHeaderButton } from './MobileHeaderButton';
-import { NSMClassificationIndicator } from './NSMClassificationIndicator';
 
-const React = {
-  forwardRef: (Component: unknown) => Component,
-};
-
-// MobileHeader - Norwegian government-compliant mobile header component
 interface MobileHeaderProps {
-  titleKey?: string;
   title?: string;
   showBackButton?: boolean;
   showMenu?: boolean;
   showSearch?: boolean;
   showNotifications?: boolean;
   notificationCount?: number;
-  height?: 'compact' | 'standard' | 'extended';
+  height?: 'sm' | 'md' | 'lg';
   sticky?: boolean;
   transparent?: boolean;
-  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  municipalityCode?: string;
   onBack?: () => void;
   onMenuToggle?: () => void;
   onSearchFocus?: () => void;
   onNotificationPress?: () => void;
-  children?: unknown;
   style?: React.CSSProperties;
 }
 
-/**
- * MobileHeader - Norwegian government-compliant mobile header component
- *
- * Features:
- * - Touch-friendly minimum touch targets (WCAG 2.2 AA)
- * - Norwegian government service integration
- * - NSM security classification display
- * - Design token integration
- * - Semantic HTML structure
- *
- * Norwegian Compliance:
- * - DigDir touch target guidelines
- * - NSM visual classification indicators
- * - Norwegian keyboard shortcuts support
- * - Municipality-specific adaptations
- */
-export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unknown): void => {
+export const MobileHeader = React.forwardRef<HTMLElement, MobileHeaderProps>((props, ref) => {
   const {
-    titleKey,
     title,
     showBackButton = false,
     showMenu = false,
     showSearch = false,
     showNotifications = false,
-    notificationCount,
-    height = 'standard',
+    notificationCount = 0,
+    height = 'md',
     sticky = false,
     transparent = false,
-    classification,
-    municipalityCode,
     onBack,
     onMenuToggle,
     onSearchFocus,
@@ -68,16 +39,13 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unk
     ...restProps
   } = props;
 
-  // Mock translation function
-  const t = (key: string) => key;
-
-  // Height variants using design tokens
-  const getHeightStyle = (): void => {
-    const heights: Record<string, string> = {
-      compact: 'var(--spacing-12)', // 48px
-      standard: 'var(--spacing-14)', // 56px
-      extended: 'var(--spacing-16)', // 64px
+  const getHeightStyle = (): string => {
+    const heights = {
+      sm: '48px',
+      md: '56px',
+      lg: '64px',
     };
+
     return heights[height];
   };
 
@@ -88,7 +56,7 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unk
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 'var(--spacing-3) var(--spacing-4)',
+        padding: '0 var(--spacing-4)',
         minHeight: getHeightStyle(),
         backgroundColor: transparent ? 'transparent' : 'var(--color-surface-primary)',
         borderBottom: '1px solid var(--color-border-subtle)',
@@ -99,39 +67,26 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unk
       }}
       {...restProps}
     >
-      {/* NSM Classification border indicator */}
-      {classification && (
-        <NSMClassificationIndicator level={classification} variant="border" position="bottom" />
-      )}
-
-      {/* Left section - Navigation buttons */}
+      {/* Left section */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
           gap: 'var(--spacing-2)',
-          minWidth: 'var(--spacing-11)',
-          minHeight: 'var(--spacing-11)',
         }}
       >
-        {showBackButton && (
-          <MobileHeaderButton icon="←" labelKey="navigation.back" onClick={onBack} />
-        )}
-
-        {showMenu && (
-          <MobileHeaderButton icon="☰" labelKey="navigation.menu" onClick={onMenuToggle} />
-        )}
+        {showBackButton && <MobileHeaderButton icon="←" label="Back" onClick={onBack} />}
+        {showMenu && <MobileHeaderButton icon="☰" label="Menu" onClick={onMenuToggle} />}
       </div>
 
-      {/* Center section - Title and classification */}
+      {/* Center section */}
       <div
         style={{
           flex: 1,
           display: 'flex',
-          flexDirection: 'column',
           alignItems: 'center',
+          justifyContent: 'center',
           textAlign: 'center',
-          padding: '0 var(--spacing-2)',
         }}
       >
         <h1
@@ -140,46 +95,29 @@ export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unk
             fontSize: 'var(--font-size-lg)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--color-text-primary)',
-            lineHeight: 'var(--line-height-tight)',
-            maxWidth: '100%',
-            overflow: 'hidden',
             textOverflow: 'ellipsis',
+            overflow: 'hidden',
             whiteSpace: 'nowrap',
+            maxWidth: '100%',
           }}
         >
-          {titleKey ? t(titleKey) : title}
+          {title}
         </h1>
-
-        {/* NSM Classification label */}
-        {classification && (
-          <NSMClassificationIndicator
-            level={classification}
-            variant="badge"
-            size="small"
-            showLabel={true}
-            style={{ marginTop: 'var(--spacing-1)' }}
-          />
-        )}
       </div>
 
-      {/* Right section - Action buttons */}
+      {/* Right section */}
       <div
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 'var(--spacing-1)',
-          minWidth: 'var(--spacing-11)',
-          justifyContent: 'flex-end',
+          gap: 'var(--spacing-2)',
         }}
       >
-        {showSearch && (
-          <MobileHeaderButton icon="🔍" labelKey="navigation.search" onClick={onSearchFocus} />
-        )}
-
+        {showSearch && <MobileHeaderButton icon="🔍" label="Search" onClick={onSearchFocus} />}
         {showNotifications && (
           <MobileHeaderButton
             icon="🔔"
-            labelKey="navigation.notifications"
+            label="Notifications"
             onClick={onNotificationPress}
             showBadge={!!notificationCount}
             badgeCount={notificationCount}

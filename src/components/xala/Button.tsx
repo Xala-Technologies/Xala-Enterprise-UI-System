@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { cn } from '../../lib/utils/cn';
-import { _getComponentTokens, _getToken } from '../../tokens';
+import { getComponentTokens, getToken } from '../../tokens';
 
 // =============================================================================
 // TYPES
@@ -37,55 +37,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...props
     },
     ref
-  ): void => {
-    // Get component tokens for the button
-    const buttonTokens = getComponentTokens('button');
-    const variantTokens = buttonTokens[variant];
-
-    // Create styles using semantic tokens
-    const buttonStyles = React.useMemo((): void => {
-      if (!variantTokens) return {};
-
-      return {
-        backgroundColor: variantTokens.background ? String(variantTokens.background) : undefined,
-        color: variantTokens.foreground ? String(variantTokens.foreground) : undefined,
-        border: variantTokens.border ? String(variantTokens.border) : undefined,
-        padding: variantTokens.padding?.[size]
-          ? String(variantTokens.padding[size])
-          : variantTokens.padding?.md
-            ? String(variantTokens.padding.md)
-            : undefined,
-        borderRadius: variantTokens.borderRadius?.[size]
-          ? String(variantTokens.borderRadius[size])
-          : variantTokens.borderRadius?.md
-            ? String(variantTokens.borderRadius.md)
-            : undefined,
-        fontSize: variantTokens.fontSize?.[size]
-          ? String(variantTokens.fontSize[size])
-          : variantTokens.fontSize?.md
-            ? String(variantTokens.fontSize.md)
-            : undefined,
-        fontWeight: variantTokens.fontWeight ? String(variantTokens.fontWeight) : undefined,
-        lineHeight: variantTokens.lineHeight ? String(variantTokens.lineHeight) : undefined,
-        minHeight: variantTokens.minHeight?.[size]
-          ? String(variantTokens.minHeight[size])
-          : variantTokens.minHeight?.md
-            ? String(variantTokens.minHeight.md)
-            : undefined,
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.6 : 1,
-        transition: 'all 0.2s ease-in-out',
-      };
-    }, [variant, size, disabled, variantTokens]);
-
-    // Handle loading state
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
-      if (!loading && !disabled && props.onClick) {
-        props.onClick(event);
-      }
-    };
-
-    return (
+  ): React.ReactElement => {
+  return (
       <button
         ref={ref}
         {...props}
@@ -123,40 +76,7 @@ Button.displayName = 'Button';
 export const SemanticButton: React.FC<ButtonProps> = props => {
   const { variant = 'primary', size = 'md', className, ...restProps } = props;
 
-  const styles = React.useMemo((): void => {
-    // Use semantic token system with proper type handling
-    const backgroundColor = getToken('alias.color.brand.primary');
-    const color = getToken('alias.color.text.inverse');
-    const padding = getToken('alias.spacing.component-padding.md');
-    const borderRadius = getToken('alias.border.radius.medium');
-    const fontSize = getToken('alias.typography.fontSize.body');
-    const fontWeight = getToken('alias.typography.fontWeight.medium');
-    const focusColor = getToken('alias.color.focus.default');
-    const hoverColor = getToken('alias.color.brand.primaryHover');
-
-    return {
-      backgroundColor: backgroundColor ? String(backgroundColor) : undefined,
-      color: color ? String(color) : undefined,
-      padding: padding ? String(padding) : undefined,
-      borderRadius: borderRadius ? String(borderRadius) : undefined,
-      fontSize: fontSize ? String(fontSize) : undefined,
-      fontWeight: fontWeight ? String(fontWeight) : undefined,
-      transition: 'all 0.2s ease-in-out',
-      cursor: 'pointer',
-
-      // Focus states for accessibility
-      '&:focus': {
-        outline: 'none',
-        boxShadow: focusColor ? `0 0 0 2px ${String(focusColor)}` : undefined,
-      },
-
-      // Hover states
-      '&:hover': {
-        backgroundColor: hoverColor ? String(hoverColor) : undefined,
-      },
-    };
-  }, [variant, size]);
-
+  const styles = React.useMemo((): React.ReactElement => {
   return (
     <button
       {...restProps}
