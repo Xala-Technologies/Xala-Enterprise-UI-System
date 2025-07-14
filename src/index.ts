@@ -1,116 +1,71 @@
 /**
- * @fileoverview Main UI System exports
+ * @fileoverview Main UI System Index
  * @module UISystem
- * @description Enterprise UI System - Core functionality without compliance overhead
+ * @description Generic UI system without country-specific compliance
  */
 
 // =============================================================================
-// CORE SYSTEM EXPORTS
+// CORE EXPORTS
 // =============================================================================
 
-// Core system functionality
-export {
-  createDevelopmentUISystem, createProductionUISystem,
-  createTestUISystem, UISystemCore
-} from './lib/core/index';
+// Components (includes platform components)
+export * from './components';
 
-// =============================================================================
-// CORE TYPES AND INTERFACES
-// =============================================================================
+// Layouts
+export * from './layouts';
 
-// Core system types
-export type {
-  AccessibilityConfig, AccessibilityLevel, AccessibilityProps, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps, ComponentState, ComponentType, EventHandlers, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
-  UISystemOptions, ValidationError
-} from './lib/types/core.types';
+// Hooks
+export * from './hooks';
 
-// Service interfaces
-export type {
-  AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory,
-  ComponentFactoryFunction, ConfigurationService,
-  EventPublisher,
-  LocalizationService, PerformanceMonitor, ThemeManager, UISystemService
-} from './lib/interfaces/ui-system.interface';
-
-// =============================================================================
-// UTILITIES
-// =============================================================================
-
-// Validation utilities
-export {
-  createValidationResult, isValidEmail,
-  isValidUrl, safeArrayAccess, safeGet
-} from './lib/utils/validation';
-export type { ValidationResult } from './lib/utils/validation';
-
-// =============================================================================
-// DESIGN TOKENS
-// =============================================================================
-
-// All design tokens
+// Tokens
 export * from './tokens';
 
-// =============================================================================
-// COMPONENTS
-// =============================================================================
-
-// All components (includes their own types)
-export * from './components';
+// Core types
+export type {
+  AccessibilityLevel, AccessibilityProps, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentProps,
+  ComponentState, ComponentType, CSSProperties, EventHandlers, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig,
+  UISystemOptions
+} from './lib/types/core.types';
 
 // =============================================================================
 // ADDITIONAL TYPES (non-conflicting)
 // =============================================================================
 
-// Localization types (only export those not already in components)
-export type {
-  LocalizationConfig, NorwegianLocale, RTLAwareProps, SupportedLocale,
-  TextDirection, TranslationFunction, TranslationKeys, UseLocalizationReturn
-} from './types/localization.types';
-
 // Platform types (only export those not already in components)
 export type {
-  HoverFriendlyProps, NorwegianPlatformConfig,
-  PlatformComponentProps, PlatformDetection, PlatformTypes,
-  ResponsiveBreakpoints, TouchFriendlyProps
+  HoverFriendlyProps, PlatformComponentProps,
+  PlatformDetection,
+  PlatformTypes,
+  ResponsiveBreakpoints,
+  TouchFriendlyProps
 } from './types/platform.types';
+
+// =============================================================================
+// PROVIDERS AND HOOKS
+// =============================================================================
+
+// Re-export UISystemProvider
+export { UISystemProvider, useAccessibility, useAccessibilityFeature, useUISystem } from './components/UISystemProvider';
 
 // =============================================================================
 // PACKAGE INFORMATION
 // =============================================================================
 
-// Version and package info
-export const VERSION = '1.0.1';
-export const PACKAGE_NAME = '@xala-technologies/ui-system';
-
-/**
- * Package information for enterprise monitoring
- */
-export const PACKAGE_INFO = {
-  name: PACKAGE_NAME,
-  version: VERSION,
-  description: 'Enterprise UI component library with accessibility and performance monitoring',
-  platform: 'react',
+export const UI_SYSTEM_INFO = {
+  name: 'Generic UI System',
+  version: '1.0.0',
+  description: 'A generic, accessible UI system built with design tokens',
   features: [
-    'accessibility-validation',
-    'type-safety',
-    'performance-monitoring',
-    'enterprise-standards',
-    'solid-principles',
+    'Configurable accessibility (WCAG 2.1 AA to WCAG 2.2 AAA)',
+    'Design token-based styling',
+    'Multi-platform support',
+    'TypeScript support',
+    'Framework agnostic',
+    'Customizable themes',
   ],
-} as const;
-
-// =============================================================================
-// EXPORT GROUPS FOR EASIER CONSUMPTION
-// =============================================================================
-
-/**
- * Core system exports grouped for easier consumption
- * Use these exports directly instead of this bundle
- */
-export const UI_SYSTEM_BUNDLE_INFO = {
-  coreExports: ['UISystemCore', 'createProductionUISystem', 'createTestUISystem', 'createDevelopmentUISystem'],
-  validationExports: ['createValidationResult', 'safeGet', 'safeArrayAccess', 'isValidEmail', 'isValidUrl'],
-  componentExports: ['All components from ./components'],
-  tokenExports: ['All tokens from ./tokens'],
-  typeExports: ['All types from various modules'],
+  accessibility: {
+    levels: ['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
+    configurable: true,
+    optional: true,
+  },
 } as const;

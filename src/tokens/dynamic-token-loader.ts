@@ -2,7 +2,7 @@
  * @fileoverview Dynamic Token Loader - Enterprise Token Management System
  * @description Dynamic loading and injection of design tokens for multi-tenant applications
  * @version 3.0.0
- * @compliance WCAG 2.2 AAA, NSM, DigDir, Enterprise Standards
+ * @compliance WCAG 2.2 AAA, Enterprise Standards
  */
 
 import { globalColorPrimitives } from './global-tokens';
@@ -34,9 +34,6 @@ export interface TenantTokenConfig {
   
   /** Branding configuration */
   readonly branding?: BrandingConfig;
-  
-  /** Norwegian compliance overrides */
-  readonly norwegianCompliance?: NorwegianComplianceConfig;
 }
 
 /**
@@ -48,31 +45,29 @@ export interface WhiteLabelConfig {
     readonly brand: string;
     readonly brandHover: string;
     readonly brandActive: string;
-    readonly brandDisabled: string;
   };
   
   /** Secondary brand colors */
   readonly secondaryColors?: {
-    readonly secondary: string;
-    readonly secondaryHover: string;
-    readonly secondaryActive: string;
+    readonly background: string;
+    readonly surface: string;
+    readonly text: string;
   };
   
-  /** Logo configuration */
-  readonly logo?: {
-    readonly primary: string;
-    readonly secondary?: string;
-    readonly favicon?: string;
+  /** Company branding */
+  readonly company?: {
+    readonly logo?: string;
+    readonly logoAlt?: string;
+    readonly name?: string;
   };
   
   /** Typography overrides */
   readonly typography?: {
     readonly fontFamily?: string;
-    readonly fontWeights?: Record<string, number>;
+    readonly headingFont?: string;
+    readonly bodyFont?: string;
+    readonly monoFont?: string;
   };
-  
-  /** Custom CSS properties */
-  readonly customProperties?: Record<string, string>;
 }
 
 /**
@@ -80,13 +75,13 @@ export interface WhiteLabelConfig {
  */
 export interface TokenOverrideConfig {
   /** Global token overrides */
-  readonly global?: Partial<Record<TokenPath, TokenValue>>;
+  readonly global?: Record<string, TokenValue>;
   
   /** Alias token overrides */
-  readonly alias?: Partial<Record<TokenPath, TokenValue>>;
+  readonly alias?: Record<string, TokenValue>;
   
   /** Component token overrides */
-  readonly component?: Partial<Record<TokenPath, TokenValue>>;
+  readonly component?: Record<string, TokenValue>;
   
   /** Custom token additions */
   readonly custom?: Record<string, TokenValue>;
@@ -96,49 +91,23 @@ export interface TokenOverrideConfig {
  * Branding configuration
  */
 export interface BrandingConfig {
-  /** Company name */
-  readonly companyName: string;
-  
-  /** Company tagline */
-  readonly tagline?: string;
+  /** Company information */
+  readonly company?: {
+    readonly name?: string;
+    readonly logo?: string;
+    readonly logoAlt?: string;
+    readonly website?: string;
+  };
   
   /** Brand colors */
-  readonly colors: {
-    readonly primary: string;
-    readonly secondary: string;
+  readonly colors?: {
+    readonly primary?: string;
+    readonly secondary?: string;
     readonly accent?: string;
   };
   
-  /** Asset URLs */
-  readonly assets?: {
-    readonly logo: string;
-    readonly favicon?: string;
-    readonly backgroundImage?: string;
-  };
-}
-
-/**
- * Norwegian compliance configuration
- */
-export interface NorwegianComplianceConfig {
-  /** Municipality code */
-  readonly municipalityCode?: string;
-  
-  /** Security classification */
-  readonly securityClassification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  
-  /** Government color overrides */
-  readonly governmentColors?: {
-    readonly primary: string;
-    readonly secondary: string;
-    readonly accent: string;
-  };
-  
-  /** Accessibility requirements */
-  readonly accessibility?: {
-    readonly level: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-    readonly highContrast: boolean;
-  };
+  /** Custom CSS variables */
+  readonly cssVariables?: Record<string, string>;
 }
 
 /**
@@ -288,11 +257,6 @@ export class DynamicTokenLoader {
       // Apply branding
       if (config.branding) {
         this.applyBrandingConfig(config.branding);
-      }
-
-      // Apply Norwegian compliance
-      if (config.norwegianCompliance) {
-        this.applyNorwegianComplianceConfig(config.norwegianCompliance);
       }
 
       // Update current tenant
@@ -457,23 +421,40 @@ export class DynamicTokenLoader {
       tokenSystem.setAliasToken('alias.color.brand.primary', config.primaryColors.brand);
       tokenSystem.setAliasToken('alias.color.brand.primaryHover', config.primaryColors.brandHover);
       tokenSystem.setAliasToken('alias.color.brand.primaryActive', config.primaryColors.brandActive);
-      tokenSystem.setAliasToken('alias.color.brand.primaryDisabled', config.primaryColors.brandDisabled);
     }
 
     if (config.secondaryColors) {
-      tokenSystem.setAliasToken('alias.color.brand.secondary', config.secondaryColors.secondary);
-      tokenSystem.setAliasToken('alias.color.brand.secondaryHover', config.secondaryColors.secondaryHover);
-      tokenSystem.setAliasToken('alias.color.brand.secondaryActive', config.secondaryColors.secondaryActive);
+      tokenSystem.setAliasToken('alias.color.brand.secondaryBackground', config.secondaryColors.background);
+      tokenSystem.setAliasToken('alias.color.brand.secondarySurface', config.secondaryColors.surface);
+      tokenSystem.setAliasToken('alias.color.brand.secondaryText', config.secondaryColors.text);
+    }
+
+    if (config.company?.logo) {
+      tokenSystem.setCustomToken('custom.company.logo', config.company.logo);
+    }
+
+    if (config.company?.logoAlt) {
+      tokenSystem.setCustomToken('custom.company.logoAlt', config.company.logoAlt);
+    }
+
+    if (config.company?.name) {
+      tokenSystem.setCustomToken('custom.company.name', config.company.name);
     }
 
     if (config.typography?.fontFamily) {
       tokenSystem.setGlobalToken('global.typography.fontFamily.primary', config.typography.fontFamily);
     }
 
-    if (config.customProperties) {
-      Object.entries(config.customProperties).forEach(([property, value]) => {
-        tokenSystem.setCustomToken(property as TokenPath, value);
-      });
+    if (config.typography?.headingFont) {
+      tokenSystem.setGlobalToken('global.typography.fontFamily.heading', config.typography.headingFont);
+    }
+
+    if (config.typography?.bodyFont) {
+      tokenSystem.setGlobalToken('global.typography.fontFamily.body', config.typography.bodyFont);
+    }
+
+    if (config.typography?.monoFont) {
+      tokenSystem.setGlobalToken('global.typography.fontFamily.mono', config.typography.monoFont);
     }
   }
 
@@ -481,38 +462,37 @@ export class DynamicTokenLoader {
    * Apply branding configuration
    */
   private applyBrandingConfig(config: BrandingConfig): void {
-    tokenSystem.setAliasToken('alias.color.brand.primary', config.colors.primary);
-    tokenSystem.setAliasToken('alias.color.brand.secondary', config.colors.secondary);
-    
-    if (config.colors.accent) {
-      tokenSystem.setAliasToken('alias.color.brand.accent', config.colors.accent);
+    if (config.company) {
+      if (config.company.name) {
+        tokenSystem.setCustomToken('custom.company.name', config.company.name);
+      }
+      if (config.company.logo) {
+        tokenSystem.setCustomToken('custom.company.logo', config.company.logo);
+      }
+      if (config.company.logoAlt) {
+        tokenSystem.setCustomToken('custom.company.logoAlt', config.company.logoAlt);
+      }
+      if (config.company.website) {
+        tokenSystem.setCustomToken('custom.company.website', config.company.website);
+      }
     }
 
-    if (config.assets?.logo) {
-      tokenSystem.setCustomToken('custom.assets.logo.primary', config.assets.logo);
+    if (config.colors) {
+      if (config.colors.primary) {
+        tokenSystem.setAliasToken('alias.color.brand.primary', config.colors.primary);
+      }
+      if (config.colors.secondary) {
+        tokenSystem.setAliasToken('alias.color.brand.secondary', config.colors.secondary);
+      }
+      if (config.colors.accent) {
+        tokenSystem.setAliasToken('alias.color.brand.accent', config.colors.accent);
+      }
     }
 
-    if (config.assets?.favicon) {
-      tokenSystem.setCustomToken('custom.assets.favicon', config.assets.favicon);
-    }
-  }
-
-  /**
-   * Apply Norwegian compliance configuration
-   */
-  private applyNorwegianComplianceConfig(config: NorwegianComplianceConfig): void {
-    if (config.governmentColors) {
-      tokenSystem.setAliasToken('alias.color.government.primary', config.governmentColors.primary);
-      tokenSystem.setAliasToken('alias.color.government.secondary', config.governmentColors.secondary);
-      tokenSystem.setAliasToken('alias.color.government.accent', config.governmentColors.accent);
-    }
-
-    if (config.municipalityCode) {
-      tokenSystem.setCustomToken('custom.norwegian.municipalityCode', config.municipalityCode);
-    }
-
-    if (config.securityClassification) {
-      tokenSystem.setCustomToken('custom.norwegian.securityClassification', config.securityClassification);
+    if (config.cssVariables) {
+      Object.entries(config.cssVariables).forEach(([name, value]) => {
+        tokenSystem.setCustomToken(name as TokenPath, value);
+      });
     }
   }
 
@@ -540,17 +520,40 @@ export class DynamicTokenLoader {
       tenantId: 'default',
       displayName: 'Default Configuration',
       branding: {
-        companyName: 'Xala Enterprise',
+        company: {
+          name: 'Xala Enterprise',
+          logo: globalColorPrimitives.blue[600],
+          logoAlt: globalColorPrimitives.blue[600],
+          website: 'https://xala.com',
+        },
         colors: {
           primary: globalColorPrimitives.blue[600],
           secondary: globalColorPrimitives.gray[600],
+          accent: globalColorPrimitives.purple[600],
+        },
+        cssVariables: {
+          '--primary-font': 'var(--font-primary)',
+          '--secondary-font': 'var(--font-secondary)',
+          '--mono-font': 'var(--font-mono)',
+          '--heading-font': 'var(--font-heading)',
         },
       },
-      norwegianCompliance: {
-        securityClassification: 'ÅPEN',
-        accessibility: {
-          level: 'WCAG_2_2_AAA',
-          highContrast: false,
+      whiteLabelConfig: {
+        primaryColors: {
+          brand: globalColorPrimitives.blue[600],
+          brandHover: globalColorPrimitives.blue[700],
+          brandActive: globalColorPrimitives.blue[800],
+        },
+        secondaryColors: {
+          background: globalColorPrimitives.gray[100],
+          surface: globalColorPrimitives.gray[200],
+          text: globalColorPrimitives.gray[900],
+        },
+        typography: {
+          fontFamily: 'var(--font-primary)',
+          headingFont: 'var(--font-heading)',
+          bodyFont: 'var(--font-primary)',
+          monoFont: 'var(--font-mono)',
         },
       },
     };
@@ -620,5 +623,5 @@ export async function initializeDynamicTokens(config: DynamicTokenLoaderConfig):
 // =============================================================================
 
 export type {
-    BrandingConfig, DynamicTokenLoaderConfig, NorwegianComplianceConfig, TenantTokenConfig, TokenOverrideConfig, WhiteLabelConfig
+    BrandingConfig, DynamicTokenLoaderConfig, TenantTokenConfig, TokenOverrideConfig, WhiteLabelConfig
 };

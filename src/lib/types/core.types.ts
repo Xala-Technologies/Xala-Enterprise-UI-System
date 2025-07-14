@@ -4,7 +4,8 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-import type { ReactNode, CSSProperties as ReactCSSProperties } from 'react';
+import type { CSSProperties as ReactCSSProperties } from 'react';
+import type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/accessibility-tokens';
 
 /**
  * Enhanced CSS Properties with pseudo-selectors, keyframes, and custom properties
@@ -33,135 +34,185 @@ export interface CSSProperties extends ReactCSSProperties {
     [key: string]: CSSProperties;
   };
 
-  // Custom CSS properties for design tokens
+  // Custom properties (CSS Variables)
   '--color-primary'?: string;
   '--color-secondary'?: string;
-  '--spacing-unit'?: string;
-  '--border-radius'?: string;
-  '--font-family'?: string;
-  '--line-length-norwegian-sm'?: string;
-  '--line-length-norwegian-md'?: string;
-  '--line-length-norwegian-lg'?: string;
-  '--line-length-norwegian-xl'?: string;
+  '--color-success'?: string;
+  '--color-warning'?: string;
+  '--color-error'?: string;
+  '--color-info'?: string;
+  '--spacing-xs'?: string;
+  '--spacing-sm'?: string;
+  '--spacing-md'?: string;
+  '--spacing-lg'?: string;
+  '--spacing-xl'?: string;
+  '--font-size-xs'?: string;
+  '--font-size-sm'?: string;
+  '--font-size-md'?: string;
+  '--font-size-lg'?: string;
+  '--font-size-xl'?: string;
+  '--border-radius-sm'?: string;
+  '--border-radius-md'?: string;
+  '--border-radius-lg'?: string;
+  '--line-height-tight'?: string;
+  '--line-height-normal'?: string;
+  '--line-height-relaxed'?: string;
+  [key: string]: any; // Allow any custom property
 
-  // Custom layout properties
-  lineLength?: string;
-
-  // Allow any CSS custom property
-  [key: `--${string}`]: string | number | undefined;
-
-  // Allow any pseudo-selector
-  [key: `:${string}`]: CSSProperties | undefined;
-
-  // Allow any at-rule
-  [key: `@${string}`]: any;
+  // Media queries
+  '@media (prefers-reduced-motion: reduce)'?: CSSProperties;
+  '@media (prefers-contrast: high)'?: CSSProperties;
+  '@media (max-width: 768px)'?: CSSProperties;
+  '@media (min-width: 769px)'?: CSSProperties;
+  '@media (min-width: 1024px)'?: CSSProperties;
+  '@media (min-width: 1200px)'?: CSSProperties;
 }
 
 /**
- * Base component properties with strict typing
+ * Supported languages for UI system
  */
-export interface ComponentProps {
-  readonly className?: string;
-  readonly children?: ReactNode;
-  readonly testId?: string;
-  readonly 'aria-label'?: string;
-  readonly style?: CSSProperties;
-  readonly id?: string;
-  readonly role?: string;
-  readonly tabIndex?: number;
-  readonly 'aria-describedby'?: string;
-  readonly 'aria-labelledby'?: string;
-  readonly 'data-testid'?: string;
-}
+export type SupportedLanguage = 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'nl' | 'sv' | 'da' | 'fi' | 'no';
 
 /**
- * Accessibility properties for all components
+ * Accessibility levels
  */
-export interface AccessibilityProps {
-  readonly 'aria-label'?: string;
-  readonly 'aria-labelledby'?: string;
-  readonly 'aria-describedby'?: string;
-  readonly 'aria-expanded'?: boolean;
-  readonly 'aria-hidden'?: boolean;
-  readonly 'aria-live'?: 'off' | 'polite' | 'assertive';
-  readonly 'aria-atomic'?: boolean;
-  readonly 'aria-busy'?: boolean;
-  readonly 'aria-controls'?: string;
-  readonly 'aria-current'?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
-  readonly 'aria-disabled'?: boolean;
-  readonly 'aria-invalid'?: boolean | 'grammar' | 'spelling';
-  readonly 'aria-pressed'?: boolean;
-  readonly 'aria-selected'?: boolean;
-  readonly role?: string;
-  readonly tabIndex?: number;
-}
+export type AccessibilityLevel = 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' | 'WCAG_2_2_AAA' | 'none';
 
 /**
- * Event handler types
- */
-export interface EventHandlers {
-  readonly onClick?: (event: React.MouseEvent<HTMLElement>) => void;
-  readonly onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
-  readonly onBlur?: (event: React.FocusEvent<HTMLElement>) => void;
-  readonly onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
-  readonly onKeyUp?: (event: React.KeyboardEvent<HTMLElement>) => void;
-  readonly onChange?: (event: React.ChangeEvent<HTMLElement>) => void;
-}
-
-/**
- * Component state types
- */
-export interface ComponentState {
-  readonly isLoading: boolean;
-  readonly isDisabled: boolean;
-  readonly hasError: boolean;
-  readonly errorMessage?: string;
-  readonly isVisible: boolean;
-  readonly isFocused: boolean;
-}
-
-/**
- * Supported languages
- */
-export type SupportedLanguage = 'en-US' | 'nb-NO' | 'nn-NO' | 'fr-FR' | 'ar-SA';
-
-/**
- * Accessibility compliance levels
- */
-export type AccessibilityLevel = 'A' | 'AA' | 'AAA';
-
-/**
- * Core UI System configuration
+ * Main UI System configuration
  */
 export interface UISystemConfig {
-  readonly theme: string;
-  readonly locale: SupportedLanguage;
-  readonly accessibilityLevel: AccessibilityLevel;
-  readonly enableAccessibilityValidation: boolean;
-  readonly enablePerformanceMonitoring: boolean;
+  /** System name/identifier */
+  readonly name: string;
+  
+  /** System version */
+  readonly version: string;
+  
+  /** Default language */
+  readonly defaultLanguage: SupportedLanguage;
+  
+  /** Accessibility configuration (optional) */
+  readonly accessibility?: AccessibilityConfig | AccessibilityPreset;
+  
+  /** Theme configuration */
+  readonly theme?: {
+    readonly mode?: 'light' | 'dark' | 'auto';
+    readonly primary?: string;
+    readonly secondary?: string;
+    readonly customTokens?: Record<string, string>;
+  };
+  
+  /** Performance configuration */
+  readonly performance?: {
+    readonly enableVirtualization?: boolean;
+    readonly enableLazyLoading?: boolean;
+    readonly enableMemoization?: boolean;
+    readonly bundleSize?: 'minimal' | 'standard' | 'full';
+  };
+  
+  /** Development configuration */
+  readonly development?: {
+    readonly enableDebugMode?: boolean;
+    readonly enablePerformanceMonitoring?: boolean;
+    readonly enableA11yWarnings?: boolean;
+    readonly logLevel?: 'error' | 'warn' | 'info' | 'debug';
+  };
 }
 
 /**
  * UI System initialization options
  */
 export interface UISystemOptions {
-  readonly enableCache?: boolean;
-  readonly enablePerformanceMonitoring?: boolean;
-  readonly customThemes?: readonly ThemeDefinition[];
-  readonly customComponents?: readonly ComponentDefinition[];
+  /** Configuration object */
+  readonly config: UISystemConfig;
+  
+  /** Custom CSS injection */
+  readonly customCSS?: string;
+  
+  /** Custom token overrides */
+  readonly tokenOverrides?: Record<string, string>;
+  
+  /** Container element for the UI system */
+  readonly container?: HTMLElement;
+  
+  /** Initialization callbacks */
+  readonly onInitialized?: () => void;
+  readonly onError?: (error: Error) => void;
 }
 
 /**
- * Theme definition
+ * Base component props
  */
-export interface ThemeDefinition {
-  readonly name: string;
-  readonly colors: ThemeColors;
-  readonly accessibility: AccessibilityConfig;
+export interface ComponentProps {
+  /** Custom CSS class names */
+  readonly className?: string;
+  
+  /** Inline styles (discouraged, use tokens instead) */
+  readonly style?: CSSProperties;
+  
+  /** Test identifier for automated testing */
+  readonly testId?: string;
+  
+  /** Custom data attributes */
+  readonly [key: `data-${string}`]: string | undefined;
+  
+  /** ARIA attributes for accessibility */
+  readonly [key: `aria-${string}`]: string | boolean | undefined;
 }
 
 /**
- * Theme color palette
+ * Component state interface
+ */
+export interface ComponentState {
+  readonly isLoading: boolean;
+  readonly isDisabled: boolean;
+  readonly hasError: boolean;
+  readonly isFocused: boolean;
+  readonly isVisible: boolean;
+}
+
+/**
+ * Event handlers interface
+ */
+export interface EventHandlers {
+  readonly onClick?: (event: MouseEvent) => void;
+  readonly onKeyDown?: (event: KeyboardEvent) => void;
+  readonly onFocus?: (event: FocusEvent) => void;
+  readonly onBlur?: (event: FocusEvent) => void;
+  readonly onChange?: (value: any) => void;
+}
+
+/**
+ * Accessibility props interface
+ */
+export interface AccessibilityProps {
+  /** ARIA label */
+  readonly 'aria-label'?: string;
+  
+  /** ARIA described by */
+  readonly 'aria-describedby'?: string;
+  
+  /** ARIA required */
+  readonly 'aria-required'?: boolean;
+  
+  /** ARIA invalid */
+  readonly 'aria-invalid'?: boolean;
+  
+  /** ARIA expanded */
+  readonly 'aria-expanded'?: boolean;
+  
+  /** ARIA hidden */
+  readonly 'aria-hidden'?: boolean;
+  
+  /** Tab index */
+  readonly tabIndex?: number;
+  
+  /** Role */
+  readonly role?: string;
+}
+
+/**
+ * Theme colors interface
  */
 export interface ThemeColors {
   readonly primary: string;
@@ -170,82 +221,96 @@ export interface ThemeColors {
   readonly warning: string;
   readonly error: string;
   readonly info: string;
+  readonly background: string;
+  readonly surface: string;
+  readonly text: string;
+  readonly border: string;
 }
 
 /**
- * Accessibility configuration for themes
+ * Theme definition interface
  */
-export interface AccessibilityConfig {
-  readonly contrastRatio: number;
-  readonly focusIndicator: string;
-  readonly highContrast: boolean;
+export interface ThemeDefinition {
+  readonly name: string;
+  readonly colors: ThemeColors;
+  readonly spacing: Record<string, string>;
+  readonly typography: Record<string, string>;
+  readonly borderRadius: Record<string, string>;
+  readonly shadows: Record<string, string>;
+  readonly breakpoints: Record<string, string>;
 }
 
 /**
- * Component definition interface (ISP - small, focused interface)
+ * Component definition interface
  */
 export interface ComponentDefinition {
   readonly name: string;
   readonly type: ComponentType;
-  readonly accessibility: ComponentAccessibilityConfig;
+  readonly props: ComponentProps;
+  readonly state: ComponentState;
+  readonly accessibility: AccessibilityProps;
+  readonly theme: Partial<ThemeDefinition>;
 }
 
 /**
- * Component types
+ * Component type enumeration
  */
-export type ComponentType =
-  | 'form'
-  | 'action-feedback'
-  | 'data-display'
+export type ComponentType = 
+  | 'button'
+  | 'input'
+  | 'select'
+  | 'textarea' 
+  | 'checkbox'
+  | 'radio'
+  | 'modal'
+  | 'drawer'
+  | 'toast'
+  | 'alert'
+  | 'card'
+  | 'table'
+  | 'list'
+  | 'navigation'
   | 'layout'
-  | 'platform-specific';
+  | 'form'
+  | 'data-display'
+  | 'feedback'
+  | 'platform';
 
 /**
- * Component accessibility configuration
+ * Accessibility configuration interface
  */
 export interface ComponentAccessibilityConfig {
-  readonly ariaLabel: string;
+  readonly level: AccessibilityLevel;
+  readonly announcements: boolean;
   readonly keyboardNavigation: boolean;
-  readonly screenReaderSupport: boolean;
-  readonly minimumTouchTarget: number; // Minimum 44px for accessibility standards
+  readonly focusManagement: boolean;
+  readonly colorContrast: number;
+  readonly touchTargets: number;
 }
 
 /**
- * Component registry type
- */
-export type ComponentRegistry = Map<string, unknown>;
-
-/**
- * Theme registry type
- */
-export type ThemeRegistry = Map<string, ThemeDefinition>;
-
-/**
- * Validation error types
- */
-export interface ValidationError {
-  readonly code: string;
-  readonly message: string;
-  readonly field?: string;
-}
-
-/**
- * Performance metrics
+ * Performance metrics interface
  */
 export interface PerformanceMetrics {
   readonly initializationTime: number;
   readonly renderTime: number;
   readonly memoryUsage: number;
-  readonly componentCount: number;
+  readonly bundleSize: number;
+  readonly componentsLoaded: number;
 }
 
 /**
- * Audit trail entry
+ * Audit trail entry interface
  */
 export interface AuditTrailEntry {
   readonly timestamp: Date;
   readonly action: string;
   readonly component: string;
   readonly user?: string;
-  readonly metadata?: Record<string, unknown>;
+  readonly details: Record<string, any>;
 }
+
+/**
+ * Theme registry type
+ */
+export type ThemeRegistry = Map<string, ThemeDefinition>;

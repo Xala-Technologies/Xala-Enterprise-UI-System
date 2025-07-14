@@ -9,336 +9,169 @@ import type { ComponentProps } from '../lib/types/core.types';
 export interface DataDisplayComponentProps extends ComponentProps {
   loading?: boolean;
   empty?: boolean;
-  emptyMessageKey?: string;
-  loadingMessageKey?: string;
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-    format?: 'government' | 'municipal' | 'modern';
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  };
 }
 
-// DataTable component props with Norwegian features
+// DataTable component props
 export interface DataTableProps extends DataDisplayComponentProps {
   data: TableData[];
   columns: TableColumn[];
-  pagination?: PaginationConfig;
-  sorting?: SortingConfig;
-  selection?: SelectionConfig;
-  search?: SearchConfig;
-  export?: ExportConfig;
-  norwegian?: DataDisplayComponentProps['norwegian'] & {
-    dateFormat?: 'DD.MM.YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD';
-    numberFormat?: 'norwegian' | 'international';
-    municipality?: string;
-    showClassification?: boolean;
+  pagination?: {
+    enabled: boolean;
+    pageSize: number;
+    currentPage: number;
+    totalItems: number;
+    showSizeChanger?: boolean;
+    showQuickJumper?: boolean;
+  };
+  sorting?: {
+    enabled: boolean;
+    sortBy?: string;
+    sortOrder?: 'asc' | 'desc';
+  };
+  selection?: {
+    enabled: boolean;
+    multiple?: boolean;
+    selectedRows?: string[];
+  };
+  search?: {
+    enabled: boolean;
+    placeholder?: string;
+    debounceMs?: number;
+  };
+  export?: {
+    enabled: boolean;
+    formats?: ('csv' | 'xlsx' | 'pdf')[];
+    filename?: string;
   };
   onRowClick?: (row: TableData, index: number) => void;
-  onSelectionChange?: (selectedRows: TableData[]) => void;
+  onSelectionChange?: (selectedRows: string[]) => void;
   onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   onPageChange?: (page: number, pageSize: number) => void;
 }
 
 // Table column definition
 export interface TableColumn {
-  key: string;
-  labelKey: string; // Localization key for column header
-  width?: string | number;
+  id: string;
+  label: string; // Column header text
+  key: string; // Data key to access from row object
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'personalNumber' | 'organizationNumber' | 'status';
+  width?: number;
+  minWidth?: number;
+  maxWidth?: number;
   sortable?: boolean;
   filterable?: boolean;
-  type?:
-    | 'text'
-    | 'number'
-    | 'date'
-    | 'boolean'
-    | 'personalNumber'
-    | 'organizationNumber'
-    | 'currency'
-    | 'status';
-  format?: TableColumnFormat;
-  align?: 'left' | 'center' | 'right';
-  norwegian?: {
-    sensitive?: boolean; // Mark as sensitive data
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    municipalitySpecific?: boolean;
+  resizable?: boolean;
+  alignment?: 'left' | 'center' | 'right';
+  format?: {
+    currency?: string;
+    numberFormat?: Intl.NumberFormatOptions;
+    dateFormat?: string;
+    boolean?: {
+      trueText: string; // Text for true value
+      falseText: string; // Text for false value
+    };
   };
-  render?: (value: any, row: TableData, column: TableColumn) => any;
+  render?: (value: any, row: any, column: TableColumn) => any;
 }
 
-// Table column formatting options
-export interface TableColumnFormat {
-  currency?: 'NOK' | 'EUR' | 'USD';
-  dateFormat?: 'DD.MM.YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD';
-  numberFormat?: {
-    decimals?: number;
-    thousandsSeparator?: '.' | ' ' | ',';
-    decimalSeparator?: ',' | '.';
-  };
-  boolean?: {
-    trueKey: string; // Localization key for true value
-    falseKey: string; // Localization key for false value
-  };
-}
-
-// Table data row type
+// Table data row definition
 export interface TableData {
-  id: string | number;
+  id: string;
   [key: string]: any;
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    sensitive?: boolean;
-    municipality?: string;
-    lastModified?: Date;
-  };
 }
 
-// Pagination configuration
-export interface PaginationConfig {
-  enabled?: boolean;
-  pageSize?: number;
-  pageSizeOptions?: number[];
-  showPageSizeSelector?: boolean;
-  showTotal?: boolean;
-  showFirstLast?: boolean;
-  position?: 'top' | 'bottom' | 'both';
-  norwegian?: {
-    showInNorwegian?: boolean;
-    compactMode?: boolean;
-  };
-}
-
-// Sorting configuration
-export interface SortingConfig {
-  enabled?: boolean;
-  defaultSortBy?: string;
-  defaultSortOrder?: 'asc' | 'desc';
-  multiSort?: boolean;
-  norwegian?: {
-    collation?: 'norwegian' | 'standard'; // Norwegian alphabetical order
-    personalNumberSort?: boolean; // Special sorting for personal numbers
-  };
-}
-
-// Selection configuration
-export interface SelectionConfig {
-  enabled?: boolean;
-  multiple?: boolean;
-  showSelectAll?: boolean;
-  preserveSelection?: boolean;
-  norwegian?: {
-    confirmationRequired?: boolean; // Require confirmation for sensitive data
-    auditLog?: boolean; // Log selections for compliance
-  };
-}
-
-// Search configuration
-export interface SearchConfig {
-  enabled?: boolean;
-  placeholder?: string;
-  debounceMs?: number;
-  searchableColumns?: string[];
-  norwegian?: {
-    searchInNorwegian?: boolean; // Enable Norwegian character search
-    highlightMatches?: boolean;
-  };
-}
-
-// Export configuration
-export interface ExportConfig {
-  enabled?: boolean;
-  formats?: ('csv' | 'excel' | 'pdf')[];
-  includeHeaders?: boolean;
-  includeSelection?: boolean;
-  norwegian?: {
-    filename?: string;
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    watermark?: boolean;
-  };
-}
-
-// KeyValueList component props
+// Key-value list component props
 export interface KeyValueListProps extends DataDisplayComponentProps {
   items: KeyValueItem[];
-  layout?: 'horizontal' | 'vertical' | 'grid';
+  layout?: 'horizontal' | 'vertical';
   spacing?: 'compact' | 'comfortable' | 'spacious';
   showDividers?: boolean;
   highlightChanges?: boolean;
-  norwegian?: DataDisplayComponentProps['norwegian'] & {
-    hideEmptyValues?: boolean;
-    showClassificationIcons?: boolean;
-    dateFormat?: 'DD.MM.YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD';
-  };
 }
 
 // Key-value item definition
 export interface KeyValueItem {
   key: string;
-  labelKey: string; // Localization key for the label
+  label: string; // Label text for the key
   value: any;
-  type?:
-    | 'text'
-    | 'number'
-    | 'date'
-    | 'boolean'
-    | 'personalNumber'
-    | 'organizationNumber'
-    | 'link'
-    | 'status'
-    | 'currency';
-  format?: KeyValueFormat;
-  copyable?: boolean;
-  sensitive?: boolean;
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    municipalityData?: boolean;
-    auditRequired?: boolean;
+  type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'personalNumber' | 'organizationNumber';
+  format?: {
+    currency?: string;
+    dateFormat?: string;
+    numberFormat?: Intl.NumberFormatOptions;
   };
-  onClick?: () => void;
-}
-
-// Key-value formatting options
-export interface KeyValueFormat {
-  currency?: 'NOK' | 'EUR' | 'USD';
-  dateFormat?: 'DD.MM.YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD' | 'relative';
-  numberFormat?: {
-    decimals?: number;
-    thousandsSeparator?: '.' | ' ' | ',';
-    decimalSeparator?: ',' | '.';
-  };
-  boolean?: {
-    trueKey: string;
-    falseKey: string;
-  };
-  link?: {
-    external?: boolean;
-    openInNewTab?: boolean;
-  };
+  changed?: boolean; // Highlight if changed
 }
 
 // Tag component props
-export interface TagProps extends ComponentProps {
-  labelKey?: string; // Localization key for tag text
+export interface TagProps extends DataDisplayComponentProps {
+  label?: string; // Tag text
   children?: any;
-  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'info' | 'success' | 'warning' | 'error' | 'neutral';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   interactive?: boolean;
   removable?: boolean;
-  icon?: any;
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    municipality?: string;
-    category?: 'status' | 'category' | 'priority' | 'role' | 'location';
-  };
   onClick?: () => void;
   onRemove?: () => void;
 }
 
 // Badge component props
-export interface BadgeProps extends ComponentProps {
-  labelKey?: string; // Localization key for badge text
+export interface BadgeProps extends DataDisplayComponentProps {
+  label?: string; // Badge text
   children?: any;
-  variant?:
-    | 'default'
-    | 'primary'
-    | 'secondary'
-    | 'success'
-    | 'warning'
-    | 'error'
-    | 'info'
-    | 'count';
-  size?: 'sm' | 'md' | 'lg';
-  shape?: 'rounded' | 'pill' | 'square';
-  position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'inline';
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  shape?: 'rounded' | 'pill';
   count?: number;
-  maxCount?: number;
   showZero?: boolean;
-  pulse?: boolean;
-  dot?: boolean;
-  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  priority?: 'low' | 'medium' | 'high' | 'urgent';
-  accessible?: boolean;
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    priority?: 'low' | 'medium' | 'high' | 'critical';
-    category?: 'notification' | 'status' | 'count' | 'achievement';
-  };
+  max?: number;
 }
 
 // Tooltip component props
-export interface TooltipProps extends ComponentProps {
-  contentKey?: string; // Localization key for tooltip content
-  content?: any;
+export interface TooltipProps extends DataDisplayComponentProps {
+  content?: string; // Tooltip content text
   children: any;
-  placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   trigger?: 'hover' | 'click' | 'focus' | 'manual';
+  placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   delay?: number;
-  maxWidth?: string | number;
-  interactive?: boolean;
+  disabled?: boolean;
   arrow?: boolean;
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    highContrast?: boolean;
-    municipality?: string;
-    helpCategory?: 'field' | 'action' | 'status' | 'navigation';
-  };
-  onOpen?: () => void;
-  onClose?: () => void;
 }
 
-// Status indicator props for Norwegian compliance
-export interface StatusIndicatorProps extends ComponentProps {
+// Status indicator component props
+export interface StatusIndicatorProps extends DataDisplayComponentProps {
+  label?: string; // Status text
   status: 'active' | 'inactive' | 'pending' | 'error' | 'success' | 'warning' | 'info';
-  labelKey?: string; // Localization key for status text
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   showLabel?: boolean;
-  animated?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    category?: 'system' | 'user' | 'process' | 'security' | 'compliance';
-    priority?: 'low' | 'medium' | 'high' | 'critical';
-    municipality?: string;
-  };
+  pulse?: boolean;
 }
 
-// Table state management
-export interface TableState {
-  currentPage: number;
-  pageSize: number;
-  sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
-  selectedRows: string[] | number[];
-  searchQuery?: string;
-  filters?: Record<string, any>;
-  loading: boolean;
-  error?: string;
-}
-
-// Norwegian data formatting utilities
-export interface NorwegianDataFormatters {
-  formatPersonalNumber: (value: string) => string;
-  formatOrganizationNumber: (value: string) => string;
-  formatCurrency: (value: number, currency?: string) => string;
-  formatDate: (value: Date | string, format?: string) => string;
-  formatNumber: (value: number, options?: Intl.NumberFormatOptions) => string;
-  formatBoolean: (value: boolean, trueKey: string, falseKey: string) => string;
-}
-
-// Data classification helpers
-export interface DataClassificationConfig {
-  level: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  displayIcon: boolean;
-  restrictExport: boolean;
-  requireAudit: boolean;
-  maskValue: boolean;
-  watermark: boolean;
-}
-
-// Export type for all data display types
-export type DataDisplayTypes =
-  | DataTableProps
-  | KeyValueListProps
-  | TagProps
-  | BadgeProps
-  | TooltipProps
-  | StatusIndicatorProps;
+// Utility functions for data formatting
+export const formatters = {
+  currency: (value: number, currency: string = 'USD'): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currency,
+    }).format(value);
+  },
+  date: (value: Date | string, format: string = 'DD.MM.YYYY'): string => {
+    const date = typeof value === 'string' ? new Date(value) : value;
+    // Implementation depends on date library
+    return date.toLocaleDateString();
+  },
+  number: (value: number, options?: Intl.NumberFormatOptions): string => {
+    return new Intl.NumberFormat('en-US', options).format(value);
+  },
+  boolean: (value: boolean, options?: { trueText: string; falseText: string }): string => {
+    return value ? (options?.trueText || 'Yes') : (options?.falseText || 'No');
+  },
+  personalNumber: (value: string): string => {
+    // Generic formatting - can be customized per locale
+    return value.replace(/(\d{6})(\d{5})/, '$1-$2');
+  },
+  organizationNumber: (value: string): string => {
+    // Generic formatting - can be customized per locale
+    return value.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+  },
+};

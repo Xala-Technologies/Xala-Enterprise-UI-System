@@ -1,19 +1,18 @@
 /**
  * @fileoverview Organization Number Input Component - Enterprise Standards Compliant
  * @module OrganizationNumberInput
- * @description Specialized input for organization numbers using design tokens (no inline styles)
+ * @description Specialized input for Norwegian organization numbers using design tokens (no inline styles)
  */
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
-import type { OrganizationNumberInputProps, OrganizationData } from '../../types/form.types';
+import type { OrganizationNumberInputProps } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
 const validateOrganizationNumber = (value: string) => ({
   isValid: value.length === 9,
   errors: value.length === 9 ? [] : ['Invalid organization number'],
-  type: 'enterprise' as const,
+  type: 'organisasjonsnummer' as const,
   mainOrganization: value,
 });
 
@@ -27,9 +26,9 @@ const formatOrganizationNumber = (value: string) => {
  * Follows enterprise standards - no inline styles, design token props only
  */
 export function OrganizationNumberInput({
-  labelKey,
-  errorKey,
-  helpKey,
+  label,
+  error,
+  helpText,
   value,
   defaultValue,
   onChange,
@@ -50,23 +49,21 @@ export function OrganizationNumberInput({
   testId,
   ...inputProps
 }: OrganizationNumberInputProps): JSX.Element {
-  const { t } = useLocalization();
-
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState<{
     isValid: boolean;
     errors: string[];
-    type: 'enterprise';
+    type: 'organisasjonsnummer';
     mainOrganization: string;
   }>({
     isValid: false,
     errors: [],
-    type: 'enterprise',
+    type: 'organisasjonsnummer',
     mainOrganization: '',
   });
   const [isValidating, setIsValidating] = useState(false);
-  const [orgData, setOrgData] = useState<OrganizationData | undefined>();
+  const [orgData, setOrgData] = useState<any | undefined>(); // Changed type to any as OrganizationData is removed
   const [isFetchingData, setIsFetchingData] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout>();
 
@@ -74,7 +71,7 @@ export function OrganizationNumberInput({
   const inputId = id || `org-number-${name || Math.random().toString(36).substr(2, 9)}`;
 
   // Build CSS classes using design tokens
-  const inputClasses = useMemo(() => {
+  const inputClasses = React.useMemo(() => {
     const classes = ['organization-number-input'];
 
     // Variant classes
@@ -148,7 +145,12 @@ export function OrganizationNumberInput({
     const cleaned = currentValue.replace(/\D/g, '');
 
     if (cleaned.length === 0) {
-      setValidationResult({ isValid: false, errors: [], type: 'enterprise', mainOrganization: '' });
+      setValidationResult({
+        isValid: false,
+        errors: [],
+        type: 'organisasjonsnummer',
+        mainOrganization: '',
+      });
       setOrgData(undefined);
       return;
     }
@@ -182,8 +184,8 @@ export function OrganizationNumberInput({
       } catch (error) {
         const errorResult = {
           isValid: false,
-          errors: [t('organizationNumber.validationError')],
-          type: 'enterprise' as const,
+          errors: ['Invalid organization number'], // Changed to direct text
+          type: 'organisasjonsnummer' as const,
           mainOrganization: '',
         };
         setValidationResult(errorResult);
@@ -198,7 +200,7 @@ export function OrganizationNumberInput({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [value, internalValue, validation, norwegian, onValidationChange, orgData, t]);
+  }, [value, internalValue, validation, norwegian, onValidationChange, orgData]);
 
   // Handle input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -232,7 +234,7 @@ export function OrganizationNumberInput({
   return (
     <div className="organization-number-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
+      {label && <Label label={label} required={required} htmlFor={inputId} />}
 
       {/* Input with validation indicator */}
       <div className="organization-number-field__input-wrapper">
@@ -244,7 +246,7 @@ export function OrganizationNumberInput({
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          placeholder={placeholder ? t(placeholder) : t('organizationNumber.placeholder')}
+          placeholder={placeholder || 'Enter organization number'}
           required={required}
           disabled={disabled}
           readOnly={readOnly}
@@ -269,12 +271,12 @@ export function OrganizationNumberInput({
       {orgData && <OrganizationDisplay orgData={orgData} isLoading={isFetchingData} />}
 
       {/* Help text */}
-      {helpKey && (
+      {helpText && (
         <div id={`${inputId}-help`} className="organization-number-field__help">
           <span className="organization-number-field__help-icon" aria-hidden="true">
             ℹ️
           </span>
-          <span className="organization-number-field__help-text">{t(helpKey)}</span>
+          <span className="organization-number-field__help-text">{helpText}</span>
         </div>
       )}
 
@@ -290,10 +292,10 @@ export function OrganizationNumberInput({
  * Organization data display component
  */
 const OrganizationDisplay: React.FC<{
-  orgData?: OrganizationData;
+  orgData?: any; // Changed type to any as OrganizationData is removed
   isLoading: boolean;
 }> = ({ orgData, isLoading }) => {
-  const { t } = useLocalization();
+  // Removed useLocalization as localization is removed
 
   if (isLoading) {
     return (
@@ -301,9 +303,7 @@ const OrganizationDisplay: React.FC<{
         <span className="organization-display__loading-icon" aria-hidden="true">
           ⏳
         </span>
-        <span className="organization-display__loading-text">
-          {t('organizationNumber.fetchingData')}
-        </span>
+        <span className="organization-display__loading-text">Fetching data...</span>
       </div>
     );
   }
@@ -329,9 +329,7 @@ const OrganizationDisplay: React.FC<{
           <span className="organization-display__status-icon" aria-hidden="true">
             {getStatusIcon(orgData.status)}
           </span>
-          <span className="organization-display__status-text">
-            {t(`organizationNumber.status.${orgData.status}`)}
-          </span>
+          <span className="organization-display__status-text">{orgData.status}</span>
         </span>
       </div>
 
@@ -362,7 +360,7 @@ const ValidationIndicator: React.FC<{
   isValidating: boolean;
   type?: string;
 }> = ({ isValid, isValidating, type }) => {
-  const { t } = useLocalization();
+  // Removed useLocalization as localization is removed
 
   if (isValidating) {
     return (
@@ -370,7 +368,7 @@ const ValidationIndicator: React.FC<{
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
         </span>
-        <span className="validation-indicator__text sr-only">{t('validation.checking')}</span>
+        <span className="validation-indicator__text sr-only">Checking...</span>
       </div>
     );
   }
@@ -381,7 +379,7 @@ const ValidationIndicator: React.FC<{
         <span className="validation-indicator__icon" aria-hidden="true">
           ✅
         </span>
-        <span className="validation-indicator__text sr-only">{t('validation.valid')}</span>
+        <span className="validation-indicator__text sr-only">Valid</span>
       </div>
     );
   }
@@ -393,20 +391,17 @@ const ValidationIndicator: React.FC<{
  * Label component
  */
 const Label: React.FC<{
-  labelKey: string;
+  label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ labelKey, required, htmlFor }) => {
-  const { t } = useLocalization();
+}> = ({ label, required, htmlFor }) => {
+  // Removed useLocalization as localization is removed
 
   return (
     <label className="organization-number-field__label" htmlFor={htmlFor}>
-      <span className="organization-number-field__label-text">{t(labelKey)}</span>
+      <span className="organization-number-field__label-text">{label}</span>
       {required && (
-        <span
-          className="organization-number-field__required-indicator"
-          aria-label={t('field.required')}
-        >
+        <span className="organization-number-field__required-indicator" aria-label="Required">
           *
         </span>
       )}
@@ -418,7 +413,7 @@ const Label: React.FC<{
  * Error message component
  */
 const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
-  const { t } = useLocalization();
+  // Removed useLocalization as localization is removed
 
   if (errors.length === 0) {
     return null;
@@ -431,9 +426,7 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
           <span className="organization-number-field__error-icon" aria-hidden="true">
             ⚠️
           </span>
-          <span className="organization-number-field__error-text">
-            {t(`organizationNumber.error.${error}`) || error}
-          </span>
+          <span className="organization-number-field__error-text">{error}</span>
         </div>
       ))}
     </div>
@@ -441,12 +434,14 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
 };
 
 // Mock function for fetching organization data
-const mockFetchOrganizationData = async (orgNumber: string): Promise<OrganizationData | null> => {
+const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null> => {
+  // Changed type to any as OrganizationData is removed
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
 
   // Mock data
-  const mockData: Record<string, OrganizationData> = {
+  const mockData: Record<string, any> = {
+    // Changed type to any as OrganizationData is removed
     '123456789': {
       name: 'Test Bedrift AS',
       organizationForm: 'Aksjeselskap',

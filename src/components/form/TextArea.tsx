@@ -1,265 +1,123 @@
-import React, { useState, useRef, useEffect } from 'react';
+/**
+ * @fileoverview TextArea Component - Enterprise Standards Compliant
+ * @module TextArea
+ * @description TextArea component using design tokens (no inline styles)
+ */
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
+import React, { useEffect, useState } from 'react';
 
-// TextArea - Norwegian government-compliant text area component
-interface TextAreaProps {
-  labelKey?: string;
-  label?: string;
-  placeholderKey?: string;
-  placeholder?: string;
-  helpTextKey?: string;
-  helpText?: string;
-  errorMessageKey?: string;
-  errorMessage?: string;
-  name?: string;
-  value?: string;
-  defaultValue?: string;
-  rows?: number;
-  maxLength?: number;
-  minLength?: number;
-  required?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
-  autoFocus?: boolean;
-  resize?: 'none' | 'vertical' | 'horizontal' | 'both';
-  variant?: 'default' | 'filled' | 'outlined';
-  size?: 'small' | 'medium' | 'large';
-  status?: 'default' | 'error' | 'warning' | 'success';
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    municipality?: string;
-    characterCount?: boolean;
-    wordCount?: boolean;
-    autoSave?: boolean;
-    auditLogging?: boolean;
-  };
-  onChange?: (event: any) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
-  style?: any;
-  'aria-describedby'?: string;
-  'aria-labelledby'?: string;
-  id?: string;
-}
+import type { TextAreaProps } from '../../types/form.types';
 
 /**
- * TextArea - Norwegian government-compliant multi-line text input
- *
- * Features:
- * - WCAG 2.2 AA accessibility compliance
- * - NSM security classification support
- * - Character/word count with Norwegian formatting
- * - Auto-save functionality for long forms
- * - Design token integration
- * - Norwegian government styling
- *
- * Norwegian Compliance:
- * - NSM data classification indicators
- * - DigDir form guidelines compliance
- * - GDPR data handling support
- * - Norwegian text validation
+ * TextArea component using design tokens and semantic props
+ * Follows enterprise standards - no inline styles, design token props only
  */
-export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
+export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
   const {
-    labelKey,
     label,
-    placeholderKey,
-    placeholder,
-    helpTextKey,
+    error,
     helpText,
-    errorMessageKey,
-    errorMessage,
-    name,
     value,
     defaultValue,
+    onChange,
+    onBlur,
+    onFocus,
     rows = 4,
+    cols,
     maxLength,
     minLength,
     required = false,
     disabled = false,
     readOnly = false,
-    autoFocus = false,
+    placeholder,
+    name,
+    id,
     resize = 'vertical',
     variant = 'default',
-    size = 'medium',
-    status = 'default',
-    norwegian,
-    onChange,
-    onBlur,
-    onFocus,
-    style,
-    id,
-    ...restProps
+    hasError = false,
+    className = '',
+    testId,
+    ...textAreaProps
   } = props;
-
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [currentLength, setCurrentLength] = useState<number>(0);
-  const [wordCount, setWordCount] = useState<number>(0);
-  const { t } = useLocalization();
 
   // Generate unique ID if not provided
   const textAreaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
   const helpTextId = `${textAreaId}-help`;
   const errorId = `${textAreaId}-error`;
-  const countId = `${textAreaId}-count`;
 
-  // Calculate character and word counts
+  // State for character count
+  const [currentLength, setCurrentLength] = useState<number>(0);
+  const [wordCount, setWordCount] = useState<number>(0);
+
+  // Update counts when value changes
   useEffect(() => {
-    const updateCounts = () => {
-      const currentValue = value || '';
-      setCurrentLength(currentValue.length);
-      setWordCount(
-        currentValue
-          .trim()
-          .split(/\s+/)
-          .filter(word => word.length > 0).length
-      );
-    };
-
-    updateCounts(); // Set initial counts
-    const textArea = textAreaRef.current;
-    if (textArea) {
-      textArea.addEventListener('input', updateCounts);
-      textArea.addEventListener('change', updateCounts);
-      return () => {
-        textArea.removeEventListener('input', updateCounts);
-        textArea.removeEventListener('change', updateCounts);
-      };
-    }
-
-    // Return empty cleanup function for cases where textArea is not available
-    return () => {};
+    const currentValue = value || '';
+    setCurrentLength(currentValue.length);
+    setWordCount(
+      currentValue
+        .trim()
+        .split(/\s+/)
+        .filter(word => word.length > 0).length
+    );
   }, [value]);
 
-  // Size variants
-  const getSizeStyles = () => {
-    const sizes: Record<string, any> = {
-      small: {
-        fontSize: 'var(--font-size-sm)',
-        padding: 'var(--spacing-2) var(--spacing-3)',
-        minHeight: 'var(--spacing-20)', // ~80px
-      },
-      medium: {
-        fontSize: 'var(--font-size-base)',
-        padding: 'var(--spacing-3) var(--spacing-4)',
-        minHeight: 'var(--spacing-24)', // ~96px
-      },
-      large: {
-        fontSize: 'var(--font-size-lg)',
-        padding: 'var(--spacing-4) var(--spacing-5)',
-        minHeight: 'var(--spacing-28)', // ~112px
-      },
-    };
-    return sizes[size];
-  };
+  // Build CSS classes using design tokens
+  const textAreaClasses = React.useMemo(() => {
+    const classes = ['textarea'];
 
-  // Status colors
-  const getStatusStyles = () => {
-    const statuses: Record<string, any> = {
-      default: {
-        borderColor: 'var(--color-border-default)',
-        focusBorderColor: 'var(--color-primary-500)',
-      },
-      error: {
-        borderColor: 'var(--color-danger-500)',
-        focusBorderColor: 'var(--color-danger-600)',
-      },
-      warning: {
-        borderColor: 'var(--color-warning-500)',
-        focusBorderColor: 'var(--color-warning-600)',
-      },
-      success: {
-        borderColor: 'var(--color-success-500)',
-        focusBorderColor: 'var(--color-success-600)',
-      },
-    };
-    return statuses[status];
-  };
+    // Variant classes
+    classes.push(`textarea--variant-${variant}`);
 
-  // NSM Classification styling
-  const getClassificationStyles = () => {
-    if (!norwegian?.classification) {
-      return {};
+    // Resize classes
+    classes.push(`textarea--resize-${resize}`);
+
+    // State classes
+    if (hasError || error) {
+      classes.push('textarea--error');
     }
 
-    const classificationColors: Record<string, string> = {
-      ÅPEN: 'var(--color-success-500)',
-      BEGRENSET: 'var(--color-warning-500)',
-      KONFIDENSIELT: 'var(--color-danger-500)',
-      HEMMELIG: 'var(--color-danger-700)',
-    };
+    if (disabled) {
+      classes.push('textarea--disabled');
+    }
 
-    return {
-      borderLeft: `4px solid ${classificationColors[norwegian.classification]}`,
-      paddingLeft: 'calc(var(--spacing-4) - 4px)',
-    };
+    if (readOnly) {
+      classes.push('textarea--readonly');
+    }
+
+    if (required) {
+      classes.push('textarea--required');
+    }
+
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+
+    return classes.join(' ');
+  }, [variant, resize, hasError, error, disabled, readOnly, required, className]);
+
+  // Handle textarea change
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = event.target.value;
+    onChange?.(newValue, event);
   };
 
-  const sizeStyles = getSizeStyles();
-  const statusStyles = getStatusStyles();
-  const classificationStyles = getClassificationStyles();
+  // Handle textarea blur
+  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    onBlur?.(event);
+  };
 
-  // Build aria-describedby
-  const ariaDescribedBy =
-    [
-      helpText || helpTextKey ? helpTextId : null,
-      errorMessage || errorMessageKey ? errorId : null,
-      norwegian?.characterCount || norwegian?.wordCount ? countId : null,
-      restProps['aria-describedby'],
-    ]
-      .filter(Boolean)
-      .join(' ') || undefined;
+  // Handle textarea focus
+  const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    onFocus?.(event);
+  };
+
+  const hasValidationErrors = hasError || error;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 'var(--spacing-2)',
-        width: '100%',
-        ...style,
-      }}
-    >
+    <div className="textarea-field" data-testid={testId}>
       {/* Label */}
-      {(label || labelKey) && (
-        <label
-          htmlFor={textAreaId}
-          style={{
-            fontSize: 'var(--font-size-sm)',
-            fontWeight: 'var(--font-weight-medium)',
-            color: disabled ? 'var(--color-text-disabled)' : 'var(--color-text-primary)',
-            lineHeight: 'var(--line-height-normal)',
-          }}
-        >
-          {labelKey ? t(labelKey) : label}
-          {required && (
-            <span
-              style={{
-                color: 'var(--color-danger-500)',
-                marginLeft: 'var(--spacing-1)',
-              }}
-              aria-label={t('form.required')}
-            >
-              *
-            </span>
-          )}
-          {/* NSM Classification indicator */}
-          {norwegian?.classification && (
-            <span
-              style={{
-                fontSize: 'var(--font-size-xs)',
-                fontWeight: 'var(--font-weight-normal)',
-                color: 'var(--color-text-secondary)',
-                marginLeft: 'var(--spacing-2)',
-                textTransform: 'uppercase',
-              }}
-            >
-              ({norwegian.classification})
-            </span>
-          )}
-        </label>
-      )}
+      {label && <Label label={label} required={required} htmlFor={textAreaId} />}
 
       {/* TextArea */}
       <textarea
@@ -268,93 +126,76 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
         name={name}
         value={value}
         defaultValue={defaultValue}
-        placeholder={placeholderKey ? t(placeholderKey) : placeholder}
-        rows={rows}
-        maxLength={maxLength}
-        minLength={minLength}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        placeholder={placeholder}
         required={required}
         disabled={disabled}
         readOnly={readOnly}
-        autoFocus={autoFocus}
-        aria-describedby={ariaDescribedBy}
-        aria-invalid={status === 'error'}
-        data-classification={norwegian?.classification}
-        data-municipality={norwegian?.municipality}
-        style={{
-          width: '100%',
-          resize,
-          border: '1px solid',
-          borderRadius: 'var(--border-radius-md)',
-          backgroundColor: disabled
-            ? 'var(--color-surface-disabled)'
-            : 'var(--color-surface-primary)',
-          color: disabled ? 'var(--color-text-disabled)' : 'var(--color-text-primary)',
-          fontFamily: 'var(--font-family-base)',
-          lineHeight: 'var(--line-height-relaxed)',
-          transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-          outline: 'none',
-          ...sizeStyles,
-          ...statusStyles,
-          ...classificationStyles,
-        }}
-        onChange={onChange}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        {...restProps}
+        rows={rows}
+        cols={cols}
+        maxLength={maxLength}
+        minLength={minLength}
+        className={textAreaClasses}
+        aria-invalid={hasValidationErrors}
+        aria-describedby={`${helpTextId} ${errorId}`}
+        aria-required={required}
+        data-variant={variant}
+        style={{ resize }}
+        {...textAreaProps}
       />
 
-      {/* Character/Word count */}
-      {(norwegian?.characterCount || norwegian?.wordCount) && (
-        <div
-          id={countId}
-          style={{
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-text-secondary)',
-            textAlign: 'right',
-          }}
-        >
-          {norwegian.characterCount && (
-            <span>
-              {t('form.characterCount', { count: currentLength, max: maxLength || 0 })}
-              {maxLength && ` / ${maxLength}`}
-            </span>
-          )}
-          {norwegian.characterCount && norwegian.wordCount && ' • '}
-          {norwegian.wordCount && <span>{t('form.wordCount', { count: wordCount })}</span>}
+      {/* Character count */}
+      {maxLength && (
+        <div className="textarea-field__character-count">
+          <span className="textarea-field__character-count-text">
+            {currentLength} / {maxLength}
+          </span>
         </div>
       )}
 
       {/* Help text */}
-      {(helpText || helpTextKey) && (
-        <div
-          id={helpTextId}
-          style={{
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-text-secondary)',
-            lineHeight: 'var(--line-height-normal)',
-          }}
-        >
-          {helpTextKey ? t(helpTextKey) : helpText}
+      {helpText && (
+        <div id={helpTextId} className="textarea-field__help">
+          <span className="textarea-field__help-icon" aria-hidden="true">
+            ℹ️
+          </span>
+          <span className="textarea-field__help-text">{helpText}</span>
         </div>
       )}
 
       {/* Error message */}
-      {(errorMessage || errorMessageKey) && (
-        <div
-          id={errorId}
-          role="alert"
-          style={{
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-danger-600)',
-            fontWeight: 'var(--font-weight-medium)',
-            lineHeight: 'var(--line-height-normal)',
-          }}
-        >
-          {errorMessageKey ? t(errorMessageKey) : errorMessage}
+      {error && (
+        <div id={errorId} className="textarea-field__error" role="alert">
+          <span className="textarea-field__error-icon" aria-hidden="true">
+            ❌
+          </span>
+          <span className="textarea-field__error-text">{error}</span>
         </div>
       )}
     </div>
   );
 });
+
+/**
+ * Label component
+ */
+const Label: React.FC<{
+  label: string;
+  required?: boolean;
+  htmlFor: string;
+}> = ({ label, required, htmlFor }) => {
+  return (
+    <label className="textarea-field__label" htmlFor={htmlFor}>
+      <span className="textarea-field__label-text">{label}</span>
+      {required && (
+        <span className="textarea-field__required-indicator" aria-label="Required">
+          *
+        </span>
+      )}
+    </label>
+  );
+};
 
 TextArea.displayName = 'TextArea';

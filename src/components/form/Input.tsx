@@ -4,20 +4,19 @@
  * @description Input component using design tokens (no inline styles)
  */
 
-import React, { forwardRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { InputProps } from '../../types/form.types';
 
 /**
  * Input component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+export const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
-    labelKey,
-    errorKey,
-    helpKey,
+    label,
+    error,
+    helpText,
     type = 'text',
     value,
     defaultValue,
@@ -38,19 +37,38 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     size = 'md',
     hasError = false,
     validation,
-    norwegian,
     className = '',
     testId,
     ...inputProps
   } = props;
 
-  const { t } = useLocalization();
-  const [internalValue, setInternalValue] = useState(value || defaultValue || '');
-  const [isValidating, setIsValidating] = useState(false);
-  const [validationError, setValidationError] = useState<string | null>(null);
-
   // Generate unique ID if not provided
-  const inputId = id || `input-${name || Math.random().toString(36).substr(2, 9)}`;
+  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const helpTextId = `${inputId}-help`;
+  const errorId = `${inputId}-error`;
+
+  // State for validation
+  const [isValidating, setIsValidating] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const debounceRef = useRef<NodeJS.Timeout>();
+
+  // Custom validation
+  useEffect(() => {
+    if (!validation?.custom || !value) return;
+
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      setIsValidating(true);
+      try {
+        const result = await Promise.resolve(validation.custom!(value));
+        setValidationErrors(result ? [result] : []);
+      } catch (err) {
+        setValidationErrors(['Validation error']);
+      } finally {
+        setIsValidating(false);
+      }
+    }, validation.debounceMs || 300);
+  }, [value, validation]);
 
   // Build CSS classes using design tokens
   const inputClasses = React.useMemo(() => {
@@ -63,7 +81,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     classes.push(`input--size-${size}`);
 
     // State classes
-    if (hasError || validationError) {
+    if (hasError || error || validationErrors.length > 0) {
       classes.push('input--error');
     }
 
@@ -83,24 +101,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       classes.push('input--validating');
     }
 
-    // Type classes
-    classes.push(`input--type-${type}`);
-
-    // Norwegian compliance classes
-    if (norwegian?.accessibility) {
-      classes.push(
-        `input--accessibility-${norwegian.accessibility.replace('_', '-').toLowerCase()}`
-      );
-    }
-
-    if (norwegian?.format) {
-      classes.push(`input--format-${norwegian.format}`);
-    }
-
-    if (norwegian?.validation) {
-      classes.push(`input--validation-${norwegian.validation}`);
-    }
-
     // Custom classes
     if (className) {
       classes.push(className);
@@ -111,78 +111,50 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     variant,
     size,
     hasError,
-    validationError,
+    error,
+    validationErrors,
     disabled,
     readOnly,
     required,
     isValidating,
-    type,
-    norwegian,
     className,
   ]);
 
   // Handle input change
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const newValue = event.target.value;
-      setInternalValue(newValue);
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    onChange?.(newValue, event);
+  };
 
-      // Custom validation
-      if (validation?.custom) {
-        setIsValidating(true);
+  // Handle input blur
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    onBlur?.(event);
+  };
 
-        setTimeout(async () => {
-          try {
-            const error = await validation.custom!(newValue);
-            setValidationError(error);
-          } catch (err) {
-            setValidationError(t('input.validationError'));
-          } finally {
-            setIsValidating(false);
-          }
-        }, validation.debounceMs || 300);
-      }
+  // Handle input focus
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    onFocus?.(event);
+  };
 
-      onChange?.(newValue, event);
-    },
-    [onChange, validation, t]
-  );
-
-  // Handle blur event
-  const handleBlur = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      onBlur?.(event);
-    },
-    [onBlur]
-  );
-
-  // Handle focus event
-  const handleFocus = useCallback(
-    (event: React.FocusEvent<HTMLInputElement>) => {
-      onFocus?.(event);
-    },
-    [onFocus]
-  );
-
-  const currentValue = value !== undefined ? value : internalValue;
-  const currentError = hasError || !!validationError;
+  const hasValidationErrors = hasError || error || validationErrors.length > 0;
 
   return (
     <div className="input-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
+      {label && <Label label={label} required={required} htmlFor={inputId} />}
 
-      {/* Input element */}
+      {/* Input */}
       <input
         ref={ref}
         id={inputId}
         name={name}
         type={type}
-        value={currentValue}
+        value={value}
+        defaultValue={defaultValue}
         onChange={handleChange}
         onBlur={handleBlur}
         onFocus={handleFocus}
-        placeholder={placeholder ? t(placeholder) : undefined}
+        placeholder={placeholder}
         required={required}
         disabled={disabled}
         readOnly={readOnly}
@@ -191,31 +163,41 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         pattern={pattern}
         autoComplete={autoComplete}
         className={inputClasses}
-        aria-invalid={currentError}
-        aria-describedby={`${inputId}-help ${inputId}-error`}
+        aria-invalid={hasValidationErrors}
+        aria-describedby={`${helpTextId} ${errorId}`}
         aria-required={required}
         data-variant={variant}
         data-size={size}
         {...inputProps}
       />
 
-      {/* Validation indicator */}
-      {isValidating && (
-        <div className="input__validation-indicator" aria-hidden="true">
-          ⏳
+      {/* Help text */}
+      {helpText && (
+        <div id={helpTextId} className="input-field__help">
+          <span className="input-field__help-icon" aria-hidden="true">
+            ℹ️
+          </span>
+          <span className="input-field__help-text">{helpText}</span>
         </div>
       )}
 
-      {/* Help text */}
-      {helpKey && <HelpText helpKey={helpKey} inputId={inputId} />}
+      {/* Error messages */}
+      <div id={errorId}>
+        {error && <ErrorMessage error={error} />}
+        {validationErrors.map((err, index) => (
+          <ErrorMessage key={index} error={err} />
+        ))}
+      </div>
 
-      {/* Error message */}
-      <ErrorMessage
-        errorKey={errorKey}
-        validationError={validationError}
-        hasError={currentError}
-        inputId={inputId}
-      />
+      {/* Validation indicator */}
+      {isValidating && (
+        <div className="input-field__validation-indicator">
+          <span className="input-field__validation-icon" aria-hidden="true">
+            ⏳
+          </span>
+          <span className="input-field__validation-text sr-only">Validating...</span>
+        </div>
+      )}
     </div>
   );
 });
@@ -224,17 +206,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
  * Label component
  */
 const Label: React.FC<{
-  labelKey: string;
+  label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ labelKey, required, htmlFor }) => {
-  const { t } = useLocalization();
-
+}> = ({ label, required, htmlFor }) => {
   return (
-    <label className="input__label" htmlFor={htmlFor}>
-      <span className="input__label-text">{t(labelKey)}</span>
+    <label className="input-field__label" htmlFor={htmlFor}>
+      <span className="input-field__label-text">{label}</span>
       {required && (
-        <span className="input__required-indicator" aria-label={t('input.required')}>
+        <span className="input-field__required-indicator" aria-label="Required">
           *
         </span>
       )}
@@ -245,45 +225,13 @@ const Label: React.FC<{
 /**
  * Error message component
  */
-const ErrorMessage: React.FC<{
-  errorKey?: string;
-  validationError?: string | null;
-  hasError: boolean;
-  inputId: string;
-}> = ({ errorKey, validationError, hasError, inputId }) => {
-  const { t } = useLocalization();
-
-  if (!hasError && !validationError) {
-    return null;
-  }
-
-  const errorMessage = validationError || (errorKey ? t(errorKey) : t('input.error.generic'));
-
+const ErrorMessage: React.FC<{ error: string }> = ({ error }) => {
   return (
-    <div id={`${inputId}-error`} className="input__error-message" role="alert" aria-live="polite">
-      <span className="input__error-icon" aria-hidden="true">
-        ⚠️
+    <div className="input-field__error" role="alert">
+      <span className="input-field__error-icon" aria-hidden="true">
+        ❌
       </span>
-      <span className="input__error-text">{errorMessage}</span>
-    </div>
-  );
-};
-
-/**
- * Help text component
- */
-const HelpText: React.FC<{
-  helpKey: string;
-  inputId: string;
-}> = ({ helpKey, inputId }) => {
-  const { t } = useLocalization();
-
-  return (
-    <div id={`${inputId}-help`} className="input__help-text">
-      <span className="input__help-icon" aria-hidden="true">
-        ℹ️
-      </span>
-      <span className="input__help-content">{t(helpKey)}</span>
+      <span className="input-field__error-text">{error}</span>
     </div>
   );
 };

@@ -9,18 +9,19 @@ import type { ComponentProps } from '../lib/types/core.types';
 export interface ActionFeedbackComponentProps extends ComponentProps {
   disabled?: boolean;
   loading?: boolean;
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    municipality?: string;
+  accessibility?: {
+    level?: 'WCAG_2_1_AA' | 'WCAG_2_1_AAA' | 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
+    announceChanges?: boolean;
+    highContrast?: boolean;
+    reduceMotion?: boolean;
     confirmationRequired?: boolean;
     auditLog?: boolean;
   };
 }
 
-// Button component props with Norwegian features
+// Button component props
 export interface ButtonProps extends ActionFeedbackComponentProps {
-  labelKey?: string; // Localization key for button text
+  label?: string; // Button text
   children?: any;
   variant?:
     | 'primary'
@@ -38,10 +39,10 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
   iconPosition?: 'left' | 'right';
   loadingText?: string;
   type?: 'button' | 'submit' | 'reset';
-  norwegian?: ActionFeedbackComponentProps['norwegian'] & {
+  features?: {
     actionType?: 'safe' | 'destructive' | 'neutral';
     requiresConfirmation?: boolean;
-    confirmationMessageKey?: string;
+    confirmationMessage?: string;
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
   onClick?: (event: any) => void;
@@ -52,8 +53,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
 // Modal component props
 export interface ModalProps extends ActionFeedbackComponentProps {
   isOpen: boolean;
-  titleKey?: string; // Localization key for modal title
-  title?: string;
+  title?: string; // Modal title text
   children: any;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   centered?: boolean;
@@ -61,15 +61,11 @@ export interface ModalProps extends ActionFeedbackComponentProps {
   closeOnEscape?: boolean;
   closeOnOverlay?: boolean;
   showOverlay?: boolean;
-  persistent?: boolean;
-  scrollable?: boolean;
-  norwegian?: ActionFeedbackComponentProps['norwegian'] & {
-    category?: 'form' | 'confirmation' | 'information' | 'warning' | 'error';
-    closeConfirmationRequired?: boolean;
-    closeConfirmationMessageKey?: string;
-    focusTrap?: boolean;
-    announceOnOpen?: boolean;
-    announceMessageKey?: string;
+  features?: {
+    scrollable?: boolean;
+    autoFocus?: boolean;
+    trapFocus?: boolean;
+    lockScroll?: boolean;
   };
   onOpen?: () => void;
   onClose?: () => void;
@@ -80,8 +76,7 @@ export interface ModalProps extends ActionFeedbackComponentProps {
 // Drawer component props
 export interface DrawerProps extends ActionFeedbackComponentProps {
   isOpen: boolean;
-  titleKey?: string; // Localization key for drawer title
-  title?: string;
+  title?: string; // Drawer title text
   children: any;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -89,14 +84,12 @@ export interface DrawerProps extends ActionFeedbackComponentProps {
   closeOnEscape?: boolean;
   closeOnOverlay?: boolean;
   showOverlay?: boolean;
-  persistent?: boolean;
-  push?: boolean; // Push content instead of overlay
-  norwegian?: ActionFeedbackComponentProps['norwegian'] & {
-    navigationRole?: 'primary' | 'secondary' | 'contextual';
-    mobileOptimized?: boolean;
-    swipeToClose?: boolean;
-    announceOnOpen?: boolean;
-    announceMessageKey?: string;
+  features?: {
+    resizable?: boolean;
+    collapsible?: boolean;
+    autoFocus?: boolean;
+    trapFocus?: boolean;
+    lockScroll?: boolean;
   };
   onOpen?: () => void;
   onClose?: () => void;
@@ -106,8 +99,7 @@ export interface DrawerProps extends ActionFeedbackComponentProps {
 
 // Toast component props
 export interface ToastProps extends ActionFeedbackComponentProps {
-  messageKey?: string; // Localization key for toast message
-  message?: string;
+  message?: string; // Toast message text
   variant?: 'info' | 'success' | 'warning' | 'error';
   duration?: number; // Auto-dismiss duration in milliseconds
   position?:
@@ -117,16 +109,14 @@ export interface ToastProps extends ActionFeedbackComponentProps {
     | 'bottom-left'
     | 'bottom-center'
     | 'bottom-right';
-  persistent?: boolean; // Don't auto-dismiss
   closable?: boolean;
-  icon?: any;
+  persistent?: boolean;
   action?: ToastAction;
-  norwegian?: ActionFeedbackComponentProps['norwegian'] & {
+  features?: {
+    showProgress?: boolean;
+    pauseOnHover?: boolean;
+    stackable?: boolean;
     priority?: 'low' | 'medium' | 'high' | 'critical';
-    announceToScreenReader?: boolean;
-    category?: 'system' | 'user' | 'process' | 'security' | 'validation';
-    retryAction?: boolean;
-    undoAction?: boolean;
   };
   onClose?: () => void;
   onAction?: () => void;
@@ -134,56 +124,52 @@ export interface ToastProps extends ActionFeedbackComponentProps {
 
 // Toast action configuration
 export interface ToastAction {
-  labelKey: string; // Localization key for action button
+  label: string; // Action button text
   handler: () => void;
   variant?: 'default' | 'primary' | 'secondary';
 }
 
 // Alert component props
 export interface AlertProps extends ActionFeedbackComponentProps {
-  titleKey?: string; // Localization key for alert title
-  messageKey?: string; // Localization key for alert message
-  title?: string;
-  message?: string;
+  title?: string; // Alert title text
+  message?: string; // Alert message text
   children?: any;
   variant?: 'info' | 'success' | 'warning' | 'error';
   severity?: 'low' | 'medium' | 'high' | 'critical';
   closable?: boolean;
-  icon?: any;
   actions?: AlertAction[];
-  norwegian?: ActionFeedbackComponentProps['norwegian'] & {
-    category?: 'system' | 'validation' | 'security' | 'process' | 'user';
+  features?: {
+    showIcon?: boolean;
+    showTimestamp?: boolean;
+    collapsible?: boolean;
+    persistent?: boolean;
     requiresAcknowledgment?: boolean;
-    acknowledgmentMessageKey?: string;
-    escalationLevel?: 'info' | 'warning' | 'critical' | 'emergency';
-    relatedDocumentationKey?: string;
   };
   onClose?: () => void;
-  onAcknowledge?: () => void;
+  onAction?: (action: AlertAction) => void;
 }
 
 // Alert action configuration
 export interface AlertAction {
-  labelKey: string; // Localization key for action button
+  label: string; // Action button text
   handler: () => void;
   variant?: 'primary' | 'secondary' | 'danger';
-  norwegian?: {
+  features?: {
     actionType?: 'safe' | 'destructive' | 'neutral';
     requiresConfirmation?: boolean;
   };
 }
 
 // Confirmation modal props (specialized modal)
-export interface ConfirmationModalProps extends Omit<ModalProps, 'children'> {
-  messageKey?: string; // Localization key for confirmation message
-  message?: string;
+export interface ConfirmationModalProps extends Omit<ModalProps, 'children' | 'features'> {
+  message?: string; // Confirmation message text
   confirmButtonProps?: Partial<ButtonProps>;
   cancelButtonProps?: Partial<ButtonProps>;
   variant?: 'default' | 'danger' | 'warning';
-  norwegian?: ModalProps['norwegian'] & {
+  features?: ModalProps['features'] & {
     actionDescription?: string;
-    consequenceWarningKey?: string;
-    requiresTypedConfirmation?: boolean;
+    consequenceWarning?: string;
+    typedConfirmation?: boolean;
     confirmationText?: string;
   };
   onConfirm: () => void;
@@ -193,57 +179,63 @@ export interface ConfirmationModalProps extends Omit<ModalProps, 'children'> {
 // Loading overlay props
 export interface LoadingOverlayProps extends ComponentProps {
   visible: boolean;
-  messageKey?: string; // Localization key for loading message
-  message?: string;
+  message?: string; // Loading message text
   progress?: number; // Progress percentage (0-100)
   size?: 'sm' | 'md' | 'lg';
   blur?: boolean; // Blur background content
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
+  features?: {
     announceProgress?: boolean;
-    progressMessageKey?: string;
+    progressMessage?: string;
     category?: 'data' | 'form' | 'navigation' | 'system';
+    showSpinner?: boolean;
+    showProgress?: boolean;
   };
 }
 
-// Status indicator props for Norwegian compliance
+// Status indicator props
 export interface StatusBannerProps extends ComponentProps {
   status: 'online' | 'offline' | 'maintenance' | 'degraded' | 'operational';
-  messageKey?: string; // Localization key for status message
-  message?: string;
+  message?: string; // Status message text
   variant?: 'info' | 'success' | 'warning' | 'error';
   dismissible?: boolean;
   showIcon?: boolean;
-  norwegian?: {
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  features?: {
     serviceLevel?: 'critical' | 'important' | 'standard' | 'low';
-    municipality?: string;
-    estimatedResolutionKey?: string;
-    contactInformationKey?: string;
+    estimatedResolution?: string;
+    contactInformation?: string;
+    showStatusHistory?: boolean;
   };
   onDismiss?: () => void;
 }
 
-// Norwegian feedback types
-export interface NorwegianFeedbackConfig {
-  enableAuditLogging: boolean;
-  requireConfirmationFor: ('destructive' | 'sensitive' | 'financial')[];
-  classificationLevels: ('ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG')[];
-  accessibilityLevel: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-  municipality?: string;
-  defaultLanguage: 'nb-NO' | 'nn-NO' | 'en-NO';
+// Notification component props
+export interface NotificationProps extends ActionFeedbackComponentProps {
+  title?: string;
+  message?: string;
+  variant?: 'info' | 'success' | 'warning' | 'error';
+  duration?: number;
+  position?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+  closable?: boolean;
+  actions?: NotificationAction[];
+  features?: {
+    showTimestamp?: boolean;
+    showAvatar?: boolean;
+    showProgress?: boolean;
+    persistent?: boolean;
+    groupable?: boolean;
+    priority?: 'low' | 'medium' | 'high' | 'critical';
+  };
+  onClose?: () => void;
+  onAction?: (action: NotificationAction) => void;
 }
 
-// Button group component for related actions
-export interface ButtonGroupProps extends ComponentProps {
-  children: any;
-  orientation?: 'horizontal' | 'vertical';
-  spacing?: 'none' | 'sm' | 'md' | 'lg';
-  connected?: boolean; // Visually connected buttons
-  size?: 'sm' | 'md' | 'lg';
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+// Notification action configuration
+export interface NotificationAction {
+  id: string;
+  label: string;
+  handler: () => void;
+  variant?: 'default' | 'primary' | 'secondary';
+  features?: {
     actionGroup?: 'primary' | 'secondary' | 'destructive';
     requiresConfirmation?: boolean;
   };
@@ -253,55 +245,15 @@ export interface ButtonGroupProps extends ComponentProps {
 export interface ProgressIndicatorProps extends ComponentProps {
   value?: number; // Progress value (0-100)
   indeterminate?: boolean; // Indeterminate progress
-  labelKey?: string; // Localization key for progress label
+  label?: string; // Progress label text
   size?: 'sm' | 'md' | 'lg';
   variant?: 'linear' | 'circular';
   showPercentage?: boolean;
-  norwegian?: {
-    accessibility?: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
+  features?: {
     announceProgress?: boolean;
     progressFormat?: 'percentage' | 'fraction' | 'time';
     category?: 'upload' | 'download' | 'processing' | 'validation';
+    showTimeRemaining?: boolean;
+    showSpeed?: boolean;
   };
 }
-
-// Feedback sound configuration for Norwegian accessibility
-export interface NorwegianSoundConfig {
-  enabled: boolean;
-  volume: number; // 0-1
-  sounds: {
-    success: string;
-    error: string;
-    warning: string;
-    info: string;
-    button: string;
-    notification: string;
-  };
-  respectSystemSettings: boolean;
-}
-
-// Norwegian action context for audit logging
-export interface NorwegianActionContext {
-  userId?: string;
-  sessionId?: string;
-  municipality?: string;
-  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  timestamp: Date;
-  actionType: string;
-  actionDetails?: Record<string, any>;
-  userAgent?: string;
-  ipAddress?: string;
-}
-
-// Export type for all action feedback types
-export type ActionFeedbackTypes =
-  | ButtonProps
-  | ModalProps
-  | DrawerProps
-  | ToastProps
-  | AlertProps
-  | ConfirmationModalProps
-  | LoadingOverlayProps
-  | StatusBannerProps
-  | ButtonGroupProps
-  | ProgressIndicatorProps;

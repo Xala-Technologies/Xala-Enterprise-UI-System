@@ -4,9 +4,8 @@
  * @description Specialized input for Norwegian personal numbers using design tokens (no inline styles)
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { PersonalNumberInputProps } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
@@ -29,9 +28,9 @@ const formatPersonalNumber = (value: string) => {
  * Follows enterprise standards - no inline styles, design token props only
  */
 export function PersonalNumberInput({
-  labelKey,
-  errorKey,
-  helpKey,
+  label,
+  error,
+  helpText,
   value,
   defaultValue,
   onChange,
@@ -52,8 +51,6 @@ export function PersonalNumberInput({
   testId,
   ...inputProps
 }: PersonalNumberInputProps): JSX.Element {
-  const { t } = useLocalization();
-
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState<{
@@ -174,7 +171,7 @@ export function PersonalNumberInput({
       } catch (error) {
         const errorResult = {
           isValid: false,
-          errors: [t('personalNumber.validationError')],
+          errors: ['Invalid personal number'],
           type: 'fødselsnummer' as const,
           birthDate: new Date(),
           gender: 'male' as const,
@@ -192,7 +189,7 @@ export function PersonalNumberInput({
         clearTimeout(debounceRef.current);
       }
     };
-  }, [value, internalValue, validation, norwegian, onValidationChange, t]);
+  }, [value, internalValue, validation, norwegian, onValidationChange]);
 
   // Handle input change
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,7 +223,7 @@ export function PersonalNumberInput({
   return (
     <div className="personal-number-field" data-testid={testId}>
       {/* Label */}
-      {labelKey && <Label labelKey={labelKey} required={required} htmlFor={inputId} />}
+      {label && <Label label={label} required={required} htmlFor={inputId} />}
 
       {/* Input with validation indicator */}
       <div className="personal-number-field__input-wrapper">
@@ -238,7 +235,7 @@ export function PersonalNumberInput({
           onChange={handleChange}
           onBlur={handleBlur}
           onFocus={handleFocus}
-          placeholder={placeholder ? t(placeholder) : t('personalNumber.placeholder')}
+          placeholder={placeholder ? placeholder : 'Enter personal number'}
           required={required}
           disabled={disabled}
           readOnly={readOnly}
@@ -260,12 +257,12 @@ export function PersonalNumberInput({
       </div>
 
       {/* Help text */}
-      {helpKey && (
+      {helpText && (
         <div id={`${inputId}-help`} className="personal-number-field__help">
           <span className="personal-number-field__help-icon" aria-hidden="true">
             ℹ️
           </span>
-          <span className="personal-number-field__help-text">{t(helpKey)}</span>
+          <span className="personal-number-field__help-text">{helpText}</span>
         </div>
       )}
 
@@ -285,15 +282,13 @@ const ValidationIndicator: React.FC<{
   isValidating: boolean;
   type?: string;
 }> = ({ isValid, isValidating, type }) => {
-  const { t } = useLocalization();
-
   if (isValidating) {
     return (
       <div className="validation-indicator validation-indicator--validating">
         <span className="validation-indicator__icon" aria-hidden="true">
           ⏳
         </span>
-        <span className="validation-indicator__text sr-only">{t('validation.checking')}</span>
+        <span className="validation-indicator__text sr-only">Checking...</span>
       </div>
     );
   }
@@ -304,7 +299,7 @@ const ValidationIndicator: React.FC<{
         <span className="validation-indicator__icon" aria-hidden="true">
           ✅
         </span>
-        <span className="validation-indicator__text sr-only">{t('validation.valid')}</span>
+        <span className="validation-indicator__text sr-only">Valid</span>
       </div>
     );
   }
@@ -316,20 +311,15 @@ const ValidationIndicator: React.FC<{
  * Label component
  */
 const Label: React.FC<{
-  labelKey: string;
+  label: string;
   required?: boolean;
   htmlFor: string;
-}> = ({ labelKey, required, htmlFor }) => {
-  const { t } = useLocalization();
-
+}> = ({ label, required, htmlFor }) => {
   return (
     <label className="personal-number-field__label" htmlFor={htmlFor}>
-      <span className="personal-number-field__label-text">{t(labelKey)}</span>
+      <span className="personal-number-field__label-text">{label}</span>
       {required && (
-        <span
-          className="personal-number-field__required-indicator"
-          aria-label={t('field.required')}
-        >
+        <span className="personal-number-field__required-indicator" aria-label="Required">
           *
         </span>
       )}
@@ -341,8 +331,6 @@ const Label: React.FC<{
  * Error message component
  */
 const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
-  const { t } = useLocalization();
-
   if (errors.length === 0) {
     return null;
   }
@@ -354,9 +342,7 @@ const ErrorMessage: React.FC<{ errors: string[] }> = ({ errors }) => {
           <span className="personal-number-field__error-icon" aria-hidden="true">
             ⚠️
           </span>
-          <span className="personal-number-field__error-text">
-            {t(`personalNumber.error.${error}`) || error}
-          </span>
+          <span className="personal-number-field__error-text">{error}</span>
         </div>
       ))}
     </div>
