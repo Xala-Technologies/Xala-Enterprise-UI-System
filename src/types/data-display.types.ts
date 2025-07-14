@@ -183,6 +183,12 @@ export interface TooltipProps extends DataDisplayComponentProps {
   delay?: number;
   disabled?: boolean;
   arrow?: boolean;
+  norwegian?: {
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+    helpCategory?: 'general' | 'form' | 'navigation' | 'data' | 'system';
+    municipalityBranding?: boolean;
+    municipality?: string;
+  };
 }
 
 // Status indicator component props

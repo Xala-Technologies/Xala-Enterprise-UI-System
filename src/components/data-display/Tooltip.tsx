@@ -189,7 +189,7 @@ const TooltipContent = ({
   norwegian,
 }: {
   contentKey?: string;
-  content?: unknown;
+  content?: string;
   norwegian?: TooltipProps['norwegian'];
 }): React.ReactElement => {
   return (

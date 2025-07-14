@@ -101,9 +101,19 @@ export interface DesktopSidebarProps extends PlatformComponentProps {
   maxWidth?: number;
   collapsible?: boolean;
   collapsed?: boolean;
+  isCollapsed?: boolean;
   position?: 'left' | 'right';
+  persistent?: boolean;
+  overlay?: boolean;
   onToggle?: () => void;
   onClose?: () => void;
+  norwegian?: {
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+    municipalityBranding?: boolean;
+    municipality?: string;
+    keyboardShortcuts?: boolean;
+    accessibilityLevel?: 'AA' | 'AAA';
+  };
 }
 
 // Top Navigation component props

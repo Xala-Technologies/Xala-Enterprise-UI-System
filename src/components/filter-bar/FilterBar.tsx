@@ -125,7 +125,7 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
       onSearchChange?.(e.target.value);
     };
 
-    const handleFilterChange = (filterId: string, value: unknown): void => {
+    const handleFilterChange = (filterId: string, value: string): void => {
       onFilterChange?.(filterId, value);
     };
 

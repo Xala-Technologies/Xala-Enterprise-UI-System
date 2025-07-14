@@ -1,20 +1,23 @@
 // DesktopSidebar component for @xala-mock/ui-system
 // Norwegian-compliant desktop sidebar with resizing and government features
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { DesktopSidebarProps } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
-const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSProperties => { const { isCollapsed = false,
+const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSProperties => {
+  const {
+    isCollapsed = false,
     width = 280,
     position = 'left',
     persistent = true,
     overlay = false,
-    norwegian, } = props;
+  } = props;
 
   // Base styles using design tokens
-  const baseStyles: React.CSSProperties = { display: 'flex',
+  const baseStyles: React.CSSProperties = {
+    display: 'flex',
     flexDirection: 'column',
     height: '100vh',
     backgroundColor: 'var(--background-secondary)',
@@ -28,128 +31,98 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
     zIndex: persistent ? 'auto' : 'var(--z-index-sidebar)',
     boxShadow: persistent ? 'none' : 'var(--shadow-xl)',
     transition: 'all var(--transition-duration-normal) ease',
-    overflow: 'hidden', };
+    width: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
+    minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
+    maxWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
+  };
 
-  // Width and collapsed styles
-  const widthStyles = getWidthStyles(width, isCollapsed);
-
-  // Overlay styles
-  const overlayStyles = getOverlayStyles(overlay, persistent);
-
-  // Classification styling
-  const classificationStyles = getClassificationStyles(norwegian?.classification);
-
-  return { ...baseStyles,
-    ...widthStyles,
-    ...overlayStyles,
-    ...classificationStyles, }; };
-
-// Get width-based styles
-const getWidthStyles = (width: number, isCollapsed: boolean): React.CSSProperties => { return { width: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`,
-    minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : `${width}px`, }; };
-
-// Get overlay styles
-const getOverlayStyles = (overlay: boolean, persistent: boolean): React.CSSProperties => { if (!overlay || persistent) { return {}; }
-
-  return { backgroundColor: 'var(--color-black-alpha-50)',
-    backdropFilter: 'blur(var(--blur-sm))', }; };
-
-// Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => { if (!classification) { return {}; }
-
-  const classificationStyles: Record<string, React.CSSProperties> = { ÅPEN: { borderLeft: 'var(--border-accent-width) solid var(--color-green-500)', },
-    BEGRENSET: { borderLeft: 'var(--border-accent-width) solid var(--color-orange-500)', },
-    KONFIDENSIELT: { borderLeft: 'var(--border-accent-width) solid var(--color-red-500)',
-      backgroundColor: 'var(--color-red-25)', },
-    HEMMELIG: { borderLeft: 'var(--border-accent-width) solid var(--color-red-800)',
-      backgroundColor: 'var(--color-red-50)',
-      boxShadow: '0 0 0 var(--border-width) var(--color-red-200), var(--shadow-xl)', }, };
-
-  return classificationStyles[classification] || {}; };
+  return baseStyles;
+};
 
 // Sidebar header component
-const SidebarHeader = ({ isCollapsed,
-  showToggle,
-  norwegian,
-  onToggle, }: { isCollapsed: boolean;
-  showToggle: boolean;
-  norwegian?: unknown;
-  onToggle?: () => void; }): React.ReactElement => { return (
+const SidebarHeader = ({
+  title,
+  isCollapsed,
+  onToggle,
+  collapsible = true,
+}: {
+  title?: string;
+  isCollapsed: boolean;
+  onToggle?: () => void;
+  collapsible?: boolean;
+}): React.ReactElement => {
+  return (
     <div
-      style={{ display: 'flex',
+      style={{
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 'var(--spacing-4)',
         borderBottom: 'var(--border-width) solid var(--border-secondary)',
-        minHeight: 'var(--sidebar-header-height)', }}
+        backgroundColor: 'var(--background-primary)',
+      }}
     >
-      {/* Logo and branding */}
-      {!isCollapsed && (
-        <div
-          style={{ display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--spacing-3)', }}
+      {!isCollapsed && title && (
+        <h2
+          style={{
+            margin: 0,
+            fontSize: 'var(--font-size-lg)',
+            fontWeight: 'var(--font-weight-semibold)',
+            color: 'var(--text-primary)',
+          }}
         >
-          {norwegian?.municipalityBranding && (
-            <div
-              style={{ display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-2)', }}
-            >
-              <span style={{ fontSize: 'var(--font-size-xl)' }}>🏛️</span>
-              <div>
-                <div
-                  style={{ fontSize: 'var(--font-size-sm)',
-                    fontWeight: 'var(--font-weight-semibold)',
-                    color: 'var(--text-primary)', }}
-                >
-                  {norwegian.municipality || 'Kommune'}
-                </div>
-                <div
-                  style={{ fontSize: 'var(--font-size-xs)',
-                    color: 'var(--text-secondary)', }}
-                >
-                  Digitale tjenester
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
+          {title}
+        </h2>
       )}
 
-      {/* Toggle button */}
-      {showToggle && (
+      {collapsible && (
         <button
-          style={{ width: 'var(--spacing-8)',
-            height: 'var(--spacing-8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            border: 'none',
-            borderRadius: 'var(--border-radius-base)',
-            backgroundColor: 'transparent',
-            color: 'var(--text-secondary)',
-            cursor: 'pointer',
-            fontSize: 'var(--font-size-lg)',
-            transition: 'all var(--transition-duration-fast) ease', }}
           onClick={onToggle}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: 'var(--spacing-2)',
+            borderRadius: 'var(--border-radius-base)',
+            color: 'var(--text-secondary)',
+            fontSize: 'var(--font-size-sm)',
+            transition: 'all var(--transition-duration-fast) ease',
+          }}
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          title={isCollapsed ? 'Utvid sidepanel' : 'Skjul sidepanel'}
-          onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-100)';
-            (e.target as HTMLElement).style.color = 'var(--text-primary)'; }}
-          onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'transparent';
-            (e.target as HTMLElement).style.color = 'var(--text-secondary)'; }}
         >
           {isCollapsed ? '→' : '←'}
         </button>
       )}
     </div>
-  ); };
+  );
+};
 
 // Classification banner component
-const ClassificationBanner = ({ level }: { level: string }): React.ReactElement => { return (
+const ClassificationBanner = ({ level }: { level: string }): React.ReactElement => {
+  const classInfo = {
+    bg:
+      level === 'HEMMELIG'
+        ? 'var(--color-red-600)'
+        : level === 'KONFIDENSIELT'
+          ? 'var(--color-orange-600)'
+          : level === 'BEGRENSET'
+            ? 'var(--color-yellow-600)'
+            : 'var(--color-green-600)',
+    text: level === 'ÅPEN' ? 'var(--color-green-900)' : 'var(--color-white)',
+    icon:
+      level === 'HEMMELIG'
+        ? '🔒'
+        : level === 'KONFIDENSIELT'
+          ? '⚠️'
+          : level === 'BEGRENSET'
+            ? '⚡'
+            : '🔓',
+  };
+
+  return (
     <div
-      style={{ padding: 'var(--spacing-2) var(--spacing-4)',
+      style={{
+        padding: 'var(--spacing-2) var(--spacing-4)',
         backgroundColor: classInfo.bg,
         color: classInfo.text,
         borderBottom: 'var(--border-width) solid var(--border-secondary)',
@@ -157,46 +130,61 @@ const ClassificationBanner = ({ level }: { level: string }): React.ReactElement 
         alignItems: 'center',
         gap: 'var(--spacing-2)',
         fontSize: 'var(--font-size-xs)',
-        fontWeight: 'var(--font-weight-semibold)', }}
+        fontWeight: 'var(--font-weight-semibold)',
+      }}
       role="banner"
       aria-label={`Classification level: ${level}`}
     >
       <span>{classInfo.icon}</span>
       <span>KLASSIFISERING: {level}</span>
     </div>
-  ); };
+  );
+};
 
 // Quick access section component
-const QuickAccessSection = ({ quickAccess,
-  isCollapsed, }: { quickAccess: unknown;
-  isCollapsed: boolean; }): React.ReactElement => { return (
-    <div
-      style={{ padding: 'var(--spacing-3) var(--spacing-4)',
-        borderBottom: 'var(--border-width) solid var(--border-secondary)', }}
-    >
+const QuickAccessSection = ({
+  isCollapsed,
+  norwegian,
+}: {
+  isCollapsed: boolean;
+  norwegian?: DesktopSidebarProps['norwegian'];
+}): React.ReactElement => {
+  const accessItems = [
+    { key: 'search', label: 'Søk', icon: '🔍' },
+    { key: 'help', label: 'Hjelp', icon: '❓' },
+    { key: 'settings', label: 'Innstillinger', icon: '⚙️' },
+  ];
+
+  return (
+    <div style={{ padding: 'var(--spacing-4)' }}>
       {!isCollapsed && (
         <h3
-          style={{ fontSize: 'var(--font-size-xs)',
+          style={{
+            fontSize: 'var(--font-size-xs)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--text-secondary)',
             textTransform: 'uppercase',
             letterSpacing: 'var(--letter-spacing-wide)',
-            margin: '0 0 var(--spacing-2) 0', }}
+            margin: '0 0 var(--spacing-2) 0',
+          }}
         >
           Hurtigtilgang
         </h3>
       )}
 
       <div
-        style={{ display: 'flex',
+        style={{
+          display: 'flex',
           flexDirection: isCollapsed ? 'column' : 'row',
           gap: 'var(--spacing-2)',
-          flexWrap: 'wrap', }}
+          flexWrap: 'wrap',
+        }}
       >
         {accessItems.map(item => (
           <button
             key={item.key}
-            style={{ display: 'flex',
+            style={{
+              display: 'flex',
               alignItems: 'center',
               gap: 'var(--spacing-2)',
               padding: 'var(--spacing-2)',
@@ -208,14 +196,8 @@ const QuickAccessSection = ({ quickAccess,
               fontSize: 'var(--font-size-xs)',
               fontWeight: 'var(--font-weight-medium)',
               transition: 'all var(--transition-duration-fast) ease',
-              flex: isCollapsed ? 'none' : '1',
-              justifyContent: isCollapsed ? 'center' : 'flex-start', }}
+            }}
             aria-label={item.label}
-            title={item.label}
-            onMouseEnter={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-primary-50)';
-              (e.target as HTMLElement).style.borderColor = 'var(--color-primary-300)'; }}
-            onMouseLeave={e => { (e.target as HTMLElement).style.backgroundColor = 'var(--color-gray-50)';
-              (e.target as HTMLElement).style.borderColor = 'var(--border-secondary)'; }}
           >
             <span>{item.icon}</span>
             {!isCollapsed && <span>{item.label}</span>}
@@ -223,127 +205,266 @@ const QuickAccessSection = ({ quickAccess,
         ))}
       </div>
     </div>
-  ); };
+  );
+};
 
-// Sidebar content area
-const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): React.ReactElement => { return (
+// Municipality branding component
+const MunicipalityBranding = ({
+  norwegian,
+  isCollapsed,
+}: {
+  norwegian?: DesktopSidebarProps['norwegian'];
+  isCollapsed: boolean;
+}): React.ReactElement => {
+  if (!norwegian?.municipalityBranding) return <></>;
+
+  return (
     <div
-      style={{ flex: 1,
-        overflow: 'auto',
-        padding: isCollapsed ? 'var(--spacing-2)' : 'var(--spacing-4)', }}
+      style={{
+        padding: 'var(--spacing-4)',
+        borderTop: 'var(--border-width) solid var(--border-secondary)',
+        backgroundColor: 'var(--background-tertiary)',
+        marginTop: 'auto',
+      }}
     >
-      {children}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 'var(--spacing-2)',
+        }}
+      >
+        <div
+          style={{
+            width: '32px',
+            height: '32px',
+            backgroundColor: 'var(--color-primary-500)',
+            borderRadius: 'var(--border-radius-base)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'var(--color-white)',
+            fontSize: 'var(--font-size-sm)',
+            fontWeight: 'var(--font-weight-bold)',
+          }}
+        >
+          {norwegian?.municipality?.charAt(0) || 'K'}
+        </div>
+        {!isCollapsed && (
+          <div>
+            <div
+              style={{
+                fontSize: 'var(--font-size-sm)',
+                fontWeight: 'var(--font-weight-semibold)',
+                color: 'var(--text-primary)',
+              }}
+            >
+              {norwegian?.municipality || 'Kommune'}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
-  ); };
+  );
+};
 
 // Resize handle component
-const ResizeHandle = ({ onResize,
-  position, }: { onResize: (width: number) => void;
-  position: string; }): React.ReactElement => { return (
+const ResizeHandle = ({
+  onMouseDown,
+  isResizing,
+}: {
+  onMouseDown: (e: React.MouseEvent) => void;
+  isResizing: boolean;
+}): React.ReactElement => {
+  return (
     <div
-      style={{ position: 'absolute',
+      style={{
+        position: 'absolute',
         top: 0,
-        bottom: 0,
-        right: position === 'left' ? 0 : 'auto',
-        left: position === 'right' ? 0 : 'auto',
-        width: 'var(--spacing-1)',
+        right: 0,
+        width: '4px',
+        height: '100%',
         cursor: 'col-resize',
         backgroundColor: isResizing ? 'var(--color-primary-500)' : 'transparent',
         transition: 'background-color var(--transition-duration-fast) ease',
-        zIndex: 1, }}
-      onMouseDown={handleMouseDown}
-      aria-label="Resize sidebar"
-      title="Dra for å endre størrelse"
+      }}
+      onMouseDown={onMouseDown}
     />
-  ); };
+  );
+};
 
-// Keyboard shortcuts info
-const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.ReactElement => { return (
+// Keyboard shortcuts help
+const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.ReactElement => {
+  if (isCollapsed) return <></>;
+
+  return (
     <div
-      style={{ padding: 'var(--spacing-3) var(--spacing-4)',
+      style={{
+        padding: 'var(--spacing-4)',
         borderTop: 'var(--border-width) solid var(--border-secondary)',
-        backgroundColor: 'var(--color-gray-25)', }}
+        backgroundColor: 'var(--background-tertiary)',
+      }}
     >
       <h4
-        style={{ fontSize: 'var(--font-size-xs)',
+        style={{
+          fontSize: 'var(--font-size-xs)',
           fontWeight: 'var(--font-weight-semibold)',
           color: 'var(--text-secondary)',
-          margin: '0 0 var(--spacing-2) 0', }}
+          textTransform: 'uppercase',
+          letterSpacing: 'var(--letter-spacing-wide)',
+          margin: '0 0 var(--spacing-2) 0',
+        }}
       >
         Hurtigtaster
       </h4>
-
       <div
-        style={{ display: 'flex',
+        style={{
+          display: 'flex',
           flexDirection: 'column',
           gap: 'var(--spacing-1)',
           fontSize: 'var(--font-size-xs)',
-          color: 'var(--text-tertiary)', }}
+          color: 'var(--text-tertiary)',
+        }}
       >
         <div>Ctrl + B - Skjul/vis sidepanel</div>
         <div>Ctrl + K - Søk</div>
         <div>Alt + H - Hjelp</div>
       </div>
     </div>
-  ); };
+  );
+};
 
 // DesktopSidebar component with forwardRef
-export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>((props, ref): React.ReactElement => { return () => document.removeEventListener('keydown', handleKeydown); }, [norwegian?.keyboardShortcuts, isCollapsed]);
+export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>(
+  (props, ref): React.ReactElement => {
+    const {
+      isOpen,
+      title,
+      children,
+      width = 280,
+      collapsible = true,
+      collapsed = false,
+      isCollapsed = collapsed,
+      position = 'left',
+      persistent = true,
+      overlay = false,
+      onToggle,
+      onClose,
+      norwegian,
+      className,
+      ...rest
+    } = props;
 
-  return (
-    <aside
-      ref={ref}
-      style={combinedStyles}
-      className={className}
-      data-testid={testId}
-      data-platform="desktop"
-      data-collapsed={isCollapsed}
-      data-position={position}
-      data-classification={norwegian?.classification}
-      data-municipality={norwegian?.municipality}
-      aria-label={ariaLabel || 'Desktop sidebar'}
-      role="complementary"
-      {...asideProps}
-    >
-      {/* Classification banner */}
-      {norwegian?.classificationBanner && norwegian.classification && (
-        <ClassificationBanner level={norwegian.classification} />
-      )}
+    const [currentWidth, setCurrentWidth] = useState(width);
+    const [isResizing, setIsResizing] = useState(false);
+    const sidebarRef = useRef<HTMLElement>(null);
 
-      {/* Sidebar header */}
-      <SidebarHeader
-        isCollapsed={isCollapsed}
-        showToggle={showToggle}
-        norwegian={norwegian}
-        onToggle={handleToggle}
-      />
+    // Handle keyboard shortcuts
+    const handleKeydown = useCallback(
+      (e: KeyboardEvent) => {
+        if (!norwegian?.keyboardShortcuts) return;
 
-      {/* Quick access section */}
-      <QuickAccessSection quickAccess={norwegian?.quickAccess} isCollapsed={isCollapsed} />
+        if (e.ctrlKey && e.key === 'b') {
+          e.preventDefault();
+          onToggle?.();
+        }
+      },
+      [norwegian?.keyboardShortcuts, onToggle]
+    );
 
-      {/* Main content */}
-      <SidebarContent isCollapsed={isCollapsed}>{children}</SidebarContent>
+    useEffect(() => {
+      if (norwegian?.keyboardShortcuts) {
+        document.addEventListener('keydown', handleKeydown);
+        return () => document.removeEventListener('keydown', handleKeydown);
+      }
+      return undefined;
+    }, [handleKeydown, norwegian?.keyboardShortcuts]);
 
-      {/* Keyboard shortcuts */}
-      {norwegian?.keyboardShortcuts && <KeyboardShortcuts isCollapsed={isCollapsed} />}
+    // Handle resize functionality
+    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+      e.preventDefault();
+      setIsResizing(true);
+    }, []);
 
-      {/* Resize handle */}
-      {isResizable && !isCollapsed && <ResizeHandle onResize={handleResize} position={position} />}
+    useEffect(() => {
+      if (!isResizing) return;
 
-      {/* Norwegian compliance footer */}
-      {norwegian?.auditLog && !isCollapsed && (
+      const handleMouseMove = (e: MouseEvent) => {
+        const newWidth = e.clientX;
+        setCurrentWidth(Math.max(200, Math.min(600, newWidth)));
+      };
+
+      const handleMouseUp = () => {
+        setIsResizing(false);
+      };
+
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }, [isResizing]);
+
+    const combinedStyles = {
+      ...getDesktopSidebarStyles({
+        ...props,
+        width: currentWidth,
+        isCollapsed,
+      }),
+      position: 'relative' as const,
+    };
+
+    return (
+      <aside
+        ref={ref}
+        style={combinedStyles}
+        className={className}
+        data-testid="desktop-sidebar"
+        data-platform="desktop"
+        data-collapsed={isCollapsed}
+        role="complementary"
+        aria-label={title || 'Sidebar'}
+        {...rest}
+      >
+        {/* Classification banner */}
+        {norwegian?.classification && <ClassificationBanner level={norwegian.classification} />}
+
+        {/* Sidebar header */}
+        <SidebarHeader
+          title={title}
+          isCollapsed={isCollapsed}
+          onToggle={onToggle}
+          collapsible={collapsible}
+        />
+
+        {/* Main content area */}
         <div
-          style={{ padding: 'var(--spacing-2) var(--spacing-4)',
-            borderTop: 'var(--border-width) solid var(--border-secondary)',
-            backgroundColor: 'var(--color-gray-25)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--text-tertiary)',
-            textAlign: 'center', }}
+          style={{
+            flex: 1,
+            overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
         >
-          📝 Handlinger logger for revisjon
+          {children}
         </div>
-      )}
-    </aside>
-  ); });
+
+        {/* Quick access section */}
+        <QuickAccessSection isCollapsed={isCollapsed} norwegian={norwegian} />
+
+        {/* Municipality branding */}
+        <MunicipalityBranding norwegian={norwegian} isCollapsed={isCollapsed} />
+
+        {/* Keyboard shortcuts help */}
+        {norwegian?.keyboardShortcuts && <KeyboardShortcuts isCollapsed={isCollapsed} />}
+
+        {/* Resize handle */}
+        {!isCollapsed && <ResizeHandle onMouseDown={handleMouseDown} isResizing={isResizing} />}
+      </aside>
+    );
+  }
+);
 
 DesktopSidebar.displayName = 'DesktopSidebar';

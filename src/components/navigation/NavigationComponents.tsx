@@ -176,6 +176,12 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     { variant = 'default', size = 'md', items, activeKey, onChange, className, ...props },
     ref
   ): React.ReactElement => {
+    const currentActiveKey = activeKey || items[0]?.key;
+
+    const handleTabClick = (key: string): void => {
+      onChange?.(key);
+    };
+
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Tab Headers */}
@@ -314,6 +320,8 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
     { variant = 'default', size = 'md', value, label, showPercentage = false, className, ...props },
     ref
   ): React.ReactElement => {
+    const clampedValue = Math.min(Math.max(value, 0), 100);
+
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Progress Label */}
