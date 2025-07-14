@@ -12,7 +12,8 @@ import type { FormProps } from '../../types/form.types';
  * Form component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.ReactElement => { const formClasses = className || '';
+export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.ReactElement => {
+  const formClasses = className || '';
   const handleSubmit = onSubmit || (() => {});
   const accessibility = {};
 
@@ -29,6 +30,7 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.R
       {/* Form content */}
       <div className="form__content">{children}</div>
     </form>
-  ); });
+  );
+});
 
 Form.displayName = 'Form';

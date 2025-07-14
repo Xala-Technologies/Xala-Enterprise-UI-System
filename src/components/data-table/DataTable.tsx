@@ -19,20 +19,31 @@ const dataTableVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'bg-background',
+  {
+    variants: {
+      variant: {
+        default: 'bg-background',
         primary: 'bg-primary/5 border-primary/20',
-        secondary: 'bg-secondary/5 border-secondary/20', },
-      size: { sm: 'text-sm',
+        secondary: 'bg-secondary/5 border-secondary/20',
+      },
+      size: {
+        sm: 'text-sm',
         md: 'text-base',
-        lg: 'text-lg', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        lg: 'text-lg',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
  * Table column definition
  */
-export interface TableColumn<T = unknown> { /** Column key */
+export interface TableColumn<T = unknown> {
+  /** Column key */
   readonly key: string;
   /** Column header */
   readonly header: string;
@@ -43,12 +54,14 @@ export interface TableColumn<T = unknown> { /** Column key */
   /** Column render function */
   readonly render?: (value: unknown, item: T, index: number) => ReactNode;
   /** Column align */
-  readonly align?: 'left' | 'center' | 'right'; }
+  readonly align?: 'left' | 'center' | 'right';
+}
 
 /**
  * Table action definition
  */
-export interface TableAction<T = unknown> { /** Action key */
+export interface TableAction<T = unknown> {
+  /** Action key */
   readonly key: string;
   /** Action label */
   readonly label: string;
@@ -59,13 +72,15 @@ export interface TableAction<T = unknown> { /** Action key */
   /** Action disabled check */
   readonly disabled?: (_item: T, index: number) => boolean;
   /** Action variant */
-  readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive'; }
+  readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive';
+}
 
 /**
  * Data Table Props
  */
 export interface DataTableProps<T = unknown>
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'data'> { /** Table variant */
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'data'> {
+  /** Table variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Table size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -92,7 +107,8 @@ export interface DataTableProps<T = unknown>
   /** Row key extractor */
   readonly rowKey?: (_item: T, index: number) => string;
   /** Row click handler */
-  readonly onRowClick?: (_item: T, index: number) => void; }
+  readonly onRowClick?: (_item: T, index: number) => void;
+}
 
 /**
  * Data Table Component
@@ -101,7 +117,8 @@ export interface DataTableProps<T = unknown>
  */
 export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
   (
-    { variant = 'default',
+    {
+      variant = 'default',
       size = 'md',
       data,
       columns,
@@ -116,9 +133,11 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       rowKey = (_, index) => index.toString(),
       onRowClick,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+  return (
             <tr
               key={rowId}
               className={cn(
@@ -160,8 +179,10 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
                     {actions.map(action => (
                       <button
                         key={action.key}
-                        onClick={e => { e.stopPropagation();
-                          action.onClick(item, index); }}
+                        onClick={e => {
+                          e.stopPropagation();
+                          action.onClick(item, index);
+                        }}
                         disabled={action.disabled?.(item, index)}
                         className={cn(
                           'p-2 rounded-md transition-colors',
@@ -181,7 +202,8 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
                 </td>
               )}
             </tr>
-          ); })}
+          );
+        })}
       </tbody>
     );
 
@@ -201,7 +223,8 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
           </table>
         )}
       </div>
-    ); }
+    );
+  }
 );
 
 DataTable.displayName = 'DataTable';

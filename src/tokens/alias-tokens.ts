@@ -5,7 +5,8 @@
  * @compliance WCAG 2.2 AAA
  */
 
-import { globalAnimationDurations,
+import {
+    globalAnimationDurations,
     globalAnimationEasings,
     globalBorderRadius,
     globalBorderWidths,
@@ -18,7 +19,8 @@ import { globalAnimationDurations,
     globalLineHeights,
     globalShadows,
     globalSpacingPrimitives,
-    globalZIndices, } from './global-tokens';
+    globalZIndices,
+} from './global-tokens';
 
 // =============================================================================
 // SEMANTIC COLOR TOKENS - Intent-based color assignments
@@ -28,16 +30,20 @@ import { globalAnimationDurations,
  * Semantic color tokens - maps primitive colors to intent-based names
  * These tokens should be used instead of primitive colors in components
  */
-export const aliasColorTokens = { // Brand colors
-  brand: { primary: globalColorPrimitives.xala[500],
+export const aliasColorTokens = {
+  // Brand colors
+  brand: {
+    primary: globalColorPrimitives.xala[500],
     'primary-hover': globalColorPrimitives.xala[600],
     'primary-active': globalColorPrimitives.xala[700],
     'primary-disabled': globalColorPrimitives.xala[300],
     'primary-subtle': globalColorPrimitives.xala[50],
-    'primary-emphasis': globalColorPrimitives.xala[700], },
+    'primary-emphasis': globalColorPrimitives.xala[700],
+  },
   
   // Background colors
-  background: { primary: globalColorPrimitives.neutral[0],
+  background: {
+    primary: globalColorPrimitives.neutral[0],
     secondary: globalColorPrimitives.neutral[50],
     tertiary: globalColorPrimitives.neutral[100],
     inverse: globalColorPrimitives.neutral[900],
@@ -45,30 +51,36 @@ export const aliasColorTokens = { // Brand colors
     elevated: globalColorPrimitives.neutral[0],
     overlay: 'rgba(0, 0, 0, 0.5)',
     'overlay-light': 'rgba(0, 0, 0, 0.1)',
-    'overlay-dark': 'rgba(0, 0, 0, 0.8)', },
+    'overlay-dark': 'rgba(0, 0, 0, 0.8)',
+  },
   
   // Foreground colors
-  foreground: { primary: globalColorPrimitives.neutral[900],
+  foreground: {
+    primary: globalColorPrimitives.neutral[900],
     secondary: globalColorPrimitives.neutral[700],
     tertiary: globalColorPrimitives.neutral[500],
     inverse: globalColorPrimitives.neutral[0],
     disabled: globalColorPrimitives.neutral[400],
     placeholder: globalColorPrimitives.neutral[400],
     'on-brand': globalColorPrimitives.neutral[0],
-    'on-accent': globalColorPrimitives.neutral[0], },
+    'on-accent': globalColorPrimitives.neutral[0],
+  },
   
   // Border colors
-  border: { primary: globalColorPrimitives.neutral[200],
+  border: {
+    primary: globalColorPrimitives.neutral[200],
     secondary: globalColorPrimitives.neutral[300],
     tertiary: globalColorPrimitives.neutral[100],
     inverse: globalColorPrimitives.neutral[700],
     disabled: globalColorPrimitives.neutral[200],
     focus: globalColorPrimitives.xala[500],
     'focus-visible': globalColorPrimitives.xala[600],
-    interactive: globalColorPrimitives.xala[300], },
+    interactive: globalColorPrimitives.xala[300],
+  },
   
   // State colors
-  state: { // Success states
+  state: {
+    // Success states
     'success-primary': globalColorPrimitives.green[500],
     'success-hover': globalColorPrimitives.green[600],
     'success-active': globalColorPrimitives.green[700],
@@ -106,10 +118,12 @@ export const aliasColorTokens = { // Brand colors
     'info-subtle': globalColorPrimitives.blue[50],
     'info-emphasis': globalColorPrimitives.blue[700],
     'info-foreground': globalColorPrimitives.blue[700],
-    'info-border': globalColorPrimitives.blue[200], },
+    'info-border': globalColorPrimitives.blue[200],
+  },
   
   // Interactive colors
-  interactive: { primary: globalColorPrimitives.xala[500],
+  interactive: {
+    primary: globalColorPrimitives.xala[500],
     'primary-hover': globalColorPrimitives.xala[600],
     'primary-active': globalColorPrimitives.xala[700],
     'primary-disabled': globalColorPrimitives.xala[300],
@@ -130,13 +144,17 @@ export const aliasColorTokens = { // Brand colors
     'link-hover': globalColorPrimitives.xala[600],
     'link-active': globalColorPrimitives.xala[700],
     'link-visited': globalColorPrimitives.xala[800],
-    'link-disabled': globalColorPrimitives.neutral[400], },
+    'link-disabled': globalColorPrimitives.neutral[400],
+  },
   
   // Utility colors
-  utility: { transparent: globalColorPrimitives.transparent,
+  utility: {
+    transparent: globalColorPrimitives.transparent,
     current: globalColorPrimitives.current,
     white: globalColorPrimitives.neutral[0],
-    black: globalColorPrimitives.neutral[1000], }, } as const;
+    black: globalColorPrimitives.neutral[1000],
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC SPACING TOKENS - Intent-based spacing assignments
@@ -145,51 +163,67 @@ export const aliasColorTokens = { // Brand colors
 /**
  * Semantic spacing tokens - maps primitive spacing to intent-based names
  */
-export const aliasSpacingTokens = { // Component internal spacing
-  'component-padding': { xs: globalSpacingPrimitives[2],
+export const aliasSpacingTokens = {
+  // Component internal spacing
+  'component-padding': {
+    xs: globalSpacingPrimitives[2],
     sm: globalSpacingPrimitives[3],
     md: globalSpacingPrimitives[4],
     lg: globalSpacingPrimitives[6],
-    xl: globalSpacingPrimitives[8], },
+    xl: globalSpacingPrimitives[8],
+  },
   
   // Component margins
-  'component-margin': { xs: globalSpacingPrimitives[1],
+  'component-margin': {
+    xs: globalSpacingPrimitives[1],
     sm: globalSpacingPrimitives[2],
     md: globalSpacingPrimitives[4],
     lg: globalSpacingPrimitives[6],
-    xl: globalSpacingPrimitives[8], },
+    xl: globalSpacingPrimitives[8],
+  },
   
   // Gap spacing (for flexbox/grid)
-  'component-gap': { xs: globalSpacingPrimitives[1],
+  'component-gap': {
+    xs: globalSpacingPrimitives[1],
     sm: globalSpacingPrimitives[2],
     md: globalSpacingPrimitives[4],
     lg: globalSpacingPrimitives[6],
-    xl: globalSpacingPrimitives[8], },
+    xl: globalSpacingPrimitives[8],
+  },
   
   // Layout spacing
-  'layout-spacing': { xs: globalSpacingPrimitives[4],
+  'layout-spacing': {
+    xs: globalSpacingPrimitives[4],
     sm: globalSpacingPrimitives[6],
     md: globalSpacingPrimitives[8],
     lg: globalSpacingPrimitives[12],
     xl: globalSpacingPrimitives[16],
     '2xl': globalSpacingPrimitives[20],
-    '3xl': globalSpacingPrimitives[24], },
+    '3xl': globalSpacingPrimitives[24],
+  },
   
   // Container spacing
-  'container-padding': { xs: globalSpacingPrimitives[4],
+  'container-padding': {
+    xs: globalSpacingPrimitives[4],
     sm: globalSpacingPrimitives[6],
     md: globalSpacingPrimitives[8],
     lg: globalSpacingPrimitives[12],
-    xl: globalSpacingPrimitives[16], },
+    xl: globalSpacingPrimitives[16],
+  },
   
   // Touch target sizes (WCAG AAA compliance)
-  'touch-target': { minimum: globalSpacingPrimitives[11], // 44px minimum
+  'touch-target': {
+    minimum: globalSpacingPrimitives[11], // 44px minimum
     comfortable: globalSpacingPrimitives[12], // 48px comfortable
-    large: globalSpacingPrimitives[14], // 56px large },
+    large: globalSpacingPrimitives[14], // 56px large
+  },
   
   // Focus ring spacing
-  'focus-ring': { offset: globalSpacingPrimitives[1],
-    width: globalSpacingPrimitives[1], }, } as const;
+  'focus-ring': {
+    offset: globalSpacingPrimitives[1],
+    width: globalSpacingPrimitives[1],
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC TYPOGRAPHY TOKENS - Intent-based typography assignments
@@ -198,80 +232,122 @@ export const aliasSpacingTokens = { // Component internal spacing
 /**
  * Semantic typography tokens - maps primitive typography to intent-based names
  */
-export const aliasTypographyTokens = { // Font families
-  'font-family': { primary: globalFontFamilies.sans,
+export const aliasTypographyTokens = {
+  // Font families
+  'font-family': {
+    primary: globalFontFamilies.sans,
     secondary: globalFontFamilies.serif,
-    mono: globalFontFamilies.mono, },
+    mono: globalFontFamilies.mono,
+  },
   
   // Headings
-  heading: { h1: { fontSize: globalFontSizes['5xl'],
+  heading: {
+    h1: {
+      fontSize: globalFontSizes['5xl'],
       fontWeight: globalFontWeights.bold,
       lineHeight: globalLineHeights.tight,
-      letterSpacing: globalLetterSpacing.tight, },
-    h2: { fontSize: globalFontSizes['4xl'],
+      letterSpacing: globalLetterSpacing.tight,
+    },
+    h2: {
+      fontSize: globalFontSizes['4xl'],
       fontWeight: globalFontWeights.bold,
       lineHeight: globalLineHeights.tight,
-      letterSpacing: globalLetterSpacing.tight, },
-    h3: { fontSize: globalFontSizes['3xl'],
+      letterSpacing: globalLetterSpacing.tight,
+    },
+    h3: {
+      fontSize: globalFontSizes['3xl'],
       fontWeight: globalFontWeights.semibold,
       lineHeight: globalLineHeights.snug,
-      letterSpacing: globalLetterSpacing.normal, },
-    h4: { fontSize: globalFontSizes['2xl'],
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    h4: {
+      fontSize: globalFontSizes['2xl'],
       fontWeight: globalFontWeights.semibold,
       lineHeight: globalLineHeights.snug,
-      letterSpacing: globalLetterSpacing.normal, },
-    h5: { fontSize: globalFontSizes.xl,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    h5: {
+      fontSize: globalFontSizes.xl,
       fontWeight: globalFontWeights.semibold,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, },
-    h6: { fontSize: globalFontSizes.lg,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    h6: {
+      fontSize: globalFontSizes.lg,
       fontWeight: globalFontWeights.medium,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, }, },
+      letterSpacing: globalLetterSpacing.normal,
+    },
+  },
   
   // Body text
-  body: { large: { fontSize: globalFontSizes.lg,
+  body: {
+    large: {
+      fontSize: globalFontSizes.lg,
       fontWeight: globalFontWeights.normal,
       lineHeight: globalLineHeights.relaxed,
-      letterSpacing: globalLetterSpacing.normal, },
-    medium: { fontSize: globalFontSizes.base,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    medium: {
+      fontSize: globalFontSizes.base,
       fontWeight: globalFontWeights.normal,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, },
-    small: { fontSize: globalFontSizes.sm,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    small: {
+      fontSize: globalFontSizes.sm,
       fontWeight: globalFontWeights.normal,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, }, },
+      letterSpacing: globalLetterSpacing.normal,
+    },
+  },
   
   // UI text
-  ui: { large: { fontSize: globalFontSizes.lg,
+  ui: {
+    large: {
+      fontSize: globalFontSizes.lg,
       fontWeight: globalFontWeights.medium,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, },
-    medium: { fontSize: globalFontSizes.base,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    medium: {
+      fontSize: globalFontSizes.base,
       fontWeight: globalFontWeights.medium,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, },
-    small: { fontSize: globalFontSizes.sm,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    small: {
+      fontSize: globalFontSizes.sm,
       fontWeight: globalFontWeights.medium,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.normal, },
-    'extra-small': { fontSize: globalFontSizes.xs,
+      letterSpacing: globalLetterSpacing.normal,
+    },
+    'extra-small': {
+      fontSize: globalFontSizes.xs,
       fontWeight: globalFontWeights.medium,
       lineHeight: globalLineHeights.normal,
-      letterSpacing: globalLetterSpacing.wide, }, },
+      letterSpacing: globalLetterSpacing.wide,
+    },
+  },
   
   // Code text
-  code: { inline: { fontSize: globalFontSizes.sm,
+  code: {
+    inline: {
+      fontSize: globalFontSizes.sm,
       fontWeight: globalFontWeights.normal,
       lineHeight: globalLineHeights.normal,
       letterSpacing: globalLetterSpacing.normal,
-      fontFamily: globalFontFamilies.mono, },
-    block: { fontSize: globalFontSizes.sm,
+      fontFamily: globalFontFamilies.mono,
+    },
+    block: {
+      fontSize: globalFontSizes.sm,
       fontWeight: globalFontWeights.normal,
       lineHeight: globalLineHeights.relaxed,
       letterSpacing: globalLetterSpacing.normal,
-      fontFamily: globalFontFamilies.mono, }, }, } as const;
+      fontFamily: globalFontFamilies.mono,
+    },
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC BORDER TOKENS - Intent-based border assignments
@@ -280,25 +356,33 @@ export const aliasTypographyTokens = { // Font families
 /**
  * Semantic border tokens - maps primitive borders to intent-based names
  */
-export const aliasBorderTokens = { // Border radius
-  radius: { none: globalBorderRadius.none,
+export const aliasBorderTokens = {
+  // Border radius
+  radius: {
+    none: globalBorderRadius.none,
     small: globalBorderRadius.sm,
     medium: globalBorderRadius.base,
     large: globalBorderRadius.lg,
     'extra-large': globalBorderRadius.xl,
-    full: globalBorderRadius.full, },
+    full: globalBorderRadius.full,
+  },
   
   // Border widths
-  width: { none: globalBorderWidths[0],
+  width: {
+    none: globalBorderWidths[0],
     thin: globalBorderWidths[1],
     medium: globalBorderWidths[2],
-    thick: globalBorderWidths[4], },
+    thick: globalBorderWidths[4],
+  },
   
   // Common border combinations
-  style: { none: 'none',
+  style: {
+    none: 'none',
     solid: 'solid',
     dashed: 'dashed',
-    dotted: 'dotted', }, } as const;
+    dotted: 'dotted',
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC SHADOW TOKENS - Intent-based shadow assignments
@@ -307,30 +391,40 @@ export const aliasBorderTokens = { // Border radius
 /**
  * Semantic shadow tokens - maps primitive shadows to intent-based names
  */
-export const aliasShadowTokens = { // Elevation shadows
-  elevation: { none: globalShadows.none,
+export const aliasShadowTokens = {
+  // Elevation shadows
+  elevation: {
+    none: globalShadows.none,
     low: globalShadows.sm,
     medium: globalShadows.base,
     high: globalShadows.lg,
-    'extra-high': globalShadows.xl, },
+    'extra-high': globalShadows.xl,
+  },
   
   // Component shadows
-  component: { card: globalShadows.base,
+  component: {
+    card: globalShadows.base,
     'card-hover': globalShadows.md,
     modal: globalShadows.xl,
     dropdown: globalShadows.lg,
     tooltip: globalShadows.md,
-    popover: globalShadows.lg, },
+    popover: globalShadows.lg,
+  },
   
   // Focus shadows
-  focus: { default: `0 0 0 2px ${aliasColorTokens.interactive.primary}40`,
+  focus: {
+    default: `0 0 0 2px ${aliasColorTokens.interactive.primary}40`,
     error: `0 0 0 2px ${aliasColorTokens.state['error-primary']}40`,
     success: `0 0 0 2px ${aliasColorTokens.state['success-primary']}40`,
-    warning: `0 0 0 2px ${aliasColorTokens.state['warning-primary']}40`, },
+    warning: `0 0 0 2px ${aliasColorTokens.state['warning-primary']}40`,
+  },
   
   // Inner shadows
-  inner: { default: globalShadows.inner,
-    pressed: 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.1)', }, } as const;
+  inner: {
+    default: globalShadows.inner,
+    pressed: 'inset 0 1px 2px 0 rgba(0, 0, 0, 0.1)',
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC ANIMATION TOKENS - Intent-based animation assignments
@@ -339,29 +433,37 @@ export const aliasShadowTokens = { // Elevation shadows
 /**
  * Semantic animation tokens - maps primitive animations to intent-based names
  */
-export const aliasAnimationTokens = { // Duration tokens
-  duration: { 'instant': '0ms',
+export const aliasAnimationTokens = {
+  // Duration tokens
+  duration: {
+    'instant': '0ms',
     'extra-fast': globalAnimationDurations.fast,
     'fast': globalAnimationDurations.normal,
     'normal': globalAnimationDurations.slow,
-    'slow': globalAnimationDurations.slower, },
+    'slow': globalAnimationDurations.slower,
+  },
   
   // Easing tokens
-  easing: { 'ease-in': globalAnimationEasings['ease-in'],
+  easing: {
+    'ease-in': globalAnimationEasings['ease-in'],
     'ease-out': globalAnimationEasings['ease-out'],
     'ease-in-out': globalAnimationEasings['ease-in-out'],
     'bounce-in': globalAnimationEasings['ease-in-back'],
     'bounce-out': globalAnimationEasings['ease-out-back'],
-    'bounce-in-out': globalAnimationEasings['ease-in-out-back'], },
+    'bounce-in-out': globalAnimationEasings['ease-in-out-back'],
+  },
   
   // Common animations
-  transition: { 'fade-in': `opacity ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
+  transition: {
+    'fade-in': `opacity ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
     'fade-out': `opacity ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in']}`,
     'slide-in': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
     'slide-out': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in']}`,
     'scale-in': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-out']}`,
     'scale-out': `transform ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in']}`,
-    'all': `all ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in-out']}`, }, } as const;
+    'all': `all ${globalAnimationDurations.normal} ${globalAnimationEasings['ease-in-out']}`,
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC BREAKPOINT TOKENS - Intent-based breakpoint assignments
@@ -370,18 +472,24 @@ export const aliasAnimationTokens = { // Duration tokens
 /**
  * Semantic breakpoint tokens - maps primitive breakpoints to intent-based names
  */
-export const aliasBreakpointTokens = { // Device breakpoints
-  device: { mobile: globalBreakpoints.xs,
+export const aliasBreakpointTokens = {
+  // Device breakpoints
+  device: {
+    mobile: globalBreakpoints.xs,
     tablet: globalBreakpoints.md,
     desktop: globalBreakpoints.lg,
     'wide-desktop': globalBreakpoints.xl,
-    'ultra-wide': globalBreakpoints['2xl'], },
+    'ultra-wide': globalBreakpoints['2xl'],
+  },
   
   // Container breakpoints
-  container: { small: globalBreakpoints.sm,
+  container: {
+    small: globalBreakpoints.sm,
     medium: globalBreakpoints.md,
     large: globalBreakpoints.lg,
-    'extra-large': globalBreakpoints.xl, }, } as const;
+    'extra-large': globalBreakpoints.xl,
+  },
+} as const;
 
 // =============================================================================
 // SEMANTIC Z-INDEX TOKENS - Intent-based z-index assignments
@@ -390,19 +498,25 @@ export const aliasBreakpointTokens = { // Device breakpoints
 /**
  * Semantic z-index tokens - maps primitive z-indices to intent-based names
  */
-export const aliasZIndexTokens = { // Component layers
-  component: { base: globalZIndices.base,
+export const aliasZIndexTokens = {
+  // Component layers
+  component: {
+    base: globalZIndices.base,
     elevated: globalZIndices.docked,
     floating: globalZIndices.dropdown,
-    sticky: globalZIndices.sticky, },
+    sticky: globalZIndices.sticky,
+  },
   
   // Overlay layers
-  overlay: { backdrop: globalZIndices.overlay,
+  overlay: {
+    backdrop: globalZIndices.overlay,
     modal: globalZIndices.modal,
     popover: globalZIndices.popover,
     tooltip: globalZIndices.tooltip,
     toast: globalZIndices.toast,
-    'skip-link': globalZIndices.skipLink, }, } as const;
+    'skip-link': globalZIndices.skipLink,
+  },
+} as const;
 
 // =============================================================================
 // UTILITY TYPES
@@ -424,13 +538,15 @@ export type AliasZIndexTokens = typeof aliasZIndexTokens;
 /**
  * All alias tokens consolidated into a single object
  */
-export const aliasTokens = { color: aliasColorTokens,
+export const aliasTokens = {
+  color: aliasColorTokens,
   spacing: aliasSpacingTokens,
   typography: aliasTypographyTokens,
   border: aliasBorderTokens,
   shadow: aliasShadowTokens,
   animation: aliasAnimationTokens,
   breakpoint: aliasBreakpointTokens,
-  zIndex: aliasZIndexTokens, } as const;
+  zIndex: aliasZIndexTokens,
+} as const;
 
 export type AliasTokens = typeof aliasTokens; 

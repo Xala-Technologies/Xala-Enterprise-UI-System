@@ -5,7 +5,7 @@
 
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useState, type InputHTMLAttributes, type ReactNode } from 'react';
+import React, { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
 
 /**
  * Input variants using class-variance-authority
@@ -27,7 +27,10 @@ const inputVariants = cva(
     // Motion preferences
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: [
+  {
+    variants: {
+      variant: {
+        default: [
           'border-input bg-background',
           'hover:border-input/80',
           'focus-visible:border-ring',
@@ -51,13 +54,20 @@ const inputVariants = cva(
           'border-transparent bg-transparent',
           'hover:border-input/40',
           'focus-visible:border-ring',
-        ], },
-      size: { sm: 'h-9 px-3 py-1 text-xs',
+        ],
+      },
+      size: {
+        sm: 'h-9 px-3 py-1 text-xs',
         default: 'h-10 px-3 py-2',
         lg: 'h-11 px-4 py-2',
-        xl: 'h-12 px-4 py-3 text-base', }, },
-    defaultVariants: { variant: 'default',
-      size: 'default', }, }
+        xl: 'h-12 px-4 py-3 text-base',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
 );
 
 /**
@@ -65,7 +75,8 @@ const inputVariants = cva(
  */
 export interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
-    VariantProps<typeof inputVariants> { /** Input label */
+    VariantProps<typeof inputVariants> {
+  /** Input label */
   readonly label?: string;
 
   /** Helper text */
@@ -111,15 +122,18 @@ export interface InputProps
   readonly labelClassName?: string;
 
   /** Helper text class name */
-  readonly helperTextClassName?: string; }
+  readonly helperTextClassName?: string;
+}
 
 /**
  * Input wrapper component
  */
 const InputWrapper = forwardRef<
   HTMLDivElement,
-  { children: ReactNode;
-    className?: string; }
+  {
+    children: ReactNode;
+    className?: string;
+  }
 >(({ _children, className }, ref) => (
   <div ref={ref} className={cn('relative', className)}>
     {children}
@@ -133,11 +147,13 @@ InputWrapper.displayName = 'InputWrapper';
  */
 const InputLabel = forwardRef<
   HTMLLabelElement,
-  { htmlFor: string;
+  {
+    htmlFor: string;
     children: ReactNode;
     required?: boolean;
     optional?: boolean;
-    className?: string; }
+    className?: string;
+  }
 >(({ htmlFor, children, required, optional, className }, ref) => (
   <label
     ref={ref}
@@ -165,11 +181,14 @@ InputLabel.displayName = 'InputLabel';
  */
 const InputMessage = forwardRef<
   HTMLParagraphElement,
-  { children: ReactNode;
+  {
+    children: ReactNode;
     type?: 'default' | 'success' | 'warning' | 'error';
     className?: string;
-    id?: string; }
->(({ children, type = 'default', className, id }, ref): React.ReactElement => { return (
+    id?: string;
+  }
+>(({ children, type = 'default', className, id }, ref): React.ReactElement => {
+  return (
     <p
       ref={ref}
       id={id}
@@ -179,18 +198,23 @@ const InputMessage = forwardRef<
     >
       {children}
     </p>
-  ); });
+  );
+});
 
 InputMessage.displayName = 'InputMessage';
 
 /**
  * Show/hide password toggle button
  */
-const PasswordToggle = ({ isVisible,
+const PasswordToggle = ({
+  isVisible,
   onToggle,
-  disabled, }: { isVisible: boolean;
+  disabled,
+}: {
+  isVisible: boolean;
   onToggle: () => void;
-  disabled?: boolean; }): React.ReactElement => (
+  disabled?: boolean;
+}): React.ReactElement => (
   <button
     type="button"
     onClick={onToggle}
@@ -277,7 +301,8 @@ const EyeOffIcon = ({ className }: { className?: string }): React.ReactElement =
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { variant,
+    {
+      variant,
       size,
       label,
       helperText,
@@ -301,9 +326,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       value,
       onChange,
       disabled,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+    return (
       <div className={cn('space-y-2', containerClassName)}>
         {/* Label */}
         {label && (
@@ -408,12 +435,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <div
               className={cn('text-xs', isOverLimit ? 'text-destructive' : 'text-muted-foreground')}
             >
-              {charCount}{maxLength}
+              {charCount}/{maxLength}
             </div>
           )}
         </div>
       </div>
-    ); }
+    );
+  }
 );
 
 Input.displayName = 'Input';

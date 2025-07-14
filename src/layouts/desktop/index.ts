@@ -12,14 +12,20 @@ export { DesktopStatusBar } from './components/DesktopStatusBar';
 export { DesktopToolbar } from './components/DesktopToolbar';
 
 // Variants and types
-export { desktopHeaderVariants, desktopMainContentVariants, desktopSidebarVariants, desktopStatusBarVariants, desktopToolbarVariants, type DesktopHeaderVariant, type DesktopMainContentVariant, type DesktopSidebarVariant, type DesktopStatusBarVariant, type DesktopToolbarVariant } from './variants';
+export {
+    desktopHeaderVariants, desktopMainContentVariants, desktopSidebarVariants, desktopStatusBarVariants, desktopToolbarVariants, type DesktopHeaderVariant, type DesktopMainContentVariant, type DesktopSidebarVariant, type DesktopStatusBarVariant, type DesktopToolbarVariant
+} from './variants';
 
-export type { DesktopHeaderProps, DesktopLayoutProps, DesktopMainContentProps, DesktopSidebarProps, DesktopStatusBarProps, DesktopToolbarProps } from './types';
+export type {
+    DesktopHeaderProps, DesktopLayoutProps, DesktopMainContentProps, DesktopSidebarProps, DesktopStatusBarProps, DesktopToolbarProps
+} from './types';
 
 // Composition helper
-export const DesktopLayoutComposition = { Header: DesktopHeader,
+export const DesktopLayoutComposition = {
+  Header: DesktopHeader,
   Sidebar: DesktopSidebar,
   MainContent: DesktopMainContent,
   Toolbar: DesktopToolbar,
   StatusBar: DesktopStatusBar,
-  Layout: DesktopLayout, };
+  Layout: DesktopLayout,
+};

@@ -17,42 +17,57 @@ const filterBarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'bg-background',
+  {
+    variants: {
+      variant: {
+        default: 'bg-background',
         primary: 'bg-primary/5 border-primary/20',
-        secondary: 'bg-secondary/5 border-secondary/20', },
-      size: { sm: 'p-2',
+        secondary: 'bg-secondary/5 border-secondary/20',
+      },
+      size: {
+        sm: 'p-2',
         md: 'p-4',
-        lg: 'p-6', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        lg: 'p-6',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
  * Filter option for combo boxes
  */
-export interface FilterOption { /** Option value */
+export interface FilterOption {
+  /** Option value */
   readonly value: string;
   /** Option label */
   readonly label: string;
   /** Option disabled state */
-  readonly disabled?: boolean; }
+  readonly disabled?: boolean;
+}
 
 /**
  * View toggle option
  */
-export interface ViewOption { /** View value */
+export interface ViewOption {
+  /** View value */
   readonly value: string;
   /** View label */
   readonly label: string;
   /** View icon */
   readonly icon?: ReactNode;
   /** View disabled state */
-  readonly disabled?: boolean; }
+  readonly disabled?: boolean;
+}
 
 /**
  * Filter Bar Props
  */
-export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> { /** Filter bar variant */
+export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+  /** Filter bar variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Filter bar size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -63,11 +78,13 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** Search change handler */
   readonly onSearchChange?: (value: string) => void;
   /** Filter options */
-  readonly filters?: readonly { readonly id: string;
+  readonly filters?: readonly {
+    readonly id: string;
     readonly label: string;
     readonly value: string;
     readonly options: readonly FilterOption[];
-    readonly placeholder?: string; }[];
+    readonly placeholder?: string;
+  }[];
   /** Filter change handler */
   readonly onFilterChange?: (filterId: string, value: string) => void;
   /** View options */
@@ -77,7 +94,8 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** View change handler */
   readonly onViewChange?: (value: string) => void;
   /** Additional actions */
-  readonly actions?: ReactNode; }
+  readonly actions?: ReactNode;
+}
 
 /**
  * Filter Bar Component
@@ -86,24 +104,36 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
  */
 export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
   (
-    { const handleSearchChange = (_value: string): void => { // Handle search change };
+    {
+  const handleSearchChange = (_value: string): void => {
+    // Handle search change
+  };
 
-  const handleFilterChange = (_filterId: string, _value: unknown): void => { // Handle filter change };
+  const handleFilterChange = (_filterId: string, _value: unknown): void => {
+    // Handle filter change
+  };
 
-  const handleViewChange = (_viewId: string): void => { // Handle view change };
+  const handleViewChange = (_viewId: string): void => {
+    // Handle view change
+  };
 
       variant = 'default',
       size = 'md',
       searchPlaceholder = 'Search...',
       searchValue = '',
-            filters = [],
-            viewOptions = [],
+      onSearchChange,
+      filters = [],
+      onFilterChange,
+      viewOptions = [],
       currentView = '',
-            actions,
+      onViewChange,
+      actions,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+  return (
       <div ref={ref} className={cn(filterBarVariants({ variant, size }), className)} {...props}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left Section - Search and Filters */}
@@ -189,7 +219,8 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
           </div>
         </div>
       </div>
-    ); }
+    );
+  }
 );
 
 FilterBar.displayName = 'FilterBar';

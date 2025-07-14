@@ -20,7 +20,8 @@ import { desktopHeaderVariants } from '../variants';
  */
 export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
   (
-    { className,
+    {
+      className,
       variant,
       size,
       logo,
@@ -29,15 +30,19 @@ export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
       sticky = true,
       blur = true,
       children,
-      ...props },
+      ...props
+    },
     ref
-  ) => { return (
+  ) => {
+    return (
       <header
         ref={ref}
         className={cn(
           desktopHeaderVariants({ variant, size }),
-          { 'sticky top-0': sticky,
-            'backdrop-blur supports-[backdrop-filter]:bg-background/60': blur, },
+          {
+            'sticky top-0': sticky,
+            'backdrop-blur supports-[backdrop-filter]:bg-background/60': blur,
+          },
           className
         )}
         {...props}
@@ -50,7 +55,8 @@ export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
 
         {children}
       </header>
-    ); }
+    );
+  }
 );
 
 DesktopHeader.displayName = 'DesktopHeader';

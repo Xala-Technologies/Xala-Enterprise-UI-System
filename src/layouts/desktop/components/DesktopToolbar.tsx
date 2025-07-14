@@ -19,7 +19,8 @@ import { desktopToolbarVariants } from '../variants';
  */
 export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
   (
-    { className,
+    {
+      className,
       variant,
       size,
       leftItems,
@@ -27,14 +28,18 @@ export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
       rightItems,
       sticky = false,
       children,
-      ...props },
+      ...props
+    },
     ref
-  ) => { return (
+  ) => {
+    return (
       <div
         ref={ref}
         className={cn(
           desktopToolbarVariants({ variant, size }),
-          { 'sticky top-0': sticky, },
+          {
+            'sticky top-0': sticky,
+          },
           className
         )}
         {...props}
@@ -49,7 +54,8 @@ export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
 
         {children}
       </div>
-    ); }
+    );
+  }
 );
 
 DesktopToolbar.displayName = 'DesktopToolbar';

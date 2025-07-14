@@ -3,8 +3,6 @@
  * Uses design tokens and CSS variables for spacing and breakpoints
  */
 
-import React from 'react';
-
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
@@ -12,7 +10,10 @@ import { forwardRef, type HTMLAttributes } from 'react';
 /**
  * Container variants using class-variance-authority
  */
-const containerVariants = cva('w-full mx-auto', { variants: { size: { sm: 'max-w-sm',
+const containerVariants = cva('w-full mx-auto', {
+  variants: {
+    size: {
+      sm: 'max-w-sm',
       md: 'max-w-md',
       lg: 'max-w-lg',
       xl: 'max-w-xl',
@@ -23,25 +24,36 @@ const containerVariants = cva('w-full mx-auto', { variants: { size: { sm: 'max-w
       '6xl': 'max-w-6xl',
       '7xl': 'max-w-7xl',
       full: 'max-w-full',
-      screen: 'max-w-screen-xl', },
-    padding: { none: 'px-0',
+      screen: 'max-w-screen-xl',
+    },
+    padding: {
+      none: 'px-0',
       sm: 'px-4',
       md: 'px-6',
       lg: 'px-8',
       xl: 'px-12',
-      '2xl': 'px-16', },
-    center: { true: 'flex items-center justify-center',
-      false: '', }, },
-  defaultVariants: { size: 'full',
+      '2xl': 'px-16',
+    },
+    center: {
+      true: 'flex items-center justify-center',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    size: 'full',
     padding: 'md',
-    center: false, }, });
+    center: false,
+  },
+});
 
 /**
  * Container component props interface
  */
 export interface ContainerProps
   extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof containerVariants> { readonly as?: keyof JSX.IntrinsicElements; }
+    VariantProps<typeof containerVariants> {
+  readonly as?: keyof JSX.IntrinsicElements;
+}
 
 /**
  * Container component

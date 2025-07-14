@@ -5,19 +5,21 @@
  */
 
 // Local validation result type
-import React from 'react';
 
-import type { PerformanceMetrics, AuditTrailEntry } from '../types/core.types';
+import type { AuditTrailEntry, PerformanceMetrics } from '../types/core.types';
 
 
-interface ValidationResult<T> { success: boolean;
+interface ValidationResult<T> {
+  success: boolean;
   data?: T;
-  error?: string; }
+  error?: string;
+}
 
 /**
  * Main UI System service interface (ISP - focused interface)
  */
-export interface UISystemService { /**
+export interface UISystemService {
+  /**
    * Initialize the UI system
    */
   initialize(): Promise<ValidationResult<void>>;
@@ -40,12 +42,14 @@ export interface UISystemService { /**
   /**
    * Cleanup resources
    */
-  dispose(): Promise<void>; }
+  dispose(): Promise<void>;
+}
 
 /**
  * Component factory interface (OCP - extensible without modification)
  */
-export interface ComponentFactory { /**
+export interface ComponentFactory {
+  /**
    * Create a component instance
    */
   createComponent<T>(name: string, props: unknown): ValidationResult<T>;
@@ -58,7 +62,8 @@ export interface ComponentFactory { /**
   /**
    * Get available component types
    */
-  getAvailableTypes(): readonly string[]; }
+  getAvailableTypes(): readonly string[];
+}
 
 /**
  * Component factory function type
@@ -68,7 +73,8 @@ export type ComponentFactoryFunction = (props: unknown) => ValidationResult<unkn
 /**
  * Theme management interface (SRP - only theme responsibilities)
  */
-export interface ThemeManager { /**
+export interface ThemeManager {
+  /**
    * Get current theme
    */
   getCurrentTheme(): string;
@@ -91,12 +97,14 @@ export interface ThemeManager { /**
   /**
    * Validate theme accessibility
    */
-  validateThemeAccessibility(themeName: string): ValidationResult<boolean>; }
+  validateThemeAccessibility(themeName: string): ValidationResult<boolean>;
+}
 
 /**
  * Accessibility service interface (SRP - accessibility only)
  */
-export interface AccessibilityService { /**
+export interface AccessibilityService {
+  /**
    * Validate component accessibility
    */
   validateComponentAccessibility(component: unknown): ValidationResult<boolean>;
@@ -114,12 +122,14 @@ export interface AccessibilityService { /**
   /**
    * Generate accessibility report
    */
-  generateAccessibilityReport(): ValidationResult<unknown>; }
+  generateAccessibilityReport(): ValidationResult<unknown>;
+}
 
 /**
  * Performance monitoring interface (SRP - performance only)
  */
-export interface PerformanceMonitor { /**
+export interface PerformanceMonitor {
+  /**
    * Start performance monitoring
    */
   startMonitoring(): void;
@@ -142,12 +152,14 @@ export interface PerformanceMonitor { /**
   /**
    * Generate performance report
    */
-  generateReport(): ValidationResult<PerformanceMetrics>; }
+  generateReport(): ValidationResult<PerformanceMetrics>;
+}
 
 /**
  * Audit trail service interface (SRP - auditing only)
  */
-export interface AuditTrailService { /**
+export interface AuditTrailService {
+  /**
    * Log an audit trail entry
    */
   logEntry(entry: AuditTrailEntry): ValidationResult<void>;
@@ -165,21 +177,25 @@ export interface AuditTrailService { /**
   /**
    * Clear audit trail (restricted operation)
    */
-  clearAuditTrail(): ValidationResult<void>; }
+  clearAuditTrail(): ValidationResult<void>;
+}
 
 /**
  * Audit trail filter interface
  */
-export interface AuditTrailFilter { readonly startDate?: Date;
+export interface AuditTrailFilter {
+  readonly startDate?: Date;
   readonly endDate?: Date;
   readonly component?: string;
   readonly action?: string;
-  readonly user?: string; }
+  readonly user?: string;
+}
 
 /**
  * Configuration service interface (SRP - configuration only)
  */
-export interface ConfigurationService { /**
+export interface ConfigurationService {
+  /**
    * Get configuration value
    */
   getValue<T>(key: string): T | undefined;
@@ -202,12 +218,14 @@ export interface ConfigurationService { /**
   /**
    * Export configuration
    */
-  exportConfiguration(): ValidationResult<Record<string, unknown>>; }
+  exportConfiguration(): ValidationResult<Record<string, unknown>>;
+}
 
 /**
  * Event publisher interface (for decoupled communication)
  */
-export interface EventPublisher { /**
+export interface EventPublisher {
+  /**
    * Publish an event
    */
   publish<T>(eventName: string, data: T): void;
@@ -220,12 +238,14 @@ export interface EventPublisher { /**
   /**
    * Unsubscribe from events
    */
-  unsubscribe(eventName: string, handler: (data: unknown) => void): void; }
+  unsubscribe(eventName: string, handler: (data: unknown) => void): void;
+}
 
 /**
  * Localization service interface (SRP - localization only)
  */
-export interface LocalizationService { /**
+export interface LocalizationService {
+  /**
    * Get current locale
    */
   getCurrentLocale(): string;
@@ -248,4 +268,5 @@ export interface LocalizationService { /**
   /**
    * Validate locale support
    */
-  validateLocale(locale: string): ValidationResult<boolean>; }
+  validateLocale(locale: string): ValidationResult<boolean>;
+}

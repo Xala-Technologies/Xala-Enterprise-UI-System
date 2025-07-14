@@ -18,7 +18,8 @@ import type { DesktopLayoutProps } from '../types';
  */
 export const DesktopLayout = forwardRef<HTMLDivElement, DesktopLayoutProps>(
   (
-    { className,
+    {
+      className,
       header,
       sidebar,
       toolbar,
@@ -26,16 +27,20 @@ export const DesktopLayout = forwardRef<HTMLDivElement, DesktopLayoutProps>(
       fullHeight = true,
       responsive = true,
       children,
-      ...props },
+      ...props
+    },
     ref
-  ) => { return (
+  ) => {
+    return (
       <div
         ref={ref}
         className={cn(
           'flex flex-col',
-          { 'h-screen': fullHeight,
+          {
+            'h-screen': fullHeight,
             'min-h-screen': !fullHeight,
-            'md:flex-row': responsive, },
+            'md:flex-row': responsive,
+          },
           className
         )}
         {...props}
@@ -61,7 +66,8 @@ export const DesktopLayout = forwardRef<HTMLDivElement, DesktopLayoutProps>(
           </div>
         </div>
       </div>
-    ); }
+    );
+  }
 );
 
 DesktopLayout.displayName = 'DesktopLayout';

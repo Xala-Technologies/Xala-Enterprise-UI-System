@@ -10,18 +10,23 @@ import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { CardProps } from '../../types/layout.types';
 
 // Helper function
-const getClassificationIcon = (level: string): string => { const icons = { 'ÅPEN': '🟢',
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
     'BEGRENSET': '🟡',
     'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫', };
-  return icons[level as keyof typeof icons] || '📋'; };
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
 
 
 /**
  * Card component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export function Card({ children,
+export function Card({
+  children,
   variant = 'default',
   shadow = 'sm',
   borderRadius = 'md',
@@ -34,10 +39,13 @@ export function Card({ children,
   margin = 'none',
   className = '',
   testId,
-  ...props }: CardProps): React.ReactElement { const { t } = useLocalization();
+  ...props
+}: CardProps): React.ReactElement {
+  const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const cardClasses = React.useMemo((): React.ReactElement => { return (
+  const cardClasses = React.useMemo((): React.ReactElement => {
+  return (
     <div
       className={cardClasses}
       data-testid={testId}
@@ -53,12 +61,14 @@ export function Card({ children,
 
       {metadata && <MetadataSection metadata={metadata} />}
     </div>
-  ); }
+  );
+}
 
 /**
  * Metadata section component
  */
-const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): React.ReactElement => { return (
+const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metadata }): React.ReactElement => {
+  return (
     <div className="card__metadata">
       {metadata.lastUpdated && (
         <div className="card__metadata-item">
@@ -90,15 +100,18 @@ const MetadataSection: React.FC<{ metadata: CardProps['metadata'] }> = ({ metada
         </div>
       )}
     </div>
-  ); };
+  );
+};
 
 /**
  * Classification indicator component
  */
-const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => { return (
+const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): React.ReactElement => {
+  return (
     <span className="card__classification-indicator" aria-hidden="true">
       {getClassificationIcon(level)}
     </span>
-  ); };
+  );
+};
 
 Card.displayName = 'Card';

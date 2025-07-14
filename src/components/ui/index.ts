@@ -12,9 +12,13 @@ export { Input } from './input';
 export type { InputProps, InputSize, InputVariant } from './input';
 
 // Card components
-export { Card, CardContent, CardDescription, CardFooter, CardHeader,
-    CardTitle } from './card';
-export type { CardContentProps, CardDescriptionProps, CardFooterProps, CardHeaderProps, CardProps, CardTitleProps, CardVariant } from './card';
+export {
+    Card, CardContent, CardDescription, CardFooter, CardHeader,
+    CardTitle
+} from './card';
+export type {
+    CardContentProps, CardDescriptionProps, CardFooterProps, CardHeaderProps, CardProps, CardTitleProps, CardVariant
+} from './card';
 
 // Alert components
 export { Alert, AlertDescription, AlertTitle } from './alert';
@@ -23,3 +27,4 @@ export type { AlertDescriptionProps, AlertProps, AlertTitleProps, AlertVariant }
 // Badge components
 export { Badge } from './badge';
 export type { BadgeProps, BadgeSize, BadgeVariant } from './badge';
+

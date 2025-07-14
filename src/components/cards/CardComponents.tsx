@@ -16,17 +16,27 @@ const cardVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'border-border',
+  {
+    variants: {
+      variant: {
+        default: 'border-border',
         primary: 'border-primary/20 bg-primary/5',
         secondary: 'border-secondary/20 bg-secondary/5',
         outline: 'border-border bg-transparent',
-        elevated: 'shadow-md hover:shadow-lg', },
-      size: { sm: 'p-3',
+        elevated: 'shadow-md hover:shadow-lg',
+      },
+      size: {
+        sm: 'p-3',
         md: 'p-4',
         lg: 'p-6',
-        xl: 'p-8', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        xl: 'p-8',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
@@ -38,17 +48,27 @@ const statCardVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'border-border',
+  {
+    variants: {
+      variant: {
+        default: 'border-border',
         primary: 'border-primary/20 bg-primary/5',
         secondary: 'border-secondary/20 bg-secondary/5',
         success: 'border-green-200 bg-green-50',
         warning: 'border-yellow-200 bg-yellow-50',
-        error: 'border-red-200 bg-red-50', },
-      size: { sm: 'p-3',
+        error: 'border-red-200 bg-red-50',
+      },
+      size: {
+        sm: 'p-3',
         md: 'p-4',
-        lg: 'p-6', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        lg: 'p-6',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
@@ -60,21 +80,32 @@ const chartCardVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'border-border',
+  {
+    variants: {
+      variant: {
+        default: 'border-border',
         primary: 'border-primary/20',
         secondary: 'border-secondary/20',
-        elevated: 'shadow-md', },
-      size: { sm: 'p-3',
+        elevated: 'shadow-md',
+      },
+      size: {
+        sm: 'p-3',
         md: 'p-4',
-        lg: 'p-6', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        lg: 'p-6',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
  * Card Props
  */
-export interface CardProps extends React.HTMLAttributes<HTMLDivElement> { /** Card variant */
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Card variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'outline' | 'elevated';
   /** Card size */
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -87,12 +118,14 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> { /** Ca
   /** Card footer */
   readonly footer?: ReactNode;
   /** Card content */
-  readonly children?: ReactNode; }
+  readonly children?: ReactNode;
+}
 
 /**
  * Statistic Card Props
  */
-export interface StatisticCardProps extends React.HTMLAttributes<HTMLDivElement> { /** Statistic card variant */
+export interface StatisticCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Statistic card variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
   /** Statistic card size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -101,17 +134,21 @@ export interface StatisticCardProps extends React.HTMLAttributes<HTMLDivElement>
   /** Statistic value */
   readonly value: string | number;
   /** Statistic change */
-  readonly change?: { readonly value: number;
-    readonly type: 'increase' | 'decrease' | 'neutral'; };
+  readonly change?: {
+    readonly value: number;
+    readonly type: 'increase' | 'decrease' | 'neutral';
+  };
   /** Statistic icon */
   readonly icon?: ReactNode;
   /** Statistic description */
-  readonly description?: string; }
+  readonly description?: string;
+}
 
 /**
  * Chart Card Props
  */
-export interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> { /** Chart card variant */
+export interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Chart card variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'elevated';
   /** Chart card size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -124,7 +161,8 @@ export interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> { /
   /** Chart content */
   readonly children: ReactNode;
   /** Chart footer */
-  readonly footer?: ReactNode; }
+  readonly footer?: ReactNode;
+}
 
 /**
  * Card Component
@@ -133,7 +171,8 @@ export interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> { /
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   (
-    { variant = 'default',
+    {
+      variant = 'default',
       size = 'md',
       title,
       description,
@@ -141,9 +180,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       footer,
       children,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+  return (
       <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
         {/* Card Header */}
         {(header || title || description) && (
@@ -162,7 +203,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         {/* Card Footer */}
         {footer && <div className="pt-4 mt-4 border-t border-border">{footer}</div>}
       </div>
-    ); }
+    );
+  }
 );
 
 Card.displayName = 'Card';
@@ -174,7 +216,8 @@ Card.displayName = 'Card';
  */
 export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
   (
-    { variant = 'default',
+    {
+      variant = 'default',
       size = 'md',
       title,
       value,
@@ -182,9 +225,11 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
       icon,
       description,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+  return (
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -212,7 +257,9 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
             </svg>
           );
         default:
-          return null; } };
+          return null;
+      }
+    };
 
     return (
       <div ref={ref} className={cn(statCardVariants({ variant, size }), className)} {...props}>
@@ -234,7 +281,8 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
           )}
         </div>
       </div>
-    ); }
+    );
+  }
 );
 
 StatisticCard.displayName = 'StatisticCard';
@@ -246,7 +294,8 @@ StatisticCard.displayName = 'StatisticCard';
  */
 export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
   (
-    { variant = 'default',
+    {
+      variant = 'default',
       size = 'md',
       title,
       subtitle,
@@ -254,9 +303,11 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
       children,
       footer,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+  return (
       <div ref={ref} className={cn(chartCardVariants({ variant, size }), className)} {...props}>
         {/* Chart Header */}
         <div className="flex items-center justify-between mb-4">
@@ -274,7 +325,8 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
         {/* Chart Footer */}
         {footer && <div className="pt-4 mt-4 border-t border-border">{footer}</div>}
       </div>
-    ); }
+    );
+  }
 );
 
 ChartCard.displayName = 'ChartCard';

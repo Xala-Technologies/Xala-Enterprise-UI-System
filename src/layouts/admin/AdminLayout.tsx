@@ -19,14 +19,24 @@ const adminTopBarVariants = cva(
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
-  { variants: { variant: { default: 'bg-background',
+  {
+    variants: {
+      variant: {
+        default: 'bg-background',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground', },
-      size: { sm: 'h-16',
+        secondary: 'bg-secondary text-secondary-foreground',
+      },
+      size: {
+        sm: 'h-16',
         md: 'h-20',
-        lg: 'h-24', }, },
-    defaultVariants: { variant: 'default',
-      size: 'md', }, }
+        lg: 'h-24',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
 );
 
 /**
@@ -39,13 +49,23 @@ const adminSidebarVariants = cva(
     'motion-reduce:transition-none',
     'h-full flex flex-col',
   ],
-  { variants: { variant: { default: 'bg-card',
+  {
+    variants: {
+      variant: {
+        default: 'bg-card',
         primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground', },
-      collapsed: { true: 'w-16 overflow-hidden',
-        false: 'w-64', }, },
-    defaultVariants: { variant: 'default',
-      collapsed: false, }, }
+        secondary: 'bg-secondary text-secondary-foreground',
+      },
+      collapsed: {
+        true: 'w-16 overflow-hidden',
+        false: 'w-64',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      collapsed: false,
+    },
+  }
 );
 
 /**
@@ -53,17 +73,26 @@ const adminSidebarVariants = cva(
  */
 const adminContentVariants = cva(
   ['flex-1 overflow-auto', 'transition-all duration-300', 'motion-reduce:transition-none'],
-  { variants: { padding: { none: 'p-0',
+  {
+    variants: {
+      padding: {
+        none: 'p-0',
         sm: 'p-4',
         md: 'p-6',
-        lg: 'p-8', }, },
-    defaultVariants: { padding: 'md', }, }
+        lg: 'p-8',
+      },
+    },
+    defaultVariants: {
+      padding: 'md',
+    },
+  }
 );
 
 /**
  * Admin Top Bar Props
  */
-export interface AdminTopBarProps extends React.HTMLAttributes<HTMLElement> { /** Top bar variant */
+export interface AdminTopBarProps extends React.HTMLAttributes<HTMLElement> {
+  /** Top bar variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
   /** Top bar size */
   readonly size?: 'sm' | 'md' | 'lg';
@@ -78,12 +107,14 @@ export interface AdminTopBarProps extends React.HTMLAttributes<HTMLElement> { /*
   /** Login button */
   readonly loginButton?: ReactNode;
   /** Profile dropdown */
-  readonly profileDropdown?: ReactNode; }
+  readonly profileDropdown?: ReactNode;
+}
 
 /**
  * Admin Sidebar Props
  */
-export interface AdminSidebarProps extends React.HTMLAttributes<HTMLElement> { /** Sidebar content */
+export interface AdminSidebarProps extends React.HTMLAttributes<HTMLElement> {
+  /** Sidebar content */
   readonly children: ReactNode;
   /** Sidebar variant */
   readonly variant?: 'default' | 'primary' | 'secondary';
@@ -92,12 +123,14 @@ export interface AdminSidebarProps extends React.HTMLAttributes<HTMLElement> { /
   /** Collapse handler */
   readonly onCollapse?: (collapsed: boolean) => void;
   /** Sidebar title */
-  readonly title?: string; }
+  readonly title?: string;
+}
 
 /**
  * Admin Content Props
  */
-export interface AdminContentProps extends React.HTMLAttributes<HTMLElement> { /** Content */
+export interface AdminContentProps extends React.HTMLAttributes<HTMLElement> {
+  /** Content */
   readonly children: ReactNode;
   /** Content padding */
   readonly padding?: 'none' | 'sm' | 'md' | 'lg';
@@ -106,12 +139,14 @@ export interface AdminContentProps extends React.HTMLAttributes<HTMLElement> { /
   /** Content subtitle */
   readonly subtitle?: string;
   /** Content actions */
-  readonly actions?: ReactNode; }
+  readonly actions?: ReactNode;
+}
 
 /**
  * Admin Layout Props
  */
-export interface AdminLayoutProps extends React.HTMLAttributes<HTMLDivElement> { /** Layout content */
+export interface AdminLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Layout content */
   readonly children: ReactNode;
   /** Top bar component */
   readonly topBar?: ReactNode;
@@ -124,7 +159,8 @@ export interface AdminLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Drawer close handler */
   readonly onDrawerClose?: () => void;
   /** Sidebar collapsed state */
-  readonly sidebarCollapsed?: boolean; }
+  readonly sidebarCollapsed?: boolean;
+}
 
 /**
  * Admin Top Bar Component
@@ -133,7 +169,8 @@ export interface AdminLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
  */
 export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
   (
-    { variant = 'default',
+    {
+      variant = 'default',
       size = 'md',
       logo,
       search,
@@ -142,9 +179,11 @@ export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
       loginButton,
       profileDropdown,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+    return (
       <nav
         ref={ref}
         role="navigation"
@@ -170,7 +209,8 @@ export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
           </div>
         </div>
       </nav>
-    ); }
+    );
+  }
 );
 
 AdminTopBar.displayName = 'AdminTopBar';
@@ -184,15 +224,18 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
   (
     { children, variant = 'default', collapsed = false, onCollapse, title, className, ...props },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+    return (
       <aside
         ref={ref}
         role="complementary"
         aria-label={title || 'Admin sidebar'}
         className={cn(adminSidebarVariants({ variant, collapsed }), className)}
-        style={{ width: collapsed
+        style={{
+          width: collapsed
             ? platformTokens.componentSizes.desktop.button.sm.minWidth
-            : platformTokens.layout.desktop.sidebar.width, }}
+            : platformTokens.layout.desktop.sidebar.width,
+        }}
         {...props}
       >
         {/* Sidebar Header */}
@@ -231,7 +274,8 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
         {/* Sidebar Content */}
         <div className="flex-1 overflow-y-auto">{children}</div>
       </aside>
-    ); }
+    );
+  }
 );
 
 AdminSidebar.displayName = 'AdminSidebar';
@@ -242,7 +286,11 @@ AdminSidebar.displayName = 'AdminSidebar';
  * @returns React.ReactElement
  */
 export const AdminContent = forwardRef<HTMLElement, AdminContentProps>(
-  ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref): React.ReactElement => { return (
+  (
+    { children, padding = 'md', title, subtitle, actions, className, ...props },
+    ref
+  ): React.ReactElement => {
+    return (
       <main
         ref={ref}
         role="main"
@@ -262,7 +310,8 @@ export const AdminContent = forwardRef<HTMLElement, AdminContentProps>(
 
         {children}
       </main>
-    ); }
+    );
+  }
 );
 
 AdminContent.displayName = 'AdminContent';
@@ -274,7 +323,8 @@ AdminContent.displayName = 'AdminContent';
  */
 export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
   (
-    { children,
+    {
+      children,
       topBar,
       sidebar,
       rightDrawer,
@@ -282,9 +332,11 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
       onDrawerClose,
       sidebarCollapsed = false,
       className,
-      ...props },
+      ...props
+    },
     ref
-  ): React.ReactElement => { return (
+  ): React.ReactElement => {
+    return (
       <div
         ref={ref}
         className={cn(
@@ -312,7 +364,9 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
                 />
                 <div
                   className="fixed right-0 top-0 bottom-0 w-96 bg-card border-l border-border z-50"
-                  style={{ padding: platformTokens.layout.desktop.container.padding, }}
+                  style={{
+                    padding: platformTokens.layout.desktop.container.padding,
+                  }}
                 >
                   {rightDrawer}
                 </div>
@@ -321,7 +375,8 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
           </div>
         </div>
       </div>
-    ); }
+    );
+  }
 );
 
 AdminLayout.displayName = 'AdminLayout';

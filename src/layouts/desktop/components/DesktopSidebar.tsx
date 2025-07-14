@@ -19,7 +19,8 @@ import { desktopSidebarVariants } from '../variants';
  */
 export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
   (
-    { className,
+    {
+      className,
       variant,
       size,
       collapsed = false,
@@ -29,29 +30,45 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
       onToggle,
       onResize,
       children,
-      ...props },
+      ...props
+    },
     ref
-  ) => { const [currentWidth, setCurrentWidth] = useState<number>(
+  ) => {
+    const [currentWidth, setCurrentWidth] = useState<number>(
       collapsed ? 64 : size === 'sm' ? 192 : size === 'lg' ? 256 : 224
     );
 
-    const handleToggle = useCallback(() => { onToggle?.(!collapsed); }, [collapsed, onToggle]);
+    const handleToggle = useCallback(() => {
+      onToggle?.(!collapsed);
+    }, [collapsed, onToggle]);
 
     const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent) => { if (event.key === 'Escape' && !collapsed) { handleToggle(); } },
+      (event: React.KeyboardEvent) => {
+        if (event.key === 'Escape' && !collapsed) {
+          handleToggle();
+        }
+      },
       [collapsed, handleToggle]
     );
 
-    useEffect(() => { if (collapsed) { setCurrentWidth(64); } else { const defaultWidth = size === 'sm' ? 192 : size === 'lg' ? 256 : 224;
-        setCurrentWidth(defaultWidth); } }, [collapsed, size]);
+    useEffect(() => {
+      if (collapsed) {
+        setCurrentWidth(64);
+      } else {
+        const defaultWidth = size === 'sm' ? 192 : size === 'lg' ? 256 : 224;
+        setCurrentWidth(defaultWidth);
+      }
+    }, [collapsed, size]);
 
     return (
       <aside
         ref={ref}
         className={cn(desktopSidebarVariants({ variant, size, collapsed }), className)}
-        style={{ width: `${currentWidth}px`,
+        style={{
+          width: `${currentWidth}px`,
           minWidth: collapsed ? '64px' : `${minWidth}px`,
-          maxWidth: collapsed ? '64px' : `${maxWidth}px`, }}
+          maxWidth: collapsed ? '64px' : `${maxWidth}px`,
+        }}
         onKeyDown={handleKeyDown}
         tabIndex={-1}
         {...props}
@@ -98,26 +115,33 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
         {resizable && !collapsed && (
           <div
             className="absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-border cursor-col-resize"
-            onMouseDown={e => { e.preventDefault();
+            onMouseDown={e => {
+              e.preventDefault();
               const startX = e.clientX;
               const startWidth = currentWidth;
 
-              const handleMouseMove = (e: MouseEvent) => { const newWidth = Math.max(
+              const handleMouseMove = (e: MouseEvent) => {
+                const newWidth = Math.max(
                   minWidth,
                   Math.min(maxWidth, startWidth + (e.clientX - startX))
                 );
                 setCurrentWidth(newWidth);
-                onResize?.(newWidth); };
+                onResize?.(newWidth);
+              };
 
-              const handleMouseUp = () => { document.removeEventListener('mousemove', handleMouseMove);
-                document.removeEventListener('mouseup', handleMouseUp); };
+              const handleMouseUp = () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+              };
 
               document.addEventListener('mousemove', handleMouseMove);
-              document.addEventListener('mouseup', handleMouseUp); }}
+              document.addEventListener('mouseup', handleMouseUp);
+            }}
           />
         )}
       </aside>
-    ); }
+    );
+  }
 );
 
 DesktopSidebar.displayName = 'DesktopSidebar';

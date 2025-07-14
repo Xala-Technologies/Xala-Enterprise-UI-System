@@ -28,30 +28,36 @@ export type TokenValue = string | number | object;
 /**
  * Token metadata for documentation and validation
  */
-export interface TokenMetadata { name: string;
+export interface TokenMetadata {
+  name: string;
   description: string;
   category: 'global' | 'alias' | 'component';
   deprecated?: boolean;
   deprecationMessage?: string;
   wcagCompliant?: boolean;
-  nsmCompliant?: boolean; }
+  nsmCompliant?: boolean;
+}
 
 /**
  * Token with full metadata
  */
-export interface SemanticToken { path: TokenPath;
+export interface SemanticToken {
+  path: TokenPath;
   value: TokenValue;
   metadata: TokenMetadata;
   cssVariable?: string;
-  dependencies?: TokenPath[]; }
+  dependencies?: TokenPath[];
+}
 
 /**
  * Token validation result
  */
-export interface TokenValidationResult { isValid: boolean;
+export interface TokenValidationResult {
+  isValid: boolean;
   errors: string[];
   warnings: string[];
-  suggestions?: string[]; }
+  suggestions?: string[];
+}
 
 // =============================================================================
 // TOKEN SYSTEM CORE
@@ -60,49 +66,68 @@ export interface TokenValidationResult { isValid: boolean;
 /**
  * Enterprise-grade semantic token system
  */
-export class SemanticTokenSystem { private tokens: Map<TokenPath, SemanticToken> = new Map();
+export class SemanticTokenSystem {
+  private tokens: Map<TokenPath, SemanticToken> = new Map();
   private cssVariables: Map<string, string> = new Map();
 
-  constructor() { this.initializeTokens(); }
+  constructor() {
+    this.initializeTokens();
+  }
 
   /**
    * Initialize all token layers
    */
-  private initializeTokens(): void { this.registerGlobalTokens();
+  private initializeTokens(): void {
+    this.registerGlobalTokens();
     this.registerAliasTokens();
     this.registerComponentTokens();
-    this.generateCSSVariables(); }
+    this.generateCSSVariables();
+  }
 
   /**
    * Register global tokens
    */
-  private registerGlobalTokens(): void { // Color primitives
-    this.registerTokenCategory('global.color', globalColorPrimitives, { category: 'global',
+  private registerGlobalTokens(): void {
+    // Color primitives
+    this.registerTokenCategory('global.color', globalColorPrimitives, {
+      category: 'global',
       description: 'Primitive color values',
       wcagCompliant: true,
-      nsmCompliant: true, });
+      nsmCompliant: true,
+    });
 
     // Spacing primitives
-    this.registerTokenCategory('global.spacing', globalSpacingPrimitives, { category: 'global',
+    this.registerTokenCategory('global.spacing', globalSpacingPrimitives, {
+      category: 'global',
       description: 'Primitive spacing values',
       wcagCompliant: true,
-      nsmCompliant: true, }); }
+      nsmCompliant: true,
+    });
+  }
 
   /**
    * Register alias tokens
    */
-  private registerAliasTokens(): void { this.registerTokenCategory('alias', aliasTokens, { category: 'alias',
+  private registerAliasTokens(): void {
+    this.registerTokenCategory('alias', aliasTokens, {
+      category: 'alias',
       description: 'Semantic token aliases',
       wcagCompliant: true,
-      nsmCompliant: true, }); }
+      nsmCompliant: true,
+    });
+  }
 
   /**
    * Register component tokens
    */
-  private registerComponentTokens(): void { this.registerTokenCategory('component', componentTokens, { category: 'component',
+  private registerComponentTokens(): void {
+    this.registerTokenCategory('component', componentTokens, {
+      category: 'component',
       description: 'Component-specific tokens',
       wcagCompliant: true,
-      nsmCompliant: true, }); }
+      nsmCompliant: true,
+    });
+  }
 
   /**
    * Register a category of tokens
@@ -111,42 +136,76 @@ export class SemanticTokenSystem { private tokens: Map<TokenPath, SemanticToken>
     basePath: string,
     tokenObj: Record<string, unknown>,
     baseMetadata: Partial<TokenMetadata>
-  ): void { const registerRecursive = (obj: Record<string, unknown>, path: string): React.ReactElement => { return () => { const index = this.tokenChangeCallbacks.indexOf(callback);
-      if (index > -1) { this.tokenChangeCallbacks.splice(index, 1); } }; }
+  ): void {
+    const registerRecursive = (obj: Record<string, unknown>, path: string): React.ReactElement => {
+  return () => {
+      const index = this.tokenChangeCallbacks.indexOf(callback);
+      if (index > -1) {
+        this.tokenChangeCallbacks.splice(index, 1);
+      }
+    };
+  }
 
   /**
    * Merge token configuration
    */
-  mergeTokenConfig(config: Partial<{ global: Record<string, TokenValue>;
+  mergeTokenConfig(config: Partial<{
+    global: Record<string, TokenValue>;
     alias: Record<string, TokenValue>;
     component: Record<string, TokenValue>;
-    custom: Record<string, TokenValue>; }>): void { if (config.global) { Object.entries(config.global).forEach(([path, value]) => { this.setGlobalToken(`global.${path}` as TokenPath, value); }); }
+    custom: Record<string, TokenValue>;
+  }>): void {
+    if (config.global) {
+      Object.entries(config.global).forEach(([path, value]) => {
+        this.setGlobalToken(`global.${path}` as TokenPath, value);
+      });
+    }
 
-    if (config.alias) { Object.entries(config.alias).forEach(([path, value]) => { this.setAliasToken(`alias.${path}` as TokenPath, value); }); }
+    if (config.alias) {
+      Object.entries(config.alias).forEach(([path, value]) => {
+        this.setAliasToken(`alias.${path}` as TokenPath, value);
+      });
+    }
 
-    if (config.component) { Object.entries(config.component).forEach(([path, value]) => { this.setComponentToken(`component.${path}` as TokenPath, value); }); }
+    if (config.component) {
+      Object.entries(config.component).forEach(([path, value]) => {
+        this.setComponentToken(`component.${path}` as TokenPath, value);
+      });
+    }
 
-    if (config.custom) { Object.entries(config.custom).forEach(([path, value]) => { this.setCustomToken(path as TokenPath, value); }); }
+    if (config.custom) {
+      Object.entries(config.custom).forEach(([path, value]) => {
+        this.setCustomToken(path as TokenPath, value);
+      });
+    }
 
-    this.notifyTokensChanged(); }
+    this.notifyTokensChanged();
+  }
 
   /**
    * Export current token configuration
    */
-  exportTokenConfig(): { global: Record<string, TokenValue>;
+  exportTokenConfig(): {
+    global: Record<string, TokenValue>;
     alias: Record<string, TokenValue>;
     component: Record<string, TokenValue>;
-    custom: Record<string, TokenValue>; } { return { global: {},
+    custom: Record<string, TokenValue>;
+  } {
+    return {
+      global: {},
       alias: {},
       component: {},
-      custom: this.customTokens || {}, }; }
+      custom: this.customTokens || {},
+    };
+  }
 
   // =============================================================================
   // PRIVATE PROPERTIES
   // =============================================================================
 
   private customTokens: Record<string, TokenValue> = {};
-  private tokenChangeCallbacks: Array<() => void> = []; }
+  private tokenChangeCallbacks: Array<() => void> = [];
+}
 
 // =============================================================================
 // TOKEN SYSTEM INSTANCE
@@ -164,55 +223,79 @@ export const tokenSystem = new SemanticTokenSystem();
 /**
  * Get token value with validation
  */
-export function getToken(path: TokenPath): TokenValue | undefined { const validation = tokenSystem.validateToken(path);
+export function getToken(path: TokenPath): TokenValue | undefined {
+  const validation = tokenSystem.validateToken(path);
   
-  if (!validation.isValid) { console.error(`Token Error: ${validation.errors.join(', ')}`);
-    return undefined; }
+  if (!validation.isValid) {
+    console.error(`Token Error: ${validation.errors.join(', ')}`);
+    return undefined;
+  }
 
-  if (validation.warnings.length > 0) { console.warn(`Token Warning: ${validation.warnings.join(', ')}`); }
+  if (validation.warnings.length > 0) {
+    console.warn(`Token Warning: ${validation.warnings.join(', ')}`);
+  }
 
-  return tokenSystem.getTokenValue(path); }
+  return tokenSystem.getTokenValue(path);
+}
 
 /**
  * Get CSS variable with validation
  */
-export function getCSSVar(path: TokenPath): string { const cssVar = tokenSystem.getCSSVariable(path);
+export function getCSSVar(path: TokenPath): string {
+  const cssVar = tokenSystem.getCSSVariable(path);
   
-  if (!cssVar) { console.error(`CSS Variable not found for token: ${path}`);
-    return ''; }
+  if (!cssVar) {
+    console.error(`CSS Variable not found for token: ${path}`);
+    return '';
+  }
 
-  return `var(${cssVar})`; }
+  return `var(${cssVar})`;
+}
 
 /**
  * Validate multiple tokens
  */
-export function validateTokens(paths: TokenPath[]): Record<string, TokenValidationResult> { const results: Record<string, TokenValidationResult> = {};
+export function validateTokens(paths: TokenPath[]): Record<string, TokenValidationResult> {
+  const results: Record<string, TokenValidationResult> = {};
   
-  paths.forEach(path => { results[path] = tokenSystem.validateToken(path); });
+  paths.forEach(path => {
+    results[path] = tokenSystem.validateToken(path);
+  });
 
-  return results; }
+  return results;
+}
 
 /**
  * Get component tokens helper
  */
-export function getComponentTokens(componentName: string): Record<string, unknown> { const componentPrefix = `component.${componentName}`;
+export function getComponentTokens(componentName: string): Record<string, unknown> {
+  const componentPrefix = `component.${componentName}`;
   const tokens = tokenSystem.getTokensByCategory('component');
   
   return tokens
     .filter(token => token.path.startsWith(componentPrefix))
-    .reduce((acc, token) => { const key = token.path.replace(componentPrefix + '.', '');
+    .reduce((acc, token) => {
+      const key = token.path.replace(componentPrefix + '.', '');
       acc[key] = token.value;
-      return acc; }, {} as Record<string, any>); }
+      return acc;
+    }, {} as Record<string, any>);
+}
 
 /**
  * Create CSS properties from tokens
  */
-export function createCSSProperties(tokenMap: Record<string, TokenPath>): Record<string, string> { const cssProps: Record<string, string> = {};
+export function createCSSProperties(tokenMap: Record<string, TokenPath>): Record<string, string> {
+  const cssProps: Record<string, string> = {};
   
-  Object.entries(tokenMap).forEach(([cssProp, tokenPath]) => { const value = getToken(tokenPath);
-    if (value) { cssProps[cssProp] = String(value); } });
+  Object.entries(tokenMap).forEach(([cssProp, tokenPath]) => {
+    const value = getToken(tokenPath);
+    if (value) {
+      cssProps[cssProp] = String(value);
+    }
+  });
 
-  return cssProps; }
+  return cssProps;
+}
 
 /**
  * Generate component CSS from tokens
@@ -220,38 +303,54 @@ export function createCSSProperties(tokenMap: Record<string, TokenPath>): Record
 export function generateComponentCSS(
   componentName: string,
   selector: string
-): string { const tokens = getComponentTokens(componentName);
+): string {
+  const tokens = getComponentTokens(componentName);
   const cssRules: string[] = [];
 
-  Object.entries(tokens).forEach(([property, value]) => { const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
-    cssRules.push(`  ${cssProperty}: ${value};`); });
+  Object.entries(tokens).forEach(([property, value]) => {
+    const cssProperty = property.replace(/([A-Z])/g, '-$1').toLowerCase();
+    cssRules.push(`  ${cssProperty}: ${value};`);
+  });
 
-  return `${selector} {\n${cssRules.join('\n')}\n}`; }
+  return `${selector} {\n${cssRules.join('\n')}\n}`;
+}
 
 /**
  * Norwegian compliance utilities
  */
-export const norwegianTokenUtils = { /**
+export const norwegianTokenUtils = {
+  /**
    * Get Norwegian government compliant colors
    */
-  getGovernmentColors(): Record<string, string> { return { primary: String(getToken('alias.color.brand-norway.primary')),
+  getGovernmentColors(): Record<string, string> {
+    return {
+      primary: String(getToken('alias.color.brand-norway.primary')),
       accent: String(getToken('alias.color.brand-norway.accent')),
-      neutral: String(getToken('alias.color.brand-norway.neutral')), }; },
+      neutral: String(getToken('alias.color.brand-norway.neutral')),
+    };
+  },
 
   /**
    * Validate WCAG AAA compliance
    */
-  validateWCAGCompliance(foreground: string, background: string): boolean { // This would contain actual WCAG contrast ratio calculation
+  validateWCAGCompliance(foreground: string, background: string): boolean {
+    // This would contain actual WCAG contrast ratio calculation
     // For now, return true as placeholder
-    return true; },
+    return true;
+  },
 
   /**
    * Get NSM classification colors
    */
-  getNSMClassificationColors(): Record<string, string> { return { open: String(getToken('alias.color.state.success-primary')),
+  getNSMClassificationColors(): Record<string, string> {
+    return {
+      open: String(getToken('alias.color.state.success-primary')),
       restricted: String(getToken('alias.color.state.warning-primary')),
       confidential: String(getToken('alias.color.state.error-primary')),
-      secret: String(getToken('alias.color.state.error-emphasis')), }; }, };
+      secret: String(getToken('alias.color.state.error-emphasis')),
+    };
+  },
+};
 
 // =============================================================================
 // DESIGN TOKEN EXPORTS
@@ -260,9 +359,12 @@ export const norwegianTokenUtils = { /**
 /**
  * Legacy compatibility exports
  */
-export const designTokens = { // Global tokens
-  global: { color: globalColorPrimitives,
-    spacing: globalSpacingPrimitives, },
+export const designTokens = {
+  // Global tokens
+  global: {
+    color: globalColorPrimitives,
+    spacing: globalSpacingPrimitives,
+  },
   
   // Alias tokens
   alias: aliasTokens,
@@ -277,7 +379,8 @@ export const designTokens = { // Global tokens
   getComponentTokens,
   createCSSProperties,
   generateComponentCSS,
-  norwegianUtils: norwegianTokenUtils, } as const;
+  norwegianUtils: norwegianTokenUtils,
+} as const;
 
 // =============================================================================
 // MIGRATION UTILITIES
@@ -286,28 +389,37 @@ export const designTokens = { // Global tokens
 /**
  * Migration utilities for old token system
  */
-export const migrationUtils = { /**
+export const migrationUtils = {
+  /**
    * Map old token paths to new paths
    */
-  mapLegacyToken(oldPath: string): string { const legacyMappings: Record<string, string> = { 'colors.primary': 'alias.color.brand.primary',
+  mapLegacyToken(oldPath: string): string {
+    const legacyMappings: Record<string, string> = {
+      'colors.primary': 'alias.color.brand.primary',
       'colors.secondary': 'alias.color.interactive.secondary',
       'spacing.small': 'alias.spacing.component-padding.sm',
       'spacing.medium': 'alias.spacing.component-padding.md',
       'spacing.large': 'alias.spacing.component-padding.lg',
       'typography.body': 'alias.typography.body.medium',
-      'typography.heading': 'alias.typography.heading.h1', };
+      'typography.heading': 'alias.typography.heading.h1',
+    };
 
-    return legacyMappings[oldPath] || oldPath; },
+    return legacyMappings[oldPath] || oldPath;
+  },
 
   /**
    * Get migration suggestions
    */
-  getMigrationSuggestions(): string[] { return [
+  getMigrationSuggestions(): string[] {
+    return [
       'Replace direct color references with alias.color.* tokens',
       'Use semantic spacing tokens instead of raw values',
       'Replace component-specific tokens with component.* namespace',
       'Use getCSSVar() instead of raw CSS variable names',
       'Validate all tokens with validateTokens() function',
-    ]; }, };
+    ];
+  },
+};
 
-export default designTokens; }
+export default designTokens; 
+}

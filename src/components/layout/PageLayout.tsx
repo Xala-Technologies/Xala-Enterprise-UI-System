@@ -13,7 +13,8 @@ import type { PageLayoutProps } from '../../types/layout.types';
  * PageLayout component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
-export function PageLayout({ children,
+export function PageLayout({
+  children,
   header,
   footer,
   sidebar,
@@ -25,8 +26,11 @@ export function PageLayout({ children,
   margin = 'none',
   className = '',
   testId,
-  ...props }: PageLayoutProps): React.ReactElement { // Build CSS classes using design tokens
-  const pageClasses = React.useMemo((): React.ReactElement => { return (
+  ...props
+}: PageLayoutProps): React.ReactElement {
+  // Build CSS classes using design tokens
+  const pageClasses = React.useMemo((): React.ReactElement => {
+  return (
     <div className={pageClasses} data-testid={testId} {...props}>
       {header && <header className="page-layout__header">{header}</header>}
 
@@ -38,6 +42,7 @@ export function PageLayout({ children,
 
       {footer && <footer className="page-layout__footer">{footer}</footer>}
     </div>
-  ); }
+  );
+}
 
 PageLayout.displayName = 'PageLayout';

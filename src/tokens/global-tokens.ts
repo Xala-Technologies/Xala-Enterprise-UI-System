@@ -13,8 +13,10 @@
  * Global color palette - primitive color values
  * These are the raw color values that form the foundation of our semantic system
  */
-export const globalColorPrimitives = { // Xala Brand Colors
-  xala: { 50: '#e8f3ff',
+export const globalColorPrimitives = {
+  // Xala Brand Colors
+  xala: {
+    50: '#e8f3ff',
     100: '#d1e7ff',
     200: '#a3cfff',
     300: '#75b7ff',
@@ -23,10 +25,12 @@ export const globalColorPrimitives = { // Xala Brand Colors
     600: '#0066cc',
     700: '#004d99',
     800: '#003366',
-    900: '#001a33', },
+    900: '#001a33',
+  },
   
   // Neutral Color Scale
-  neutral: { 0: '#ffffff',
+  neutral: {
+    0: '#ffffff',
     50: '#fafafa',
     100: '#f5f5f5',
     200: '#e5e5e5',
@@ -38,10 +42,12 @@ export const globalColorPrimitives = { // Xala Brand Colors
     800: '#262626',
     900: '#171717',
     950: '#0a0a0a',
-    1000: '#000000', },
+    1000: '#000000',
+  },
   
   // Semantic Color Scales
-  green: { 50: '#f0fdf4',
+  green: {
+    50: '#f0fdf4',
     100: '#dcfce7',
     200: '#bbf7d0',
     300: '#86efac',
@@ -50,9 +56,11 @@ export const globalColorPrimitives = { // Xala Brand Colors
     600: '#16a34a',
     700: '#15803d',
     800: '#166534',
-    900: '#14532d', },
+    900: '#14532d',
+  },
   
-  yellow: { 50: '#fffbeb',
+  yellow: {
+    50: '#fffbeb',
     100: '#fef3c7',
     200: '#fde68a',
     300: '#fcd34d',
@@ -61,9 +69,11 @@ export const globalColorPrimitives = { // Xala Brand Colors
     600: '#d97706',
     700: '#b45309',
     800: '#92400e',
-    900: '#78350f', },
+    900: '#78350f',
+  },
   
-  red: { 50: '#fef2f2',
+  red: {
+    50: '#fef2f2',
     100: '#fee2e2',
     200: '#fecaca',
     300: '#fca5a5',
@@ -72,9 +82,11 @@ export const globalColorPrimitives = { // Xala Brand Colors
     600: '#dc2626',
     700: '#b91c1c',
     800: '#991b1b',
-    900: '#7f1d1d', },
+    900: '#7f1d1d',
+  },
   
-  blue: { 50: '#eff6ff',
+  blue: {
+    50: '#eff6ff',
     100: '#dbeafe',
     200: '#bfdbfe',
     300: '#93c5fd',
@@ -83,11 +95,13 @@ export const globalColorPrimitives = { // Xala Brand Colors
     600: '#2563eb',
     700: '#1d4ed8',
     800: '#1e40af',
-    900: '#1e3a8a', },
+    900: '#1e3a8a',
+  },
   
   // Special colors
   transparent: 'transparent',
-  current: 'currentColor', } as const;
+  current: 'currentColor',
+} as const;
 
 // =============================================================================
 // SPACING PRIMITIVES - Raw spacing values
@@ -97,7 +111,8 @@ export const globalColorPrimitives = { // Xala Brand Colors
  * Global spacing scale - primitive spacing values
  * Following 4px base unit system with logical progressions
  */
-export const globalSpacingPrimitives = { 0: '0px',
+export const globalSpacingPrimitives = {
+  0: '0px',
   1: '4px',
   2: '8px',
   3: '12px',
@@ -127,7 +142,8 @@ export const globalSpacingPrimitives = { 0: '0px',
   64: '256px',
   72: '288px',
   80: '320px',
-  96: '384px', } as const;
+  96: '384px',
+} as const;
 
 // =============================================================================
 // TYPOGRAPHY PRIMITIVES - Raw typography values
@@ -136,7 +152,8 @@ export const globalSpacingPrimitives = { 0: '0px',
 /**
  * Font family primitives
  */
-export const globalFontFamilies = { sans: [
+export const globalFontFamilies = {
+  sans: [
     'Inter',
     '-apple-system',
     'BlinkMacSystemFont',
@@ -158,12 +175,14 @@ export const globalFontFamilies = { sans: [
     'Liberation Mono',
     'Menlo',
     'monospace',
-  ], } as const;
+  ],
+} as const;
 
 /**
  * Font size primitives - following type scale
  */
-export const globalFontSizes = { xs: '12px',
+export const globalFontSizes = {
+  xs: '12px',
   sm: '14px',
   base: '16px',
   lg: '18px',
@@ -175,12 +194,14 @@ export const globalFontSizes = { xs: '12px',
   '6xl': '60px',
   '7xl': '72px',
   '8xl': '96px',
-  '9xl': '128px', } as const;
+  '9xl': '128px',
+} as const;
 
 /**
  * Font weight primitives
  */
-export const globalFontWeights = { thin: '100',
+export const globalFontWeights = {
+  thin: '100',
   extralight: '200',
   light: '300',
   normal: '400',
@@ -188,27 +209,32 @@ export const globalFontWeights = { thin: '100',
   semibold: '600',
   bold: '700',
   extrabold: '800',
-  black: '900', } as const;
+  black: '900',
+} as const;
 
 /**
  * Line height primitives
  */
-export const globalLineHeights = { none: '1',
+export const globalLineHeights = {
+  none: '1',
   tight: '1.25',
   snug: '1.375',
   normal: '1.5',
   relaxed: '1.625',
-  loose: '2', } as const;
+  loose: '2',
+} as const;
 
 /**
  * Letter spacing primitives
  */
-export const globalLetterSpacing = { tighter: '-0.05em',
+export const globalLetterSpacing = {
+  tighter: '-0.05em',
   tight: '-0.025em',
   normal: '0em',
   wide: '0.025em',
   wider: '0.05em',
-  widest: '0.1em', } as const;
+  widest: '0.1em',
+} as const;
 
 // =============================================================================
 // BORDER PRIMITIVES - Raw border values
@@ -217,7 +243,8 @@ export const globalLetterSpacing = { tighter: '-0.05em',
 /**
  * Border radius primitives
  */
-export const globalBorderRadius = { none: '0px',
+export const globalBorderRadius = {
+  none: '0px',
   sm: '2px',
   base: '4px',
   md: '6px',
@@ -225,16 +252,19 @@ export const globalBorderRadius = { none: '0px',
   xl: '12px',
   '2xl': '16px',
   '3xl': '24px',
-  full: '9999px', } as const;
+  full: '9999px',
+} as const;
 
 /**
  * Border width primitives
  */
-export const globalBorderWidths = { 0: '0px',
+export const globalBorderWidths = {
+  0: '0px',
   1: '1px',
   2: '2px',
   4: '4px',
-  8: '8px', } as const;
+  8: '8px',
+} as const;
 
 // =============================================================================
 // SHADOW PRIMITIVES - Raw shadow values
@@ -243,14 +273,16 @@ export const globalBorderWidths = { 0: '0px',
 /**
  * Shadow primitives - following design system standards
  */
-export const globalShadows = { none: 'none',
+export const globalShadows = {
+  none: 'none',
   sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
   base: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
   md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
   lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
   xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
   '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-  inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)', } as const;
+  inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+} as const;
 
 // =============================================================================
 // BREAKPOINT PRIMITIVES - Raw breakpoint values
@@ -259,12 +291,14 @@ export const globalShadows = { none: 'none',
 /**
  * Breakpoint primitives for responsive design
  */
-export const globalBreakpoints = { xs: '320px',
+export const globalBreakpoints = {
+  xs: '320px',
   sm: '640px',
   md: '768px',
   lg: '1024px',
   xl: '1280px',
-  '2xl': '1536px', } as const;
+  '2xl': '1536px',
+} as const;
 
 // =============================================================================
 // ANIMATION PRIMITIVES - Raw animation values
@@ -273,22 +307,26 @@ export const globalBreakpoints = { xs: '320px',
 /**
  * Animation duration primitives
  */
-export const globalAnimationDurations = { fast: '150ms',
+export const globalAnimationDurations = {
+  fast: '150ms',
   normal: '200ms',
   slow: '300ms',
-  slower: '500ms', } as const;
+  slower: '500ms',
+} as const;
 
 /**
  * Animation easing primitives
  */
-export const globalAnimationEasings = { linear: 'linear',
+export const globalAnimationEasings = {
+  linear: 'linear',
   ease: 'ease',
   'ease-in': 'ease-in',
   'ease-out': 'ease-out',
   'ease-in-out': 'ease-in-out',
   'ease-in-back': 'cubic-bezier(0.6, -0.28, 0.735, 0.045)',
   'ease-out-back': 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-  'ease-in-out-back': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)', } as const;
+  'ease-in-out-back': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+} as const;
 
 // =============================================================================
 // Z-INDEX PRIMITIVES - Raw z-index values
@@ -297,7 +335,8 @@ export const globalAnimationEasings = { linear: 'linear',
 /**
  * Z-index primitives for layering
  */
-export const globalZIndices = { auto: 'auto',
+export const globalZIndices = {
+  auto: 'auto',
   base: '0',
   docked: '10',
   dropdown: '1000',
@@ -308,7 +347,8 @@ export const globalZIndices = { auto: 'auto',
   popover: '1500',
   skipLink: '1600',
   toast: '1700',
-  tooltip: '1800', } as const;
+  tooltip: '1800',
+} as const;
 
 // =============================================================================
 // UTILITY TYPES
