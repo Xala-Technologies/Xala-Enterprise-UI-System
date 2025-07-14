@@ -8,14 +8,14 @@ import type { ToastProps } from '../../types/action-feedback.types';
 import type { NorwegianCompliance } from '../../utils/norwegian-compliance';
 
 // Extended ToastProps interface with Norwegian compliance
-export interface ToastPropsWithNorwegian extends ToastProps {
+export interface ToastPropsWithNorwegian extends Omit<ToastProps, 'norwegian'> {
   titleKey?: string;
   messageKey?: string;
   icon?: React.ReactNode;
   ariaLabel?: string;
   testId?: string;
   norwegian?: NorwegianCompliance & {
-    priority?: string;
+    priority?: 'lav' | 'middels' | 'høy' | 'kritisk';
     classification?: string;
   };
 }

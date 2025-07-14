@@ -5,6 +5,17 @@
 
 import React from 'react';
 
+// Helper function for classification icons
+const getClassificationIcon = (level: string): string => {
+  const icons = {
+    'ÅPEN': '🟢',
+    'BEGRENSET': '🟡',
+    'KONFIDENSIELT': '🔴',
+    'HEMMELIG': '⚫',
+  };
+  return icons[level as keyof typeof icons] || '📋';
+};
+
 /**
  * Renders the icon for a Toast notification based on variant or custom icon.
  * @param props - ToastIconProps
@@ -41,7 +52,7 @@ export default function ToastIcon({ variant, icon }: ToastIconProps): React.Reac
       style={{ fontSize: 'var(--font-size-lg)', flexShrink: 0, marginTop: 'var(--spacing-1)' }}
       aria-hidden="true"
     >
-      {variantIcons[variant] || variantIcons.info}
+      {variantIcons[variant] || variantIcons['info']}
     </span>
   );
 }

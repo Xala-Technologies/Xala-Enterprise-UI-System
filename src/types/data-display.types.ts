@@ -6,6 +6,7 @@
 import type React from 'react';
 
 import type { ComponentProps } from '../lib/types/core.types';
+import type { NorwegianFeedbackConfig } from './action-feedback.types';
 
 // Base data display component props
 export interface DataDisplayComponentProps extends ComponentProps {
@@ -17,6 +18,7 @@ export interface DataDisplayComponentProps extends ComponentProps {
 export interface DataTableProps extends DataDisplayComponentProps {
   data: TableData[];
   columns: TableColumn[];
+  norwegian?: NorwegianFeedbackConfig; // Norwegian compliance configuration
   pagination?: {
     enabled: boolean;
     pageSize: number;
@@ -29,6 +31,8 @@ export interface DataTableProps extends DataDisplayComponentProps {
     enabled: boolean;
     sortBy?: string;
     sortOrder?: 'asc' | 'desc';
+    defaultSortBy?: string; // Default sort column
+    defaultSortOrder?: 'asc' | 'desc'; // Default sort order
   };
   selection?: {
     enabled: boolean;
@@ -55,7 +59,10 @@ export interface DataTableProps extends DataDisplayComponentProps {
 export interface TableColumn {
   id: string;
   label: string; // Column header text
+  labelKey?: string; // Translation key for label
   key: string; // Data key to access from row object
+  norwegian?: NorwegianFeedbackConfig; // Norwegian compliance configuration
+  format?: string; // Column format string
   type?:
     | 'text'
     | 'number'
@@ -97,12 +104,14 @@ export interface KeyValueListProps extends DataDisplayComponentProps {
   spacing?: 'compact' | 'comfortable' | 'spacious';
   showDividers?: boolean;
   highlightChanges?: boolean;
+  norwegian?: NorwegianFeedbackConfig; // Norwegian compliance configuration
 }
 
 // Key-value item definition
 export interface KeyValueItem {
   key: string;
   label: string; // Label text for the key
+  labelKey?: string; // Translation key for label
   value: unknown;
   type?:
     | 'text'
@@ -111,13 +120,26 @@ export interface KeyValueItem {
     | 'boolean'
     | 'currency'
     | 'personalNumber'
-    | 'organizationNumber';
+    | 'organizationNumber'
+    | 'link'
+    | 'status';
+  format?: {
+    currency?: string;
+    dateFormat?: string;
+    numberFormat?: Intl.NumberFormatOptions;
+    boolean?: {
+      trueText: string;
+      falseText: string;
+    };
+  };
   _format?: {
     currency?: string;
     dateFormat?: string;
     numberFormat?: Intl.NumberFormatOptions;
   };
   changed?: boolean; // Highlight if changed
+  copyable?: boolean; // Allow copying value
+  onClick?: () => void; // Click handler
 }
 
 // Tag component props
@@ -142,13 +164,14 @@ export interface BadgeProps extends DataDisplayComponentProps {
   count?: number;
   showZero?: boolean;
   max?: number;
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'; // Badge position
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'inline'; // Badge position
   pulse?: boolean; // Animated pulse effect
   maxCount?: number; // Maximum count to display
   dot?: boolean; // Show as dot instead of count
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG'; // Norwegian classification
   priority?: 'low' | 'medium' | 'high' | 'critical'; // Priority level
   accessible?: boolean; // Enhanced accessibility features
+  ariaLabel?: string; // Accessibility label
 }
 
 // Tooltip component props

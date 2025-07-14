@@ -25,7 +25,36 @@ export function Section({
   ...props
 }: SectionProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const sectionClasses = React.useMemo((): React.ReactElement => {
+  const sectionClasses = React.useMemo((): string => {
+    const classes = ['section'];
+    
+    // Variant class
+    classes.push(`section--${variant}`);
+    
+    // Spacing class
+    classes.push(`section--spacing-${spacing}`);
+    
+    // Background class
+    classes.push(`section--bg-${background}`);
+    
+    // Padding class
+    classes.push(`section--padding-${padding}`);
+    
+    // Margin class
+    if (margin !== 'none') {
+      classes.push(`section--margin-${margin}`);
+    }
+    
+    // Custom class
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  }, [variant, spacing, background, padding, margin, className]);
+
+  const Component = as as any; // Type assertion for polymorphic component
+
   return (
     <Component className={sectionClasses} data-testid={testId} {...props}>
       {children}

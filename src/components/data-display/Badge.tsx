@@ -12,14 +12,13 @@ import type { BadgeProps } from '../../types/data-display.types';
 // Helper function
 const getClassificationIcon = (level: string): string => {
   const icons = {
-    'ÅPEN': '🟢',
-    'BEGRENSET': '🟡',
-    'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
+    ÅPEN: '🟢',
+    BEGRENSET: '🟡',
+    KONFIDENSIELT: '🔴',
+    HEMMELIG: '⚫',
   };
   return icons[level as keyof typeof icons] || '📋';
 };
-
 
 /**
  * Badge component using design tokens and semantic props
@@ -39,6 +38,7 @@ export function Badge({
   classification,
   priority,
   accessible = true,
+  ariaLabel,
   className = '',
   testId,
   ...props

@@ -312,9 +312,13 @@ export interface ButtonGroupProps extends ComponentProps {
 export interface NorwegianFeedbackConfig {
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
   category?: string;
+  municipality?: string; // Norwegian municipality context
   complianceLevel?: 'NSM' | 'DigDir' | 'WCAG_2_2_AAA';
   auditRequired?: boolean;
+  auditLog?: boolean; // Audit logging enabled
   language?: 'no' | 'nb' | 'nn' | 'en';
+  showClassification?: boolean; // Show classification indicator
+  dateFormat?: string; // Date format for Norwegian locale
 }
 
 // Norwegian action context

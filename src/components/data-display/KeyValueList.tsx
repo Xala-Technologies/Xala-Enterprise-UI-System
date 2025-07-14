@@ -12,14 +12,13 @@ import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.t
 // Helper function
 const getClassificationIcon = (level: string): string => {
   const icons = {
-    'ÅPEN': '🟢',
-    'BEGRENSET': '🟡',
-    'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
+    ÅPEN: '🟢',
+    BEGRENSET: '🟡',
+    KONFIDENSIELT: '🔴',
+    HEMMELIG: '⚫',
   };
   return icons[level as keyof typeof icons] || '📋';
 };
-
 
 const logger = Logger.create({
   serviceName: 'ui-system-keyvalslist',
@@ -48,27 +47,27 @@ export function KeyValueList({
   // Build CSS classes using design tokens
   const listClasses = React.useMemo(() => {
     const classes = ['keyvalue-list'];
-    
+
     // Layout variant
     classes.push(`keyvalue-list--${layout}`);
-    
+
     // Spacing variant
     classes.push(`keyvalue-list--${spacing}`);
-    
+
     // Optional features
     if (showDividers) {
       classes.push('keyvalue-list--with-dividers');
     }
-    
+
     if (highlightChanges) {
       classes.push('keyvalue-list--highlight-changes');
     }
-    
+
     // Custom classes
     if (className) {
       classes.push(className);
     }
-    
+
     return classes.join(' ');
   }, [layout, spacing, showDividers, highlightChanges, className]);
 
@@ -81,7 +80,7 @@ export function KeyValueList({
     }
     return items;
   }, [items, norwegian?.hideEmptyValues]);
-  
+
   // Handle empty state
   if (displayItems.length === 0) {
     return (
@@ -92,7 +91,7 @@ export function KeyValueList({
       </div>
     );
   }
-  
+
   return (
     <div className={listClasses} data-testid={testId} {...props}>
       {displayItems.map((item, index) => (
@@ -131,13 +130,15 @@ const KeyValueItemComponent: React.FC<{
       </div>
 
       <div className="keyvalue-item__value">
-        <span className="keyvalue-item__value-text">{formattedValue}</span>
+        <span className="keyvalue-item__value-text">
+          {formatValue(item.value, item, norwegian)}
+        </span>
 
         {item.copyable && (
           <button
             className="keyvalue-item__copy-button"
             onClick={handleCopy}
-            aria-label={t('keyvalue.copy', { value: formattedValue })}
+            aria-label={t('keyvalue.copy', { value: formatValue(item.value, item, norwegian) })}
             type="button"
           >
             📋
@@ -153,7 +154,9 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
-const ClassificationIcon: React.FC<{ classification: string }> = ({ classification }): React.ReactElement => {
+const ClassificationIcon: React.FC<{ classification: string }> = ({
+  classification,
+}): React.ReactElement => {
   return (
     <span className="keyvalue-item__classification-icon" aria-hidden="true">
       {getClassificationIcon(classification)}

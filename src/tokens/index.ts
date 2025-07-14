@@ -22,6 +22,7 @@ export * from './global-tokens';
 
 // NEW: Semantic tokens (industry-standard structure)
 export * from './semantic';
+export { semanticTokens } from './semantic';
 
 // Alias tokens (semantic layer) - DEPRECATED: Use semantic tokens instead
 export * from './alias-tokens';
@@ -37,6 +38,13 @@ export * from './platform-tokens';
 
 // Dynamic token loading
 export * from './dynamic-token-loader';
+
+// Export validation system (NEW)
+export * from './validation';
+export {
+    generateTokenCSS, TokenValidator,
+    tokenValidator, validateSingleToken, validateTokens, validateTokensAtBuildTime
+} from './validation';
 
 // =============================================================================
 // ACCESSIBILITY TOKENS

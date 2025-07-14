@@ -22,6 +22,7 @@ export interface FormComponentProps extends ComponentProps {
 
 // Form container props
 export interface FormProps extends ComponentProps {
+  children?: React.ReactNode; // Form content
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   noValidate?: boolean;
   autoComplete?: 'on' | 'off';

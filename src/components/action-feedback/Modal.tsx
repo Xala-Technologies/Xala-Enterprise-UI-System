@@ -394,10 +394,10 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
             {/* Modal header */}
             {(title || titleKey) && (
               <ModalHeader
-                titleKey={titleKey}
-                title={title}
+                titleKey={titleKey || undefined}
+                title={title || undefined}
                 closable={closable}
-                norwegian={norwegian}
+                norwegian={norwegian || undefined}
                 onClose={handleClose}
               />
             )}

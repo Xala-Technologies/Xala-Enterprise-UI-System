@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
+import { CloseButton } from './AlertActions';
 import ClassificationIndicator from './ClassificationIndicator';
 import PriorityIndicator from './PriorityIndicator';
 import ToastIcon from './ToastIcon';

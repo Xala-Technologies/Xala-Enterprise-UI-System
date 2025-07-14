@@ -112,11 +112,11 @@ export function DataTable({
       <table className="datatable__table">
         <TableHeader
           columns={columns}
-          sorting={sorting}
-          onSortChange={onSortChange}
-          norwegian={norwegian}
+          sorting={sorting || undefined}
+          onSortChange={onSortChange || undefined}
+          norwegian={norwegian || undefined}
         />
-        <TableBody data={data} columns={columns} onRowClick={onRowClick} norwegian={norwegian} />
+        <TableBody data={data} columns={columns} onRowClick={onRowClick || undefined} norwegian={norwegian || undefined} />
       </table>
 
       {norwegian?.classification && (
@@ -141,7 +141,7 @@ const TableHeader: React.FC<{
 
   const handleSort = (column: TableColumn): void => {
     if (column.sortable && onSortChange) {
-      const currentOrder = sorting?.defaultSortBy === column.key ? sorting.defaultSortOrder : 'asc';
+      const currentOrder = sorting?.sortBy === column.key ? sorting.sortOrder : 'asc';
       const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
       onSortChange(column.key, newOrder);
     }
@@ -164,19 +164,19 @@ const TableHeader: React.FC<{
             role={column.sortable ? 'button' : undefined}
             tabIndex={column.sortable ? 0 : undefined}
             aria-sort={
-              sorting?.defaultSortBy === column.key
-                ? sorting.defaultSortOrder === 'asc'
+              sorting?.sortBy === column.key
+                ? sorting.sortOrder === 'asc'
                   ? 'ascending'
                   : 'descending'
                 : 'none'
             }
           >
-            <span className="datatable__header-text">{t(column.labelKey)}</span>
+            <span className="datatable__header-text">{column.labelKey ? t(column.labelKey) : column.label}</span>
 
             {column.sortable && (
               <span className="datatable__sort-indicator" aria-hidden="true">
-                {sorting?.defaultSortBy === column.key
-                  ? sorting.defaultSortOrder === 'asc'
+                {sorting?.sortBy === column.key
+                  ? sorting.sortOrder === 'asc'
                     ? '↑'
                     : '↓'
                   : '↕'}
@@ -223,11 +223,11 @@ const TableBody: React.FC<{
       case 'date':
         return formatDate(value, norwegian?.dateFormat || 'DD.MM.YYYY');
       case 'currency':
-        return formatCurrency(Number(value), column.format?.currency || 'NOK');
+        return formatCurrency(Number(value), 'NOK');
       case 'number':
-        return formatNumber(Number(value), column.format?.numberFormat);
+        return formatNumber(Number(value), {});
       case 'boolean':
-        return formatBoolean(Boolean(value), column.format?.boolean);
+        return formatBoolean(Boolean(value), { trueKey: 'Yes', falseKey: 'No' });
       case 'status':
         return String(value);
       default:
