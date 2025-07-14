@@ -1,6 +1,6 @@
 /**
  * @fileoverview Design Tokens Index - Enterprise-Grade Token System
- * @description Export the new semantic token system
+ * @description Export the new semantic token system with dynamic loading support
  * @version 3.0.0
  * @compliance WCAG 2.2 AAA, NSM, DigDir
  */
@@ -26,6 +26,36 @@ export {
     // Types
     type SemanticToken, type TokenMetadata, type TokenPath, type TokenValidationResult, type TokenValue
 } from './semantic-token-system';
+
+// =============================================================================
+// DYNAMIC TOKEN LOADING (v3.0.0)
+// =============================================================================
+
+export {
+    clearTenantConfiguration,
+    // Dynamic token loader
+    DynamicTokenLoader,
+    dynamicTokenLoader, getCurrentTenant,
+    initializeDynamicTokens, injectCustomTokens,
+    // Convenience functions
+    loadTenantConfiguration,
+    loadTenantFromJSON, type BrandingConfig, type DynamicTokenLoaderConfig, type NorwegianComplianceConfig,
+    // Types
+    type TenantTokenConfig, type TokenOverrideConfig, type WhiteLabelConfig
+} from './dynamic-token-loader';
+
+// =============================================================================
+// PLATFORM TOKENS (v3.0.0)
+// =============================================================================
+
+export {
+    desktopTokens,
+    mobileTokens,
+    // Platform tokens
+    platformTokens,
+    // Platform utilities
+    platformUtils, tabletTokens
+} from './platform-tokens';
 
 // =============================================================================
 // GLOBAL TOKENS (Foundation Layer)
@@ -79,7 +109,7 @@ export {
  */
 export const TOKEN_SYSTEM_INFO = {
   version: '3.0.0',
-  architecture: 'Three-tier semantic token system',
+  architecture: 'Three-tier semantic token system with dynamic loading',
   layers: [
     'Global tokens (primitives)',
     'Alias tokens (semantic)',
@@ -93,6 +123,11 @@ export const TOKEN_SYSTEM_INFO = {
     'Migration utilities',
     'WCAG AAA compliance',
     'NSM compliance',
+    'Dynamic token loading',
+    'Tenant configuration support',
+    'White labeling capabilities',
+    'Runtime token injection',
+    'Platform-specific tokens',
   ],
   compliance: [
     'WCAG 2.2 AAA',
@@ -106,9 +141,9 @@ export const TOKEN_SYSTEM_INFO = {
 // =============================================================================
 
 /**
- * MIGRATION GUIDE - Moving from old to new token system
+ * MIGRATION GUIDE - Token system usage
  * 
- * NEW RECOMMENDED USAGE:
+ * BASIC TOKEN USAGE:
  * ```typescript
  * import { getToken, getCSSVar } from '@/tokens';
  * 
@@ -122,32 +157,60 @@ export const TOKEN_SYSTEM_INFO = {
  * const buttonTokens = getComponentTokens('button');
  * ```
  * 
- * COMPONENT INTEGRATION:
+ * DYNAMIC TOKEN LOADING:
  * ```typescript
- * import { getComponentTokens } from '@/tokens';
+ * import { loadTenantConfiguration, injectCustomTokens } from '@/tokens';
  * 
- * const Button = ({ variant = 'primary' }) => {
- *   const buttonTokens = getComponentTokens('button');
- *   const variantTokens = buttonTokens[variant];
- *   
- *   return (
- *     <button style={{
- *       backgroundColor: variantTokens.background,
- *       color: variantTokens.foreground,
- *       padding: variantTokens.padding.md,
- *     }}>
- *       Button
- *     </button>
- *   );
- * };
+ * // Load tenant configuration
+ * await loadTenantConfiguration('tenant-123');
+ * 
+ * // Inject custom tokens at runtime
+ * injectCustomTokens({
+ *   'alias.color.brand.primary': '#ff0000',
+ *   'alias.color.brand.secondary': '#00ff00',
+ * });
  * ```
  * 
- * NORWEGIAN COMPLIANCE:
+ * PLATFORM-SPECIFIC TOKENS:
  * ```typescript
- * import { norwegianTokenUtils } from '@/tokens';
+ * import { platformTokens } from '@/tokens';
  * 
- * const govColors = norwegianTokenUtils.getGovernmentColors();
- * const nsmColors = norwegianTokenUtils.getNSMClassificationColors();
+ * // Get current platform
+ * const platform = platformTokens.utils.getCurrentPlatform();
+ * 
+ * // Get platform-specific tokens
+ * const currentTokens = platformTokens.getCurrentPlatformTokens();
+ * 
+ * // Get platform-specific values
+ * const sidebarWidth = platformTokens.getSidebarWidth();
+ * const clickTargetSize = platformTokens.getClickTargetSize();
+ * ```
+ * 
+ * TENANT CONFIGURATION:
+ * ```typescript
+ * import { loadTenantFromJSON, type TenantTokenConfig } from '@/tokens';
+ * 
+ * const tenantConfig: TenantTokenConfig = {
+ *   tenantId: 'customer-corp',
+ *   displayName: 'Customer Corporation',
+ *   whiteLabelConfig: {
+ *     primaryColors: {
+ *       brand: '#1a365d',
+ *       brandHover: '#2d3748',
+ *       brandActive: '#4a5568',
+ *       brandDisabled: '#cbd5e0',
+ *     },
+ *   },
+ *   branding: {
+ *     companyName: 'Customer Corp',
+ *     colors: {
+ *       primary: '#1a365d',
+ *       secondary: '#2d3748',
+ *     },
+ *   },
+ * };
+ * 
+ * await loadTenantFromJSON(tenantConfig);
  * ```
  */
 
