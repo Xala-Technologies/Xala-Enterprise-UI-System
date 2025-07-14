@@ -3,7 +3,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-import { DesktopSidebarProps } from '../../../types/platform.types';
+import type { DesktopSidebarProps } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
 const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSProperties => {

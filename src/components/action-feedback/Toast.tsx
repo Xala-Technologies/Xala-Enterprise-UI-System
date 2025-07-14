@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { ToastProps } from '../../types/action-feedback.types';
+import type { ToastProps } from '../../types/action-feedback.types';
 
 // Helper function to generate CSS using design tokens
 const getToastStyles = (props: ToastProps): React.CSSProperties => {

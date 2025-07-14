@@ -1,7 +1,7 @@
 // RTL Design Tokens for @xala-mock/ui-system
 // Right-to-left language support with Norwegian testing capabilities
 
-import { RTLDesignTokens, TextDirection } from '../../types/localization.types';
+import type { RTLDesignTokens, TextDirection } from '../../types/localization.types';
 
 // RTL-aware spacing tokens
 export const RTL_SPACING_TOKENS = {

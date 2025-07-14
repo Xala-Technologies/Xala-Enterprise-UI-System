@@ -1,7 +1,7 @@
 // Norwegian Nynorsk (nn-NO) translations for @xala-mock/ui-system
 // Official Norwegian government terminology in Nynorsk
 
-import { TranslationKeys } from '../../types/localization.types';
+import type { TranslationKeys } from '../../types/localization.types';
 
 export const nnNO: TranslationKeys = {
   common: {

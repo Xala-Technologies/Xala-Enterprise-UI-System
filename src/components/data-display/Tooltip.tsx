@@ -3,7 +3,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-import { TooltipProps } from '../../types/data-display.types';
+import type { TooltipProps } from '../../types/data-display.types';
 
 // Helper function to generate CSS using design tokens
 const getTooltipStyles = (props: TooltipProps): React.CSSProperties => {

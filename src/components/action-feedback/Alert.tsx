@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { AlertProps } from '../../types/action-feedback.types';
+import type { AlertProps } from '../../types/action-feedback.types';
 
 // Helper function to generate CSS using design tokens
 const getAlertStyles = (props: AlertProps): React.CSSProperties => {

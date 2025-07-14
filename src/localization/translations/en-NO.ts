@@ -1,7 +1,7 @@
 // English (Norway) translations for @xala-mock/ui-system
 // English translations with Norwegian context and terminology
 
-import { TranslationKeys } from '../../types/localization.types';
+import type { TranslationKeys } from '../../types/localization.types';
 
 export const enNO: TranslationKeys = {
   common: {

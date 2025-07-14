@@ -1,43 +1,105 @@
 /**
- * @fileoverview Design Tokens Index
- * @description Export consolidated design token system and maintain backward compatibility
- * @version 2.0.0
+ * @fileoverview Design Tokens Index - Enterprise-Grade Token System
+ * @description Export the new semantic token system
+ * @version 3.0.0
+ * @compliance WCAG 2.2 AAA, NSM, DigDir
  */
 
 // =============================================================================
-// PRIMARY EXPORT - NEW CONSOLIDATED DESIGN TOKEN SYSTEM
+// SEMANTIC TOKEN SYSTEM (v3.0.0)
 // =============================================================================
 
-// Export the new consolidated design token system
-export * from './design-tokens';
+// Primary exports for the new semantic token system
 export {
-    componentTokens, designTokens,
-    getToken, norwegianCompliance, platformTokens, semanticColors,
-    semanticSpacing,
-    semanticTypography
-} from './design-tokens';
+    createCSSProperties, designTokens, generateComponentCSS,
+    getComponentTokens, getCSSVar,
+    // Token utilities
+    getToken,
+    // Migration utilities
+    migrationUtils,
 
-// Export token helpers and utilities
-export * from './token-helpers';
+    // Norwegian compliance
+    norwegianTokenUtils,
+    // Core token system
+    SemanticTokenSystem,
+    tokenSystem, validateTokens,
+    // Types
+    type SemanticToken, type TokenMetadata, type TokenPath, type TokenValidationResult, type TokenValue
+} from './semantic-token-system';
+
+// =============================================================================
+// GLOBAL TOKENS (Foundation Layer)
+// =============================================================================
+
 export {
-    createButtonStyles, createCardStyles, createInputStyles, generateCSSString, generateCSSVariables, getComponentToken, getDebugTokens, getPlatformToken, getResponsiveToken, getSemanticColor,
-    getSemanticSpacing, tokensToCSSObject, validateToken
-} from './token-helpers';
+
+    // Animation system
+    globalAnimationDurations,
+    globalAnimationEasings,
+    // Layout system
+    globalBorderRadius,
+    globalBorderWidths, globalBreakpoints,
+    // Color primitives
+    globalColorPrimitives,
+    // Typography system
+    globalFontFamilies,
+    globalFontSizes,
+    globalFontWeights, globalLetterSpacing, globalLineHeights, globalShadows,
+    // Spacing system
+    globalSpacingPrimitives, globalZIndices
+} from './global-tokens';
 
 // =============================================================================
-// BACKWARD COMPATIBILITY - LEGACY EXPORTS
+// ALIAS TOKENS (Semantic Layer)
 // =============================================================================
 
-// Keep legacy exports for backward compatibility
-export * from './border-radius';
-export * from './colors';
-export * from './shadows';
-export * from './spacing';
-export * from './typography';
-export * from './validation';
+export {
+    aliasAnimationTokens, aliasBorderTokens, aliasBreakpointTokens, aliasColorTokens, aliasShadowTokens, aliasSpacingTokens,
+    // Alias token collections
+    aliasTokens, aliasTypographyTokens, aliasZIndexTokens
+} from './alias-tokens';
 
-// Legacy CSS variables - will be deprecated
-export * from './css-variables';
+// =============================================================================
+// COMPONENT TOKENS (Component Layer)
+// =============================================================================
+
+export {
+    buttonComponentTokens, cardComponentTokens,
+    // Component token collections
+    componentTokens, inputComponentTokens, modalComponentTokens,
+    toastComponentTokens
+} from './component-tokens';
+
+// =============================================================================
+// SYSTEM INFORMATION
+// =============================================================================
+
+/**
+ * Token system information
+ */
+export const TOKEN_SYSTEM_INFO = {
+  version: '3.0.0',
+  architecture: 'Three-tier semantic token system',
+  layers: [
+    'Global tokens (primitives)',
+    'Alias tokens (semantic)',
+    'Component tokens (specific)',
+  ],
+  features: [
+    'Type-safe token paths',
+    'Validation and error handling',
+    'CSS variable generation',
+    'Norwegian compliance utilities',
+    'Migration utilities',
+    'WCAG AAA compliance',
+    'NSM compliance',
+  ],
+  compliance: [
+    'WCAG 2.2 AAA',
+    'NSM (Norwegian Security Authority)',
+    'DigDir (Norwegian Digitalization Directorate)',
+  ],
+} as const;
 
 // =============================================================================
 // MIGRATION GUIDE
@@ -46,117 +108,55 @@ export * from './css-variables';
 /**
  * MIGRATION GUIDE - Moving from old to new token system
  * 
- * OLD WAY (deprecated):
- * import { baseColors } from '@/tokens';
- * color: baseColors.primary[500];
+ * NEW RECOMMENDED USAGE:
+ * ```typescript
+ * import { getToken, getCSSVar } from '@/tokens';
  * 
- * NEW WAY (recommended):
- * import { semanticColors } from '@/tokens';
- * color: semanticColors.primary[500];
+ * // Get token value
+ * const primaryColor = getToken('alias.color.brand.primary');
  * 
- * EVEN BETTER (semantic):
- * import { semanticColors } from '@/tokens';
- * color: semanticColors.interactive.primary;
+ * // Get CSS variable
+ * const primaryCSSVar = getCSSVar('alias.color.brand.primary');
  * 
- * BEST PRACTICE (using helpers):
- * import { getSemanticColor } from '@/tokens';
- * color: getSemanticColor('interactive.primary');
+ * // Get component tokens
+ * const buttonTokens = getComponentTokens('button');
+ * ```
  * 
- * COMPONENT STYLES:
- * import { createButtonStyles } from '@/tokens';
- * const buttonStyles = createButtonStyles('primary', 'md');
+ * COMPONENT INTEGRATION:
+ * ```typescript
+ * import { getComponentTokens } from '@/tokens';
+ * 
+ * const Button = ({ variant = 'primary' }) => {
+ *   const buttonTokens = getComponentTokens('button');
+ *   const variantTokens = buttonTokens[variant];
+ *   
+ *   return (
+ *     <button style={{
+ *       backgroundColor: variantTokens.background,
+ *       color: variantTokens.foreground,
+ *       padding: variantTokens.padding.md,
+ *     }}>
+ *       Button
+ *     </button>
+ *   );
+ * };
+ * ```
+ * 
+ * NORWEGIAN COMPLIANCE:
+ * ```typescript
+ * import { norwegianTokenUtils } from '@/tokens';
+ * 
+ * const govColors = norwegianTokenUtils.getGovernmentColors();
+ * const nsmColors = norwegianTokenUtils.getNSMClassificationColors();
+ * ```
  */
 
 // =============================================================================
-// LEGACY COMPATIBILITY LAYER
+// DEFAULT EXPORT
 // =============================================================================
 
-// Re-export legacy token systems for backward compatibility
-export interface DesignTokenSystem {
-  colors: Record<string, string>;
-  spacing: Record<string, string>;
-  typography: Record<string, string>;
-  borderRadius: Record<string, string>;
-  shadows: Record<string, string>;
-}
+// Import for default export
+import { designTokens } from './semantic-token-system';
 
-// Norwegian municipality themes (legacy)
-export const municipalityThemes = {
-  drammen: 'drammen',
-  oslo: 'oslo',
-  bergen: 'bergen',
-  trondheim: 'trondheim',
-  stavanger: 'stavanger',
-} as const;
-
-export type MunicipalityTheme = (typeof municipalityThemes)[keyof typeof municipalityThemes];
-
-// Legacy theme configuration
-export interface NorwegianThemeConfig {
-  municipality: MunicipalityTheme;
-  mode: 'light' | 'dark';
-  accessibility: 'WCAG_2_2_AA' | 'WCAG_2_2_AAA';
-  language: 'nb' | 'nn' | 'en';
-}
-
-// Legacy async token loading (deprecated)
-export const designTokensLegacy = {
-  colors: async (): Promise<Record<string, any>> => import('./colors').then(m => m.colorTokens),
-  spacing: async (): Promise<Record<string, any>> => import('./spacing').then(m => m.spacingTokens),
-  typography: async (): Promise<Record<string, any>> => import('./typography').then(m => m.typographyTokens),
-  borderRadius: async (): Promise<Record<string, any>> => import('./border-radius').then(m => m.borderRadiusTokens),
-  shadows: async (): Promise<Record<string, any>> => import('./shadows').then(m => m.shadowTokens),
-};
-
-// Legacy theme generation (deprecated)
-export const generateThemeTokens = async (config: NorwegianThemeConfig): Promise<Record<string, any>> => {
-  const [colors, spacing, typography, borderRadius, shadows] = await Promise.all([
-    designTokensLegacy.colors(),
-    designTokensLegacy.spacing(),
-    designTokensLegacy.typography(),
-    designTokensLegacy.borderRadius(),
-    designTokensLegacy.shadows(),
-  ]);
-
-  return {
-    ...colors,
-    ...spacing,
-    ...typography,
-    ...borderRadius,
-    ...shadows,
-    '--theme-municipality': config.municipality,
-    '--theme-mode': config.mode,
-    '--theme-accessibility': config.accessibility,
-    '--theme-language': config.language,
-  };
-};
-
-// =============================================================================
-// DEPRECATION WARNINGS
-// =============================================================================
-
-/**
- * @deprecated Use `designTokens` from the new consolidated system instead
- */
-export const legacyDesignTokens = designTokensLegacy;
-
-/**
- * @deprecated Use `semanticColors` from the new consolidated system instead
- */
-export const themeColors = designTokensLegacy.colors;
-
-/**
- * @deprecated CSS variables will be auto-generated from design tokens
- */
-export const cssVars = null;
-
-/**
- * @deprecated Theme manager will be replaced with new token system
- */
-export const themeManager = null;
-
-/**
- * @deprecated Themes will be generated from design tokens
- */
-export const themes = null;
+export default designTokens;
 

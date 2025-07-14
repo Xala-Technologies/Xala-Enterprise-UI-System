@@ -1,11 +1,12 @@
 // LocalizationProvider for @xala-mock/ui-system
 // Norwegian government-compliant localization context provider
 
-import {
+import type {
   SupportedLocale,
   TranslationKeys,
   LocalizationConfig,
-  LocalizationProviderProps,
+  LocalizationProviderProps} from '../../types/localization.types';
+import {
   DEFAULT_LOCALIZATION_CONFIG,
 } from '../../types/localization.types';
 

@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 
-import { ButtonProps } from '../../types/action-feedback.types';
+import type { ButtonProps } from '../../types/action-feedback.types';
 
 // Helper function to generate CSS using design tokens
 const getButtonStyles = (props: ButtonProps): React.CSSProperties => {

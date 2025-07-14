@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 
-import { ModalProps } from '../../types/action-feedback.types';
+import type { ModalProps } from '../../types/action-feedback.types';
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {

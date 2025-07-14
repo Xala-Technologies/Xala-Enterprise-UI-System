@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import { MobileHeaderProps } from '../../../types/platform.types';
+import type { MobileHeaderProps } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
 const getMobileHeaderStyles = (props: MobileHeaderProps): React.CSSProperties => {

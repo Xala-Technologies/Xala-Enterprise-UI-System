@@ -1,7 +1,7 @@
 // Norwegian Bokmål (nb-NO) translations for @xala-mock/ui-system
 // Official Norwegian government terminology and standards
 
-import { TranslationKeys } from '../../types/localization.types';
+import type { TranslationKeys } from '../../types/localization.types';
 
 export const nbNO: TranslationKeys = {
   common: {

@@ -1,11 +1,12 @@
 // useLocalization hook for @xala-mock/ui-system
 // Norwegian government-compliant internationalization with RTL support
 
-import {
+import type {
   SupportedLocale,
   TextDirection,
   UseLocalizationReturn,
-  TranslationFunction,
+  TranslationFunction} from '../../types/localization.types';
+import {
   DEFAULT_LOCALIZATION_CONFIG,
 } from '../../types/localization.types';
 

@@ -4,15 +4,14 @@
  */
 
 // Form components
-export { Button, ButtonGroup, IconButton, type ButtonProps, type ButtonSize, type ButtonVariant } from './Button';
+export { Button, SemanticButton, type ButtonProps } from './Button';
 export { Input, type InputProps, type InputSize, type InputVariant } from './Input';
 
 // Re-export accessibility utilities
 export { xalaAccessibility } from '@/lib/accessibility/wcag-aaa';
 
-// Re-export design tokens
-export { xalaTheme } from '@/tokens/css-variables';
-export { xalaColors } from '@/tokens/xala-colors';
+// Re-export design tokens from new semantic token system
+export { designTokens, getCSSVar, getComponentTokens, getToken } from '@/tokens';
 
 /**
  * Xala component library version
