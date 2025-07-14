@@ -344,7 +344,7 @@ const formatCellValue = (value: unknown, column: TableColumn, row: TableData): R
     case 'currency':
       return formatCurrency(Number(value), 'NOK');
     case 'number':
-      return formatNumber(Number(value), column.format);
+      return formatNumber(Number(value));
     case 'boolean':
       return formatBoolean(Boolean(value));
     default:

@@ -135,6 +135,69 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
     },
     ref
   ): React.ReactElement => {
+    // State management
+    const [inputValue, setInputValue] = React.useState(value);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [selectedIndex, setSelectedIndex] = React.useState(-1);
+
+    // Refs
+    const inputRef = React.useRef<HTMLInputElement>(null);
+    const resultsRef = React.useRef<HTMLDivElement>(null);
+
+    // Handlers
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newValue = e.target.value;
+      setInputValue(newValue);
+      onChange?.(newValue);
+      setIsOpen(true);
+      setSelectedIndex(-1);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex(prev => Math.max(prev - 1, -1));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (selectedIndex >= 0 && results[selectedIndex]) {
+          handleResultClick(results[selectedIndex]);
+        } else {
+          onSubmit?.(inputValue);
+        }
+      } else if (e.key === 'Escape') {
+        setIsOpen(false);
+        setSelectedIndex(-1);
+      }
+    };
+
+    const handleFocus = () => {
+      setIsOpen(true);
+      onFocus?.();
+    };
+
+    const handleBlur = () => {
+      // Delay closing to allow for result clicks
+      setTimeout(() => {
+        setIsOpen(false);
+        setSelectedIndex(-1);
+      }, 200);
+      onBlur?.();
+    };
+
+    const handleResultClick = (result: SearchResultItem) => {
+      setInputValue(result.title);
+      setIsOpen(false);
+      setSelectedIndex(-1);
+      if (result.onClick) {
+        result.onClick();
+      } else if (result.url) {
+        window.location.href = result.url;
+      }
+    };
+
     return (
       <div
         ref={ref}
@@ -171,19 +234,19 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
         {isOpen && (showResults || results.length > 0) && (
           <div
             ref={resultsRef}
-            className="absolute top-full left-0 right-0 z-50 mt-1 bg-card border border-border rounded-md shadow-lg max-h-64 overflow-auto"
+            className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-border bg-popover shadow-lg"
             role="listbox"
-            aria-label="Search results"
           >
             {loading && (
-              <div className="p-4 text-center text-muted-foreground">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary mx-auto"></div>
-                <span className="sr-only">Loading...</span>
+              <div className="flex items-center justify-center p-4">
+                <div className="text-sm text-muted-foreground">Loading...</div>
               </div>
             )}
 
             {!loading && results.length === 0 && (
-              <div className="p-4 text-center text-muted-foreground">No results found</div>
+              <div className="flex items-center justify-center p-4">
+                <div className="text-sm text-muted-foreground">No results found</div>
+              </div>
             )}
 
             {!loading &&
@@ -191,9 +254,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
                 <div
                   key={result.id}
                   className={cn(
-                    'p-3 cursor-pointer border-b border-border last:border-b-0',
-                    'hover:bg-accent hover:text-accent-foreground',
-                    'transition-colors duration-200',
+                    'flex items-center px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground',
                     selectedIndex === index && 'bg-accent text-accent-foreground'
                   )}
                   onClick={() => handleResultClick(result)}
@@ -201,26 +262,18 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
                   role="option"
                   aria-selected={selectedIndex === index}
                 >
-                  <div className="flex items-start space-x-3">
-                    {result.icon && <div className="flex-shrink-0 mt-0.5">{result.icon}</div>}
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-medium truncate">{result.title}</h3>
-                        {result.category && (
-                          <span className="text-xs text-muted-foreground ml-2">
-                            {result.category}
-                          </span>
-                        )}
+                  {result.icon && <div className="mr-2">{result.icon}</div>}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium truncate">{result.title}</div>
+                    {result.description && (
+                      <div className="text-sm text-muted-foreground truncate">
+                        {result.description}
                       </div>
-
-                      {result.description && (
-                        <p className="text-xs text-muted-foreground mt-1 truncate">
-                          {result.description}
-                        </p>
-                      )}
-                    </div>
+                    )}
                   </div>
+                  {result.category && (
+                    <div className="ml-2 text-xs text-muted-foreground">{result.category}</div>
+                  )}
                 </div>
               ))}
           </div>
