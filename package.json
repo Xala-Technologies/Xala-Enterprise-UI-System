@@ -2,33 +2,33 @@
   "name": "@xala-technologies/ui-system",
   "version": "2.0.0",
   "description": "Enterprise-compliant UI system with Norwegian accessibility standards, design tokens, and zero inline styles following @xala-technologies/enterprise-standards v6.0.2",
-  "main": "dist/lib-index.js",
-  "module": "dist/lib-index.js",
-  "types": "dist/lib-index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/lib-index.d.ts",
-      "import": "./dist/lib-index.js",
-      "require": "./dist/lib-index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
     },
     "./localization": {
       "types": "./dist/localization/index.d.ts",
-      "import": "./dist/esm/localization/index.js",
+      "import": "./dist/localization/index.js",
       "require": "./dist/localization/index.js"
     },
     "./rtl": {
       "types": "./dist/rtl/index.d.ts",
-      "import": "./dist/esm/rtl/index.js",
+      "import": "./dist/rtl/index.js",
       "require": "./dist/rtl/index.js"
     },
     "./components": {
       "types": "./dist/components/index.d.ts",
-      "import": "./dist/esm/components/index.js",
+      "import": "./dist/components/index.js",
       "require": "./dist/components/index.js"
     },
     "./tokens": {
       "types": "./dist/tokens/index.d.ts",
-      "import": "./dist/esm/tokens/index.js",
+      "import": "./dist/tokens/index.js",
       "require": "./dist/tokens/index.js"
     },
     "./package.json": "./package.json"
