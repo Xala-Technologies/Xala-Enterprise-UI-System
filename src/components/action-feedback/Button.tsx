@@ -226,7 +226,7 @@ const getPriorityStyles = (priority?: string): React.CSSProperties => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }) => {
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -253,7 +253,7 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 };
 
 // Loading spinner component
-const LoadingSpinner = ({ size }: { size: string }) => {
+const LoadingSpinner = ({ size }: { size: string }): React.ReactElement => {
   const spinnerSize =
     size === 'sm'
       ? 'var(--spacing-3)'
@@ -290,7 +290,7 @@ const ConfirmationDialog = ({
   messageKey?: string;
   onConfirm: () => void;
   onCancel: () => void;
-}) => {
+}): React.ReactElement | null => {
   if (!isOpen) {
     return null;
   }
@@ -392,8 +392,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
     children,
     variant = 'primary',
     size = 'md',
-    shape = 'rounded',
-    fullWidth = false,
     icon,
     iconPosition = 'left',
     loading = false,
@@ -417,7 +415,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
   const buttonStyles = getButtonStyles(props);
   const combinedStyles = { ...buttonStyles, ...style };
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     if (isDisabled) {
       return;
     }
@@ -431,12 +429,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((props, r
     onClick?.(event);
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = (): void => {
     setShowConfirmation(false);
-    onConfirm?.() || onClick?.(null);
+    onConfirm?.() || onClick?.(null as unknown as React.MouseEvent<HTMLButtonElement>);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (): void => {
     setShowConfirmation(false);
     onCancel?.();
   };

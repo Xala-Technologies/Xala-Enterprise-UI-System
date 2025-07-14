@@ -4,15 +4,23 @@
  * @description Provides UI system configuration to all components
  */
 
-import React, { createContext, ReactNode, useContext, useMemo } from 'react';
+import { Logger } from '@xala-technologies/enterprise-standards';
+import type { ReactNode } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import type { AccessibilityLevel, UISystemConfig } from '../lib/types/core.types';
-import {
+import type {
   AccessibilityConfig,
   AccessibilityPreset,
-  accessibilityPresets,
   AccessibilityTokens,
-  generateAccessibilityTokens,
 } from '../tokens/accessibility-tokens';
+import { accessibilityPresets, generateAccessibilityTokens } from '../tokens/accessibility-tokens';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-provider',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // =============================================================================
 // CONTEXT INTERFACES
@@ -42,7 +50,7 @@ export interface UISystemContext {
 // CONTEXT CREATION
 // =============================================================================
 
-const UISystemContext = createContext<UISystemContext | undefined>(undefined);
+const UISystemContextInstance = createContext<UISystemContext | undefined>(undefined);
 
 // =============================================================================
 // PROVIDER COMPONENT
@@ -122,21 +130,23 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
 
   // Update configuration function
   const updateConfig = useMemo(
-    () => (updates: Partial<UISystemConfig>) => {
-      // In a real implementation, this would update state
-      // For now, we'll just log the update
-      console.warn('UISystemProvider: Configuration updates not implemented in read-only mode');
-    },
+    () =>
+      (_updates: Partial<UISystemConfig>): void => {
+        // In a real implementation, this would update state
+        // For now, we'll just log the update
+        logger.warn('UISystemProvider: Configuration updates not implemented in read-only mode');
+      },
     []
   );
 
   // Update accessibility function
   const updateAccessibility = useMemo(
-    () => (accessibility: AccessibilityConfig | AccessibilityPreset) => {
-      // In a real implementation, this would update state
-      // For now, we'll just log the update
-      console.warn('UISystemProvider: Accessibility updates not implemented in read-only mode');
-    },
+    () =>
+      (_accessibility: AccessibilityConfig | AccessibilityPreset): void => {
+        // In a real implementation, this would update state
+        // For now, we'll just log the update
+        logger.warn('UISystemProvider: Accessibility updates not implemented in read-only mode');
+      },
     []
   );
 
@@ -179,17 +189,17 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   }, [accessibilityTokens]);
 
   return (
-    <UISystemContext.Provider value={contextValue}>
+    <UISystemContextInstance.Provider value={contextValue}>
       <div
         className="ui-system-root"
-        style={{ [cssVariables as any]: undefined } as React.CSSProperties}
+        style={{ cssText: cssVariables } as React.CSSProperties}
         data-accessibility-level={accessibilityConfig.level}
         data-high-contrast={accessibilityConfig.highContrast}
         data-reduce-motion={accessibilityConfig.reduceMotion}
       >
         {children}
       </div>
-    </UISystemContext.Provider>
+    </UISystemContextInstance.Provider>
   );
 };
 
@@ -201,7 +211,7 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
  * Hook to access UI System context
  */
 export const useUISystem = (): UISystemContext => {
-  const context = useContext(UISystemContext);
+  const context = useContext(UISystemContextInstance);
   if (!context) {
     throw new Error('useUISystem must be used within a UISystemProvider');
   }
@@ -250,9 +260,9 @@ export const useAccessibilityFeature = (feature: keyof AccessibilityConfig): boo
  */
 export const createAccessibilityProps = (
   config: AccessibilityConfig,
-  props: Record<string, any> = {}
-): Record<string, any> => {
-  const a11yProps: Record<string, any> = {};
+  props: Record<string, unknown> = {}
+): Record<string, unknown> => {
+  const a11yProps: Record<string, unknown> = {};
 
   if (config.level === 'none') {
     return props;

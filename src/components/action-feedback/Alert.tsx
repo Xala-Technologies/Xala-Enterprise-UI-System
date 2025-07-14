@@ -149,7 +149,7 @@ const getEscalationStyles = (escalationLevel?: string): React.CSSProperties => {
 };
 
 // Alert icon component
-const AlertIcon = ({ variant }: { variant: string }) => {
+const AlertIcon = ({ variant }: { variant: string }): React.ReactElement => {
   const getVariantIcon = (variant: string): string => {
     const icons = {
       info: 'ℹ️',
@@ -175,7 +175,7 @@ const AlertIcon = ({ variant }: { variant: string }) => {
 };
 
 // Classification indicator component
-const ClassificationIndicator = ({ level }: { level: string }) => {
+const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
   const getClassificationIcon = (classification: string): string => {
     const icons = {
       ÅPEN: '🟢',
@@ -202,7 +202,7 @@ const ClassificationIndicator = ({ level }: { level: string }) => {
 };
 
 // Severity indicator component
-const SeverityIndicator = ({ severity }: { severity: string }) => {
+const SeverityIndicator = ({ severity }: { severity: string }): React.ReactElement => {
   const getSeverityIcon = (severity: string): string => {
     const icons = {
       low: '🔵',
@@ -229,7 +229,7 @@ const SeverityIndicator = ({ severity }: { severity: string }) => {
 };
 
 // Close button component
-const CloseButton = ({ onClose }: { onClose: () => void }) => {
+const CloseButton = ({ onClose }: { onClose: () => void }): React.ReactElement => {
   return (
     <button
       style={{
@@ -268,7 +268,13 @@ const CloseButton = ({ onClose }: { onClose: () => void }) => {
 };
 
 // Action buttons component
-const AlertActions = ({ actions }: { actions: any[] }) => {
+interface AlertAction {
+  variant?: string;
+  handler: () => void;
+  labelKey: string;
+}
+
+const AlertActions = ({ actions }: { actions: AlertAction[] }): React.ReactElement | null => {
   if (!actions || actions.length === 0) {
     return null;
   }
@@ -308,7 +314,7 @@ const AlertActions = ({ actions }: { actions: any[] }) => {
 };
 
 // Norwegian category indicator
-const CategoryIndicator = ({ category }: { category?: string }) => {
+const CategoryIndicator = ({ category }: { category?: string }): React.ReactElement | null => {
   if (!category) {
     return null;
   }
@@ -365,11 +371,11 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) =
   const alertStyles = getAlertStyles(props);
   const combinedStyles = { ...alertStyles, ...style };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     onClose?.();
   };
 
-  const handleAcknowledge = () => {
+  const handleAcknowledge = (): void => {
     onAcknowledge?.();
     if (norwegian?.requiresAcknowledgment) {
       // TODO: Log acknowledgment for audit purposes

@@ -1,7 +1,12 @@
-// React mock for development
-const React = {
-  forwardRef: (Component: any) => Component,
-};
+import { Logger } from '@xala-technologies/enterprise-standards';
+import React, { useCallback } from 'react';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-bottom-navigation',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // BottomNavigation - Norwegian government-compliant mobile bottom navigation component
 interface BottomNavigationItem {
@@ -101,22 +106,25 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
   };
 
   // Handle item press with Norwegian compliance audit
-  const handleItemPress = (index: number, item: BottomNavigationItem) => {
-    if (item.disabled) {
-      return;
-    }
+  const handleItemPress = useCallback(
+    (index: number, item: BottomNavigationItem): void => {
+      if (item.disabled) {
+        return;
+      }
 
-    // Norwegian compliance audit logging
-    if (item.classification) {
-      console.log('Audit: Bottom navigation item pressed', {
-        item: item.labelKey,
-        classification: item.classification,
-        timestamp: new Date().toISOString(),
-      });
-    }
+      // Norwegian compliance audit logging
+      if (item.classification) {
+        logger.info('Bottom navigation item pressed', {
+          item: item.labelKey,
+          classification: item.classification,
+          timestamp: new Date().toISOString(),
+        });
+      }
 
-    onItemPress?.(index, item);
-  };
+      onItemPress?.(index, item);
+    },
+    [onItemPress]
+  );
 
   return (
     <nav

@@ -4,10 +4,17 @@
  * @description Key-value display component using design tokens (no inline styles)
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
-
 import { useLocalization } from '../../localization/hooks/useLocalization';
-import type { KeyValueListProps, KeyValueItem } from '../../types/data-display.types';
+import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-keyvalslist',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 /**
  * KeyValue List component using design tokens and semantic props
@@ -161,7 +168,7 @@ const KeyValueItemComponent: React.FC<{
         await navigator.clipboard.writeText(String(item.value));
         // You could add a toast notification here
       } catch (error) {
-        console.error('Failed to copy to clipboard:', error);
+        logger.error('Failed to copy to clipboard:', error);
       }
     }
   }, [item]);

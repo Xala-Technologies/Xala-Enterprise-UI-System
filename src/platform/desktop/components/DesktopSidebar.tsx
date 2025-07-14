@@ -1,6 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { Logger } from '@xala-technologies/enterprise-standards';
+import React, { useRef, useState } from 'react';
 
 import { useLocalization } from '../../../localization/hooks/useLocalization';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-desktop-sidebar',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // DesktopSidebar - Norwegian government-compliant desktop sidebar component
 interface DesktopSidebarProps {
@@ -97,17 +105,17 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
   };
 
   // Handle toggle
-  const handleToggle = () => {
-    if (classification) {
-      console.log('Audit: Sidebar toggled', {
-        classification,
-        municipalityCode,
-        collapsed: !isCollapsed,
-        timestamp: new Date().toISOString(),
-      });
-    }
+  const handleToggle = useCallback((): void => {
+    setIsCollapsed(!isCollapsed);
     onToggle?.(!isCollapsed);
-  };
+
+    // Audit log for user interaction
+    logger.info('Sidebar toggled', {
+      collapsed: !isCollapsed,
+      timestamp: new Date().toISOString(),
+      userId: 'current-user', // Replace with actual user ID
+    });
+  }, [isCollapsed, onToggle]);
 
   // Handle keyboard navigation
   const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {

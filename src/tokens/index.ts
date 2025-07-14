@@ -4,6 +4,15 @@
  * @description Centralized export of all design tokens and token utilities
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-tokens',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
+
 // =============================================================================
 // CORE TOKEN SYSTEM
 // =============================================================================
@@ -151,7 +160,7 @@ export const devUtils = {
     if (process.env['NODE_ENV'] === 'development') {
       // Basic validation - extend as needed
       if (!config.level || !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(config.level)) {
-        console.warn('⚠️ Invalid accessibility level:', config.level);
+        logger.warn('Invalid accessibility level:', { level: config.level });
       }
     }
   },

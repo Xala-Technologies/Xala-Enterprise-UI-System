@@ -1,4 +1,12 @@
-import React, { useEffect } from 'react';
+import { Logger } from '@xala-technologies/enterprise-standards';
+import React, { useCallback } from 'react';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-mobile-drawer',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 import { useLocalization } from '../../../localization/hooks/useLocalization';
 
@@ -164,16 +172,16 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
   };
 
   // Handle close button
-  const handleClose = () => {
-    if (classification) {
-      console.log('Audit: Drawer closed', {
-        classification,
-        municipalityCode,
-        timestamp: new Date().toISOString(),
-      });
-    }
+  const handleClose = useCallback((): void => {
+    setIsOpen(false);
     onClose?.();
-  };
+
+    // Audit log for user interaction
+    logger.info('Drawer closed', {
+      timestamp: new Date().toISOString(),
+      userId: 'current-user', // Replace with actual user ID
+    });
+  }, [onClose]);
 
   if (!isOpen) {
     return null;

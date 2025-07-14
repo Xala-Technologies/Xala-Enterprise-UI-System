@@ -4,9 +4,17 @@
  * @description Specialized input for Norwegian organization numbers using design tokens (no inline styles)
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useEffect, useRef, useState } from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-org-number-input',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // Placeholder validation functions (replace with actual validation package)
 const validateOrganizationNumber = (value: string) => ({
@@ -174,7 +182,9 @@ export function OrganizationNumberInput({
             const data = await mockFetchOrganizationData(cleaned);
             setOrgData(data || undefined);
           } catch (error) {
-            console.warn('Failed to fetch organization data:', error);
+            logger.warn('Failed to fetch organization data:', {
+              error: error instanceof Error ? error.message : String(error),
+            });
           } finally {
             setIsFetchingData(false);
           }
