@@ -1,7 +1,9 @@
-// Action & Feedback types for @xala-mock/ui-system
-// Norwegian-compliant interactive component types
+/**
+ * @fileoverview Action feedback component type definitions
+ * @module ActionFeedbackTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // Base action feedback component props
 export interface ActionFeedbackComponentProps extends ComponentProps {

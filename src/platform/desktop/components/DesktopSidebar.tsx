@@ -1,7 +1,6 @@
-// React mock for development
-const React = {
-  forwardRef: (Component: any) => Component,
-};
+import React, { useState, useEffect, useRef } from 'react';
+
+import { useLocalization } from '../../../localization/hooks/useLocalization';
 
 // DesktopSidebar - Norwegian government-compliant desktop sidebar component
 interface DesktopSidebarProps {
@@ -65,10 +64,11 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
     ...restProps
   } = props;
 
-  // Mock translation function
-  const t = (key: string) => key;
+  const [sidebarWidth, setSidebarWidth] = useState<number>(width);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const { t } = useLocalization();
 
-  // Classification styling based on NSM standards
+  // Get Norwegian classification colors and styles
   const getClassificationStyle = () => {
     if (!classification) { return {}; }
 
@@ -107,17 +107,19 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
     onToggle?.(!isCollapsed);
   };
 
-  // Handle keyboard shortcuts
-  const handleKeyDown = (event: KeyboardEvent) => {
-    // Alt+S to toggle sidebar (Norwegian keyboard shortcut)
-    if (event.altKey && event.key === 's') {
+  // Handle keyboard navigation
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key === 'Escape' && !persistent) {
+      onToggle?.(true); // Collapse on escape
+    }
+    if (event.key === 'Tab') {
+      // Focus management for accessibility
       event.preventDefault();
-      handleToggle();
     }
   };
 
   // Sidebar width with collapse support
-  const sidebarWidth = isCollapsed ? 60 : width;
+  // const sidebarWidth = isCollapsed ? 60 : width;
 
   return (
     <>

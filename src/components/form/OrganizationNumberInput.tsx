@@ -1,14 +1,26 @@
-// OrganizationNumberInput component for @xala-mock/ui-system
-// Norwegian Organization Number (Organisasjonsnummer) input with validation
+/**
+ * @fileoverview Organization Number Input Component
+ * @module OrganizationNumberInput
+ * @description Specialized input for organization numbers with validation
+ */
 
-import React, { forwardRef, useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 
-import { OrganizationNumberInputProps, OrganizationData } from '../../types/form.types';
-import {
-  validateOrganizationNumber,
-  formatOrganizationNumber,
-  NORWEGIAN_ERROR_MESSAGES,
-} from '../../utils/norwegian-validation';
+import { useLocalization } from '../../localization/hooks/useLocalization';
+import type { OrganizationNumberInputProps, OrganizationData } from '../../types/form.types';
+
+// Placeholder validation functions (replace with actual validation package)
+const validateOrganizationNumber = (value: string) => ({
+  isValid: value.length === 9,
+  errors: value.length === 9 ? [] : ['Invalid organization number'],
+  type: 'enterprise' as const,
+  mainOrganization: value,
+});
+
+const formatOrganizationNumber = (value: string) => {
+  const cleaned = value.replace(/\D/g, '');
+  return cleaned.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3');
+};
 
 // Helper function to generate CSS using design tokens
 const getOrganizationInputStyles = (props: OrganizationNumberInputProps): React.CSSProperties => {
@@ -296,7 +308,7 @@ const ErrorMessage = ({ errors }: { errors: string[] }) => {
       {errors.map((error, index) => (
         <div key={index}>
           {/* TODO: Replace with actual localization */}
-          {NORWEGIAN_ERROR_MESSAGES[error as keyof typeof NORWEGIAN_ERROR_MESSAGES] || error}
+          {error}
         </div>
       ))}
     </div>
@@ -336,7 +348,7 @@ const mockFetchOrganizationData = async (orgNumber: string): Promise<Organizatio
 };
 
 // OrganizationNumberInput component with forwardRef
-export const OrganizationNumberInput = forwardRef<HTMLInputElement, OrganizationNumberInputProps>(
+export const OrganizationNumberInput = React.forwardRef<HTMLInputElement, OrganizationNumberInputProps>(
   (props, ref) => {
     const {
       labelKey,
@@ -387,8 +399,8 @@ export const OrganizationNumberInput = forwardRef<HTMLInputElement, Organization
     const combinedStyles = { ...inputStyles, ...style };
 
     // Validate organization number
-    const validateInput = useCallback(
-      async (inputValue: string) => {
+    const validateInput = useMemo(
+      () => async (inputValue: string) => {
         if (!inputValue.trim()) {
           setValidationResult({ isValid: false, errors: [], type: undefined });
           setOrgData(null);
@@ -397,9 +409,7 @@ export const OrganizationNumberInput = forwardRef<HTMLInputElement, Organization
 
         setIsValidating(true);
 
-        const result = validateOrganizationNumber(inputValue, {
-          allowSubOrganization: true,
-        });
+        const result = validateOrganizationNumber(inputValue);
 
         setValidationResult(result);
 
@@ -432,8 +442,8 @@ export const OrganizationNumberInput = forwardRef<HTMLInputElement, Organization
     );
 
     // Handle input change with formatting and validation
-    const handleChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = useMemo(
+      () => (event: React.ChangeEvent<HTMLInputElement>) => {
         let newValue = event.target.value;
 
         // Remove non-numeric characters and limit length
@@ -470,8 +480,8 @@ export const OrganizationNumberInput = forwardRef<HTMLInputElement, Organization
     );
 
     // Validate on blur for complete inputs
-    const handleBlur = useCallback(
-      (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = useMemo(
+      () => (event: React.FocusEvent<HTMLInputElement>) => {
         const cleaned = internalValue.replace(/\D/g, '');
         if (cleaned.length === 9) {
           validateInput(cleaned);

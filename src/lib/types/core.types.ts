@@ -4,6 +4,122 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
+import type { ReactNode, CSSProperties as ReactCSSProperties } from 'react';
+
+/**
+ * Enhanced CSS Properties with pseudo-selectors, keyframes, and custom properties
+ */
+export interface CSSProperties extends ReactCSSProperties {
+  // Pseudo-selectors
+  ':hover'?: CSSProperties;
+  ':focus'?: CSSProperties;
+  ':active'?: CSSProperties;
+  ':visited'?: CSSProperties;
+  ':disabled'?: CSSProperties;
+  ':focus-within'?: CSSProperties;
+  ':first-child'?: CSSProperties;
+  ':last-child'?: CSSProperties;
+  ':nth-child(odd)'?: CSSProperties;
+  ':nth-child(even)'?: CSSProperties;
+
+  // Keyframes and animations
+  '@keyframes badge-pulse'?: {
+    [key: string]: CSSProperties;
+  };
+  '@keyframes fadeIn'?: {
+    [key: string]: CSSProperties;
+  };
+  '@keyframes slideIn'?: {
+    [key: string]: CSSProperties;
+  };
+
+  // Custom CSS properties for design tokens
+  '--color-primary'?: string;
+  '--color-secondary'?: string;
+  '--spacing-unit'?: string;
+  '--border-radius'?: string;
+  '--font-family'?: string;
+  '--line-length-norwegian-sm'?: string;
+  '--line-length-norwegian-md'?: string;
+  '--line-length-norwegian-lg'?: string;
+  '--line-length-norwegian-xl'?: string;
+
+  // Custom layout properties
+  lineLength?: string;
+
+  // Allow any CSS custom property
+  [key: `--${string}`]: string | number | undefined;
+
+  // Allow any pseudo-selector
+  [key: `:${string}`]: CSSProperties | undefined;
+
+  // Allow any at-rule
+  [key: `@${string}`]: any;
+}
+
+/**
+ * Base component properties with strict typing
+ */
+export interface ComponentProps {
+  readonly className?: string;
+  readonly children?: ReactNode;
+  readonly testId?: string;
+  readonly 'aria-label'?: string;
+  readonly style?: CSSProperties;
+  readonly id?: string;
+  readonly role?: string;
+  readonly tabIndex?: number;
+  readonly 'aria-describedby'?: string;
+  readonly 'aria-labelledby'?: string;
+  readonly 'data-testid'?: string;
+}
+
+/**
+ * Accessibility properties for all components
+ */
+export interface AccessibilityProps {
+  readonly 'aria-label'?: string;
+  readonly 'aria-labelledby'?: string;
+  readonly 'aria-describedby'?: string;
+  readonly 'aria-expanded'?: boolean;
+  readonly 'aria-hidden'?: boolean;
+  readonly 'aria-live'?: 'off' | 'polite' | 'assertive';
+  readonly 'aria-atomic'?: boolean;
+  readonly 'aria-busy'?: boolean;
+  readonly 'aria-controls'?: string;
+  readonly 'aria-current'?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
+  readonly 'aria-disabled'?: boolean;
+  readonly 'aria-invalid'?: boolean | 'grammar' | 'spelling';
+  readonly 'aria-pressed'?: boolean;
+  readonly 'aria-selected'?: boolean;
+  readonly role?: string;
+  readonly tabIndex?: number;
+}
+
+/**
+ * Event handler types
+ */
+export interface EventHandlers {
+  readonly onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  readonly onFocus?: (event: React.FocusEvent<HTMLElement>) => void;
+  readonly onBlur?: (event: React.FocusEvent<HTMLElement>) => void;
+  readonly onKeyDown?: (event: React.KeyboardEvent<HTMLElement>) => void;
+  readonly onKeyUp?: (event: React.KeyboardEvent<HTMLElement>) => void;
+  readonly onChange?: (event: React.ChangeEvent<HTMLElement>) => void;
+}
+
+/**
+ * Component state types
+ */
+export interface ComponentState {
+  readonly isLoading: boolean;
+  readonly isDisabled: boolean;
+  readonly hasError: boolean;
+  readonly errorMessage?: string;
+  readonly isVisible: boolean;
+  readonly isFocused: boolean;
+}
+
 /**
  * Supported languages
  */
@@ -132,67 +248,4 @@ export interface AuditTrailEntry {
   readonly component: string;
   readonly user?: string;
   readonly metadata?: Record<string, unknown>;
-}
-
-/**
- * Component props interface
- */
-export interface ComponentProps {
-  readonly className?: string;
-  readonly children?: unknown;
-  readonly testId?: string;
-  readonly 'aria-label'?: string;
-  readonly style?: Record<string, unknown>;
-  readonly id?: string;
-  readonly role?: string;
-  readonly tabIndex?: number;
-  readonly 'aria-describedby'?: string;
-  readonly 'aria-labelledby'?: string;
-  readonly 'data-testid'?: string;
-}
-
-/**
- * Accessibility properties
- */
-export interface AccessibilityProps {
-  readonly 'aria-label'?: string;
-  readonly 'aria-labelledby'?: string;
-  readonly 'aria-describedby'?: string;
-  readonly 'aria-expanded'?: boolean;
-  readonly 'aria-hidden'?: boolean;
-  readonly 'aria-live'?: 'off' | 'polite' | 'assertive';
-  readonly 'aria-atomic'?: boolean;
-  readonly 'aria-busy'?: boolean;
-  readonly 'aria-controls'?: string;
-  readonly 'aria-current'?: boolean | 'page' | 'step' | 'location' | 'date' | 'time';
-  readonly 'aria-disabled'?: boolean;
-  readonly 'aria-invalid'?: boolean | 'grammar' | 'spelling';
-  readonly 'aria-pressed'?: boolean;
-  readonly 'aria-selected'?: boolean;
-  readonly role?: string;
-  readonly tabIndex?: number;
-}
-
-/**
- * Event handler types
- */
-export interface EventHandlers {
-  readonly onClick?: (event: unknown) => void;
-  readonly onFocus?: (event: unknown) => void;
-  readonly onBlur?: (event: unknown) => void;
-  readonly onKeyDown?: (event: unknown) => void;
-  readonly onKeyUp?: (event: unknown) => void;
-  readonly onChange?: (event: unknown) => void;
-}
-
-/**
- * Component state
- */
-export interface ComponentState {
-  readonly isLoading: boolean;
-  readonly isDisabled: boolean;
-  readonly hasError: boolean;
-  readonly errorMessage?: string;
-  readonly isVisible: boolean;
-  readonly isFocused: boolean;
 }

@@ -1,7 +1,6 @@
-// React mock for development
-const React = {
-  forwardRef: (Component: any) => Component,
-};
+import React, { useEffect } from 'react';
+
+import { useLocalization } from '../../../localization/hooks/useLocalization';
 
 // MobileDrawer - Norwegian government-compliant mobile drawer component
 interface MobileDrawerProps {
@@ -63,8 +62,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
     ...restProps
   } = props;
 
-  // Mock translation function
-  const t = (key: string) => key;
+  const { t } = useLocalization();
 
   // Classification styling based on NSM standards
   const getClassificationStyle = () => {

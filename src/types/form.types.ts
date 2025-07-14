@@ -1,7 +1,9 @@
-// Form types for @xala-mock/ui-system
-// Norwegian-compliant form component types with accessibility and validation
+/**
+ * @fileoverview Form component type definitions
+ * @module FormTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // Base form component props with Norwegian accessibility
 export interface FormComponentProps extends ComponentProps {

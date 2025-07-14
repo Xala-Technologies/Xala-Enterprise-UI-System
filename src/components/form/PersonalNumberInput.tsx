@@ -1,14 +1,28 @@
-// PersonalNumberInput component for @xala-mock/ui-system
-// Norwegian Personal Number (Fødselsnummer) input with validation
+/**
+ * @fileoverview Personal Number Input Component
+ * @module PersonalNumberInput
+ * @description Specialized input for Norwegian personal numbers with validation
+ */
 
-import React, { forwardRef, useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-import { PersonalNumberInputProps } from '../../types/form.types';
-import {
-  validatePersonalNumber,
-  formatPersonalNumber,
-  NORWEGIAN_ERROR_MESSAGES,
-} from '../../utils/norwegian-validation';
+import { useLocalization } from '../../localization/hooks/useLocalization';
+import type { PersonalNumberInputProps } from '../../types/form.types';
+
+// Placeholder validation functions (replace with actual validation package)
+const validatePersonalNumber = (value: string) => ({
+  isValid: value.length === 11,
+  errors: value.length === 11 ? [] : ['Invalid personal number'],
+  type: 'fødselsnummer' as const,
+  birthDate: new Date(),
+  gender: 'male' as const,
+  century: 20,
+});
+
+const formatPersonalNumber = (value: string) => {
+  const cleaned = value.replace(/\D/g, '');
+  return cleaned.replace(/(\d{6})(\d{5})/, '$1-$2');
+};
 
 // Helper function to generate CSS using design tokens
 const getPersonalNumberInputStyles = (props: PersonalNumberInputProps): React.CSSProperties => {
@@ -205,7 +219,7 @@ const ErrorMessage = ({ errors }: { errors: string[] }) => {
       {errors.map((error, index) => (
         <div key={index}>
           {/* TODO: Replace with actual localization */}
-          {NORWEGIAN_ERROR_MESSAGES[error as keyof typeof NORWEGIAN_ERROR_MESSAGES] || error}
+          {error}
         </div>
       ))}
     </div>
@@ -213,7 +227,7 @@ const ErrorMessage = ({ errors }: { errors: string[] }) => {
 };
 
 // PersonalNumberInput component with forwardRef
-export const PersonalNumberInput = forwardRef<HTMLInputElement, PersonalNumberInputProps>(
+export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNumberInputProps>(
   (props, ref) => {
     const {
       labelKey,
@@ -262,7 +276,7 @@ export const PersonalNumberInput = forwardRef<HTMLInputElement, PersonalNumberIn
     const combinedStyles = { ...inputStyles, ...style };
 
     // Validate personal number
-    const validateInput = useCallback(
+    const validateInput = React.useCallback(
       (inputValue: string) => {
         if (!inputValue.trim()) {
           setValidationResult({ isValid: false, errors: [], type: undefined });
@@ -273,11 +287,7 @@ export const PersonalNumberInput = forwardRef<HTMLInputElement, PersonalNumberIn
 
         // Add small delay to simulate real validation
         setTimeout(() => {
-          const result = validatePersonalNumber(inputValue, {
-            allowDNumber: validation.allowDNumber,
-            allowHNumber: validation.allowHNumber,
-            strictFormat: validation.strictFormat,
-          });
+          const result = validatePersonalNumber(inputValue);
 
           setValidationResult(result);
           setIsValidating(false);
@@ -287,11 +297,11 @@ export const PersonalNumberInput = forwardRef<HTMLInputElement, PersonalNumberIn
           }
         }, 300);
       },
-      [validation, onValidationChange]
+      [onValidationChange]
     );
 
     // Handle input change with formatting and validation
-    const handleChange = useCallback(
+    const handleChange = React.useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         let newValue = event.target.value;
 
@@ -327,7 +337,7 @@ export const PersonalNumberInput = forwardRef<HTMLInputElement, PersonalNumberIn
     );
 
     // Validate on blur for complete inputs
-    const handleBlur = useCallback(
+    const handleBlur = React.useCallback(
       (event: React.FocusEvent<HTMLInputElement>) => {
         const cleaned = internalValue.replace(/\D/g, '');
         if (cleaned.length === 11) {

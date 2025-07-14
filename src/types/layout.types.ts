@@ -1,12 +1,14 @@
-// Layout types for @xala-mock/ui-system
-// Norwegian-compliant semantic layout component types
+/**
+ * @fileoverview Layout component type definitions
+ * @module LayoutTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // Base layout component props
 export interface LayoutComponentProps extends ComponentProps {
   padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-  margin?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
+  margin?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'auto';
   background?: 'primary' | 'secondary' | 'tertiary' | 'transparent';
 }
 
@@ -31,6 +33,11 @@ export interface SectionProps extends LayoutComponentProps {
 export interface ContainerProps extends LayoutComponentProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   center?: boolean;
+  maxWidth?: string | number;
+  centerContent?: boolean;
+  responsive?: boolean;
+  accessibilityMode?: boolean;
+  norwegianMaxWidth?: boolean;
   norwegian?: {
     maxWidth?: boolean; // Follow Norwegian content width guidelines
     accessibility?: boolean; // WCAG 2.2 AA spacing

@@ -1,7 +1,6 @@
-// React mock for development
-const React = {
-  forwardRef: (Component: any) => Component,
-};
+import React, { useState, useRef, useEffect } from 'react';
+
+import { useLocalization } from '../../localization/hooks/useLocalization';
 
 // TextArea - Norwegian government-compliant text area component
 interface TextAreaProps {
@@ -94,8 +93,10 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
     ...restProps
   } = props;
 
-  // Mock translation function
-  const t = (key: string) => key;
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [currentLength, setCurrentLength] = useState<number>(0);
+  const [wordCount, setWordCount] = useState<number>(0);
+  const { t } = useLocalization();
 
   // Generate unique ID if not provided
   const textAreaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`;
@@ -104,13 +105,32 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
   const countId = `${textAreaId}-count`;
 
   // Calculate character and word counts
-  const currentLength = value?.length || 0;
-  const wordCount = value
-    ? value
-      .trim()
-      .split(/\s+/)
-      .filter(word => word.length > 0).length
-    : 0;
+  useEffect(() => {
+    const updateCounts = () => {
+      const currentValue = value || '';
+      setCurrentLength(currentValue.length);
+      setWordCount(
+        currentValue
+          .trim()
+          .split(/\s+/)
+          .filter(word => word.length > 0).length
+      );
+    };
+
+    updateCounts(); // Set initial counts
+    const textArea = textAreaRef.current;
+    if (textArea) {
+      textArea.addEventListener('input', updateCounts);
+      textArea.addEventListener('change', updateCounts);
+      return () => {
+        textArea.removeEventListener('input', updateCounts);
+        textArea.removeEventListener('change', updateCounts);
+      };
+    }
+    
+    // Return empty cleanup function for cases where textArea is not available
+    return () => {};
+  }, [value]);
 
   // Size variants
   const getSizeStyles = () => {
@@ -293,7 +313,7 @@ export const TextArea = React.forwardRef((props: TextAreaProps, ref: any) => {
         >
           {norwegian.characterCount && (
             <span>
-              {t('form.characterCount', { count: currentLength, max: maxLength })}
+              {t('form.characterCount', { count: currentLength, max: maxLength || 0 })}
               {maxLength && ` / ${maxLength}`}
             </span>
           )}

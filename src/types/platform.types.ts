@@ -1,7 +1,9 @@
-// Platform-specific types for @xala-mock/ui-system
-// Norwegian-compliant mobile and desktop component types
+/**
+ * @fileoverview Platform component type definitions
+ * @module PlatformTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // Base platform component props
 export interface PlatformComponentProps extends ComponentProps {

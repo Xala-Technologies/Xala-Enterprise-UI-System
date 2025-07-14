@@ -1,7 +1,5 @@
-// React mock for development
-const React = {
-  forwardRef: (Component: any) => Component,
-};
+import React from 'react';
+import { useLocalization } from '../../../localization/hooks/useLocalization';
 
 // NSMClassificationIndicator - Norwegian Security Authority classification display
 interface NSMClassificationIndicatorProps {
@@ -35,8 +33,7 @@ export const NSMClassificationIndicator = React.forwardRef(
       ...restProps
     } = props;
 
-    // Mock translation function
-    const t = (key: string) => key;
+    const { t } = useLocalization();
 
     // Classification definitions based on NSM standards
     const getClassificationConfig = () => {

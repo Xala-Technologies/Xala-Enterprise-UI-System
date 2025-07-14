@@ -1,178 +1,102 @@
-// PageLayout component for @xala-mock/ui-system
-// Norwegian-compliant page layout with semantic structure
+/**
+ * @fileoverview PageLayout Component - Enterprise Standards Compliant
+ * @module PageLayout
+ * @description Page layout component using design tokens (no inline styles)
+ */
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 
-import { PageLayoutProps } from '../../types/layout.types';
+import type { PageLayoutProps } from '../../types/layout.types';
 
-// Helper function to generate CSS using design tokens
-const getPageLayoutStyles = (props: PageLayoutProps): React.CSSProperties => {
-  const {
-    padding = 'none',
-    margin = 'none',
-    background = 'transparent',
-    variant = 'modern',
-    fullWidth = false,
-    municipality,
-  } = props;
+/**
+ * PageLayout component using design tokens and semantic props
+ * Follows enterprise standards - no inline styles, design token props only
+ */
+export function PageLayout({
+  children,
+  header,
+  footer,
+  sidebar,
+  variant = 'modern',
+  municipality,
+  fullWidth = false,
+  background = 'primary',
+  padding = 'md',
+  margin = 'none',
+  className = '',
+  testId,
+  ...props
+}: PageLayoutProps): JSX.Element {
 
-  // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'grid',
-    minHeight: '100vh',
-    gridTemplateRows: 'auto 1fr auto',
-    gridTemplateColumns: props.sidebar ? 'auto 1fr' : '1fr',
-    gridTemplateAreas: props.sidebar
-      ? `"sidebar header"
-         "sidebar main"
-         "sidebar footer"`
-      : `"header"
-         "main"
-         "footer"`,
-    width: fullWidth ? '100%' : undefined,
-    maxWidth: fullWidth ? undefined : 'var(--container-max-width)',
-    margin: fullWidth ? '0' : '0 auto',
-    backgroundColor: getBackgroundToken(background),
-    padding: getPaddingToken(padding),
-    fontFamily: 'var(--font-family-sans)',
-    lineHeight: 'var(--line-height-normal)',
-  };
+  // Build CSS classes using design tokens
+  const pageClasses = React.useMemo(() => {
+    const classes = ['page-layout'];
 
-  // Municipality-specific theme
-  if (municipality) {
-    baseStyles.colorScheme = `var(--theme-${municipality})`;
-  }
+    // Variant classes
+    classes.push(`page-layout--${variant}`);
 
-  // Variant-specific adjustments
-  const variantStyles = getVariantStyles(variant);
+    // Municipality classes
+    if (municipality) {
+      classes.push(`page-layout--municipality-${municipality}`);
+    }
 
-  return { ...baseStyles, ...variantStyles };
-};
+    // Background classes
+    classes.push(`page-layout--bg-${background}`);
 
-// Get background color token
-const getBackgroundToken = (background: string): string => {
-  const backgrounds = {
-    primary: 'var(--background-primary)',
-    secondary: 'var(--background-secondary)',
-    tertiary: 'var(--color-gray-50)',
-    transparent: 'transparent',
-  };
-  return backgrounds[background as keyof typeof backgrounds] || backgrounds.transparent;
-};
+    // Padding classes
+    classes.push(`page-layout--padding-${padding}`);
 
-// Get padding token
-const getPaddingToken = (padding: string): string => {
-  const paddings = {
-    none: '0',
-    sm: 'var(--spacing-4)',
-    md: 'var(--spacing-6)',
-    lg: 'var(--spacing-8)',
-    xl: 'var(--spacing-12)',
-  };
-  return paddings[padding as keyof typeof paddings] || paddings.none;
-};
+    // Margin classes
+    classes.push(`page-layout--margin-${margin}`);
 
-// Get variant-specific styles
-const getVariantStyles = (variant: string): React.CSSProperties => {
-  const variants: Record<string, React.CSSProperties> = {
-    government: {
-      backgroundColor: 'var(--color-white)',
-      border: 'var(--border-width) solid var(--border-primary)',
-      borderRadius: 'var(--border-radius-sm)', // Minimal rounding for government
-    },
-    municipal: {
-      backgroundColor: 'var(--background-primary)',
-      borderRadius: 'var(--border-radius-base)', // Municipal standard
-      boxShadow: 'var(--shadow-sm)', // Subtle municipal shadow
-    },
-    modern: {
-      backgroundColor: 'var(--background-primary)',
-      borderRadius: 'var(--border-radius-md)',
-      boxShadow: 'var(--shadow-base)',
-    },
-  };
-  return variants[variant] || variants.modern;
-};
+    // Feature classes
+    if (fullWidth) {
+      classes.push('page-layout--full-width');
+    }
 
-// PageLayout component with forwardRef for className/style props
-export const PageLayout = forwardRef<HTMLDivElement, PageLayoutProps>((props, ref) => {
-  const {
-    children,
-    header,
-    footer,
-    sidebar,
-    className,
-    style,
-    testId,
-    'aria-label': ariaLabel,
-    ...layoutProps
-  } = props;
+    if (sidebar) {
+      classes.push('page-layout--with-sidebar');
+    }
 
-  const pageStyles = getPageLayoutStyles(layoutProps);
-  const combinedStyles = { ...pageStyles, ...style };
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+
+    return classes.join(' ');
+  }, [variant, municipality, background, padding, margin, fullWidth, sidebar, className]);
 
   return (
     <div
-      ref={ref}
-      className={className}
-      style={combinedStyles}
+      className={pageClasses}
       data-testid={testId}
-      aria-label={ariaLabel}
-      role='main'
+      {...props}
     >
-      {/* Header area */}
       {header && (
-        <header style={{ gridArea: 'header' }} role='banner'>
+        <header className="page-layout__header">
           {header}
         </header>
       )}
 
-      {/* Sidebar area (if provided) */}
-      {sidebar && (
-        <aside
-          style={{
-            gridArea: 'sidebar',
-            borderRight: 'var(--border-width) solid var(--border-primary)',
-            backgroundColor: 'var(--background-secondary)',
-            padding: 'var(--spacing-4)',
-          }}
-          role='navigation'
-          aria-label='Sidebar navigation'
-        >
-          {sidebar}
-        </aside>
-      )}
+      <div className="page-layout__body">
+        {sidebar && (
+          <aside className="page-layout__sidebar">
+            {sidebar}
+          </aside>
+        )}
 
-      {/* Main content area */}
-      <main
-        style={{
-          gridArea: 'main',
-          padding: 'var(--spacing-6)',
-          minHeight: 'var(--main-min-height)', // Minimum content height
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-        role='main'
-      >
-        {children}
-      </main>
+        <main className="page-layout__content">
+          {children}
+        </main>
+      </div>
 
-      {/* Footer area */}
       {footer && (
-        <footer
-          style={{
-            gridArea: 'footer',
-            borderTop: 'var(--border-width) solid var(--border-primary)',
-            backgroundColor: 'var(--background-secondary)',
-            padding: 'var(--spacing-4)',
-          }}
-          role='contentinfo'
-        >
+        <footer className="page-layout__footer">
           {footer}
         </footer>
       )}
     </div>
   );
-});
+}
 
 PageLayout.displayName = 'PageLayout';

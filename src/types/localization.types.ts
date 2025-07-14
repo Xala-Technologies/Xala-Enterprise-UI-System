@@ -1,7 +1,9 @@
-// Localization and RTL types for @xala-mock/ui-system
-// Norwegian government-compliant internationalization types
+/**
+ * @fileoverview Localization component type definitions
+ * @module LocalizationTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // React type definitions for this file
 declare namespace React {

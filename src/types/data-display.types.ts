@@ -1,7 +1,9 @@
-// Data Display types for @xala-mock/ui-system
-// Norwegian-compliant data display component types
+/**
+ * @fileoverview Data display component type definitions
+ * @module DataDisplayTypes
+ */
 
-import { ComponentProps } from './index';
+import type { ComponentProps } from '../lib/types/core.types';
 
 // Base data display component props
 export interface DataDisplayComponentProps extends ComponentProps {
@@ -251,6 +253,10 @@ export interface BadgeProps extends ComponentProps {
   maxCount?: number;
   showZero?: boolean;
   pulse?: boolean;
+  dot?: boolean;
+  classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  accessible?: boolean;
   norwegian?: {
     classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
     priority?: 'low' | 'medium' | 'high' | 'critical';

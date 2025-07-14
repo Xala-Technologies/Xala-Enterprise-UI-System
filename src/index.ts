@@ -1,28 +1,23 @@
 /**
- * @fileoverview Main exports for @xala-technologies/ui-system
+ * @fileoverview Main UI System exports
  * @module UISystem
- * @compliance NSM, GDPR, WCAG AAA
+ * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
-// Core library exports
+// Core system exports
 export {
   UISystemCore,
   createProductionUISystem,
   createTestUISystem,
   createDevelopmentUISystem,
-  VERSION,
-  PACKAGE_NAME,
-  PACKAGE_INFO,
-} from './lib/index';
+} from './lib/core/index';
 
-// Type definitions with enterprise compliance
+// Core types and interfaces
 export type {
-  // Core types
   UISystemConfig,
   UISystemOptions,
-  NorwegianCompliance,
-  NorwegianLanguage,
-  WCAGLevel,
+  SupportedLanguage,
+  AccessibilityLevel,
   ThemeDefinition,
   ThemeColors,
   AccessibilityConfig,
@@ -32,94 +27,63 @@ export type {
   ValidationError,
   PerformanceMetrics,
   AuditTrailEntry,
+  ComponentProps,
+  AccessibilityProps,
+  EventHandlers,
+  ComponentState,
+} from './lib/types/core.types';
 
-  // Service interfaces
+// Interfaces
+export type {
   UISystemService,
   ComponentFactory,
   ComponentFactoryFunction,
   ThemeManager,
   AccessibilityService,
   PerformanceMonitor,
-  NorwegianComplianceValidator,
   AuditTrailService,
+  AuditTrailFilter,
   ConfigurationService,
   EventPublisher,
   LocalizationService,
+} from './lib/interfaces/ui-system.interface';
 
-  // Component types
-  ComponentProps,
-  SemanticComponentProps,
-  MobileComponentProps,
-  DesktopComponentProps,
-  NorwegianFormProps,
-  AccessibilityProps,
-  EventHandlers,
-  ComponentState,
-  ThemeContext,
-  LocalizationContext,
-
-  // UI configuration
-  NorwegianUIConfig,
-  DesignToken,
-  CSSProperties,
-
-  // Norwegian validation types
-  NorwegianPersonalNumber,
-  NorwegianOrganizationNumber,
-  NorwegianPostalCode,
-  NorwegianPhoneNumber,
-} from './types/index';
-
-// Norwegian compliance utilities
+// Validation utilities
+export type { ValidationResult } from './lib/utils/validation';
 export {
-  isValidNorwegianPersonalNumber,
-  isValidNorwegianOrganizationNumber,
-  isValidNorwegianPostalCode,
-  isValidNorwegianPhoneNumber,
-  validateNorwegianCompliance,
-  isValidNSMClassification,
-  isValidWCAGLevel,
-  isValidNorwegianLanguage,
-  isValidNorwegianMunicipalityCode,
-  getNSMClassificationLabel,
-  canDisplayClassification,
-  sanitizeDataForClassification,
-  validateGDPRConsent,
-  validateColorContrast,
-} from './lib/index';
+  createValidationResult,
+  safeGet,
+  safeArrayAccess,
+  isValidEmail,
+  isValidUrl,
+} from './lib/utils/validation';
 
-// Type safety utilities
-export {
-  isValidComponentProps,
-  isValidAccessibilityProps,
-  isValidEventHandlers,
-  isValidComponentState,
-  safeGetComponentProp,
-  safeGetChildAt,
-  validateComponentProps,
-  validateNorwegianComplianceConfig,
-  safeAccessObject,
-  validateEmailWithNorwegianSupport,
-  validateUrlWithNorwegianCompliance,
-  createSafeEventHandler,
-  validateAccessibilityRequirements,
-  createComponentFactory,
-  validateTouchTargetSize,
-  validateColorContrastRatio,
-} from './lib/index';
+// Component exports
+export * from './components';
 
-// Design tokens (preserved from existing implementation)
-export { colors, colorTokens, municipalityColors } from './tokens/colors';
-export { spacing, spacingTokens, norwegianSpacing } from './tokens/spacing';
-export { typography, typographyTokens, norwegianTypography } from './tokens/typography';
-export { borderRadius, borderRadiusTokens, norwegianBorderRadius } from './tokens/border-radius';
-export { shadows, shadowTokens, norwegianShadows } from './tokens/shadows';
-export { validateDesignTokens } from './tokens/validation';
-export { generateThemeTokens, municipalityThemes } from './tokens';
-export type { NorwegianThemeConfig, MunicipalityTheme } from './tokens';
+// Token exports
+export * from './tokens';
 
-// React hooks (preserved from existing implementation)
-export { useUISystem } from './hooks/index';
+// Type exports
+export * from './types';
 
-// Core components (preserved from existing implementation)
-export { UISystemProvider } from './components/UISystemProvider';
+// Version and package info
+export const VERSION = '1.0.1';
+export const PACKAGE_NAME = '@xala-technologies/ui-system';
+
+/**
+ * Package information for enterprise monitoring
+ */
+export const PACKAGE_INFO = {
+  name: PACKAGE_NAME,
+  version: VERSION,
+  description: 'Enterprise UI component library with accessibility and performance monitoring',
+  platform: 'react',
+  features: [
+    'accessibility-validation',
+    'type-safety',
+    'performance-monitoring',
+    'enterprise-standards',
+    'solid-principles',
+  ],
+} as const;

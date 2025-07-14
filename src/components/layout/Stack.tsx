@@ -1,119 +1,83 @@
-// Stack component for @xala-mock/ui-system
-// Flexbox stacking with Norwegian responsive design patterns
+/**
+ * @fileoverview Stack Component - Enterprise Standards Compliant
+ * @module Stack
+ * @description Flexbox stack component using design tokens (no inline styles)
+ */
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 
-import { StackProps } from '../../types/layout.types';
+import type { StackProps } from '../../types/layout.types';
 
-// Helper function to generate CSS using design tokens
-const getStackStyles = (props: StackProps): React.CSSProperties => {
-  const {
-    padding = 'none',
-    margin = 'none',
-    background = 'transparent',
-    direction = 'column',
-    gap = 'md',
-    align = 'stretch',
-    justify = 'start',
-    wrap = false,
-    reverse = false,
-  } = props;
+/**
+ * Stack component using design tokens and semantic props
+ * Follows enterprise standards - no inline styles, design token props only
+ */
+export function Stack({
+  children,
+  direction = 'column',
+  gap = 'md',
+  align = 'stretch',
+  justify = 'start',
+  wrap = false,
+  reverse = false,
+  background = 'transparent',
+  padding = 'none',
+  margin = 'none',
+  className = '',
+  testId,
+  ...props
+}: StackProps): JSX.Element {
 
-  // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: getFlexDirection(direction, reverse),
-    alignItems: align,
-    justifyContent: justify,
-    flexWrap: wrap ? 'wrap' : 'nowrap',
-    gap: getGapToken(gap),
-    width: '100%',
-    backgroundColor: getBackgroundToken(background),
-    padding: getPaddingToken(padding),
-    margin: getMarginToken(margin),
-    fontFamily: 'var(--font-family-sans)',
-  };
+  // Build CSS classes using design tokens
+  const stackClasses = React.useMemo(() => {
+    const classes = ['stack'];
 
-  return baseStyles;
-};
+    // Direction classes (with reverse support)
+    const directionClass = reverse
+      ? (direction === 'row' ? 'row-reverse' : 'column-reverse')
+      : direction;
+    classes.push(`stack--direction-${directionClass}`);
 
-// Function to get flex direction with proper typing
-const getFlexDirection = (
-  direction: 'horizontal' | 'vertical' = 'vertical',
-  reverse: boolean = false
-): 'row' | 'column' | 'row-reverse' | 'column-reverse' => {
-  if (direction === 'horizontal') {
-    return reverse ? 'row-reverse' : 'row';
-  }
-  return reverse ? 'column-reverse' : 'column';
-};
+    // Gap classes
+    classes.push(`stack--gap-${gap}`);
 
-// Get background color token
-const getBackgroundToken = (background: string): string => {
-  const backgrounds = {
-    primary: 'var(--background-primary)',
-    secondary: 'var(--background-secondary)',
-    tertiary: 'var(--color-gray-50)',
-    transparent: 'transparent',
-  };
-  return backgrounds[background as keyof typeof backgrounds] || backgrounds.transparent;
-};
+    // Alignment classes
+    classes.push(`stack--align-${align}`);
 
-// Get padding token
-const getPaddingToken = (padding: string): string => {
-  const paddings = {
-    none: '0',
-    sm: 'var(--spacing-4)',
-    md: 'var(--spacing-6)',
-    lg: 'var(--spacing-8)',
-    xl: 'var(--spacing-12)',
-  };
-  return paddings[padding as keyof typeof paddings] || paddings.none;
-};
+    // Justification classes
+    classes.push(`stack--justify-${justify}`);
 
-// Get margin token
-const getMarginToken = (margin: string): string => {
-  const margins = {
-    none: '0',
-    sm: 'var(--spacing-4)',
-    md: 'var(--spacing-6)',
-    lg: 'var(--spacing-8)',
-    xl: 'var(--spacing-12)',
-  };
-  return margins[margin as keyof typeof margins] || margins.none;
-};
+    // Background classes
+    classes.push(`stack--bg-${background}`);
 
-// Get gap token (Norwegian spacing standards)
-const getGapToken = (gap: string): string => {
-  const gaps = {
-    none: '0',
-    sm: 'var(--spacing-2)', // Norwegian small spacing
-    md: 'var(--spacing-4)', // Norwegian form standard
-    lg: 'var(--spacing-6)', // Section spacing
-    xl: 'var(--spacing-8)', // Large component spacing
-  };
-  return gaps[gap as keyof typeof gaps] || gaps.md;
-};
+    // Padding classes
+    classes.push(`stack--padding-${padding}`);
 
-// Stack component with forwardRef for className/style props
-export const Stack = forwardRef<HTMLDivElement, StackProps>((props, ref) => {
-  const { children, className, style, testId, 'aria-label': ariaLabel, ...stackProps } = props;
+    // Margin classes
+    classes.push(`stack--margin-${margin}`);
 
-  const stackStyles = getStackStyles(stackProps);
-  const combinedStyles = { ...stackStyles, ...style };
+    // Feature classes
+    if (wrap) {
+      classes.push('stack--wrap');
+    }
+
+    // Custom classes
+    if (className) {
+      classes.push(className);
+    }
+
+    return classes.join(' ');
+  }, [direction, gap, align, justify, wrap, reverse, background, padding, margin, className]);
 
   return (
     <div
-      ref={ref}
-      className={className}
-      style={combinedStyles}
+      className={stackClasses}
       data-testid={testId}
-      aria-label={ariaLabel}
-      role='group'
+      {...props}
     >
       {children}
     </div>
   );
-});
+}
 
 Stack.displayName = 'Stack';
