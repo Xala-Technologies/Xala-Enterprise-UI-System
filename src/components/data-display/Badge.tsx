@@ -30,11 +30,11 @@ export function Badge({
   className = '',
   testId,
   ...props
-}: BadgeProps): JSX.Element {
+}: BadgeProps): React.ReactElement {
   const { t } = useLocalization();
 
   // Format count display
-  const displayCount = React.useMemo((): void => {
+  const displayCount = React.useMemo((): React.ReactNode => {
     if (typeof count !== 'number') {
       return children;
     }
@@ -45,7 +45,7 @@ export function Badge({
   }, [count, maxCount, showZero, children]);
 
   // Build CSS classes using design tokens
-  const badgeClasses = React.useMemo((): void => {
+  const badgeClasses = React.useMemo((): string => {
     const classes = ['badge'];
 
     // Variant classes
@@ -96,7 +96,7 @@ export function Badge({
       return {};
     }
 
-    const props: Record<string, any> = {
+    const props: Record<string, unknown> = {
       role: 'status',
       'aria-live': 'polite',
     };

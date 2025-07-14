@@ -20,13 +20,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitOverride": true,
     "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    "rootDir": ".",
-    "baseUrl": ".",
-    "jsx": "react-jsx",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "allowUnreachableCode": false
   },
   "include": [
     "src"

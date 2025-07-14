@@ -20,7 +20,7 @@ export interface FormComponentProps extends ComponentProps {
 
 // Form container props
 export interface FormProps extends ComponentProps {
-  onSubmit?: (event: any) => void;
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   noValidate?: boolean;
   autoComplete?: 'on' | 'off';
   padding?: 'none' | 'sm' | 'md' | 'lg';
@@ -37,9 +37,9 @@ export interface InputProps extends FormComponentProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: any) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   maxLength?: number;
   minLength?: number;
   pattern?: string;
@@ -57,9 +57,9 @@ export interface InputProps extends FormComponentProps {
 export interface TextAreaProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: any) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   rows?: number;
   cols?: number;
   maxLength?: number;
@@ -73,9 +73,9 @@ export interface TextAreaProps extends FormComponentProps {
 export interface SelectProps extends FormComponentProps {
   value?: string | string[];
   defaultValue?: string | string[];
-  onChange?: (value: string | string[], event: any) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onChange?: (value: string | string[], event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   multiple?: boolean;
   size?: number;
   options: SelectOption[];
@@ -95,7 +95,7 @@ export interface SelectOption {
 export interface CheckboxProps extends FormComponentProps {
   checked?: boolean;
   defaultChecked?: boolean;
-  onChange?: (checked: boolean, event: any) => void;
+  onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   indeterminate?: boolean;
   variant?: 'default' | 'outlined' | 'filled';
@@ -107,7 +107,7 @@ export interface CheckboxProps extends FormComponentProps {
 export interface RadioProps extends FormComponentProps {
   checked?: boolean;
   defaultChecked?: boolean;
-  onChange?: (checked: boolean, event: any) => void;
+  onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   name: string; // Required for radio groups
   variant?: 'default' | 'outlined' | 'filled';
@@ -119,7 +119,7 @@ export interface RadioProps extends FormComponentProps {
 export interface RadioGroupProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: any) => void;
+  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   options: RadioOption[];
   orientation?: 'horizontal' | 'vertical';
   variant?: 'default' | 'outlined' | 'filled';
@@ -137,10 +137,10 @@ export interface RadioOption {
 export interface PersonalNumberInputProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, isValid: boolean, event: any) => void;
+  onChange?: (value: string, isValid: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   onValidationChange?: (isValid: boolean, errors: string[]) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   variant?: 'default' | 'outlined' | 'filled';
   hasError?: boolean;
   validation?: {
@@ -159,10 +159,10 @@ export interface PersonalNumberInputProps extends FormComponentProps {
 export interface OrganizationNumberInputProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, isValid: boolean, event: any) => void;
+  onChange?: (value: string, isValid: boolean, event: React.ChangeEvent<HTMLInputElement>) => void;
   onValidationChange?: (isValid: boolean, errors: string[], orgData?: OrganizationData) => void;
-  onBlur?: (event: any) => void;
-  onFocus?: (event: any) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   variant?: 'default' | 'outlined' | 'filled';
   hasError?: boolean;
   validation?: {

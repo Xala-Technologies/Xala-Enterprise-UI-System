@@ -22,7 +22,7 @@ export interface ActionFeedbackComponentProps extends ComponentProps {
 // Button component props
 export interface ButtonProps extends ActionFeedbackComponentProps {
   label?: string; // Button text
-  children?: any;
+  children?: React.ReactNode;
   variant?:
     | 'primary'
     | 'secondary'
@@ -35,7 +35,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   shape?: 'rounded' | 'pill' | 'square';
   fullWidth?: boolean;
-  icon?: any;
+  icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   loadingText?: string;
   type?: 'button' | 'submit' | 'reset';
@@ -45,7 +45,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
     confirmationMessage?: string;
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
-  onClick?: (event: any) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
 }
@@ -54,7 +54,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
 export interface ModalProps extends ActionFeedbackComponentProps {
   isOpen: boolean;
   title?: string; // Modal title text
-  children: any;
+  children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   centered?: boolean;
   closable?: boolean;
@@ -77,7 +77,7 @@ export interface ModalProps extends ActionFeedbackComponentProps {
 export interface DrawerProps extends ActionFeedbackComponentProps {
   isOpen: boolean;
   title?: string; // Drawer title text
-  children: any;
+  children: React.ReactNode;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   closable?: boolean;
@@ -133,7 +133,7 @@ export interface ToastAction {
 export interface AlertProps extends ActionFeedbackComponentProps {
   title?: string; // Alert title text
   message?: string; // Alert message text
-  children?: any;
+  children?: React.ReactNode;
   variant?: 'info' | 'success' | 'warning' | 'error';
   severity?: 'low' | 'medium' | 'high' | 'critical';
   closable?: boolean;

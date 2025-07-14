@@ -16,26 +16,26 @@ import type { DataTableProps, TableColumn, TableData } from '../../types/data-di
 export function DataTable({
   data,
   columns,
-  pagination,
+  pagination: _pagination,
   sorting,
   selection,
-  search,
-  export: exportConfig,
+  search: _search,
+  export: _exportConfig,
   norwegian,
   loading = false,
   empty = false,
   onRowClick,
-  onSelectionChange,
+  onSelectionChange: _onSelectionChange,
   onSortChange,
-  onPageChange,
+  onPageChange: _onPageChange,
   className = '',
   testId,
   ...props
-}: DataTableProps): JSX.Element {
+}: DataTableProps): React.ReactElement {
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const tableClasses = React.useMemo((): void => {
+  const tableClasses = React.useMemo((): string => {
     const classes = ['datatable'];
 
     // State classes
@@ -124,7 +124,7 @@ const TableHeader: React.FC<{
   sorting?: DataTableProps['sorting'];
   onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ columns, sorting, onSortChange, norwegian }): void => {
+}> = ({ columns, sorting, onSortChange, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
   const handleSort = (column: TableColumn): void => {
@@ -191,10 +191,10 @@ const TableBody: React.FC<{
   columns: TableColumn[];
   onRowClick?: (row: TableData, index: number) => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ data, columns, onRowClick, norwegian }): void => {
+}> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const formatCellValue = (value: any, column: TableColumn, row: TableData): string => {
+  const formatCellValue = (value: unknown, column: TableColumn, row: TableData): React.ReactNode => {
     if (value === null || value === undefined) {
       return '-';
     }

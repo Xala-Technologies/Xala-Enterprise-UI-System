@@ -156,7 +156,7 @@ export const devUtils = {
   /**
    * Validate accessibility configuration
    */
-  validateAccessibility: (config: any) => {
+  validateAccessibility: (config: { level?: string; [key: string]: unknown }): void => {
     if (process.env['NODE_ENV'] === 'development') {
       // Basic validation - extend as needed
       if (!config.level || !['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA', 'none'].includes(config.level)) {

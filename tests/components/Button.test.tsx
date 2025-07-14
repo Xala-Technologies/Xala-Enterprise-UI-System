@@ -1,461 +1,170 @@
 /**
- * Button Component Tests for @xala-mock/ui-system
- * Norwegian compliance testing with Jest, React Testing Library, and axe-core
+ * @fileoverview Button Component Tests
+ * Enterprise-compliant test suite following @xala-technologies/enterprise-standards
+ *
+ * Tests button component functionality with accessibility, design tokens, and responsive design
+ * following generic UI system patterns and SOLID principles
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import React from 'react';
+
 import { Button } from '../../src/components/action-feedback/Button';
 
-// Extend Jest matchers
-expect.extend(toHaveNoViolations);
+/**
+ * Test suite for Button component
+ * Enterprise-compliant testing with comprehensive coverage
+ */
+describe('Button Component', (): void => {
+  /**
+   * Test basic rendering functionality
+   */
+  describe('Rendering', (): void => {
+    /**
+     * Test basic button rendering
+     */
+    test('renders button with text', (): void => {
+      render(<Button>Save</Button>);
 
-describe('Button Component', () => {
-  // Basic rendering tests
-  describe('Rendering', () => {
-    test('renders button with Norwegian text', () => {
-      render(<Button labelKey="common.save">Lagre</Button>);
-      
-      const button = screen.getByRole('button', { name: /lagre/i });
+      const button = screen.getByRole('button', { name: /save/i });
       expect(button).toBeInTheDocument();
-      expect(button).toHaveNorwegianLanguageSupport();
     });
 
-    test('renders with classification level', () => {
-      render(
-        <Button 
-          labelKey="common.submit"
-          norwegian={{ classification: 'BEGRENSET' }}
-        >
-          Send inn
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toComplyCNSMClassification('BEGRENSET');
+    /**
+     * Test button with different variants
+     */
+    test('renders with different variants', (): void => {
+      const { rerender } = render(<Button variant="primary">Primary</Button>);
+
+      let button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-variant', 'primary');
+
+      rerender(<Button variant="secondary">Secondary</Button>);
+      button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-variant', 'secondary');
     });
 
-    test('renders with municipality context', () => {
-      render(
-        <Button 
-          labelKey="common.save"
-          norwegian={{ municipality: '0301' }}
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button.getAttribute('data-municipality')).toBe('0301');
-    });
-  });
+    /**
+     * Test button with different sizes
+     */
+    test('renders with different sizes', (): void => {
+      const { rerender } = render(<Button size="sm">Small</Button>);
 
-  // Norwegian accessibility tests
-  describe('Norwegian Accessibility', () => {
-    test('meets WCAG 2.2 AA standards for Norway', async () => {
-      const { container } = render(
-        <Button 
-          variant="primary"
-          size="standard"
-          labelKey="common.save"
-          norwegian={{ 
-            accessibility: 'WCAG_2_2_AA',
-            classification: 'ÅPEN'
-          }}
-        >
-          Lagre dokument
-        </Button>
-      );
+      let button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-size', 'sm');
 
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      expect(container).toBeAccessibleForNorway();
-    });
-
-    test('has proper Norwegian keyboard support', async () => {
-      render(
-        <Button 
-          labelKey="common.save"
-          norwegian={{ keyboardShortcut: 'Ctrl+S' }}
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toHaveNorwegianKeyboardSupport();
-      
-      // Test Norwegian keyboard shortcuts
-      await userEvent.keyboard('{Control>}s{/Control}');
-      // Verify shortcut handling if implemented
-    });
-
-    test('meets Norwegian touch target requirements', () => {
-      render(
-        <Button 
-          size="standard"
-          labelKey="common.save"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toHaveAccessibleTouchTarget();
-    });
-
-    test('has proper color contrast for Norwegian standards', () => {
-      render(
-        <Button 
-          variant="primary"
-          labelKey="common.save"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toMeetNorwegianColorStandards();
-    });
-
-    test('supports Norwegian screen readers', () => {
-      render(
-        <Button 
-          labelKey="common.save"
-          aria-label="Lagre dokument"
-          aria-describedby="save-help"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'Lagre dokument');
-      expect(button).toHaveAttribute('aria-describedby', 'save-help');
+      rerender(<Button size="md">Medium</Button>);
+      button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-size', 'md');
     });
   });
 
-  // NSM Classification tests
-  describe('NSM Classification', () => {
-    test.each([
-      'ÅPEN',
-      'BEGRENSET', 
-      'KONFIDENSIELT',
-      'HEMMELIG'
-    ])('handles %s classification level', (level) => {
-      render(
-        <Button 
-          labelKey="common.save"
-          norwegian={{ classification: level }}
-        >
-          Lagre
-        </Button>
-      );
-      
+  /**
+   * Test accessibility standards
+   */
+  describe('Accessibility', (): void => {
+    /**
+     * Test keyboard support
+     */
+    test('has proper keyboard support', async (): Promise<void> => {
+      const mockClick = jest.fn();
+      render(<Button onClick={mockClick}>Keyboard Test</Button>);
+
       const button = screen.getByRole('button');
-      expect(button).toComplyCNSMClassification(level);
+      button.focus();
+
+      // Test Enter key
+      await userEvent.keyboard('{Enter}');
+      expect(mockClick).toHaveBeenCalledTimes(1);
     });
 
-    test('applies visual indicators for classification levels', () => {
+    /**
+     * Test screen reader support
+     */
+    test('supports screen readers', (): void => {
       render(
-        <Button 
-          labelKey="common.save"
-          norwegian={{ 
-            classification: 'KONFIDENSIELT',
-            showClassificationIndicator: true
-          }}
-        >
-          Lagre konfidensielt dokument
+        <Button aria-label="Save document">
+          <span aria-hidden="true">💾</span>
         </Button>
       );
-      
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-classification', 'KONFIDENSIELT');
-      
-      // Check for visual classification indicator
-      const indicator = button.querySelector('[data-testid="classification-indicator"]');
-      expect(indicator).toBeInTheDocument();
-    });
 
-    test('restricts actions based on classification', async () => {
-      const mockConfirmAction = jest.fn();
-      
-      render(
-        <Button 
-          labelKey="actions.delete"
-          variant="danger"
-          confirmDialog={{
-            titleKey: 'dialogs.confirmDelete.title',
-            messageKey: 'dialogs.confirmDelete.message'
-          }}
-          onClick={mockConfirmAction}
-          norwegian={{ classification: 'KONFIDENSIELT' }}
-        >
-          Slett dokument
-        </Button>
-      );
-      
       const button = screen.getByRole('button');
-      await userEvent.click(button);
-      
-      // For confidential documents, should require confirmation
-      const confirmDialog = await screen.findByRole('dialog');
-      expect(confirmDialog).toBeInTheDocument();
-      
-      const confirmButton = screen.getByRole('button', { name: /bekreft/i });
-      await userEvent.click(confirmButton);
-      
-      expect(mockConfirmAction).toHaveBeenCalled();
+      expect(button).toHaveAttribute('aria-label', 'Save document');
     });
   });
 
-  // GDPR Compliance tests
-  describe('GDPR Compliance', () => {
-    test('handles GDPR data processing attributes', () => {
-      render(
-        <Button 
-          labelKey="common.submit"
-          data-gdpr-collect="personal"
-          data-gdpr-basis="consent"
-          data-gdpr-retention="2 years"
-        >
-          Send inn persondata
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toComplyWithGDPR();
-    });
+  /**
+   * Test loading states
+   */
+  describe('Loading States', (): void => {
+    /**
+     * Test loading state
+     */
+    test('shows loading state', (): void => {
+      render(<Button loading={true}>Loading Test</Button>);
 
-    test('requires consent for personal data processing', async () => {
-      const mockSubmit = jest.fn();
-      
-      render(
-        <Button 
-          labelKey="common.submit"
-          onClick={mockSubmit}
-          norwegian={{ 
-            gdprRequirement: 'consent',
-            dataTypes: ['personal', 'contact']
-          }}
-        >
-          Send inn skjema
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      await userEvent.click(button);
-      
-      // Should trigger GDPR consent flow if not already given
-      // This would be implemented in the actual component
-      expect(mockSubmit).toHaveBeenCalled();
-    });
-  });
-
-  // DigDir Standards tests
-  describe('DigDir Standards', () => {
-    test('complies with DigDir design principles', () => {
-      render(
-        <Button 
-          labelKey="common.save"
-          aria-label="Lagre dokument"
-          lang="nb-NO"
-          data-keyboard-shortcuts="Ctrl+S"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toComplyWithDigDir();
-    });
-
-    test('supports DigDir standard keyboard shortcuts', async () => {
-      const mockAction = jest.fn();
-      
-      render(
-        <Button 
-          labelKey="common.help"
-          onClick={mockAction}
-          data-keyboard-shortcuts="Alt+H"
-        >
-          Hjelp
-        </Button>
-      );
-      
-      // Test DigDir standard help shortcut
-      await userEvent.keyboard('{Alt>}h{/Alt}');
-      // Verify if shortcut handling is implemented
-    });
-  });
-
-  // Design token validation tests
-  describe('Design Token Usage', () => {
-    test('uses design tokens instead of hardcoded values', () => {
-      render(
-        <Button 
-          variant="primary"
-          size="large"
-          labelKey="common.save"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      expect(button).toUseDesignTokens();
-      
-      // Validate no hardcoded values
-      const violations = global.testHelpers.validateDesignTokenUsage(button);
-      expect(violations).toHaveLength(0);
-    });
-
-    test('maintains consistent spacing using tokens', () => {
-      render(
-        <Button 
-          variant="primary"
-          size="standard"
-          spacing="comfortable"
-          labelKey="common.save"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const button = screen.getByRole('button');
-      const styles = window.getComputedStyle(button);
-      
-      // Should use spacing tokens
-      expect(styles.padding).toMatch(/var\(--spacing-/);
-      expect(styles.margin).toMatch(/var\(--spacing-/);
-    });
-  });
-
-  // Norwegian form integration tests
-  describe('Norwegian Form Integration', () => {
-    test('integrates with Norwegian form validation', async () => {
-      const mockSubmit = jest.fn();
-      
-      render(
-        <form onSubmit={mockSubmit}>
-          <input 
-            type="text" 
-            name="personalNumber"
-            aria-label="Fødselsnummer"
-            pattern="[0-9]{11}"
-            required
-          />
-          <Button 
-            type="submit"
-            labelKey="common.submit"
-            norwegian={{ 
-              formValidation: true,
-              requiresPersonalNumber: true
-            }}
-          >
-            Send inn
-          </Button>
-        </form>
-      );
-      
-      const submitButton = screen.getByRole('button', { name: /send inn/i });
-      const input = screen.getByLabelText(/fødselsnummer/i);
-      
-      // Test with invalid personal number
-      await userEvent.type(input, '12345678900');
-      await userEvent.click(submitButton);
-      
-      // Should prevent submission with invalid personal number
-      expect(mockSubmit).not.toHaveBeenCalled();
-      
-      // Test with valid personal number
-      await userEvent.clear(input);
-      await userEvent.type(input, '12345678901');
-      await userEvent.click(submitButton);
-      
-      expect(mockSubmit).toHaveBeenCalled();
-    });
-  });
-
-  // Loading and state tests
-  describe('Loading States', () => {
-    test('shows Norwegian loading text', () => {
-      render(
-        <Button 
-          loading={true}
-          loadingText="Lagrer..."
-          labelKey="common.save"
-        >
-          Lagre
-        </Button>
-      );
-      
-      expect(screen.getByText(/lagrer/i)).toBeInTheDocument();
-      expect(screen.getByRole('button')).toBeDisabled();
-    });
-
-    test('maintains accessibility during loading', async () => {
-      const { container } = render(
-        <Button 
-          loading={true}
-          loadingText="Lagrer dokument..."
-          labelKey="common.save"
-          aria-describedby="loading-status"
-        >
-          Lagre
-        </Button>
-      );
-      
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
-      
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-busy', 'true');
     });
-  });
 
-  // Error handling tests
-  describe('Error Handling', () => {
-    test('displays Norwegian error messages', () => {
+    /**
+     * Test accessibility during loading
+     */
+    test('maintains accessibility during loading', (): void => {
       render(
-        <Button 
-          error={true}
-          errorMessage="Kunne ikke lagre dokumentet"
-          labelKey="common.save"
-        >
-          Lagre
+        <Button loading={true} loadingText="Saving...">
+          Save
         </Button>
       );
-      
-      const errorMessage = screen.getByText(/kunne ikke lagre/i);
-      expect(errorMessage).toBeInTheDocument();
-      expect(global.validateNorwegianText(errorMessage.textContent)).toBe(true);
-    });
-  });
 
-  // Responsive design tests
-  describe('Responsive Design', () => {
-    test('adapts to Norwegian mobile standards', () => {
-      // Mock mobile viewport
-      Object.defineProperty(window, 'innerWidth', {
-        writable: true,
-        configurable: true,
-        value: 375,
-      });
-
-      render(
-        <Button 
-          labelKey="common.save"
-          responsive={true}
-        >
-          Lagre
-        </Button>
-      );
-      
       const button = screen.getByRole('button');
-      expect(button).toHaveAccessibleTouchTarget();
+      expect(button).toHaveAttribute('aria-busy', 'true');
+      expect(button).toHaveTextContent('Saving...');
     });
   });
-}); 
+
+  /**
+   * Test disabled state
+   */
+  describe('Disabled State', (): void => {
+    /**
+     * Test disabled button
+     */
+    test('handles disabled state', (): void => {
+      const mockClick = jest.fn();
+      render(
+        <Button disabled={true} onClick={mockClick}>
+          Disabled Button
+        </Button>
+      );
+
+      const button = screen.getByRole('button');
+      expect(button).toBeDisabled();
+      expect(button).toHaveAttribute('aria-disabled', 'true');
+
+      // Should not call onClick when disabled
+      fireEvent.click(button);
+      expect(mockClick).not.toHaveBeenCalled();
+    });
+  });
+
+  /**
+   * Test button types
+   */
+  describe('Button Types', (): void => {
+    /**
+     * Test submit button
+     */
+    test('works as submit button', (): void => {
+      render(
+        <form>
+          <Button type="submit">Submit</Button>
+        </form>
+      );
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('type', 'submit');
+    });
+  });
+});

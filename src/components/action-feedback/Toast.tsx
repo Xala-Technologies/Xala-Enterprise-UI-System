@@ -168,7 +168,7 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 };
 
 // Toast icon component
-const ToastIcon = ({ variant, icon }: { variant: string; icon?: any }): void => {
+const ToastIcon = ({ variant, icon }: { variant: string; icon?: React.ReactNode }): React.ReactElement => {
   if (icon) {
     return (
       <span
@@ -277,7 +277,7 @@ const CloseButton = ({ onClose }: { onClose: () => void }): void => {
 };
 
 // Toast action button
-const ToastActionButton = ({ action }: { action: any }): void => {
+const ToastActionButton = ({ action }: { action: { label: string; handler: () => void } }): React.ReactElement => {
   return (
     <button
       style={{

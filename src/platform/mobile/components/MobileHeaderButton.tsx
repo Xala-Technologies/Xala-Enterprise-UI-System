@@ -1,6 +1,6 @@
 // React mock for development
 const React = {
-  forwardRef: (Component: any) => Component,
+  forwardRef: <T, P>(Component: React.ForwardRefRenderFunction<T, P>) => React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<T>>,
 };
 
 // MobileHeaderButton - Reusable button component for mobile headers
@@ -13,7 +13,7 @@ interface MobileHeaderButtonProps {
   size?: 'compact' | 'standard';
   showBadge?: boolean;
   badgeCount?: number;
-  style?: any;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -25,7 +25,7 @@ interface MobileHeaderButtonProps {
  * - Norwegian accessibility labels
  * - Badge notification support
  */
-export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonProps, ref: any): void => {
+export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHeaderButtonProps>((props, ref) => {
   const {
     icon,
     labelKey,
@@ -43,7 +43,7 @@ export const MobileHeaderButton = React.forwardRef((props: MobileHeaderButtonPro
   const t = (key: string) => key;
 
   // Size variants
-  const getSizeStyle = (): void => {
+  const getSizeStyle = (): React.CSSProperties => {
     return size === 'compact'
       ? { minWidth: 'var(--spacing-10)', minHeight: 'var(--spacing-10)' }
       : { minWidth: 'var(--spacing-11)', minHeight: 'var(--spacing-11)' }; // WCAG 2.2 AA touch target

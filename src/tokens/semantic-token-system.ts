@@ -132,10 +132,10 @@ export class SemanticTokenSystem {
    */
   private registerTokenCategory(
     basePath: string,
-    tokenObj: any,
+    tokenObj: Record<string, unknown>,
     baseMetadata: Partial<TokenMetadata>
   ): void {
-    const registerRecursive = (obj: any, path: string): void => {
+    const registerRecursive = (obj: Record<string, unknown>, path: string): void => {
       Object.entries(obj).forEach(([key, value]) => {
         const fullPath = path ? `${path}.${key}` : key;
         

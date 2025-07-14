@@ -310,7 +310,7 @@ export const platformTokens = {
     const currentTokens = this.getCurrentPlatformTokens();
     const pathParts = tokenPath.split('.');
     
-    let value: any = currentTokens;
+    let value: unknown = currentTokens;
     for (const part of pathParts) {
       value = value?.[part];
       if (value === undefined) break;

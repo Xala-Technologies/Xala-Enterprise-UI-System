@@ -71,13 +71,13 @@ export interface TableColumn {
       falseText: string; // Text for false value
     };
   };
-  render?: (value: any, row: any, column: TableColumn) => any;
+  render?: (value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
 }
 
 // Table data row definition
 export interface TableData {
   id: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Key-value list component props
@@ -93,7 +93,7 @@ export interface KeyValueListProps extends DataDisplayComponentProps {
 export interface KeyValueItem {
   key: string;
   label: string; // Label text for the key
-  value: any;
+  value: unknown;
   type?: 'text' | 'number' | 'date' | 'boolean' | 'currency' | 'personalNumber' | 'organizationNumber';
   format?: {
     currency?: string;
@@ -106,7 +106,7 @@ export interface KeyValueItem {
 // Tag component props
 export interface TagProps extends DataDisplayComponentProps {
   label?: string; // Tag text
-  children?: any;
+  children?: React.ReactNode;
   variant?: 'default' | 'info' | 'success' | 'warning' | 'error' | 'neutral';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   interactive?: boolean;
@@ -118,7 +118,7 @@ export interface TagProps extends DataDisplayComponentProps {
 // Badge component props
 export interface BadgeProps extends DataDisplayComponentProps {
   label?: string; // Badge text
-  children?: any;
+  children?: React.ReactNode;
   variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   shape?: 'rounded' | 'pill';
@@ -130,7 +130,7 @@ export interface BadgeProps extends DataDisplayComponentProps {
 // Tooltip component props
 export interface TooltipProps extends DataDisplayComponentProps {
   content?: string; // Tooltip content text
-  children: any;
+  children: React.ReactNode;
   trigger?: 'hover' | 'click' | 'focus' | 'manual';
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
   delay?: number;
