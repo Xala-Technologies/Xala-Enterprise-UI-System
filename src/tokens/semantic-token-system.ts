@@ -5,6 +5,8 @@
  * @compliance WCAG 2.2 AAA, NSM, DigDir
  */
 
+import React from 'react';
+
 import { aliasTokens } from './alias-tokens';
 import { componentTokens } from './component-tokens';
 import { globalColorPrimitives, globalSpacingPrimitives } from './global-tokens';
@@ -284,8 +286,8 @@ export class SemanticTokenSystem {
   /**
    * Get token documentation
    */
-  getTokenDocumentation(): Record<string, any> {
-    const docs: Record<string, any> = {};
+  getTokenDocumentation(): Record<string, unknown> {
+    const docs: Record<string, unknown> = {};
 
     this.tokens.forEach((token, path) => {
       docs[path] = {
@@ -527,7 +529,7 @@ export function validateTokens(paths: TokenPath[]): Record<string, TokenValidati
 /**
  * Get component tokens helper
  */
-export function getComponentTokens(componentName: string): Record<string, any> {
+export function getComponentTokens(componentName: string): Record<string, unknown> {
   const componentPrefix = `component.${componentName}`;
   const tokens = tokenSystem.getTokensByCategory('component');
   

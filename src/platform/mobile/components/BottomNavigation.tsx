@@ -27,8 +27,8 @@ interface BottomNavigationProps {
   safeAreaBottom?: boolean;
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
   onItemPress?: (index: number, item: BottomNavigationItem) => void;
-  style?: any;
-  children?: any;
+  style?: React.CSSProperties;
+  children?: unknown;
 }
 
 /**
@@ -50,7 +50,7 @@ interface BottomNavigationProps {
  * - Emergency access support
  * - Accessibility announcements in Norwegian
  */
-export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: any): void => {
+export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, ref: unknown): void => {
   const {
     items = [],
     activeIndex = 0,
@@ -73,7 +73,7 @@ export const BottomNavigation = React.forwardRef((props: BottomNavigationProps, 
       return {};
     }
 
-    const styles: Record<string, any> = {
+    const styles: Record<string, unknown> = {
       ÅPEN: {
         borderTop: '2px solid var(--color-success-500)',
         backgroundColor: 'var(--color-success-50)',

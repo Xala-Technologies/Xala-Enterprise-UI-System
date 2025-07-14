@@ -4,6 +4,8 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
+import React from 'react';
+
 import { Logger, EventCore } from '@xala-technologies/enterprise-standards';
 
 import type { UISystemService } from '../interfaces/ui-system.interface';

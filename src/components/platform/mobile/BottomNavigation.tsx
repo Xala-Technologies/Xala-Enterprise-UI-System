@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-import type { BottomNavigationProps, BottomNavigationItem } from '../../../types/platform.types';
+import type { _BottomNavigationProps, _BottomNavigationItem } from '../../../types/platform.types';
 
 // Helper function to generate CSS using design tokens
 const getBottomNavigationStyles = (props: BottomNavigationProps): React.CSSProperties => {

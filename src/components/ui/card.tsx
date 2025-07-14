@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for theming
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
@@ -40,7 +42,7 @@ export interface CardProps
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, ...props }, ref) => (
-    <div ref={ref} className={cn(cardVariants({ variant, className }))} {...props} />
+    <div ref={ref} className={cn(cardVariants({ _variant, _className }))} {...props} />
   )
 );
 

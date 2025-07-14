@@ -111,7 +111,7 @@ const HeaderButton = ({
   ariaLabel,
   badgeCount,
 }: {
-  icon: any;
+  icon: React.ReactNode;
   onPress?: () => void;
   testId?: string;
   ariaLabel?: string;

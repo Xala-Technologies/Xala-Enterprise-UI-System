@@ -358,7 +358,7 @@ function formatOrganizationNumber(value: string): string {
   return value;
 }
 
-function formatDate(value: any, format: string): string {
+function formatDate(value: unknown, format: string): string {
   const date = new Date(value);
   if (isNaN(date.getTime())) {
     return String(value);
@@ -387,7 +387,7 @@ function formatCurrency(value: number, currency: string): string {
   }).format(value);
 }
 
-function formatNumber(value: number, format?: any): string {
+function formatNumber(value: number, format?: unknown): string {
   return new Intl.NumberFormat('nb-NO', format).format(value);
 }
 

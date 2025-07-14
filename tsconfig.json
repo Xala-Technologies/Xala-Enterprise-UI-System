@@ -1,6 +1,9 @@
 {
   "extends": "./node_modules/@xala-technologies/enterprise-standards/configs/typescript/base.json",
   "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "declarationDir": "./dist/types",
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -10,7 +13,10 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -23,11 +29,17 @@
     "allowUnreachableCode": false
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "build"
+    "build",
+    "coverage",
+    "tests",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }

@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for spacing and alignment
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';

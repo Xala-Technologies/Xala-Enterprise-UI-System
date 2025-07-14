@@ -116,7 +116,7 @@ export interface TabletLayoutProps extends React.HTMLAttributes<HTMLDivElement> 
 /**
  * Tablet Header Component
  * @param props - Header properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
   (
@@ -136,7 +136,7 @@ export const TabletHeader = forwardRef<HTMLElement, TabletHeaderProps>(
         ref={ref}
         role="banner"
         className={cn(
-          tabletHeaderVariants({ variant, size }),
+          tabletHeaderVariants({ _variant, _size }),
           'flex items-center justify-between',
           className
         )}
@@ -157,7 +157,7 @@ TabletHeader.displayName = 'TabletHeader';
 /**
  * Tablet Sidebar Component
  * @param props - Sidebar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
   ({ children, variant = 'default', collapsed = false, onCollapse, className, ...props }, ref): void => {
@@ -166,7 +166,7 @@ export const TabletSidebar = forwardRef<HTMLElement, TabletSidebarProps>(
         ref={ref}
         role="complementary"
         className={cn(
-          tabletSidebarVariants({ variant, collapsed }),
+          tabletSidebarVariants({ _variant, _collapsed }),
           'h-full flex flex-col',
           className
         )}
@@ -215,7 +215,7 @@ TabletSidebar.displayName = 'TabletSidebar';
 /**
  * Tablet Layout Component
  * @param props - Layout properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const TabletLayout = forwardRef<HTMLDivElement, TabletLayoutProps>(
   ({ children, header, sidebar, rightDrawer, drawerOpen = false, className, ...props }, ref): void => {
@@ -269,4 +269,4 @@ TabletLayout.displayName = 'TabletLayout';
 export type TabletHeaderVariant = VariantProps<typeof tabletHeaderVariants>;
 export type TabletSidebarVariant = VariantProps<typeof tabletSidebarVariants>;
 
-export { tabletHeaderVariants, tabletSidebarVariants };
+export { _tabletHeaderVariants, _tabletSidebarVariants };

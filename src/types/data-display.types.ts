@@ -3,6 +3,8 @@
  * @module DataDisplayTypes
  */
 
+import type React from 'react';
+
 import type { ComponentProps } from '../lib/types/core.types';
 
 // Base data display component props

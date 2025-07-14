@@ -25,7 +25,7 @@ export function Tag({
   className = '',
   testId,
   ...props
-}: TagProps): JSX.Element {
+}: TagProps): React.ReactElement {
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
@@ -161,7 +161,7 @@ const ClassificationIndicator: React.FC<{ level: string }> = ({ level }): void =
 /**
  * Remove button component
  */
-const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ onRemove, size }): void => {
+const RemoveButton: React.FC<{ onRemove?: () => void; size: string }> = ({ _onRemove, _size }): void => {
   const { t } = useLocalization();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {

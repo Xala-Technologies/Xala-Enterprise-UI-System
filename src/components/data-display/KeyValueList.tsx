@@ -7,7 +7,7 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
 import { useLocalization } from '../../localization/hooks/useLocalization';
-import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
+import type { _KeyValueItem, _KeyValueListProps } from '../../types/data-display.types';
 
 const logger = Logger.create({
   serviceName: 'ui-system-keyvalslist',
@@ -30,7 +30,7 @@ export function KeyValueList({
   className = '',
   testId,
   ...props
-}: KeyValueListProps): JSX.Element {
+}: KeyValueListProps): React.ReactElement {
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens
@@ -257,7 +257,7 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }): void => {
  * Value formatting function
  */
 function formatValue(
-  value: any,
+  value: unknown,
   item: KeyValueItem,
   norwegian?: KeyValueListProps['norwegian']
 ): string {
@@ -304,7 +304,7 @@ function formatOrganizationNumber(value: string): string {
   return value;
 }
 
-function formatDate(value: any, format: string): string {
+function formatDate(value: unknown, format: string): string {
   const date = new Date(value);
   if (isNaN(date.getTime())) {
     return String(value);
@@ -333,7 +333,7 @@ function formatCurrency(value: number, currency: string): string {
   }).format(value);
 }
 
-function formatNumber(value: number, format?: any): string {
+function formatNumber(value: number, format?: unknown): string {
   return new Intl.NumberFormat('nb-NO', format).format(value);
 }
 

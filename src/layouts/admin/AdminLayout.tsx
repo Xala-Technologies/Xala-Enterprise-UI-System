@@ -165,7 +165,7 @@ export interface AdminLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * Admin Top Bar Component
  * @param props - Top bar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
   (
@@ -188,7 +188,7 @@ export const AdminTopBar = forwardRef<HTMLElement, AdminTopBarProps>(
         ref={ref}
         role="navigation"
         aria-label="Admin navigation"
-        className={cn(adminTopBarVariants({ variant, size }), className)}
+        className={cn(adminTopBarVariants({ _variant, _size }), className)}
         {...props}
       >
         <div className="px-6 h-full">
@@ -218,7 +218,7 @@ AdminTopBar.displayName = 'AdminTopBar';
 /**
  * Admin Sidebar Component
  * @param props - Sidebar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
   (
@@ -230,7 +230,7 @@ export const AdminSidebar = forwardRef<HTMLElement, AdminSidebarProps>(
         ref={ref}
         role="complementary"
         aria-label={title || 'Admin sidebar'}
-        className={cn(adminSidebarVariants({ variant, collapsed }), className)}
+        className={cn(adminSidebarVariants({ _variant, _collapsed }), className)}
         style={{
           width: collapsed
             ? platformTokens.componentSizes.desktop.button.sm.minWidth
@@ -283,7 +283,7 @@ AdminSidebar.displayName = 'AdminSidebar';
 /**
  * Admin Content Component
  * @param props - Content properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const AdminContent = forwardRef<HTMLElement, AdminContentProps>(
   ({ children, padding = 'md', title, subtitle, actions, className, ...props }, ref): void => {
@@ -316,7 +316,7 @@ AdminContent.displayName = 'AdminContent';
 /**
  * Admin Layout Component
  * @param props - Layout properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
   (

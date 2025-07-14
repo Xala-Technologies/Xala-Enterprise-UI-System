@@ -1,9 +1,11 @@
 // React mock for development
+import React from 'react';
+
 import { MobileHeaderButton } from './MobileHeaderButton';
 import { NSMClassificationIndicator } from './NSMClassificationIndicator';
 
 const React = {
-  forwardRef: (Component: any) => Component,
+  forwardRef: (Component: unknown) => Component,
 };
 
 // MobileHeader - Norwegian government-compliant mobile header component
@@ -24,8 +26,8 @@ interface MobileHeaderProps {
   onMenuToggle?: () => void;
   onSearchFocus?: () => void;
   onNotificationPress?: () => void;
-  children?: any;
-  style?: any;
+  children?: unknown;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -44,7 +46,7 @@ interface MobileHeaderProps {
  * - Norwegian keyboard shortcuts support
  * - Municipality-specific adaptations
  */
-export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: any): void => {
+export const MobileHeader = React.forwardRef((props: MobileHeaderProps, ref: unknown): void => {
   const {
     titleKey,
     title,

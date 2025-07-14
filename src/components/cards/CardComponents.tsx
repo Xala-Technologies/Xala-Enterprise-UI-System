@@ -167,7 +167,7 @@ export interface ChartCardProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * Card Component
  * @param props - Card properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   (
@@ -185,7 +185,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     ref
   ): void => {
     return (
-      <div ref={ref} className={cn(cardVariants({ variant, size }), className)} {...props}>
+      <div ref={ref} className={cn(cardVariants({ _variant, _size }), className)} {...props}>
         {/* Card Header */}
         {(header || title || description) && (
           <div className="space-y-1.5 mb-4">
@@ -212,7 +212,7 @@ Card.displayName = 'Card';
 /**
  * Statistic Card Component
  * @param props - Statistic card properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
   (
@@ -288,7 +288,7 @@ export const StatisticCard = forwardRef<HTMLDivElement, StatisticCardProps>(
     };
 
     return (
-      <div ref={ref} className={cn(statCardVariants({ variant, size }), className)} {...props}>
+      <div ref={ref} className={cn(statCardVariants({ _variant, _size }), className)} {...props}>
         <div className="flex items-center justify-between">
           <div className="flex-1">
             <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -316,7 +316,7 @@ StatisticCard.displayName = 'StatisticCard';
 /**
  * Chart Card Component
  * @param props - Chart card properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
   (
@@ -334,7 +334,7 @@ export const ChartCard = forwardRef<HTMLDivElement, ChartCardProps>(
     ref
   ): void => {
     return (
-      <div ref={ref} className={cn(chartCardVariants({ variant, size }), className)} {...props}>
+      <div ref={ref} className={cn(chartCardVariants({ _variant, _size }), className)} {...props}>
         {/* Chart Header */}
         <div className="flex items-center justify-between mb-4">
           <div>

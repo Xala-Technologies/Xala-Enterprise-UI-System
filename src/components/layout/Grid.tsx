@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for spacing and breakpoints
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
@@ -123,7 +125,7 @@ export interface GridItemProps
  */
 export const GridItem = forwardRef<HTMLDivElement, GridItemProps>(
   ({ className, span, start, ...props }, ref) => (
-    <div ref={ref} className={cn(gridItemVariants({ span, start }), className)} {...props} />
+    <div ref={ref} className={cn(gridItemVariants({ _span, _start }), className)} {...props} />
   )
 );
 

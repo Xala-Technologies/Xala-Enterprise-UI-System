@@ -3,6 +3,8 @@
  * @module ActionFeedbackTypes
  */
 
+import type React from 'react';
+
 import type { ComponentProps } from '../lib/types/core.types';
 
 // Base action feedback component props

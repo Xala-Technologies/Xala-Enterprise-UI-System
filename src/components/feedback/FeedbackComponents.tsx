@@ -187,14 +187,14 @@ export interface NotificationProps extends React.HTMLAttributes<HTMLDivElement> 
 /**
  * Spinner Component
  * @param props - Spinner properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
   ({ variant = 'default', size = 'md', label, className, ...props }, ref): void => {
     return (
       <div ref={ref} className={cn('flex items-center gap-2', className)} {...props}>
         <div
-          className={cn(spinnerVariants({ variant, size }))}
+          className={cn(spinnerVariants({ _variant, _size }))}
           role="status"
           aria-label={label || 'Loading'}
         >
@@ -211,7 +211,7 @@ Spinner.displayName = 'Spinner';
 /**
  * Alert Component
  * @param props - Alert properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   (
@@ -268,7 +268,7 @@ Alert.displayName = 'Alert';
 /**
  * Badge Component
  * @param props - Badge properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   ({ variant = 'default', className, children, ...props }, ref): void => {
@@ -285,7 +285,7 @@ Badge.displayName = 'Badge';
 /**
  * Notification Component
  * @param props - Notification properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Notification = forwardRef<HTMLDivElement, NotificationProps>(
   (

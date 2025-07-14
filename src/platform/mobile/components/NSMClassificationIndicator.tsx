@@ -9,7 +9,7 @@ interface NSMClassificationIndicatorProps {
   size?: 'small' | 'medium' | 'large';
   showLabel?: boolean;
   position?: 'top' | 'bottom' | 'left' | 'right';
-  style?: any;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -23,7 +23,7 @@ interface NSMClassificationIndicatorProps {
  * - Design token integration
  */
 export const NSMClassificationIndicator = React.forwardRef(
-  (props: NSMClassificationIndicatorProps, ref: any): void => {
+  (props: NSMClassificationIndicatorProps, ref: unknown): void => {
     const {
       level,
       variant = 'badge',
@@ -38,7 +38,7 @@ export const NSMClassificationIndicator = React.forwardRef(
 
     // Classification definitions based on NSM standards
     const getClassificationConfig = (): void => {
-      const configs: Record<string, any> = {
+      const configs: Record<string, unknown> = {
         ÅPEN: {
           color: 'var(--color-success-500)',
           backgroundColor: 'var(--color-success-50)',
@@ -69,7 +69,7 @@ export const NSMClassificationIndicator = React.forwardRef(
 
     // Size configurations
     const getSizeConfig = (): void => {
-      const sizes: Record<string, any> = {
+      const sizes: Record<string, unknown> = {
         small: {
           fontSize: 'var(--font-size-xs)',
           padding: 'var(--spacing-1) var(--spacing-2)',

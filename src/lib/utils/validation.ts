@@ -7,6 +7,8 @@
 /**
  * Simple ValidationResult implementation
  */
+import React from 'react';
+
 export interface ValidationResult<T> {
   readonly success: boolean;
   readonly data?: T;

@@ -169,7 +169,7 @@ export interface ProgressBarProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * Tabs Component
  * @param props - Tabs properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
   ({ variant = 'default', size = 'md', items, activeKey, onChange, className, ...props }, ref): void => {
@@ -186,7 +186,7 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     return (
       <div ref={ref} className={cn('w-full', className)} {...props}>
         {/* Tab Headers */}
-        <div className={cn(tabsVariants({ variant, size }))}>
+        <div className={cn(tabsVariants({ _variant, _size }))}>
           <div className="flex space-x-8">
             {items.map(item => (
               <button
@@ -240,7 +240,7 @@ Tabs.displayName = 'Tabs';
 /**
  * Steps Component
  * @param props - Steps properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const Steps = forwardRef<HTMLDivElement, StepsProps>(
   (
@@ -259,7 +259,7 @@ export const Steps = forwardRef<HTMLDivElement, StepsProps>(
       <div
         ref={ref}
         className={cn(
-          stepsVariants({ variant, orientation }),
+          stepsVariants({ _variant, _orientation }),
           orientation === 'vertical' && 'space-y-4',
           className
         )}
@@ -314,7 +314,7 @@ Steps.displayName = 'Steps';
 /**
  * Progress Bar Component
  * @param props - Progress bar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
   (
@@ -336,7 +336,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         )}
 
         {/* Progress Bar */}
-        <div className={cn(progressBarVariants({ variant, size }))}>
+        <div className={cn(progressBarVariants({ _variant, _size }))}>
           <div
             className={cn(
               'h-full rounded-full transition-all duration-300',

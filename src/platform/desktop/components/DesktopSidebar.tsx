@@ -1,5 +1,5 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
-import React, { useRef, useState } from 'react';
+import React, { _useRef, _useState } from 'react';
 
 import { useLocalization } from '../../../localization/hooks/useLocalization';
 
@@ -27,7 +27,7 @@ interface DesktopSidebarProps {
   showQuickAccess?: boolean;
   onToggle?: (collapsed: boolean) => void;
   onResize?: (width: number) => void;
-  style?: any;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -51,7 +51,7 @@ interface DesktopSidebarProps {
  * - Norwegian keyboard shortcuts (Alt+S for sidebar)
  * - Municipal branding and context
  */
-export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: any): void => {
+export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref: unknown): void => {
   const {
     isCollapsed = false,
     isResizable = true,
@@ -82,7 +82,7 @@ export const DesktopSidebar = React.forwardRef((props: DesktopSidebarProps, ref:
       return {};
     }
 
-    const styles: Record<string, any> = {
+    const styles: Record<string, unknown> = {
       ÅPEN: {
         borderColor: 'var(--color-success-500)',
         backgroundColor: 'var(--color-success-25)',

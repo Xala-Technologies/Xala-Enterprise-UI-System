@@ -134,7 +134,7 @@ const InputWrapper = forwardRef<
     children: ReactNode;
     className?: string;
   }
->(({ children, className }, ref) => (
+>(({ _children, _className }, ref) => (
   <div ref={ref} className={cn('relative', className)}>
     {children}
   </div>
@@ -221,7 +221,7 @@ const PasswordToggle = ({
   isVisible: boolean;
   onToggle: () => void;
   disabled?: boolean;
-}): JSX.Element => (
+}): React.ReactElement => (
   <button
     type="button"
     onClick={onToggle}
@@ -242,7 +242,7 @@ const PasswordToggle = ({
 /**
  * Simple eye icons for password toggle
  */
-const EyeIcon = ({ className }: { className?: string }): JSX.Element => (
+const EyeIcon = ({ className }: { className?: string }): React.ReactElement => (
   <svg
     className={className}
     fill="none"
@@ -265,7 +265,7 @@ const EyeIcon = ({ className }: { className?: string }): JSX.Element => (
   </svg>
 );
 
-const EyeOffIcon = ({ className }: { className?: string }): JSX.Element => (
+const EyeOffIcon = ({ className }: { className?: string }): React.ReactElement => (
   <svg
     className={className}
     fill="none"

@@ -112,7 +112,7 @@ export interface GlobalSearchProps
 /**
  * Global Search Component
  * @param props - Search properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
   (
@@ -223,7 +223,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       <div
         ref={ref}
         className={cn(
-          globalSearchVariants({ variant, size }),
+          globalSearchVariants({ _variant, _size }),
           'rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
           className
         )}
@@ -322,4 +322,4 @@ GlobalSearch.displayName = 'GlobalSearch';
 export type GlobalSearchVariant = VariantProps<typeof globalSearchVariants>;
 export type SearchInputVariant = VariantProps<typeof searchInputVariants>;
 
-export { globalSearchVariants, searchInputVariants };
+export { _globalSearchVariants, _searchInputVariants };

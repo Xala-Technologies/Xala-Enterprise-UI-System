@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for theming
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type InputHTMLAttributes } from 'react';

@@ -28,7 +28,7 @@ export function Card({
   className = '',
   testId,
   ...props
-}: CardProps): JSX.Element {
+}: CardProps): React.ReactElement {
   const { t } = useLocalization();
 
   // Build CSS classes using design tokens

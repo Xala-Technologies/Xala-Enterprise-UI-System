@@ -4,6 +4,8 @@
  * @description Centralized export of all design tokens and token utilities
  */
 
+import React from 'react';
+
 import { Logger } from '@xala-technologies/enterprise-standards';
 
 const logger = Logger.create({

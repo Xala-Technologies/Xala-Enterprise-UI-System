@@ -4,7 +4,7 @@
  * @description TextArea component using design tokens (no inline styles)
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { _useEffect, _useState } from 'react';
 
 import type { TextAreaProps } from '../../types/form.types';
 

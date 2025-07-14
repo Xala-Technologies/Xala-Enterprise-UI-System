@@ -50,7 +50,7 @@ export function PersonalNumberInput({
   className = '',
   testId,
   ...inputProps
-}: PersonalNumberInputProps): JSX.Element {
+}: PersonalNumberInputProps): React.ReactElement {
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState<{

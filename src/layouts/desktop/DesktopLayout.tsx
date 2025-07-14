@@ -412,7 +412,7 @@ export const DesktopHeader = forwardRef<HTMLElement, DesktopHeaderProps>(
       <header
         ref={ref}
         role="banner"
-        className={cn(desktopHeaderVariants({ variant, size }), className)}
+        className={cn(desktopHeaderVariants({ _variant, _size }), className)}
         {...props}
       >
         {/* Logo */}
@@ -696,7 +696,7 @@ export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
         ref={ref}
         role="toolbar"
         aria-label="Toolbar"
-        className={cn(desktopToolbarVariants({ variant, position }), className)}
+        className={cn(desktopToolbarVariants({ _variant, _position }), className)}
         {...props}
       >
         {/* Left Actions */}

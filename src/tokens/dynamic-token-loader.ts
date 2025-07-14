@@ -5,6 +5,8 @@
  * @compliance WCAG 2.2 AAA, Enterprise Standards
  */
 
+import React from 'react';
+
 import { globalColorPrimitives } from './global-tokens';
 import type {
     TokenPath,

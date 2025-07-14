@@ -26,7 +26,7 @@ export function PageLayout({
   className = '',
   testId,
   ...props
-}: PageLayoutProps): JSX.Element {
+}: PageLayoutProps): React.ReactElement {
   // Build CSS classes using design tokens
   const pageClasses = React.useMemo((): void => {
     const classes = ['page-layout'];

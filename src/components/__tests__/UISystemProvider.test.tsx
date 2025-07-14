@@ -6,10 +6,10 @@
  * with comprehensive coverage following SOLID principles
  */
 
-import { render, screen } from '@testing-library/react';
+import { _render, _screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Logger } from '@xala-technologies/enterprise-standards';
-import { axe, toHaveNoViolations } from 'jest-axe';
+import { _axe, _toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
 import type { AccessibilityConfig } from '../../tokens/accessibility-tokens';

@@ -108,7 +108,7 @@ const SidebarHeader = ({
 }: {
   isCollapsed: boolean;
   showToggle: boolean;
-  norwegian?: any;
+  norwegian?: unknown;
   onToggle?: () => void;
 }): void => {
   return (
@@ -241,7 +241,7 @@ const QuickAccessSection = ({
   quickAccess,
   isCollapsed,
 }: {
-  quickAccess: any;
+  quickAccess: unknown;
   isCollapsed: boolean;
 }): void => {
   if (!quickAccess) {
@@ -333,7 +333,7 @@ const QuickAccessSection = ({
 };
 
 // Sidebar content area
-const SidebarContent = ({ children, isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): void => {
+const SidebarContent = ({ _children, _isCollapsed }: { children: React.ReactNode; isCollapsed: boolean }): void => {
   return (
     <div
       style={{

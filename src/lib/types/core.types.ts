@@ -4,6 +4,8 @@
  * @description Enterprise UI System - Core functionality without compliance overhead
  */
 
+import React from 'react';
+
 import type { CSSProperties as ReactCSSProperties } from 'react';
 import type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/accessibility-tokens';
 
@@ -57,7 +59,7 @@ export interface CSSProperties extends ReactCSSProperties {
   '--line-height-tight'?: string;
   '--line-height-normal'?: string;
   '--line-height-relaxed'?: string;
-  [key: string]: any; // Allow any custom property
+  [key: string]: string | number | undefined | CSSProperties; // Allow custom CSS properties
 
   // Media queries
   '@media (prefers-reduced-motion: reduce)'?: CSSProperties;
@@ -179,7 +181,7 @@ export interface EventHandlers {
   readonly onKeyDown?: (event: KeyboardEvent) => void;
   readonly onFocus?: (event: FocusEvent) => void;
   readonly onBlur?: (event: FocusEvent) => void;
-  readonly onChange?: (value: any) => void;
+  readonly onChange?: (value: unknown) => void;
 }
 
 /**
@@ -307,7 +309,7 @@ export interface AuditTrailEntry {
   readonly action: string;
   readonly component: string;
   readonly user?: string;
-  readonly details: Record<string, any>;
+  readonly details: Record<string, unknown>;
 }
 
 /**

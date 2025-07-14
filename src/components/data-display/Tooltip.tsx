@@ -251,7 +251,7 @@ const TooltipContent = ({
   norwegian,
 }: {
   contentKey?: string;
-  content?: any;
+  content?: unknown;
   norwegian?: TooltipProps['norwegian'];
 }): void => {
   return (
@@ -390,7 +390,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>((props, re
           left = triggerRect.left + (triggerRect.width - tooltipRect.width) / 2;
       }
 
-      setPosition({ top, left });
+      setPosition({ _top, _left });
     }
   }, [isVisible, placement]);
 

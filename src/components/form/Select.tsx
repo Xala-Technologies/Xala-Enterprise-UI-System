@@ -1,6 +1,8 @@
 // React mock for development
+import React from 'react';
+
 const React = {
-  forwardRef: (Component: any) => Component,
+  forwardRef: (Component: unknown) => Component,
 };
 
 // Select option interface
@@ -44,7 +46,7 @@ interface SelectProps {
   onChange?: (event: React.MouseEvent<HTMLElement>) => void;
   onBlur?: (event: React.MouseEvent<HTMLElement>) => void;
   onFocus?: (event: React.MouseEvent<HTMLElement>) => void;
-  style?: any;
+  style?: React.CSSProperties;
   'aria-describedby'?: string;
   'aria-labelledby'?: string;
   id?: string;
@@ -67,7 +69,7 @@ interface SelectProps {
  * - DigDir form guidelines compliance
  * - Norwegian sorting and filtering
  */
-export const Select = React.forwardRef((props: SelectProps, ref: any): void => {
+export const Select = React.forwardRef((props: SelectProps, ref: unknown): void => {
   const {
     labelKey,
     label,
@@ -186,7 +188,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any): void => {
 
   // Size variants
   const getSizeStyles = (): void => {
-    const sizes: Record<string, any> = {
+    const sizes: Record<string, unknown> = {
       small: {
         fontSize: 'var(--font-size-sm)',
         padding: 'var(--spacing-2) var(--spacing-3)',
@@ -208,7 +210,7 @@ export const Select = React.forwardRef((props: SelectProps, ref: any): void => {
 
   // Status colors
   const getStatusStyles = (): void => {
-    const statuses: Record<string, any> = {
+    const statuses: Record<string, unknown> = {
       default: {
         borderColor: 'var(--color-border-default)',
         focusBorderColor: 'var(--color-primary-500)',

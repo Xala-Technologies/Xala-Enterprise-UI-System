@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for theming
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
@@ -61,7 +63,7 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     const Comp = asChild ? 'span' : 'div';
 
     return (
-      <Comp ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />
+      <Comp ref={ref} className={cn(badgeVariants({ _variant, _size }), className)} {...props} />
     );
   }
 );

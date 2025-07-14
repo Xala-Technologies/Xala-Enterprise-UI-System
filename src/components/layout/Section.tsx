@@ -23,7 +23,7 @@ export function Section({
   className = '',
   testId,
   ...props
-}: SectionProps): JSX.Element {
+}: SectionProps): React.ReactElement {
   // Build CSS classes using design tokens
   const sectionClasses = React.useMemo((): void => {
     const classes = ['section'];

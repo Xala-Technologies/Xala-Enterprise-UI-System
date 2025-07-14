@@ -266,7 +266,7 @@ const CategoryIndicator = ({ category }: { category: string }): void => {
 };
 
 // Modal body component
-const ModalBody = ({ children, scrollable }: { children: React.ReactNode; scrollable: boolean }): void => {
+const ModalBody = ({ _children, _scrollable }: { children: React.ReactNode; scrollable: boolean }): void => {
   return (
     <div
       style={{

@@ -163,7 +163,7 @@ export interface WebLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
 /**
  * Web Navbar Component
  * @param props - Navbar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
   (
@@ -186,7 +186,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
         ref={ref}
         role="navigation"
         aria-label="Main navigation"
-        className={cn(webNavbarVariants({ variant, size }), className)}
+        className={cn(webNavbarVariants({ _variant, _size }), className)}
         {...props}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -216,7 +216,7 @@ WebNavbar.displayName = 'WebNavbar';
 /**
  * Web Content Component
  * @param props - Content properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const WebContent = forwardRef<HTMLElement, WebContentProps>(
   ({ children, boxed = true, padding = 'md', title, className, ...props }, ref): void => {
@@ -224,7 +224,7 @@ export const WebContent = forwardRef<HTMLElement, WebContentProps>(
       <main
         ref={ref}
         role="main"
-        className={cn(webContentVariants({ boxed, padding }), className)}
+        className={cn(webContentVariants({ _boxed, _padding }), className)}
         {...props}
       >
         {title && (
@@ -244,7 +244,7 @@ WebContent.displayName = 'WebContent';
 /**
  * Web Footer Component
  * @param props - Footer properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
   ({ children, variant = 'default', size = 'md', className, ...props }, ref): void => {
@@ -252,7 +252,7 @@ export const WebFooter = forwardRef<HTMLElement, WebFooterProps>(
       <footer
         ref={ref}
         role="contentinfo"
-        className={cn(webFooterVariants({ variant, size }), className)}
+        className={cn(webFooterVariants({ _variant, _size }), className)}
         {...props}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">{children}</div>
@@ -266,7 +266,7 @@ WebFooter.displayName = 'WebFooter';
 /**
  * Web Layout Component
  * @param props - Layout properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const WebLayout = forwardRef<HTMLDivElement, WebLayoutProps>(
   (

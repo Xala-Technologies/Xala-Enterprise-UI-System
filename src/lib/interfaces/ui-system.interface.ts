@@ -5,6 +5,8 @@
  */
 
 // Local validation result type
+import React from 'react';
+
 import type { PerformanceMetrics, AuditTrailEntry } from '../types/core.types';
 
 interface ValidationResult<T> {

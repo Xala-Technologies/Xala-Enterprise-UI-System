@@ -3,6 +3,8 @@
  * @module FormTypes
  */
 
+import type React from 'react';
+
 import type { ComponentProps } from '../lib/types/core.types';
 
 // Base form component props
@@ -37,7 +39,7 @@ export interface InputProps extends FormComponentProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (_value: string, _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   maxLength?: number;
@@ -57,7 +59,7 @@ export interface InputProps extends FormComponentProps {
 export interface TextAreaProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (_value: string, _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   rows?: number;
@@ -73,7 +75,7 @@ export interface TextAreaProps extends FormComponentProps {
 export interface SelectProps extends FormComponentProps {
   value?: string | string[];
   defaultValue?: string | string[];
-  onChange?: (value: string | string[], event: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange?: (_value: string | string[], _event: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onFocus?: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   multiple?: boolean;
@@ -119,7 +121,7 @@ export interface RadioProps extends FormComponentProps {
 export interface RadioGroupProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
-  onChange?: (value: string, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (_value: string, _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   options: RadioOption[];
   orientation?: 'horizontal' | 'vertical';
   variant?: 'default' | 'outlined' | 'filled';

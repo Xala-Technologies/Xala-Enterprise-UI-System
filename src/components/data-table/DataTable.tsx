@@ -67,9 +67,9 @@ export interface TableAction<T = unknown> {
   /** Action icon */
   readonly icon?: ReactNode;
   /** Action handler */
-  readonly onClick: (item: T, index: number) => void;
+  readonly onClick: (_item: T, index: number) => void;
   /** Action disabled check */
-  readonly disabled?: (item: T, index: number) => boolean;
+  readonly disabled?: (_item: T, _index: number) => boolean;
   /** Action variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive';
 }
@@ -104,15 +104,15 @@ export interface DataTableProps<T = unknown>
   /** Row selection handler */
   readonly onRowSelect?: (selectedRows: readonly string[]) => void;
   /** Row key extractor */
-  readonly rowKey?: (item: T, index: number) => string;
+  readonly rowKey?: (_item: T, _index: number) => string;
   /** Row click handler */
-  readonly onRowClick?: (item: T, index: number) => void;
+  readonly onRowClick?: (_item: T, _index: number) => void;
 }
 
 /**
  * Data Table Component
  * @param props - Data table properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
   (
@@ -174,9 +174,9 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
 
     /**
      * Render table header
-     * @returns JSX.Element
+     * @returns React.ReactElement
      */
-    const renderHeader = (): JSX.Element => (
+    const renderHeader = (): React.ReactElement => (
       <thead className="bg-muted/50">
         <tr>
           {onRowSelect && (
@@ -225,9 +225,9 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
 
     /**
      * Render table body
-     * @returns JSX.Element
+     * @returns React.ReactElement
      */
-    const renderBody = (): JSX.Element => (
+    const renderBody = (): React.ReactElement => (
       <tbody>
         {data.map((item, index): void => {
           const rowId = rowKey(item, index);
@@ -304,7 +304,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
     );
 
     return (
-      <div ref={ref} className={cn(dataTableVariants({ variant, size }), className)} {...props}>
+      <div ref={ref} className={cn(dataTableVariants({ _variant, _size }), className)} {...props}>
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>

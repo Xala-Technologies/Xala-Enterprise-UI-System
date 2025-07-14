@@ -1,3 +1,4 @@
+import React from 'react';
 // RTL Component Testing for @xala-mock/ui-system
 // Right-to-left language support testing (Arabic, Hebrew) with Norwegian compliance
 
@@ -217,7 +218,7 @@ export class RTLComponentTester {
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = window.getComputedStyle(element);
+    const computedStyle = global.window.getComputedStyle(element);
     const actualDirection = computedStyle.direction;
 
     if (actualDirection !== testSuite.expectedResults.direction) {
@@ -239,7 +240,7 @@ export class RTLComponentTester {
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = window.getComputedStyle(element);
+    const computedStyle = global.window.getComputedStyle(element);
 
     // Check for logical properties support
     const hasMarginInlineStart = computedStyle.marginInlineStart !== '';
@@ -274,7 +275,7 @@ export class RTLComponentTester {
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = window.getComputedStyle(element);
+    const computedStyle = global.window.getComputedStyle(element);
     const textAlign = computedStyle.textAlign;
 
     // For RTL, expect right alignment or start alignment
@@ -292,7 +293,7 @@ export class RTLComponentTester {
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = window.getComputedStyle(element);
+    const computedStyle = global.window.getComputedStyle(element);
     const unicodeBidi = computedStyle.unicodeBidi;
 
     // Check for proper BiDi isolation

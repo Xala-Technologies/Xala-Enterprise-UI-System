@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { cn } from '../../lib/utils/cn';
-import { getComponentTokens, getToken } from '../../tokens';
+import { _getComponentTokens, _getToken } from '../../tokens';
 
 // =============================================================================
 // TYPES

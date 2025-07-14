@@ -3,6 +3,8 @@
  * @module PlatformTypes
  */
 
+import React from 'react';
+
 import type { ReactNode } from 'react';
 import type { ComponentProps } from '../lib/types/core.types';
 

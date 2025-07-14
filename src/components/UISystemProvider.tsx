@@ -7,13 +7,13 @@
 import { Logger } from '@xala-technologies/enterprise-standards';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
-import type { AccessibilityLevel, UISystemConfig } from '../lib/types/core.types';
+import type { _AccessibilityLevel, _UISystemConfig } from '../lib/types/core.types';
 import type {
   AccessibilityConfig,
   AccessibilityPreset,
   AccessibilityTokens,
 } from '../tokens/accessibility-tokens';
-import { accessibilityPresets, generateAccessibilityTokens } from '../tokens/accessibility-tokens';
+import { _accessibilityPresets, _generateAccessibilityTokens } from '../tokens/accessibility-tokens';
 
 const logger = Logger.create({
   serviceName: 'ui-system-provider',
@@ -227,7 +227,7 @@ export const useAccessibility = (): {
   level: AccessibilityLevel;
   isEnabled: boolean;
 } => {
-  const { accessibility, accessibilityTokens } = useUISystem();
+  const { _accessibility, _accessibilityTokens } = useUISystem();
 
   return {
     config: accessibility,

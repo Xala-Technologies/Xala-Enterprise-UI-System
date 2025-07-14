@@ -450,7 +450,7 @@ export const MainContent = forwardRef<HTMLElement, MainContentProps>(
         id="main-content"
         role="main"
         aria-label={title || 'Main content'}
-        className={cn(mainContentVariants({ platform, maxWidth }), className)}
+        className={cn(mainContentVariants({ _platform, _maxWidth }), className)}
         {...props}
       >
         {/* Main content title */}

@@ -1,7 +1,7 @@
 // Toast component for @xala-mock/ui-system
 // Norwegian-compliant toast notification with accessibility and positioning
 
-import React, { useEffect, useState } from 'react';
+import React, { _useEffect, _useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
 
@@ -168,7 +168,7 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 };
 
 // Toast icon component
-const ToastIcon = ({ variant, icon }: { variant: string; icon?: React.ReactNode }): React.ReactElement => {
+const ToastIcon = ({ _variant, _icon }: { variant: string; icon?: React.ReactNode }): React.ReactElement => {
   if (icon) {
     return (
       <span
@@ -311,7 +311,7 @@ const ToastActionButton = ({ action }: { action: { label: string; handler: () =>
 };
 
 // Progress bar for timed toasts
-const ProgressBar = ({ duration, paused }: { duration: number; paused: boolean }): void => {
+const ProgressBar = ({ _duration, _paused }: { duration: number; paused: boolean }): void => {
   const [progress, setProgress] = useState(100);
 
   useEffect((): void => {

@@ -56,7 +56,7 @@ export function OrganizationNumberInput({
   className = '',
   testId,
   ...inputProps
-}: OrganizationNumberInputProps): JSX.Element {
+}: OrganizationNumberInputProps): React.ReactElement {
   // State management
   const [internalValue, setInternalValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState<{
@@ -302,9 +302,9 @@ export function OrganizationNumberInput({
  * Organization data display component
  */
 const OrganizationDisplay: React.FC<{
-  orgData?: any; // Changed type to any as OrganizationData is removed
+  orgData?: unknown; // Changed type to any as OrganizationData is removed
   isLoading: boolean;
-}> = ({ orgData, isLoading }): void => {
+}> = ({ _orgData, _isLoading }): void => {
   // Removed useLocalization as localization is removed
 
   if (isLoading) {
@@ -450,7 +450,7 @@ const mockFetchOrganizationData = async (orgNumber: string): Promise<any | null>
   await new Promise(resolve => setTimeout(resolve, 500));
 
   // Mock data
-  const mockData: Record<string, any> = {
+  const mockData: Record<string, unknown> = {
     // Changed type to any as OrganizationData is removed
     '123456789': {
       name: 'Test Bedrift AS',

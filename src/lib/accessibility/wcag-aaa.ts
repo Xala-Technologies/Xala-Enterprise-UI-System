@@ -167,11 +167,7 @@ export const keyboardNavigation = {
   /**
    * Standard keyboard event handlers
    */
-  handleArrowKeys: (
-    items: HTMLElement[],
-    currentIndex: number,
-    direction: 'horizontal' | 'vertical' = 'horizontal'
-  ) => {
+  handleArrowKeys: (items: HTMLElement[], currentIndex: number, direction: 'horizontal' | 'vertical' = 'horizontal') => {
     const isHorizontal = direction === 'horizontal';
     
     return (e: KeyboardEvent): void => {

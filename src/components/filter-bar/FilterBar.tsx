@@ -100,7 +100,7 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
 /**
  * Filter Bar Component
  * @param props - Filter bar properties
- * @returns JSX.Element
+ * @returns React.ReactElement
  */
 export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
   (
@@ -147,7 +147,7 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
     };
 
     return (
-      <div ref={ref} className={cn(filterBarVariants({ variant, size }), className)} {...props}>
+      <div ref={ref} className={cn(filterBarVariants({ _variant, _size }), className)} {...props}>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           {/* Left Section - Search and Filters */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-1">

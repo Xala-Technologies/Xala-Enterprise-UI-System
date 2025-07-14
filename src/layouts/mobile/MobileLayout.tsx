@@ -290,7 +290,7 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
       <header
         ref={ref}
         role="banner"
-        className={cn(mobileHeaderVariants({ variant, size }), className)}
+        className={cn(mobileHeaderVariants({ _variant, _size }), className)}
         {...props}
       >
         {/* Left Section */}
@@ -424,7 +424,7 @@ export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
           ref={ref}
           role="complementary"
           aria-label={title || 'Navigation drawer'}
-          className={cn(mobileDrawerVariants({ position, open }), className)}
+          className={cn(mobileDrawerVariants({ _position, _open }), className)}
           {...props}
         >
           {/* Header */}
@@ -494,7 +494,7 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
         ref={ref}
         role="main"
         aria-label={title || 'Main content'}
-        className={cn(mobileContentVariants({ padding, bottomSafe }), className)}
+        className={cn(mobileContentVariants({ _padding, _bottomSafe }), className)}
         {...props}
       >
         {/* Pull to refresh indicator */}

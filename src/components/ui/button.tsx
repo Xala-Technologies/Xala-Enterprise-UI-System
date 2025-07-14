@@ -3,6 +3,8 @@
  * Uses class-variance-authority for variants and CSS variables for theming
  */
 
+import React from 'react';
+
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { type ButtonHTMLAttributes, forwardRef } from 'react';

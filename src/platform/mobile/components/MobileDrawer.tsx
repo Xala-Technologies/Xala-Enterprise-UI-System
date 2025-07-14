@@ -26,7 +26,7 @@ interface MobileDrawerProps {
   safeAreaHandling?: boolean;
   onOpen?: () => void;
   onClose?: () => void;
-  style?: any;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -50,7 +50,7 @@ interface MobileDrawerProps {
  * - Voice-over support for Norwegian content
  * - Municipal branding and information
  */
-export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any): void => {
+export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: unknown): void => {
   const {
     isOpen,
     titleKey,
@@ -78,7 +78,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
       return {};
     }
 
-    const styles: Record<string, any> = {
+    const styles: Record<string, unknown> = {
       ÅPEN: {
         borderColor: 'var(--color-success-500)',
         backgroundColor: 'var(--color-success-50)',
@@ -135,7 +135,7 @@ export const MobileDrawer = React.forwardRef((props: MobileDrawerProps, ref: any
             ? 'translate3d(0, -100%, 0)'
             : 'translate3d(0, 100%, 0)';
 
-    const position: Record<string, any> = {
+    const position: Record<string, unknown> = {
       position: 'fixed',
       top: placement === 'top' ? '0' : placement === 'bottom' ? 'auto' : '0',
       bottom: placement === 'bottom' ? '0' : 'auto',

@@ -1,4 +1,6 @@
 // React mock for development
+import React from 'react';
+
 const React = {
   forwardRef: <T, P>(Component: React.ForwardRefRenderFunction<T, P>) => React.ForwardRefExoticComponent<React.PropsWithoutRef<P> & React.RefAttributes<T>>,
 };
@@ -40,7 +42,7 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
   } = props;
 
   // Mock translation function
-  const t = (key: string) => key;
+  const t = (key: string): string => key;
 
   // Size variants
   const getSizeStyle = (): React.CSSProperties => {
@@ -50,8 +52,8 @@ export const MobileHeaderButton = React.forwardRef<HTMLButtonElement, MobileHead
   };
 
   // Variant styling
-  const getVariantStyle = (): void => {
-    const variants: Record<string, any> = {
+  const getVariantStyle = (): React.CSSProperties => {
+    const variants: Record<string, React.CSSProperties> = {
       default: {
         color: 'var(--color-text-primary)',
         backgroundColor: 'transparent',
