@@ -75,7 +75,10 @@ export interface TypographyProps
  * @returns Typography JSX element
  */
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
-  ({ className, variant, textColor, align, as, truncate, ...props }, ref): React.ReactElement => {
+  (
+    { className, variant, textColor, align, as: Component = 'p', truncate, ...props },
+    ref
+  ): React.ReactElement => {
     return (
       <Component
         ref={ref}

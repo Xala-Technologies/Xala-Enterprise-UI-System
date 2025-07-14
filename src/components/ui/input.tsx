@@ -60,7 +60,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
-        className={cn(inputVariants({ variant: computedVariant, size, className }))}
+        className={cn(inputVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />

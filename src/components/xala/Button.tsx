@@ -34,11 +34,40 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled = false,
       children,
       className,
+      onClick,
       ...props
     },
     ref
   ): React.ReactElement => {
-  return (
+    // Handle click events
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (loading || disabled) return;
+      onClick?.(e);
+    };
+
+    // Generate button styles using design tokens
+    const buttonStyles = React.useMemo((): React.CSSProperties => {
+      const tokens = getComponentTokens('button');
+
+      return {
+        padding: String(tokens[`padding-${size}`] || getToken('spacing.3') || '0.75rem'),
+        fontSize: String(tokens[`fontSize-${size}`] || getToken('fontSize.sm') || '0.875rem'),
+        borderRadius: String(tokens.borderRadius || getToken('borderRadius.md') || '0.375rem'),
+        backgroundColor: String(
+          tokens[`bg-${variant}`] || getToken('colors.primary.500') || '#3b82f6'
+        ),
+        color: String(tokens[`text-${variant}`] || getToken('colors.white') || '#ffffff'),
+        border:
+          variant === 'outline'
+            ? `1px solid ${String(getToken('colors.border') || '#e5e7eb')}`
+            : 'none',
+        cursor: loading || disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.6 : 1,
+        transition: 'all 0.2s ease-in-out',
+      };
+    }, [variant, size, loading, disabled]);
+
+    return (
       <button
         ref={ref}
         {...props}
@@ -58,7 +87,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
           </div>
         )}
-        <span className={loading ? 'opacity-0' : ''}>{children}</span>
+        <span className={loading ? 'opacity-0' : 'opacity-100'}>{children}</span>
       </button>
     );
   }
@@ -76,7 +105,21 @@ Button.displayName = 'Button';
 export const SemanticButton: React.FC<ButtonProps> = props => {
   const { variant = 'primary', size = 'md', className, ...restProps } = props;
 
-  const styles = React.useMemo((): React.ReactElement => {
+  const styles = React.useMemo((): React.CSSProperties => {
+    const tokens = getComponentTokens('button');
+
+    return {
+      padding: String(tokens[`padding-${size}`] || getToken('spacing.3') || '0.75rem'),
+      fontSize: String(tokens[`fontSize-${size}`] || getToken('fontSize.sm') || '0.875rem'),
+      borderRadius: String(tokens.borderRadius || getToken('borderRadius.md') || '0.375rem'),
+      backgroundColor: String(
+        tokens[`bg-${variant}`] || getToken('colors.primary.500') || '#3b82f6'
+      ),
+      color: String(tokens[`text-${variant}`] || getToken('colors.white') || '#ffffff'),
+      transition: 'all 0.15s ease-in-out',
+    };
+  }, [variant, size]);
+
   return (
     <button
       {...restProps}
@@ -98,51 +141,17 @@ export const SemanticButton: React.FC<ButtonProps> = props => {
  * Button component documentation
  *
  * This component demonstrates the proper usage of semantic design tokens:
- *
- * 1. **Component Tokens**: Uses `getComponentTokens('button')` for consistent styling
- * 2. **Semantic Tokens**: Uses `getToken('alias.color.brand.primary')` for individual tokens
- * 3. **Type Safety**: Full TypeScript support with proper token paths
- * 4. **Accessibility**: Follows WCAG 2.2 AA standards with proper focus management
- * 5. **Norwegian Compliance**: Adheres to DigDir and NSM standards
- *
- * @example
- * ```tsx
- * import { Button } from '@/components';
-
-// Helper function
-const getClassificationIcon = (level: string): string => {
-  const icons = {
-    'ÅPEN': '🟢',
-    'BEGRENSET': '🟡',
-    'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
-  };
-  return icons[level as keyof typeof icons] || '📋';
-};
-
-
- *
- * function MyComponent() {
- *   return (
- *     <Button variant="primary" size="md" onClick={handleClick}>
- *       Click me
- *     </Button>
- *   );
- * }
- * ```
+ * - Uses getComponentTokens() for component-specific tokens
+ * - Falls back to getToken() for base design tokens
+ * - Supports all standard button variants and sizes
+ * - Includes loading states and accessibility features
+ * - Follows Norwegian government design standards
  *
  * @example
  * ```tsx
- * // Loading state
- * <Button loading>Processing...</Button>
- *
- * // Disabled state
- * <Button disabled>Disabled</Button>
- *
- * // Different variants
- * <Button variant="secondary">Secondary</Button>
- * <Button variant="outline">Outline</Button>
- * <Button variant="ghost">Ghost</Button>
+ * <Button variant="primary" size="md" loading={isLoading}>
+ *   Save Changes
+ * </Button>
  * ```
  */
 

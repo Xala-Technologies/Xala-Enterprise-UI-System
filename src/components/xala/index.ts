@@ -1,17 +1,18 @@
 /**
- * Xala Design System Components
- * Based on Equinor Design System with WCAG AAA accessibility compliance
+ * @fileoverview Xala Component Library Index
+ * @module Xala
+ * @description Centralized export of all Xala components and utilities
  */
 
-// Form components
-export { Button, SemanticButton, type ButtonProps } from './Button';
-export { Input, type InputProps, type InputSize, type InputVariant } from './Input';
+// Re-export core components
+export { Button } from './Button';
+export { Input } from './Input';
 
 // Re-export accessibility utilities
 export { xalaAccessibility } from '@/lib/accessibility/wcag-aaa';
 
 // Re-export design tokens from new semantic token system
-export { designTokens, getCSSVar, getComponentTokens, getToken } from '@/tokens';
+export { semanticTokens as designTokens, getCSSVar, getComponentTokens } from '@/tokens';
 
 /**
  * Xala component library version
@@ -19,53 +20,74 @@ export { designTokens, getCSSVar, getComponentTokens, getToken } from '@/tokens'
 export const XALA_VERSION = '1.0.0';
 
 /**
- * Xala design system info
+ * Xala component library metadata
  */
-export const XALA_INFO = {
-  name: 'Xala Design System',
+export const XALA_METADATA = {
+  name: 'Xala UI Components',
   version: XALA_VERSION,
-  description: 'Enterprise-grade design system with WCAG AAA accessibility compliance',
+  description: 'Enterprise-grade React components with Norwegian compliance',
   author: 'Xala Technologies',
   license: 'MIT',
-  wcagCompliance: 'AAA',
-  accessibility: {
-    contrastRatio: '7:1 for normal text, 4.5:1 for large text',
-    touchTargets: '44px minimum',
-    keyboardNavigation: 'Full support',
-    screenReader: 'Optimized',
-    reducedMotion: 'Supported',
+  repository: 'https://github.com/xala-technologies/ui-system',
+  documentation: 'https://ui.xala.no',
+  compliance: {
+    nsm: 'NSM Classification Support',
+    digdir: 'DigDir Design Standards',
+    wcag: 'WCAG 2.2 AAA Compliance',
+    gdpr: 'GDPR Privacy Compliance',
   },
-};
-
-/**
- * Component categories for organization
- */
-export const XALA_CATEGORIES = {
-  FORM: 'Form Components',
-  NAVIGATION: 'Navigation Components',
-  FEEDBACK: 'Feedback Components',
-  DATA_DISPLAY: 'Data Display Components',
-  LAYOUT: 'Layout Components',
-  OVERLAY: 'Overlay Components',
+  features: [
+    'Semantic Design Tokens',
+    'Accessibility First',
+    'Norwegian Government Standards',
+    'TypeScript Support',
+    'Dark Mode Support',
+    'Responsive Design',
+    'Enterprise Security',
+  ],
 } as const;
 
 /**
- * Component registry for dynamic imports
+ * Xala component library configuration
  */
-export const XALA_COMPONENTS = {
-  // Form components
-  Button: {
-    name: 'Button',
-    category: XALA_CATEGORIES.FORM,
-    description: 'Interactive button component with multiple variants',
-    wcagCompliant: true,
-    touchOptimized: true,
-  },
-  Input: {
-    name: 'Input',
-    category: XALA_CATEGORIES.FORM,
-    description: 'Text input component with validation states',
-    wcagCompliant: true,
-    touchOptimized: true,
+export const XALA_CONFIG = {
+  defaultTheme: 'light',
+  supportedThemes: ['light', 'dark', 'auto'],
+  defaultLocale: 'nb-NO',
+  supportedLocales: ['nb-NO', 'nn-NO', 'en-US'],
+  accessibilityLevel: 'WCAG_2_2_AAA',
+  classification: 'ÅPEN',
+  complianceStandards: ['NSM', 'DigDir', 'GDPR', 'ISO27001'],
+} as const;
+
+/**
+ * Xala component library utilities
+ */
+export const xalaUtils = {
+  /**
+   * Get component version
+   */
+  getVersion: (): string => XALA_VERSION,
+
+  /**
+   * Get component metadata
+   */
+  getMetadata: () => XALA_METADATA,
+
+  /**
+   * Get component configuration
+   */
+  getConfig: () => XALA_CONFIG,
+
+  /**
+   * Validate Norwegian compliance
+   */
+  validateNorwegianCompliance: (config: { classification?: string; [key: string]: unknown }): void => {
+    if (process.env['NODE_ENV'] === 'development') {
+      const validClassifications = ['ÅPEN', 'BEGRENSET', 'KONFIDENSIELT', 'HEMMELIG'];
+      if (config.classification && !validClassifications.includes(config.classification)) {
+        console.warn('Invalid NSM classification:', config.classification);
+      }
+    }
   },
 } as const;

@@ -40,7 +40,7 @@ export interface CardProps
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, ...props }, ref) => (
-    <div ref={ref} className={cn(cardVariants({ _variant, className }))} {...props} />
+    <div ref={ref} className={cn(cardVariants({ variant, className }))} {...props} />
   )
 );
 

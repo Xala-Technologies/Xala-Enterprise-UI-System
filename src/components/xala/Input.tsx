@@ -1,140 +1,50 @@
 /**
- * Xala Input Component
- * Based on Equinor Design System with WCAG AAA accessibility compliance
+ * @fileoverview Input Component using Semantic Design Tokens
+ * @description Modern input component using consolidated design token system
+ * @version 3.0.0
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { cn } from '../../lib/utils/cn';
 
-/**
- * Input variants using class-variance-authority
- */
-const inputVariants = cva(
-  [
-    // Base styles
-    'flex w-full rounded-md border px-3 py-2 text-sm ring-offset-background',
-    'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-    'placeholder:text-muted-foreground',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-    'transition-colors',
+// =============================================================================
+// TYPES
+// =============================================================================
 
-    // Touch targets and accessibility
-    'min-h-[44px]', // WCAG AAA minimum touch target size
-    'touch-manipulation',
-
-    // Motion preferences
-    'motion-reduce:transition-none',
-  ],
-  {
-    variants: {
-      variant: {
-        default: [
-          'border-input bg-background',
-          'hover:border-input/80',
-          'focus-visible:border-ring',
-        ],
-        success: [
-          'border-success bg-background',
-          'hover:border-success/80',
-          'focus-visible:border-success focus-visible:ring-success',
-        ],
-        warning: [
-          'border-warning bg-background',
-          'hover:border-warning/80',
-          'focus-visible:border-warning focus-visible:ring-warning',
-        ],
-        error: [
-          'border-destructive bg-background',
-          'hover:border-destructive/80',
-          'focus-visible:border-destructive focus-visible:ring-destructive',
-        ],
-        ghost: [
-          'border-transparent bg-transparent',
-          'hover:border-input/40',
-          'focus-visible:border-ring',
-        ],
-      },
-      size: {
-        sm: 'h-9 px-3 py-1 text-xs',
-        default: 'h-10 px-3 py-2',
-        lg: 'h-11 px-4 py-2',
-        xl: 'h-12 px-4 py-3 text-base',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
-
-/**
- * Input component props interface
- */
-export interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
-    VariantProps<typeof inputVariants> {
-  /** Input label */
-  readonly label?: string;
-
-  /** Helper text */
-  readonly helperText?: string;
-
-  /** Error message */
-  readonly error?: string;
-
-  /** Success message */
-  readonly success?: string;
-
-  /** Warning message */
-  readonly warning?: string;
-
-  /** Icon to display at the start */
-  readonly startIcon?: ReactNode;
-
-  /** Icon to display at the end */
-  readonly endIcon?: ReactNode;
-
-  /** Unit or suffix text */
-  readonly unit?: string;
-
-  /** Show/hide password toggle for password inputs */
-  readonly showPasswordToggle?: boolean;
-
-  /** Required field indicator */
-  readonly required?: boolean;
-
-  /** Optional field indicator */
-  readonly optional?: boolean;
-
-  /** Character count display */
-  readonly showCharCount?: boolean;
-
-  /** Maximum character count */
-  readonly maxLength?: number;
-
-  /** Container class name */
-  readonly containerClassName?: string;
-
-  /** Label class name */
-  readonly labelClassName?: string;
-
-  /** Helper text class name */
-  readonly helperTextClassName?: string;
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  variant?: 'default' | 'error' | 'success' | 'warning';
+  size?: 'sm' | 'md' | 'lg';
+  label?: string;
+  helperText?: string;
+  error?: string;
+  success?: string;
+  warning?: string;
+  required?: boolean;
+  optional?: boolean;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  unit?: string;
+  showPasswordToggle?: boolean;
+  containerClassName?: string;
+  labelClassName?: string;
+  helperTextClassName?: string;
 }
+
+// =============================================================================
+// HELPER COMPONENTS
+// =============================================================================
 
 /**
  * Input wrapper component
  */
-const InputWrapper = forwardRef<
+const InputWrapper = React.forwardRef<
   HTMLDivElement,
   {
     children: ReactNode;
     className?: string;
   }
->(({ _children, className }, ref) => (
+>(({ children, className }, ref) => (
   <div ref={ref} className={cn('relative', className)}>
     {children}
   </div>
@@ -145,49 +55,52 @@ InputWrapper.displayName = 'InputWrapper';
 /**
  * Input label component
  */
-const InputLabel = forwardRef<
+const InputLabel = React.forwardRef<
   HTMLLabelElement,
   {
-    htmlFor: string;
     children: ReactNode;
+    htmlFor?: string;
     required?: boolean;
     optional?: boolean;
     className?: string;
   }
->(({ htmlFor, children, required, optional, className }, ref) => (
+>(({ children, htmlFor, required, optional, className }, ref) => (
   <label
     ref={ref}
     htmlFor={htmlFor}
     className={cn(
-      'block text-sm font-medium leading-6 text-foreground mb-2',
-      'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      'block text-sm font-medium text-foreground',
+      required && 'after:content-["*"] after:ml-0.5 after:text-destructive',
+      optional &&
+        'after:content-["(optional)"] after:ml-1 after:text-muted-foreground after:font-normal',
       className
     )}
   >
     {children}
-    {required && (
-      <span className="ml-1 text-destructive" aria-label="required">
-        *
-      </span>
-    )}
-    {optional && <span className="ml-1 text-muted-foreground text-xs">(optional)</span>}
   </label>
 ));
 
 InputLabel.displayName = 'InputLabel';
 
 /**
- * Input message component
+ * Input message component for errors, success, warnings, and helper text
  */
-const InputMessage = forwardRef<
+const InputMessage = React.forwardRef<
   HTMLParagraphElement,
   {
     children: ReactNode;
-    type?: 'default' | 'success' | 'warning' | 'error';
+    type?: 'default' | 'error' | 'success' | 'warning';
     className?: string;
     id?: string;
   }
 >(({ children, type = 'default', className, id }, ref): React.ReactElement => {
+  const messageClasses = {
+    default: 'text-muted-foreground',
+    error: 'text-destructive',
+    success: 'text-success',
+    warning: 'text-warning',
+  };
+
   return (
     <p
       ref={ref}
@@ -209,120 +122,81 @@ InputMessage.displayName = 'InputMessage';
 const PasswordToggle = ({
   isVisible,
   onToggle,
-  disabled,
 }: {
   isVisible: boolean;
   onToggle: () => void;
-  disabled?: boolean;
 }): React.ReactElement => (
   <button
     type="button"
     onClick={onToggle}
-    disabled={disabled}
-    className={cn(
-      'absolute inset-y-0 right-0 flex items-center pr-3',
-      'text-muted-foreground hover:text-foreground',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-      'disabled:cursor-not-allowed disabled:opacity-50',
-      'transition-colors'
-    )}
+    className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground hover:text-foreground"
     aria-label={isVisible ? 'Hide password' : 'Show password'}
   >
-    {isVisible ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
+    {isVisible ? '🙈' : '👁️'}
   </button>
 );
 
-/**
- * Simple eye icons for password toggle
- */
-const EyeIcon = ({ className }: { className?: string }): React.ReactElement => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-    />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-    />
-  </svg>
-);
+// =============================================================================
+// COMPONENT VARIANTS
+// =============================================================================
 
-const EyeOffIcon = ({ className }: { className?: string }): React.ReactElement => (
-  <svg
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-    />
-  </svg>
-);
+const inputVariants = (props: { variant?: string; size?: string }) => {
+  const { variant = 'default', size = 'md' } = props;
 
-/**
- * Input component
- * @param variant - Input style variant
- * @param size - Input size
- * @param label - Input label
- * @param helperText - Helper text
- * @param error - Error message
- * @param success - Success message
- * @param warning - Warning message
- * @param startIcon - Icon at the start
- * @param endIcon - Icon at the end
- * @param unit - Unit or suffix text
- * @param showPasswordToggle - Show password toggle for password inputs
- * @param required - Required field indicator
- * @param optional - Optional field indicator
- * @param showCharCount - Show character count
- * @param maxLength - Maximum character count
- * @param containerClassName - Container class name
- * @param labelClassName - Label class name
- * @param helperTextClassName - Helper text class name
- * @param className - Additional CSS classes
- * @param props - Additional input props
- * @returns Input JSX element
- */
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+  const baseClasses = [
+    'flex w-full rounded-md border border-input bg-background px-3 py-2',
+    'text-sm ring-offset-background file:border-0 file:bg-transparent',
+    'file:text-sm file:font-medium placeholder:text-muted-foreground',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    'focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  ];
+
+  const variantClasses = {
+    default: 'border-input',
+    error: 'border-destructive focus-visible:ring-destructive',
+    success: 'border-success focus-visible:ring-success',
+    warning: 'border-warning focus-visible:ring-warning',
+  };
+
+  const sizeClasses = {
+    sm: 'h-9 px-2 text-xs',
+    md: 'h-10 px-3 text-sm',
+    lg: 'h-11 px-4 text-base',
+  };
+
+  return cn(
+    baseClasses,
+    variantClasses[variant as keyof typeof variantClasses],
+    sizeClasses[size as keyof typeof sizeClasses]
+  );
+};
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      variant,
-      size,
+      variant = 'default',
+      size = 'md',
+      type = 'text',
       label,
       helperText,
       error,
       success,
       warning,
+      required = false,
+      optional = false,
       startIcon,
       endIcon,
       unit,
       showPasswordToggle = false,
-      required = false,
-      optional = false,
-      showCharCount = false,
-      maxLength,
       containerClassName,
       labelClassName,
       helperTextClassName,
       className,
-      type = 'text',
-      id,
+      maxLength,
       value,
       onChange,
       disabled,
@@ -330,6 +204,43 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ): React.ReactElement => {
+    // State management
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const [currentValue, setCurrentValue] = useState(value || '');
+
+    // Generate unique IDs
+    const inputId = useMemo(() => `input-${Math.random().toString(36).substr(2, 9)}`, []);
+    const helperTextId = useMemo(() => `helper-${inputId}`, [inputId]);
+    const errorId = useMemo(() => `error-${inputId}`, [inputId]);
+    const successId = useMemo(() => `success-${inputId}`, [inputId]);
+    const warningId = useMemo(() => `warning-${inputId}`, [inputId]);
+
+    // Determine input type
+    const inputType = type === 'password' && isPasswordVisible ? 'text' : type;
+
+    // Determine variant based on state
+    const computedVariant = error ? 'error' : success ? 'success' : warning ? 'warning' : variant;
+
+    // Handle change events
+    const handleChange = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = e.target.value;
+        setCurrentValue(newValue);
+        onChange?.(e);
+      },
+      [onChange]
+    );
+
+    // Character count logic
+    const charCount = String(currentValue).length;
+    const isOverLimit = maxLength ? charCount > maxLength : false;
+
+    // Accessibility attributes
+    const describedBy =
+      [helperText && helperTextId, error && errorId, success && successId, warning && warningId]
+        .filter(Boolean)
+        .join(' ') || undefined;
+
     return (
       <div className={cn('space-y-2', containerClassName)}>
         {/* Label */}
@@ -370,75 +281,60 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
             aria-describedby={describedBy || undefined}
             aria-invalid={error ? 'true' : 'false'}
-            aria-required={required}
             {...props}
           />
 
-          {/* End icon */}
-          {endIcon && !unit && !(type === 'password' && showPasswordToggle) && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <span className="text-muted-foreground">{endIcon}</span>
+          {/* End elements */}
+          {(endIcon || unit || (type === 'password' && showPasswordToggle)) && (
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+              {endIcon && <span className="text-muted-foreground">{endIcon}</span>}
+              {unit && <span className="text-muted-foreground text-sm">{unit}</span>}
+              {type === 'password' && showPasswordToggle && (
+                <PasswordToggle
+                  isVisible={isPasswordVisible}
+                  onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                />
+              )}
             </div>
-          )}
-
-          {/* Unit */}
-          {unit && !(type === 'password' && showPasswordToggle) && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <span className="text-muted-foreground text-sm">{unit}</span>
-            </div>
-          )}
-
-          {/* Password toggle */}
-          {type === 'password' && showPasswordToggle && (
-            <PasswordToggle
-              isVisible={isPasswordVisible}
-              onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
-              disabled={disabled}
-            />
           )}
         </InputWrapper>
 
-        {/* Messages and character count */}
-        <div className="flex justify-between items-start gap-2">
-          <div className="flex-1">
-            {/* Helper text */}
-            {helperText && !error && !success && !warning && (
-              <InputMessage id={helperTextId} className={helperTextClassName}>
-                {helperText}
-              </InputMessage>
-            )}
+        {/* Helper text */}
+        {helperText && (
+          <InputMessage id={helperTextId} className={helperTextClassName}>
+            {helperText}
+          </InputMessage>
+        )}
 
-            {/* Error message */}
-            {error && (
-              <InputMessage id={errorId} type="error" className={helperTextClassName}>
-                {error}
-              </InputMessage>
-            )}
+        {/* Error message */}
+        {error && (
+          <InputMessage id={errorId} type="error" className={helperTextClassName}>
+            {error}
+          </InputMessage>
+        )}
 
-            {/* Success message */}
-            {success && (
-              <InputMessage id={successId} type="success" className={helperTextClassName}>
-                {success}
-              </InputMessage>
-            )}
+        {/* Success message */}
+        {success && (
+          <InputMessage id={successId} type="success" className={helperTextClassName}>
+            {success}
+          </InputMessage>
+        )}
 
-            {/* Warning message */}
-            {warning && (
-              <InputMessage id={warningId} type="warning" className={helperTextClassName}>
-                {warning}
-              </InputMessage>
-            )}
+        {/* Warning message */}
+        {warning && (
+          <InputMessage id={warningId} type="warning" className={helperTextClassName}>
+            {warning}
+          </InputMessage>
+        )}
+
+        {/* Character count */}
+        {maxLength && (
+          <div
+            className={cn('text-xs', isOverLimit ? 'text-destructive' : 'text-muted-foreground')}
+          >
+            {charCount}/{maxLength}
           </div>
-
-          {/* Character count */}
-          {showCharCount && maxLength && (
-            <div
-              className={cn('text-xs', isOverLimit ? 'text-destructive' : 'text-muted-foreground')}
-            >
-              {charCount}/{maxLength}
-            </div>
-          )}
-        </div>
+        )}
       </div>
     );
   }
@@ -446,10 +342,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = 'Input';
 
-/**
- * Export input variants and types
- */
-export type InputVariant = VariantProps<typeof inputVariants>['variant'];
-export type InputSize = VariantProps<typeof inputVariants>['size'];
+// =============================================================================
+// EXPORTS
+// =============================================================================
 
-export { inputVariants };
+export default Input;
+export { InputLabel, InputMessage, InputWrapper, PasswordToggle };
