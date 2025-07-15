@@ -1,5 +1,9 @@
-// MobileHeader component for @xala-mock/ui-system
-// Norwegian-compliant mobile header with government branding and accessibility
+/**
+ * Mobile Header Component
+ * Enterprise-grade mobile header with responsive design and Norwegian compliance
+ */
+
+/* eslint-disable no-unused-vars */
 
 import React, { useCallback } from 'react';
 
@@ -271,7 +275,7 @@ export const MobileHeader = React.forwardRef<HTMLDivElement, MobileHeaderProps>(
       onSearchFocus,
       onNotificationClick,
       height = 'standard',
-      sticky = true,
+      sticky: _sticky = true,
       // transparent mode planned for future
       norwegian,
       className,

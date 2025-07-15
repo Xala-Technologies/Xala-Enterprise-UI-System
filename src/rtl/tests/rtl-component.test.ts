@@ -134,8 +134,8 @@ export class RTLComponentTester {
   private testResults: Map<string, RTLTestResults> = new Map();
 
   // Test a component with specific RTL configuration
-  testComponent(componentElement: HTMLElement, testSuite: RTLTestSuite): RTLTestResults {
-    const startTime = performance.now();
+  testComponent(componentElement: globalThis.HTMLElement, testSuite: RTLTestSuite): RTLTestResults {
+    const startTime = globalThis.performance.now();
     const errors: string[] = [];
     const warnings: string[] = [];
 
@@ -157,7 +157,7 @@ export class RTLComponentTester {
       // Test accessibility in RTL mode
       const accessibility = this.testRTLAccessibility(componentElement);
 
-      const endTime = performance.now();
+      const endTime = globalThis.performance.now();
       const results: RTLTestResults = {
         passed: errors.length === 0,
         errors,
@@ -181,7 +181,7 @@ export class RTLComponentTester {
   }
 
   // Set up RTL testing environment
-  private setupRTLEnvironment(element: HTMLElement, testSuite: RTLTestSuite): void {
+  private setupRTLEnvironment(element: globalThis.HTMLElement, testSuite: RTLTestSuite): void {
     element.dir = testSuite.direction;
     element.lang = testSuite.locale;
 
@@ -197,12 +197,12 @@ export class RTLComponentTester {
 
   // Test direction handling
   private testDirectionHandling(
-    element: HTMLElement,
+    element: globalThis.HTMLElement,
     testSuite: RTLTestSuite,
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = global.window.getComputedStyle(element);
+    const computedStyle = globalThis.window.getComputedStyle(element);
     const actualDirection = computedStyle.direction;
 
     if (actualDirection !== testSuite.expectedResults.direction) {
@@ -219,12 +219,12 @@ export class RTLComponentTester {
 
   // Test spacing properties (margin, padding)
   private testSpacingProperties(
-    element: HTMLElement,
+    element: globalThis.HTMLElement,
     testSuite: RTLTestSuite,
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = global.window.getComputedStyle(element);
+    const computedStyle = globalThis.window.getComputedStyle(element);
 
     // Check for logical properties support
     const hasMarginInlineStart = computedStyle.marginInlineStart !== '';
@@ -254,12 +254,12 @@ export class RTLComponentTester {
 
   // Test text alignment
   private testTextAlignment(
-    element: HTMLElement,
+    element: globalThis.HTMLElement,
     testSuite: RTLTestSuite,
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = global.window.getComputedStyle(element);
+    const computedStyle = globalThis.window.getComputedStyle(element);
     const textAlign = computedStyle.textAlign;
 
     // For RTL, expect right alignment or start alignment
@@ -272,12 +272,12 @@ export class RTLComponentTester {
 
   // Test BiDi (Bidirectional) support
   private testBiDiSupport(
-    element: HTMLElement,
+    element: globalThis.HTMLElement,
     testSuite: RTLTestSuite,
     errors: string[],
     warnings: string[]
   ): void {
-    const computedStyle = global.window.getComputedStyle(element);
+    const computedStyle = globalThis.window.getComputedStyle(element);
     const unicodeBidi = computedStyle.unicodeBidi;
 
     // Check for proper BiDi isolation
@@ -298,7 +298,7 @@ export class RTLComponentTester {
 
   // Test Norwegian government compliance in RTL mode
   private testNorwegianRTLCompliance(
-    element: HTMLElement,
+    element: globalThis.HTMLElement,
     testSuite: RTLTestSuite,
     errors: string[],
     warnings: string[]
@@ -323,7 +323,7 @@ export class RTLComponentTester {
   }
 
   // Test RTL accessibility
-  private testRTLAccessibility(element: HTMLElement): {
+  private testRTLAccessibility(element: globalThis.HTMLElement): {
     screenReaderCompatible: boolean;
     keyboardNavigable: boolean;
   } {
@@ -355,7 +355,7 @@ export class RTLComponentTester {
 
   // Estimate memory usage (mock implementation)
   private estimateMemoryUsage(): number {
-    // Mock implementation - in real scenario would use performance.measureUserAgentSpecificMemory
+    // Mock implementation - in real scenario would use globalThis.performance.measureUserAgentSpecificMemory
     return Math.random() * 1000;
   }
 
@@ -371,8 +371,8 @@ export class RTLComponentTester {
     this.testResults.forEach((results, testName) => {
       report += `## ${testName}\n`;
       report += `**Status:** ${results.passed ? '✅ PASSED' : '❌ FAILED'}\n`;
-      report += `**Render Time:** ${results.performance.renderTime.toFixed(2)}ms\n`;
-      report += `**Memory Usage:** ${results.performance.memoryUsage.toFixed(2)} KB\n\n`;
+      report += `**Render Time:** ${results.globalThis.performance.renderTime.toFixed(2)}ms\n`;
+      report += `**Memory Usage:** ${results.globalThis.performance.memoryUsage.toFixed(2)} KB\n\n`;
 
       if (results.errors.length > 0) {
         report += '**Errors:**\n';
@@ -400,7 +400,7 @@ export class RTLComponentTester {
 export const defaultRTLTester = new RTLComponentTester();
 
 // Utility function to run all RTL tests
-export const runAllRTLTests = (componentElement: HTMLElement): Map<string, RTLTestResults> => {
+export const runAllRTLTests = (componentElement: globalThis.HTMLElement): Map<string, RTLTestResults> => {
   const tester = new RTLComponentTester();
 
   // Test Arabic support

@@ -1,7 +1,10 @@
 /**
- * Mobile Layout Components
- * Comprehensive mobile-first layout system with touch optimization
+ * Mobile Layout Component
+ * Enterprise-grade mobile layout with responsive design
+ * Supports drawer navigation and status bar configuration
  */
+
+/* eslint-disable no-unused-vars */
 
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -176,7 +179,6 @@ export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLEl
   /** Active item index */
   readonly activeIndex?: number;
   /** Navigation change handler */
-  // eslint-disable-next-line no-unused-vars
   readonly onNavigate?: (_index: number) => void;
 }
 

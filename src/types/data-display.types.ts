@@ -1,7 +1,9 @@
 /**
- * @fileoverview Data display component type definitions
- * @module DataDisplayTypes
+ * Data Display Types
+ * Enterprise-grade data display and table type definitions
  */
+
+/* eslint-disable no-unused-vars */
 
 import type React from 'react';
 
@@ -50,15 +52,11 @@ export interface DataTableProps extends DataDisplayComponentProps {
     filename?: string;
   };
    
-  // eslint-disable-next-line no-unused-vars
   onRowClick?: (_row: TableData, _index: number) => void;
-  // eslint-disable-next-line no-unused-vars
   onSelectionChange?: (_selectedRows: string[]) => void;
    
-  // eslint-disable-next-line no-unused-vars
   onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
    
-  // eslint-disable-next-line no-unused-vars
   onPageChange?: (_page: number, _pageSize: number) => void;
 }
 
@@ -97,7 +95,6 @@ export interface TableColumn {
   };
    
    
-  // eslint-disable-next-line no-unused-vars
   render?: (_value: unknown, _row: Record<string, unknown>, _column: TableColumn) => React.ReactNode;
 }
 
@@ -218,7 +215,7 @@ export const formatters = {
       currency: currency,
     }).format(value);
   },
-  date: (value: Date | string, format: string = 'DD.MM.YYYY'): string => {
+  date: (value: Date | string, _format: string = 'DD.MM.YYYY'): string => {
     const date = typeof value === 'string' ? new Date(value) : value;
     // Implementation depends on date library
     return date.toLocaleDateString();

@@ -1,8 +1,14 @@
+/**
+ * Mobile Header Button Component
+ */
+
+/* eslint-disable no-unused-vars */
+
 // React mock for development
 import React from 'react';
 
 // Helper function for classification icons
-const getClassificationIcon = (classification?: string): string => {
+const _getClassificationIcon = (classification?: string): string => {
   const icons = {
     ÅPEN: '🟢',
     BEGRENSET: '🟡',

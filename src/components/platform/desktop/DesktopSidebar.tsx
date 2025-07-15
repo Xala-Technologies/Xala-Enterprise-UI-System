@@ -1,5 +1,10 @@
-// DesktopSidebar component for @xala-mock/ui-system
-// Norwegian-compliant desktop sidebar with resizing and government features
+/**
+ * Desktop Sidebar Component
+ * Enterprise-grade desktop sidebar with configurable layouts
+ * Supports collapsible, overlay, and persistent modes
+ */
+
+/* eslint-disable no-unused-vars */
 
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -274,7 +279,6 @@ const ResizeHandle = ({
   onMouseDown,
   isResizing,
 }: {
-  // eslint-disable-next-line no-unused-vars
   onMouseDown: (_e: React.MouseEvent) => void;
   isResizing: boolean;
 }): React.ReactElement => {

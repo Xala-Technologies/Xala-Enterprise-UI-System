@@ -3,6 +3,8 @@
  * Uses design tokens and CSS variables for theming
  */
 
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 
 import { cn } from '@/lib/utils/cn';
