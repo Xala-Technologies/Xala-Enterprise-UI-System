@@ -4,20 +4,22 @@
  * @compliance NSM, GDPR, WCAG AAA
  */
 
-import { isValidNorwegianPersonalNumber,
-  isValidNorwegianOrganizationNumber,
-  isValidNorwegianPostalCode,
-  isValidNorwegianPhoneNumber,
-  validateNorwegianCompliance,
-  isValidNSMClassification,
-  isValidWCAGLevel,
-  isValidNorwegianLanguage,
-  isValidNorwegianMunicipalityCode,
-  getNSMClassificationLabel,
-  canDisplayClassification,
-  sanitizeDataForClassification,
-  validateGDPRConsent,
-  validateColorContrast, } from '../utils/norwegian-compliance';
+import {
+    canDisplayClassification,
+    getNSMClassificationLabel,
+    isValidNorwegianLanguage,
+    isValidNorwegianMunicipalityCode,
+    isValidNorwegianOrganizationNumber,
+    isValidNorwegianPersonalNumber,
+    isValidNorwegianPhoneNumber,
+    isValidNorwegianPostalCode,
+    isValidNSMClassification,
+    isValidWCAGLevel,
+    sanitizeDataForClassification,
+    validateColorContrast,
+    validateGDPRConsent,
+    validateNorwegianCompliance,
+} from '../utils/norwegian-compliance';
 
 describe('@xala-technologies/ui-system - Norwegian Compliance', () => { describe('Norwegian Personal Number Validation', () => { it('should validate correct Norwegian personal numbers', () => { // Note: These are test numbers, not real personal numbers
       const validNumbers = [
@@ -268,25 +270,36 @@ describe('@xala-technologies/ui-system - Norwegian Compliance', () => { describe
       expect(sanitized.password).toBe('secret123');
       expect(sanitized.secretData).toBe('classified'); }); });
 
-  describe('GDPR Consent Validation', () => { it('should validate valid GDPR consent', () => { const validConsent = { consentGiven: true,
+  describe('GDPR Consent Validation', () => { 
+    it('should validate valid GDPR consent', () => { 
+      const validConsent = { 
+        consentGiven: true,
         purposes: ['analytics', 'marketing'],
-        expiryDate: new Date(Date.now() + 86400000).toISOString(), // Tomorrow };
+        expiryDate: new Date(Date.now() + 86400000).toISOString() // Tomorrow 
+      };
 
       const result = validateGDPRConsent(validConsent, 'analytics');
-      expect(result.success).toBe(true); });
+      expect(result.success).toBe(true); 
+    });
 
     it('should reject invalid GDPR consent', () => { const invalidConsents = [
         null,
         undefined,
         { consentGiven: false },
         { consentGiven: true, purposes: ['marketing'] }, // Missing required purpose
-        { consentGiven: true,
+        { 
+          consentGiven: true,
           purposes: ['analytics'],
-          expiryDate: new Date(Date.now() - 86400000).toISOString(), // Expired },
+          expiryDate: new Date(Date.now() - 86400000).toISOString() // Expired 
+        }
       ];
 
-      for (const consent of invalidConsents) { const result = validateGDPRConsent(consent, 'analytics');
-        expect(result.success).toBe(false); } }); });
+      for (const consent of invalidConsents) { 
+        const result = validateGDPRConsent(consent, 'analytics');
+        expect(result.success).toBe(false); 
+      } 
+    }); 
+  });
 
   describe('Color Contrast Validation', () => { it('should validate color contrast for WCAG compliance', () => { const result = validateColorContrast('#000000', '#FFFFFF', 'AAA');
       // Note: This is using simplified validation

@@ -228,7 +228,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     {
       name,
       options,
-      value,
+      // value,
       defaultValue,
       onValueChange,
       variant,

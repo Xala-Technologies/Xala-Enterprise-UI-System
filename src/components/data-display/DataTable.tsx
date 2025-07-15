@@ -144,7 +144,7 @@ export function DataTable({
 const TableHeader: React.FC<{
   columns: TableColumn[];
   sorting?: DataTableProps['sorting'];
-   
+
   // eslint-disable-next-line no-unused-vars
   onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
   norwegian?: DataTableProps['norwegian'];
@@ -209,47 +209,15 @@ const TableHeader: React.FC<{
 const TableBody: React.FC<{
   data: TableData[];
   columns: TableColumn[];
-   
+
   // eslint-disable-next-line no-unused-vars
   onRowClick?: (_row: TableData, _index: number) => void;
   norwegian?: DataTableProps['norwegian'];
 }> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const __formatCellValue = (
-    value: unknown,
-    column: TableColumn,
-    row: TableData
-  ): React.ReactNode => {
-    if (value === null || value === undefined) {
-      return '-';
-    }
-
-    // Handle custom render function
-    if (column.render) {
-      return column.render(value, row, column);
-    }
-
-    // Handle type-specific formatting
-    switch (column.type) {
-      case 'personalNumber':
-        return formatPersonalNumber(String(value));
-      case 'organizationNumber':
-        return formatOrganizationNumber(String(value));
-      case 'date':
-        return formatDate(value, norwegian?.dateFormat || 'DD.MM.YYYY');
-      case 'currency':
-        return formatCurrency(Number(value), 'NOK');
-      case 'number':
-        return formatNumber(Number(value), {});
-      case 'boolean':
-        return formatBoolean(Boolean(value), { trueKey: 'Yes', falseKey: 'No' });
-      case 'status':
-        return String(value);
-      default:
-        return String(value);
-    }
-  };
+  // Cell rendering logic would be implemented here
+  // const formatCellValue = (value, column, row) => { ... }
 
   return (
     <tbody className="datatable__body">

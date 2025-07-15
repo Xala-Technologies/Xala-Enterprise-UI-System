@@ -147,7 +147,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
     const resultsRef = React.useRef<HTMLDivElement>(null);
 
     // Handlers
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
       const newValue = e.target.value;
       setInputValue(newValue);
       onChange?.(newValue);
@@ -155,7 +155,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       setSelectedIndex(-1);
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
@@ -175,12 +175,12 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       }
     };
 
-    const handleFocus = () => {
+    const handleFocus = (): void => {
       setIsOpen(true);
       onFocus?.();
     };
 
-    const handleBlur = () => {
+    const handleBlur = (): void => {
       // Delay closing to allow for result clicks
       setTimeout(() => {
         setIsOpen(false);
@@ -189,7 +189,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       onBlur?.();
     };
 
-    const handleResultClick = (result: SearchResultItem) => {
+    const handleResultClick = (result: SearchResultItem): void => {
       setInputValue(result.title);
       setIsOpen(false);
       setSelectedIndex(-1);

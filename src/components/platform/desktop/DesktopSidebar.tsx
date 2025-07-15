@@ -1,7 +1,7 @@
 // DesktopSidebar component for @xala-mock/ui-system
 // Norwegian-compliant desktop sidebar with resizing and government features
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import type { DesktopSidebarProps } from '../../../types/platform.types';
 
@@ -10,9 +10,9 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
   const {
     isCollapsed = false,
     width = 280,
-    position = 'left',
-    persistent = true,
-    overlay = false,
+    // position: _position = "left",
+    // persistent: _persistent = true,
+    // overlay: _overlay = false,
   } = props;
 
   // Base styles using design tokens
@@ -21,15 +21,17 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
     flexDirection: 'column',
     height: '100vh',
     backgroundColor: 'var(--background-secondary)',
-    borderRight: position === 'left' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
-    borderLeft: position === 'right' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
+    borderRight:
+      _position === 'left' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
+    borderLeft:
+      _position === 'right' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
     fontFamily: 'var(--font-family-sans)',
-    position: persistent ? 'relative' : 'fixed',
-    top: persistent ? 'auto' : 0,
-    left: position === 'left' && !persistent ? 0 : 'auto',
-    right: position === 'right' && !persistent ? 0 : 'auto',
-    zIndex: persistent ? 'auto' : 'var(--z-index-sidebar)',
-    boxShadow: persistent ? 'none' : 'var(--shadow-xl)',
+    position: _persistent ? 'relative' : 'fixed',
+    top: _persistent ? 'auto' : 0,
+    left: _position === 'left' && !_persistent ? 0 : 'auto',
+    right: _position === 'right' && !_persistent ? 0 : 'auto',
+    zIndex: _persistent ? 'auto' : 'var(--z-index-sidebar)',
+    boxShadow: _persistent ? 'none' : 'var(--shadow-xl)',
     transition: 'all var(--transition-duration-normal) ease',
     width: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
     minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
@@ -144,7 +146,7 @@ const ClassificationBanner = ({ level }: { level: string }): React.ReactElement 
 // Quick access section component
 const QuickAccessSection = ({
   isCollapsed,
-   
+
   // _norwegian removed - unused parameter
 }: {
   isCollapsed: boolean;
@@ -347,9 +349,9 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       collapsible = true,
       collapsed = false,
       isCollapsed = collapsed,
-      position = 'left',
-      persistent = true,
-      overlay = false,
+      position: _position = 'left',
+      persistent: _persistent = true,
+      overlay: _overlay = false,
       onToggle,
       // onClose: planned for future
       norwegian,
@@ -364,7 +366,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
 
     // Handle keyboard shortcuts
     const handleKeydown = useCallback(
-      (e: KeyboardEvent) => {
+      (e: KeyboardEvent): void => {
         if (!norwegian?.keyboardShortcuts) return;
 
         if (e.ctrlKey && e.key === 'b') {
@@ -384,20 +386,20 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
     }, [handleKeydown, norwegian?.keyboardShortcuts]);
 
     // Handle resize functionality
-    const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    const handleMouseDown = useCallback((e: React.MouseEvent): void => {
       e.preventDefault();
       setIsResizing(true);
     }, []);
 
     useEffect(() => {
-      if (!isResizing) return;
+      if (!isResizing) return undefined;
 
-      const handleMouseMove = (e: MouseEvent) => {
+      const handleMouseMove = (e: MouseEvent): void => {
         const newWidth = e.clientX;
         setCurrentWidth(Math.max(200, Math.min(600, newWidth)));
       };
 
-      const handleMouseUp = () => {
+      const handleMouseUp = (): void => {
         setIsResizing(false);
       };
 

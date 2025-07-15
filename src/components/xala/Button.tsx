@@ -40,7 +40,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ): React.ReactElement => {
     // Handle click events
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>): JSX.Element => {
       if (loading || disabled) return;
       onClick?.(e);
     };

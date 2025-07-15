@@ -20,12 +20,21 @@ interface PersonalNumberValidationResult {
   age?: number;
 }
 
+interface ValidationResult {
+  isValid: boolean;
+  errors: string[];
+  type: 'fødselsnummer';
+  birthDate: Date;
+  gender: 'male' | 'female';
+  century: number;
+}
+
 // Placeholder validation functions (replace with actual validation package)
 const validatePersonalNumber = (
   value: string,
   // eslint-disable-next-line no-unused-vars
   _validation: PersonalNumberInputProps['validation']
-) => {
+): ValidationResult => {
   const digits = value.replace(/\D/g, '');
   const isValid = digits.length === 11;
   const errors: string[] = [];
@@ -145,7 +154,6 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
       testId,
       className,
       displayFormat = 'ddmmyy-nnnnn',
-      maskInput = false,
       autoFormat = true,
       validation = {
         checksum: true,

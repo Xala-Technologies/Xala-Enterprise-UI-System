@@ -263,7 +263,7 @@ export const MobileHeader = React.forwardRef<HTMLDivElement, MobileHeaderProps>(
       showSearch = false,
       showNotifications = false,
       notificationCount,
-      searchPlaceholder,
+      // searchPlaceholder,
       onBackClick,
       onBack,
       onMenuClick,

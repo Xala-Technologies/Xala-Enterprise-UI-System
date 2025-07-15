@@ -4,10 +4,12 @@
  * @compliance NSM, GDPR, WCAG AAA
  */
 
-import { UISystemCore,
-  createProductionUISystem,
-  createTestUISystem,
-  createDevelopmentUISystem, } from '../core/index';
+import {
+    UISystemCore,
+    createDevelopmentUISystem,
+    createProductionUISystem,
+    createTestUISystem,
+} from '../core/index';
 
 describe('@xala-technologies/ui-system - UI System Core', () => { describe('Basic Configuration Tests', () => { it('should create UI system with default configuration', async () => { const uiSystem = UISystemCore.create();
       expect(uiSystem).toBeInstanceOf(UISystemCore);
@@ -115,7 +117,7 @@ describe('@xala-technologies/ui-system - UI System Core', () => { describe('Basi
 
       const registry = uiSystem.getComponentRegistry();
       expect(registry.has('TestComponent')).toBe(true);
-      expect(registry.ge'TestComponent').toBe(mockComponent);
+      expect(registry.get('TestComponent')).toBe(mockComponent);
 
       await uiSystem.dispose(); });
 

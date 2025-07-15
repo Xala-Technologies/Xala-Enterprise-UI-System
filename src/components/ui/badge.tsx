@@ -59,7 +59,7 @@ export interface BadgeProps
  * @returns Badge JSX element
  */
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref): React.ReactElement => {
+  ({ className, variant, size, /* asChild = false, */ ...props }, ref): React.ReactElement => {
     return <div ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />;
   }
 );

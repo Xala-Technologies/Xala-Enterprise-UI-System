@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type ReactNode } from 'react';
 
-
 /**
  * Data table variants using design tokens
  */
@@ -52,8 +51,7 @@ export interface TableColumn<T = unknown> {
   /** Column width */
   readonly width?: string;
   /** Column render function */
-   
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly render?: (_value: unknown, _item: T, _index: number) => ReactNode;
   /** Column align */
@@ -71,11 +69,11 @@ export interface TableAction<T = unknown> {
   /** Action icon */
   readonly icon?: ReactNode;
   /** Action handler */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly onClick: (_item: T, _index: number) => void;
   /** Action disabled check */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly disabled?: (_item: T, _index: number) => boolean;
   /** Action variant */
@@ -106,7 +104,7 @@ export interface DataTableProps<T = unknown>
   /** Sort direction */
   readonly sortDirection?: 'asc' | 'desc';
   /** Sort change handler */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly onSort?: (_column: string, _direction: 'asc' | 'desc') => void;
   /** Row selection */
@@ -115,11 +113,11 @@ export interface DataTableProps<T = unknown>
   // eslint-disable-next-line no-unused-vars
   readonly onRowSelect?: (_selectedRows: readonly string[]) => void;
   /** Row key extractor */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly rowKey?: (_item: T, _index: number) => string;
   /** Row click handler */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly onRowClick?: (_item: T, _index: number) => void;
 }
@@ -144,7 +142,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       onSort,
       selectedRows = [],
       onRowSelect,
-      rowKey = (_, index) => index.toString(),
+      rowKey = (_: unknown, index: number): string => index.toString(),
       onRowClick,
       className,
       ...props
@@ -201,16 +199,12 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
               <div className="flex items-center gap-2">
                 {column.header}
                 {column.sortable && sortBy === column.key && (
-                  <span className="text-xs">
-                    {sortDirection === 'asc' ? '↑' : '↓'}
-                  </span>
+                  <span className="text-xs">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                 )}
               </div>
             </th>
           ))}
-          {actions.length > 0 && (
-            <th className="w-20 p-3 text-right">Actions</th>
-          )}
+          {actions.length > 0 && <th className="w-20 p-3 text-right">Actions</th>}
         </tr>
       </thead>
     );

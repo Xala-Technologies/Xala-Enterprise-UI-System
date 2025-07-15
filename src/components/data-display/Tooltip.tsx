@@ -5,18 +5,6 @@ import React from 'react';
 
 import type { TooltipProps } from '../../types/data-display.types';
 
-// Helper function
-const getClassificationIcon = (level: string): string => {
-  const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
-  return icons[level as keyof typeof icons] || '📋';
-};
-// Helper function to generate CSS using design tokens
-
-const getCategoryIcon = (category: string): string => {
-  const icons = { system: '⚙️', validation: '✅', security: '🔒', process: '🔄', user: '👤' };
-  return icons[category as keyof typeof icons] || '📋';
-};
-
 const getTooltipStyles = (props: TooltipProps): React.CSSProperties => {
   const { placement = 'top', arrow = true } = props;
 
@@ -71,142 +59,15 @@ const getTooltipStyles = (props: TooltipProps): React.CSSProperties => {
   return { ...baseStyles, ...placementStyles };
 };
 
-// Get placement-based styles
-const _getPlacementStyles = (placement: string): React.CSSProperties => {
-  // Basic placement - actual positioning would be handled by JavaScript
-  const placements = {
-    top: { marginBottom: 'var(--spacing-2)' },
-    bottom: { marginTop: 'var(--spacing-2)' },
-    left: { marginRight: 'var(--spacing-2)' },
-    right: { marginLeft: 'var(--spacing-2)' },
-    auto: {},
-  };
-  return placements[placement as keyof typeof placements] || placements.top;
-};
+// Minimal tooltip content component
+const TooltipContent = ({ content }: { content?: string }): React.ReactElement => (
+  <span>{content || ''}</span>
+);
 
-// Get accessibility styles
-const _getAccessibilityStyles = (
-  accessibility?: string,
-  highContrast?: boolean
-): React.CSSProperties => {
-  const styles: React.CSSProperties = {};
-
-  if (accessibility === 'WCAG_2_2_AAA' || highContrast) {
-    styles.backgroundColor = 'var(--color-black)';
-    styles.color = 'var(--color-white)';
-    styles.border = 'var(--border-width) solid var(--color-white)';
-    styles.fontSize = 'var(--font-size-base)'; // Larger font for better readability
-    styles.fontWeight = 'var(--font-weight-medium)';
-  }
-
-  return styles;
-};
-
-// Get Norwegian classification styles
-const _getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) {
-    return {};
-  }
-
-  const classificationStyles: Record<string, React.CSSProperties> = {
-    ÅPEN: { borderLeft: 'var(--border-accent-width) solid var(--color-green-400)' },
-    BEGRENSET: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-orange-400)',
-      backgroundColor: 'var(--color-orange-900)',
-    },
-    KONFIDENSIELT: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-400)',
-      backgroundColor: 'var(--color-red-900)',
-    },
-    HEMMELIG: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-300)',
-      backgroundColor: 'var(--color-red-950)',
-      border: 'var(--border-width) solid var(--color-red-400)',
-    },
-  };
-
-  return classificationStyles[classification] || {};
-};
-
-// Arrow component
-const TooltipArrow = ({
-  placement,
-  // eslint-disable-next-line no-unused-vars
-  classification: _classification,
-}: {
-  placement: string;
-  classification?: string;
-}): React.ReactElement => {
-  return (
-    <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
-        marginRight: 'var(--spacing-1)',
-        opacity: '0.9',
-      }}
-      aria-label={`Placement: ${placement}`}
-    >
-      ▲
-    </span>
-  );
-};
-
-// Classification indicator
-const ClassificationIndicator = ({ level }: { level: string }): React.ReactElement => {
-  return (
-    <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
-        marginRight: 'var(--spacing-1)',
-        opacity: '0.9',
-      }}
-      aria-label={`Classification: ${level}`}
-    >
-      {getClassificationIcon(level)}
-    </span>
-  );
-};
-
-// Help category indicator
-const HelpCategoryIndicator = ({ category }: { category?: string }): React.ReactElement => {
-  return (
-    <span
-      style={{
-        fontSize: 'var(--font-size-xs)',
-        marginRight: 'var(--spacing-1)',
-        opacity: '0.8',
-      }}
-      aria-label={`Help category: ${category}`}
-    >
-      {getCategoryIcon(category || '')}
-    </span>
-  );
-};
-
-// Tooltip content component
-const TooltipContent = ({
-  // eslint-disable-next-line no-unused-vars
-  contentKey: _contentKey,
-  content,
-  norwegian,
-}: {
-  contentKey?: string;
-  content?: string;
-  norwegian?: TooltipProps['norwegian'];
-}): React.ReactElement => {
-  return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--spacing-1)' }}>
-      {/* Classification indicator */}
-      {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
-
-      {/* Help category indicator */}
-      <HelpCategoryIndicator category={norwegian?.helpCategory} />
-
-      {/* Tooltip text */}
-      <span>{content || ''}</span>
-    </div>
-  );
-};
+// Minimal arrow component
+const TooltipArrow = ({ placement: _placement }: { placement: string }): React.ReactElement => (
+  <span aria-label={`Tooltip arrow for ${_placement}`}>▲</span>
+);
 
 // Tooltip component with forwardRef
 export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
@@ -216,8 +77,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
       content,
       placement = 'top',
       trigger = 'hover',
-      delay = 0,
-      disabled = false,
+      // delay: _delay = 0,
+      // disabled: _disabled = false,
       arrow = true,
       className,
       testId = 'tooltip',

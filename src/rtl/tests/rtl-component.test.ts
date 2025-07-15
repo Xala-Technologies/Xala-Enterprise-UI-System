@@ -1,13 +1,7 @@
 // RTL Component Testing for @xala-mock/ui-system
 // Right-to-left language support testing (Arabic, Hebrew) with Norwegian compliance
 
-import type { TextDirection, SupportedLocale } from '../../types/localization.types';
-import { _RTLDesignTokens: _RTLDesignTokens } from '../../types/localization.types';
-import {
-  _generateRTLTokens,
-  _RTL_COMPONENT_UTILITIES,
-  _NORWEGIAN_RTL_TESTING,
-} from '../tokens/rtl-design-tokens';
+import type { SupportedLocale, TextDirection } from '../../types/localization.types';
 
 // RTL Test Suite Interface
 export interface RTLTestSuite {

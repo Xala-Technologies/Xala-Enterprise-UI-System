@@ -87,7 +87,6 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       disabled = false,
       multiple = false,
       size = 'medium',
-      variant = 'default',
       status = 'default',
       norwegian,
       onChange,

@@ -53,8 +53,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
-    const handleBlur = onBlur || (() => {});
-    const handleFocus = onFocus || (() => {});
+    const handleBlur = onBlur || ((): void => {});
+    const handleFocus = onFocus || ((): void => {});
     const inputClasses = className || 'input';
     const hasValidationErrors = !!error || hasError;
 

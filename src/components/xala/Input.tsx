@@ -140,7 +140,7 @@ const PasswordToggle = ({
 // COMPONENT VARIANTS
 // =============================================================================
 
-const inputVariants = (props: { variant?: string; size?: string }) => {
+const inputVariants = (props: { variant?: string; size?: string }): JSX.Element => {
   const { variant = 'default', size = 'md' } = props;
 
   const baseClasses = [

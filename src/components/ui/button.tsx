@@ -110,7 +110,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       disabled,
       children,
-      asChild = false,
+      // asChild = false,
       ...props
     },
     ref

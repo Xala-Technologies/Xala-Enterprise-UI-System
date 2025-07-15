@@ -293,7 +293,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
     const {
       items,
       activeIndex = 0,
-      activeItem,
+      // activeItem,
       onItemClick,
       showLabels = true,
       showBadges = true,
