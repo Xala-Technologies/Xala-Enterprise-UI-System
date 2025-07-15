@@ -4,7 +4,7 @@
  * @description Specialized input for Norwegian personal numbers using design tokens (no inline styles)
  */
 
-import React, { useCallback, useId, useState } from 'react';
+import React from 'react';
 
 import { cn } from '../../lib/utils/cn';
 import type { PersonalNumberInputProps } from '../../types/form.types';
@@ -166,77 +166,55 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
     } = props;
 
     // Generate IDs for accessibility
-    const inputId = useId();
-    const helpTextId = useId();
-    const errorId = useId();
-    const validationId = useId();
+    const inputId = `personal-number-${Math.random().toString(36).substr(2, 9)}`;
+    const helpTextId = `${inputId}-help`;
+    const errorId = `${inputId}-error`;
+    const validationId = `${inputId}-validation`;
 
-    // State for validation
-    const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
-    const [validationResult, setValidationResult] = useState<PersonalNumberValidationResult | null>(
-      null
-    );
-    const [isValidating, setIsValidating] = useState(false);
+    // Use controlled value
+    const currentValue = value || defaultValue || '';
+    const validationResult = validation?.realTimeValidation !== false
+      ? validatePersonalNumber(currentValue, validation)
+      : null;
+    const isValidating = false; // No async validation in pure component
 
     // Determine if validation is enabled
     const enableValidation = validation?.realTimeValidation !== false;
     const showValidationIcon = enableValidation;
 
     // Handle change with validation
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = e.target.value;
-        const formattedValue = autoFormat
-          ? formatPersonalNumber(inputValue, displayFormat)
-          : inputValue;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const inputValue = e.target.value;
+      const formattedValue = autoFormat
+        ? formatPersonalNumber(inputValue, displayFormat)
+        : inputValue;
 
-        setCurrentValue(formattedValue);
-
-        if (enableValidation) {
-          setIsValidating(true);
-          const result = validatePersonalNumber(formattedValue, validation);
-          setValidationResult(result);
-          setIsValidating(false);
-
-          if (onValidationChange) {
-            onValidationChange(result.isValid, result.errors);
-          }
+      if (enableValidation) {
+        const result = validatePersonalNumber(formattedValue, validation);
+        
+        if (onValidationChange) {
+          onValidationChange(result.isValid, result.errors);
         }
+      }
 
-        if (onChange) {
-          onChange(formattedValue, validationResult?.isValid || false, e);
-        }
-      },
-      [
-        autoFormat,
-        displayFormat,
-        enableValidation,
-        validation,
-        onChange,
-        onValidationChange,
-        validationResult,
-      ]
-    );
+      if (onChange) {
+        onChange(formattedValue, validationResult?.isValid || false, e);
+      }
+    };
 
     // Handle blur
-    const handleBlur = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>) => {
-        if (onBlur) {
-          onBlur(e);
-        }
-      },
-      [onBlur]
-    );
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>): void => {
+      if (onBlur) {
+        onBlur(e);
+      }
+    };
 
     // Handle focus
-    const handleFocus = useCallback(
-      (e: React.FocusEvent<HTMLInputElement>) => {
-        if (onFocus) {
-          onFocus(e);
-        }
-      },
-      [onFocus]
-    );
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>): void => {
+      if (onFocus) {
+        onFocus(e);
+      }
+    };
 
     // Determine validation state
     const hasValidationErrors = Boolean(

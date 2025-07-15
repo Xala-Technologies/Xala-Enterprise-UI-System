@@ -4,7 +4,7 @@
  * @description Specialized input for Norwegian organization numbers using design tokens (no inline styles)
  */
 
-import React, { useId, useState } from 'react';
+import React from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
 
@@ -56,16 +56,17 @@ export const OrganizationNumberInput = React.forwardRef<
     ...inputProps
   } = props;
 
-  const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
-  const [validationResult, setValidationResult] = useState(validateOrganizationNumber(''));
-  const [_isValidating] = useState(false);
-  const [_organizationData] = useState<OrganizationData | null>(null);
+  // Use controlled value
+  const currentValue = value || defaultValue || '';
+  const validationResult = validateOrganizationNumber(currentValue);
+  const _isValidating = false;
+  const _organizationData: OrganizationData | null = null;
 
   // Display format for validation
   const displayFormat = autoFormat ? 'nnn nnn nnn' : 'nnnnnnnnn';
 
   // Generate ID if not provided
-  const generatedId = useId();
+  const generatedId = Math.random().toString(36).substr(2, 9);
   const inputId = `${testId}-input-${generatedId}`;
   const hasValidationErrors = !validationResult.isValid || hasError;
 
@@ -73,9 +74,7 @@ export const OrganizationNumberInput = React.forwardRef<
     const inputValue = e.target.value;
     const formattedValue = autoFormat ? formatOrganizationNumber(inputValue) : inputValue;
 
-    setCurrentValue(formattedValue);
     const result = validateOrganizationNumber(formattedValue);
-    setValidationResult(result);
 
     if (onChange) {
       onChange(formattedValue, result.isValid, e);

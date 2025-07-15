@@ -9,6 +9,24 @@ import * as React from 'react';
 import { forwardRef, type ReactNode } from 'react';
 
 /**
+ * Data table text configuration interface
+ */
+export interface DataTableTexts {
+  readonly loading: string;
+  readonly selectAllRows: string;
+  readonly actionsHeader: string;
+}
+
+/**
+ * Default text configuration for data table
+ */
+const defaultTexts: DataTableTexts = {
+  loading: 'Loading...',
+  selectAllRows: 'Select all rows',
+  actionsHeader: 'Actions',
+};
+
+/**
  * Data table variants using design tokens
  */
 const dataTableVariants = cva(
@@ -57,6 +75,8 @@ export interface TableColumn<T = unknown> {
   readonly render?: (_value: unknown, _item: T, _index: number) => ReactNode;
   /** Column align */
   readonly align?: 'left' | 'center' | 'right';
+  /** Column accessor function (for simple access) */
+  readonly accessor?: (_item: T) => string;
 }
 
 /**
@@ -100,6 +120,8 @@ export interface DataTableProps<T = unknown>
   readonly loading?: boolean;
   /** Empty state message */
   readonly emptyMessage?: string;
+  /** Text configuration for localization */
+  readonly texts?: Partial<DataTableTexts>;
   /** Sort column */
   readonly sortBy?: string;
   /** Sort direction */
@@ -138,6 +160,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       actions = [],
       loading = false,
       emptyMessage = 'No data available',
+      texts: userTexts,
       sortBy,
       sortDirection = 'asc',
       onSort,
@@ -150,6 +173,12 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
     },
     ref
   ): React.ReactElement => {
+    // Merge default texts with user provided texts
+    const texts: DataTableTexts = {
+      ...defaultTexts,
+      ...userTexts,
+    };
+
     const handleRowSelect = (rowId: string): void => {
       if (onRowSelect) {
         const isSelected = selectedRows.includes(rowId);
@@ -161,21 +190,23 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
       }
     };
 
-    const handleSort = (columnKey: string): void => {
+    const handleSort = (column: string): void => {
       if (onSort) {
-        const newDirection = sortBy === columnKey && sortDirection === 'asc' ? 'desc' : 'asc';
-        onSort(columnKey, newDirection);
+        const newDirection = sortBy === column && sortDirection === 'asc' ? 'desc' : 'asc';
+        onSort(column, newDirection);
       }
     };
 
+    const canSelectRows = onRowSelect !== undefined;
+
     const renderHeader = (): React.ReactElement => (
-      <thead className="bg-muted/50">
+      <thead>
         <tr className="border-b border-border">
-          {onRowSelect && (
+          {canSelectRows && (
             <th className="w-12 p-3">
               <input
                 type="checkbox"
-                checked={selectedRows.length === data.length && data.length > 0}
+                checked={selectedRows.length > 0 && selectedRows.length === data.length}
                 onChange={() => {
                   if (selectedRows.length === data.length) {
                     onRowSelect([]);
@@ -184,7 +215,7 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
                   }
                 }}
                 className="rounded border-border focus:ring-ring"
-                aria-label="Select all rows"
+                aria-label={texts.selectAllRows}
               />
             </th>
           )}
@@ -205,100 +236,87 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
               </div>
             </th>
           ))}
-          {actions.length > 0 && <th className="w-20 p-3 text-right">Actions</th>}
+          {actions.length > 0 && <th className="w-20 p-3 text-right">{texts.actionsHeader}</th>}
         </tr>
       </thead>
     );
 
-    const renderBody = (): React.ReactElement => (
-      <tbody>
-        {data.map((item, index) => {
-          const rowId = rowKey(item, index);
-          const isSelected = selectedRows.includes(rowId);
+    const renderRow = (item: unknown, index: number): React.ReactElement => {
+      const key = rowKey(item, index);
+      const isSelected = selectedRows.includes(key);
 
-          return (
-            <tr
-              key={rowId}
-              className={cn(
-                'border-b border-border transition-colors',
-                'hover:bg-muted/50',
-                isSelected && 'bg-primary/5',
-                onRowClick && 'cursor-pointer'
-              )}
-              onClick={() => onRowClick?.(item, index)}
-            >
-              {onRowSelect && (
-                <td className="w-12 p-3">
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    onChange={() => handleRowSelect(rowId)}
-                    className="rounded border-border focus:ring-ring"
-                    aria-label={`Select row ${index + 1}`}
-                  />
-                </td>
-              )}
-              {columns.map(column => (
-                <td
-                  key={column.key}
-                  className={cn(
-                    'p-3 text-foreground',
-                    column.align === 'center' && 'text-center',
-                    column.align === 'right' && 'text-right'
-                  )}
-                >
-                  {column.render
-                    ? column.render((item as Record<string, unknown>)[column.key], item, index)
-                    : String((item as Record<string, unknown>)[column.key] || '')}
-                </td>
-              ))}
-              {actions.length > 0 && (
-                <td className="p-3 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    {actions.map(action => (
-                      <button
-                        key={action.key}
-                        onClick={e => {
-                          e.stopPropagation();
-                          action.onClick(item, index);
-                        }}
-                        disabled={action.disabled?.(item, index)}
-                        className={cn(
-                          'p-2 rounded-md transition-colors',
-                          'hover:bg-accent hover:text-accent-foreground',
-                          'focus:outline-none focus:ring-2 focus:ring-ring',
-                          'disabled:opacity-50 disabled:cursor-not-allowed',
-                          action.variant === 'destructive' &&
-                            'hover:bg-destructive hover:text-destructive-foreground'
-                        )}
-                        aria-label={action.label}
-                        title={action.label}
-                      >
-                        {action.icon}
-                      </button>
-                    ))}
-                  </div>
-                </td>
-              )}
-            </tr>
-          );
-        })}
-      </tbody>
-    );
+      return (
+        <tr
+          key={key}
+          className={cn(
+            'border-b border-border hover:bg-muted/50 transition-colors',
+            isSelected && 'bg-muted',
+            onRowClick && 'cursor-pointer'
+          )}
+          onClick={() => onRowClick?.(item, index)}
+        >
+          {canSelectRows && (
+            <td className="w-12 p-3">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={() => handleRowSelect(key)}
+                className="rounded border-border focus:ring-ring"
+                onClick={e => e.stopPropagation()}
+              />
+            </td>
+          )}
+          {columns.map(column => {
+            const value = column.accessor?.(item) ?? (item as Record<string, unknown>)[column.key];
+            return (
+              <td key={column.key} className="p-3">
+                {column.render ? column.render(value, item, index) : String(value ?? '')}
+              </td>
+            );
+          })}
+          {actions.length > 0 && (
+            <td className="p-3 text-right">
+              <div className="flex items-center justify-end gap-1">
+                {actions.map((action, actionIndex) => (
+                  <button
+                    key={actionIndex}
+                    onClick={e => {
+                      e.stopPropagation();
+                      action.onClick(item, index);
+                    }}
+                    disabled={action.disabled?.(item, index)}
+                    className={cn('p-1 rounded hover:bg-background transition-colors', {
+                      'text-muted-foreground hover:text-foreground': action.variant === 'default',
+                      'text-primary hover:text-primary/80': action.variant === 'primary',
+                      'text-secondary hover:text-secondary/80': action.variant === 'secondary',
+                      'text-destructive hover:text-destructive/80':
+                        action.variant === 'destructive',
+                    })}
+                    title={action.label}
+                  >
+                    {action.icon}
+                  </button>
+                ))}
+              </div>
+            </td>
+          )}
+        </tr>
+      );
+    };
 
     return (
       <div ref={ref} className={cn(dataTableVariants({ variant, size }), className)} {...props}>
         {loading ? (
           <div className="p-8 text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-            <p className="mt-4 text-muted-foreground">Loading...</p>
+            <p className="mt-4 text-muted-foreground">{texts.loading}</p>
           </div>
         ) : data.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground">{emptyMessage}</div>
         ) : (
           <table className="w-full">
             {renderHeader()}
-            {renderBody()}
+            <tbody>{data.map((item, index) => renderRow(item, index))}</tbody>
           </table>
         )}
       </div>
