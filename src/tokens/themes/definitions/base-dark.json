@@ -1,0 +1,138 @@
+{
+  "id": "base-dark",
+  "name": "Base Dark",
+  "description": "Base dark theme template - fallback for all dark themes when configuration fails",
+  "version": "1.0.0",
+  "category": "BASE",
+  "mode": "DARK",
+  "isDefault": true,
+  "isActive": true,
+  "isPublic": true,
+  "isFallback": true,
+  "accessibility": {
+    "level": "WCAG_AA",
+    "highContrast": true,
+    "reducedMotion": true,
+    "focusIndicators": true,
+    "colorBlindFriendly": true,
+    "screenReaderOptimized": false
+  },
+  "colors": {
+    "primary": {
+      "50": "#020617",
+      "100": "#0f172a",
+      "200": "#1e293b",
+      "300": "#334155",
+      "400": "#475569",
+      "500": "#64748b",
+      "600": "#94a3b8",
+      "700": "#cbd5e1",
+      "800": "#e2e8f0",
+      "900": "#f1f5f9",
+      "950": "#f8fafc"
+    },
+    "secondary": {
+      "50": "#030712",
+      "100": "#111827",
+      "200": "#1f2937",
+      "300": "#374151",
+      "400": "#4b5563",
+      "500": "#6b7280",
+      "600": "#9ca3af",
+      "700": "#d1d5db",
+      "800": "#e5e7eb",
+      "900": "#f3f4f6",
+      "950": "#f9fafb"
+    },
+    "background": {
+      "default": "#0f172a",
+      "paper": "#1e293b",
+      "elevated": "#334155"
+    },
+    "text": {
+      "primary": "#f8fafc",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#334155",
+      "muted": "#1e293b"
+    },
+    "status": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Inter", "system-ui", "sans-serif"],
+      "serif": ["Georgia", "serif"],
+      "mono": ["JetBrains Mono", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "tight": 1.25,
+      "normal": 1.5,
+      "relaxed": 1.75
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+    "16": "4rem",
+    "24": "6rem"
+  },
+  "branding": {
+    "logo": {
+      "primary": "/assets/logos/base-logo-dark.svg",
+      "secondary": "/assets/logos/base-logo-alt-dark.svg"
+    },
+    "baseColors": {
+      "main": "#64748b",
+      "accent": "#6b7280"
+    }
+  },
+  "compliance": {
+    "standards": ["GDPR"],
+    "dataClassification": "PUBLIC",
+    "requiresApproval": false,
+    "auditLogging": false
+  },
+  "performance": {
+    "lazyLoading": true,
+    "cacheStrategy": "aggressive",
+    "bundleOptimization": true
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1440px"
+    }
+  }
+}

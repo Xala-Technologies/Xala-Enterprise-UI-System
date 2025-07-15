@@ -1,0 +1,101 @@
+{
+  "id": "drammen-light",
+  "name": "drammen",
+  "displayName": "Drammen Kommune Light",
+  "description": "Official light theme for Drammen municipality with Norwegian government compliance",
+  "version": "3.2.0",
+  "category": "MUNICIPAL",
+  "mode": "LIGHT",
+  "colors": {
+    "primary": "#0066cc",
+    "secondary": "#005599",
+    "accent": "#66b3ff",
+    "success": "#22c55e",
+    "warning": "#f59e0b",
+    "error": "#ef4444",
+    "info": "#3b82f6",
+    "background": "#ffffff",
+    "surface": "#fafafa",
+    "text": "#171717",
+    "textSecondary": "#404040",
+    "border": "#e5e5e5",
+    "focus": "#0066cc",
+    "hover": "#005599",
+    "active": "#004477",
+    "disabled": "#a3a3a3"
+  },
+  "typography": {
+    "fontFamily": "Inter, system-ui, sans-serif",
+    "headingFont": "Inter, system-ui, sans-serif",
+    "monoFont": "JetBrains Mono, Consolas, monospace",
+    "baseFontSize": "16px",
+    "scaleRatio": 1.25,
+    "lineHeight": 1.5,
+    "letterSpacing": 0.0
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "scale": [0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96, 128, 160],
+    "containerMaxWidth": "1200px",
+    "gridGutter": "24px",
+    "componentPadding": "16px"
+  },
+  "accessibility": {
+    "level": "WCAG_AAA",
+    "enabled": true,
+    "highContrast": true,
+    "reducedMotion": true,
+    "screenReaderOptimized": true,
+    "keyboardNavigation": true,
+    "focusManagement": true,
+    "minimumTouchTarget": "44px",
+    "minimumFontSize": "16px",
+    "contrastRatio": 7.0
+  },
+  "branding": {
+    "logoUrl": "/logos/drammen-logo.svg",
+    "logoAlt": "Drammen Kommune Logo",
+    "faviconUrl": "/favicons/drammen-favicon.ico",
+    "motto": "Elven, fjorden og mulighetene",
+    "companyName": "Drammen Kommune",
+    "website": "https://www.drammen.kommune.no",
+    "iconStyle": "OUTLINED",
+    "borderRadius": "8px",
+    "shadowIntensity": 0.1
+  },
+  "compliance": {
+    "standards": ["GDPR", "NSM"],
+    "dataRetention": 2555,
+    "encryptionRequired": true,
+    "auditLogging": true,
+    "privacyMode": false
+  },
+  "performance": {
+    "enableAnimations": true,
+    "enableTransitions": true,
+    "enableVirtualization": true,
+    "enableLazyLoading": true,
+    "bundleOptimization": true,
+    "cacheStrategy": "memory"
+  },
+  "responsive": {
+    "breakpoints": {
+      "xs": "320px",
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1536px"
+    },
+    "fluidTypography": true,
+    "adaptiveSpacing": true,
+    "mobileFirst": true,
+    "touchOptimized": true
+  },
+  "isDefault": false,
+  "isActive": true,
+  "isPublic": true,
+  "tags": ["municipal", "norwegian", "government", "accessibility", "wcag-aaa"],
+  "createdAt": "2024-01-15T10:00:00.000Z",
+  "updatedAt": "2024-01-15T10:00:00.000Z"
+}

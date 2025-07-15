@@ -1,0 +1,140 @@
+{
+  "id": "finance-dark",
+  "name": "Finance Dark",
+  "description": "Professional dark theme for financial applications with regulatory compliance",
+  "version": "1.0.0",
+  "category": "FINANCE",
+  "mode": "DARK",
+  "accessibility": {
+    "level": "WCAG_AA",
+    "highContrast": true,
+    "reducedMotion": true,
+    "focusIndicators": true,
+    "colorBlindFriendly": true,
+    "screenReaderOptimized": false
+  },
+  "colors": {
+    "primary": {
+      "50": "#5c360e",
+      "100": "#a6681b",
+      "200": "#d1841a",
+      "300": "#eba025",
+      "400": "#f2b73f",
+      "500": "#f7ce68",
+      "600": "#fbe29c",
+      "700": "#fdefc4",
+      "800": "#fef7e1",
+      "900": "#fefbf1",
+      "950": "#fefdf8"
+    },
+    "secondary": {
+      "50": "#020617",
+      "100": "#0f172a",
+      "200": "#1e293b",
+      "300": "#334155",
+      "400": "#475569",
+      "500": "#64748b",
+      "600": "#94a3b8",
+      "700": "#cbd5e1",
+      "800": "#e2e8f0",
+      "900": "#f1f5f9",
+      "950": "#f8fafc"
+    },
+    "background": {
+      "default": "#0f172a",
+      "paper": "#1e293b",
+      "elevated": "#334155"
+    },
+    "text": {
+      "primary": "#f8fafc",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#334155",
+      "muted": "#1e293b"
+    },
+    "status": {
+      "success": "#34d399",
+      "warning": "#fbbf24",
+      "error": "#f87171",
+      "info": "#60a5fa"
+    },
+    "financial": {
+      "profit": "#34d399",
+      "loss": "#f87171",
+      "neutral": "#94a3b8",
+      "premium": "#a78bfa"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Open Sans", "system-ui", "sans-serif"],
+      "serif": ["Source Serif Pro", "serif"],
+      "mono": ["Roboto Mono", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "tight": 1.25,
+      "normal": 1.5,
+      "relaxed": 1.75
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+    "16": "4rem",
+    "24": "6rem"
+  },
+  "branding": {
+    "logo": {
+      "primary": "/assets/logos/finance-logo-dark.svg",
+      "secondary": "/assets/logos/finance-logo-alt-dark.svg"
+    },
+    "financialColors": {
+      "main": "#f7ce68",
+      "accent": "#64748b"
+    }
+  },
+  "compliance": {
+    "standards": ["GDPR", "PCI_DSS", "SOC2"],
+    "dataClassification": "HIGHLY_CONFIDENTIAL",
+    "requiresApproval": true,
+    "auditLogging": true
+  },
+  "performance": {
+    "lazyLoading": true,
+    "cacheStrategy": "minimal",
+    "bundleOptimization": true
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1440px"
+    }
+  }
+}

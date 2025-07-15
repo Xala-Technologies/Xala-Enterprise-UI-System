@@ -1,0 +1,140 @@
+{
+  "id": "ecommerce-dark",
+  "name": "E-commerce Dark",
+  "description": "Modern dark theme for e-commerce platforms with conversion-focused design",
+  "version": "1.0.0",
+  "category": "ECOMMERCE",
+  "mode": "DARK",
+  "accessibility": {
+    "level": "WCAG_AA",
+    "highContrast": true,
+    "reducedMotion": true,
+    "focusIndicators": true,
+    "colorBlindFriendly": true,
+    "screenReaderOptimized": false
+  },
+  "colors": {
+    "primary": {
+      "50": "#500724",
+      "100": "#831843",
+      "200": "#9d174d",
+      "300": "#be185d",
+      "400": "#db2777",
+      "500": "#ec4899",
+      "600": "#f472b6",
+      "700": "#f9a8d4",
+      "800": "#fbcfe8",
+      "900": "#fce7f3",
+      "950": "#fdf2f8"
+    },
+    "secondary": {
+      "50": "#052e16",
+      "100": "#14532d",
+      "200": "#166534",
+      "300": "#15803d",
+      "400": "#16a34a",
+      "500": "#22c55e",
+      "600": "#4ade80",
+      "700": "#86efac",
+      "800": "#bbf7d0",
+      "900": "#dcfce7",
+      "950": "#f0fdf4"
+    },
+    "background": {
+      "default": "#0f1419",
+      "paper": "#1a1f2e",
+      "elevated": "#252a39"
+    },
+    "text": {
+      "primary": "#f8fafc",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#374151",
+      "muted": "#1f2937"
+    },
+    "status": {
+      "success": "#22c55e",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    },
+    "commerce": {
+      "sale": "#f87171",
+      "discount": "#a78bfa",
+      "featured": "#fbbf24",
+      "cart": "#34d399"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Poppins", "system-ui", "sans-serif"],
+      "serif": ["Playfair Display", "serif"],
+      "mono": ["Roboto Mono", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "tight": 1.25,
+      "normal": 1.5,
+      "relaxed": 1.75
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+    "16": "4rem",
+    "24": "6rem"
+  },
+  "branding": {
+    "logo": {
+      "primary": "/assets/logos/ecommerce-logo-dark.svg",
+      "secondary": "/assets/logos/ecommerce-logo-alt-dark.svg"
+    },
+    "brandColors": {
+      "main": "#ec4899",
+      "accent": "#22c55e"
+    }
+  },
+  "compliance": {
+    "standards": ["GDPR", "PCI_DSS", "CCPA"],
+    "dataClassification": "SENSITIVE",
+    "requiresApproval": false,
+    "auditLogging": true
+  },
+  "performance": {
+    "lazyLoading": true,
+    "cacheStrategy": "aggressive",
+    "bundleOptimization": true
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1440px"
+    }
+  }
+}

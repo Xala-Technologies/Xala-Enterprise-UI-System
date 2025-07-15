@@ -1,0 +1,140 @@
+{
+  "id": "healthcare-light",
+  "name": "Healthcare Light",
+  "description": "Professional light theme for healthcare applications with medical compliance",
+  "version": "1.0.0",
+  "category": "HEALTHCARE",
+  "mode": "LIGHT",
+  "accessibility": {
+    "level": "WCAG_AAA",
+    "highContrast": false,
+    "reducedMotion": false,
+    "focusIndicators": true,
+    "colorBlindFriendly": true,
+    "screenReaderOptimized": true
+  },
+  "colors": {
+    "primary": {
+      "50": "#f0fdfa",
+      "100": "#ccfbf1",
+      "200": "#99f6e4",
+      "300": "#5eead4",
+      "400": "#2dd4bf",
+      "500": "#14b8a6",
+      "600": "#0d9488",
+      "700": "#0f766e",
+      "800": "#115e59",
+      "900": "#134e4a",
+      "950": "#042f2e"
+    },
+    "secondary": {
+      "50": "#f8fafc",
+      "100": "#f1f5f9",
+      "200": "#e2e8f0",
+      "300": "#cbd5e1",
+      "400": "#94a3b8",
+      "500": "#64748b",
+      "600": "#475569",
+      "700": "#334155",
+      "800": "#1e293b",
+      "900": "#0f172a",
+      "950": "#020617"
+    },
+    "background": {
+      "default": "#ffffff",
+      "paper": "#f8fafc",
+      "elevated": "#f1f5f9"
+    },
+    "text": {
+      "primary": "#0f172a",
+      "secondary": "#475569",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#e2e8f0",
+      "muted": "#f1f5f9"
+    },
+    "status": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    },
+    "medical": {
+      "critical": "#dc2626",
+      "urgent": "#ea580c",
+      "moderate": "#d97706",
+      "stable": "#059669"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Lato", "system-ui", "sans-serif"],
+      "serif": ["Merriweather", "serif"],
+      "mono": ["Source Code Pro", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "tight": 1.25,
+      "normal": 1.5,
+      "relaxed": 1.75
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+    "16": "4rem",
+    "24": "6rem"
+  },
+  "branding": {
+    "logo": {
+      "primary": "/assets/logos/healthcare-logo-light.svg",
+      "secondary": "/assets/logos/healthcare-logo-alt-light.svg"
+    },
+    "medicalColors": {
+      "main": "#14b8a6",
+      "accent": "#64748b"
+    }
+  },
+  "compliance": {
+    "standards": ["GDPR", "HIPAA", "ISO27001"],
+    "dataClassification": "HIGHLY_CONFIDENTIAL",
+    "requiresApproval": true,
+    "auditLogging": true
+  },
+  "performance": {
+    "lazyLoading": true,
+    "cacheStrategy": "minimal",
+    "bundleOptimization": true
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1440px"
+    }
+  }
+}

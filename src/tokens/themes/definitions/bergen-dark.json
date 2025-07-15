@@ -1,0 +1,134 @@
+{
+  "id": "bergen-dark",
+  "name": "Bergen Dark",
+  "description": "Official dark theme for Bergen Municipality with Norwegian compliance standards",
+  "version": "1.0.0",
+  "category": "MUNICIPAL",
+  "mode": "DARK",
+  "accessibility": {
+    "level": "WCAG_AAA",
+    "highContrast": true,
+    "reducedMotion": true,
+    "focusIndicators": true,
+    "colorBlindFriendly": true,
+    "screenReaderOptimized": true
+  },
+  "colors": {
+    "primary": {
+      "50": "#052e16",
+      "100": "#14532d",
+      "200": "#166534",
+      "300": "#15803d",
+      "400": "#16a34a",
+      "500": "#22c55e",
+      "600": "#4ade80",
+      "700": "#86efac",
+      "800": "#bbf7d0",
+      "900": "#dcfce7",
+      "950": "#f0fdf4"
+    },
+    "secondary": {
+      "50": "#020617",
+      "100": "#0f172a",
+      "200": "#1e293b",
+      "300": "#334155",
+      "400": "#475569",
+      "500": "#64748b",
+      "600": "#94a3b8",
+      "700": "#cbd5e1",
+      "800": "#e2e8f0",
+      "900": "#f1f5f9",
+      "950": "#f8fafc"
+    },
+    "background": {
+      "default": "#0f172a",
+      "paper": "#1e293b",
+      "elevated": "#334155"
+    },
+    "text": {
+      "primary": "#f8fafc",
+      "secondary": "#cbd5e1",
+      "muted": "#94a3b8"
+    },
+    "border": {
+      "default": "#334155",
+      "muted": "#1e293b"
+    },
+    "status": {
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "error": "#ef4444",
+      "info": "#3b82f6"
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Public Sans", "system-ui", "sans-serif"],
+      "serif": ["Source Serif Pro", "serif"],
+      "mono": ["Source Code Pro", "monospace"]
+    },
+    "fontSize": {
+      "xs": "0.75rem",
+      "sm": "0.875rem",
+      "base": "1rem",
+      "lg": "1.125rem",
+      "xl": "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem"
+    },
+    "fontWeight": {
+      "light": 300,
+      "normal": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    },
+    "lineHeight": {
+      "tight": 1.25,
+      "normal": 1.5,
+      "relaxed": 1.75
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "6": "1.5rem",
+    "8": "2rem",
+    "12": "3rem",
+    "16": "4rem",
+    "24": "6rem"
+  },
+  "branding": {
+    "logo": {
+      "primary": "/assets/logos/bergen-logo-dark.svg",
+      "secondary": "/assets/logos/bergen-logo-alt-dark.svg"
+    },
+    "municipalColors": {
+      "main": "#22c55e",
+      "accent": "#64748b"
+    }
+  },
+  "compliance": {
+    "standards": ["GDPR", "NSM", "ISO27001"],
+    "dataClassification": "ÅPEN",
+    "requiresApproval": false,
+    "auditLogging": true
+  },
+  "performance": {
+    "lazyLoading": true,
+    "cacheStrategy": "aggressive",
+    "bundleOptimization": true
+  },
+  "responsive": {
+    "breakpoints": {
+      "mobile": "320px",
+      "tablet": "768px",
+      "desktop": "1024px",
+      "wide": "1440px"
+    }
+  }
+}

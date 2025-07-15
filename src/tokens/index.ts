@@ -24,6 +24,9 @@ export * from './global-tokens';
 export * from './semantic';
 export { semanticTokens } from './semantic';
 
+// Comprehensive theme system (replaces municipal-tokens)
+export * from './themes';
+
 // Alias tokens (semantic layer) - DEPRECATED: Use semantic tokens instead
 export * from './alias-tokens';
 
