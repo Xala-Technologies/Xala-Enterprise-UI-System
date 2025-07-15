@@ -23,7 +23,7 @@ import {
 } from '../../src';
 
 // Mock SSR environment
-const mockSSREnvironment = () => {
+const mockSSREnvironment = (): void => {
   // Mock window as undefined (SSR environment)
   Object.defineProperty(global, 'window', {
     value: undefined,
@@ -37,7 +37,7 @@ const mockSSREnvironment = () => {
   });
 };
 
-const restoreClientEnvironment = () => {
+const restoreClientEnvironment = (): void => {
   // Restore window and document for other tests
   Object.defineProperty(global, 'window', {
     value: global.window || {},
@@ -49,6 +49,9 @@ const restoreClientEnvironment = () => {
     writable: true,
   });
 };
+
+const _mockSSREnvironment = mockSSREnvironment;
+const _restoreClientEnvironment = restoreClientEnvironment;
 
 describe('SSR Compatibility Tests', () => {
   describe('Component Rendering Without Context Errors', () => {

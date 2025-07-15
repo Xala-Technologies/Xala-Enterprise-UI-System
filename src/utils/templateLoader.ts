@@ -19,6 +19,74 @@ const logger = Logger.create({
   enableFileLogging: false,
 });
 
+export interface TemplateValidationContext {
+  templateId: string;
+  source: string;
+  timestamp: number;
+  metadata?: Record<string, unknown>;
+}
+
+export function validateTemplateStructure(template: Record<string, unknown>, context: TemplateValidationContext): boolean {
+  // Basic structure checks
+  if (typeof template !== 'object' || template === null) {
+    logger.warn('Invalid template structure: not an object', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  // Check for required fields
+  if (typeof template.id !== 'string' || typeof template.name !== 'string' || typeof template.version !== 'string') {
+    logger.warn('Invalid template structure: missing required fields (id, name, version)', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  // Check for optional fields
+  if (typeof template.description !== 'string' && typeof template.description !== 'undefined') {
+    logger.warn('Invalid template structure: description must be a string or undefined', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  if (typeof template.isFallback !== 'boolean' && typeof template.isFallback !== 'undefined') {
+    logger.warn('Invalid template structure: isFallback must be a boolean or undefined', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  // Check for nested structure (e.g., tokens, colors, typography)
+  if (typeof template.tokens !== 'object' || template.tokens === null) {
+    logger.warn('Invalid template structure: tokens object missing or not an object', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  if (typeof template.colors !== 'object' || template.colors === null) {
+    logger.warn('Invalid template structure: colors object missing or not an object', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  if (typeof template.typography !== 'object' || template.typography === null) {
+    logger.warn('Invalid template structure: typography object missing or not an object', { templateId: context.templateId, source: context.source });
+    return false;
+  }
+
+  // Recursive validation for nested objects
+  const validateNested = (obj: Record<string, unknown>, prefix: string = ''): boolean => {
+    for (const key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        const newKey = prefix ? `${prefix}.${key}` : key;
+        if (typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key])) {
+          if (!validateNested(obj[key] as Record<string, unknown>, newKey)) {
+            return false;
+          }
+        } else if (typeof obj[key] !== 'string' && typeof obj[key] !== 'number' && typeof obj[key] !== 'boolean' && typeof obj[key] !== 'undefined') {
+          logger.warn(`Invalid template structure: unexpected type for ${newKey}`, { templateId: context.templateId, source: context.source });
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  return validateNested(template);
+}
+
 export class TemplateLoader {
   private static instance: TemplateLoader;
   private templateCache = new Map<string, ThemeTemplate>();

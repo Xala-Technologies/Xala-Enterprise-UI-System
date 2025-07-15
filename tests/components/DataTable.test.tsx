@@ -3,10 +3,10 @@
  * Norwegian compliance testing with Jest, React Testing Library, and axe-core
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import React from 'react';
 import { DataTable } from '../../src/components/data-display/DataTable';
 
 // Extend Jest matchers
@@ -19,22 +19,22 @@ const mockNorwegianData = [
     navn: 'Ola Nordmann',
     fødselsnummer: '12345678901',
     kommune: 'Oslo',
-    klassifisering: 'ÅPEN'
+    klassifisering: 'ÅPEN',
   },
   {
     id: '2',
     navn: 'Kari Nordmann',
     fødselsnummer: '98765432109',
     kommune: 'Bergen',
-    klassifisering: 'BEGRENSET'
+    klassifisering: 'BEGRENSET',
   },
   {
     id: '3',
     navn: 'Per Hansen',
     fødselsnummer: '11223344556',
     kommune: 'Trondheim',
-    klassifisering: 'KONFIDENSIELT'
-  }
+    klassifisering: 'KONFIDENSIELT',
+  },
 ];
 
 const mockColumns = [
@@ -42,30 +42,30 @@ const mockColumns = [
     key: 'navn',
     titleKey: 'table.columns.name',
     sortable: true,
-    norwegian: { personalData: true }
+    norwegian: { personalData: true },
   },
   {
     key: 'fødselsnummer',
     titleKey: 'table.columns.personalNumber',
     sortable: false,
-    norwegian: { 
+    norwegian: {
       personalData: true,
       classification: 'KONFIDENSIELT',
-      masking: true
-    }
+      masking: true,
+    },
   },
   {
     key: 'kommune',
     titleKey: 'table.columns.municipality',
     sortable: true,
-    norwegian: { publicData: true }
+    norwegian: { publicData: true },
   },
   {
     key: 'klassifisering',
     titleKey: 'table.columns.classification',
     sortable: true,
-    norwegian: { nsmLevel: true }
-  }
+    norwegian: { nsmLevel: true },
+  },
 ];
 
 describe('DataTable Component', () => {
@@ -80,11 +80,11 @@ describe('DataTable Component', () => {
           norwegian={{
             classification: 'BEGRENSET',
             municipality: '0301',
-            auditLogging: true
+            auditLogging: true,
           }}
         />
       );
-      
+
       const table = screen.getByRole('table');
       expect(table).toBeInTheDocument();
       expect(table).toComplyCNSMClassification('BEGRENSET');
@@ -94,20 +94,20 @@ describe('DataTable Component', () => {
 
     test('renders with proper table headers and Norwegian labels', () => {
       render(
-        <DataTable
-          data={mockNorwegianData}
-          columns={mockColumns}
-          titleKey="table.citizens.title"
-        />
+        <DataTable data={mockNorwegianData} columns={mockColumns} titleKey="table.citizens.title" />
       );
-      
+
       // Check for semantic table structure
       expect(screen.getByRole('table')).toBeInTheDocument();
-      
+
       // Check for Norwegian column headers
       expect(screen.getByRole('columnheader', { name: /navn|name/i })).toBeInTheDocument();
-      expect(screen.getByRole('columnheader', { name: /fødselsnummer|personal number/i })).toBeInTheDocument();
-      expect(screen.getByRole('columnheader', { name: /kommune|municipality/i })).toBeInTheDocument();
+      expect(
+        screen.getByRole('columnheader', { name: /fødselsnummer|personal number/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('columnheader', { name: /kommune|municipality/i })
+      ).toBeInTheDocument();
     });
 
     test('displays NSM classification indicators for sensitive data', () => {
@@ -118,14 +118,14 @@ describe('DataTable Component', () => {
           titleKey="table.classified.title"
           norwegian={{
             classification: 'KONFIDENSIELT',
-            showClassificationIndicators: true
+            showClassificationIndicators: true,
           }}
         />
       );
-      
+
       const classificationCells = screen.getAllByTestId('classification-indicator');
       expect(classificationCells.length).toBeGreaterThan(0);
-      
+
       classificationCells.forEach(cell => {
         expect(cell).toHaveAttribute('data-classification');
       });
@@ -142,7 +142,7 @@ describe('DataTable Component', () => {
           titleKey="table.citizens.title"
           norwegian={{
             accessibility: 'WCAG_2_2_AA',
-            classification: 'ÅPEN'
+            classification: 'ÅPEN',
           }}
         />
       );
@@ -160,14 +160,14 @@ describe('DataTable Component', () => {
           titleKey="table.citizens.title"
           captionKey="table.citizens.caption"
           norwegian={{
-            screenReaderOptimized: true
+            screenReaderOptimized: true,
           }}
         />
       );
-      
+
       const table = screen.getByRole('table');
       expect(table).toHaveAttribute('aria-labelledby');
-      
+
       const caption = screen.getByRole('caption');
       expect(caption).toBeInTheDocument();
       expect(global.validateNorwegianText(caption.textContent)).toBe(true);
@@ -181,17 +181,17 @@ describe('DataTable Component', () => {
           titleKey="table.citizens.title"
           sortable={true}
           norwegian={{
-            keyboardShortcuts: 'standard'
+            keyboardShortcuts: 'standard',
           }}
         />
       );
-      
+
       const sortableHeaders = screen.getAllByRole('columnheader', { name: /sortér|sort/i });
       const firstHeader = sortableHeaders[0];
-      
+
       firstHeader.focus();
       expect(firstHeader).toHaveFocus();
-      
+
       // Test Norwegian keyboard shortcuts for sorting
       await userEvent.keyboard('{Enter}');
       // Verify sort functionality if implemented
@@ -205,17 +205,17 @@ describe('DataTable Component', () => {
           titleKey="table.citizens.title"
           selectable={true}
           norwegian={{
-            focusManagement: 'strict'
+            focusManagement: 'strict',
           }}
         />
       );
-      
+
       const checkboxes = screen.getAllByRole('checkbox');
       const firstCheckbox = checkboxes[0];
-      
+
       await userEvent.click(firstCheckbox);
       expect(firstCheckbox).toHaveFocus();
-      
+
       await userEvent.tab();
       // Next focusable element should receive focus
     });
@@ -223,33 +223,31 @@ describe('DataTable Component', () => {
 
   // NSM Classification and data security tests
   describe('NSM Classification and Data Security', () => {
-    test.each([
-      'ÅPEN',
-      'BEGRENSET', 
-      'KONFIDENSIELT',
-      'HEMMELIG'
-    ])('handles %s classification level with appropriate data protection', (level) => {
-      render(
-        <DataTable
-          data={mockNorwegianData}
-          columns={mockColumns}
-          titleKey="table.classified.title"
-          norwegian={{
-            classification: level,
-            dataMasking: level !== 'ÅPEN',
-            auditLogging: level !== 'ÅPEN'
-          }}
-        />
-      );
-      
-      const table = screen.getByRole('table');
-      expect(table).toComplyCNSMClassification(level);
-      
-      if (level !== 'ÅPEN') {
-        expect(table).toHaveAttribute('data-masking-enabled', 'true');
-        expect(table).toHaveAttribute('data-audit-logging', 'true');
+    test.each(['ÅPEN', 'BEGRENSET', 'KONFIDENSIELT', 'HEMMELIG'])(
+      'handles %s classification level with appropriate data protection',
+      level => {
+        render(
+          <DataTable
+            data={mockNorwegianData}
+            columns={mockColumns}
+            titleKey="table.classified.title"
+            norwegian={{
+              classification: level,
+              dataMasking: level !== 'ÅPEN',
+              auditLogging: level !== 'ÅPEN',
+            }}
+          />
+        );
+
+        const table = screen.getByRole('table');
+        expect(table).toComplyCNSMClassification(level);
+
+        if (level !== 'ÅPEN') {
+          expect(table).toHaveAttribute('data-masking-enabled', 'true');
+          expect(table).toHaveAttribute('data-audit-logging', 'true');
+        }
       }
-    });
+    );
 
     test('masks sensitive personal data in KONFIDENSIELT tables', () => {
       render(
@@ -259,15 +257,15 @@ describe('DataTable Component', () => {
           titleKey="table.confidential.title"
           norwegian={{
             classification: 'KONFIDENSIELT',
-            maskPersonalNumbers: true
+            maskPersonalNumbers: true,
           }}
         />
       );
-      
+
       // Personal numbers should be masked
       const personalNumberCells = screen.getAllByText(/\*{6}\d{5}/);
       expect(personalNumberCells.length).toBeGreaterThan(0);
-      
+
       // Full personal numbers should not be visible
       expect(screen.queryByText('12345678901')).not.toBeInTheDocument();
     });
@@ -280,13 +278,13 @@ describe('DataTable Component', () => {
           titleKey="table.mixed.title"
           norwegian={{
             showRowClassification: true,
-            inheritMaxClassification: 'KONFIDENSIELT'
+            inheritMaxClassification: 'KONFIDENSIELT',
           }}
         />
       );
-      
+
       const rows = screen.getAllByRole('row').slice(1); // Skip header row
-      
+
       rows.forEach((row, index) => {
         const data = mockNorwegianData[index];
         expect(row).toHaveAttribute('data-classification', data.klassifisering);
@@ -306,12 +304,12 @@ describe('DataTable Component', () => {
             gdprCompliance: {
               personalDataColumns: ['navn', 'fødselsnummer'],
               processingBasis: 'legitimate_interests',
-              retentionPeriod: '5 years'
-            }
+              retentionPeriod: '5 years',
+            },
           }}
         />
       );
-      
+
       const table = screen.getByRole('table');
       expect(table).toComplyWithGDPR();
       expect(table).toHaveAttribute('data-gdpr-basis', 'legitimate_interests');
@@ -327,12 +325,12 @@ describe('DataTable Component', () => {
           norwegian={{
             gdprCompliance: {
               showDataSubjectRights: true,
-              contactDPO: 'dpo@kommune.no'
-            }
+              contactDPO: 'dpo@kommune.no',
+            },
           }}
         />
       );
-      
+
       const rightsInfo = screen.getByTestId('gdpr-rights-info');
       expect(rightsInfo).toBeInTheDocument();
       expect(rightsInfo).toHaveTextContent(/dpo@kommune\.no/);
@@ -343,17 +341,21 @@ describe('DataTable Component', () => {
   describe('Norwegian Data Integration', () => {
     test('integrates with BRREG for organization data', async () => {
       global.mockNorwegianAPIs.setupBRREGMock();
-      
+
       const orgData = [
         { id: '1', organisasjonsnummer: '123456789', navn: 'Test AS' },
-        { id: '2', organisasjonsnummer: '987654321', navn: 'Demo AS' }
+        { id: '2', organisasjonsnummer: '987654321', navn: 'Demo AS' },
       ];
-      
+
       const orgColumns = [
-        { key: 'organisasjonsnummer', titleKey: 'table.columns.orgNumber', norwegian: { brregIntegration: true } },
-        { key: 'navn', titleKey: 'table.columns.orgName' }
+        {
+          key: 'organisasjonsnummer',
+          titleKey: 'table.columns.orgNumber',
+          norwegian: { brregIntegration: true },
+        },
+        { key: 'navn', titleKey: 'table.columns.orgName' },
       ];
-      
+
       render(
         <DataTable
           data={orgData}
@@ -361,11 +363,11 @@ describe('DataTable Component', () => {
           titleKey="table.organizations.title"
           norwegian={{
             brregIntegration: true,
-            municipality: '0301'
+            municipality: '0301',
           }}
         />
       );
-      
+
       const table = screen.getByRole('table');
       expect(table).toHaveAttribute('data-brreg-integration', 'true');
     });
@@ -379,14 +381,14 @@ describe('DataTable Component', () => {
           editable={true}
           norwegian={{
             personalNumberValidation: true,
-            realTimeValidation: true
+            realTimeValidation: true,
           }}
         />
       );
-      
+
       const editButtons = screen.getAllByRole('button', { name: /rediger|edit/i });
       await userEvent.click(editButtons[0]);
-      
+
       const personalNumberInput = screen.getByDisplayValue(/\d{11}/);
       expect(personalNumberInput).toHaveValidNorwegianPersonalNumber();
     });
@@ -399,9 +401,9 @@ describe('DataTable Component', () => {
         { id: '1', navn: 'Åse Andersen' },
         { id: '2', navn: 'Øystein Berg' },
         { id: '3', navn: 'Anders Carlsen' },
-        { id: '4', navn: 'Ærlend Dale' }
+        { id: '4', navn: 'Ærlend Dale' },
       ];
-      
+
       render(
         <DataTable
           data={norwegianNames}
@@ -409,18 +411,18 @@ describe('DataTable Component', () => {
           titleKey="table.names.title"
           norwegian={{
             sortingLocale: 'nb-NO',
-            norwegianCollation: true
+            norwegianCollation: true,
           }}
         />
       );
-      
+
       const sortButton = screen.getByRole('button', { name: /sortér etter navn|sort by name/i });
       await userEvent.click(sortButton);
-      
+
       // Norwegian alphabetical order: A-Z, Æ, Ø, Å
       const cells = screen.getAllByRole('cell');
       const sortedNames = cells.map(cell => cell.textContent).filter(Boolean);
-      
+
       expect(sortedNames[0]).toBe('Anders Carlsen');
       expect(sortedNames[3]).toBe('Åse Andersen'); // Å comes last in Norwegian alphabet
     });
@@ -429,9 +431,9 @@ describe('DataTable Component', () => {
       const largeDataSet = Array.from({ length: 50 }, (_, i) => ({
         id: String(i + 1),
         navn: `Person ${i + 1}`,
-        kommune: 'Oslo'
+        kommune: 'Oslo',
       }));
-      
+
       render(
         <DataTable
           data={largeDataSet}
@@ -439,17 +441,17 @@ describe('DataTable Component', () => {
           titleKey="table.large.title"
           pagination={{
             pageSize: 10,
-            showSizeChanger: true
+            showSizeChanger: true,
           }}
           norwegian={{
-            paginationLanguage: 'norwegian'
+            paginationLanguage: 'norwegian',
           }}
         />
       );
-      
+
       const pagination = screen.getByTestId('table-pagination');
       expect(pagination).toBeInTheDocument();
-      
+
       // Check for Norwegian pagination text
       expect(screen.getByText(/av|of/i)).toBeInTheDocument();
       expect(screen.getByText(/rader|rows/i)).toBeInTheDocument();
@@ -467,11 +469,11 @@ describe('DataTable Component', () => {
           loading={true}
           loadingTextKey="states.loading.table"
           norwegian={{
-            classification: 'ÅPEN'
+            classification: 'ÅPEN',
           }}
         />
       );
-      
+
       const loadingIndicator = screen.getByText(/laster|loading|henter data/i);
       expect(loadingIndicator).toBeInTheDocument();
       expect(global.validateNorwegianText(loadingIndicator.textContent)).toBe(true);
@@ -485,11 +487,11 @@ describe('DataTable Component', () => {
           titleKey="table.empty.title"
           emptyStateKey="states.empty.noData"
           norwegian={{
-            municipality: '0301'
+            municipality: '0301',
           }}
         />
       );
-      
+
       const emptyMessage = screen.getByText(/ingen data|no data|tom tabell/i);
       expect(emptyMessage).toBeInTheDocument();
       expect(global.validateNorwegianText(emptyMessage.textContent)).toBe(true);
@@ -503,14 +505,14 @@ describe('DataTable Component', () => {
           titleKey="table.error.title"
           error={{
             hasError: true,
-            messageKey: 'errors.dataLoad.failed'
+            messageKey: 'errors.dataLoad.failed',
           }}
           norwegian={{
-            errorHandling: 'norwegian'
+            errorHandling: 'norwegian',
           }}
         />
       );
-      
+
       const errorMessage = screen.getByRole('alert');
       expect(errorMessage).toBeInTheDocument();
       expect(global.validateNorwegianText(errorMessage.textContent)).toBe(true);
@@ -529,10 +531,10 @@ describe('DataTable Component', () => {
           density="comfortable"
         />
       );
-      
+
       const table = screen.getByRole('table');
       expect(table).toUseDesignTokens();
-      
+
       const violations = global.testHelpers.validateDesignTokenUsage(table);
       expect(violations).toHaveLength(0);
     });
@@ -545,14 +547,14 @@ describe('DataTable Component', () => {
           titleKey="table.government.title"
           norwegian={{
             styling: 'government',
-            municipality: '0301'
+            municipality: '0301',
           }}
         />
       );
-      
+
       const table = screen.getByRole('table');
       const styles = window.getComputedStyle(table);
-      
+
       expect(styles.borderColor).toMatch(/var\(--color-/);
       expect(styles.padding).toMatch(/var\(--spacing-/);
       expect(styles.fontSize).toMatch(/var\(--font-size-/);
@@ -563,7 +565,7 @@ describe('DataTable Component', () => {
   describe('Export Functionality', () => {
     test('exports data with Norwegian formatting', async () => {
       const mockExport = jest.fn();
-      
+
       render(
         <DataTable
           data={mockNorwegianData}
@@ -573,21 +575,21 @@ describe('DataTable Component', () => {
           onExport={mockExport}
           norwegian={{
             exportFormat: 'norwegian',
-            includeClassificationHeader: true
+            includeClassificationHeader: true,
           }}
         />
       );
-      
+
       const exportButton = screen.getByRole('button', { name: /eksporter|export/i });
       await userEvent.click(exportButton);
-      
+
       expect(mockExport).toHaveBeenCalledWith(
         expect.objectContaining({
           data: mockNorwegianData,
           format: 'norwegian',
-          includeHeaders: true
+          includeHeaders: true,
         })
       );
     });
   });
-}); 
+});

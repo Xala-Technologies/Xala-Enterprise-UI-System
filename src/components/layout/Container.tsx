@@ -32,7 +32,7 @@ export const Container: React.FC<ContainerProps> = ({
   ...props
 }) => {
   // ✅ Hook safely accesses tokens through app-owned context
-  const { spacing, responsive } = useTokens();
+  const { spacing } = useTokens();
 
   // ✅ All styling comes from JSON templates (no hard-coded values)
   const getMaxWidthStyles = (): React.CSSProperties => {

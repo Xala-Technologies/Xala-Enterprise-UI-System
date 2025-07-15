@@ -4,7 +4,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
+const _path = require('path');
 
 function fixAllLintIssues() {
   console.log('🔧 Starting comprehensive lint fix...');

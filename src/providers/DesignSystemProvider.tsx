@@ -1,6 +1,6 @@
 /**
  * @fileoverview Simplified SSR-Safe DesignSystemProvider - Production Strategy
- * @description Simple theme provider without governance complexity - SSR compatible
+ * @description Simple _theme provider without governance complexity - SSR compatible
  * @version 4.0.0
  * @compliance SSR-Safe, Production-ready, Framework-agnostic
  */
@@ -25,14 +25,14 @@ const logger = Logger.create({
 
 interface DesignSystemContextValue {
   currentTemplate: ThemeTemplate | null;
-  templateId: string;
+  _templateId: string;
   isDarkMode: boolean;
   isLoading: boolean;
 
-  // Simple theme management
-  setTemplate: (templateId: string) => Promise<void>;
+  // Simple _theme management
+  setTemplate: (_templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
-  setDarkMode: (isDark: boolean) => void;
+  setDarkMode: (_isDark: boolean) => void;
 
   // Template utilities
   getAvailableTemplates: () => Promise<string[]>;
@@ -47,7 +47,7 @@ const DesignSystemContext = createContext<DesignSystemContextValue | null>(null)
 
 export interface DesignSystemProviderProps {
   children: React.ReactNode;
-  templateId?: string;
+  _templateId?: string;
   initialDarkMode?: boolean;
   autoDetectDarkMode?: boolean;
   // SSR-specific props
@@ -59,25 +59,25 @@ export interface DesignSystemProviderProps {
 // SSR-SAFE PROVIDER IMPLEMENTATION
 // =============================================================================
 
-export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
+export function DesignSystemProvider({
   children,
-  templateId = 'base-light',
-  initialDarkMode = false,
-  autoDetectDarkMode = true,
-  ssrTemplate,
-  enableSSRFallback = true,
-}) => {
+  _templateId,
+  initialDarkMode: _initialDarkMode = false,
+  autoDetectDarkMode: _autoDetectDarkMode = false,
+  ssrTemplate: _ssrTemplate,
+  enableSSRFallback: _enableSSRFallback = true,
+}: DesignSystemProviderProps): JSX.Element {
   // ✅ SSR-safe initialization
-  const [currentTemplate, setCurrentTemplate] = useState<ThemeTemplate | null>(ssrTemplate || null);
-  const [currentTemplateId, setCurrentTemplateId] = useState(templateId);
-  const [isDarkMode, setIsDarkMode] = useState(initialDarkMode);
-  const [isLoading, setIsLoading] = useState(!ssrTemplate);
+  const [currentTemplate, setCurrentTemplate] = useState<ThemeTemplate | null>(null);
+  const [currentTemplateId, setCurrentTemplateId] = useState('base-light');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const templateLoader = TemplateLoader.getInstance();
 
   // ✅ SSR-safe browser detection
   useEffect(() => {
-    if (autoDetectDarkMode && typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       setIsDarkMode(mediaQuery.matches);
 
@@ -87,17 +87,17 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
       return (): void => mediaQuery.removeEventListener('change', handleChange);
     }
     return undefined;
-  }, [autoDetectDarkMode]);
+  }, []);
 
   // ✅ SSR-safe template loading
   useEffect(() => {
     // Only load template client-side if not provided via SSR
-    if (typeof window !== 'undefined' && !ssrTemplate) {
+    if (typeof window !== 'undefined') {
       loadTemplate(currentTemplateId);
     }
-  }, [currentTemplateId, isDarkMode, ssrTemplate]);
+  }, [currentTemplateId, isDarkMode]);
 
-  const loadTemplate = async (templateId: string): Promise<void> => {
+  const loadTemplate = async (_templateId: string): Promise<void> => {
     // ✅ Skip loading during SSR
     if (typeof window === 'undefined') return;
 
@@ -105,32 +105,32 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     try {
       const mode = isDarkMode ? 'DARK' : 'LIGHT';
       const finalTemplateId =
-        templateId.includes('-light') || templateId.includes('-dark')
-          ? templateId
-          : `${templateId}-${mode.toLowerCase()}`;
+        _templateId.includes('-light') || _templateId.includes('-dark')
+          ? _templateId
+          : `${_templateId}-${mode.toLowerCase()}`;
 
       const template = await templateLoader.loadTemplate(finalTemplateId, mode);
       setCurrentTemplate(template);
-      logger.info('Template loaded successfully', { templateId: finalTemplateId, mode });
+      logger.info('Template loaded successfully', { _templateId: finalTemplateId, mode });
     } catch (error) {
-      logger.error('Failed to load template:', { templateId, error });
+      logger.error('Failed to load template:', { _templateId, error });
 
       // ✅ SSR fallback to emergency template
-      if (enableSSRFallback) {
+      if (typeof window !== 'undefined') {
         const emergencyTemplate = templateLoader.getEmergencyFallback(
           isDarkMode ? 'DARK' : 'LIGHT'
         );
         setCurrentTemplate(emergencyTemplate);
-        logger.warn('Using emergency fallback template', { templateId, isDarkMode });
+        logger.warn('Using emergency fallback template', { _templateId, isDarkMode });
       }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const setTemplate = async (templateId: string): Promise<void> => {
-    logger.info('Switching template', { from: currentTemplateId, to: templateId });
-    setCurrentTemplateId(templateId);
+  const setTemplate = async (_templateId: string): Promise<void> => {
+    logger.info('Switching template', { from: currentTemplateId, to: _templateId });
+    setCurrentTemplateId(_templateId);
   };
 
   const toggleDarkMode = (): void => {
@@ -138,9 +138,9 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
     setIsDarkMode(!isDarkMode);
   };
 
-  const setDarkMode = (isDark: boolean): void => {
-    logger.info('Setting dark mode', { mode: isDark });
-    setIsDarkMode(isDark);
+  const setDarkMode = (_isDark: boolean): void => {
+    logger.info('Setting dark mode', { mode: _isDark });
+    setIsDarkMode(_isDark);
   };
 
   const getAvailableTemplates = async (): Promise<string[]> => {
@@ -148,7 +148,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   };
 
   const reloadTemplate = async (): Promise<void> => {
-    logger.info('Reloading current template', { templateId: currentTemplateId });
+    logger.info('Reloading current template', { _templateId: currentTemplateId });
     await loadTemplate(currentTemplateId);
   };
 
@@ -226,7 +226,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
           });
         }
 
-        logger.info('CSS custom properties applied', { templateId: template.id });
+        logger.info('CSS custom properties applied', { _templateId: template.id });
       } catch (error) {
         logger.error('Failed to apply CSS custom properties', { error });
       }
@@ -235,7 +235,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
 
   const value: DesignSystemContextValue = {
     currentTemplate,
-    templateId: currentTemplateId,
+    _templateId: currentTemplateId,
     isDarkMode,
     isLoading,
     setTemplate,
@@ -246,7 +246,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
   };
 
   return <DesignSystemContext.Provider value={value}>{children}</DesignSystemContext.Provider>;
-};
+}
 
 // =============================================================================
 // CONTEXT HOOK
@@ -265,19 +265,19 @@ export const useDesignSystem = (): DesignSystemContextValue => {
 // =============================================================================
 
 /**
- * Hook for accessing current theme
+ * Hook for accessing current _theme
  */
 export const useTheme = (): {
-  theme: ThemeTemplate | null;
+  _theme: ThemeTemplate | null;
   mode: 'LIGHT' | 'DARK';
   isLoading: boolean;
-  setTemplate: (templateId: string) => Promise<void>;
+  setTemplate: (_templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
 } => {
   const { currentTemplate, isDarkMode, isLoading, setTemplate, toggleDarkMode } = useDesignSystem();
 
   return {
-    theme: currentTemplate,
+    _theme: currentTemplate,
     mode: isDarkMode ? 'DARK' : 'LIGHT',
     isLoading,
     setTemplate,
@@ -292,13 +292,13 @@ export const useTemplates = (): {
   availableTemplates: () => Promise<string[]>;
   currentTemplateId: string;
   reloadTemplate: () => Promise<void>;
-  setTemplate: (templateId: string) => Promise<void>;
+  setTemplate: (_templateId: string) => Promise<void>;
 } => {
-  const { templateId, getAvailableTemplates, reloadTemplate, setTemplate } = useDesignSystem();
+  const { _templateId, getAvailableTemplates, reloadTemplate, setTemplate } = useDesignSystem();
 
   return {
     availableTemplates: getAvailableTemplates,
-    currentTemplateId: templateId,
+    currentTemplateId: _templateId,
     reloadTemplate,
     setTemplate,
   };

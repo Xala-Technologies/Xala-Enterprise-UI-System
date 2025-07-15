@@ -190,15 +190,11 @@ export const Input: React.FC<InputProps> = ({
   // Handle focus and blur for focus ring styling
   const [isFocused, setIsFocused] = React.useState(false);
 
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
-    setIsFocused(true);
-    onFocus?.(event);
-  };
+  
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>): void => {
-    setIsFocused(false);
-    onBlur?.(event);
-  };
+  
+
+  
 
   const finalStyles = isFocused ? { ...combinedStyles, ...focusStyles } : combinedStyles;
 
@@ -209,8 +205,8 @@ export const Input: React.FC<InputProps> = ({
       value={value}
       defaultValue={defaultValue}
       onChange={onChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
+      onFocus={onFocus}
+      onBlur={onBlur}
       disabled={disabled}
       required={required}
       autoComplete={autoComplete}
