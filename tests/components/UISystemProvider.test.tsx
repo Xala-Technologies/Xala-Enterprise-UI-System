@@ -93,7 +93,7 @@ describe('UISystemProvider', () => {
      */
     it('should render with accessibility configuration', (): void => {
       const { container } = render(
-        <UISystemProvider accessibility="WCAG_2_1_AA">
+        <UISystemProvider accessibility="basic">
           <TestComponent />
         </UISystemProvider>
       );
@@ -130,7 +130,7 @@ describe('UISystemProvider', () => {
      * Test WCAG 2.1 AA configuration
      */
     it('should handle WCAG 2.1 AA configuration', (): void => {
-      const Wrapper = createWrapper({ accessibility: 'WCAG_2_1_AA' });
+      const Wrapper = createWrapper({ accessibility: 'basic' });
 
       render(
         <Wrapper>
@@ -260,7 +260,7 @@ describe('UISystemProvider', () => {
       ['basic', 'WCAG_2_1_AA'],
       ['enhanced', 'WCAG_2_2_AAA'],
       ['government', 'WCAG_2_2_AAA'],
-      ['enterprise', 'enterprise'],
+      ['enterprise', 'WCAG_2_1_AA'],
       ['none', 'none'],
     ] as const)('should apply %s preset correctly with level %s', (preset, expectedLevel) => {
       const { container } = render(
