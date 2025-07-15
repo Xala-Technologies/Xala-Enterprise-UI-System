@@ -3,7 +3,7 @@
  * Automated validation and CSS generation for design tokens
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
+import { Logger } from '../../lib/utils/multiplatform-logger';
 import { semanticTokens } from '../semantic';
 import type { TokenPath, TokenValue } from '../semantic-token-system';
 
@@ -56,6 +56,7 @@ export interface TokenValidationReport {
 /**
  * Token validator class
  */
+
 
 const logger = Logger.create({
   serviceName: 'ui-system-token-validator',

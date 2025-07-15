@@ -3,7 +3,7 @@
  * @description Manages caching of dynamic tokens with TTL and storage backend support
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
+import { Logger } from '../../lib/utils/multiplatform-logger';
 import type { TokenValue } from '../semantic-token-system';
 import type { TokenCacheEntry } from './types';
 

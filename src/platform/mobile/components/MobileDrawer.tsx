@@ -1,5 +1,5 @@
-import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useCallback } from 'react';
+import { Logger } from '../../../lib/utils/multiplatform-logger';
 
 const logger = Logger.create({
   serviceName: 'ui-system-mobile-drawer',

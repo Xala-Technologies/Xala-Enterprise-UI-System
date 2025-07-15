@@ -4,8 +4,8 @@
  * @description Key-value display component using design tokens (no inline styles)
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
+import { Logger } from '../../lib/utils/multiplatform-logger';
 // import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { KeyValueItem, KeyValueListProps } from '../../types/data-display.types';
 

@@ -1,6 +1,6 @@
-import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../../components/action-feedback/Button';
+import { Logger } from '../../../lib/utils/multiplatform-logger';
 import type { DesktopSidebarProps } from '../../../types/platform.types';
 
 const logger = Logger.create({

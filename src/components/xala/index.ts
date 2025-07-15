@@ -3,7 +3,7 @@
  * @description Enterprise-grade React components for Norwegian compliance
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
+import { Logger } from '../../lib/utils/multiplatform-logger';
 
 const logger = Logger.create({
   serviceName: 'ui-system-xala-components',

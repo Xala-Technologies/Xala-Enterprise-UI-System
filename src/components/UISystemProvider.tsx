@@ -4,10 +4,10 @@
  * @description Provides UI system configuration to all components
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
 import type { ReactNode } from 'react';
 import React, { createContext, useContext, useMemo } from 'react';
 import type { AccessibilityLevel, UISystemConfig } from '../lib/types/core.types';
+import { Logger } from '../lib/utils/multiplatform-logger';
 import type {
   AccessibilityConfig,
   AccessibilityPreset,

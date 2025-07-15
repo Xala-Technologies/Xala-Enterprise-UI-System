@@ -4,7 +4,7 @@
  * @description Centralized export of all design tokens and token utilities
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
+import { Logger } from '../lib/utils/multiplatform-logger';
 
 const logger = Logger.create({
   serviceName: 'ui-system-tokens',

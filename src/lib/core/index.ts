@@ -4,7 +4,6 @@
  * @version 2.0.0
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
 import type {
     AccessibilityConfig,
     AccessibilityPreset,
@@ -13,6 +12,7 @@ import type {
     ThemeDefinition,
     UISystemConfig
 } from '../types/core.types';
+import { Logger, type ILogger } from '../utils/multiplatform-logger';
 
 /**
  * UI System Core class implementing the Singleton pattern
@@ -20,7 +20,7 @@ import type {
  */
 class UISystemCore {
   private static instance: UISystemCore;
-  private readonly logger: Logger;
+  private readonly logger: ILogger;
   private readonly config: UISystemConfig;
   private readonly componentRegistry: Map<string, ComponentDefinition>;
   private readonly themeRegistry: Map<string, ThemeDefinition>;

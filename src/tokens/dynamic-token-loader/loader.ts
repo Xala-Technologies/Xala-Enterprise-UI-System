@@ -3,7 +3,7 @@
  * Single responsibility: Orchestrate token loading and injection
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
+import { Logger } from '../../lib/utils/multiplatform-logger';
 import type { TokenValue } from '../semantic-token-system';
 import { TokenCacheManager } from './cache-manager';
 import { TenantConfigurationLoader } from './tenant-loader';
