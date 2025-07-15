@@ -5,7 +5,7 @@
 
 /* eslint-disable no-unused-vars */
 
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import type { MobileHeaderProps } from '../../../types/platform.types';
 
@@ -285,16 +285,16 @@ export const MobileHeader = React.forwardRef<HTMLDivElement, MobileHeaderProps>(
     } = props;
 
     // Handle back button click
-    const handleBackClick = useCallback(() => {
+    const handleBackClick = (): void => {
       onBackClick?.();
       onBack?.();
-    }, [onBackClick, onBack]);
+    };
 
     // Handle menu toggle
-    const handleMenuToggle = useCallback(() => {
+    const handleMenuToggle = (): void => {
       onMenuClick?.();
       onMenuToggle?.();
-    }, [onMenuClick, onMenuToggle]);
+    };
 
     // Get combined styles
     const combinedStyles = getMobileHeaderStyles(props);

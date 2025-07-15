@@ -1,7 +1,7 @@
 // BottomNavigation component for @xala-mock/ui-system
 // Norwegian-compliant mobile bottom navigation with accessibility and emergency features
 
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import type { BottomNavigationItem, BottomNavigationProps } from '../../../types/platform.types';
 
@@ -306,13 +306,10 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
     } = props;
 
     // Handle item press
-    const handleItemPress = useCallback(
-      (index: number, item: BottomNavigationItem) => {
-        if (item.disabled) return;
-        onItemClick?.(item, index);
-      },
-      [onItemClick]
-    );
+    const handleItemPress = (index: number, item: BottomNavigationItem): void => {
+      if (item.disabled) return;
+      onItemClick?.(item, index);
+    };
 
     // Get combined styles
     const combinedStyles = getBottomNavigationStyles(props);
