@@ -55,6 +55,7 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       errorId = 'error-text',
       currentLength = 0,
       onLengthChange,
+      labelKey,
       ...restProps
     } = props;
 

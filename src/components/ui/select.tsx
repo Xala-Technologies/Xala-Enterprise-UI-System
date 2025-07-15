@@ -75,6 +75,7 @@ export interface SelectProps
   readonly success?: boolean;
   readonly allowEmpty?: boolean;
   readonly emptyLabel?: string;
+  onValueChange?: (value: string, event?: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 /**
@@ -132,6 +133,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       allowEmpty = true,
       emptyLabel = 'Select an option...',
       id,
+      onValueChange,
       ...props
     },
     ref
@@ -159,6 +161,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           aria-invalid={error || !!errorText}
           aria-describedby={displayHelperText ? `${selectId}-helper` : undefined}
           aria-required={required}
+          onChange={e => {
+            onValueChange?.(e.target.value, e);
+            if (props.onChange) props.onChange(e);
+          }}
           {...props}
         >
           {allowEmpty && (

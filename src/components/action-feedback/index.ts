@@ -3,7 +3,7 @@
 
 export { Alert } from './Alert';
 export { Button } from './Button';
-export { Modal } from './Modal';
+export { Modal, ModalBody, ModalContent, ModalHeader } from './Modal';
 export { Toast } from './Toast';
 
 // Export additional components

@@ -83,12 +83,7 @@ export interface TextAreaProps extends FormComponentProps {
   onLengthChange?: (length: number) => void;
   value?: string;
   defaultValue?: string;
-  onChange?: (
-    // eslint-disable-next-line no-unused-vars
-    _value: string,
-    // eslint-disable-next-line no-unused-vars
-    _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => void;
+  onChange?: (value: string, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (
     // eslint-disable-next-line no-unused-vars
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -104,6 +99,7 @@ export interface TextAreaProps extends FormComponentProps {
   resize?: 'none' | 'vertical' | 'horizontal' | 'both';
   variant?: 'default' | 'outlined' | 'filled';
   hasError?: boolean;
+  labelKey?: string;
 }
 
 // Select component props

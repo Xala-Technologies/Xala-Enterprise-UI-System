@@ -37,7 +37,9 @@ export interface NorwegianActionContext {
  * Modal component props interface
  */
 export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
-  readonly isOpen: boolean;
+  readonly isOpen?: boolean;
+  readonly open?: boolean;
+  readonly onOpenChange?: (open: boolean) => void;
   readonly title?: string;
   readonly titleKey?: string;
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -370,6 +372,8 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       onEscapeKey,
       onOverlayClick,
       texts: userTexts,
+      open,
+      onOpenChange,
       ...divProps
     } = props;
 
@@ -399,10 +403,13 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
     // Use focus trap
-    useFocusTrap(isOpen, true, contentRef);
+    const actualIsOpen =
+      typeof open === 'boolean' ? open : typeof isOpen === 'boolean' ? isOpen : false;
+    useFocusTrap(actualIsOpen, true, contentRef);
 
     const handleClose = (): void => {
       if (!persistent) {
+        onOpenChange?.(false);
         onClose?.();
       }
     };
@@ -414,7 +421,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       }
     };
 
-    if (!isOpen) {
+    if (!actualIsOpen) {
       return <></>;
     }
 
@@ -500,3 +507,10 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
 );
 
 Modal.displayName = 'Modal';
+
+// Rename internal components to avoid redeclaration
+const _ModalHeader = ModalHeader;
+const _ModalBody = ModalBody;
+
+export { _ModalBody as ModalBody, _ModalHeader as ModalHeader };
+export const ModalContent = _ModalBody;

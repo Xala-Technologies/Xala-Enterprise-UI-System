@@ -19,6 +19,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   disabled?: boolean;
   children: React.ReactNode;
   className?: string;
+  fullWidth?: boolean;
 }
 
 // =============================================================================
@@ -35,6 +36,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       className,
       onClick,
+      fullWidth,
       ...props
     },
     ref
@@ -81,6 +83,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           'focus:outline-none focus:ring-2 focus:ring-offset-2',
           'disabled:cursor-not-allowed disabled:opacity-60',
           loading && 'relative',
+          fullWidth && 'w-full',
           className
         )}
       >
