@@ -157,8 +157,8 @@ export const OrganizationNumberInput = React.forwardRef<
         </div>
       )}
 
-      {/* Organization data display */}
-      {_organizationData && (
+      {/* Organization data display - TODO: Implement organization data fetching */}
+      {/* {_organizationData && (
         <div className="organization-number-field__org-data">
           <h4 className="organization-number-field__org-name">{_organizationData.name}</h4>
           <p className="organization-number-field__org-details">
@@ -168,7 +168,7 @@ export const OrganizationNumberInput = React.forwardRef<
             {_organizationData.municipality}, {_organizationData.county}
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 });

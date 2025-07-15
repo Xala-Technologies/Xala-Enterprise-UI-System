@@ -45,7 +45,7 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonPropsWithNorwegian 
+export interface ButtonPropsWithNorwegian
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   readonly loading?: boolean;
@@ -115,22 +115,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonPropsWithNorwegi
           {...buttonProps}
         >
           {iconPosition === 'left' && icon && <span className="mr-2">{icon}</span>}
-          {loading && <LoadingSpinner size={size} />}
-          <span className="button-text">
-            {loading && loadingText ? loadingText : children}
-          </span>
+          {loading && <LoadingSpinner size={size || 'md'} />}
+          <span className="button-text">{loading && loadingText ? loadingText : children}</span>
           {iconPosition === 'right' && icon && <span className="ml-2">{icon}</span>}
           {norwegian?.classification && (
             <ClassificationIndicator level={norwegian.classification} />
           )}
         </button>
 
-        {showConfirmation && (
+        {showConfirmation && onConfirm && onCancel && (
           <ConfirmationDialog
             isOpen={showConfirmation}
             messageKey={norwegian?.confirmationMessageKey || 'confirm.message'}
-            onConfirm={onConfirm}
-            onCancel={onCancel}
+            onConfirm={onConfirm!}
+            onCancel={onCancel!}
           />
         )}
       </>

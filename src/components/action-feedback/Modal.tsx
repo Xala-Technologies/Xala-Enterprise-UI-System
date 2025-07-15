@@ -3,7 +3,59 @@
 
 import React from 'react';
 
-import type { ModalProps } from '../../types/action-feedback.types';
+/**
+ * Modal text configuration interface
+ */
+export interface ModalTexts {
+  readonly closeButtonAriaLabel: string;
+  readonly closeButtonTitle: string;
+  readonly classificationLabel: string;
+  readonly auditActiveText: string;
+}
+
+/**
+ * Default text configuration for modal
+ */
+const defaultTexts: ModalTexts = {
+  closeButtonAriaLabel: 'Close modal',
+  closeButtonTitle: 'Close',
+  classificationLabel: '🔒 Classification:',
+  auditActiveText: '📝 Audit active',
+};
+
+/**
+ * Norwegian action context interface
+ */
+export interface NorwegianActionContext {
+  classification: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  category?: string;
+  municipality?: string;
+  auditLog?: boolean;
+}
+
+/**
+ * Modal component props interface
+ */
+export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
+  readonly isOpen: boolean;
+  readonly title?: string;
+  readonly titleKey?: string;
+  readonly size?: 'sm' | 'md' | 'lg' | 'xl';
+  readonly centered?: boolean;
+  readonly closable?: boolean;
+  readonly closeOnEscape?: boolean;
+  readonly closeOnOverlay?: boolean;
+  readonly showOverlay?: boolean;
+  readonly scrollable?: boolean;
+  readonly persistent?: boolean;
+  readonly norwegian?: NorwegianActionContext;
+  readonly ariaLabel?: string;
+  readonly testId?: string;
+  readonly texts?: Partial<ModalTexts>;
+  readonly onClose?: () => void;
+  readonly onEscapeKey?: () => void;
+  readonly onOverlayClick?: () => void;
+}
 
 // Helper functions
 const getClassificationIcon = (level: string): string => {
@@ -115,12 +167,14 @@ const ModalHeader = ({
   closable,
   norwegian,
   onClose,
+  texts,
 }: {
   titleKey?: string;
   title?: string;
   closable: boolean;
   norwegian?: { classification?: string; category?: string };
   onClose: () => void;
+  texts: ModalTexts;
 }): React.ReactElement => {
   return (
     <div
@@ -179,8 +233,8 @@ const ModalHeader = ({
             (e.target as HTMLElement).style.backgroundColor = 'transparent';
             (e.target as HTMLElement).style.color = 'var(--text-secondary)';
           }}
-          aria-label="Lukk modal"
-          title="Lukk"
+          aria-label={texts.closeButtonAriaLabel}
+          title={texts.closeButtonTitle}
         >
           ×
         </button>
@@ -315,8 +369,15 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       onClose,
       onEscapeKey,
       onOverlayClick,
+      texts: userTexts,
       ...divProps
     } = props;
+
+    // Merge default texts with user provided texts
+    const texts: ModalTexts = {
+      ...defaultTexts,
+      ...userTexts,
+    };
 
     const modalRef = React.useRef<HTMLDivElement>(null);
     const contentRef = React.useRef<HTMLDivElement>(null);
@@ -402,6 +463,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
                 closable={closable}
                 norwegian={norwegian || undefined}
                 onClose={handleClose}
+                texts={texts}
               />
             )}
 
@@ -424,10 +486,10 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
                 }}
               >
                 <span>
-                  🔒 Klassifisering: {norwegian.classification}
+                  {texts.classificationLabel} {norwegian.classification}
                   {norwegian.municipality && ` • ${norwegian.municipality}`}
                 </span>
-                {norwegian.auditLog && <span>📝 Revisjon aktivert</span>}
+                {norwegian.auditLog && <span>{texts.auditActiveText}</span>}
               </div>
             )}
           </div>

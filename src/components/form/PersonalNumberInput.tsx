@@ -20,21 +20,14 @@ interface PersonalNumberValidationResult {
   age?: number;
 }
 
-interface ValidationResult {
-  isValid: boolean;
-  errors: string[];
-  type: 'fødselsnummer';
-  birthDate: Date;
-  gender: 'male' | 'female';
-  century: number;
-}
+// Note: Using PersonalNumberValidationResult for all validation results
 
 // Placeholder validation functions (replace with actual validation package)
 const validatePersonalNumber = (
   value: string,
   // eslint-disable-next-line no-unused-vars
   _validation: PersonalNumberInputProps['validation']
-): ValidationResult => {
+): PersonalNumberValidationResult => {
   const digits = value.replace(/\D/g, '');
   const isValid = digits.length === 11;
   const errors: string[] = [];
@@ -54,6 +47,7 @@ const validatePersonalNumber = (
     birthDate,
     gender,
     century,
+    age: new Date().getFullYear() - birthDate.getFullYear(),
   };
 };
 
@@ -173,9 +167,10 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
 
     // Use controlled value
     const currentValue = value || defaultValue || '';
-    const validationResult = validation?.realTimeValidation !== false
-      ? validatePersonalNumber(currentValue, validation)
-      : null;
+    const validationResult: PersonalNumberValidationResult | null =
+      validation?.realTimeValidation !== false
+        ? validatePersonalNumber(currentValue, validation)
+        : null;
     const isValidating = false; // No async validation in pure component
 
     // Determine if validation is enabled
@@ -191,7 +186,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
 
       if (enableValidation) {
         const result = validatePersonalNumber(formattedValue, validation);
-        
+
         if (onValidationChange) {
           onValidationChange(result.isValid, result.errors);
         }
@@ -312,7 +307,7 @@ export const PersonalNumberInput = React.forwardRef<HTMLInputElement, PersonalNu
             <div className="personal-number-field__validation-info">
               <span className="personal-number-field__validation-label">Age:</span>
               <span className="personal-number-field__validation-value">
-                {validationResult.age}
+                {validationResult?.age || 'Unknown'}
               </span>
             </div>
           </div>
