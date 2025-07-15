@@ -17,12 +17,15 @@ export { Switch, type SwitchProps } from './switch';
 export { Textarea, type TextareaProps } from './textarea';
 
 // Data display components
+export { Avatar, type AvatarProps } from './avatar';
 export { Badge, type BadgeProps } from './badge';
+export { Divider, type DividerProps } from './divider';
 export { Typography, type TypographyProps } from './typography';
 
 // Feedback components
 export { Alert, AlertDescription, AlertTitle, type AlertProps } from './alert';
 export { CircularProgress, Progress, type ProgressProps } from './progress';
+export { Tooltip, type TooltipProps } from './tooltip';
 
 // Layout components
 export { Card } from './card';
@@ -44,4 +47,26 @@ export {
 
 // Individual Tabs components (shadcn-ui style)
 export { TabsContent, TabsList, TabsTrigger } from './tabs-individual';
+
+// Command Palette
+export { CommandPalette, type CommandPaletteProps } from './command-palette';
+
+// Drawer
+export { Drawer, type DrawerProps } from './drawer';
+
+// Calendar
+export { Calendar, type CalendarProps } from './calendar';
+
+// Tree View
+export { TreeView, type TreeViewProps } from './tree-view';
+
+// Context Menu
+export { ContextMenu, type ContextMenuProps } from './context-menu';
+
+// Timeline
+export { Timeline, type TimelineProps } from './timeline';
+
+// Date & Time Pickers
+export { DatePicker, type DatePickerProps } from './date-picker';
+export { TimePicker, type TimePickerProps } from './time-picker';
 
