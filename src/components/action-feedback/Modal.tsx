@@ -18,7 +18,7 @@ const getCategoryIcon = (category: string): string => {
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const { size: _size = 'md', centered: _centered = true, norwegian: _norwegian } = props;
 
   // Base modal overlay styles
@@ -291,14 +291,14 @@ const useFocusTrap = (
 
 // Modal component
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   (props, _ref): React.ReactElement => {
     const {
       isOpen,
       title,
       titleKey,
       size = 'md',
-      // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line no-unused-vars
       centered: _centered = true,
       closable = true,
       closeOnEscape = true,

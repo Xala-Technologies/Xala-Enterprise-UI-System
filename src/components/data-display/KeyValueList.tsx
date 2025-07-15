@@ -186,7 +186,7 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
 const _ClassificationIcon: React.FC<{ classification: string }> = ({
   classification,
 }): React.ReactElement => {
@@ -270,7 +270,7 @@ function formatOrganizationNumber(value: string): string {
   return value;
 }
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
 function formatDate(value: unknown, _format: string): string {
   // Type guard for valid date inputs
   if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {

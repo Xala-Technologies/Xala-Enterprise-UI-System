@@ -37,14 +37,14 @@ export function Badge({
   dot = false,
   classification,
   priority,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   accessible: _accessible = true,
   ariaLabel,
   className = '',
   testId,
   ...props
 }: BadgeProps): React.ReactElement {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const { t: _t } = useLocalization();
 
   // Format count display

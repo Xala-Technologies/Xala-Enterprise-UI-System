@@ -10,7 +10,7 @@ import PriorityIndicator from './PriorityIndicator';
 import ToastIcon from './ToastIcon';
 
 // Helper function
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+// eslint-disable-next-line no-unused-vars
 const _getClassificationIcon = (level: string): string => {
   const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
   return icons[level as keyof typeof icons] || '📋';
@@ -234,7 +234,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       return 'polite';
     };
 
-    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     const _getVariantIcon = (variant: string): string => {
       const icons = { info: 'ℹ️', success: '✅', warning: '⚠️', error: '❌' };
       return icons[variant as keyof typeof icons] || 'ℹ️';

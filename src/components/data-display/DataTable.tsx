@@ -27,28 +27,28 @@ const getClassificationIcon = (level: string): string => {
 export function DataTable({
   data,
   columns,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   pagination: _pagination,
   sorting,
   selection,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   search: _search,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   export: _exportConfig,
   norwegian,
   loading = false,
   empty = false,
   onRowClick,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   onSelectionChange: _onSelectionChange,
   onSortChange,
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   onPageChange: _onPageChange,
   className = '',
   testId,
   ...props
 }: DataTableProps): React.ReactElement {
-  // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   const { t: _t } = useLocalization();
 
   // Build CSS classes using design tokens

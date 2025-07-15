@@ -127,11 +127,11 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
       accessibility: accessibilityConfig,
       accessibilityTokens: generateAccessibilityTokens(accessibilityConfig),
       updateConfig: (_updates: Partial<UISystemConfig>): void => {
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+         
         logger.debug('Config update requested', { updates: _updates });
       },
       updateAccessibility: (_accessibility: AccessibilityConfig | AccessibilityPreset): void => {
-        // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+         
         logger.debug('Accessibility update requested', { accessibility: _accessibility });
       },
     }),
