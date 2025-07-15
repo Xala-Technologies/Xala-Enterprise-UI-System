@@ -1,9 +1,11 @@
 # AI Enterprise Standards Enforcement Rules
+
 # Auto-generated from @xala-technologies/enterprise-standards v6.1.0
 
 ## 🎯 CRITICAL AI RULES - MUST BE FOLLOWED
 
 ### TypeScript Enforcement (Zero Tolerance)
+
 - ALWAYS use explicit return types for functions
 - NEVER use 'any' type - always create specific types
 - ALWAYS enable strict mode in TypeScript configuration
@@ -11,6 +13,7 @@
 - ALWAYS use exact optional property types
 
 ### ESLint Enforcement (Auto-Applied)
+
 - ALWAYS run ESLint before code generation
 - ALWAYS fix ESLint errors immediately
 - NEVER ignore ESLint warnings without justification
@@ -18,6 +21,7 @@
 - ALWAYS maintain complexity limits (max 10)
 
 ### Code Structure Enforcement
+
 - NEVER create files over 200 lines
 - NEVER create functions over 20 lines
 - ALWAYS add JSDoc to public methods and classes
@@ -25,69 +29,116 @@
 - ALWAYS use composition over inheritance
 
 ### Security & Compliance Enforcement
+
 - NEVER use eval() or similar dynamic code execution
 - ALWAYS validate user inputs with proper types
 - NEVER hardcode secrets or sensitive data
 - ALWAYS implement proper error handling
 - ALWAYS use parameterized queries for database access
 
-
 ### Platform-Specific Rules (library)
+
 - ALWAYS follow platform best practices
 - ALWAYS implement proper error handling
 - ALWAYS use TypeScript throughout
 - ALWAYS maintain code quality standards
 
+### UI Component Rules (CRITICAL)
+
+- NEVER use SSR dependencies (no 'use client', no server-side rendering)
+- NEVER use client-side state (no useState, useEffect, useCallback, useMemo)
+- ALWAYS create pure presentational components only
+- ALWAYS use design tokens via CSS variables (bg-primary, text-foreground, border-border)
+- NEVER hardcode colors - use semantic tokens (text-primary, text-muted-foreground, bg-background)
+- ALWAYS use class-variance-authority for component variants
+- ALWAYS use forwardRef for proper ref handling
+
+### Design Token Usage (MANDATORY)
+
+- ALWAYS use semantic color tokens: bg-primary, text-foreground, border-border, bg-background
+- ALWAYS use semantic spacing: space-2, space-4, p-4, m-4 (mapped to design system)
+- ALWAYS use semantic states: text-destructive, bg-destructive, border-destructive for errors
+- ALWAYS use semantic text: text-muted-foreground for secondary text
+- ALWAYS use semantic interactive: bg-accent, text-accent-foreground for hover states
+- NEVER use hardcoded values: #1976d2, 16px, red, blue (use tokens instead)
+- SUCCESS states: use text-green-600, bg-green-500, border-green-500 pattern
+- WARNING states: use text-yellow-600, bg-yellow-500, border-yellow-500 pattern
+
 ### Function Pattern Template
+
 ```typescript
 /**
  * Function description with business context
  * @param input - Validated input parameter
  * @returns Promise with typed result
  */
-export async function processUserData(
-  input: UserDataInput
-): Promise<ProcessedUserData> {
+export async function processUserData(input: UserDataInput): Promise<ProcessedUserData> {
   try {
     const validated = await validateUserInput(input);
     const result = await processData(validated);
     return result;
   } catch (error) {
     const typedError = error as Error;
-    logger.error('User data processing failed', { 
-      error: typedError.message 
+    logger.error('User data processing failed', {
+      error: typedError.message,
     });
     throw new ProcessingError('Failed to process user data', typedError);
   }
 }
 ```
 
-### Component Pattern Template  
+### Component Pattern Template
+
 ```typescript
-interface ComponentProps {
-  readonly data: DataType;
-  readonly onAction?: (action: ActionType) => void;
+// ✅ CORRECT - Pure presentational component with design tokens
+import { cn } from '@/lib/utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { forwardRef, type HTMLAttributes } from 'react';
+
+const componentVariants = cva(
+  'base-classes-using-design-tokens',
+  {
+    variants: {
+      variant: {
+        default: 'bg-background text-foreground',
+        primary: 'bg-primary text-primary-foreground',
+        destructive: 'bg-destructive text-destructive-foreground',
+      },
+      size: {
+        sm: 'text-sm p-2',
+        md: 'text-base p-4',
+        lg: 'text-lg p-6',
+      },
+    },
+    defaultVariants: { variant: 'default', size: 'md' },
+  }
+);
+
+interface ComponentProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof componentVariants> {
+  readonly children: React.ReactNode;
 }
 
-export function ComponentName({ 
-  data, 
-  onAction 
-}: ComponentProps): JSX.Element {
-  const handleAction = useCallback((action: ActionType) => {
-    onAction?.(action);
-  }, [onAction]);
+export const ComponentName = forwardRef<HTMLDivElement, ComponentProps>(
+  ({ className, variant, size, children, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(componentVariants({ variant, size }), className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
-  return (
-    <Container>
-      <Section>
-        {/* Implementation */}
-      </Section>
-    </Container>
-  );
-}
+ComponentName.displayName = 'ComponentName';
 ```
 
 ## 🚫 FORBIDDEN PATTERNS (NEVER USE)
+
 - NEVER use 'any' type
 - NEVER ignore TypeScript errors
 - NEVER use magic numbers
@@ -96,9 +147,15 @@ export function ComponentName({
 - NEVER ignore ESLint warnings
 - NEVER skip error handling
 - NEVER use implicit returns
+- NEVER use React hooks in UI components (useState, useEffect, useCallback, useMemo)
+- NEVER use 'use client' or SSR dependencies in components
+- NEVER hardcode colors (#1976d2, blue, red) - use design tokens instead
+- NEVER create stateful components - only pure presentational components
 
 ## 🔧 CODE GENERATION CHECKLIST
+
 Before submitting any code, verify:
+
 - [ ] All functions have explicit return types
 - [ ] No 'any' types used anywhere
 - [ ] All imports organized and unused ones removed
@@ -109,7 +166,12 @@ Before submitting any code, verify:
 - [ ] No files exceed 200 lines
 - [ ] All ESLint rules pass
 - [ ] TypeScript strict mode passes
+- [ ] No React hooks used in UI components (pure components only)
+- [ ] All colors use design tokens (no hardcoded values)
+- [ ] Components use class-variance-authority for variants
+- [ ] Components use forwardRef for proper ref handling
 
 ---
-*Generated by @xala-technologies/enterprise-standards v6.1.0*
-*Platform: library | Environment: development*
+
+_Generated by @xala-technologies/enterprise-standards v6.1.0_
+_Platform: library | Environment: development_

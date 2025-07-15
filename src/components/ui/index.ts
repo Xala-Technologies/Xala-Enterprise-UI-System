@@ -84,3 +84,11 @@ export type { DatePickerProps } from './date-picker';
 export { TimePicker } from './time-picker';
 export type { TimePickerProps } from './time-picker';
 
+// Timeline components
+export { Timeline, TimelineItem } from './timeline';
+export type { TimelineItemData, TimelineItemProps, TimelineProps } from './timeline';
+
+// Accordion components
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './accordion';
+export type { AccordionContentProps, AccordionItemData, AccordionItemProps, AccordionProps, AccordionTriggerProps } from './accordion';
+
