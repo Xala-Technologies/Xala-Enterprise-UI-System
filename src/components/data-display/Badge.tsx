@@ -37,13 +37,13 @@ export function Badge({
   dot = false,
   classification,
   priority,
-  accessible = true,
+  accessible: _accessible = true,
   ariaLabel,
   className = '',
   testId,
   ...props
 }: BadgeProps): React.ReactElement {
-  const { t } = useLocalization();
+  const { t: _t } = useLocalization();
 
   // Format count display
   const displayCount = React.useMemo((): React.ReactNode => {

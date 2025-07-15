@@ -290,13 +290,13 @@ const useFocusTrap = (
 
 // Modal component
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
-  (props, ref): React.ReactElement => {
+  (props, _ref): React.ReactElement => {
     const {
       isOpen,
       title,
       titleKey,
       size = 'md',
-      centered = true,
+      centered: _centered = true,
       closable = true,
       closeOnEscape = true,
       closeOnOverlay = true,
@@ -331,7 +331,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         document.addEventListener('keydown', handleEscape);
       }
 
-      return () => document.removeEventListener('keydown', handleEscape);
+      return (): void => document.removeEventListener('keydown', handleEscape);
     }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
     // Use focus trap

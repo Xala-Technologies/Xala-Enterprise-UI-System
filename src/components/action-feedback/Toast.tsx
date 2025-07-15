@@ -10,7 +10,7 @@ import PriorityIndicator from './PriorityIndicator';
 import ToastIcon from './ToastIcon';
 
 // Helper function
-const getClassificationIcon = (level: string): string => {
+const _getClassificationIcon = (level: string): string => {
   const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
   return icons[level as keyof typeof icons] || '📋';
 };
@@ -201,7 +201,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         handleClose();
       }, duration);
 
-      return () => clearTimeout(timer);
+      return (): void => clearTimeout(timer);
     }, [isVisible, duration, persistent, isPaused]);
 
     const handleClose = (): void => {
@@ -233,7 +233,7 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       return 'polite';
     };
 
-    const getVariantIcon = (variant: string): string => {
+    const _getVariantIcon = (variant: string): string => {
       const icons = { info: 'ℹ️', success: '✅', warning: '⚠️', error: '❌' };
       return icons[variant as keyof typeof icons] || 'ℹ️';
     };

@@ -12,14 +12,13 @@ import type { DataTableProps, TableColumn, TableData } from '../../types/data-di
 // Helper function
 const getClassificationIcon = (level: string): string => {
   const icons = {
-    'ÅPEN': '🟢',
-    'BEGRENSET': '🟡',
-    'KONFIDENSIELT': '🔴',
-    'HEMMELIG': '⚫',
+    ÅPEN: '🟢',
+    BEGRENSET: '🟡',
+    KONFIDENSIELT: '🔴',
+    HEMMELIG: '⚫',
   };
   return icons[level as keyof typeof icons] || '📋';
 };
-
 
 /**
  * DataTable component using design tokens and semantic props
@@ -32,7 +31,7 @@ export function DataTable({
   sorting,
   selection,
   search: _search,
-  export: exportConfig,
+  export: _exportConfig,
   norwegian,
   loading = false,
   empty = false,
@@ -44,7 +43,7 @@ export function DataTable({
   testId,
   ...props
 }: DataTableProps): React.ReactElement {
-  const { t } = useLocalization();
+  const { t: _t } = useLocalization();
 
   // Build CSS classes using design tokens
   const tableClasses = React.useMemo((): string => {
@@ -116,7 +115,12 @@ export function DataTable({
           onSortChange={onSortChange || undefined}
           norwegian={norwegian || undefined}
         />
-        <TableBody data={data} columns={columns} onRowClick={onRowClick || undefined} norwegian={norwegian || undefined} />
+        <TableBody
+          data={data}
+          columns={columns}
+          onRowClick={onRowClick || undefined}
+          norwegian={norwegian || undefined}
+        />
       </table>
 
       {norwegian?.classification && (
@@ -171,15 +175,13 @@ const TableHeader: React.FC<{
                 : 'none'
             }
           >
-            <span className="datatable__header-text">{column.labelKey ? t(column.labelKey) : column.label}</span>
+            <span className="datatable__header-text">
+              {column.labelKey ? t(column.labelKey) : column.label}
+            </span>
 
             {column.sortable && (
               <span className="datatable__sort-indicator" aria-hidden="true">
-                {sorting?.sortBy === column.key
-                  ? sorting.sortOrder === 'asc'
-                    ? '↑'
-                    : '↓'
-                  : '↕'}
+                {sorting?.sortBy === column.key ? (sorting.sortOrder === 'asc' ? '↑' : '↓') : '↕'}
               </span>
             )}
 
@@ -204,7 +206,11 @@ const TableBody: React.FC<{
 }> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const formatCellValue = (value: unknown, column: TableColumn, row: TableData): React.ReactNode => {
+  const formatCellValue = (
+    value: unknown,
+    column: TableColumn,
+    row: TableData
+  ): React.ReactNode => {
     if (value === null || value === undefined) {
       return '-';
     }
@@ -340,7 +346,7 @@ const formatCellValue = (value: unknown, column: TableColumn, row: TableData): R
     case 'organizationNumber':
       return formatOrganizationNumber(String(value));
     case 'date':
-      return formatDate(value, column.format as string || 'DD.MM.YYYY');
+      return formatDate(value, (column.format as string) || 'DD.MM.YYYY');
     case 'currency':
       return formatCurrency(Number(value), 'NOK');
     case 'number':
@@ -409,4 +415,3 @@ function formatBoolean(value: boolean, format?: { trueKey: string; falseKey: str
 }
 
 DataTable.displayName = 'DataTable';
-
