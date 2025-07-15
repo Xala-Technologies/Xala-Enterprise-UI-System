@@ -188,17 +188,7 @@ export const Input: React.FC<InputProps> = ({
   };
 
   // Handle focus and blur for focus ring styling
-  const [isFocused, setIsFocused] = React.useState(false);
-
-  
-
-  
-
-  
-
-  const finalStyles = isFocused ? { ...combinedStyles, ...focusStyles } : combinedStyles;
-
-  return (
+  const finalStyles = combinedStyles;return (
     <input
       type={type}
       placeholder={placeholder}

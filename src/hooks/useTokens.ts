@@ -352,7 +352,7 @@ export interface UseTokensResult {
   
   // Utility functions
   getToken: (_path: string, _fallback?: unknown) => unknown;
-  hasToken: (_path: string) => boolean;
+  hasToken: (path: string) => boolean;
   
   // Theme info
   themeInfo: {
