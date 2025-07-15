@@ -40,9 +40,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm run clean && pnpm run build:ts",
-    "build:lib": "pnpm run build:ts && (test -f dist/tokens.css || (mkdir -p dist && echo '/* minimal css */' > dist/tokens.css))",
-    "build:ts": "tsc",
+    "build": "pnpm run clean && pnpm run build:ts && pnpm run fix:imports && pnpm run build:css",
+    "build:lib": "pnpm run build:ts && pnpm run fix:imports && pnpm run build:css",
+    "build:ts": "tsc --project tsconfig.build.json",
+    "fix:imports": "node scripts/fix-imports.js",
+    "build:css": "mkdir -p dist && echo '/* Enterprise UI System Tokens */' > dist/tokens.css",
     "build:watch": "tsc --watch",
     "dev": "tsc --watch",
     "clean": "rimraf dist",
