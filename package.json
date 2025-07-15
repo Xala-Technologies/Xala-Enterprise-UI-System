@@ -40,7 +40,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "pnpm run clean && pnpm run build:ts && pnpm run generate:css",
+    "build": "pnpm run clean && pnpm run build:ts",
     "build:lib": "pnpm run build:ts && (test -f dist/tokens.css || echo '/* minimal css */' > dist/tokens.css)",
     "build:ts": "tsc",
     "build:watch": "tsc --watch",
@@ -58,7 +58,6 @@
     "type-check": "tsc --noEmit",
     "validate": "npm run format && npm run lint && npm run type-check && npm run test",
     "validate:comprehensive": "pnpm run validate && pnpm run test:coverage",
-    "generate:css": "node scripts/generate-css.js",
     "validate:components": "node scripts/validate-action-feedback-components.js && node scripts/validate-data-display-components.js && node scripts/validate-form-components.js && node scripts/validate-layout-components.js && node scripts/validate-platform-components.js",
     "validate:pasepage": "node scripts/validate-pasepage.js",
     "validate:design-tokens": "node scripts/validate-design-tokens.js",

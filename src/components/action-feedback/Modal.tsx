@@ -18,7 +18,7 @@ const getCategoryIcon = (category: string): string => {
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
-  const { size = 'md', centered = true, norwegian } = props;
+  const { size: _size = 'md', centered: _centered = true, norwegian: _norwegian } = props;
 
   // Base modal overlay styles
   const overlayStyles: React.CSSProperties = {
@@ -29,7 +29,7 @@ const getModalStyles = (props: ModalProps): React.CSSProperties => {
     bottom: 0,
     backgroundColor: 'var(--color-black-alpha-50)',
     display: 'flex',
-    alignItems: centered ? 'center' : 'flex-start',
+    alignItems: _centered ? 'center' : 'flex-start',
     justifyContent: 'center',
     zIndex: 'var(--z-index-modal)',
     padding: 'var(--spacing-4)',
@@ -284,7 +284,7 @@ const useFocusTrap = (
     };
 
     container.addEventListener('keydown', handleTab);
-    return () => container.removeEventListener('keydown', handleTab);
+    return (): void => container.removeEventListener('keydown', handleTab);
   }, [isOpen, enabled, containerRef]);
 };
 

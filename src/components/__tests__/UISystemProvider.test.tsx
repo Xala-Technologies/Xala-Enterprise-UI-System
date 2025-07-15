@@ -10,6 +10,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Logger } from '@xala-technologies/enterprise-standards';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import React from 'react';
 
 import type { AccessibilityConfig } from '../../tokens/accessibility-tokens';
 import { UISystemProvider } from '../UISystemProvider';
