@@ -216,7 +216,7 @@ const TableBody: React.FC<{
 }> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const _formatCellValue = (
+  const __formatCellValue = (
     value: unknown,
     column: TableColumn,
     row: TableData

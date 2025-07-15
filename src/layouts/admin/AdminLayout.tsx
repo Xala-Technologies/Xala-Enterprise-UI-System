@@ -329,7 +329,7 @@ export const AdminLayout = forwardRef<HTMLDivElement, AdminLayoutProps>(
       rightDrawer,
       drawerOpen = false,
       onDrawerClose,
-      sidebarCollapsed: _sidebarCollapsed = false,
+      // sidebarCollapsed planned for future
       className,
       ...props
     },

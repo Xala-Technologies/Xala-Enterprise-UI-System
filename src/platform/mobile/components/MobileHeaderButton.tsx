@@ -1,15 +1,15 @@
 // React mock for development
 import React from 'react';
 
-// Helper function
-const getClassificationIcon = (level: string): string => {
+// Helper function for classification icons
+const getClassificationIcon = (classification?: string): string => {
   const icons = {
     ÅPEN: '🟢',
     BEGRENSET: '🟡',
     KONFIDENSIELT: '🔴',
     HEMMELIG: '⚫',
   };
-  return icons[level as keyof typeof icons] || '📋';
+  return icons[classification as keyof typeof icons] || '📱';
 };
 
 interface MobileHeaderButtonProps {

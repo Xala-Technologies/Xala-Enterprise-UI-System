@@ -1,13 +1,5 @@
-import { Logger } from '@xala-technologies/enterprise-standards';
 import React from 'react';
 import { useLocalization } from '../../../localization/hooks/useLocalization';
-
-const logger = Logger.create({
-  serviceName: 'ui-system-bottom-navigation',
-  logLevel: 'info',
-  enableConsoleLogging: true,
-  enableFileLogging: false,
-});
 
 // BottomNavigation - Norwegian government-compliant mobile bottom navigation component
 interface BottomNavigationItem {
@@ -27,7 +19,7 @@ interface BottomNavigationProps {
   height?: 'compact' | 'standard' | 'extended';
   safeAreaBottom?: boolean;
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-   
+
   // eslint-disable-next-line no-unused-vars
   onItemPress?: (_index: number, _item: BottomNavigationItem) => void;
   style?: React.CSSProperties;
@@ -67,39 +59,42 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
       style,
       ...restProps
     } = props;
-    
+
     const { t } = useLocalization();
-    
+
     const handleItemPress = (index: number, item: BottomNavigationItem): void => {
       if (!item.disabled && onItemPress) {
         onItemPress(index, item);
       }
     };
-    
+
     const getHeightStyle = (): string => {
       switch (height) {
-        case 'compact': return 'var(--spacing-12)';
-        case 'extended': return 'var(--spacing-16)';
-        default: return 'var(--spacing-14)';
+        case 'compact':
+          return 'var(--spacing-12)';
+        case 'extended':
+          return 'var(--spacing-16)';
+        default:
+          return 'var(--spacing-14)';
       }
     };
-    
+
     const getClassificationStyle = (): React.CSSProperties => {
       if (!classification) return {};
-      
+
       const classificationColors = {
-        'ÅPEN': 'var(--color-success-500)',
-        'BEGRENSET': 'var(--color-warning-500)', 
-        'KONFIDENSIELT': 'var(--color-danger-500)',
-        'HEMMELIG': 'var(--color-danger-700)'
+        ÅPEN: 'var(--color-success-500)',
+        BEGRENSET: 'var(--color-warning-500)',
+        KONFIDENSIELT: 'var(--color-danger-500)',
+        HEMMELIG: 'var(--color-danger-700)',
       };
-      
+
       return {
         borderTopColor: classificationColors[classification] || 'var(--color-border-subtle)',
-        borderTopWidth: '2px'
+        borderTopWidth: '2px',
       };
     };
-    
+
     return (
       <nav
         ref={ref}
@@ -129,7 +124,7 @@ export const BottomNavigation = React.forwardRef<HTMLElement, BottomNavigationPr
         {items.map((item, index): React.ReactElement => {
           const isActive = index === activeIndex;
           const itemClassification = item.classification;
-          
+
           return (
             <button
               key={index}

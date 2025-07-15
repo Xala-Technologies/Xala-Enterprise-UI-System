@@ -440,6 +440,7 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
   ): React.ReactElement => {
     const [refreshing, setRefreshing] = useState(false);
 
+    // Refresh handler for future implementation
     const handleRefresh = async (): Promise<void> => {
       if (onRefresh && !refreshing) {
         setRefreshing(true);
@@ -447,6 +448,9 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
         setRefreshing(false);
       }
     };
+
+    // Suppress unused variable warning for planned feature
+    void handleRefresh;
 
     return (
       <main

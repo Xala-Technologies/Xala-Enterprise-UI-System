@@ -340,7 +340,7 @@ const KeyboardShortcuts = ({ isCollapsed }: { isCollapsed: boolean }): React.Rea
 export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>(
   (props, ref): React.ReactElement => {
     const {
-      isOpen: _isOpen,
+      // isOpen: planned for future
       title,
       children,
       width = 280,
@@ -351,7 +351,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       persistent = true,
       overlay = false,
       onToggle,
-      onClose: _onClose,
+      // onClose: planned for future
       norwegian,
       className,
       ...rest
@@ -359,7 +359,8 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
 
     const [currentWidth, setCurrentWidth] = useState(width);
     const [isResizing, setIsResizing] = useState(false);
-    const _sidebarRef = useRef<HTMLElement>(null);
+    // Sidebar ref planned
+    // const sidebarRef = useRef<HTMLElement>(null);
 
     // Handle keyboard shortcuts
     const handleKeydown = useCallback(

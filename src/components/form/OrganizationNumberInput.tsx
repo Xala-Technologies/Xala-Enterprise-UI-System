@@ -4,23 +4,17 @@
  * @description Specialized input for Norwegian organization numbers using design tokens (no inline styles)
  */
 
-import { Logger } from '@xala-technologies/enterprise-standards';
 import React, { useId, useState } from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
-
-const _logger = Logger.create({
-  serviceName: 'ui-system-org-number-input',
-  logLevel: 'info',
-  enableConsoleLogging: true,
-  enableFileLogging: false,
-});
 
 // Import the correct OrganizationData type
 import type { OrganizationData } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
-const validateOrganizationNumber = (value: string): { isValid: boolean; errors: string[]; type: string; mainOrganization: string } => ({
+const validateOrganizationNumber = (
+  value: string
+): { isValid: boolean; errors: string[]; type: string; mainOrganization: string } => ({
   isValid: value.length === 9,
   errors: value.length === 9 ? [] : ['Invalid organization number'],
   type: 'organisasjonsnummer' as const,
@@ -54,11 +48,7 @@ export const OrganizationNumberInput = React.forwardRef<
     onFocus,
     variant = 'default',
     hasError = false,
-    validation,
-    displayFormat = 'nnn nnn nnn',
-    maskInput = false,
     autoFormat = true,
-    fetchOrganizationData = false,
     disabled = false,
     readOnly = false,
     placeholder = 'Enter organization number',
@@ -68,9 +58,11 @@ export const OrganizationNumberInput = React.forwardRef<
 
   const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState(validateOrganizationNumber(''));
-  const [_isValidating, _setIsValidating] = useState(false);
-  const [_isFetchingData, _setIsFetchingData] = useState(false);
-  const [_orgData, _setOrgData] = useState<OrganizationData | null>(null);
+  const [_isValidating] = useState(false);
+  const [_organizationData] = useState<OrganizationData | null>(null);
+
+  // Display format for validation
+  const displayFormat = autoFormat ? 'nnn nnn nnn' : 'nnnnnnnnn';
 
   // Generate ID if not provided
   const generatedId = useId();
@@ -90,7 +82,7 @@ export const OrganizationNumberInput = React.forwardRef<
     }
 
     if (onValidationChange) {
-      onValidationChange(result.isValid, result.errors, _orgData || undefined);
+      onValidationChange(result.isValid, result.errors, undefined);
     }
   };
 
@@ -167,14 +159,14 @@ export const OrganizationNumberInput = React.forwardRef<
       )}
 
       {/* Organization data display */}
-      {_orgData && (
+      {_organizationData && (
         <div className="organization-number-field__org-data">
-          <h4 className="organization-number-field__org-name">{_orgData.name}</h4>
+          <h4 className="organization-number-field__org-name">{_organizationData.name}</h4>
           <p className="organization-number-field__org-details">
-            {_orgData.organizationForm} - {_orgData.status}
+            {_organizationData.organizationForm} - {_organizationData.status}
           </p>
           <p className="organization-number-field__org-address">
-            {_orgData.municipality}, {_orgData.county}
+            {_organizationData.municipality}, {_organizationData.county}
           </p>
         </div>
       )}
