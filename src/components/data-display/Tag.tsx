@@ -68,7 +68,7 @@ export function Tag({
   };
 
   // Build CSS classes using design tokens
-  const tagClasses = React.useMemo(() => {
+  const getTagClasses = (): string => {
     const classes = ['tag'];
 
     // Variant class
@@ -98,7 +98,7 @@ export function Tag({
     }
 
     return classes.join(' ');
-  }, [variant, size, interactive, onClick, removable, norwegian?.classification, className]);
+  };
 
   // Handle click events
   const handleClick = (): void => {
@@ -117,7 +117,7 @@ export function Tag({
 
   return (
     <div
-      className={tagClasses}
+      className={getTagClasses()}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role={interactive ? 'button' : undefined}

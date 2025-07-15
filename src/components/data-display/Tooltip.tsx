@@ -99,7 +99,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
       if (e.key === 'Escape') onVisibilityChange?.(false);
     };
 
-    const combinedStyles = React.useMemo(() => getTooltipStyles(props), [props]);
+    const getCombinedStyles = (): React.CSSProperties => getTooltipStyles(props);
 
     return (
       <>
@@ -125,7 +125,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
             id={`tooltip-${testId}`}
             role="tooltip"
             className={className}
-            style={combinedStyles}
+            style={getCombinedStyles()}
             data-testid={testId}
             data-placement={placement}
             data-trigger={trigger}
