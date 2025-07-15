@@ -2,7 +2,6 @@
 // Norwegian-compliant toast notification with accessibility and positioning
 
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
 import { CloseButton } from './AlertActions';
@@ -181,45 +180,37 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       onClose,
       onOpen,
       onActionClick,
+      isVisible = true,
+      isPaused = false,
+      onVisibilityChange,
+      onPauseChange,
       ...divProps
     } = props;
 
-    const [isVisible, setIsVisible] = useState(false);
-    const [isPaused, setIsPaused] = useState(false);
-
-    useEffect(() => {
-      if (isOpen) {
-        setIsVisible(true);
+    // Pure component - all state managed via props
+    React.useEffect(() => {
+      if (isOpen && !isVisible) {
+        onVisibilityChange?.(true);
         onOpen?.();
-      } else {
-        setIsVisible(false);
+      } else if (!isOpen && isVisible) {
+        onVisibilityChange?.(false);
       }
-    }, [isOpen, onOpen]);
-
-    useEffect(() => {
-      if (!isVisible || persistent || isPaused) return;
-
-      const timer = setTimeout(() => {
-        handleClose();
-      }, duration);
-
-      return (): void => clearTimeout(timer);
-    }, [isVisible, duration, persistent, isPaused]);
+    }, [isOpen, isVisible, onVisibilityChange, onOpen]);
 
     const handleClose = (): void => {
-      setIsVisible(false);
+      onVisibilityChange?.(false);
       onClose?.();
     };
 
     const handleMouseEnter = (): void => {
       if (pauseOnHover) {
-        setIsPaused(true);
+        onPauseChange?.(true);
       }
     };
 
     const handleMouseLeave = (): void => {
       if (pauseOnHover) {
-        setIsPaused(false);
+        onPauseChange?.(false);
       }
     };
 

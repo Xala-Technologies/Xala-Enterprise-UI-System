@@ -4,7 +4,7 @@
  * @description TextArea component using design tokens (no inline styles)
  */
 
-import React, { useCallback, useId, useState } from 'react';
+import React from 'react';
 
 import type { TextAreaProps } from '../../types/form.types';
 
@@ -50,45 +50,32 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       error,
       testId,
       className,
+      textAreaId = 'textarea',
+      helpTextId = 'help-text',
+      errorId = 'error-text',
+      currentLength = 0,
+      onLengthChange,
       ...restProps
     } = props;
 
-    // Generate unique IDs
-    const baseId = useId();
-    const textAreaId = `${baseId}-textarea`;
-    const helpTextId = `${baseId}-help`;
-    const errorId = `${baseId}-error`;
-
-    // State for character count
-    const [currentLength, setCurrentLength] = useState<number>(
-      (value || defaultValue || '').toString().length
-    );
+    // Pure component - IDs and length management handled by parent
 
     // Handle change with character count
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const newValue = e.target.value;
-        setCurrentLength(newValue.length);
-        onChange?.(newValue, e);
-      },
-      [onChange]
-    );
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>): void => {
+      const newValue = e.target.value;
+      onLengthChange?.(newValue.length);
+      onChange?.(newValue, e);
+    };
 
     // Handle blur
-    const handleBlur = useCallback(
-      (e: React.FocusEvent<HTMLTextAreaElement>) => {
-        onBlur?.(e);
-      },
-      [onBlur]
-    );
+    const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>): void => {
+      onBlur?.(e);
+    };
 
     // Handle focus
-    const handleFocus = useCallback(
-      (e: React.FocusEvent<HTMLTextAreaElement>) => {
-        onFocus?.(e);
-      },
-      [onFocus]
-    );
+    const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>): void => {
+      onFocus?.(e);
+    };
 
     // Validation state
     const hasValidationErrors = Boolean(error);

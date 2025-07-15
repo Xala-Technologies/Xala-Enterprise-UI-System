@@ -71,6 +71,16 @@ export interface InputProps extends FormComponentProps {
 
 // TextArea component props
 export interface TextAreaProps extends FormComponentProps {
+  /** Textarea ID (for pure component state management) */
+  textAreaId?: string;
+  /** Help text ID (for pure component state management) */
+  helpTextId?: string;
+  /** Error ID (for pure component state management) */
+  errorId?: string;
+  /** Current character length (for pure component state management) */
+  currentLength?: number;
+  /** Callback when length changes */
+  onLengthChange?: (length: number) => void;
   value?: string;
   defaultValue?: string;
   onChange?: (

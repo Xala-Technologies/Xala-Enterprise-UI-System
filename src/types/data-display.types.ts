@@ -187,6 +187,10 @@ export interface BadgeProps extends DataDisplayComponentProps {
 
 // Tooltip component props
 export interface TooltipProps extends DataDisplayComponentProps {
+  /** Controls tooltip visibility (for pure component state management) */
+  isVisible?: boolean;
+  /** Callback when visibility changes */
+  onVisibilityChange?: (visible: boolean) => void;
   content?: string; // Tooltip content text
   children: React.ReactNode;
   trigger?: 'hover' | 'click' | 'focus' | 'manual';

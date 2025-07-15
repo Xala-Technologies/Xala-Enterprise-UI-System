@@ -1,7 +1,7 @@
 // Modal component for @xala-mock/ui-system
 // Norwegian-compliant modal with accessibility and focus management
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import type { ModalProps } from '../../types/action-feedback.types';
 
@@ -321,8 +321,8 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     const modalRef = React.useRef<HTMLDivElement>(null);
     const contentRef = React.useRef<HTMLDivElement>(null);
 
-    // Handle escape key
-    useEffect(() => {
+    // Pure component - escape key handling moved to parent
+    React.useEffect(() => {
       const handleEscape = (event: KeyboardEvent): void => {
         if (event.key === 'Escape' && closeOnEscape && !persistent) {
           onEscapeKey?.();

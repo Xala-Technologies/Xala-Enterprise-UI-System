@@ -82,20 +82,21 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
       arrow = true,
       className,
       testId = 'tooltip',
+      isVisible = false,
+      onVisibilityChange,
       ...divProps
     } = props;
 
-    const [isVisible, setIsVisible] = React.useState(false);
     const triggerRef = React.useRef<HTMLDivElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
 
-    const handleMouseEnter = (): void => setIsVisible(true);
-    const handleMouseLeave = (): void => setIsVisible(false);
-    const handleClick = (): void => setIsVisible(!isVisible);
-    const handleFocus = (): void => setIsVisible(true);
-    const handleBlur = (): void => setIsVisible(false);
+    const handleMouseEnter = (): void => onVisibilityChange?.(true);
+    const handleMouseLeave = (): void => onVisibilityChange?.(false);
+    const handleClick = (): void => onVisibilityChange?.(!isVisible);
+    const handleFocus = (): void => onVisibilityChange?.(true);
+    const handleBlur = (): void => onVisibilityChange?.(false);
     const handleKeyDown = (e: React.KeyboardEvent): void => {
-      if (e.key === 'Escape') setIsVisible(false);
+      if (e.key === 'Escape') onVisibilityChange?.(false);
     };
 
     const combinedStyles = React.useMemo(() => getTooltipStyles(props), [props]);

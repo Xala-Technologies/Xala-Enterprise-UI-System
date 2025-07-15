@@ -107,6 +107,14 @@ export interface DrawerProps extends ActionFeedbackComponentProps {
 
 // Toast component props
 export interface ToastProps extends ActionFeedbackComponentProps {
+  /** Controls toast visibility (for pure component state management) */
+  isVisible?: boolean;
+  /** Controls pause state (for pure component state management) */
+  isPaused?: boolean;
+  /** Callback when visibility changes */
+  onVisibilityChange?: (visible: boolean) => void;
+  /** Callback when pause state changes */
+  onPauseChange?: (paused: boolean) => void;
   /** Toast message text */
   message?: string;
   /** Toast title text */
