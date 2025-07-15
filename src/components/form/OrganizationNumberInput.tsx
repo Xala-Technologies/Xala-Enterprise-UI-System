@@ -9,7 +9,7 @@ import React, { useId, useState } from 'react';
 
 import type { OrganizationNumberInputProps } from '../../types/form.types';
 
-const logger = Logger.create({
+const _logger = Logger.create({
   serviceName: 'ui-system-org-number-input',
   logLevel: 'info',
   enableConsoleLogging: true,
@@ -20,7 +20,7 @@ const logger = Logger.create({
 import type { OrganizationData } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
-const validateOrganizationNumber = (value: string) => ({
+const validateOrganizationNumber = (value: string): { isValid: boolean; errors: string[]; type: string; mainOrganization: string } => ({
   isValid: value.length === 9,
   errors: value.length === 9 ? [] : ['Invalid organization number'],
   type: 'organisasjonsnummer' as const,
@@ -68,9 +68,9 @@ export const OrganizationNumberInput = React.forwardRef<
 
   const [currentValue, setCurrentValue] = useState(value || defaultValue || '');
   const [validationResult, setValidationResult] = useState(validateOrganizationNumber(''));
-  const [isValidating, setIsValidating] = useState(false);
-  const [isFetchingData, setIsFetchingData] = useState(false);
-  const [orgData, setOrgData] = useState<OrganizationData | null>(null);
+  const [_isValidating, _setIsValidating] = useState(false);
+  const [_isFetchingData, _setIsFetchingData] = useState(false);
+  const [_orgData, _setOrgData] = useState<OrganizationData | null>(null);
 
   // Generate ID if not provided
   const generatedId = useId();
@@ -90,7 +90,7 @@ export const OrganizationNumberInput = React.forwardRef<
     }
 
     if (onValidationChange) {
-      onValidationChange(result.isValid, result.errors, orgData || undefined);
+      onValidationChange(result.isValid, result.errors, _orgData || undefined);
     }
   };
 
@@ -139,7 +139,7 @@ export const OrganizationNumberInput = React.forwardRef<
         {/* Validation indicator */}
         <ValidationIndicator
           isValid={validationResult.isValid}
-          isValidating={isValidating}
+          _isValidating={_isValidating}
           errors={validationResult.errors}
         />
       </div>
@@ -167,14 +167,14 @@ export const OrganizationNumberInput = React.forwardRef<
       )}
 
       {/* Organization data display */}
-      {orgData && (
+      {_orgData && (
         <div className="organization-number-field__org-data">
-          <h4 className="organization-number-field__org-name">{orgData.name}</h4>
+          <h4 className="organization-number-field__org-name">{_orgData.name}</h4>
           <p className="organization-number-field__org-details">
-            {orgData.organizationForm} - {orgData.status}
+            {_orgData.organizationForm} - {_orgData.status}
           </p>
           <p className="organization-number-field__org-address">
-            {orgData.municipality}, {orgData.county}
+            {_orgData.municipality}, {_orgData.county}
           </p>
         </div>
       )}
@@ -207,10 +207,10 @@ const Label: React.FC<{
  */
 const ValidationIndicator: React.FC<{
   isValid: boolean;
-  isValidating: boolean;
+  _isValidating: boolean;
   errors: string[];
-}> = ({ isValid, isValidating, errors }): React.ReactElement => {
-  if (isValidating) {
+}> = ({ isValid, _isValidating, errors }): React.ReactElement => {
+  if (_isValidating) {
     return (
       <div className="organization-number-field__validation-indicator organization-number-field__validation-indicator--loading">
         <span className="organization-number-field__validation-icon" aria-hidden="true">

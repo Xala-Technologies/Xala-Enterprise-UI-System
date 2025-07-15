@@ -7,7 +7,7 @@ import { Logger } from '@xala-technologies/enterprise-standards';
 import type { TokenValue } from '../semantic-token-system';
 import { TokenCacheManager } from './cache-manager';
 import { TenantConfigurationLoader } from './tenant-loader';
-import type { DynamicTokenLoaderConfig, TokenLoadResult } from './types';
+import type { DynamicTokenLoaderConfig, TenantTokenConfig, TokenLoadResult } from './types';
 
 /**
  * Dynamic Token Loader
@@ -83,12 +83,12 @@ export class DynamicTokenLoader {
   /**
    * Load tenant from JSON configuration
    */
-  async loadTenantFromJSON(config: any): Promise<TokenLoadResult> {
+  async loadTenantFromJSON(config: unknown): Promise<TokenLoadResult> {
     if (!this.isInitialized) {
       await this.initialize();
     }
 
-    return this.tenantLoader.loadFromJSON(config);
+    return this.tenantLoader.loadFromJSON(config as TenantTokenConfig);
   }
 
   /**

@@ -485,7 +485,7 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       bottomNavigation,
       drawer,
       drawerOpen = false,
-       
+
       // _onDrawerClose removed - unused parameter
       statusBarStyle = 'default',
       className,
@@ -562,8 +562,8 @@ export const MobileLayoutComposition = {
     header?: ReactNode;
     content: ReactNode;
     actions?: ReactNode;
-    onClose?: () => void;
-  } & MobileLayoutProps) => (
+    onClose?: (() => void) | undefined;
+  } & MobileLayoutProps): React.ReactElement => (
     <MobileLayout {...props}>
       {header}
       <MobileContent bottomSafe={false}>{content}</MobileContent>

@@ -31,7 +31,7 @@ export async function loadTenantConfiguration(tenantId: string): Promise<boolean
   return result.success;
 }
 
-export async function loadTenantFromJSON(config: any): Promise<boolean> {
+export async function loadTenantFromJSON(config: unknown): Promise<boolean> {
   const result = await dynamicTokenLoader.loadTenantFromJSON(config);
   return result.success;
 }

@@ -72,7 +72,7 @@ const getTooltipStyles = (props: TooltipProps): React.CSSProperties => {
 };
 
 // Get placement-based styles
-const getPlacementStyles = (placement: string): React.CSSProperties => {
+const _getPlacementStyles = (placement: string): React.CSSProperties => {
   // Basic placement - actual positioning would be handled by JavaScript
   const placements = {
     top: { marginBottom: 'var(--spacing-2)' },
@@ -85,7 +85,7 @@ const getPlacementStyles = (placement: string): React.CSSProperties => {
 };
 
 // Get accessibility styles
-const getAccessibilityStyles = (
+const _getAccessibilityStyles = (
   accessibility?: string,
   highContrast?: boolean
 ): React.CSSProperties => {
@@ -103,7 +103,7 @@ const getAccessibilityStyles = (
 };
 
 // Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => {
+const _getClassificationStyles = (classification?: string): React.CSSProperties => {
   if (!classification) {
     return {};
   }

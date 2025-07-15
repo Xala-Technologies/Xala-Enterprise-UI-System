@@ -58,7 +58,7 @@ export function Tag({
 }: TagProps): React.ReactElement {
   // const { t } = useLocalization();
   // eslint-disable-next-line no-unused-vars
-  const t = (key: string): string => key; // Placeholder for localization
+  const _t = (key: string): string => key; // Placeholder for localization
 
   // Mock norwegian config for now
   const norwegian = {

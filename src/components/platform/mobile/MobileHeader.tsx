@@ -272,7 +272,7 @@ export const MobileHeader = React.forwardRef<HTMLDivElement, MobileHeaderProps>(
       onNotificationClick,
       height = 'standard',
       sticky = true,
-      transparent = false,
+      transparent: _transparent = false,
       norwegian,
       className,
       testId,
