@@ -1,118 +1,98 @@
 /**
- * @fileoverview SSR-Safe Container Component - Production Strategy Implementation
- * @description Container layout component using useTokens hook for JSON template integration
- * @version 4.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @fileoverview Container Component - Enterprise Standards Compliant
+ * @description Pure container layout component using design tokens
+ * @version 5.0.0
+ * @compliance Pure component, no hooks, uses design tokens
  */
 
-// ✅ NO 'use client' directive - works in SSR
-import React from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cn } from '@/lib/utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
+import React, { forwardRef, type HTMLAttributes } from 'react';
 
-export interface ContainerProps {
-  children: React.ReactNode;
-  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | 'none';
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-  centered?: boolean;
-  fluid?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-  'data-testid'?: string;
+/**
+ * Container variants using design tokens
+ */
+const containerVariants = cva(
+  'w-full box-border min-w-0', // Base classes
+  {
+    variants: {
+      maxWidth: {
+        sm: 'max-w-sm',
+        md: 'max-w-md',
+        lg: 'max-w-lg',
+        xl: 'max-w-xl',
+        '2xl': 'max-w-2xl',
+        full: 'max-w-full',
+        none: 'max-w-none',
+      },
+      padding: {
+        none: 'p-0',
+        sm: 'px-3 py-2',
+        md: 'p-4',
+        lg: 'p-6',
+      },
+      centered: {
+        true: 'mx-auto',
+        false: 'mx-0',
+      },
+      fluid: {
+        true: 'w-full max-w-none',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      maxWidth: 'lg',
+      padding: 'md',
+      centered: true,
+      fluid: false,
+    },
+  }
+);
+
+export interface ContainerProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof containerVariants> {
+  readonly children: React.ReactNode;
+  readonly 'data-testid'?: string;
 }
 
-export const Container: React.FC<ContainerProps> = ({
-  children,
-  maxWidth = 'lg',
-  padding = 'md',
-  centered = true,
-  fluid = false,
-  className,
-  style,
-  'data-testid': testId,
-  ...props
-}) => {
-  // ✅ Hook safely accesses tokens through app-owned context
-  const { spacing } = useTokens();
+/**
+ * Container component using design tokens and semantic props
+ * Pure presentational component with no hooks
+ */
+export const Container = forwardRef<HTMLDivElement, ContainerProps>(
+  (
+    {
+      children,
+      maxWidth,
+      padding,
+      centered,
+      fluid,
+      className,
+      'data-testid': testId,
+      ...props
+    },
+    ref
+  ): React.ReactElement => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          containerVariants({
+            maxWidth,
+            padding,
+            centered,
+            fluid,
+          }),
+          className
+        )}
+        data-testid={testId}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
-  // ✅ All styling comes from JSON templates (no hard-coded values)
-  const getMaxWidthStyles = (): React.CSSProperties => {
-    if (fluid) {
-      return { width: '100%', maxWidth: 'none' };
-    }
-
-    switch (maxWidth) {
-      case 'sm':
-        return { maxWidth: '640px' };
-      case 'md':
-        return { maxWidth: '768px' };
-      case 'lg':
-        return { maxWidth: '1024px' };
-      case 'xl':
-        return { maxWidth: '1280px' };
-      case '2xl':
-        return { maxWidth: '1536px' };
-      case 'full':
-        return { maxWidth: '100%' };
-      case 'none':
-        return { maxWidth: 'none' };
-      default:
-        return { maxWidth: '1024px' };
-    }
-  };
-
-  const getPaddingStyles = (): React.CSSProperties => {
-    switch (padding) {
-      case 'none':
-        return { padding: '0' };
-      case 'sm':
-        return {
-          paddingLeft: spacing[3],
-          paddingRight: spacing[3],
-          paddingTop: spacing[2],
-          paddingBottom: spacing[2],
-        };
-      case 'md':
-        return {
-          paddingLeft: spacing[4],
-          paddingRight: spacing[4],
-          paddingTop: spacing[4],
-          paddingBottom: spacing[4],
-        };
-      case 'lg':
-        return {
-          paddingLeft: spacing[6],
-          paddingRight: spacing[6],
-          paddingTop: spacing[6],
-          paddingBottom: spacing[6],
-        };
-      default:
-        return {};
-    }
-  };
-
-  const baseStyles: React.CSSProperties = {
-    // Layout
-    width: '100%',
-    boxSizing: 'border-box',
-
-    // Centering
-    marginLeft: centered ? 'auto' : '0',
-    marginRight: centered ? 'auto' : '0',
-
-    // Responsive behavior
-    minWidth: 0, // Prevents flex overflow issues
-  };
-
-  const combinedStyles: React.CSSProperties = {
-    ...baseStyles,
-    ...getMaxWidthStyles(),
-    ...getPaddingStyles(),
-    ...style,
-  };
-
-  return (
-    <div className={className} style={combinedStyles} data-testid={testId} {...props}>
-      {children}
-    </div>
-  );
-};
+Container.displayName = 'Container';

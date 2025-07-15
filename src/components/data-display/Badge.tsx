@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { BadgeProps } from '../../types/data-display.types';
 
 // Helper function
@@ -131,8 +130,6 @@ export function Badge({
   testId,
   ...props
 }: BadgeProps): React.ReactElement {
-  // eslint-disable-next-line no-unused-vars
-  const { t: _t } = useLocalization();
 
   // Format count display
   const displayCount = getDisplayCount(count, maxCount, showZero, children);

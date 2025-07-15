@@ -99,8 +99,10 @@ export interface GlobalSearchProps
   readonly results?: readonly SearchResultItem[];
   /** Loading state */
   readonly loading?: boolean;
-  /** Show results */
-  readonly showResults?: boolean;
+  /** Show results dropdown */
+  readonly isOpen?: boolean;
+  /** Selected result index */
+  readonly selectedIndex?: number;
   /** Search focus handler */
   readonly onFocus?: () => void;
   /** Search blur handler */
@@ -109,6 +111,15 @@ export interface GlobalSearchProps
   readonly leftIcon?: ReactNode;
   /** Right action */
   readonly rightAction?: ReactNode;
+  /** Result click handler */
+  // eslint-disable-next-line no-unused-vars
+  readonly onResultClick?: (_result: SearchResultItem) => void;
+  /** Selected index change handler */
+  // eslint-disable-next-line no-unused-vars
+  readonly onSelectedIndexChange?: (_index: number) => void;
+  /** Open state change handler */
+  // eslint-disable-next-line no-unused-vars
+  readonly onOpenChange?: (_isOpen: boolean) => void;
 }
 
 /**
@@ -127,76 +138,71 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
       onSubmit,
       results = [],
       loading = false,
-      showResults = false,
+      isOpen = false,
+      selectedIndex = -1,
       onFocus,
       onBlur,
       leftIcon,
       rightAction,
+      onResultClick,
+      onSelectedIndexChange,
+      onOpenChange,
       className,
       ...props
     },
     ref
   ): React.ReactElement => {
-    // State management
-    const [inputValue, setInputValue] = React.useState(value);
-    const [isOpen, setIsOpen] = React.useState(false);
-    const [selectedIndex, setSelectedIndex] = React.useState(-1);
-
-    // Refs
-    const inputRef = React.useRef<HTMLInputElement>(null);
-    const resultsRef = React.useRef<HTMLDivElement>(null);
-
     // Handlers
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
       const newValue = e.target.value;
-      setInputValue(newValue);
       onChange?.(newValue);
-      setIsOpen(true);
-      setSelectedIndex(-1);
+      onOpenChange?.(true);
+      onSelectedIndexChange?.(-1);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+        onSelectedIndexChange?.(Math.min(selectedIndex + 1, results.length - 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => Math.max(prev - 1, -1));
+        onSelectedIndexChange?.(Math.max(selectedIndex - 1, -1));
       } else if (e.key === 'Enter') {
         e.preventDefault();
         if (selectedIndex >= 0 && results[selectedIndex]) {
           handleResultClick(results[selectedIndex]);
         } else {
-          onSubmit?.(inputValue);
+          onSubmit?.(value);
         }
       } else if (e.key === 'Escape') {
-        setIsOpen(false);
-        setSelectedIndex(-1);
+        onOpenChange?.(false);
+        onSelectedIndexChange?.(-1);
       }
     };
 
     const handleFocus = (): void => {
-      setIsOpen(true);
+      onOpenChange?.(true);
       onFocus?.();
     };
 
     const handleBlur = (): void => {
       // Delay closing to allow for result clicks
       setTimeout(() => {
-        setIsOpen(false);
-        setSelectedIndex(-1);
+        onOpenChange?.(false);
+        onSelectedIndexChange?.(-1);
       }, 200);
       onBlur?.();
     };
 
     const handleResultClick = (result: SearchResultItem): void => {
-      setInputValue(result.title);
-      setIsOpen(false);
-      setSelectedIndex(-1);
-      if (result.onClick) {
-        result.onClick();
-      } else if (result.url) {
-        window.location.href = result.url;
+      onResultClick?.(result);
+      if (!onResultClick) {
+        // Default behavior if no handler provided
+        if (result.onClick) {
+          result.onClick();
+        } else if (result.url) {
+          window.location.href = result.url;
+        }
       }
     };
 
@@ -214,9 +220,8 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
           {leftIcon && <div className="flex-shrink-0 ml-3">{leftIcon}</div>}
 
           <input
-            ref={inputRef}
             type="text"
-            value={inputValue}
+            value={value}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             onFocus={handleFocus}
@@ -233,9 +238,8 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
         </div>
 
         {/* Search Results */}
-        {isOpen && (showResults || results.length > 0) && (
+        {isOpen && results.length > 0 && (
           <div
-            ref={resultsRef}
             className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-border bg-popover shadow-lg"
             role="listbox"
           >
@@ -260,7 +264,7 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
                     selectedIndex === index && 'bg-accent text-accent-foreground'
                   )}
                   onClick={() => handleResultClick(result)}
-                  onMouseEnter={() => setSelectedIndex(index)}
+                  onMouseEnter={() => onSelectedIndexChange?.(index)}
                   role="option"
                   aria-selected={selectedIndex === index}
                 >

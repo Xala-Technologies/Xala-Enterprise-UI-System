@@ -3,11 +3,9 @@
  * Uses design tokens and CSS variables for theming
  */
 
-import React from 'react';
-
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type InputHTMLAttributes } from 'react';
+import React, { forwardRef, type InputHTMLAttributes } from 'react';
 
 /**
  * Check icon component
@@ -273,19 +271,12 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
     },
     ref
   ): React.ReactElement => {
-    const [selectedValues, setSelectedValues] = React.useState<string[]>(
-      value || defaultValue || []
-    );
+    // Use value prop or defaultValue as controlled/uncontrolled values
+    const selectedValues = value || defaultValue || [];
 
     // Generate ID if not provided and label exists
     const groupId =
       id || (label ? `checkbox-group-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
-
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setSelectedValues(value);
-      }
-    }, [value]);
 
     const handleChange = (optionValue: string, checked: boolean): void => {
       let newValues: string[];
@@ -312,7 +303,6 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
         }
       }
 
-      setSelectedValues(newValues);
       onValueChange?.(newValues);
     };
 

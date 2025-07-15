@@ -6,7 +6,6 @@
 
 import React from 'react';
 
-import { useLocalization } from '../../localization/hooks/useLocalization';
 import type { CardProps } from '../../types/layout.types';
 
 // Helper function
@@ -88,7 +87,6 @@ export function Card({
   testId,
   ...props
 }: CardProps): React.ReactElement {
-  // const { t } = useLocalization();
 
   // Build CSS classes using design tokens
   const cardClasses = getCardClasses(
@@ -127,21 +125,20 @@ export function Card({
 const MetadataSection: React.FC<{ metadata?: CardProps['metadata'] }> = ({
   metadata,
 }): React.ReactElement | null => {
-  const { t } = useLocalization();
   if (!metadata) return null;
 
   return (
     <div className="card__metadata">
       {metadata.lastUpdated && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">{t('card.lastUpdated')}:</span>
+          <span className="card__metadata-label">Last Updated:</span>
           <span className="card__metadata-value">{metadata.lastUpdated}</span>
         </div>
       )}
 
       {metadata.municipality && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">{t('card.municipality')}:</span>
+          <span className="card__metadata-label">Municipality:</span>
           <span className="card__metadata-value">{metadata.municipality}</span>
         </div>
       )}
@@ -150,14 +147,14 @@ const MetadataSection: React.FC<{ metadata?: CardProps['metadata'] }> = ({
         <div className="card__metadata-item card__metadata-item--classification">
           <ClassificationIndicator level={metadata.classification} />
           <span className="card__metadata-value">
-            {t(`classification.${metadata.classification}`)}
+            {metadata.classification}
           </span>
         </div>
       )}
 
       {metadata.compliance && metadata.compliance.length > 0 && (
         <div className="card__metadata-item">
-          <span className="card__metadata-label">{t('card.compliance')}:</span>
+          <span className="card__metadata-label">Compliance:</span>
           <span className="card__metadata-value">{metadata.compliance.join(', ')}</span>
         </div>
       )}
