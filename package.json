@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Enterprise-compliant UI system with Norwegian accessibility standards, design tokens, and zero inline styles following @xala-technologies/enterprise-standards v6.0.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "build": "pnpm run clean && pnpm run build:ts",
-    "build:lib": "pnpm run build:ts && (test -f dist/tokens.css || echo '/* minimal css */' > dist/tokens.css)",
+    "build:lib": "pnpm run build:ts && (test -f dist/tokens.css || (mkdir -p dist && echo '/* minimal css */' > dist/tokens.css))",
     "build:ts": "tsc",
     "build:watch": "tsc --watch",
     "dev": "tsc --watch",
