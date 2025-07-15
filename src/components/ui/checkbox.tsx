@@ -230,7 +230,7 @@ export interface CheckboxGroupProps {
   readonly options: CheckboxOption[];
   readonly value?: string[];
   readonly defaultValue?: string[];
-  readonly onValueChange?: (newValues: string[]) => void;
+  readonly onValueChange?: (_newValues: string[]) => void;
   readonly variant?: CheckboxProps['variant'];
   readonly size?: CheckboxProps['size'];
   readonly orientation?: 'horizontal' | 'vertical';

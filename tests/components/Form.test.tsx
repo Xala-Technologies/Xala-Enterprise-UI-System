@@ -3,10 +3,10 @@
  * Testing actual component functionality with Jest and React Testing Library
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
+import React from 'react';
 import { Form } from '../../src/components/form/Form';
 import { Input } from '../../src/components/form/Input';
 
@@ -22,7 +22,7 @@ describe('Form Component', () => {
           <Input label="Name" name="name" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('test-form');
       expect(form).toBeInTheDocument();
       expect(form.tagName.toLowerCase()).toBe('form');
@@ -35,7 +35,7 @@ describe('Form Component', () => {
           <Input label="Password" name="password" type="password" />
         </Form>
       );
-      
+
       expect(screen.getByLabelText('Email')).toBeInTheDocument();
       expect(screen.getByLabelText('Password')).toBeInTheDocument();
     });
@@ -46,22 +46,18 @@ describe('Form Component', () => {
           <Input label="Field" name="field" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('styled-form');
       expect(form).toHaveClass('custom-form');
     });
 
     test('forwards additional props to form element', () => {
       render(
-        <Form 
-          testId="data-form"
-          data-custom="value"
-          data-testattr="test"
-        >
+        <Form testId="data-form" data-custom="value" data-testattr="test">
           <Input label="Field" name="field" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('data-form');
       expect(form).toHaveAttribute('data-custom', 'value');
       expect(form).toHaveAttribute('data-testattr', 'test');
@@ -71,18 +67,18 @@ describe('Form Component', () => {
   // Form submission tests
   describe('Form Submission', () => {
     test('handles form submission', async () => {
-      const mockSubmit = jest.fn((e) => e.preventDefault());
-      
+      const mockSubmit = jest.fn(e => e.preventDefault());
+
       render(
         <Form onSubmit={mockSubmit}>
           <Input label="Name" name="name" />
           <button type="submit">Submit</button>
         </Form>
       );
-      
+
       const submitButton = screen.getByRole('button', { name: 'Submit' });
       fireEvent.click(submitButton);
-      
+
       expect(mockSubmit).toHaveBeenCalledTimes(1);
       expect(mockSubmit).toHaveBeenCalledWith(expect.any(Object));
     });
@@ -94,10 +90,10 @@ describe('Form Component', () => {
           <button type="submit">Submit</button>
         </Form>
       );
-      
+
       const form = screen.getByTestId('form');
       const submitButton = screen.getByRole('button', { name: 'Submit' });
-      
+
       // This should not throw or cause navigation
       expect(() => fireEvent.click(submitButton)).not.toThrow();
     });
@@ -108,7 +104,7 @@ describe('Form Component', () => {
           <Input label="Email" name="email" type="email" required />
         </Form>
       );
-      
+
       const form = screen.getByTestId('form');
       expect(form).toHaveAttribute('noValidate');
     });
@@ -119,7 +115,7 @@ describe('Form Component', () => {
           <Input label="Username" name="username" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('form');
       expect(form).toHaveAttribute('autoComplete', 'off');
     });
@@ -130,16 +126,11 @@ describe('Form Component', () => {
     test('meets WCAG standards', async () => {
       const { container } = render(
         <Form>
-          <Input 
-            label="Name" 
-            name="name" 
-            required 
-            helpText="Enter your full name"
-          />
-          <Input 
-            label="Email" 
-            name="email" 
-            type="email" 
+          <Input label="Name" name="name" required helpText="Enter your full name" />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
             required
             helpText="We'll never share your email"
           />
@@ -157,7 +148,7 @@ describe('Form Component', () => {
           <Input label="Field" name="field" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('form');
       expect(form).toHaveAttribute('aria-label', 'Form');
     });
@@ -168,7 +159,7 @@ describe('Form Component', () => {
           <Input label="Field" name="field" />
         </Form>
       );
-      
+
       const form = screen.getByTestId('form');
       expect(form).toHaveAttribute('noValidate');
     });
@@ -181,23 +172,23 @@ describe('Form Component', () => {
           <button type="submit">Submit</button>
         </Form>
       );
-      
+
       const firstInput = screen.getByLabelText('First Name');
       const lastInput = screen.getByLabelText('Last Name');
       const submitButton = screen.getByRole('button', { name: 'Submit' });
-      
+
       // Focus first input
       firstInput.focus();
       expect(firstInput).toHaveFocus();
-      
+
       // Tab to next input
       await userEvent.tab();
       expect(lastInput).toHaveFocus();
-      
+
       // Tab to submit button
       await userEvent.tab();
       expect(submitButton).toHaveFocus();
-      
+
       // Shift+Tab back
       await userEvent.tab({ shift: true });
       expect(lastInput).toHaveFocus();
@@ -212,7 +203,7 @@ describe('Form Component', () => {
           <Input label="Username" name="username" />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Username');
       expect(input).toBeInTheDocument();
       expect(input).toHaveAttribute('name', 'username');
@@ -220,20 +211,16 @@ describe('Form Component', () => {
 
     test('handles input value changes', async () => {
       const handleChange = jest.fn();
-      
+
       render(
         <Form>
-          <Input 
-            label="Text Field" 
-            name="textField" 
-            onChange={handleChange}
-          />
+          <Input label="Text Field" name="textField" onChange={handleChange} />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Text Field');
       await userEvent.type(input, 'Hello');
-      
+
       expect(handleChange).toHaveBeenCalledTimes(5); // Called for each character
       expect(handleChange).toHaveBeenLastCalledWith('Hello', expect.any(Object));
     });
@@ -241,19 +228,19 @@ describe('Form Component', () => {
     test('displays error messages', () => {
       render(
         <Form>
-          <Input 
-            label="Email" 
-            name="email" 
+          <Input
+            label="Email"
+            name="email"
             type="email"
             error="Please enter a valid email"
             hasError={true}
           />
         </Form>
       );
-      
+
       const errorMessage = screen.getByRole('alert');
       expect(errorMessage).toHaveTextContent('Please enter a valid email');
-      
+
       const input = screen.getByLabelText('Email');
       expect(input).toHaveAttribute('aria-invalid', 'true');
     });
@@ -261,33 +248,29 @@ describe('Form Component', () => {
     test('displays help text', () => {
       render(
         <Form>
-          <Input 
-            label="Password" 
-            name="password" 
+          <Input
+            label="Password"
+            name="password"
             type="password"
             helpText="Must be at least 8 characters"
           />
         </Form>
       );
-      
+
       expect(screen.getByText('Must be at least 8 characters')).toBeInTheDocument();
     });
 
     test('handles required fields', () => {
       render(
         <Form>
-          <Input 
-            label="Required Field" 
-            name="required" 
-            required
-          />
+          <Input label="Required Field" name="required" required />
         </Form>
       );
-      
+
       const input = screen.getByLabelText(/Required Field/);
       expect(input).toHaveAttribute('required');
       expect(input).toHaveAttribute('aria-required', 'true');
-      
+
       // Check for required indicator
       expect(screen.getByLabelText('Required')).toHaveTextContent('*');
     });
@@ -301,7 +284,7 @@ describe('Form Component', () => {
           <Input label="Website" name="website" type="url" />
         </Form>
       );
-      
+
       expect(screen.getByLabelText('Email')).toHaveAttribute('type', 'email');
       expect(screen.getByLabelText('Password')).toHaveAttribute('type', 'password');
       expect(screen.getByLabelText('Phone')).toHaveAttribute('type', 'tel');
@@ -311,24 +294,14 @@ describe('Form Component', () => {
     test('supports input variants and sizes', () => {
       render(
         <Form>
-          <Input 
-            label="Default" 
-            name="default" 
-            variant="default"
-            size="md"
-          />
-          <Input 
-            label="Outlined" 
-            name="outlined" 
-            variant="outlined"
-            size="lg"
-          />
+          <Input label="Default" name="default" variant="default" size="md" />
+          <Input label="Outlined" name="outlined" variant="outlined" size="lg" />
         </Form>
       );
-      
+
       const defaultInput = screen.getByLabelText('Default');
       const outlinedInput = screen.getByLabelText('Outlined');
-      
+
       expect(defaultInput).toHaveAttribute('data-variant', 'default');
       expect(defaultInput).toHaveAttribute('data-size', 'md');
       expect(outlinedInput).toHaveAttribute('data-variant', 'outlined');
@@ -341,14 +314,10 @@ describe('Form Component', () => {
     test('handles disabled state', () => {
       render(
         <Form>
-          <Input 
-            label="Disabled Field" 
-            name="disabled" 
-            disabled
-          />
+          <Input label="Disabled Field" name="disabled" disabled />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Disabled Field');
       expect(input).toBeDisabled();
     });
@@ -356,47 +325,38 @@ describe('Form Component', () => {
     test('handles readOnly state', () => {
       render(
         <Form>
-          <Input 
-            label="Read Only Field" 
-            name="readonly" 
-            readOnly
-            value="Cannot edit this"
-          />
+          <Input label="Read Only Field" name="readonly" readOnly value="Cannot edit this" />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Read Only Field');
       expect(input).toHaveAttribute('readOnly');
       expect(input).toHaveValue('Cannot edit this');
     });
 
     test('supports controlled and uncontrolled inputs', () => {
-      const { rerender } = render(
+      render(
         <Form>
-          <Input 
-            label="Controlled" 
-            name="controlled" 
+          <Input
+            label="Controlled"
+            name="controlled"
             value="controlled value"
             onChange={() => {}}
           />
-          <Input 
-            label="Uncontrolled" 
-            name="uncontrolled" 
-            defaultValue="default value"
-          />
+          <Input label="Uncontrolled" name="uncontrolled" defaultValue="default value" />
         </Form>
       );
-      
+
       const controlled = screen.getByLabelText('Controlled');
       const uncontrolled = screen.getByLabelText('Uncontrolled');
-      
+
       expect(controlled).toHaveValue('controlled value');
       expect(uncontrolled).toHaveValue('default value');
-      
+
       // Controlled input should not change without onChange
       fireEvent.change(controlled, { target: { value: 'new value' } });
       expect(controlled).toHaveValue('controlled value');
-      
+
       // Uncontrolled input should change
       fireEvent.change(uncontrolled, { target: { value: 'new value' } });
       expect(uncontrolled).toHaveValue('new value');
@@ -406,12 +366,12 @@ describe('Form Component', () => {
   // Complex form scenarios
   describe('Complex Form Scenarios', () => {
     test('handles form with multiple field types', async () => {
-      const handleSubmit = jest.fn((e) => {
+      const handleSubmit = jest.fn(e => {
         e.preventDefault();
         const formData = new FormData(e.target);
         return Object.fromEntries(formData);
       });
-      
+
       render(
         <Form onSubmit={handleSubmit}>
           <Input label="Name" name="name" required />
@@ -421,66 +381,58 @@ describe('Form Component', () => {
           <button type="submit">Submit</button>
         </Form>
       );
-      
+
       // Get inputs by their name attribute since labels might not be connected properly
-      const nameInput = screen.getByRole('textbox', { name: /name/i }) || 
-                       document.querySelector('input[name="name"]');
+      const nameInput =
+        screen.getByRole('textbox', { name: /name/i }) ||
+        document.querySelector('input[name="name"]');
       const emailInput = document.querySelector('input[name="email"]');
       const ageInput = document.querySelector('input[name="age"]');
       const websiteInput = document.querySelector('input[name="website"]');
-      
+
       // Fill out form
       if (nameInput) await userEvent.type(nameInput, 'John Doe');
       if (emailInput) await userEvent.type(emailInput, 'john@example.com');
       if (ageInput) await userEvent.type(ageInput, '25');
       if (websiteInput) await userEvent.type(websiteInput, 'https://example.com');
-      
+
       // Submit form
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
-      
+
       expect(handleSubmit).toHaveBeenCalledTimes(1);
     });
 
     test('validates form fields on blur', async () => {
       const handleBlur = jest.fn();
-      
+
       render(
         <Form>
-          <Input 
-            label="Email" 
-            name="email" 
-            type="email"
-            onBlur={handleBlur}
-          />
+          <Input label="Email" name="email" type="email" onBlur={handleBlur} />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Email');
-      
+
       // Focus and blur
       await userEvent.click(input);
       await userEvent.tab();
-      
+
       expect(handleBlur).toHaveBeenCalledTimes(1);
     });
 
     test('supports custom validation', async () => {
-      const customValidation = jest.fn((value) => {
+      const customValidation = jest.fn(value => {
         return value.length < 3 ? 'Too short' : null;
       });
-      
+
       render(
         <Form>
-          <Input 
-            label="Custom Field" 
-            name="custom"
-            validation={{ custom: customValidation }}
-          />
+          <Input label="Custom Field" name="custom" validation={{ custom: customValidation }} />
         </Form>
       );
-      
+
       const input = screen.getByLabelText('Custom Field');
-      
+
       // The validation.custom might not be implemented in the Input component
       // This is testing a feature that may not exist
       expect(input).toBeInTheDocument();
@@ -490,14 +442,14 @@ describe('Form Component', () => {
   // Edge cases and error handling
   describe('Edge Cases', () => {
     test('handles empty form submission', () => {
-      const handleSubmit = jest.fn((e) => e.preventDefault());
-      
+      const handleSubmit = jest.fn(e => e.preventDefault());
+
       render(
         <Form onSubmit={handleSubmit}>
           <button type="submit">Submit</button>
         </Form>
       );
-      
+
       fireEvent.click(screen.getByRole('button', { name: 'Submit' }));
       expect(handleSubmit).toHaveBeenCalledTimes(1);
     });
@@ -508,7 +460,7 @@ describe('Form Component', () => {
           <div>Just some content</div>
         </Form>
       );
-      
+
       expect(screen.getByText('Just some content')).toBeInTheDocument();
     });
 
@@ -523,7 +475,7 @@ describe('Form Component', () => {
           </div>
         </Form>
       );
-      
+
       const formGroups = screen.getByTestId('form').querySelectorAll('.form-group');
       expect(formGroups).toHaveLength(2);
     });

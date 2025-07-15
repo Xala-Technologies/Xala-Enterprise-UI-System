@@ -82,8 +82,8 @@ const defaultConfig: UISystemConfig = {
   accessibility: 'basic',
   theme: {
     mode: 'light',
-    primary: '#1976d2',
-    secondary: '#dc004e',
+    primary: 'hsl(var(--primary))',
+    secondary: 'hsl(var(--secondary))',
   },
   performance: {
     enableVirtualization: true,
@@ -118,9 +118,9 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   const cssVariables = useMemo(() => {
     const tokens = generateAccessibilityTokens(accessibilityConfig);
     const variables: string[] = [];
-    
+
     // Flatten nested object to CSS variables
-    const flattenTokens = (obj: any, prefix = ''): void => {
+    const flattenTokens = (obj: Record<string, unknown> | object, prefix = ''): void => {
       Object.entries(obj).forEach(([key, value]) => {
         const varName = prefix ? `${prefix}-${key}` : key;
         if (typeof value === 'object' && value !== null) {
@@ -130,7 +130,7 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
         }
       });
     };
-    
+
     flattenTokens(tokens);
     return variables.join('; ');
   }, [accessibilityConfig]);

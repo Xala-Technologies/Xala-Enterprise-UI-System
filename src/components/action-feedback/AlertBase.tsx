@@ -41,13 +41,11 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertPropsWithNorwegian>((
     ariaLabel,
     testId = 'alert',
     onClose,
+    isVisible = true,
     ...divProps
   } = props;
 
-  const [isVisible, setIsVisible] = React.useState(true);
-
   const handleClose = (): void => {
-    setIsVisible(false);
     onClose?.();
   };
 

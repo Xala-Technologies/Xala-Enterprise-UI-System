@@ -5,7 +5,7 @@
  */
 
 import * as React from 'react';
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { cn } from '../../lib/utils/cn';
 
 // =============================================================================
@@ -26,6 +26,12 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   endIcon?: ReactNode;
   unit?: string;
   showPasswordToggle?: boolean;
+  /** Password visibility state for password inputs */
+  isPasswordVisible?: boolean;
+  /** Callback when password visibility changes */
+  onPasswordVisibilityChange?: (_visible: boolean) => void;
+  /** Unique ID for the input (if not provided, auto-generated) */
+  inputId?: string;
   containerClassName?: string;
   labelClassName?: string;
   helperTextClassName?: string;
@@ -192,28 +198,27 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       endIcon,
       unit,
       showPasswordToggle = false,
+      isPasswordVisible = false,
+      onPasswordVisibilityChange,
+      inputId,
       containerClassName,
       labelClassName,
       helperTextClassName,
       className,
       maxLength,
-      value,
+      value = '',
       onChange,
       disabled,
       ...props
     },
     ref
   ): React.ReactElement => {
-    // State management
-    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-    const [currentValue, setCurrentValue] = useState(value || '');
-
-    // Generate unique IDs
-    const inputId = useMemo(() => `input-${Math.random().toString(36).substr(2, 9)}`, []);
-    const helperTextId = useMemo(() => `helper-${inputId}`, [inputId]);
-    const errorId = useMemo(() => `error-${inputId}`, [inputId]);
-    const successId = useMemo(() => `success-${inputId}`, [inputId]);
-    const warningId = useMemo(() => `warning-${inputId}`, [inputId]);
+    // Generate unique IDs deterministically
+    const baseId = inputId || `input-${Math.random().toString(36).substr(2, 9)}`;
+    const helperTextId = `helper-${baseId}`;
+    const errorId = `error-${baseId}`;
+    const successId = `success-${baseId}`;
+    const warningId = `warning-${baseId}`;
 
     // Determine input type
     const inputType = type === 'password' && isPasswordVisible ? 'text' : type;
@@ -221,18 +226,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     // Determine variant based on state
     const computedVariant = error ? 'error' : success ? 'success' : warning ? 'warning' : variant;
 
-    // Handle change events
-    const handleChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        setCurrentValue(newValue);
-        onChange?.(e);
-      },
-      [onChange]
-    );
-
-    // Character count logic
-    const charCount = String(currentValue).length;
+    // Character count logic (pure calculation based on props)
+    const charCount = String(value).length;
     const isOverLimit = maxLength ? charCount > maxLength : false;
 
     // Accessibility attributes
@@ -246,7 +241,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {/* Label */}
         {label && (
           <InputLabel
-            htmlFor={inputId}
+            htmlFor={baseId}
             required={required}
             optional={optional}
             className={labelClassName}
@@ -267,10 +262,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {/* Input */}
           <input
             ref={ref}
-            id={inputId}
+            id={baseId}
             type={inputType}
-            value={currentValue}
-            onChange={handleChange}
+            value={value}
+            onChange={onChange}
             disabled={disabled}
             maxLength={maxLength}
             className={cn(
@@ -292,7 +287,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {type === 'password' && showPasswordToggle && (
                 <PasswordToggle
                   isVisible={isPasswordVisible}
-                  onToggle={() => setIsPasswordVisible(!isPasswordVisible)}
+                  onToggle={() => onPasswordVisibilityChange?.(!isPasswordVisible)}
                 />
               )}
             </div>

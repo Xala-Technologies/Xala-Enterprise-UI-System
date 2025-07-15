@@ -174,7 +174,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
       variant = 'default',
       showLine = true,
       itemSize = 'md',
-      norwegian,
+      norwegian: _norwegian,
       className,
       ...props
     },

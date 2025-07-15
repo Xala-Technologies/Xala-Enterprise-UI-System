@@ -14,6 +14,8 @@ export interface AlertPropsWithNorwegian extends AlertProps {
   icon?: React.ReactNode;
   ariaLabel?: string;
   testId?: string;
+  /** Controls whether the alert is visible (for pure component state management) */
+  isVisible?: boolean;
   norwegian?: NorwegianCompliance & {
     municipality?: string;
     category?: string;

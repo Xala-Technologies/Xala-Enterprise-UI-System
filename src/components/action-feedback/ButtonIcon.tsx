@@ -22,7 +22,8 @@ export interface LoadingSpinnerProps {
  * @returns Loading spinner element
  */
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ size, className, style }) => {
-  const spinnerSize = size === 'sm' ? '12px' : size === 'lg' ? '20px' : '16px';
+  const spinnerSize =
+    size === 'sm' ? 'var(--size-3)' : size === 'lg' ? 'var(--size-5)' : 'var(--size-4)';
 
   const spinnerStyle: React.CSSProperties = {
     width: spinnerSize,

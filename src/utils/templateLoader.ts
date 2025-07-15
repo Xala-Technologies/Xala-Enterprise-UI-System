@@ -178,7 +178,7 @@ export class TemplateLoader {
    * Load template from dynamic imports (SSR-safe)
    */
   private async loadTemplateFromImports(templateId: string): Promise<ThemeTemplate> {
-    const templateMap: Record<string, () => Promise<any>> = {
+    const templateMap: Record<string, () => Promise<unknown>> = {
       'base-light': () => import('../tokens/themes/definitions/base-light.json'),
       'base-dark': () => import('../tokens/themes/definitions/base-dark.json'),
       'drammen-light': () => import('../tokens/themes/definitions/drammen-light.json'),
@@ -206,7 +206,7 @@ export class TemplateLoader {
       throw new Error(`Template ${templateId} not found in imports`);
     }
 
-    const module = await loader();
+    const module = await loader() as { default: ThemeTemplate };
     return module.default || module;
   }
 

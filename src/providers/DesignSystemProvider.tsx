@@ -5,7 +5,7 @@
  * @compliance SSR-Safe, Production-ready, Framework-agnostic
  */
 
-'use client'; // ✅ Only the provider is client-side
+// ✅ Pure provider - no client-side directives needed
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Logger } from '../lib/utils/multiplatform-logger';
@@ -30,9 +30,9 @@ interface DesignSystemContextValue {
   isLoading: boolean;
 
   // Simple _theme management
-  setTemplate: (_templateId: string) => Promise<void>;
+  setTemplate: (templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
-  setDarkMode: (_isDark: boolean) => void;
+  setDarkMode: (isDark: boolean) => void;
 
   // Template utilities
   getAvailableTemplates: () => Promise<string[]>;
@@ -160,9 +160,9 @@ export function DesignSystemProvider({
       try {
         // Type-safe access to template properties
         const template = currentTemplate as ThemeTemplate;
-        const colors = template.colors as Record<string, any>;
+        const colors = template.colors as Record<string, unknown>;
         const spacing = template.spacing as Record<string, string>;
-        const typography = template.typography as Record<string, any>;
+        const typography = template.typography as Record<string, unknown>;
         const borderRadius = template.borderRadius as Record<string, string>;
 
         // Apply color tokens
@@ -271,7 +271,7 @@ export const useTheme = (): {
   _theme: ThemeTemplate | null;
   mode: 'LIGHT' | 'DARK';
   isLoading: boolean;
-  setTemplate: (_templateId: string) => Promise<void>;
+  setTemplate: (templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
 } => {
   const { currentTemplate, isDarkMode, isLoading, setTemplate, toggleDarkMode } = useDesignSystem();
@@ -292,7 +292,7 @@ export const useTemplates = (): {
   availableTemplates: () => Promise<string[]>;
   currentTemplateId: string;
   reloadTemplate: () => Promise<void>;
-  setTemplate: (_templateId: string) => Promise<void>;
+  setTemplate: (templateId: string) => Promise<void>;
 } => {
   const { _templateId, getAvailableTemplates, reloadTemplate, setTemplate } = useDesignSystem();
 

@@ -37,13 +37,9 @@ export const Card: React.FC<CardProps> = ({
     lg: (getToken('borderRadius.lg') as string) || '0.5rem',
   };
   const elevation = {
-    sm: (getToken('elevation.sm') as string) || '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    md:
-      (getToken('elevation.md') as string) ||
-      '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    lg:
-      (getToken('elevation.lg') as string) ||
-      '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+    sm: (getToken('elevation.sm') as string) || 'var(--shadow-sm)',
+    md: (getToken('elevation.md') as string) || 'var(--shadow)',
+    lg: (getToken('elevation.lg') as string) || 'var(--shadow-lg)',
   };
 
   // ✅ All styling comes from JSON templates (no hard-coded values)

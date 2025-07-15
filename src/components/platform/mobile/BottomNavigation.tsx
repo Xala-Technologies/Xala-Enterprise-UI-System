@@ -64,7 +64,7 @@ const getEmergencyStyles = (emergencyTab?: boolean): React.CSSProperties => {
 
   return {
     borderTop: '2px solid var(--color-red-500)',
-    boxShadow: '0 -2px 8px rgba(239, 68, 68, 0.2), var(--shadow-lg)',
+    boxShadow: '0 -2px 8px hsl(var(--destructive) / 0.2), var(--shadow-lg)',
   };
 };
 

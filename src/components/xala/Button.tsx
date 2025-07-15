@@ -54,12 +54,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         fontSize: String(tokens[`fontSize-${size}`] || getToken('fontSize.sm') || '0.875rem'),
         borderRadius: String(tokens.borderRadius || getToken('borderRadius.md') || '0.375rem'),
         backgroundColor: String(
-          tokens[`bg-${variant}`] || getToken('colors.primary.500') || '#3b82f6'
+          tokens[`bg-${variant}`] || getToken('colors.primary.500') || 'hsl(var(--primary))'
         ),
-        color: String(tokens[`text-${variant}`] || getToken('colors.white') || '#ffffff'),
+        color: String(
+          tokens[`text-${variant}`] || getToken('colors.white') || 'hsl(var(--primary-foreground))'
+        ),
         border:
           variant === 'outline'
-            ? `1px solid ${String(getToken('colors.border') || '#e5e7eb')}`
+            ? `1px solid ${String(getToken('colors.border') || 'hsl(var(--border))')}`
             : 'none',
         cursor: loading || disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.6 : 1,

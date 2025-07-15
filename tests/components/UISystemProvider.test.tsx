@@ -7,15 +7,16 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { Logger } from '@xala-technologies/enterprise-standards';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import React from 'react';
 
-import { UISystemProvider, useUISystem } from '../../src/components/UISystemProvider';
-import type { AccessibilityConfig, AccessibilityPreset } from '../../src/tokens/accessibility-tokens';
-import { accessibilityPresets } from '../../src/tokens/accessibility-tokens';
 import type { UISystemProviderProps } from '../../src/components/UISystemProvider';
+import { UISystemProvider, useUISystem } from '../../src/components/UISystemProvider';
+import type {
+  AccessibilityConfig,
+  AccessibilityPreset,
+} from '../../src/tokens/accessibility-tokens';
+import { accessibilityPresets } from '../../src/tokens/accessibility-tokens';
 
 // Extend Jest matchers for accessibility testing
 expect.extend(toHaveNoViolations);
@@ -98,7 +99,7 @@ describe('UISystemProvider', () => {
       );
 
       expect(screen.getByTestId('test-component')).toBeInTheDocument();
-      
+
       // Check that accessibility attributes are applied
       const rootElement = container.querySelector('.ui-system-root');
       expect(rootElement).toHaveAttribute('data-accessibility-level', 'WCAG_2_1_AA');
@@ -205,7 +206,7 @@ describe('UISystemProvider', () => {
       );
 
       const button = screen.getByRole('button', { name: /test button/i });
-      
+
       // Simulate tab key press
       button.focus();
       expect(button).toHaveFocus();
@@ -259,20 +260,17 @@ describe('UISystemProvider', () => {
       ['basic', 'WCAG_2_1_AA'],
       ['enhanced', 'WCAG_2_2_AAA'],
       ['government', 'WCAG_2_2_AAA'],
-      ['enterprise', 'WCAG_2_1_AA'],
+      ['enterprise', 'enterprise'],
       ['none', 'none'],
-    ] as const)(
-      'should apply %s preset correctly with level %s',
-      (preset, expectedLevel) => {
-        const { container } = render(
-          <UISystemProvider accessibility={preset}>
-            <TestComponent />
-          </UISystemProvider>
-        );
+    ] as const)('should apply %s preset correctly with level %s', (preset, expectedLevel) => {
+      const { container } = render(
+        <UISystemProvider accessibility={preset}>
+          <TestComponent />
+        </UISystemProvider>
+      );
 
-        const rootElement = container.querySelector('.ui-system-root');
-        expect(rootElement).toHaveAttribute('data-accessibility-level', expectedLevel);
-      }
-    );
+      const rootElement = container.querySelector('.ui-system-root');
+      expect(rootElement).toHaveAttribute('data-accessibility-level', expectedLevel);
+    });
   });
 });

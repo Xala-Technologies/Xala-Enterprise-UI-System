@@ -95,17 +95,17 @@ export type {
 // =============================================================================
 // Desktop platform exports (lazy-loaded)
 export const Desktop = {
-  get Sidebar() { 
+  get Sidebar(): Promise<unknown> { 
     return import('./components/platform/desktop/DesktopSidebar').then(m => m.DesktopSidebar);
   }
 };
 
 // Mobile platform exports (lazy-loaded)
 export const Mobile = {
-  get Header() { 
+  get Header(): Promise<unknown> { 
     return import('./components/platform/mobile/MobileHeader').then(m => m.MobileHeader);
   },
-  get BottomNavigation() { 
+  get BottomNavigation(): Promise<unknown> { 
     return import('./components/platform/mobile/BottomNavigation').then(m => m.BottomNavigation);
   }
 };
@@ -122,13 +122,13 @@ export type {
 // =============================================================================
 // Load only when needed for bundle optimization
 export const Advanced = {
-  get GlobalSearch() {
+  get GlobalSearch(): Promise<unknown> {
     return import('./components/global-search/GlobalSearch').then(m => m.GlobalSearch);
   },
-  get FilterBar() {
+  get FilterBar(): Promise<unknown> {
     return import('./components/filter-bar/FilterBar').then(m => m.FilterBar);
   },
-  get NavigationComponents() {
+  get NavigationComponents(): Promise<unknown> {
     return import('./components/navigation/NavigationComponents');
   }
 };

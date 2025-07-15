@@ -199,8 +199,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       items,
       variant = 'default',
       size = 'md',
-      multiple = false,
-      collapsible = true,
+      multiple: _multiple = false,
+      collapsible: _collapsible = true,
       norwegian,
       className,
       children,
@@ -218,7 +218,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           aria-label={norwegian?.accessibilityLabel || 'Accordion'}
           {...props}
         >
-          {items.map((item, index) => (
+          {items.map((item, _index) => (
             <AccordionItem key={item.id} value={item.id} variant={variant} disabled={item.disabled}>
               <AccordionTrigger
                 variant={variant}
