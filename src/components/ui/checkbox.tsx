@@ -36,7 +36,7 @@ const IndeterminateIcon = ({ className }: { className?: string }): React.ReactEl
 );
 
 /**
- * Checkbox variants using class-variance-authority
+ * Checkbox variants using class-variance-authority with semantic design tokens
  */
 const checkboxVariants = cva(
   'peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
@@ -48,9 +48,9 @@ const checkboxVariants = cva(
         destructive:
           'border-destructive data-[state=checked]:bg-destructive data-[state=checked]:text-destructive-foreground data-[state=checked]:border-destructive',
         success:
-          'border-green-500 data-[state=checked]:bg-green-500 data-[state=checked]:text-white data-[state=checked]:border-green-500',
+          'border-success data-[state=checked]:bg-success data-[state=checked]:text-success-foreground data-[state=checked]:border-success',
         warning:
-          'border-yellow-500 data-[state=checked]:bg-yellow-500 data-[state=checked]:text-white data-[state=checked]:border-yellow-500',
+          'border-warning data-[state=checked]:bg-warning data-[state=checked]:text-warning-foreground data-[state=checked]:border-warning',
       },
       size: {
         sm: 'h-3 w-3',

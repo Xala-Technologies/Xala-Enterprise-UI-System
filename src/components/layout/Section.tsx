@@ -9,6 +9,44 @@ import * as React from 'react';
 import type { SectionProps } from '../../types/layout.types';
 
 /**
+ * Build CSS classes using design tokens - pure function
+ */
+const getSectionClasses = (
+  variant: string,
+  spacing: string,
+  background: string,
+  padding: string,
+  margin: string,
+  className: string
+): string => {
+  const classes = ['section'];
+
+  // Variant class
+  classes.push(`section--${variant}`);
+
+  // Spacing class
+  classes.push(`section--spacing-${spacing}`);
+
+  // Background class
+  classes.push(`section--bg-${background}`);
+
+  // Padding class
+  classes.push(`section--padding-${padding}`);
+
+  // Margin class
+  if (margin !== 'none') {
+    classes.push(`section--margin-${margin}`);
+  }
+
+  // Custom class
+  if (className) {
+    classes.push(className);
+  }
+
+  return classes.join(' ');
+};
+
+/**
  * Section component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
@@ -25,33 +63,14 @@ export function Section({
   ...props
 }: SectionProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const sectionClasses = React.useMemo((): string => {
-    const classes = ['section'];
-
-    // Variant class
-    classes.push(`section--${variant}`);
-
-    // Spacing class
-    classes.push(`section--spacing-${spacing}`);
-
-    // Background class
-    classes.push(`section--bg-${background}`);
-
-    // Padding class
-    classes.push(`section--padding-${padding}`);
-
-    // Margin class
-    if (margin !== 'none') {
-      classes.push(`section--margin-${margin}`);
-    }
-
-    // Custom class
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, spacing, background, padding, margin, className]);
+  const sectionClasses = getSectionClasses(
+    variant,
+    spacing,
+    background,
+    padding,
+    margin,
+    className
+  );
 
   const Component = as as React.ElementType; // Type assertion for polymorphic component
 

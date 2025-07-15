@@ -21,6 +21,93 @@ const getClassificationIcon = (level: string): string => {
 };
 
 /**
+ * Format count display - pure function
+ */
+const getDisplayCount = (
+  count: number | undefined,
+  maxCount: number,
+  showZero: boolean,
+  children: React.ReactNode
+): React.ReactNode => {
+  if (typeof count !== 'number') {
+    return children;
+  }
+  if (count === 0 && !showZero) {
+    return null;
+  }
+  return count > maxCount ? `${maxCount}+` : count.toString();
+};
+
+/**
+ * Build CSS classes using design tokens - pure function
+ */
+const getBadgeClasses = (
+  variant: string,
+  size: string,
+  shape: string,
+  position: string,
+  pulse: boolean,
+  dot: boolean,
+  classification: string | undefined,
+  priority: string | undefined,
+  className: string
+): string => {
+  const classes = ['badge'];
+
+  // Variant classes
+  classes.push(`badge--${variant}`);
+
+  // Size classes
+  classes.push(`badge--${size}`);
+
+  // Shape classes
+  classes.push(`badge--${shape}`);
+
+  // Position classes
+  if (position !== 'inline') {
+    classes.push('badge--positioned');
+    classes.push(`badge--${position}`);
+  }
+
+  // State classes
+  if (pulse) {
+    classes.push('badge--pulse');
+  }
+
+  if (dot) {
+    classes.push('badge--dot');
+  }
+
+  // Classification classes
+  if (classification) {
+    classes.push(`badge--classification-${classification}`);
+  }
+
+  // Priority classes
+  if (priority) {
+    classes.push(`badge--priority-${priority}`);
+  }
+
+  // Custom classes
+  if (className) {
+    classes.push(className);
+  }
+
+  return classes.join(' ');
+};
+
+/**
+ * Get accessibility props - pure function
+ */
+const getAccessibilityProps = (ariaLabel: string | undefined): Record<string, string> => {
+  const props: Record<string, string> = {};
+  if (ariaLabel) {
+    props['aria-label'] = ariaLabel;
+  }
+  return props;
+};
+
+/**
  * Badge component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
@@ -48,70 +135,23 @@ export function Badge({
   const { t: _t } = useLocalization();
 
   // Format count display
-  const displayCount = React.useMemo((): React.ReactNode => {
-    if (typeof count !== 'number') {
-      return children;
-    }
-    if (count === 0 && !showZero) {
-      return null;
-    }
-    return count > maxCount ? `${maxCount}+` : count.toString();
-  }, [count, maxCount, showZero, children]);
+  const displayCount = getDisplayCount(count, maxCount, showZero, children);
 
   // Build CSS classes using design tokens
-  const badgeClasses = React.useMemo((): string => {
-    const classes = ['badge'];
-
-    // Variant classes
-    classes.push(`badge--${variant}`);
-
-    // Size classes
-    classes.push(`badge--${size}`);
-
-    // Shape classes
-    classes.push(`badge--${shape}`);
-
-    // Position classes
-    if (position !== 'inline') {
-      classes.push('badge--positioned');
-      classes.push(`badge--${position}`);
-    }
-
-    // State classes
-    if (pulse) {
-      classes.push('badge--pulse');
-    }
-
-    if (dot) {
-      classes.push('badge--dot');
-    }
-
-    // Classification classes
-    if (classification) {
-      classes.push(`badge--classification-${classification}`);
-    }
-
-    // Priority classes
-    if (priority) {
-      classes.push(`badge--priority-${priority}`);
-    }
-
-    // Custom classes
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, size, shape, position, pulse, dot, classification, priority, className]);
+  const badgeClasses = getBadgeClasses(
+    variant,
+    size,
+    shape,
+    position,
+    pulse,
+    dot,
+    classification,
+    priority,
+    className
+  );
 
   // Accessibility props
-  const accessibilityProps = React.useMemo(() => {
-    const props: Record<string, string> = {};
-    if (ariaLabel) {
-      props['aria-label'] = ariaLabel;
-    }
-    return props;
-  }, [ariaLabel]);
+  const accessibilityProps = getAccessibilityProps(ariaLabel);
 
   if (displayCount === null) {
     return <></>;

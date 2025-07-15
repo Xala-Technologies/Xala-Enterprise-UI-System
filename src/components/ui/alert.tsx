@@ -8,7 +8,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
 
 /**
- * Alert variants using class-variance-authority
+ * Alert variants using class-variance-authority with semantic design tokens
  */
 const alertVariants = cva(
   'relative w-full rounded-lg border p-4 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground [&>svg~*]:pl-7',
@@ -18,10 +18,11 @@ const alertVariants = cva(
         default: 'bg-background text-foreground',
         destructive:
           'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
-        success: 'border-green-500/50 text-green-800 dark:border-green-500 [&>svg]:text-green-800',
+        success:
+          'border-success/50 text-success-foreground dark:border-success [&>svg]:text-success',
         warning:
-          'border-yellow-500/50 text-yellow-800 dark:border-yellow-500 [&>svg]:text-yellow-800',
-        info: 'border-blue-500/50 text-blue-800 dark:border-blue-500 [&>svg]:text-blue-800',
+          'border-warning/50 text-warning-foreground dark:border-warning [&>svg]:text-warning',
+        info: 'border-info/50 text-info-foreground dark:border-info [&>svg]:text-info',
       },
     },
     defaultVariants: {

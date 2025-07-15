@@ -10,7 +10,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
 
 /**
- * Progress variants using class-variance-authority
+ * Progress variants using class-variance-authority with semantic design tokens
  */
 const progressVariants = cva(
   'relative h-4 w-full overflow-hidden rounded-full bg-secondary transition-all duration-300',
@@ -18,9 +18,9 @@ const progressVariants = cva(
     variants: {
       variant: {
         default: 'bg-secondary',
-        success: 'bg-green-100',
-        warning: 'bg-yellow-100',
-        destructive: 'bg-red-100',
+        success: 'bg-success/10',
+        warning: 'bg-warning/10',
+        destructive: 'bg-destructive/10',
       },
       size: {
         sm: 'h-2',
@@ -36,7 +36,7 @@ const progressVariants = cva(
 );
 
 /**
- * Progress indicator variants
+ * Progress indicator variants using semantic design tokens
  */
 const progressIndicatorVariants = cva(
   'h-full w-full flex-1 bg-primary transition-all duration-300 ease-in-out',
@@ -44,9 +44,9 @@ const progressIndicatorVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary',
-        success: 'bg-green-500',
-        warning: 'bg-yellow-500',
-        destructive: 'bg-red-500',
+        success: 'bg-success',
+        warning: 'bg-warning',
+        destructive: 'bg-destructive',
       },
       animated: {
         true: 'bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse',
@@ -76,6 +76,25 @@ export interface ProgressProps
   readonly helperText?: string;
   readonly size?: 'sm' | 'default' | 'lg';
 }
+
+/**
+ * Format display value - pure function
+ */
+const getDisplayValue = (
+  showPercentage: boolean,
+  showValue: boolean,
+  percentage: number,
+  value: number,
+  max: number
+): string | null => {
+  if (showPercentage) {
+    return `${Math.round(percentage)}%`;
+  }
+  if (showValue) {
+    return `${value}/${max}`;
+  }
+  return null;
+};
 
 /**
  * Enhanced Progress component
@@ -115,15 +134,7 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
     // Format display value
-    const displayValue = React.useMemo(() => {
-      if (showPercentage) {
-        return `${Math.round(percentage)}%`;
-      }
-      if (showValue) {
-        return `${value}/${max}`;
-      }
-      return null;
-    }, [percentage, showPercentage, showValue, value, max]);
+    const displayValue = getDisplayValue(showPercentage, showValue, percentage, value, max);
 
     const progressElement = (
       <div
@@ -206,6 +217,24 @@ export interface CircularProgressProps {
   readonly label?: string;
 }
 
+/**
+ * Format circular display value - pure function
+ */
+const getCircularDisplayValue = (
+  showPercentage: boolean,
+  showValue: boolean,
+  percentage: number,
+  value: number
+): string | null => {
+  if (showPercentage) {
+    return `${Math.round(percentage)}%`;
+  }
+  if (showValue) {
+    return `${value}`;
+  }
+  return null;
+};
+
 export const CircularProgress = forwardRef<SVGSVGElement, CircularProgressProps>(
   (
     {
@@ -228,22 +257,15 @@ export const CircularProgress = forwardRef<SVGSVGElement, CircularProgressProps>
     const strokeDasharray = `${circumference} ${circumference}`;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
+    // Using semantic design tokens instead of hardcoded colors
     const colorMap = {
       default: 'text-primary',
-      success: 'text-green-500',
-      warning: 'text-yellow-500',
-      destructive: 'text-red-500',
+      success: 'text-success',
+      warning: 'text-warning',
+      destructive: 'text-destructive',
     };
 
-    const displayValue = React.useMemo(() => {
-      if (showPercentage) {
-        return `${Math.round(percentage)}%`;
-      }
-      if (showValue) {
-        return `${value}`;
-      }
-      return null;
-    }, [percentage, showPercentage, showValue, value]);
+    const displayValue = getCircularDisplayValue(showPercentage, showValue, percentage, value);
 
     return (
       <div className="circular-progress relative inline-flex items-center justify-center">

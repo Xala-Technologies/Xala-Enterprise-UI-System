@@ -33,7 +33,7 @@ export interface SelectOption {
 }
 
 /**
- * Select variants using class-variance-authority
+ * Select variants using class-variance-authority with semantic design tokens
  */
 const selectVariants = cva(
   'flex w-full appearance-none rounded-md border border-input bg-background text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',
@@ -42,8 +42,8 @@ const selectVariants = cva(
       variant: {
         default: 'border-input focus-visible:ring-ring',
         destructive: 'border-destructive focus-visible:ring-destructive text-destructive',
-        success: 'border-green-500 focus-visible:ring-green-500 text-green-800',
-        warning: 'border-yellow-500 focus-visible:ring-yellow-500 text-yellow-800',
+        success: 'border-success focus-visible:ring-success text-success-foreground',
+        warning: 'border-warning focus-visible:ring-warning text-warning-foreground',
       },
       size: {
         sm: 'h-8 px-3 py-1 text-xs pr-8',
@@ -76,6 +76,23 @@ export interface SelectProps
   readonly allowEmpty?: boolean;
   readonly emptyLabel?: string;
 }
+
+/**
+ * Group options by group property - pure function
+ */
+const getGroupedOptions = (options: SelectOption[]): Record<string, SelectOption[]> => {
+  const groups: Record<string, SelectOption[]> = {};
+
+  options.forEach(option => {
+    const groupName = option.group || '';
+    if (!groups[groupName]) {
+      groups[groupName] = [];
+    }
+    groups[groupName].push(option);
+  });
+
+  return groups;
+};
 
 /**
  * Enhanced Select component
@@ -131,19 +148,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const displayHelperText = errorText || successText || helperText;
 
     // Group options by group property
-    const groupedOptions = React.useMemo((): Record<string, SelectOption[]> => {
-      const groups: Record<string, SelectOption[]> = {};
-
-      options.forEach(option => {
-        const groupName = option.group || '';
-        if (!groups[groupName]) {
-          groups[groupName] = [];
-        }
-        groups[groupName].push(option);
-      });
-
-      return groups;
-    }, [options]);
+    const groupedOptions = getGroupedOptions(options);
 
     const selectElement = (
       <div className="relative">
@@ -218,7 +223,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
               {
                 'text-destructive': error || errorText,
-                'text-green-700': success || successText,
+                'text-success': success || successText,
               }
             )}
           >
@@ -238,7 +243,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             id={`${selectId}-helper`}
             className={cn('text-xs', {
               'text-destructive': error || errorText,
-              'text-green-600': success || successText,
+              'text-success': success || successText,
               'text-muted-foreground': !error && !errorText && !success && !successText,
             })}
           >

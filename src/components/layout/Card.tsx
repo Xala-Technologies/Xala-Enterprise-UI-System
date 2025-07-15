@@ -21,6 +21,54 @@ const getClassificationIcon = (level: string): string => {
 };
 
 /**
+ * Build CSS classes using design tokens - pure function
+ */
+const getCardClasses = (
+  variant: string,
+  shadow: string,
+  borderRadius: string,
+  interactive: boolean,
+  background: string,
+  padding: string,
+  margin: string,
+  className: string
+): string => {
+  const classes = ['card'];
+
+  // Variant class
+  classes.push(`card--${variant}`);
+
+  // Shadow class
+  classes.push(`card--shadow-${shadow}`);
+
+  // Border radius class
+  classes.push(`card--radius-${borderRadius}`);
+
+  // Interactive class
+  if (interactive) {
+    classes.push('card--interactive');
+  }
+
+  // Background class
+  classes.push(`card--bg-${background}`);
+
+  // Padding class
+  classes.push(`card--padding-${padding}`);
+
+  // Margin class
+  if (margin !== 'none') {
+    classes.push(`card--margin-${margin}`);
+  }
+
+  // Custom class
+  if (className) {
+    classes.push(className);
+  }
+
+  return classes.join(' ');
+};
+
+/**
  * Card component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
@@ -43,41 +91,16 @@ export function Card({
   // const { t } = useLocalization();
 
   // Build CSS classes using design tokens
-  const cardClasses = React.useMemo((): string => {
-    const classes = ['card'];
-
-    // Variant class
-    classes.push(`card--${variant}`);
-
-    // Shadow class
-    classes.push(`card--shadow-${shadow}`);
-
-    // Border radius class
-    classes.push(`card--radius-${borderRadius}`);
-
-    // Interactive class
-    if (interactive) {
-      classes.push('card--interactive');
-    }
-
-    // Background class
-    classes.push(`card--bg-${background}`);
-
-    // Padding class
-    classes.push(`card--padding-${padding}`);
-
-    // Margin class
-    if (margin !== 'none') {
-      classes.push(`card--margin-${margin}`);
-    }
-
-    // Custom class
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, shadow, borderRadius, interactive, background, padding, margin, className]);
+  const cardClasses = getCardClasses(
+    variant,
+    shadow,
+    borderRadius,
+    interactive,
+    background,
+    padding,
+    margin,
+    className
+  );
 
   return (
     <div

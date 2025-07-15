@@ -9,6 +9,46 @@ import * as React from 'react';
 import type { PageLayoutProps } from '../../types/layout.types';
 
 /**
+ * Build CSS classes using design tokens - pure function
+ */
+const getPageClasses = (
+  variant: string,
+  fullWidth: boolean,
+  background: string,
+  padding: string,
+  margin: string,
+  className: string
+): string => {
+  const classes = ['page-layout'];
+
+  // Variant class
+  classes.push(`page-layout--${variant}`);
+
+  // Full width class
+  if (fullWidth) {
+    classes.push('page-layout--full-width');
+  }
+
+  // Background class
+  classes.push(`page-layout--bg-${background}`);
+
+  // Padding class
+  classes.push(`page-layout--padding-${padding}`);
+
+  // Margin class
+  if (margin !== 'none') {
+    classes.push(`page-layout--margin-${margin}`);
+  }
+
+  // Custom class
+  if (className) {
+    classes.push(className);
+  }
+
+  return classes.join(' ');
+};
+
+/**
  * PageLayout component using design tokens and semantic props
  * Follows enterprise standards - no inline styles, design token props only
  */
@@ -29,35 +69,7 @@ export function PageLayout({
   ...props
 }: PageLayoutProps): React.ReactElement {
   // Build CSS classes using design tokens
-  const pageClasses = React.useMemo((): string => {
-    const classes = ['page-layout'];
-
-    // Variant class
-    classes.push(`page-layout--${variant}`);
-
-    // Full width class
-    if (fullWidth) {
-      classes.push('page-layout--full-width');
-    }
-
-    // Background class
-    classes.push(`page-layout--bg-${background}`);
-
-    // Padding class
-    classes.push(`page-layout--padding-${padding}`);
-
-    // Margin class
-    if (margin !== 'none') {
-      classes.push(`page-layout--margin-${margin}`);
-    }
-
-    // Custom class
-    if (className) {
-      classes.push(className);
-    }
-
-    return classes.join(' ');
-  }, [variant, fullWidth, background, padding, margin, className]);
+  const pageClasses = getPageClasses(variant, fullWidth, background, padding, margin, className);
 
   return (
     <div className={pageClasses} data-testid={testId} {...props}>
