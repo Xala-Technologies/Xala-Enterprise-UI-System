@@ -52,7 +52,10 @@ export interface TableColumn<T = unknown> {
   /** Column width */
   readonly width?: string;
   /** Column render function */
-  readonly render?: (value: unknown, item: T, index: number) => ReactNode;
+   
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly render?: (_value: unknown, _item: T, _index: number) => ReactNode;
   /** Column align */
   readonly align?: 'left' | 'center' | 'right';
 }
@@ -68,9 +71,13 @@ export interface TableAction<T = unknown> {
   /** Action icon */
   readonly icon?: ReactNode;
   /** Action handler */
-  readonly onClick: (_item: T, index: number) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly onClick: (_item: T, _index: number) => void;
   /** Action disabled check */
-  readonly disabled?: (_item: T, index: number) => boolean;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly disabled?: (_item: T, _index: number) => boolean;
   /** Action variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive';
 }
@@ -99,15 +106,22 @@ export interface DataTableProps<T = unknown>
   /** Sort direction */
   readonly sortDirection?: 'asc' | 'desc';
   /** Sort change handler */
-  readonly onSort?: (column: string, direction: 'asc' | 'desc') => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly onSort?: (_column: string, _direction: 'asc' | 'desc') => void;
   /** Row selection */
   readonly selectedRows?: readonly string[];
   /** Row selection handler */
-  readonly onRowSelect?: (selectedRows: readonly string[]) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onRowSelect?: (_selectedRows: readonly string[]) => void;
   /** Row key extractor */
-  readonly rowKey?: (_item: T, index: number) => string;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly rowKey?: (_item: T, _index: number) => string;
   /** Row click handler */
-  readonly onRowClick?: (_item: T, index: number) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly onRowClick?: (_item: T, _index: number) => void;
 }
 
 /**

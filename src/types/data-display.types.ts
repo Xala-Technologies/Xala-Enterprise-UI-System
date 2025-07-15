@@ -49,10 +49,17 @@ export interface DataTableProps extends DataDisplayComponentProps {
     formats?: ('csv' | 'xlsx' | 'pdf')[];
     filename?: string;
   };
-  onRowClick?: (row: TableData, index: number) => void;
-  onSelectionChange?: (selectedRows: string[]) => void;
-  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
-  onPageChange?: (page: number, pageSize: number) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onRowClick?: (_row: TableData, _index: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  onSelectionChange?: (_selectedRows: string[]) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onPageChange?: (_page: number, _pageSize: number) => void;
 }
 
 // Table column definition
@@ -88,7 +95,10 @@ export interface TableColumn {
       falseText: string; // Text for false value
     };
   };
-  render?: (value: unknown, row: Record<string, unknown>, column: TableColumn) => React.ReactNode;
+   
+   
+  // eslint-disable-next-line no-unused-vars
+  render?: (_value: unknown, _row: Record<string, unknown>, _column: TableColumn) => React.ReactNode;
 }
 
 // Table data row definition

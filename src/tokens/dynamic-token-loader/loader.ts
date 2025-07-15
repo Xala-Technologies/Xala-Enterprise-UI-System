@@ -3,6 +3,7 @@
  * Single responsibility: Orchestrate token loading and injection
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
 import type { TokenValue } from '../semantic-token-system';
 import { TokenCacheManager } from './cache-manager';
 import { TenantConfigurationLoader } from './tenant-loader';
@@ -12,6 +13,14 @@ import type { DynamicTokenLoaderConfig, TokenLoadResult } from './types';
  * Dynamic Token Loader
  * Main class that orchestrates token loading from various sources
  */
+
+const logger = Logger.create({
+  serviceName: 'ui-system-dynamic-token-loader',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
+
 export class DynamicTokenLoader {
   private config: DynamicTokenLoaderConfig;
   private tenantLoader: TenantConfigurationLoader;
@@ -55,7 +64,7 @@ export class DynamicTokenLoader {
 
       this.isInitialized = true;
     } catch (error) {
-      console.error('Failed to initialize dynamic token loader:', error);
+      logger.error('Failed to initialize dynamic token loader:', { error: error instanceof Error ? error.message : String(error) });
       throw error;
     }
   }
@@ -139,7 +148,7 @@ export class DynamicTokenLoader {
     // This would integrate with the semantic token system
     // For now, we'll just log the injection
     if (this.config.development?.verbose) {
-      console.log(`Injecting token: ${path} = ${value}`);
+      logger.debug(`Injecting token: ${path} = ${value}`);
     }
 
     // TODO: Integrate with semantic token system

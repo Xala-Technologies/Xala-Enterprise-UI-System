@@ -46,7 +46,9 @@ export interface BottomNavigationProps extends PlatformComponentProps {
   items: BottomNavigationItem[];
   activeIndex?: number;
   activeItem?: string;
-  onItemClick?: (item: BottomNavigationItem, index: number) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onItemClick?: (_item: BottomNavigationItem, _index: number) => void;
   showLabels?: boolean;
   showBadges?: boolean;
   height?: 'standard' | 'compact' | 'extended';
@@ -129,7 +131,8 @@ export interface TopNavigationProps extends PlatformComponentProps {
   showBreadcrumbs?: boolean;
   breadcrumbs?: BreadcrumbItem[];
   actions?: NavigationAction[];
-  onAction?: (action: NavigationAction) => void;
+  // eslint-disable-next-line no-unused-vars
+  onAction?: (_action: NavigationAction) => void;
 }
 
 // Breadcrumb item configuration

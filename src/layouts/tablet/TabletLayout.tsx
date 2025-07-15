@@ -94,7 +94,8 @@ export interface TabletSidebarProps extends React.HTMLAttributes<HTMLElement> {
   /** Collapsed state */
   readonly collapsed?: boolean;
   /** Collapse handler */
-  readonly onCollapse?: (collapsed: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onCollapse?: (_collapsed: boolean) => void;
 }
 
 /**

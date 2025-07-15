@@ -1,8 +1,16 @@
 /**
- * @fileoverview Xala Component Library Index
- * @module Xala
- * @description Centralized export of all Xala components and utilities
+ * @fileoverview Xala Enterprise UI Components
+ * @description Enterprise-grade React components for Norwegian compliance
  */
+
+import { Logger } from '@xala-technologies/enterprise-standards';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-xala-components',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // Re-export core components
 export { Button } from './Button';
@@ -12,7 +20,7 @@ export { Input } from './Input';
 export { xalaAccessibility } from '@/lib/accessibility/wcag-aaa';
 
 // Re-export design tokens from new semantic token system
-export { semanticTokens as designTokens, getCSSVar, getComponentTokens } from '@/tokens';
+export { semanticTokens as designTokens, getComponentTokens, getCSSVar } from '@/tokens';
 
 /**
  * Xala component library version
@@ -86,7 +94,7 @@ export const xalaUtils = {
     if (process.env['NODE_ENV'] === 'development') {
       const validClassifications = ['ÅPEN', 'BEGRENSET', 'KONFIDENSIELT', 'HEMMELIG'];
       if (config.classification && !validClassifications.includes(config.classification)) {
-        console.warn('Invalid NSM classification:', config.classification);
+        logger.warn('Invalid NSM classification:', { classification: config.classification });
       }
     }
   },

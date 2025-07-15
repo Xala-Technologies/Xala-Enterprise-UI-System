@@ -27,7 +27,9 @@ interface BottomNavigationProps {
   height?: 'compact' | 'standard' | 'extended';
   safeAreaBottom?: boolean;
   classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-  onItemPress?: (index: number, item: BottomNavigationItem) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onItemPress?: (_index: number, _item: BottomNavigationItem) => void;
   style?: React.CSSProperties;
   children?: unknown;
 }

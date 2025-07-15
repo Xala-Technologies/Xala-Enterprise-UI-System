@@ -96,7 +96,7 @@ Stack.displayName = 'Stack';
  * @param props - Stack props
  * @returns Horizontal Stack JSX element
  */
-export const HStack = forwardRef<HTMLDivElement, StackProps>(({ direction, ...props }, ref) => (
+export const HStack = forwardRef<HTMLDivElement, StackProps>((props, ref) => (
   <Stack ref={ref} direction="horizontal" {...props} />
 ));
 
@@ -107,7 +107,7 @@ HStack.displayName = 'HStack';
  * @param props - Stack props
  * @returns Vertical Stack JSX element
  */
-export const VStack = forwardRef<HTMLDivElement, StackProps>(({ direction, ...props }, ref) => (
+export const VStack = forwardRef<HTMLDivElement, StackProps>((props, ref) => (
   <Stack ref={ref} direction="vertical" {...props} />
 ));
 

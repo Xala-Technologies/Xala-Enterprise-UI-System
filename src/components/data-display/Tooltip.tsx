@@ -131,7 +131,8 @@ const getClassificationStyles = (classification?: string): React.CSSProperties =
 // Arrow component
 const TooltipArrow = ({
   placement,
-  classification,
+  // eslint-disable-next-line no-unused-vars
+  classification: _classification,
 }: {
   placement: string;
   classification?: string;
@@ -184,7 +185,8 @@ const HelpCategoryIndicator = ({ category }: { category?: string }): React.React
 
 // Tooltip content component
 const TooltipContent = ({
-  contentKey,
+  // eslint-disable-next-line no-unused-vars
+  contentKey: _contentKey,
   content,
   norwegian,
 }: {

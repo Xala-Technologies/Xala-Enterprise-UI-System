@@ -14,6 +14,7 @@ export const RTLUtils = {
   },
 
   // Mock validation function for RTL components
+  // eslint-disable-next-line no-unused-vars
   validateRTLColorContrast: (_element: HTMLElement): boolean => {
     return true;
   },

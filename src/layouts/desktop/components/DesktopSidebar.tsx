@@ -129,7 +129,7 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
                 onResize?.(newWidth);
               };
 
-              const handleMouseUp = () => {
+              const handleMouseUp = (): void => {
                 document.removeEventListener('mousemove', handleMouseMove);
                 document.removeEventListener('mouseup', handleMouseUp);
               };

@@ -348,14 +348,22 @@ const restrictedColor = classificationColors.BEGRENSET;
 
 ```typescript
 import { getDebugTokens, validateToken } from '@/tokens';
+import { Logger } from '@xala-technologies/enterprise-standards';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-tokens-debug',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 // Get all tokens for debugging
 const allTokens = getDebugTokens();
-console.log(allTokens);
+logger.debug('All tokens:', allTokens);
 
 // Validate token exists
 const isValid = validateToken('interactive.primary');
-console.log(`Token exists: ${isValid}`);
+logger.info(`Token exists: ${isValid}`);
 ```
 
 ### Development Tools

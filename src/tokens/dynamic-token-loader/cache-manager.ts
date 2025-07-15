@@ -1,10 +1,18 @@
 /**
- * Token Cache Manager
- * Single responsibility: Handle token caching and cache invalidation
+ * @fileoverview Token Cache Manager
+ * @description Manages caching of dynamic tokens with TTL and storage backend support
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
 import type { TokenValue } from '../semantic-token-system';
 import type { TokenCacheEntry } from './types';
+
+const logger = Logger.create({
+  serviceName: 'ui-system-token-cache-manager',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
 
 /**
  * Cache configuration options
@@ -179,7 +187,7 @@ export class TokenCacheManager {
       const serialized = JSON.stringify(entry);
       localStorage.setItem(`${this.config.storagePrefix}${tenantId}`, serialized);
     } catch (error) {
-      console.warn('Failed to persist token cache:', error);
+      logger.warn('Failed to persist token cache:', { error: error instanceof Error ? error.message : String(error) });
     }
   }
 
@@ -199,7 +207,7 @@ export class TokenCacheManager {
 
       return JSON.parse(serialized) as TokenCacheEntry;
     } catch (error) {
-      console.warn('Failed to load token cache:', error);
+      logger.warn('Failed to load token cache:', { error: error instanceof Error ? error.message : String(error) });
       return null;
     }
   }

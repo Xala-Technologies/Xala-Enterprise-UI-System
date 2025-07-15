@@ -429,5 +429,6 @@ beforeAll(() => {
   global.mockNorwegianAPIs.setupIDPortenMock();
   global.mockNorwegianAPIs.setupAltinnMock();
   
+  // Using console.log in test setup is acceptable for initialization messages
   console.log('🇳🇴 Norwegian compliance testing environment initialized');
 }); 

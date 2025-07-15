@@ -100,6 +100,8 @@ Typography.displayName = 'Typography';
  * @param variant - Typography variant
  * @returns HTML element tag
  */
+ 
+// eslint-disable-next-line no-unused-vars
 function getElementFromVariant(variant: string | null | undefined): React.ElementType {
   switch (variant) {
     case 'h1':

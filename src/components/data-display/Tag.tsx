@@ -57,6 +57,7 @@ export function Tag({
   ...props
 }: TagProps): React.ReactElement {
   // const { t } = useLocalization();
+  // eslint-disable-next-line no-unused-vars
   const t = (key: string): string => key; // Placeholder for localization
 
   // Mock norwegian config for now
@@ -100,14 +101,14 @@ export function Tag({
   }, [variant, size, interactive, onClick, removable, norwegian?.classification, className]);
 
   // Handle click events
-  const handleClick = () => {
+  const handleClick = (): void => {
     if (interactive && onClick) {
       onClick();
     }
   };
 
   // Handle keyboard events
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleClick();

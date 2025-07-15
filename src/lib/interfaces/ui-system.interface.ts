@@ -26,7 +26,9 @@ export interface UISystemService {
   /**
    * Register a component in the system
    */
-  registerComponent(name: string, component: unknown): ValidationResult<void>;
+   
+  // eslint-disable-next-line no-unused-vars
+  registerComponent(_name: string, _component: unknown): ValidationResult<void>;
 
   /**
    * Get component registry (read-only)
@@ -51,12 +53,16 @@ export interface ComponentFactory {
   /**
    * Create a component instance
    */
-  createComponent<T>(name: string, props: unknown): ValidationResult<T>;
+   
+  // eslint-disable-next-line no-unused-vars
+  createComponent<T>(_name: string, _props: unknown): ValidationResult<T>;
 
   /**
    * Register a component type
    */
-  registerComponentType(name: string, factory: ComponentFactoryFunction): ValidationResult<void>;
+   
+  // eslint-disable-next-line no-unused-vars
+  registerComponentType(_name: string, _factory: ComponentFactoryFunction): ValidationResult<void>;
 
   /**
    * Get available component types
@@ -67,7 +73,8 @@ export interface ComponentFactory {
 /**
  * Component factory function type
  */
-export type ComponentFactoryFunction = (props: unknown) => ValidationResult<unknown>;
+// eslint-disable-next-line no-unused-vars
+export type ComponentFactoryFunction = (_props: unknown) => ValidationResult<unknown>;
 
 /**
  * Theme management interface (SRP - only theme responsibilities)
@@ -81,12 +88,14 @@ export interface ThemeManager {
   /**
    * Set current theme
    */
-  setTheme(themeName: string): ValidationResult<void>;
+  // eslint-disable-next-line no-unused-vars
+  setTheme(_themeName: string): ValidationResult<void>;
 
   /**
    * Register a new theme
    */
-  registerTheme(theme: unknown): ValidationResult<void>;
+  // eslint-disable-next-line no-unused-vars
+  registerTheme(_theme: unknown): ValidationResult<void>;
 
   /**
    * Get available themes
@@ -96,7 +105,8 @@ export interface ThemeManager {
   /**
    * Validate theme accessibility
    */
-  validateThemeAccessibility(themeName: string): ValidationResult<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  validateThemeAccessibility(_themeName: string): ValidationResult<boolean>;
 }
 
 /**
@@ -106,17 +116,20 @@ export interface AccessibilityService {
   /**
    * Validate component accessibility
    */
-  validateComponentAccessibility(component: unknown): ValidationResult<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  validateComponentAccessibility(_component: unknown): ValidationResult<boolean>;
 
   /**
    * Get accessibility violations
    */
-  getAccessibilityViolations(component: unknown): readonly string[];
+  // eslint-disable-next-line no-unused-vars
+  getAccessibilityViolations(_component: unknown): readonly string[];
 
   /**
    * Check WCAG compliance level
    */
-  checkWCAGCompliance(level: 'A' | 'AA' | 'AAA'): ValidationResult<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  checkWCAGCompliance(_level: 'A' | 'AA' | 'AAA'): ValidationResult<boolean>;
 
   /**
    * Generate accessibility report
@@ -146,7 +159,9 @@ export interface PerformanceMonitor {
   /**
    * Log performance metric
    */
-  logMetric(name: string, value: number): void;
+   
+  // eslint-disable-next-line no-unused-vars
+  logMetric(_name: string, _value: number): void;
 
   /**
    * Generate performance report
@@ -161,17 +176,20 @@ export interface AuditTrailService {
   /**
    * Log an audit trail entry
    */
-  logEntry(entry: AuditTrailEntry): ValidationResult<void>;
+  // eslint-disable-next-line no-unused-vars
+  logEntry(_entry: AuditTrailEntry): ValidationResult<void>;
 
   /**
    * Get audit trail entries
    */
+  // eslint-disable-next-line no-unused-vars
   getEntries(filter?: AuditTrailFilter): readonly AuditTrailEntry[];
 
   /**
    * Export audit trail
    */
-  exportAuditTrail(format: 'json' | 'csv'): ValidationResult<string>;
+  // eslint-disable-next-line no-unused-vars
+  exportAuditTrail(_format: 'json' | 'csv'): ValidationResult<string>;
 
   /**
    * Clear audit trail (restricted operation)
@@ -197,12 +215,15 @@ export interface ConfigurationService {
   /**
    * Get configuration value
    */
-  getValue<T>(key: string): T | undefined;
+  // eslint-disable-next-line no-unused-vars
+  getValue<T>(_key: string): T | undefined;
 
   /**
    * Set configuration value
    */
-  setValue<T>(key: string, value: T): ValidationResult<void>;
+   
+  // eslint-disable-next-line no-unused-vars
+  setValue<T>(_key: string, _value: T): ValidationResult<void>;
 
   /**
    * Validate configuration
@@ -212,7 +233,8 @@ export interface ConfigurationService {
   /**
    * Load configuration from source
    */
-  loadConfiguration(source: string): ValidationResult<void>;
+  // eslint-disable-next-line no-unused-vars
+  loadConfiguration(_source: string): ValidationResult<void>;
 
   /**
    * Export configuration
@@ -227,17 +249,25 @@ export interface EventPublisher {
   /**
    * Publish an event
    */
-  publish<T>(eventName: string, data: T): void;
+   
+  // eslint-disable-next-line no-unused-vars
+  publish<T>(_eventName: string, _data: T): void;
 
   /**
    * Subscribe to events
    */
-  subscribe<T>(eventName: string, handler: (data: T) => void): () => void;
+   
+   
+  // eslint-disable-next-line no-unused-vars
+  subscribe<T>(_eventName: string, _handler: (_data: T) => void): () => void;
 
   /**
    * Unsubscribe from events
    */
-  unsubscribe(eventName: string, handler: (data: unknown) => void): void;
+   
+   
+  // eslint-disable-next-line no-unused-vars
+  unsubscribe(_eventName: string, _handler: (_data: unknown) => void): void;
 }
 
 /**
@@ -252,12 +282,15 @@ export interface LocalizationService {
   /**
    * Set current locale
    */
-  setLocale(locale: string): ValidationResult<void>;
+  // eslint-disable-next-line no-unused-vars
+  setLocale(_locale: string): ValidationResult<void>;
 
   /**
    * Translate a key
    */
-  translate(key: string, params?: Record<string, string>): string;
+   
+  // eslint-disable-next-line no-unused-vars
+  translate(_key: string, params?: Record<string, string>): string;
 
   /**
    * Get available locales
@@ -267,5 +300,6 @@ export interface LocalizationService {
   /**
    * Validate locale support
    */
-  validateLocale(locale: string): ValidationResult<boolean>;
+  // eslint-disable-next-line no-unused-vars
+  validateLocale(_locale: string): ValidationResult<boolean>;
 }

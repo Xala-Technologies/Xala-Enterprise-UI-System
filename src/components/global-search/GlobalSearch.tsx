@@ -90,9 +90,11 @@ export interface GlobalSearchProps
   /** Search value */
   readonly value?: string;
   /** Search change handler */
-  readonly onChange?: (value: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onChange?: (_value: string) => void;
   /** Search submit handler */
-  readonly onSubmit?: (value: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onSubmit?: (_value: string) => void;
   /** Search results */
   readonly results?: readonly SearchResultItem[];
   /** Loading state */

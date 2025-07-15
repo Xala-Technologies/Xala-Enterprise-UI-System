@@ -232,7 +232,8 @@ export const NORWEGIAN_RTL_TESTING = {
 // RTL component utilities
 export const RTL_COMPONENT_UTILITIES = {
   // Get appropriate margin/padding for RTL
-  getSpacing: (property: 'margin' | 'padding', side: 'start' | 'end', value: string) => {
+  // eslint-disable-next-line no-unused-vars
+  getSpacing: (property: 'margin' | 'padding', side: 'start' | 'end', _value: string) => {
     return `var(--spacing-${property}-${side})`;
   },
 

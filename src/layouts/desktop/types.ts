@@ -73,12 +73,14 @@ export interface DesktopSidebarProps
   /**
    * Toggle collapse state
    */
-  onToggle?: (collapsed: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
+  onToggle?: (_collapsed: boolean) => void;
 
   /**
    * Resize callback
    */
-  onResize?: (width: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  onResize?: (_width: number) => void;
 }
 
 /**

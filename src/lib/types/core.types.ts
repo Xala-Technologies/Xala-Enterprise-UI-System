@@ -153,7 +153,8 @@ export interface UISystemOptions {
 
   /** Initialization callbacks */
   readonly onInitialized?: () => void;
-  readonly onError?: (error: Error) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onError?: (_error: Error) => void;
 }
 
 /**
@@ -191,10 +192,15 @@ export interface ComponentState {
  * Event handlers interface
  */
 export interface EventHandlers {
+  // eslint-disable-next-line no-unused-vars
   readonly onClick?: (_event: MouseEvent) => void;
+  // eslint-disable-next-line no-unused-vars
   readonly onKeyDown?: (_event: KeyboardEvent) => void;
+  // eslint-disable-next-line no-unused-vars
   readonly onFocus?: (_event: FocusEvent) => void;
+  // eslint-disable-next-line no-unused-vars
   readonly onBlur?: (_event: FocusEvent) => void;
+  // eslint-disable-next-line no-unused-vars
   readonly onChange?: (_value: unknown) => void;
 }
 

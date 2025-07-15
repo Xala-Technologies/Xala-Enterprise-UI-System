@@ -168,7 +168,7 @@ const usePlatform = (): 'mobile' | 'tablet' | 'desktop' => {
   const [platform, setPlatform] = React.useState<'mobile' | 'tablet' | 'desktop'>('desktop');
 
   React.useEffect(() => {
-    const detectPlatform = () => {
+    const detectPlatform = (): void => {
       const width = window.innerWidth;
       if (width < 768) {
         setPlatform('mobile');

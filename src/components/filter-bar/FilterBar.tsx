@@ -76,7 +76,8 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
   /** Search value */
   readonly searchValue?: string;
   /** Search change handler */
-  readonly onSearchChange?: (value: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onSearchChange?: (_value: string) => void;
   /** Filter options */
   readonly filters?: readonly {
     readonly id: string;
@@ -86,13 +87,16 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
     readonly placeholder?: string;
   }[];
   /** Filter change handler */
-  readonly onFilterChange?: (filterId: string, value: string) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  readonly onFilterChange?: (_filterId: string, _value: string) => void;
   /** View options */
   readonly viewOptions?: readonly ViewOption[];
   /** Current view value */
   readonly currentView?: string;
   /** View change handler */
-  readonly onViewChange?: (value: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onViewChange?: (_value: string) => void;
   /** Additional actions */
   readonly actions?: ReactNode;
 }

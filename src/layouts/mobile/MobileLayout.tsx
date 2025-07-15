@@ -176,7 +176,8 @@ export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLEl
   /** Active item index */
   readonly activeIndex?: number;
   /** Navigation change handler */
-  readonly onNavigate?: (index: number) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onNavigate?: (_index: number) => void;
 }
 
 /**
@@ -484,7 +485,8 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       bottomNavigation,
       drawer,
       drawerOpen = false,
-      onDrawerClose,
+       
+      // _onDrawerClose removed - unused parameter
       statusBarStyle = 'default',
       className,
       ...props
@@ -554,7 +556,7 @@ export const MobileLayoutComposition = {
     header,
     content,
     actions,
-    onClose,
+    // _onClose removed - unused parameter
     ...props
   }: {
     header?: ReactNode;

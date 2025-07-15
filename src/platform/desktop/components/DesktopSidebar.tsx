@@ -23,7 +23,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       children,
       style,
       onToggle,
-      onClose,
+      // _onClose removed - unused parameter
       ...restProps
     },
     ref

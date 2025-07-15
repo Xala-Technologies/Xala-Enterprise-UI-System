@@ -131,7 +131,8 @@ export interface TabsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'o
   /** Active tab key */
   readonly activeKey?: string;
   /** Tab change handler */
-  readonly onChange?: (key: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onChange?: (_key: string) => void;
 }
 
 /**
@@ -147,7 +148,8 @@ export interface StepsProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Current step key */
   readonly currentKey?: string;
   /** Step click handler */
-  readonly onStepClick?: (key: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  readonly onStepClick?: (_key: string) => void;
 }
 
 /**
@@ -247,7 +249,8 @@ export const Steps = forwardRef<HTMLDivElement, StepsProps>(
       variant = 'default',
       orientation = 'horizontal',
       items,
-      currentKey,
+       
+      // _currentKey removed - unused parameter
       onStepClick,
       className,
       ...props

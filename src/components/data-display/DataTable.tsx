@@ -144,7 +144,9 @@ export function DataTable({
 const TableHeader: React.FC<{
   columns: TableColumn[];
   sorting?: DataTableProps['sorting'];
-  onSortChange?: (sortBy: string, sortOrder: 'asc' | 'desc') => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
   norwegian?: DataTableProps['norwegian'];
 }> = ({ columns, sorting, onSortChange, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
@@ -207,7 +209,9 @@ const TableHeader: React.FC<{
 const TableBody: React.FC<{
   data: TableData[];
   columns: TableColumn[];
-  onRowClick?: (row: TableData, index: number) => void;
+   
+  // eslint-disable-next-line no-unused-vars
+  onRowClick?: (_row: TableData, _index: number) => void;
   norwegian?: DataTableProps['norwegian'];
 }> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
   const { t } = useLocalization();
@@ -343,7 +347,8 @@ const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.
 };
 
 // Utility formatting functions (simplified for enterprise standards)
-const formatCellValue = (value: unknown, column: TableColumn, row: TableData): React.ReactNode => {
+// eslint-disable-next-line no-unused-vars
+const formatCellValue = (value: unknown, column: TableColumn, _row: TableData): React.ReactNode => {
   if (value === null || value === undefined) {
     return '-';
   }

@@ -56,7 +56,7 @@ export interface InputProps
  * @returns Input JSX element
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, size, error, success, type, ...props }, ref): React.ReactElement => {
+  ({ className, variant, size, type, ...props }, ref): React.ReactElement => {
     return (
       <input
         type={type}

@@ -3,6 +3,7 @@
  * Automated validation and CSS generation for design tokens
  */
 
+import { Logger } from '@xala-technologies/enterprise-standards';
 import { semanticTokens } from '../semantic';
 import type { TokenPath, TokenValue } from '../semantic-token-system';
 
@@ -55,9 +56,18 @@ export interface TokenValidationReport {
 /**
  * Token validator class
  */
+
+const logger = Logger.create({
+  serviceName: 'ui-system-token-validator',
+  logLevel: 'info',
+  enableConsoleLogging: true,
+  enableFileLogging: false,
+});
+
 export class TokenValidator {
   private config: TokenValidationConfig;
-  private validationRules: Map<string, (value: TokenValue) => TokenValidationError[]>;
+  // eslint-disable-next-line no-unused-vars
+  private validationRules: Map<string, (_value: TokenValue) => TokenValidationError[]>;
 
   constructor(config: Partial<TokenValidationConfig> = {}) {
     this.config = {
@@ -341,6 +351,8 @@ export class TokenValidator {
     classes.push('/* Color Utilities */');
     Object.entries(semanticTokens.color || {}).forEach(([category, colors]) => {
       if (typeof colors === 'object' && colors !== null) {
+         
+        // eslint-disable-next-line no-unused-vars
         Object.entries(colors).forEach(([name, value]) => {
           classes.push(`.text-${category}-${name} { color: var(${options.prefix}-color-${category}-${name}); }`);
           classes.push(`.bg-${category}-${name} { background-color: var(${options.prefix}-color-${category}-${name}); }`);
@@ -352,6 +364,8 @@ export class TokenValidator {
     classes.push('/* Spacing Utilities */');
     Object.entries(semanticTokens.spacing || {}).forEach(([category, spacing]) => {
       if (typeof spacing === 'object' && spacing !== null) {
+         
+        // eslint-disable-next-line no-unused-vars
         Object.entries(spacing).forEach(([name, value]) => {
           classes.push(`.m-${category}-${name} { margin: var(${options.prefix}-spacing-${category}-${name}); }`);
           classes.push(`.p-${category}-${name} { padding: var(${options.prefix}-spacing-${category}-${name}); }`);
@@ -431,20 +445,20 @@ export function validateTokensAtBuildTime(): boolean {
   const report = validateTokens();
   
   if (report.errors.length > 0) {
-    console.error('❌ Token validation failed:');
+    logger.error('Token validation failed:');
     report.errors.forEach(error => {
-      console.error(`  ${error.path}: ${error.message} (${error.code})`);
+      logger.error(`  ${error.path}: ${error.message} (${error.code})`);
     });
     return false;
   }
   
   if (report.warnings.length > 0) {
-    console.warn('⚠️  Token validation warnings:');
+    logger.warn('Token validation warnings:');
     report.warnings.forEach(warning => {
-      console.warn(`  ${warning.path}: ${warning.message} (${warning.code})`);
+      logger.warn(`  ${warning.path}: ${warning.message} (${warning.code})`);
     });
   }
   
-  console.log(`✅ Token validation passed: ${report.validTokens}/${report.totalTokens} tokens valid (${report.complianceScore.toFixed(1)}% compliance)`);
+  logger.info(`Token validation passed: ${report.validTokens}/${report.totalTokens} tokens valid (${report.complianceScore.toFixed(1)}% compliance)`);
   return true;
 } 

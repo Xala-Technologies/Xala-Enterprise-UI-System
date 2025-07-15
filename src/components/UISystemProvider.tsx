@@ -40,9 +40,11 @@ export interface UISystemContext {
   accessibilityTokens: AccessibilityTokens;
 
   /** Update configuration */
+  // eslint-disable-next-line no-unused-vars
   updateConfig: (_updates: Partial<UISystemConfig>) => void;
 
   /** Update accessibility configuration */
+  // eslint-disable-next-line no-unused-vars
   updateAccessibility: (_accessibility: AccessibilityConfig | AccessibilityPreset) => void;
 }
 

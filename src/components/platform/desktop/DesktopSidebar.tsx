@@ -144,7 +144,8 @@ const ClassificationBanner = ({ level }: { level: string }): React.ReactElement 
 // Quick access section component
 const QuickAccessSection = ({
   isCollapsed,
-  norwegian,
+   
+  // _norwegian removed - unused parameter
 }: {
   isCollapsed: boolean;
   norwegian?: DesktopSidebarProps['norwegian'];
@@ -273,7 +274,8 @@ const ResizeHandle = ({
   onMouseDown,
   isResizing,
 }: {
-  onMouseDown: (e: React.MouseEvent) => void;
+  // eslint-disable-next-line no-unused-vars
+  onMouseDown: (_e: React.MouseEvent) => void;
   isResizing: boolean;
 }): React.ReactElement => {
   return (

@@ -2,11 +2,11 @@
 // Right-to-left language support testing (Arabic, Hebrew) with Norwegian compliance
 
 import type { TextDirection, SupportedLocale } from '../../types/localization.types';
-import { RTLDesignTokens } from '../../types/localization.types';
+import { _RTLDesignTokens: _RTLDesignTokens } from '../../types/localization.types';
 import {
-  generateRTLTokens,
-  RTL_COMPONENT_UTILITIES,
-  NORWEGIAN_RTL_TESTING,
+  _generateRTLTokens,
+  _RTL_COMPONENT_UTILITIES,
+  _NORWEGIAN_RTL_TESTING,
 } from '../tokens/rtl-design-tokens';
 
 // RTL Test Suite Interface
