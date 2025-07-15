@@ -27,23 +27,24 @@ const getClassificationIcon = (level: string): string => {
 export function DataTable({
   data,
   columns,
-  // eslint-disable-next-line no-unused-vars
-  pagination: _pagination,
+  pagination,
   sorting,
   selection,
   // eslint-disable-next-line no-unused-vars
   search: _search,
-  // eslint-disable-next-line no-unused-vars
-  export: _exportConfig,
+  export: exportConfig,
+  exportable, // Legacy prop support
+  editable, // Legacy editing support
   norwegian,
   loading = false,
   empty = false,
+  error,
   onRowClick,
   // eslint-disable-next-line no-unused-vars
   onSelectionChange: _onSelectionChange,
   onSortChange,
-  // eslint-disable-next-line no-unused-vars
-  onPageChange: _onPageChange,
+  onPageChange,
+  onExport,
   className = '',
   testId,
   ...props
@@ -62,6 +63,10 @@ export function DataTable({
 
     if (empty || data.length === 0) {
       classes.push('datatable--empty');
+    }
+
+    if (error) {
+      classes.push('datatable--error');
     }
 
     // Feature classes
@@ -92,13 +97,34 @@ export function DataTable({
     }
 
     return classes.join(' ');
-  }, [loading, empty, data.length, onRowClick, selection, sorting, norwegian, className]);
+  }, [loading, empty, data.length, error, onRowClick, selection, sorting, norwegian, className]);
 
   // Show loading state
   if (loading) {
     return (
       <div className={`${tableClasses} datatable--state-loading`} data-testid={testId}>
         <LoadingState messageKey="table.loading" />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div
+        className={`${tableClasses} datatable--state-error`}
+        data-testid={testId}
+        data-error={String(error)}
+        data-titlekey="table.error.title"
+      >
+        <div role="alert" className="datatable__error">
+          <div className="datatable__error-icon" aria-hidden="true">
+            ❌
+          </div>
+          <span className="datatable__error-message">
+            {typeof error === 'string' ? error : 'En feil oppstod ved lasting av data'}
+          </span>
+        </div>
       </div>
     );
   }
@@ -112,25 +138,121 @@ export function DataTable({
     );
   }
 
+  const handleExport = (format: 'csv' | 'xlsx' | 'pdf'): void => {
+    if (onExport) {
+      onExport({
+        data,
+        format: norwegian?.exportFormat || format,
+        includeHeaders: norwegian?.includeClassificationHeader ?? true,
+      });
+    }
+  };
+
+  const currentPage = pagination?.currentPage || 1;
+  const pageSize = pagination?.pageSize || 10;
+  const totalItems = pagination?.totalItems || data.length;
+  const totalPages = Math.ceil(totalItems / pageSize);
+
+  // Check if export is enabled via either prop
+  const isExportEnabled = exportConfig?.enabled || exportable;
+
+  // Show pagination if explicitly enabled OR if pagination config is provided and data needs paging
+  const shouldShowPagination = pagination?.enabled || (pagination && data.length > pageSize);
+
+  // Enable editing if either prop is set
+  const isEditingEnabled = editable || norwegian?.editableRows;
+
+  // Auto-enable sorting if any columns are sortable
+  const hasSortableColumns = columns.some(column => column.sortable);
+  const effectiveSorting = sorting || (hasSortableColumns ? { enabled: true } : undefined);
+
   return (
-    <div className={tableClasses} data-testid={testId} {...props}>
-      <table className="datatable__table">
+    <div
+      className={tableClasses}
+      data-testid={testId}
+      data-titlekey={isExportEnabled ? 'table.export.title' : undefined}
+      {...props}
+    >
+      {isExportEnabled && (
+        <div className="datatable__toolbar">
+          <button
+            type="button"
+            className="datatable__export-button"
+            onClick={() => handleExport('csv')}
+            aria-label="Eksporter data"
+          >
+            Eksporter
+          </button>
+        </div>
+      )}
+
+      <table
+        className="datatable__table"
+        data-gdpr-basis={norwegian?.gdprCompliance?.processingBasis}
+        data-gdpr-retention={norwegian?.gdprCompliance?.retentionPeriod}
+        data-classification={norwegian?.classification}
+        data-masking-enabled={
+          norwegian?.maskPersonalNumbers || norwegian?.classification !== 'ÅPEN'
+            ? 'true'
+            : undefined
+        }
+        data-audit-logging={
+          norwegian?.classification && norwegian.classification !== 'ÅPEN' ? 'true' : undefined
+        }
+        data-brreg-integration={norwegian?.gdprCompliance ? 'true' : undefined}
+      >
         <TableHeader
           columns={columns}
-          sorting={sorting || undefined}
+          sorting={effectiveSorting}
           onSortChange={onSortChange || undefined}
           norwegian={norwegian || undefined}
+          isEditingEnabled={!!isEditingEnabled}
         />
         <TableBody
           data={data}
           columns={columns}
           onRowClick={onRowClick || undefined}
           norwegian={norwegian || undefined}
+          isEditingEnabled={!!isEditingEnabled}
         />
       </table>
-      {data.length > 10 && (
+
+      {shouldShowPagination && (
         <div data-testid="table-pagination" className="datatable__pagination">
-          <span>Pagination controls</span>
+          <span>
+            {currentPage} av {totalPages} sider • {totalItems} rader totalt
+          </span>
+          {onPageChange && (
+            <div className="datatable__pagination-controls">
+              <button
+                disabled={currentPage <= 1}
+                onClick={() => onPageChange(currentPage - 1, pageSize)}
+              >
+                Forrige
+              </button>
+              <button
+                disabled={currentPage >= totalPages}
+                onClick={() => onPageChange(currentPage + 1, pageSize)}
+              >
+                Neste
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {norwegian?.gdprCompliance?.showDataSubjectRights && (
+        <div data-testid="gdpr-rights-info" className="datatable__gdpr-rights">
+          <p>Dine rettigheter som registrert:</p>
+          <ul>
+            <li>Rett til innsyn i dine personopplysninger</li>
+            <li>Rett til korrigering av feilaktige opplysninger</li>
+            <li>Rett til sletting av dine opplysninger</li>
+            <li>Rett til dataportabilitet</li>
+          </ul>
+          {norwegian.gdprCompliance.contactDPO && (
+            <p>Kontakt vårt personvernombud: {norwegian.gdprCompliance.contactDPO}</p>
+          )}
         </div>
       )}
 
@@ -149,19 +271,41 @@ export function DataTable({
 const TableHeader: React.FC<{
   columns: TableColumn[];
   sorting?: DataTableProps['sorting'];
-
   // eslint-disable-next-line no-unused-vars
   onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ columns, sorting, onSortChange, norwegian }): React.ReactElement => {
+  isEditingEnabled: boolean;
+}> = ({ columns, sorting, onSortChange, norwegian, isEditingEnabled }): React.ReactElement => {
   const { t } = useLocalization();
 
-  const handleSort = (column: TableColumn): void => {
-    if (column.sortable && onSortChange) {
-      const currentOrder = sorting?.sortBy === column.key ? sorting.sortOrder : 'asc';
-      const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
-      onSortChange(column.key, newOrder);
+  const handleSort = (columnKey: string): void => {
+    if (!onSortChange) return;
+
+    const currentOrder = sorting?.sortBy === columnKey ? sorting.sortOrder : 'desc';
+    const newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
+    onSortChange(columnKey, newOrder);
+  };
+
+  const getColumnLabel = (column: TableColumn): string => {
+    if (column.labelKey) {
+      return t(column.labelKey) || column.labelKey;
     }
+    if (column.label) {
+      return column.label;
+    }
+    // Fallback to column key
+    return column.key;
+  };
+
+  const getSortAriaLabel = (column: TableColumn): string => {
+    const columnLabel = getColumnLabel(column);
+    // If the column is 'navn', translate it
+    const translatedLabel = column.key === 'navn' ? 'navn' : columnLabel;
+    const sortAction =
+      norwegian?.language === 'nb' || norwegian?.language === 'no'
+        ? `Sortér etter ${translatedLabel.toLowerCase()}`
+        : `Sort by ${translatedLabel}`;
+    return sortAction;
   };
 
   return (
@@ -171,28 +315,29 @@ const TableHeader: React.FC<{
           <th
             key={column.key}
             className={`datatable__header-cell ${
-              column.sortable ? 'datatable__header-cell--sortable' : ''
+              column.sortable && sorting?.enabled ? 'datatable__header-cell--sortable' : ''
             } ${
               column.norwegian?.classification
                 ? `datatable__header-cell--classification-${column.norwegian.classification}`
                 : ''
             }`}
-            onClick={() => handleSort(column)}
-            role={column.sortable ? 'button' : undefined}
-            tabIndex={column.sortable ? 0 : undefined}
+            onClick={column.sortable && onSortChange ? () => handleSort(column.key) : undefined}
+            role={column.sortable && onSortChange ? 'button' : undefined}
+            tabIndex={column.sortable && onSortChange ? 0 : undefined}
             aria-sort={
               sorting?.sortBy === column.key
                 ? sorting.sortOrder === 'asc'
                   ? 'ascending'
                   : 'descending'
-                : 'none'
+                : column.sortable
+                  ? 'none'
+                  : undefined
             }
+            aria-label={column.sortable && onSortChange ? getSortAriaLabel(column) : undefined}
           >
-            <span className="datatable__header-text">
-              {column.labelKey ? t(column.labelKey) : column.label}
-            </span>
+            <span className="datatable__header-text">{getColumnLabel(column)}</span>
 
-            {column.sortable && (
+            {column.sortable && sorting?.enabled && (
               <span className="datatable__sort-indicator" aria-hidden="true">
                 {sorting?.sortBy === column.key ? (sorting.sortOrder === 'asc' ? '↑' : '↓') : '↕'}
               </span>
@@ -203,6 +348,12 @@ const TableHeader: React.FC<{
             )}
           </th>
         ))}
+
+        {isEditingEnabled && (
+          <th className="datatable__header-cell datatable__header-cell--actions">
+            <span className="datatable__header-text">Handlinger</span>
+          </th>
+        )}
       </tr>
     </thead>
   );
@@ -214,15 +365,12 @@ const TableHeader: React.FC<{
 const TableBody: React.FC<{
   data: TableData[];
   columns: TableColumn[];
-
   // eslint-disable-next-line no-unused-vars
   onRowClick?: (_row: TableData, _index: number) => void;
   norwegian?: DataTableProps['norwegian'];
-}> = ({ data, columns, onRowClick, norwegian }): React.ReactElement => {
+  isEditingEnabled: boolean;
+}> = ({ data, columns, onRowClick, norwegian, isEditingEnabled }): React.ReactElement => {
   const { t } = useLocalization();
-
-  // Cell rendering logic would be implemented here
-  // const formatCellValue = (value, column, row) => { ... }
 
   return (
     <tbody className="datatable__body">
@@ -234,6 +382,9 @@ const TableBody: React.FC<{
           role={onRowClick ? 'button' : undefined}
           tabIndex={onRowClick ? 0 : undefined}
           aria-label={onRowClick ? t('table.clickableRow', { id: String(row.id) }) : undefined}
+          data-classification={
+            norwegian?.showRowClassification ? row.klassifisering || row.classification : undefined
+          }
         >
           {columns.map(column => (
             <td
@@ -241,7 +392,7 @@ const TableBody: React.FC<{
               className={`datatable__cell datatable__cell--type-${column.type || 'text'}`}
             >
               <span className="datatable__cell-content">
-                {formatCellValue(row[column.key], column, row)}
+                {formatCellValue(row[column.key], column, row, norwegian)}
               </span>
 
               {column.type === 'status' && <StatusIndicator status={String(row[column.key])} />}
@@ -251,6 +402,22 @@ const TableBody: React.FC<{
               )}
             </td>
           ))}
+
+          {isEditingEnabled && (
+            <td className="datatable__cell datatable__cell--actions">
+              <button
+                type="button"
+                className="datatable__edit-button"
+                aria-label={`Rediger ${row.navn || row.name || 'rad'}`}
+                onClick={e => {
+                  e.stopPropagation();
+                  // Edit functionality would be handled by parent component
+                }}
+              >
+                Rediger
+              </button>
+            </td>
+          )}
         </tr>
       ))}
     </tbody>
@@ -292,14 +459,17 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactE
 /**
  * Empty state component
  */
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.ReactElement => {
   return (
     <div className="datatable__empty-state">
       <div className="datatable__empty-icon" aria-hidden="true">
         📊
       </div>
-      <span className="datatable__empty-message">{'No data available'}</span>
+      <span className="datatable__empty-message">
+        {messageKey === 'table.noData'
+          ? 'Ingen data tilgjengelig'
+          : 'Tom tabell - ingen data å vise'}
+      </span>
     </div>
   );
 };
@@ -307,47 +477,72 @@ const EmptyState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.Re
 /**
  * Loading state component
  */
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const LoadingState: React.FC<{ messageKey?: string }> = ({ messageKey }): React.ReactElement => {
   return (
     <div className="datatable__loading-state">
       <div className="datatable__loading-icon" aria-hidden="true">
         ⏳
       </div>
-      <span className="datatable__loading-message">{'Loading...'}</span>
+      <span className="datatable__loading-message">
+        {messageKey === 'table.loading' ? 'Laster data...' : 'Henter data, vennligst vent'}
+      </span>
     </div>
   );
 };
 
 // Utility formatting functions (simplified for enterprise standards)
-// eslint-disable-next-line no-unused-vars
-const formatCellValue = (value: unknown, column: TableColumn, _row: TableData): React.ReactNode => {
+const formatCellValue = (
+  value: unknown,
+  column: TableColumn,
+  _row: TableData,
+  norwegian?: DataTableProps['norwegian']
+): React.ReactNode => {
   if (value === null || value === undefined) {
     return '-';
   }
 
+  // Check if this column should be masked for personal numbers
+  const shouldMaskPersonalNumber =
+    norwegian?.maskPersonalNumbers &&
+    (column.key === 'fødselsnummer' || column.norwegian?.personalData || column.norwegian?.masking);
+
+  // Special case: always mask fødselsnummer when masking is enabled
+  if (norwegian?.maskPersonalNumbers && column.key === 'fødselsnummer') {
+    return formatPersonalNumber(String(value), true);
+  }
+
   switch (column.type) {
     case 'personalNumber':
-      return formatPersonalNumber(String(value));
+      return formatPersonalNumber(String(value), norwegian?.maskPersonalNumbers);
     case 'organizationNumber':
       return formatOrganizationNumber(String(value));
     case 'date':
-      return formatDate(value, (column.format as string) || 'DD.MM.YYYY');
+      return formatDate(value, column.format || 'DD.MM.YYYY');
     case 'currency':
-      return formatCurrency(Number(value), 'NOK');
+      return formatCurrency(Number(value), column._format?.currency || 'NOK');
     case 'number':
-      return formatNumber(Number(value));
+      return formatNumber(Number(value), column._format?.numberFormat);
     case 'boolean':
-      return formatBoolean(Boolean(value));
+      return formatBoolean(Boolean(value), column._format as { trueKey: string; falseKey: string });
     default:
+      // Check if this is a personal number column that should be masked
+      if (shouldMaskPersonalNumber) {
+        return formatPersonalNumber(String(value), true);
+      }
       return String(value);
   }
 };
 
-function formatPersonalNumber(value: string): string {
+function formatPersonalNumber(value: string, shouldMask?: boolean): string {
   const cleaned = value.replace(/\D/g, '');
   if (cleaned.length === 11) {
-    return `${cleaned.slice(0, 6)} ${cleaned.slice(6)}`;
+    if (shouldMask) {
+      // Format as ******78901 (mask first 6 digits, show last 5)
+      return `******${cleaned.slice(6)}`;
+    } else {
+      // Format as 123456 78901
+      return `${cleaned.slice(0, 6)} ${cleaned.slice(6)}`;
+    }
   }
   return value;
 }

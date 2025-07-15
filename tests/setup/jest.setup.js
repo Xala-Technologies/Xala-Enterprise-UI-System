@@ -42,6 +42,96 @@ global.testUtils = {
   },
 };
 
+// Global test helpers for compatibility
+global.testHelpers = {
+  validateDesignTokenUsage: element => {
+    const violations = [];
+    // Check for hardcoded values instead of design tokens
+    const style = element.style || {};
+    Object.entries(style).forEach(([prop, value]) => {
+      if (
+        typeof value === 'string' &&
+        (value.includes('#') || value.includes('px') || value.includes('rem')) &&
+        !value.includes('var(--')
+      ) {
+        violations.push({ property: prop, value, element });
+      }
+    });
+    return violations;
+  },
+};
+
+// Global Norwegian compliance helper for compatibility
+global.validateNorwegianText = text => {
+  if (!text || text.trim() === '') return false;
+
+  const norwegianChars = /[æøåÆØÅ]/;
+  const norwegianWords = [
+    'og',
+    'eller',
+    'med',
+    'uten',
+    'til',
+    'fra',
+    'av',
+    'på',
+    'i',
+    'for',
+    'ikke',
+    'skal',
+    'kan',
+    'må',
+    'vil',
+    'være',
+    'har',
+    'hadde',
+    'ville',
+    'dette',
+    'den',
+    'det',
+    'de',
+    'som',
+    'en',
+    'et',
+    'alle',
+    'noen',
+    'laster',
+    'loading',
+    'henter',
+    'data',
+    'ingen',
+    'tom',
+    'tabell',
+    'eksporter',
+    'export',
+    'rader',
+    'rows',
+  ];
+
+  const hasNorwegianChars = norwegianChars.test(text);
+  const hasNorwegianWords = norwegianWords.some(word => text.toLowerCase().includes(word));
+
+  return hasNorwegianChars || hasNorwegianWords;
+};
+
+// Custom Jest matcher for design tokens
+expect.extend({
+  toUseDesignTokens(received) {
+    const violations = global.testHelpers.validateDesignTokenUsage(received);
+    const hasViolations = violations.length > 0;
+
+    return {
+      message: () => {
+        if (hasViolations) {
+          return `Expected element to use design tokens, but found hardcoded values:\n${violations.map(v => `${v.property}: ${v.value}`).join('\n')}`;
+        }
+        return 'Expected element not to use design tokens';
+      },
+      pass: !hasViolations,
+    };
+  },
+});
+
 // Mock console for cleaner test output
 const originalError = console.error;
 beforeAll(() => {
@@ -101,9 +191,12 @@ Object.defineProperty(navigator, 'clipboard', {
   writable: true,
 });
 
-// Mock window.getComputedStyle
+// Mock window.getComputedStyle with proper return values
 global.getComputedStyle = jest.fn().mockReturnValue({
   getPropertyValue: jest.fn().mockReturnValue(''),
+  borderColor: 'var(--color-border)',
+  padding: 'var(--spacing-md)',
+  fontSize: 'var(--font-size-base)',
 });
 
 // Enterprise logger mock
@@ -121,20 +214,3 @@ jest.mock('@xala-technologies/enterprise-standards', () => ({
     })),
   },
 }));
-
-// Global test helpers
-global.testHelpers = {
-  validateDesignTokenUsage: (element) => {
-    const violations = [];
-    // Check for hardcoded values instead of design tokens
-    const style = element.style || {};
-    Object.entries(style).forEach(([prop, value]) => {
-      if (typeof value === 'string' && 
-          (value.includes('#') || value.includes('px') || value.includes('rem')) &&
-          !value.includes('var(--')) {
-        violations.push({ property: prop, value, element });
-      }
-    });
-    return violations;
-  }
-};

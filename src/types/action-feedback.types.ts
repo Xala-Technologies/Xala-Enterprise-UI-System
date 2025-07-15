@@ -323,6 +323,37 @@ export interface NorwegianFeedbackConfig {
   language?: 'no' | 'nb' | 'nn' | 'en';
   showClassification?: boolean; // Show classification indicator
   dateFormat?: string; // Date format for Norwegian locale
+  exportFormat?: string; // Export format for Norwegian data
+  includeClassificationHeader?: boolean; // Include classification in export headers
+  paginationLanguage?: string; // Language for pagination text
+  
+  // Data masking and privacy
+  maskPersonalNumbers?: boolean; // Mask Norwegian personal numbers
+  showRowClassification?: boolean; // Show classification on table rows
+  inheritMaxClassification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+  
+  // Column-level data properties
+  personalData?: boolean; // Mark column as containing personal data
+  publicData?: boolean; // Mark column as containing public data
+  nsmLevel?: boolean; // Mark column as NSM classification level
+  masking?: boolean; // Enable masking for this column
+  
+  // GDPR compliance
+  gdprCompliance?: {
+    personalDataColumns?: string[];
+    processingBasis?: string;
+    retentionPeriod?: string;
+    showDataSubjectRights?: boolean;
+    contactDPO?: string;
+  };
+  
+  // Sorting and interaction
+  sortingLocale?: string;
+  norwegianCollation?: boolean;
+  
+  // Row editing
+  editableRows?: boolean;
+  editPermissions?: string[];
 }
 
 // Norwegian action context

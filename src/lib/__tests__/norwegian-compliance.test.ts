@@ -19,7 +19,7 @@ import {
     validateColorContrast,
     validateGDPRConsent,
     validateNorwegianCompliance,
-} from '../utils/norwegian-compliance';
+} from '../../utils/norwegian-compliance';
 
 describe('@xala-technologies/ui-system - Norwegian Compliance', () => { describe('Norwegian Personal Number Validation', () => { it('should validate correct Norwegian personal numbers', () => { // Note: These are test numbers, not real personal numbers
       const validNumbers = [

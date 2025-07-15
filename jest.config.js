@@ -24,7 +24,11 @@ export default {
     '<rootDir>/src/**/*.(test|spec).(ts|tsx)',
     '<rootDir>/tests/**/*.(test|spec).(ts|tsx)',
   ],
-  setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.js', '@testing-library/jest-dom'],
+  setupFilesAfterEnv: [
+    '<rootDir>/tests/setup/jest.setup.js',
+    '<rootDir>/tests/setup/norwegian.setup.js',
+    '@testing-library/jest-dom',
+  ],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',

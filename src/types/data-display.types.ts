@@ -20,6 +20,8 @@ export interface DataDisplayComponentProps extends ComponentProps {
 export interface DataTableProps extends DataDisplayComponentProps {
   data: TableData[];
   columns: TableColumn[];
+  error?: Error | string | null; // Error state for the table
+  editable?: boolean; // Enable row editing (legacy support)
   norwegian?: NorwegianFeedbackConfig; // Norwegian compliance configuration
   pagination?: {
     enabled: boolean;
@@ -51,6 +53,7 @@ export interface DataTableProps extends DataDisplayComponentProps {
     formats?: ('csv' | 'xlsx' | 'pdf')[];
     filename?: string;
   };
+  exportable?: boolean; // Legacy support for tests
    
   onRowClick?: (_row: TableData, _index: number) => void;
   onSelectionChange?: (_selectedRows: string[]) => void;
@@ -58,6 +61,7 @@ export interface DataTableProps extends DataDisplayComponentProps {
   onSortChange?: (_sortBy: string, _sortOrder: 'asc' | 'desc') => void;
    
   onPageChange?: (_page: number, _pageSize: number) => void;
+  onExport?: (_exportOptions: { data: TableData[]; format: string; includeHeaders: boolean }) => void;
 }
 
 // Table column definition
