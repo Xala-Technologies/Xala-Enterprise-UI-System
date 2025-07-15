@@ -233,17 +233,17 @@ export const NORWEGIAN_RTL_TESTING = {
 export const RTL_COMPONENT_UTILITIES = {
   // Get appropriate margin/padding for RTL
   // eslint-disable-next-line no-unused-vars
-  getSpacing: (property: 'margin' | 'padding', side: 'start' | 'end', _value: string) => {
+  getSpacing: (property: 'margin' | 'padding', side: 'start' | 'end', _value: string): string => {
     return `var(--spacing-${property}-${side})`;
   },
 
   // Get appropriate positioning for RTL
-  getPosition: (side: 'start' | 'end') => {
+  getPosition: (side: 'start' | 'end'): string => {
     return `var(--position-${side})`;
   },
 
   // Generate RTL-aware CSS
-  generateRTLCSS: (styles: Record<string, string>, direction: TextDirection) => {
+  generateRTLCSS: (styles: Record<string, string>, direction: TextDirection): Record<string, string> => {
     const rtlStyles: Record<string, string> = {};
 
     Object.entries(styles).forEach(([property, value]) => {

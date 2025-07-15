@@ -10,9 +10,9 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
   const {
     isCollapsed = false,
     width = 280,
-    // position: _position = "left",
-    // persistent: _persistent = true,
-    // overlay: _overlay = false,
+    position = 'left',
+    persistent = true,
+    overlay: _overlay = false,
   } = props;
 
   // Base styles using design tokens
@@ -21,17 +21,15 @@ const getDesktopSidebarStyles = (props: DesktopSidebarProps): React.CSSPropertie
     flexDirection: 'column',
     height: '100vh',
     backgroundColor: 'var(--background-secondary)',
-    borderRight:
-      _position === 'left' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
-    borderLeft:
-      _position === 'right' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
+    borderRight: position === 'left' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
+    borderLeft: position === 'right' ? 'var(--border-width) solid var(--border-secondary)' : 'none',
     fontFamily: 'var(--font-family-sans)',
-    position: _persistent ? 'relative' : 'fixed',
-    top: _persistent ? 'auto' : 0,
-    left: _position === 'left' && !_persistent ? 0 : 'auto',
-    right: _position === 'right' && !_persistent ? 0 : 'auto',
-    zIndex: _persistent ? 'auto' : 'var(--z-index-sidebar)',
-    boxShadow: _persistent ? 'none' : 'var(--shadow-xl)',
+    position: persistent ? 'relative' : 'fixed',
+    top: persistent ? 'auto' : 0,
+    left: position === 'left' && !persistent ? 0 : 'auto',
+    right: position === 'right' && !persistent ? 0 : 'auto',
+    zIndex: persistent ? 'auto' : 'var(--z-index-sidebar)',
+    boxShadow: persistent ? 'none' : 'var(--shadow-xl)',
     transition: 'all var(--transition-duration-normal) ease',
     width: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
     minWidth: isCollapsed ? 'var(--sidebar-collapsed-width)' : width,
@@ -380,7 +378,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
     useEffect(() => {
       if (norwegian?.keyboardShortcuts) {
         document.addEventListener('keydown', handleKeydown);
-        return () => document.removeEventListener('keydown', handleKeydown);
+        return (): void => document.removeEventListener('keydown', handleKeydown);
       }
       return undefined;
     }, [handleKeydown, norwegian?.keyboardShortcuts]);
@@ -406,7 +404,7 @@ export const DesktopSidebar = React.forwardRef<HTMLElement, DesktopSidebarProps>
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
 
-      return () => {
+      return (): void => {
         document.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseup', handleMouseUp);
       };

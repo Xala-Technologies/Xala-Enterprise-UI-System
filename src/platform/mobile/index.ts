@@ -10,8 +10,8 @@ export { MobileHeaderButton } from './components/MobileHeaderButton';
 // export { MobileContainer } from './layouts/MobileContainer';
 
 // Export types
-export type {} from // Will be exported once components are properly typed
-'../types/mobile.types';
+export type { } from // Will be exported once components are properly typed
+    '../types/mobile.types';
 
 // Mobile platform utilities
 export const mobileUtils = {
@@ -19,7 +19,7 @@ export const mobileUtils = {
   validateTouchTarget: (size: number): boolean => size >= 44,
 
   // Safe area utilities
-  getSafeAreaInsets: () => ({
+  getSafeAreaInsets: (): { top: string; bottom: string; left: string; right: string } => ({
     top: 'env(safe-area-inset-top)',
     bottom: 'env(safe-area-inset-bottom)',
     left: 'env(safe-area-inset-left)',
@@ -55,10 +55,10 @@ export const mobileUtils = {
 
   // Device detection
   device: {
-    isMobile: () => window.innerWidth <= 768,
-    isTablet: () => window.innerWidth > 768 && window.innerWidth <= 1024,
-    hasTouchScreen: () => 'ontouchstart' in window,
-    getOrientation: () => (window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'),
+    isMobile: (): boolean => window.innerWidth <= 768,
+    isTablet: (): boolean => window.innerWidth > 768 && window.innerWidth <= 1024,
+    hasTouchScreen: (): boolean => 'ontouchstart' in window,
+    getOrientation: (): 'portrait' | 'landscape' => (window.innerHeight > window.innerWidth ? 'portrait' : 'landscape'),
   },
 
   // Gesture utilities

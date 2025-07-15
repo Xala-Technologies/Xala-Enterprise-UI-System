@@ -186,7 +186,7 @@ const usePlatform = (): 'mobile' | 'tablet' | 'desktop' => {
     window.addEventListener('resize', detectPlatform);
 
     // Cleanup
-    return () => window.removeEventListener('resize', detectPlatform);
+    return (): void => window.removeEventListener('resize', detectPlatform);
   }, []);
 
   return platform;
@@ -509,7 +509,7 @@ export const LayoutComposition = {
     footer?: ReactNode;
     sidebarOpen?: boolean;
     onSidebarClose?: () => void;
-  } & BaseLayoutProps) => (
+  } & BaseLayoutProps): React.ReactElement => (
     <BaseLayout {...props}>
       {header}
       <div className="flex flex-1 overflow-hidden">
@@ -540,7 +540,7 @@ export const LayoutComposition = {
     main: ReactNode;
     footer?: ReactNode;
     sidebarCollapsed?: boolean;
-  } & BaseLayoutProps) => (
+  } & BaseLayoutProps): React.ReactElement => (
     <BaseLayout {...props}>
       {header}
       <div className="flex flex-1 overflow-hidden">
@@ -565,7 +565,7 @@ export const LayoutComposition = {
     main: ReactNode;
     footer?: ReactNode;
     maxWidth?: MainContentProps['maxWidth'];
-  } & BaseLayoutProps) => (
+  } & BaseLayoutProps): React.ReactElement => (
     <BaseLayout {...props}>
       {header}
       <MainContent maxWidth={maxWidth}>{main}</MainContent>

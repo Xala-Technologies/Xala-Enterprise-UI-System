@@ -120,7 +120,7 @@ export const DesktopSidebar = forwardRef<HTMLElement, DesktopSidebarProps>(
               const startX = e.clientX;
               const startWidth = currentWidth;
 
-              const handleMouseMove = (e: MouseEvent) => {
+              const handleMouseMove = (e: MouseEvent): void => {
                 const newWidth = Math.max(
                   minWidth,
                   Math.min(maxWidth, startWidth + (e.clientX - startX))
