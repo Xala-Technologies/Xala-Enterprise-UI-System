@@ -8,7 +8,8 @@ import type { ButtonProps } from '../../types/action-feedback.types';
 import type { NorwegianCompliance } from '../../utils/norwegian-compliance';
 
 // Extended ButtonProps interface with Norwegian compliance
-export interface ButtonPropsWithNorwegian extends ButtonProps {
+export interface ButtonPropsWithNorwegian extends Omit<ButtonProps, 'loadingText'> {
+  loadingText?: string;
   titleKey?: string;
   messageKey?: string;
   icon?: React.ReactNode;

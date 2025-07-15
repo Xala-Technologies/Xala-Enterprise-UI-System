@@ -121,3 +121,20 @@ jest.mock('@xala-technologies/enterprise-standards', () => ({
     })),
   },
 }));
+
+// Global test helpers
+global.testHelpers = {
+  validateDesignTokenUsage: (element) => {
+    const violations = [];
+    // Check for hardcoded values instead of design tokens
+    const style = element.style || {};
+    Object.entries(style).forEach(([prop, value]) => {
+      if (typeof value === 'string' && 
+          (value.includes('#') || value.includes('px') || value.includes('rem')) &&
+          !value.includes('var(--')) {
+        violations.push({ property: prop, value, element });
+      }
+    });
+    return violations;
+  }
+};

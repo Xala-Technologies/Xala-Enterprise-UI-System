@@ -21,6 +21,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonPropsWithNorwegi
       type = 'button',
       disabled = false,
       loading = false,
+      loadingText,
       children,
       labelKey,
       icon,
@@ -60,49 +61,42 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonPropsWithNorwegi
       ...style,
     };
 
-    const buttonContent = (
-      <>
-        {loading && <LoadingSpinner size={size} />}
-        {icon && iconPosition === 'left' && !loading && icon}
-        {norwegian?.classification && <ClassificationIndicator level={norwegian.classification} />}
-        {children || labelKey}
-        {icon && iconPosition === 'right' && !loading && icon}
-      </>
-    );
-
     return (
       <>
         <button
           ref={ref}
           type={type}
           disabled={isDisabled}
-          className={className}
+          className={`xala-button ${className}`}
           style={combinedStyles}
-          onClick={handleClick}
-          aria-label={ariaLabel || (loading ? `Loading: ${labelKey || children}` : undefined)}
+          aria-label={ariaLabel || labelKey}
           aria-busy={loading}
           aria-disabled={isDisabled}
           data-testid={testId}
           data-variant={variant}
           data-size={size}
-          data-classification={norwegian?.classification}
-          data-municipality={norwegian?.municipality}
-          data-action-type={norwegian?.actionType}
-          data-priority={norwegian?.priority}
+          onClick={handleClick}
           {...buttonProps}
         >
-          {buttonContent}
+          {iconPosition === 'left' && icon && <span className="xala-button__icon">{icon}</span>}
+          {loading && <LoadingSpinner size={size} />}
+          <span className="xala-button__text">
+            {loading && loadingText ? loadingText : children}
+          </span>
+          {iconPosition === 'right' && icon && <span className="xala-button__icon">{icon}</span>}
+          {norwegian?.classification && (
+            <ClassificationIndicator level={norwegian.classification} />
+          )}
         </button>
 
-        {/* Confirmation dialog */}
-        <ConfirmationDialog
-          isOpen={showConfirmation}
-          {...(norwegian?.confirmationMessageKey && {
-            messageKey: norwegian.confirmationMessageKey,
-          })}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-        />
+        {showConfirmation && (
+          <ConfirmationDialog
+            isOpen={showConfirmation}
+            messageKey={norwegian?.confirmationMessageKey || 'confirm.message'}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        )}
       </>
     );
   }

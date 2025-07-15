@@ -360,3 +360,18 @@ expect.extend({
 
 // Export axe configuration for use in tests
 global.axe = axe; 
+// Add missing test matchers
+expect.extend({
+  toUseDesignTokens(received) {
+    const hasDesignTokens = received.className && 
+      received.className.includes('var(--') ||
+      received.style && Object.values(received.style).some(val => 
+        typeof val === 'string' && val.includes('var(--')
+      );
+    
+    return {
+      message: () => `Expected element to use design tokens`,
+      pass: hasDesignTokens
+    };
+  }
+});

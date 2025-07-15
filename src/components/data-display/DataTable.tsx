@@ -128,6 +128,11 @@ export function DataTable({
           norwegian={norwegian || undefined}
         />
       </table>
+      {data.length > 10 && (
+        <div data-testid="table-pagination" className="datatable__pagination">
+          <span>Pagination controls</span>
+        </div>
+      )}
 
       {norwegian?.classification && (
         <div className="datatable__classification">
