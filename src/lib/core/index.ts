@@ -25,33 +25,8 @@ class UISystemCore {
   private readonly componentRegistry: Map<string, ComponentDefinition>;
   private readonly themeRegistry: Map<string, ThemeDefinition>;
 
-  private constructor(config: UISystemConfig) {
-    this.config = config;
-    this.logger = Logger.create({
-      serviceName: 'ui-system-core',
-      logLevel: 'info',
-      enableConsoleLogging: true,
-      enableFileLogging: false,
-    });
-
-    // Initialize registries
-    this.componentRegistry = new Map();
-    this.themeRegistry = new Map();
-
-    // Log initialization
-    this.logger.info('UISystemCore initialized', {
-      theme: config.theme,
-      defaultLanguage: config.defaultLanguage,
-      accessibility: config.accessibility,
-    });
-  }
-
-  /**
-   * Factory method following the Factory pattern (GoF)
-   * Ensures proper initialization and configuration
-   */
-  static create(config: Partial<UISystemConfig> = {}): UISystemCore {
-    const defaultConfig: UISystemConfig = {
+  private constructor(config: Partial<UISystemConfig> = {}) {
+    this.config = {
       name: 'xala-ui-system',
       version: '2.0.0',
       defaultLanguage: 'nb-NO' as SupportedLanguage,
@@ -70,20 +45,46 @@ class UISystemCore {
       },
       development: {
         enableDebugMode: false,
-        enableHotReload: false,
-        enableTypeChecking: true,
+        enablePerformanceMonitoring: true,
+        enableA11yWarnings: true,
+        logLevel: 'info',
       },
-      enableAccessibilityValidation: true,
-      enablePerformanceMonitoring: true,
-      enableErrorBoundaries: true,
+      ...config,
     };
 
-    const mergedConfig = { ...defaultConfig, ...config };
-    
+    this.logger = Logger.create({
+      serviceName: 'ui-system-core',
+      logLevel: 'info',
+      enableConsoleLogging: true,
+      enableFileLogging: false,
+    });
+
+    // Initialize registries
+    this.componentRegistry = new Map();
+    this.themeRegistry = new Map();
+
+    // Log initialization
+    this.logger.info('UISystemCore initialized with configuration');
+    this.logger.debug('Configuration details', { config: this.config });
+  }
+
+  /**
+   * Create a new UI system instance (Singleton pattern)
+   */
+  public static create(config: Partial<UISystemConfig> = {}): UISystemCore {
     if (!UISystemCore.instance) {
-      UISystemCore.instance = new UISystemCore(mergedConfig);
+      UISystemCore.instance = new UISystemCore(config);
     }
-    
+    return UISystemCore.instance;
+  }
+
+  /**
+   * Get the current UI system instance
+   */
+  public static getInstance(): UISystemCore {
+    if (!UISystemCore.instance) {
+      throw new Error('UISystemCore not initialized. Call create() first.');
+    }
     return UISystemCore.instance;
   }
 
@@ -167,12 +168,12 @@ class UISystemCore {
   }
 
   /**
-   * Initialize theme registry with Norwegian compliance
+   * Initialize theme registry
    */
   private async initializeThemeRegistry(): Promise<void> {
-    // Register Norwegian government theme
-    this.themeRegistry.set('norwegian-government', {
-      name: 'norwegian-government',
+    // Initialize with default theme
+    this.themeRegistry.set('default', {
+      name: 'default',
       colors: {
         primary: '#1a365d',
         secondary: '#2d3748',
@@ -185,80 +186,14 @@ class UISystemCore {
         text: '#1a202c',
         border: '#e2e8f0',
       },
-      spacing: {
-        xs: '0.25rem',
-        sm: '0.5rem',
-        md: '1rem',
-        lg: '1.5rem',
-        xl: '2rem',
-      },
-      typography: {
-        fontFamily: 'Inter, system-ui, sans-serif',
-        fontSize: '1rem',
-        lineHeight: '1.5',
-      },
-      borderRadius: {
-        sm: '0.25rem',
-        md: '0.375rem',
-        lg: '0.5rem',
-      },
-      shadows: {
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-      },
-      breakpoints: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
-      },
+      spacing: { sm: '8px', md: '16px', lg: '24px' },
+      typography: { body: '16px', heading: '24px' },
+      borderRadius: { sm: '4px', md: '8px' },
+      shadows: { sm: '0 1px 2px rgba(0,0,0,0.1)' },
+      breakpoints: { sm: '640px', md: '768px', lg: '1024px' },
     });
 
-    // Register high contrast theme for accessibility
-    this.themeRegistry.set('high-contrast', {
-      name: 'high-contrast',
-      colors: {
-        primary: '#000000',
-        secondary: '#ffffff',
-        success: '#00ff00',
-        warning: '#ffff00',
-        error: '#ff0000',
-        info: '#0080ff',
-        background: '#ffffff',
-        surface: '#f0f0f0',
-        text: '#000000',
-        border: '#000000',
-      },
-      spacing: {
-        xs: '0.25rem',
-        sm: '0.5rem',
-        md: '1rem',
-        lg: '1.5rem',
-        xl: '2rem',
-      },
-      typography: {
-        fontFamily: 'Arial, sans-serif',
-        fontSize: '1.125rem',
-        lineHeight: '1.6',
-      },
-      borderRadius: {
-        sm: '0.25rem',
-        md: '0.375rem',
-        lg: '0.5rem',
-      },
-      shadows: {
-        sm: '0 2px 4px 0 rgba(0, 0, 0, 0.3)',
-        md: '0 6px 8px -1px rgba(0, 0, 0, 0.3)',
-        lg: '0 12px 16px -3px rgba(0, 0, 0, 0.3)',
-      },
-      breakpoints: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
-      },
-    });
+    this.logger.info('Theme registry initialized');
   }
 
   /**
@@ -286,7 +221,18 @@ class UISystemCore {
       },
       theme: {
         name: 'default',
-        colors: { primary: '#000000', secondary: '#ffffff' },
+        colors: {
+          primary: '#1a365d',
+          secondary: '#2d3748',
+          success: '#38a169',
+          warning: '#d69e2e',
+          error: '#e53e3e',
+          info: '#3182ce',
+          background: '#ffffff',
+          surface: '#f7fafc',
+          text: '#1a202c',
+          border: '#e2e8f0',
+        },
         spacing: { sm: '8px', md: '16px', lg: '24px' },
         typography: { body: '16px', heading: '24px' },
         borderRadius: { sm: '4px', md: '8px' },
@@ -316,7 +262,18 @@ class UISystemCore {
       },
       theme: {
         name: 'default',
-        colors: { primary: '#000000', secondary: '#ffffff' },
+        colors: {
+          primary: '#1a365d',
+          secondary: '#2d3748',
+          success: '#38a169',
+          warning: '#d69e2e',
+          error: '#e53e3e',
+          info: '#3182ce',
+          background: '#ffffff',
+          surface: '#f7fafc',
+          text: '#1a202c',
+          border: '#e2e8f0',
+        },
         spacing: { sm: '8px', md: '16px', lg: '24px' },
         typography: { body: '16px', heading: '24px' },
         borderRadius: { sm: '4px', md: '8px' },
@@ -405,12 +362,41 @@ export function createNorwegianUISystem(config: Partial<UISystemConfig> = {}): U
         'gov-secondary': '#2d3748',
       },
     },
-    enableAccessibilityValidation: true,
-    enablePerformanceMonitoring: true,
+    development: {
+      enableDebugMode: false,
+      enablePerformanceMonitoring: true,
+      enableA11yWarnings: false,
+      logLevel: 'error',
+    },
     ...config,
   };
 
   return UISystemCore.create(norwegianConfig);
+}
+
+/**
+ * Create UI system instance for production
+ */
+export function createProductionUISystem(config: Partial<UISystemConfig> = {}): UISystemCore {
+  const productionConfig: Partial<UISystemConfig> = {
+    name: 'production-ui-system',
+    defaultLanguage: 'en-US' as SupportedLanguage,
+    accessibility: 'enterprise' as AccessibilityPreset,
+    theme: {
+      mode: 'light',
+      primary: '#1a365d',
+      secondary: '#2d3748',
+    },
+    development: {
+      enableDebugMode: false,
+      enablePerformanceMonitoring: true,
+      enableA11yWarnings: false,
+      logLevel: 'error',
+    },
+    ...config,
+  };
+
+  return UISystemCore.create(productionConfig);
 }
 
 /**
@@ -429,11 +415,10 @@ export function createTestUISystem(config: Partial<UISystemConfig> = {}): UISyst
     },
     development: {
       enableDebugMode: true,
-      enableHotReload: false,
-      enableTypeChecking: true,
+      enablePerformanceMonitoring: true,
+      enableA11yWarnings: true,
+      logLevel: 'debug',
     },
-    enableAccessibilityValidation: false,
-    enablePerformanceMonitoring: false,
     ...config,
   };
 
@@ -447,20 +432,18 @@ export function createDevelopmentUISystem(config: Partial<UISystemConfig> = {}):
   const developmentConfig: Partial<UISystemConfig> = {
     name: 'development-ui-system',
     defaultLanguage: 'en-US' as SupportedLanguage,
-    accessibility: 'enhanced' as AccessibilityPreset,
+    accessibility: 'standard' as AccessibilityPreset,
     theme: {
       mode: 'light',
-      primary: '#007acc',
-      secondary: '#666666',
-      customTokens: {},
+      primary: '#1a365d',
+      secondary: '#2d3748',
     },
     development: {
       enableDebugMode: true,
-      enableHotReload: true,
-      enableTypeChecking: true,
+      enablePerformanceMonitoring: true,
+      enableA11yWarnings: true,
+      logLevel: 'debug',
     },
-    enableAccessibilityValidation: true,
-    enablePerformanceMonitoring: true,
     ...config,
   };
 
