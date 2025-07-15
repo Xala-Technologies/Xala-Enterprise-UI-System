@@ -213,6 +213,192 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 Checkbox.displayName = 'Checkbox';
 
 /**
+ * Checkbox option interface for CheckboxGroup
+ */
+export interface CheckboxOption {
+  readonly value: string;
+  readonly label: string;
+  readonly description?: string;
+  readonly disabled?: boolean;
+}
+
+/**
+ * Checkbox Group component props interface
+ */
+export interface CheckboxGroupProps {
+  readonly name: string;
+  readonly options: CheckboxOption[];
+  readonly value?: string[];
+  readonly defaultValue?: string[];
+  readonly onValueChange?: (newValues: string[]) => void;
+  readonly variant?: CheckboxProps['variant'];
+  readonly size?: CheckboxProps['size'];
+  readonly orientation?: 'horizontal' | 'vertical';
+  readonly label?: string;
+  readonly description?: string;
+  readonly error?: boolean;
+  readonly errorText?: string;
+  readonly required?: boolean;
+  readonly disabled?: boolean;
+  readonly className?: string;
+  readonly id?: string;
+  readonly maxSelections?: number;
+  readonly minSelections?: number;
+}
+
+/**
+ * Checkbox Group component for managing multiple checkbox options
+ */
+export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
+  (
+    {
+      name,
+      options,
+      value,
+      defaultValue,
+      onValueChange,
+      variant,
+      size,
+      orientation = 'vertical',
+      label,
+      description,
+      error,
+      errorText,
+      required,
+      disabled,
+      className,
+      id,
+      maxSelections,
+      minSelections,
+    },
+    ref
+  ): React.ReactElement => {
+    const [selectedValues, setSelectedValues] = React.useState<string[]>(
+      value || defaultValue || []
+    );
+
+    // Generate ID if not provided and label exists
+    const groupId =
+      id || (label ? `checkbox-group-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+
+    React.useEffect(() => {
+      if (value !== undefined) {
+        setSelectedValues(value);
+      }
+    }, [value]);
+
+    const handleChange = (optionValue: string, checked: boolean): void => {
+      let newValues: string[];
+
+      if (checked) {
+        // Add value if not already selected and within max limit
+        if (!selectedValues.includes(optionValue)) {
+          newValues = [...selectedValues, optionValue];
+
+          // Check max selections limit
+          if (maxSelections && newValues.length > maxSelections) {
+            return; // Don't allow selection beyond max
+          }
+        } else {
+          return; // Already selected
+        }
+      } else {
+        // Remove value
+        newValues = selectedValues.filter(v => v !== optionValue);
+
+        // Check min selections limit
+        if (minSelections && newValues.length < minSelections) {
+          return; // Don't allow deselection below min
+        }
+      }
+
+      setSelectedValues(newValues);
+      onValueChange?.(newValues);
+    };
+
+    const isSelectionLimitReached = maxSelections && selectedValues.length >= maxSelections;
+
+    const groupElement = (
+      <div
+        ref={ref}
+        role="group"
+        aria-labelledby={label ? `${groupId}-label` : undefined}
+        aria-describedby={description || errorText ? `${groupId}-description` : undefined}
+        aria-invalid={error || !!errorText}
+        aria-required={required}
+        className={cn(
+          'checkbox-group',
+          {
+            'flex flex-col space-y-3': orientation === 'vertical',
+            'flex flex-row flex-wrap gap-6': orientation === 'horizontal',
+          },
+          className
+        )}
+      >
+        {options.map(option => {
+          const isSelected = selectedValues.includes(option.value);
+          const isOptionDisabled =
+            disabled || option.disabled || (!isSelected && Boolean(isSelectionLimitReached));
+
+          return (
+            <Checkbox
+              key={option.value}
+              name={name}
+              checked={isSelected}
+              onChange={e => handleChange(option.value, e.target.checked)}
+              variant={variant}
+              size={size}
+              label={option.label}
+              description={option.description}
+              disabled={isOptionDisabled}
+              error={error && !isSelected && required}
+            />
+          );
+        })}
+      </div>
+    );
+
+    // If label or description provided, wrap in a fieldset
+    if (label || description || errorText) {
+      return (
+        <div className="checkbox-group-field space-y-2">
+          {label && (
+            <label
+              id={`${groupId}-label`}
+              className={cn(
+                'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+                error && 'text-destructive'
+              )}
+            >
+              {label}
+              {required && <span className="text-destructive ml-1">*</span>}
+            </label>
+          )}
+
+          {groupElement}
+
+          {description && !errorText && (
+            <p id={`${groupId}-description`} className="text-xs text-muted-foreground">
+              {description}
+            </p>
+          )}
+
+          {errorText && (
+            <p id={`${groupId}-description`} className="text-xs text-destructive">
+              {errorText}
+            </p>
+          )}
+        </div>
+      );
+    }
+
+    return groupElement;
+  }
+);
+
+CheckboxGroup.displayName = 'CheckboxGroup';
+
+/**
  * Checkbox variants type exports
  */
 export type CheckboxVariant = VariantProps<typeof checkboxVariants>['variant'];

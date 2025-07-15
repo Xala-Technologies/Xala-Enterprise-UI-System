@@ -351,7 +351,7 @@ export interface UseTokensResult {
   responsive: ResponsiveTokens;
   
   // Utility functions
-  getToken: (_path: string, _fallback?: unknown) => unknown;
+  getToken: (path: string, fallback?: unknown) => unknown;
   hasToken: (path: string) => boolean;
   
   // Theme info

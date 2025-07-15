@@ -14,9 +14,9 @@ export interface InputProps {
   placeholder?: string;
   value?: string;
   defaultValue?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onChange?: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: (_event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (_event: React.FocusEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   required?: boolean;
   autoComplete?: string;
@@ -171,15 +171,6 @@ export const Input: React.FC<InputProps> = ({
     opacity: disabled ? 0.5 : 1,
   };
 
-  const focusStyles: React.CSSProperties = {
-    borderColor: error
-      ? colors.status.error
-      : success
-        ? colors.status.success
-        : colors.primary[500],
-    boxShadow: `0 0 0 2px ${error ? '#fca5a5' : success ? '#86efac' : colors.primary[200]}`,
-  };
-
   const combinedStyles: React.CSSProperties = {
     ...baseStyles,
     ...getVariantStyles(),
@@ -188,7 +179,8 @@ export const Input: React.FC<InputProps> = ({
   };
 
   // Handle focus and blur for focus ring styling
-  const finalStyles = combinedStyles;return (
+  const finalStyles = combinedStyles;
+  return (
     <input
       type={type}
       placeholder={placeholder}
