@@ -43,7 +43,7 @@ export function KeyValueList({
   ...props
 }: KeyValueListProps): React.ReactElement {
   // const { t } = useLocalization();
-  const t = (key: string) => key; // Placeholder for localization
+  const t = (key: string): string => key; // Placeholder for localization
 
   // Build CSS classes using design tokens
   const listClasses = React.useMemo(() => {
@@ -111,7 +111,7 @@ const KeyValueItemComponent: React.FC<{
   norwegian?: KeyValueListProps['norwegian'];
 }> = ({ item, showDividers, norwegian }): React.ReactElement => {
   // const { t } = useLocalization();
-  const t = (key: string) => key; // Placeholder for localization
+  const t = (key: string): string => key; // Placeholder for localization
 
   const itemClasses = React.useMemo(() => {
     const classes = ['keyvalue-item'];
@@ -186,7 +186,7 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
-const ClassificationIcon: React.FC<{ classification: string }> = ({
+const _ClassificationIcon: React.FC<{ classification: string }> = ({
   classification,
 }): React.ReactElement => {
   return (

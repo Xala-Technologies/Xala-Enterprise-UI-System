@@ -16,7 +16,7 @@ export const Form = forwardRef<HTMLFormElement, FormProps>((props, ref): React.R
   const { className, onSubmit, testId = 'form', children, accessibility, ...formProps } = props;
 
   const formClasses = className || '';
-  const handleSubmit = onSubmit || (() => {});
+  const handleSubmit = onSubmit || ((): void => {});
 
   return (
     <form

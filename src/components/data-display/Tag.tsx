@@ -57,7 +57,7 @@ export function Tag({
   ...props
 }: TagProps): React.ReactElement {
   // const { t } = useLocalization();
-  const t = (key: string) => key; // Placeholder for localization
+  const t = (key: string): string => key; // Placeholder for localization
 
   // Mock norwegian config for now
   const norwegian = {

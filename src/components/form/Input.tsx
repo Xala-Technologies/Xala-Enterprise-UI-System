@@ -47,7 +47,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const generatedId = useId();
     const finalInputId = id || generatedId;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
       if (onChange) {
         onChange(e.target.value, e);
       }
