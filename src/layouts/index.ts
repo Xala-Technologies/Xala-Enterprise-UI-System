@@ -13,7 +13,7 @@ export * from './mobile/MobileLayout';
 export * from './tablet/TabletLayout';
 
 // Desktop Layout Components
-export * from './desktop/DesktopLayout';
+export * from './desktop';
 
 // Web Layout Components
 export * from './web/WebLayout';
@@ -23,58 +23,58 @@ export * from './admin/AdminLayout';
 
 // Layout composition utilities
 export { LayoutComposition } from './BaseLayout';
-export { DesktopLayoutComposition } from './desktop/DesktopLayout';
+export { DesktopLayoutComposition } from './desktop';
 export { MobileLayoutComposition } from './mobile/MobileLayout';
 
 // Layout types - Base
 export type {
-  BaseLayoutProps,
-  FooterProps,
-  HeaderProps,
-  MainContentProps,
-  SidebarProps,
+    BaseLayoutProps,
+    FooterProps,
+    HeaderProps,
+    MainContentProps,
+    SidebarProps
 } from './BaseLayout';
 
 // Layout types - Mobile
 export type {
-  MobileBottomNavigationProps,
-  MobileContentProps,
-  MobileDrawerProps,
-  MobileHeaderProps,
-  MobileLayoutProps,
+    MobileBottomNavigationProps,
+    MobileContentProps,
+    MobileDrawerProps,
+    MobileHeaderProps,
+    MobileLayoutProps
 } from './mobile/MobileLayout';
 
 // Layout types - Tablet
 export type {
-  TabletHeaderProps,
-  TabletLayoutProps,
-  TabletSidebarProps,
+    TabletHeaderProps,
+    TabletLayoutProps,
+    TabletSidebarProps
 } from './tablet/TabletLayout';
 
 // Layout types - Desktop
 export type {
-  DesktopHeaderProps,
-  DesktopLayoutProps,
-  DesktopMainContentProps,
-  DesktopSidebarProps,
-  DesktopStatusBarProps,
-  DesktopToolbarProps,
-} from './desktop/DesktopLayout';
+    DesktopHeaderProps,
+    DesktopLayoutProps,
+    DesktopMainContentProps,
+    DesktopSidebarProps,
+    DesktopStatusBarProps,
+    DesktopToolbarProps
+} from './desktop';
 
 // Layout types - Web
 export type {
-  WebContentProps,
-  WebFooterProps,
-  WebLayoutProps,
-  WebNavbarProps,
+    WebContentProps,
+    WebFooterProps,
+    WebLayoutProps,
+    WebNavbarProps
 } from './web/WebLayout';
 
 // Layout types - Admin
 export type {
-  AdminContentProps,
-  AdminLayoutProps,
-  AdminSidebarProps,
-  AdminTopBarProps,
+    AdminContentProps,
+    AdminLayoutProps,
+    AdminSidebarProps,
+    AdminTopBarProps
 } from './admin/AdminLayout';
 
 // Platform utilities

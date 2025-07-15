@@ -17,7 +17,7 @@ import { desktopStatusBarVariants } from '../variants';
  * - Flexible sizing
  * - Accessible status updates
  */
-export const DesktopStatusBar = forwardRef<HTMLElement, DesktopStatusBarProps>(
+export const DesktopStatusBar = forwardRef<HTMLDivElement, DesktopStatusBarProps>(
   ({ className, variant, size, leftItems, centerItems, rightItems, children, ...props }, ref) => {
     return (
       <div

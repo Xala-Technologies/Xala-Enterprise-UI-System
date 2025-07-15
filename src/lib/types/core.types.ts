@@ -330,3 +330,6 @@ export interface AuditTrailEntry {
  * Theme registry type
  */
 export type ThemeRegistry = Map<string, ThemeDefinition>;
+
+// Re-export accessibility types
+export type { AccessibilityConfig, AccessibilityPreset } from '../../tokens/accessibility-tokens';

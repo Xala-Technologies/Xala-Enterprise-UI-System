@@ -17,7 +17,7 @@ import { desktopToolbarVariants } from '../variants';
  * - Flexible sizing
  * - Blur effect support
  */
-export const DesktopToolbar = forwardRef<HTMLElement, DesktopToolbarProps>(
+export const DesktopToolbar = forwardRef<HTMLDivElement, DesktopToolbarProps>(
   (
     {
       className,

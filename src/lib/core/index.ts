@@ -18,7 +18,7 @@ import type {
  * UI System Core class implementing the Singleton pattern
  * Manages themes, components, and accessibility settings
  */
-export class UISystemCore {
+class UISystemCore {
   private static instance: UISystemCore;
   private readonly logger: Logger;
   private readonly config: UISystemConfig;
@@ -262,29 +262,66 @@ export class UISystemCore {
   }
 
   /**
-   * Initialize component registry
+   * Initialize default components
    */
-  private async initializeComponentRegistry(): Promise<void> {
-    // Register core components
+  private initializeDefaultComponents(): void {
+    // Register default Button component
     this.componentRegistry.set('Button', {
       name: 'Button',
-      version: '1.0.0',
-      description: 'Interactive button component',
-      props: ['variant', 'size', 'disabled', 'loading'],
+      type: 'button',
+      props: {
+        className: 'btn',
+        testId: 'button-component',
+      },
+      state: {
+        isLoading: false,
+        isDisabled: false,
+        isVisible: true,
+        hasError: false,
+        isFocused: false,
+      },
       accessibility: {
-        level: 'AAA',
-        features: ['keyboard-navigation', 'screen-reader', 'focus-management'],
+        'aria-label': 'Button',
+        'aria-describedby': 'button-description',
+      },
+      theme: {
+        name: 'default',
+        colors: { primary: '#000000', secondary: '#ffffff' },
+        spacing: { sm: '8px', md: '16px', lg: '24px' },
+        typography: { body: '16px', heading: '24px' },
+        borderRadius: { sm: '4px', md: '8px' },
+        shadows: { sm: '0 1px 2px rgba(0,0,0,0.1)' },
+        breakpoints: { sm: '640px', md: '768px', lg: '1024px' },
       },
     });
 
+    // Register default Input component
     this.componentRegistry.set('Input', {
       name: 'Input',
-      version: '1.0.0',
-      description: 'Text input component',
-      props: ['type', 'placeholder', 'disabled', 'error'],
+      type: 'input',
+      props: {
+        className: 'input',
+        testId: 'input-component',
+      },
+      state: {
+        isLoading: false,
+        isDisabled: false,
+        isVisible: true,
+        hasError: false,
+        isFocused: false,
+      },
       accessibility: {
-        level: 'AAA',
-        features: ['keyboard-navigation', 'screen-reader', 'validation'],
+        'aria-label': 'Input field',
+        'aria-describedby': 'input-description',
+      },
+      theme: {
+        name: 'default',
+        colors: { primary: '#000000', secondary: '#ffffff' },
+        spacing: { sm: '8px', md: '16px', lg: '24px' },
+        typography: { body: '16px', heading: '24px' },
+        borderRadius: { sm: '4px', md: '8px' },
+        shadows: { sm: '0 1px 2px rgba(0,0,0,0.1)' },
+        breakpoints: { sm: '640px', md: '768px', lg: '1024px' },
       },
     });
   }
@@ -295,7 +332,7 @@ export class UISystemCore {
   async initialize(): Promise<void> {
     try {
       await this.initializeThemeRegistry();
-      await this.initializeComponentRegistry();
+      this.initializeDefaultComponents();
       
       this.logger.info('UISystemCore initialization completed');
     } catch (error) {
