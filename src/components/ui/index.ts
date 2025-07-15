@@ -5,11 +5,11 @@
 
 // Button components
 export { Button } from './button';
-export type { ButtonProps, ButtonSize, ButtonVariant } from './button';
+export type { ButtonProps } from './button';
 
 // Input components
 export { Input } from './input';
-export type { InputProps, InputSize, InputVariant } from './input';
+export type { InputProps } from './input';
 
 // Form components
 export { Checkbox } from './checkbox';
@@ -34,15 +34,12 @@ export { Slider } from './slider';
 export type { SliderProps, SliderSize, SliderVariant } from './slider';
 
 // Card components
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card';
+export { Card, CardContent, CardFooter, CardHeader } from './card';
 export type {
     CardContentProps,
-    CardDescriptionProps,
     CardFooterProps,
     CardHeaderProps,
-    CardProps,
-    CardTitleProps,
-    CardVariant
+    CardProps
 } from './card';
 
 // Alert components

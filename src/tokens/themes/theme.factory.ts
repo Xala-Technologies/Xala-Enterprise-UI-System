@@ -7,14 +7,14 @@
 
 import { Logger } from '../../lib/utils/multiplatform-logger';
 import type {
+    AccessibilityLevel,
     CreateThemeInput,
+    ThemeCategory,
     ThemeColors,
     ThemeModel,
     UpdateThemeInput,
 } from './theme.model';
 import {
-    AccessibilityLevel,
-    ThemeCategory,
     ThemeMode,
     createDefaultAccessibility,
     themeToJson,
