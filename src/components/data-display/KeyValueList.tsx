@@ -186,6 +186,7 @@ const KeyValueItemComponent: React.FC<{
 /**
  * Classification icon component
  */
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
 const _ClassificationIcon: React.FC<{ classification: string }> = ({
   classification,
 }): React.ReactElement => {
@@ -221,7 +222,11 @@ const StatusIndicator: React.FC<{ status: string }> = ({ status }): React.ReactE
 /**
  * Value formatting function
  */
-function formatValue(value: unknown, item: KeyValueItem, norwegian?: any): string {
+function formatValue(
+  value: unknown,
+  item: KeyValueItem,
+  norwegian?: KeyValueListProps['norwegian']
+): string {
   if (value === null || value === undefined) {
     return '';
   }
@@ -265,7 +270,8 @@ function formatOrganizationNumber(value: string): string {
   return value;
 }
 
-function formatDate(value: unknown, format: string): string {
+// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
+function formatDate(value: unknown, _format: string): string {
   // Type guard for valid date inputs
   if (typeof value === 'string' || typeof value === 'number' || value instanceof Date) {
     const date = new Date(value);

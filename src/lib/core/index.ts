@@ -320,7 +320,7 @@ class UISystemCore {
    * Update theme configuration
    */
   updateTheme(theme: UISystemConfig['theme']): void {
-    (this.config as any).theme = theme;
+    (this.config as { theme: UISystemConfig['theme'] }).theme = theme;
     this.logger.info('Theme configuration updated', { theme });
   }
 
