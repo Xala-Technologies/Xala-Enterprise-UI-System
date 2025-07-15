@@ -4,7 +4,8 @@
  * @description Input component using design tokens (no inline styles)
  */
 
-import React, { useId } from 'react';
+import * as React from 'react';
+import { useId } from 'react';
 
 import type { InputProps } from '../../types/form.types';
 

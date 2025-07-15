@@ -4,7 +4,8 @@
  * @description Form container component using design tokens (no inline styles)
  */
 
-import React, { forwardRef } from 'react';
+import * as React from 'react';
+import { forwardRef } from 'react';
 
 import type { FormProps } from '../../types/form.types';
 

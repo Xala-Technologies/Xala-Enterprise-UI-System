@@ -4,7 +4,7 @@
  * @version 3.0.0
  */
 
-import React from 'react';
+import * as React from 'react';
 import { cn } from '../../lib/utils/cn';
 import { getComponentTokens, getToken } from '../../tokens';
 

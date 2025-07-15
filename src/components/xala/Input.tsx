@@ -4,8 +4,8 @@
  * @version 3.0.0
  */
 
-import type { ReactNode } from 'react';
-import React, { useCallback, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/utils/cn';
 
 // =============================================================================

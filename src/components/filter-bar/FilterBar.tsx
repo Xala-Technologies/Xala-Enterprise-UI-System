@@ -5,7 +5,8 @@
 
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, type ReactNode } from 'react';
+import * as React from 'react';
+import { forwardRef, type ReactNode } from 'react';
 
 /**
  * Filter bar variants using design tokens
@@ -87,7 +88,7 @@ export interface FilterBarProps extends Omit<React.HTMLAttributes<HTMLDivElement
     readonly placeholder?: string;
   }[];
   /** Filter change handler */
-   
+
   // eslint-disable-next-line no-unused-vars
   readonly onFilterChange?: (_filterId: string, _value: string) => void;
   /** View options */

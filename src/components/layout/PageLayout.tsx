@@ -4,7 +4,7 @@
  * @description Page layout component using design tokens (no inline styles)
  */
 
-import React from 'react';
+import * as React from 'react';
 
 import type { PageLayoutProps } from '../../types/layout.types';
 
@@ -18,7 +18,7 @@ export function PageLayout({
   footer,
   sidebar,
   variant = 'modern',
-   
+
   // _municipality removed - unused parameter
   fullWidth = false,
   background = 'primary',

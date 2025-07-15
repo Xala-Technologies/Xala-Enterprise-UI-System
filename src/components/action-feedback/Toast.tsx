@@ -1,7 +1,8 @@
 // Toast component for @xala-mock/ui-system
 // Norwegian-compliant toast notification with accessibility and positioning
 
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import type { ToastProps } from '../../types/action-feedback.types';
 import { CloseButton } from './AlertActions';

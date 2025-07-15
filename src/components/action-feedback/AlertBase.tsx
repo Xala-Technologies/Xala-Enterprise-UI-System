@@ -3,7 +3,7 @@
  * Main Alert component using extracted modules
  */
 
-import React from 'react';
+import * as React from 'react';
 
 import { AlertActions, CloseButton } from './AlertActions';
 import {

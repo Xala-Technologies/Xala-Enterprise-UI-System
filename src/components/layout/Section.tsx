@@ -4,7 +4,7 @@
  * @description Semantic section component using design tokens (no inline styles)
  */
 
-import React from 'react';
+import * as React from 'react';
 
 import type { SectionProps } from '../../types/layout.types';
 

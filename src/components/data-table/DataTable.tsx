@@ -5,7 +5,8 @@
 
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, type ReactNode } from 'react';
+import * as React from 'react';
+import { forwardRef, type ReactNode } from 'react';
 
 /**
  * Data table variants using design tokens

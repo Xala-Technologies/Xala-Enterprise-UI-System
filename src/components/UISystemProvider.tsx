@@ -4,8 +4,8 @@
  * @description Provides UI system configuration to all components
  */
 
-import type { ReactNode } from 'react';
-import React, { createContext, useContext, useMemo } from 'react';
+import * as React from 'react';
+import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import type { AccessibilityLevel, UISystemConfig } from '../lib/types/core.types';
 import { Logger } from '../lib/utils/multiplatform-logger';
 import type {
