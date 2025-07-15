@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Enterprise-compliant UI system with Norwegian accessibility standards, design tokens, and zero inline styles following @xala-technologies/enterprise-standards v6.0.2",
   "main": "dist/index.js",
   "module": "dist/index.js",
