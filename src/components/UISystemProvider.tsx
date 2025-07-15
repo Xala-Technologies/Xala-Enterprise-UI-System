@@ -117,9 +117,22 @@ export const UISystemProvider: React.FC<UISystemProviderProps> = ({
   // Generate CSS variables
   const cssVariables = useMemo(() => {
     const tokens = generateAccessibilityTokens(accessibilityConfig);
-    return Object.entries(tokens)
-      .map(([key, value]) => `--${key}: ${value};`)
-      .join(' ');
+    const variables: string[] = [];
+    
+    // Flatten nested object to CSS variables
+    const flattenTokens = (obj: any, prefix = ''): void => {
+      Object.entries(obj).forEach(([key, value]) => {
+        const varName = prefix ? `${prefix}-${key}` : key;
+        if (typeof value === 'object' && value !== null) {
+          flattenTokens(value, varName);
+        } else {
+          variables.push(`--${varName}: ${value}`);
+        }
+      });
+    };
+    
+    flattenTokens(tokens);
+    return variables.join('; ');
   }, [accessibilityConfig]);
 
   // Create context value

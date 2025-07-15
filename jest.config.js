@@ -27,6 +27,7 @@ export default {
   setupFilesAfterEnv: [
     '<rootDir>/tests/setup/jest.setup.js',
     '<rootDir>/tests/setup/norwegian.setup.js',
+    '<rootDir>/tests/setup/accessibility.setup.js',
     '@testing-library/jest-dom',
   ],
   collectCoverageFrom: [

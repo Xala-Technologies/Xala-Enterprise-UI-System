@@ -3,7 +3,7 @@
  * Norwegian WCAG 2.2 AA compliance validation with axe-core
  */
 
-import { configureAxe } from 'jest-axe';
+const { configureAxe } = require('jest-axe');
 
 // Configure axe-core for Norwegian WCAG 2.2 AA compliance
 const axe = configureAxe({

@@ -199,7 +199,7 @@ export function DataTable({
         data-audit-logging={
           norwegian?.classification && norwegian.classification !== 'ÅPEN' ? 'true' : undefined
         }
-        data-brreg-integration={norwegian?.gdprCompliance ? 'true' : undefined}
+        data-brreg-integration={norwegian ? 'true' : undefined}
       >
         <TableHeader
           columns={columns}
@@ -321,26 +321,32 @@ const TableHeader: React.FC<{
                 ? `datatable__header-cell--classification-${column.norwegian.classification}`
                 : ''
             }`}
-            onClick={column.sortable && onSortChange ? () => handleSort(column.key) : undefined}
-            role={column.sortable && onSortChange ? 'button' : undefined}
-            tabIndex={column.sortable && onSortChange ? 0 : undefined}
-            aria-sort={
-              sorting?.sortBy === column.key
-                ? sorting.sortOrder === 'asc'
-                  ? 'ascending'
-                  : 'descending'
-                : column.sortable
-                  ? 'none'
-                  : undefined
-            }
-            aria-label={column.sortable && onSortChange ? getSortAriaLabel(column) : undefined}
           >
-            <span className="datatable__header-text">{getColumnLabel(column)}</span>
-
-            {column.sortable && sorting?.enabled && (
-              <span className="datatable__sort-indicator" aria-hidden="true">
-                {sorting?.sortBy === column.key ? (sorting.sortOrder === 'asc' ? '↑' : '↓') : '↕'}
-              </span>
+            {column.sortable && onSortChange ? (
+              <button
+                type="button"
+                className="datatable__sort-button"
+                onClick={() => handleSort(column.key)}
+                aria-sort={
+                  sorting?.sortBy === column.key
+                    ? sorting.sortOrder === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                }
+                aria-label={getSortAriaLabel(column)}
+              >
+                <span className="datatable__header-text">{getColumnLabel(column)}</span>
+                <span className="datatable__sort-indicator" aria-hidden="true">
+                  {sorting?.sortBy === column.key
+                    ? sorting.sortOrder === 'asc'
+                      ? '↑'
+                      : '↓'
+                    : '↕'}
+                </span>
+              </button>
+            ) : (
+              <span className="datatable__header-text">{getColumnLabel(column)}</span>
             )}
 
             {column.norwegian?.classification && norwegian?.showClassification && (
