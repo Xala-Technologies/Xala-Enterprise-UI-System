@@ -18,39 +18,52 @@ export {
     Accordion,
     AccordionContent,
     AccordionItem,
-    AccordionTrigger, Avatar,
+    AccordionTrigger,
+    // Data display components
+    Avatar, Blockquote,
     // Navigation components
-    Breadcrumb, Calendar,
+    Breadcrumb, Calendar, CardContent,
+    CardFooter, CardHeader,
     // Form components
     Checkbox,
-    CheckboxGroup, CircularProgress,
+    CheckboxGroup, CircularProgress, Code,
     // Advanced UI components
-    CommandPalette, ContextMenu, DatePicker, Divider, IconButton, Pagination, Radio,
+    CommandPalette, ContextMenu, ContextMenuContent,
+    ContextMenuItem, ContextMenuTrigger, DatePicker, Divider, DrawerBody,
+    DrawerFooter, DrawerHeader, Heading, IconButton, Pagination, Radio,
     RadioGroup,
     // Loading components
     Skeleton,
     SkeletonAvatar,
     SkeletonButton,
     SkeletonCard,
-    SkeletonText, Slider,
-    Switch,
+    SkeletonText, Slider, Switch,
     // Individual Tabs components
     TabsContent,
     TabsList,
-    TabsTrigger, TimePicker, Timeline, TreeView, Typography,
+    TabsTrigger, Text, Timeline,
+    TimelineItem, TimePicker, TooltipContent,
+    TooltipTrigger, TreeView,
+    TreeViewItem, Typography,
     // Feedback components
     Alert as UIAlert,
     AlertDescription as UIAlertDescription,
-    AlertTitle as UIAlertTitle,
-    // Data display components
-    Badge as UIBadge, Button as UIButton,
+    AlertTitle as UIAlertTitle, Badge as UIBadge,
+    // Button components
+    Button as UIButton,
     // Layout components
-    Card as UICard, Drawer as UIDrawer, Input as UIInput, Progress as UIProgress, Select as UISelect, Textarea as UITextarea, Tooltip as UITooltip, type AccordionProps, type AvatarProps, type BreadcrumbItem,
-    type BreadcrumbProps, type CalendarProps,
-    // Export types
-    type CheckboxProps, type CommandPaletteProps, type ContextMenuProps, type DatePickerProps, type DividerProps, type PaginationProps, type RadioProps, type SkeletonProps, type SliderProps,
-    type SwitchProps, type TimePickerProps, type TimelineProps, type TreeViewProps, type TypographyProps, type AlertProps as UIAlertProps, type BadgeProps as UIBadgeProps, type DrawerProps as UIDrawerProps, type ProgressProps as UIProgressProps, type SelectOption as UISelectOption,
-    type SelectProps as UISelectProps, type TextareaProps as UITextareaProps, type TooltipProps as UITooltipProps
+    Card as UICard, Drawer as UIDrawer, Input as UIInput, Progress as UIProgress, Select as UISelect, Textarea as UITextarea, Tooltip as UITooltip, type AccordionContentProps,
+    type AccordionItemData, type AccordionItemProps, type AccordionProps, type AccordionTriggerProps, type AvatarProps, type BreadcrumbItem,
+    type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant, type CalendarDate, type CalendarProps, type CalendarSize, type CalendarVariant, type CardContentProps,
+    type CardFooterProps, type CardHeaderProps, type CheckboxGroupProps, type CheckboxOption, type CheckboxProps, type CheckboxSize, type CheckboxVariant, type CircularProgressProps, type CommandGroup, type CommandItem, type CommandPaletteProps, type CommandPaletteSize, type CommandPaletteTexts, type CommandPaletteVariant, type ContextMenuContentProps,
+    type ContextMenuItemProps, type ContextMenuProps,
+    type ContextMenuTriggerProps, type DatePickerProps, type DividerOrientation, type DividerProps, type DividerSize, type DividerStyle, type DividerVariant, type DrawerBodyProps,
+    type DrawerFooterProps, type DrawerHeaderProps, type DrawerOverlayVariant, type DrawerSide,
+    type DrawerSize, type IconButtonProps, type IconButtonShape, type IconButtonSize, type IconButtonVariant, type NorwegianHoliday, type PaginationProps, type PaginationSize, type PaginationVariant, type RadioGroupProps, type RadioOption, type RadioProps, type RadioSize, type RadioVariant, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonSpeed, type SkeletonTextProps, type SkeletonVariant, type SliderProps, type SliderSize, type SliderVariant, type SwitchProps, type SwitchSize, type SwitchVariant, type TabsContentProps, type TabsListProps, type TabsOrientation, type TabsTriggerProps, type TextareaResize, type TextareaSize, type TextareaVariant, type TimelineItemData, type TimelineItemProps, type TimelineProps, type TimePickerProps, type TooltipContentProps,
+    type TooltipSide, type TreeViewData, type TreeViewItemProps, type TreeViewProps, type TypographyAlign, type TypographyColor, type TypographyProps,
+    type TypographyVariant, type AlertProps as UIAlertProps,
+    type AlertVariant as UIAlertVariant, type BadgeProps as UIBadgeProps, type BadgeSize as UIBadgeSize, type BadgeVariant as UIBadgeVariant, type ButtonProps as UIButtonProps, type CardProps as UICardProps, type DrawerProps as UIDrawerProps, type InputProps as UIInputProps, type ProgressProps as UIProgressProps, type ProgressSize as UIProgressSize, type ProgressVariant as UIProgressVariant, type SelectOption as UISelectOption,
+    type SelectProps as UISelectProps, type SelectSize as UISelectSize, type SelectVariant as UISelectVariant, type TextareaProps as UITextareaProps, type TooltipProps as UITooltipProps
 } from './ui';
 
 // New Components (with specific exports to avoid conflicts)
@@ -62,35 +75,22 @@ export {
 
 export { FilterBar, filterBarVariants } from './filter-bar/FilterBar';
 
-export { DataTable as XalaDataTable, dataTableVariants } from './data-table/DataTable';
+export { dataTableVariants, DataTable as XalaDataTable } from './data-table/DataTable';
 
 export {
-    ProgressBar,
-    Steps,
-    Tabs,
-    progressBarVariants,
-    stepsVariants,
-    tabsVariants
+    ProgressBar, progressBarVariants, Steps, stepsVariants, Tabs, tabsVariants
 } from './navigation/NavigationComponents';
 
 export {
-    Notification,
-    Spinner,
-    Alert as XalaAlert,
-    Badge as XalaBadge,
     alertVariants,
-    badgeVariants,
-    notificationVariants,
-    spinnerVariants
+    badgeVariants, Notification, notificationVariants, Spinner, spinnerVariants, Alert as XalaAlert,
+    Badge as XalaBadge
 } from './feedback/FeedbackComponents';
 
 export {
-    ChartCard,
-    StatisticCard,
-    Card as XalaCard,
-    cardVariants,
-    chartCardVariants,
-    statCardVariants
+    cardVariants, ChartCard, chartCardVariants,
+    statCardVariants, StatisticCard,
+    Card as XalaCard
 } from './cards/CardComponents';
 
 // Global Search Types
