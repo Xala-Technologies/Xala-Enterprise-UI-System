@@ -17,6 +17,7 @@ export type { LoadingSpinnerProps } from './components/action-feedback/ButtonIco
 export type { AlertProps as ActionAlertProps, ButtonProps as ActionButtonProps, DrawerProps as ActionDrawerProps, ActionFeedbackComponentProps, ActionFeedbackTypes, ModalProps as ActionModalProps, ButtonGroupProps, ConfirmationModalProps, LoadingOverlayProps, NorwegianActionContext, NorwegianFeedbackConfig, ProgressIndicatorProps, StatusBannerProps, ToastProps } from './types/action-feedback.types';
 
 // Data Display Components
+export { DataTable, KeyValueList, Tag } from './components/data-display';
 export { Avatar, Badge, Blockquote, Code, Divider, Heading, Text, Tooltip, TooltipContent, TooltipTrigger, Typography } from './components/ui';
 // Types: Data Display
 export type { BadgeProps as DataBadgeProps, DataDisplayComponentProps, TooltipProps as DataTooltipProps, KeyValueItem, KeyValueListProps, StatusIndicatorProps, TagProps } from './types/data-display.types';
@@ -26,6 +27,7 @@ export { Button, IconButton } from './components/ui';
 export type { ButtonProps, IconButtonProps, IconButtonShape, IconButtonSize, IconButtonVariant } from './components/ui';
 
 // Form Components
+export { Form, OrganizationNumberInput, PersonalNumberInput, TextArea } from './components/form';
 export { Checkbox, CheckboxGroup, Input, Radio, RadioGroup, Select, Slider, Switch, Textarea } from './components/ui';
 // Types: Form
 export type { FormComponentProps, InputProps as FormInputProps, FormProps, SelectOption as FormSelectOption, SelectProps as FormSelectProps, TextAreaProps as FormTextAreaProps, OrganizationData, OrganizationNumberInputProps, PersonalNumberInputProps, ValidationError, ValidationResult } from './types/form.types';
@@ -42,8 +44,8 @@ export { Breadcrumb, Pagination, TabsContent, TabsList, TabsTrigger } from './co
 export type { BreadcrumbItem, BreadcrumbProps, BreadcrumbSize, BreadcrumbVariant, PaginationProps, PaginationSize, PaginationVariant, TabsContentProps, TabsListProps, TabsOrientation, TabsTriggerProps } from './components/ui';
 
 // Loading Components
-export { Skeleton, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonText } from './components/ui';
-export type { SkeletonAvatarProps, SkeletonButtonProps, SkeletonCardProps, SkeletonProps, SkeletonSpeed, SkeletonTextProps, SkeletonVariant } from './components/ui';
+export { CircularProgress, Progress, Skeleton, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonText } from './components/ui';
+export type { CircularProgressProps, ProgressProps, ProgressSize, ProgressVariant, SkeletonAvatarProps, SkeletonButtonProps, SkeletonCardProps, SkeletonProps, SkeletonSpeed, SkeletonTextProps, SkeletonVariant } from './components/ui';
 
 // Accordion Components
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './components/ui';
