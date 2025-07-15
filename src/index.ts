@@ -1,90 +1,145 @@
 /**
- * @fileoverview Main UI System Index
- * @module UISystem
- * @description Generic UI system without country-specific compliance
+ * @fileoverview Main UI System Entry Point - Production Optimized
+ * @description Tree-shakeable exports organized for optimal bundle splitting
+ * @version 4.0.0
+ * @compliance SSR-Safe, Production-ready, Tree-shakeable
  */
 
 // =============================================================================
-// CORE EXPORTS
+// CORE PROVIDER & HOOKS (Essential for SSR)
 // =============================================================================
-
-// Components (includes platform components)
-export * from './components';
-
-// Layouts
-export * from './layouts';
-
-// Hooks
-export * from './hooks';
-
-// Tokens
-export * from './tokens';
-
-// Core types
-export type {
-  AccessibilityLevel,
-  AccessibilityProps,
-  AuditTrailEntry,
-  CSSProperties,
-  ComponentAccessibilityConfig,
-  ComponentDefinition,
-  ComponentProps,
-  ComponentState,
-  ComponentType,
-  EventHandlers,
-  PerformanceMetrics,
-  SupportedLanguage,
-  ThemeColors,
-  ThemeDefinition,
-  UISystemConfig,
-  UISystemOptions,
-} from './lib/types/core.types';
+export { useTokens } from './hooks/useTokens';
+export type { UseTokensResult } from './hooks/useTokens';
+export { DesignSystemProvider } from './providers/DesignSystemProvider';
 
 // =============================================================================
-// ADDITIONAL TYPES (non-conflicting)
+// ESSENTIAL UI COMPONENTS (Most commonly used)
 // =============================================================================
+export { Container } from './components/layout/Container';
+export { Button } from './components/ui/button';
+export { Card, CardContent, CardFooter, CardHeader } from './components/ui/card';
+export { Input } from './components/ui/input';
 
-// Platform types (only export those not already in components)
-export type {
-  HoverFriendlyProps,
-  PlatformComponentProps,
-  PlatformDetection,
-  PlatformTypes,
-  ResponsiveBreakpoints,
-  TouchFriendlyProps,
-} from './types/platform.types';
+export type { ContainerProps } from './components/layout/Container';
+export type { ButtonProps } from './components/ui/button';
+export type { CardContentProps, CardFooterProps, CardHeaderProps, CardProps } from './components/ui/card';
+export type { InputProps } from './components/ui/input';
 
 // =============================================================================
-// PROVIDERS AND HOOKS
+// TEMPLATE SYSTEM (Dynamic loading for SSR optimization)
 // =============================================================================
+export { TemplateLoader } from './utils/templateLoader';
 
-// Re-export UISystemProvider
+// =============================================================================
+// LAYOUT COMPONENTS (Tree-shakeable)
+// =============================================================================
 export {
-  UISystemProvider,
-  useAccessibility,
-  useAccessibilityFeature,
-  useUISystem,
-} from './components/UISystemProvider';
+    Grid,
+    GridItem, HStack, PageLayout, Section, Stack,
+    VStack
+} from './components/layout';
+
+export type {
+    GridItemProps, GridProps, StackProps
+} from './components/layout';
 
 // =============================================================================
-// PACKAGE INFORMATION
+// FORM COMPONENTS (Tree-shakeable)
 // =============================================================================
+export {
+    Form, OrganizationNumberInput, PersonalNumberInput, Select,
+    TextArea
+} from './components/form';
 
-export const UI_SYSTEM_INFO = {
-  name: 'Generic UI System',
-  version: '1.0.0',
-  description: 'A generic, accessible UI system built with design tokens',
-  features: [
-    'Configurable accessibility (WCAG 2.1 AA to WCAG 2.2 AAA)',
-    'Design token-based styling',
-    'Multi-platform support',
-    'TypeScript support',
-    'Framework agnostic',
-    'Customizable themes',
-  ],
-  accessibility: {
-    levels: ['WCAG_2_1_AA', 'WCAG_2_1_AAA', 'WCAG_2_2_AA', 'WCAG_2_2_AAA'],
-    configurable: true,
-    optional: true,
+export type {
+    FormProps, OrganizationNumberInputProps, PersonalNumberInputProps, SelectProps,
+    TextAreaProps
+} from './components/form';
+
+// =============================================================================
+// DATA DISPLAY COMPONENTS (Tree-shakeable)
+// =============================================================================
+export {
+    Badge,
+    DataTable,
+    KeyValueList,
+    Tag,
+    Tooltip
+} from './components/data-display';
+
+export type {
+    BadgeProps,
+    DataTableProps,
+    KeyValueListProps,
+    TagProps,
+    TooltipProps
+} from './components/data-display';
+
+// =============================================================================
+// ACTION & FEEDBACK COMPONENTS (Tree-shakeable)
+// =============================================================================
+export {
+    Alert,
+    Modal,
+    Toast
+} from './components/action-feedback';
+
+export type {
+    AlertProps,
+    ModalProps,
+    ToastProps
+} from './components/action-feedback';
+
+// =============================================================================
+// PLATFORM COMPONENTS (Lazy-loadable for SSR)
+// =============================================================================
+// Desktop platform exports (lazy-loaded)
+export const Desktop = {
+  get Sidebar() { 
+    return import('./components/platform/desktop/DesktopSidebar').then(m => m.DesktopSidebar);
+  }
+};
+
+// Mobile platform exports (lazy-loaded)
+export const Mobile = {
+  get Header() { 
+    return import('./components/platform/mobile/MobileHeader').then(m => m.MobileHeader);
   },
-} as const;
+  get BottomNavigation() { 
+    return import('./components/platform/mobile/BottomNavigation').then(m => m.BottomNavigation);
+  }
+};
+
+// =============================================================================
+// UTILITY TYPES & INTERFACES (Tree-shakeable)
+// =============================================================================
+export type {
+    AccessibilityTokens, BrandingTokens, ColorTokens, ResponsiveTokens, SpacingTokens, TypographyTokens
+} from './hooks/useTokens';
+
+// =============================================================================
+// ADVANCED FEATURES (Lazy-loadable)
+// =============================================================================
+// Load only when needed for bundle optimization
+export const Advanced = {
+  get GlobalSearch() {
+    return import('./components/global-search/GlobalSearch').then(m => m.GlobalSearch);
+  },
+  get FilterBar() {
+    return import('./components/filter-bar/FilterBar').then(m => m.FilterBar);
+  },
+  get NavigationComponents() {
+    return import('./components/navigation/NavigationComponents');
+  }
+};
+
+// =============================================================================
+// UTILITIES (Tree-shakeable)
+// =============================================================================
+// Note: Some utilities not yet implemented - will be added in future versions
+
+// =============================================================================
+// LEGACY COMPATIBILITY (Deprecated - will be removed in v5.0.0)
+// =============================================================================
+/** @deprecated Use new component exports instead. Will be removed in v5.0.0 */
+export * from './components/ui';

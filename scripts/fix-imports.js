@@ -1,70 +1,75 @@
-const fs = require('fs');
-const path = require('path');
-
 /**
- * Recursively process all .js files in dist directory to fix @/* imports
+ * Fix import paths in compiled JavaScript files
+ * ES Module compatible version
  */
-function fixImports(dirPath) {
-  const files = fs.readdirSync(dirPath);
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const distDir = path.join(__dirname, '..', 'dist');
+
+function fixImportsInFile(filePath) {
+  if (!fs.existsSync(filePath) || !filePath.endsWith('.js')) {
+    return;
+  }
+
+  try {
+    let content = fs.readFileSync(filePath, 'utf8');
+    let hasChanges = false;
+
+    // Fix relative imports without .js extension
+    const importRegex = /from ['"](\..+?)['"];?/g;
+    content = content.replace(importRegex, (match, importPath) => {
+      if (!importPath.endsWith('.js') && !importPath.includes('.json')) {
+        hasChanges = true;
+        return match.replace(importPath, importPath + '.js');
+      }
+      return match;
+    });
+
+    // Fix require statements if any remain
+    const requireRegex = /require\(['"](\..+?)['"]\)/g;
+    content = content.replace(requireRegex, (match, requirePath) => {
+      if (!requirePath.endsWith('.js') && !requirePath.includes('.json')) {
+        hasChanges = true;
+        return match.replace(requirePath, requirePath + '.js');
+      }
+      return match;
+    });
+
+    if (hasChanges) {
+      fs.writeFileSync(filePath, content, 'utf8');
+      console.log(`Fixed imports in: ${filePath}`);
+    }
+  } catch (error) {
+    console.warn(`Warning: Could not fix imports in ${filePath}:`, error.message);
+  }
+}
+
+function walkDirectory(dir) {
+  if (!fs.existsSync(dir)) {
+    console.log('Dist directory not found, skipping import fixes.');
+    return;
+  }
+
+  const files = fs.readdirSync(dir);
 
   for (const file of files) {
-    const filePath = path.join(dirPath, file);
-    const stat = fs.statSync(filePath);
+    const fullPath = path.join(dir, file);
+    const stat = fs.statSync(fullPath);
 
     if (stat.isDirectory()) {
-      fixImports(filePath);
-    } else if (file.endsWith('.js')) {
-      let content = fs.readFileSync(filePath, 'utf8');
-      let modified = false;
-
-      // Fix @/lib/utils/cn imports
-      if (content.includes(`require("@/lib/utils/cn")`)) {
-        const relativePath = getRelativePath(filePath, 'dist/lib/utils/cn');
-        content = content.replace(/require\("@\/lib\/utils\/cn"\)/g, `require("${relativePath}")`);
-        modified = true;
-      }
-
-      // Fix other @/* imports as needed
-      const atImports = content.match(/require\("@\/[^"]+"\)/g);
-      if (atImports) {
-        for (const atImport of atImports) {
-          const importPath = atImport.match(/require\("(@\/[^"]+)"\)/)[1];
-          const targetPath = importPath.replace('@/', 'dist/');
-          const relativePath = getRelativePath(filePath, targetPath);
-          content = content.replace(atImport, `require("${relativePath}")`);
-          modified = true;
-        }
-      }
-
-      if (modified) {
-        fs.writeFileSync(filePath, content);
-        console.log(`Fixed imports in: ${filePath}`);
-      }
+      walkDirectory(fullPath);
+    } else if (stat.isFile() && file.endsWith('.js')) {
+      fixImportsInFile(fullPath);
     }
   }
 }
 
-/**
- * Get relative path from source file to target file
- */
-function getRelativePath(fromFile, toFile) {
-  const fromDir = path.dirname(fromFile);
-  const relativePath = path.relative(fromDir, toFile);
-
-  // Ensure relative paths start with ./ or ../
-  if (!relativePath.startsWith('.')) {
-    return './' + relativePath;
-  }
-  return relativePath;
-}
-
-// Run the fix
-const distPath = path.join(__dirname, '..', 'dist');
-if (fs.existsSync(distPath)) {
-  console.log('Fixing import paths in compiled files...');
-  fixImports(distPath);
-  console.log('✅ Import paths fixed!');
-} else {
-  console.error('❌ dist directory not found');
-  process.exit(1);
-}
+console.log('Fixing import paths in compiled files...');
+walkDirectory(distDir);
+console.log('✅ Import paths fixed!');

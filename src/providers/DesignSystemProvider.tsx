@@ -86,6 +86,7 @@ export const DesignSystemProvider: React.FC<DesignSystemProviderProps> = ({
 
       return (): void => mediaQuery.removeEventListener('change', handleChange);
     }
+    return undefined;
   }, [autoDetectDarkMode]);
 
   // ✅ SSR-safe template loading

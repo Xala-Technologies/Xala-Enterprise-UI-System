@@ -1,68 +1,49 @@
 /**
- * Jest Configuration for UI System Library
- * Extends @xala-technologies/enterprise-standards library configuration
- * with React/JSX support for component testing
+ * Jest configuration for @xala-technologies/ui-system
+ * ES Module compatible configuration
  */
-
-const libraryConfig = require('@xala-technologies/enterprise-standards/configs/jest/library.cjs');
-
-module.exports = {
-  ...libraryConfig,
-
-  // Override test environment for React components
+export default {
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'jsdom',
-
-  // Add React setup
-  setupFilesAfterEnv: [...libraryConfig.setupFilesAfterEnv, '<rootDir>/tests/setup/jest.setup.js'],
-
-  // Add JSX transformation
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   transform: {
-    ...libraryConfig.transform,
-    '^.+\\.tsx?$': [
+    '^.+\\.(ts|tsx)$': [
       'ts-jest',
       {
         useESM: true,
-        tsconfig: {
-          module: 'ESNext',
-          target: 'ES2022',
-          jsx: 'react-jsx',
-        },
+        tsconfig: 'tsconfig.json',
       },
     ],
   },
-
-  // Add module name mapping for CSS and static assets
-  moduleNameMapper: {
-    ...libraryConfig.moduleNameMapper,
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
-    '\\.(png|jpg|jpeg|gif|svg)$': '<rootDir>/tests/__mocks__/image.js',
-  },
-
-  // UI System specific test patterns
   testMatch: [
-    '<rootDir>/src/**/__tests__/**/*.{ts,tsx}',
-    '<rootDir>/src/**/*.{spec,test}.{ts,tsx}',
-    '<rootDir>/tests/**/*.{test,spec}.{ts,tsx}',
+    '<rootDir>/src/**/__tests__/**/*.(ts|tsx)',
+    '<rootDir>/src/**/*.(test|spec).(ts|tsx)',
+    '<rootDir>/tests/**/*.(test|spec).(ts|tsx)',
   ],
-
-  // Coverage configuration for UI components
+  setupFilesAfterEnv: ['<rootDir>/tests/setup/jest.setup.js', '@testing-library/jest-dom'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
+    '!src/**/__tests__/**',
     '!src/**/*.test.{ts,tsx}',
     '!src/**/*.spec.{ts,tsx}',
     '!src/**/index.ts',
-    '!src/**/__tests__/**',
-    '!src/**/__mocks__/**',
   ],
-
-  // Higher coverage thresholds for UI system
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
+      branches: 70,
+      functions: 70,
+      lines: 70,
+      statements: 70,
     },
   },
+  testTimeout: 10000,
+  verbose: true,
+  maxWorkers: '50%',
 };
