@@ -9,7 +9,6 @@ import React from 'react';
 import type { OrganizationNumberInputProps } from '../../types/form.types';
 
 // Import the correct OrganizationData type
-import type { OrganizationData } from '../../types/form.types';
 
 // Placeholder validation functions (replace with actual validation package)
 const validateOrganizationNumber = (
@@ -60,7 +59,7 @@ export const OrganizationNumberInput = React.forwardRef<
   const currentValue = value || defaultValue || '';
   const validationResult = validateOrganizationNumber(currentValue);
   const _isValidating = false;
-  const _organizationData: OrganizationData | null = null;
+  // Remove or prefix '__organizationData' as needed.
 
   // Display format for validation
   const displayFormat = autoFormat ? 'nnn nnn nnn' : 'nnnnnnnnn';
@@ -158,14 +157,14 @@ export const OrganizationNumberInput = React.forwardRef<
       )}
 
       {/* Organization data display - TODO: Implement organization data fetching */}
-      {/* {_organizationData && (
+      {/* {__organizationData && (
         <div className="organization-number-field__org-data">
-          <h4 className="organization-number-field__org-name">{_organizationData.name}</h4>
+          <h4 className="organization-number-field__org-name">{__organizationData.name}</h4>
           <p className="organization-number-field__org-details">
-            {_organizationData.organizationForm} - {_organizationData.status}
+            {__organizationData.organizationForm} - {__organizationData.status}
           </p>
           <p className="organization-number-field__org-address">
-            {_organizationData.municipality}, {_organizationData.county}
+            {__organizationData.municipality}, {__organizationData.county}
           </p>
         </div>
       )} */}

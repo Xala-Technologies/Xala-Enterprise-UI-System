@@ -31,6 +31,7 @@ export { Checkbox, CheckboxGroup, Input, Radio, RadioGroup, Select, Slider, Swit
 export type { FormComponentProps, InputProps as FormInputProps, FormProps, SelectOption as FormSelectOption, SelectProps as FormSelectProps, TextAreaProps as FormTextAreaProps, OrganizationData, OrganizationNumberInputProps, PersonalNumberInputProps, ValidationError, ValidationResult } from './types/form.types';
 
 // Layout Components
+export { Container, Grid, GridItem, HStack, PageLayout, Section, Stack, VStack } from './components/layout';
 export { Card, CardContent, CardFooter, CardHeader } from './components/ui';
 // Types: Layout
 export type { ContainerProps, GridProps, LayoutComponentProps, PageLayoutProps, SectionProps, StackProps } from './types/layout.types';

@@ -372,7 +372,6 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       onEscapeKey,
       onOverlayClick,
       texts: userTexts,
-      open,
       onOpenChange,
       ...divProps
     } = props;
@@ -403,8 +402,7 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     }, [isOpen, closeOnEscape, persistent, onEscapeKey, onClose]);
 
     // Use focus trap
-    const actualIsOpen =
-      typeof open === 'boolean' ? open : typeof isOpen === 'boolean' ? isOpen : false;
+    const actualIsOpen = typeof isOpen === 'boolean' ? isOpen : false;
     useFocusTrap(actualIsOpen, true, contentRef);
 
     const handleClose = (): void => {

@@ -6,9 +6,10 @@
  * following enterprise standards and SOLID principles
  */
 
+import '@testing-library/jest-dom';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Logger } from '@xala-technologies/enterprise-standards';
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { UISystemProvider } from '../../src/components/UISystemProvider';
 
@@ -94,7 +95,7 @@ describe('Enterprise Logger Integration', () => {
           <input
             data-testid="test-input"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={e => setValue(e.target.value)}
             aria-label="Test input"
           />
         );
@@ -107,10 +108,10 @@ describe('Enterprise Logger Integration', () => {
       );
 
       const input = screen.getByTestId('test-input');
-      
+
       // Use fireEvent to avoid clipboard issues
       fireEvent.change(input, { target: { value: 'test value' } });
-      
+
       // Verify the input works correctly
       await waitFor(() => {
         expect(input).toHaveValue('test value');
@@ -218,12 +219,9 @@ describe('Enterprise Logger Integration', () => {
     it('should not block UI interactions', async (): Promise<void> => {
       const InteractiveComponent = (): JSX.Element => {
         const [count, setCount] = React.useState(0);
-        
+
         return (
-          <button
-            data-testid="counter-button"
-            onClick={() => setCount(prev => prev + 1)}
-          >
+          <button data-testid="counter-button" onClick={() => setCount(prev => prev + 1)}>
             Count: {count}
           </button>
         );
@@ -236,12 +234,12 @@ describe('Enterprise Logger Integration', () => {
       );
 
       const button = screen.getByTestId('counter-button');
-      
+
       // Click the button multiple times using fireEvent
       fireEvent.click(button);
       fireEvent.click(button);
       fireEvent.click(button);
-      
+
       // Verify the count updated correctly
       await waitFor(() => {
         expect(button).toHaveTextContent('Count: 3');
@@ -253,19 +251,19 @@ describe('Enterprise Logger Integration', () => {
      */
     it('should render components quickly', async (): Promise<void> => {
       const startTime = performance.now();
-      
+
       render(
         <TestWrapper>
           <div data-testid="performance-test">Performance Test</div>
         </TestWrapper>
       );
-      
+
       const endTime = performance.now();
       const renderTime = endTime - startTime;
-      
+
       // Component should render in less than 100ms
       expect(renderTime).toBeLessThan(100);
-      
+
       await waitFor(() => {
         expect(screen.getByTestId('performance-test')).toBeInTheDocument();
       });

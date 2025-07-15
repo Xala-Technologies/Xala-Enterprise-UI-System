@@ -3,6 +3,7 @@
  * Testing actual component functionality with Jest and React Testing Library
  */
 
+import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { axe, toHaveNoViolations } from 'jest-axe';
@@ -23,9 +24,9 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('test-form');
-      expect(form).toBeInTheDocument();
-      expect(form.tagName.toLowerCase()).toBe('form');
+      const _form = screen.getByTestId('test-form');
+      expect(_form).toBeInTheDocument();
+      expect(_form.tagName.toLowerCase()).toBe('form');
     });
 
     test('renders with children', () => {
@@ -47,8 +48,8 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('styled-form');
-      expect(form).toHaveClass('custom-form');
+      const _form = screen.getByTestId('styled-form');
+      expect(_form).toHaveClass('custom-form');
     });
 
     test('forwards additional props to form element', () => {
@@ -58,9 +59,9 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('data-form');
-      expect(form).toHaveAttribute('data-custom', 'value');
-      expect(form).toHaveAttribute('data-testattr', 'test');
+      const _form = screen.getByTestId('data-form');
+      expect(_form).toHaveAttribute('data-custom', 'value');
+      expect(_form).toHaveAttribute('data-testattr', 'test');
     });
   });
 
@@ -91,7 +92,7 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('form');
+      const _form = screen.getByTestId('form');
       const submitButton = screen.getByRole('button', { name: 'Submit' });
 
       // This should not throw or cause navigation
@@ -105,8 +106,8 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('form');
-      expect(form).toHaveAttribute('noValidate');
+      const _form = screen.getByTestId('form');
+      expect(_form).toHaveAttribute('noValidate');
     });
 
     test('supports autoComplete prop', () => {
@@ -116,8 +117,8 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('form');
-      expect(form).toHaveAttribute('autoComplete', 'off');
+      const _form = screen.getByTestId('form');
+      expect(_form).toHaveAttribute('autoComplete', 'off');
     });
   });
 
@@ -149,8 +150,8 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('form');
-      expect(form).toHaveAttribute('aria-label', 'Form');
+      const _form = screen.getByTestId('form');
+      expect(_form).toHaveAttribute('aria-label', 'Form');
     });
 
     test('supports accessibility announceErrors prop', () => {
@@ -160,8 +161,8 @@ describe('Form Component', () => {
         </Form>
       );
 
-      const form = screen.getByTestId('form');
-      expect(form).toHaveAttribute('noValidate');
+      const _form = screen.getByTestId('form');
+      expect(_form).toHaveAttribute('noValidate');
     });
 
     test('supports keyboard navigation', async () => {
