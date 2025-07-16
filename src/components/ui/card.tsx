@@ -12,7 +12,7 @@ import { useTokens } from '../../hooks/useTokens';
 export interface CardProps {
   children: React.ReactNode;
   variant?: 'default' | 'elevated' | 'outlined' | 'flat';
-  padding?: 'none' | 'sm' | 'md' | 'lg';
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   style?: React.CSSProperties;
   onClick?: () => void;
@@ -84,6 +84,8 @@ export const Card: React.FC<CardProps> = ({
         return { padding: spacing[4] };
       case 'lg':
         return { padding: spacing[6] };
+      case 'xl':
+        return { padding: spacing[8] };
       default:
         return {};
     }

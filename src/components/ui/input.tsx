@@ -14,7 +14,8 @@ export interface InputProps {
   placeholder?: string;
   value?: string;
   defaultValue?: string;
-  onChange?: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string, event?: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeEvent?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (_event: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (_event: React.FocusEvent<HTMLInputElement>) => void;
   disabled?: boolean;
@@ -41,6 +42,7 @@ export const Input: React.FC<InputProps> = ({
   value,
   defaultValue,
   onChange,
+  onChangeEvent,
   onFocus,
   onBlur,
   disabled = false,
@@ -178,6 +180,21 @@ export const Input: React.FC<InputProps> = ({
     ...style,
   };
 
+  // Handle change events to support both interfaces
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const inputValue = event.target.value;
+
+    // Call the string-based onChange if provided
+    if (onChange) {
+      onChange(inputValue, event);
+    }
+
+    // Call the event-based onChangeEvent if provided
+    if (onChangeEvent) {
+      onChangeEvent(event);
+    }
+  };
+
   // Handle focus and blur for focus ring styling
   const finalStyles = combinedStyles;
   return (
@@ -186,7 +203,7 @@ export const Input: React.FC<InputProps> = ({
       placeholder={placeholder}
       value={value}
       defaultValue={defaultValue}
-      onChange={onChange}
+      onChange={handleChange}
       onFocus={onFocus}
       onBlur={onBlur}
       disabled={disabled}

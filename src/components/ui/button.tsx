@@ -16,6 +16,7 @@ export interface ButtonProps {
   onClick?: () => void;
   disabled?: boolean;
   loading?: boolean;
+  fullWidth?: boolean;
   type?: 'button' | 'submit' | 'reset';
   className?: string;
   style?: React.CSSProperties;
@@ -27,6 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   disabled = false,
   loading = false,
+  fullWidth = false,
   type = 'button',
   className,
   style,
@@ -125,6 +127,7 @@ export const Button: React.FC<ButtonProps> = ({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
+    width: fullWidth ? '100%' : 'auto',
 
     // Typography from JSON templates
     fontFamily: typography.fontFamily.sans.join(', '),
