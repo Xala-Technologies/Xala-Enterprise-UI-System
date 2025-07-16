@@ -28,14 +28,36 @@ function applySsrSafetyChecks(filePath) {
   let content = fs.readFileSync(filePath, 'utf8');
   let modified = false;
 
-  // Add SSR safety check for React imports
+  // Add SSR safety check for React imports, but preserve 'use client' directive at the top
   if (content.includes('import { createContext') && !content.includes('SSR Safety Check')) {
-    content = `// SSR Safety Check
+    // Check if file has 'use client' directive
+    const hasUseClient = content.includes("'use client'");
+
+    if (hasUseClient) {
+      // Extract 'use client' directive and place it first
+      const lines = content.split('\n');
+      const useClientLine = lines.find(line => line.trim().startsWith("'use client'"));
+      const restOfContent = lines
+        .filter(line => !line.trim().startsWith("'use client'"))
+        .join('\n');
+
+      content = `${useClientLine}
+
+// SSR Safety Check
+if (typeof window === 'undefined' && typeof global !== 'undefined') {
+  global.React = global.React || require('react');
+}
+
+${restOfContent}`;
+    } else {
+      // No 'use client' directive, add SSR check at the beginning
+      content = `// SSR Safety Check
 if (typeof window === 'undefined' && typeof global !== 'undefined') {
   global.React = global.React || require('react');
 }
 
 ${content}`;
+    }
     modified = true;
   }
 
