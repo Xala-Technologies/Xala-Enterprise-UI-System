@@ -206,3 +206,33 @@ if (typeof window === 'undefined' && typeof global !== 'undefined') {
 ---
 
 **Last Updated**: December 2024 | **Version**: 4.7.0 | **Status**: Production Ready | **Chat Interface**: Complete
+
+## [2024-12-01] UI System v4.7.1 - CRITICAL FIX: Missing Chat Component Exports
+
+**FIXED CRITICAL ISSUE**: Chat interface components (Box, ActionBar, MessageBubble, CodeBlock, ScrollArea, Separator) were built but not exported from main package entry point, making them unusable despite being present in the build.
+
+**Root Cause**: Components were added to `src/components/ui/index.ts` but missing from main `src/index.ts` exports.
+
+**SOLUTION IMPLEMENTED**:
+
+- Added comprehensive chat component exports to `src/index.ts`:
+  - ActionBar (with variants and types)
+  - Box (flexible layout container)
+  - CodeBlock (syntax highlighting)
+  - MessageBubble (specialized chat messages)
+  - ScrollArea (smooth scrolling)
+  - Separator (visual dividers)
+- Updated package version to 4.7.1
+- Rebuilt package with all chat components properly exported
+- Zero TypeScript errors, full SSR compatibility maintained
+
+**VERIFICATION**: All 161+ components now properly exported including 6 new chat interface components.
+
+**API CLARIFICATION FOR CONSUMERS**:
+
+- **Tabs API**: Uses traditional shadcn-ui pattern with TabsList/TabsTrigger/TabsContent children, NOT items prop
+- **IconButton API**: Requires `icon` and `label` props as mandatory
+- **Box Component**: Now available for flexible layouts
+- **All chat components**: Available for AI chat interface implementations
+
+**Status**: UI System v4.7.1 production-ready with complete chat interface support.

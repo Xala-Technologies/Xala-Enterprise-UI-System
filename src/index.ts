@@ -113,6 +113,14 @@ export type {
   WebLayoutProps, WebNavbarProps
 } from './layouts';
 
+// ===== CHAT INTERFACE COMPONENTS =====
+export { ActionBar, actionBarVariants, actionButtonVariants, defaultActions, type ActionBarProps, type ActionConfig, type ActionType } from './components/ui/action-bar';
+export { Box, boxVariants, type BoxProps } from './components/ui/box';
+export { CodeBlock, codeBlockHeaderVariants, codeBlockVariants, languageConfig, type CodeBlockProps } from './components/ui/code-block';
+export { MessageBubble, messageBubbleAvatarVariants, messageBubbleMetadataVariants, messageBubbleVariants, type MessageBubbleProps } from './components/ui/message-bubble';
+export { ScrollArea, scrollAreaVariants, type ScrollAreaProps } from './components/ui/scroll-area';
+export { Separator, separatorVariants, type SeparatorProps } from './components/ui/separator';
+
 // ===== ACTION FEEDBACK COMPONENTS =====
 export { ClassificationIndicator, LoadingSpinner, Modal, ModalBody, ModalContent, ModalHeader, Toast } from './components/action-feedback';
 export type { LoadingSpinnerProps } from './components/action-feedback/ButtonIcon';
