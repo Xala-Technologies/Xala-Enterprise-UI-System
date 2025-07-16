@@ -55,11 +55,25 @@ const stackVariants = cva('flex', {
 });
 
 /**
- * Stack component props interface
+ * Base variant props from class-variance-authority
  */
-export interface StackProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof stackVariants> {
+type BaseStackVariants = VariantProps<typeof stackVariants>;
+
+/**
+ * Stack component props interface with flexible string support
+ */
+export interface StackProps extends HTMLAttributes<HTMLDivElement> {
+  /** Stack direction - accepts known values or any string */
+  readonly direction?: BaseStackVariants['direction'] | string;
+  /** Gap between items - accepts known values or any string */
+  readonly gap?: BaseStackVariants['gap'] | string;
+  /** Alignment along cross axis */
+  readonly align?: BaseStackVariants['align'];
+  /** Alignment along main axis */
+  readonly justify?: BaseStackVariants['justify'];
+  /** Enable wrapping */
+  readonly wrap?: BaseStackVariants['wrap'];
+  /** HTML element type */
   readonly as?: keyof JSX.IntrinsicElements;
 }
 
@@ -79,10 +93,31 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
   ({ className, direction, gap, align, justify, wrap, as: Component = 'div', ...props }, ref) => {
     const ElementType = Component as React.ElementType;
 
+    // Convert string values to known variants or use as fallback
+    const normalizedDirection =
+      direction === 'horizontal' || direction === 'vertical'
+        ? (direction as BaseStackVariants['direction'])
+        : ('vertical' as const);
+
+    const normalizedGap = (['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).includes(
+      gap as any
+    )
+      ? (gap as BaseStackVariants['gap'])
+      : ('md' as const);
+
     return (
       <ElementType
         ref={ref}
-        className={cn(stackVariants({ direction, gap, align, justify, wrap }), className)}
+        className={cn(
+          stackVariants({
+            direction: normalizedDirection,
+            gap: normalizedGap,
+            align,
+            justify,
+            wrap,
+          }),
+          className
+        )}
         {...props}
       />
     );
@@ -116,7 +151,7 @@ VStack.displayName = 'VStack';
 /**
  * Stack variants type exports
  */
-export type StackDirection = VariantProps<typeof stackVariants>['direction'];
-export type StackGap = VariantProps<typeof stackVariants>['gap'];
-export type StackAlign = VariantProps<typeof stackVariants>['align'];
-export type StackJustify = VariantProps<typeof stackVariants>['justify'];
+export type StackDirection = BaseStackVariants['direction'] | string;
+export type StackGap = BaseStackVariants['gap'] | string;
+export type StackAlign = BaseStackVariants['align'];
+export type StackJustify = BaseStackVariants['justify'];

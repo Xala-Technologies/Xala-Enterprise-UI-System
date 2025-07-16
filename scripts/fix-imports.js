@@ -25,8 +25,19 @@ function fixImportsInFile(filePath) {
     const importRegex = /from ['"](\..+?)['"];?/g;
     content = content.replace(importRegex, (match, importPath) => {
       if (!importPath.endsWith('.js') && !importPath.includes('.json')) {
-        hasChanges = true;
-        return match.replace(importPath, importPath + '.js');
+        // Check if this import path points to a directory with index.js
+        const absolutePath = path.resolve(path.dirname(filePath), importPath);
+        const indexPath = path.join(absolutePath, 'index.js');
+
+        if (fs.existsSync(indexPath)) {
+          // Directory with index.js exists, import from index.js
+          hasChanges = true;
+          return match.replace(importPath, importPath + '/index.js');
+        } else {
+          // Regular file, add .js extension
+          hasChanges = true;
+          return match.replace(importPath, importPath + '.js');
+        }
       }
       return match;
     });
@@ -39,6 +50,28 @@ function fixImportsInFile(filePath) {
         return match.replace(requirePath, requirePath + '.js');
       }
       return match;
+    });
+
+    // Fix TypeScript path aliases (@/ mappings)
+    const aliasRegex = /from ['"]@\/(.+?)['"];?/g;
+    content = content.replace(aliasRegex, (match, aliasPath) => {
+      // Calculate relative path from current file to src root
+      const currentDir = path.dirname(filePath);
+      const srcDir = path.join(path.dirname(__dirname), 'dist');
+      const relativePath = path.relative(currentDir, srcDir);
+      const resolvedPath = path.join(relativePath || '.', aliasPath);
+
+      // Normalize path separators for cross-platform compatibility
+      const normalizedPath = resolvedPath.split(path.sep).join('/');
+
+      // Add .js extension if not present
+      const finalPath = normalizedPath.endsWith('.js') ? normalizedPath : normalizedPath + '.js';
+
+      hasChanges = true;
+      return match.replace(
+        `@/${aliasPath}`,
+        finalPath.startsWith('.') ? finalPath : `./${finalPath}`
+      );
     });
 
     if (hasChanges) {

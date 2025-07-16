@@ -37,36 +37,36 @@ export type {
 // =============================================================================
 
 // Municipal themes
-import bergenDarkTheme from './definitions/bergen-dark.json';
-import bergenLightTheme from './definitions/bergen-light.json';
-import drammenDarkTheme from './definitions/drammen-dark.json';
-import drammenLightTheme from './definitions/drammen-light.json';
-import osloDarkTheme from './definitions/oslo-dark.json';
-import osloLightTheme from './definitions/oslo-light.json';
+import bergenDarkTheme from './definitions/bergen-dark.json' with { type: 'json' };
+import bergenLightTheme from './definitions/bergen-light.json' with { type: 'json' };
+import drammenDarkTheme from './definitions/drammen-dark.json' with { type: 'json' };
+import drammenLightTheme from './definitions/drammen-light.json' with { type: 'json' };
+import osloDarkTheme from './definitions/oslo-dark.json' with { type: 'json' };
+import osloLightTheme from './definitions/oslo-light.json' with { type: 'json' };
 
 // Enterprise themes
-import enterpriseDarkTheme from './definitions/enterprise-dark.json';
-import enterpriseLightTheme from './definitions/enterprise-light.json';
+import enterpriseDarkTheme from './definitions/enterprise-dark.json' with { type: 'json' };
+import enterpriseLightTheme from './definitions/enterprise-light.json' with { type: 'json' };
 
 // E-commerce themes
-import ecommerceDarkTheme from './definitions/ecommerce-dark.json';
-import ecommerceLightTheme from './definitions/ecommerce-light.json';
+import ecommerceDarkTheme from './definitions/ecommerce-dark.json' with { type: 'json' };
+import ecommerceLightTheme from './definitions/ecommerce-light.json' with { type: 'json' };
 
 // Healthcare themes
-import healthcareDarkTheme from './definitions/healthcare-dark.json';
-import healthcareLightTheme from './definitions/healthcare-light.json';
+import healthcareDarkTheme from './definitions/healthcare-dark.json' with { type: 'json' };
+import healthcareLightTheme from './definitions/healthcare-light.json' with { type: 'json' };
 
 // Finance themes
-import financeDarkTheme from './definitions/finance-dark.json';
-import financeLightTheme from './definitions/finance-light.json';
+import financeDarkTheme from './definitions/finance-dark.json' with { type: 'json' };
+import financeLightTheme from './definitions/finance-light.json' with { type: 'json' };
 
 // Education themes
-import educationDarkTheme from './definitions/education-dark.json';
-import educationLightTheme from './definitions/education-light.json';
+import educationDarkTheme from './definitions/education-dark.json' with { type: 'json' };
+import educationLightTheme from './definitions/education-light.json' with { type: 'json' };
 
 // Productivity themes
-import productivityDarkTheme from './definitions/productivity-dark.json';
-import productivityLightTheme from './definitions/productivity-light.json';
+import productivityDarkTheme from './definitions/productivity-dark.json' with { type: 'json' };
+import productivityLightTheme from './definitions/productivity-light.json' with { type: 'json' };
 
 // =============================================================================
 // THEME FACTORY INSTANCES

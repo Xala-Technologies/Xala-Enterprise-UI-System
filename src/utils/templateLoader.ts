@@ -9,8 +9,8 @@ import { Logger } from '../lib/utils/multiplatform-logger';
 import type { ThemeTemplate } from '../tokens/themes/template-loader';
 
 // Import base templates for emergency fallback
-import baseDarkTemplate from '../tokens/themes/definitions/base-dark.json';
-import baseLightTemplate from '../tokens/themes/definitions/base-light.json';
+import baseDarkTemplate from '../tokens/themes/definitions/base-dark.json' with { type: 'json' };
+import baseLightTemplate from '../tokens/themes/definitions/base-light.json' with { type: 'json' };
 
 const logger = Logger.create({
   serviceName: 'ui-system-template-loader',
@@ -179,26 +179,26 @@ export class TemplateLoader {
    */
   private async loadTemplateFromImports(templateId: string): Promise<ThemeTemplate> {
     const templateMap: Record<string, () => Promise<unknown>> = {
-      'base-light': () => import('../tokens/themes/definitions/base-light.json'),
-      'base-dark': () => import('../tokens/themes/definitions/base-dark.json'),
-      'drammen-light': () => import('../tokens/themes/definitions/drammen-light.json'),
-      'drammen-dark': () => import('../tokens/themes/definitions/drammen-dark.json'),
-      'oslo-light': () => import('../tokens/themes/definitions/oslo-light.json'),
-      'oslo-dark': () => import('../tokens/themes/definitions/oslo-dark.json'),
-      'bergen-light': () => import('../tokens/themes/definitions/bergen-light.json'),
-      'bergen-dark': () => import('../tokens/themes/definitions/bergen-dark.json'),
-      'enterprise-light': () => import('../tokens/themes/definitions/enterprise-light.json'),
-      'enterprise-dark': () => import('../tokens/themes/definitions/enterprise-dark.json'),
-      'ecommerce-light': () => import('../tokens/themes/definitions/ecommerce-light.json'),
-      'ecommerce-dark': () => import('../tokens/themes/definitions/ecommerce-dark.json'),
-      'healthcare-light': () => import('../tokens/themes/definitions/healthcare-light.json'),
-      'healthcare-dark': () => import('../tokens/themes/definitions/healthcare-dark.json'),
-      'finance-light': () => import('../tokens/themes/definitions/finance-light.json'),
-      'finance-dark': () => import('../tokens/themes/definitions/finance-dark.json'),
-      'education-light': () => import('../tokens/themes/definitions/education-light.json'),
-      'education-dark': () => import('../tokens/themes/definitions/education-dark.json'),
-      'productivity-light': () => import('../tokens/themes/definitions/productivity-light.json'),
-      'productivity-dark': () => import('../tokens/themes/definitions/productivity-dark.json'),
+      'base-light': () => import('../tokens/themes/definitions/base-light.json', { with: { type: 'json' } }),
+      'base-dark': () => import('../tokens/themes/definitions/base-dark.json', { with: { type: 'json' } }),
+      'drammen-light': () => import('../tokens/themes/definitions/drammen-light.json', { with: { type: 'json' } }),
+      'drammen-dark': () => import('../tokens/themes/definitions/drammen-dark.json', { with: { type: 'json' } }),
+      'oslo-light': () => import('../tokens/themes/definitions/oslo-light.json', { with: { type: 'json' } }),
+      'oslo-dark': () => import('../tokens/themes/definitions/oslo-dark.json', { with: { type: 'json' } }),
+      'bergen-light': () => import('../tokens/themes/definitions/bergen-light.json', { with: { type: 'json' } }),
+      'bergen-dark': () => import('../tokens/themes/definitions/bergen-dark.json', { with: { type: 'json' } }),
+      'enterprise-light': () => import('../tokens/themes/definitions/enterprise-light.json', { with: { type: 'json' } }),
+      'enterprise-dark': () => import('../tokens/themes/definitions/enterprise-dark.json', { with: { type: 'json' } }),
+      'ecommerce-light': () => import('../tokens/themes/definitions/ecommerce-light.json', { with: { type: 'json' } }),
+      'ecommerce-dark': () => import('../tokens/themes/definitions/ecommerce-dark.json', { with: { type: 'json' } }),
+      'healthcare-light': () => import('../tokens/themes/definitions/healthcare-light.json', { with: { type: 'json' } }),
+      'healthcare-dark': () => import('../tokens/themes/definitions/healthcare-dark.json', { with: { type: 'json' } }),
+      'finance-light': () => import('../tokens/themes/definitions/finance-light.json', { with: { type: 'json' } }),
+      'finance-dark': () => import('../tokens/themes/definitions/finance-dark.json', { with: { type: 'json' } }),
+      'education-light': () => import('../tokens/themes/definitions/education-light.json', { with: { type: 'json' } }),
+      'education-dark': () => import('../tokens/themes/definitions/education-dark.json', { with: { type: 'json' } }),
+      'productivity-light': () => import('../tokens/themes/definitions/productivity-light.json', { with: { type: 'json' } }),
+      'productivity-dark': () => import('../tokens/themes/definitions/productivity-dark.json', { with: { type: 'json' } }),
     };
 
     const loader = templateMap[templateId];

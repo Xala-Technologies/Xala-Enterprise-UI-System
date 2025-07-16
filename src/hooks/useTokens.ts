@@ -11,8 +11,8 @@ import { useDesignSystem } from '../providers/DesignSystemProvider';
 import type { ThemeTemplate } from '../tokens/themes/template-loader';
 
 // Import base templates for fallback values
-import baseDarkTemplate from '../tokens/themes/definitions/base-dark.json';
-import baseLightTemplate from '../tokens/themes/definitions/base-light.json';
+import baseDarkTemplate from '../tokens/themes/definitions/base-dark.json' with { type: 'json' };
+import baseLightTemplate from '../tokens/themes/definitions/base-light.json' with { type: 'json' };
 
 const logger = Logger.create({
   serviceName: 'ui-system-use-tokens',
