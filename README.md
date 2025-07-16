@@ -1,180 +1,217 @@
-# @xala-mock/ui-system
+# Xala Technologies UI System v4.7.1
 
-Norwegian-compliant UI component library with WCAG 2.2 AA, NSM, and GDPR compliance.
+> **Enterprise-grade, SSR-safe UI component library with Norwegian compliance and multiplatform support**
+
+[![npm version](https://badge.fury.io/js/%40xala-technologies%2Fui-system.svg)](https://badge.fury.io/js/%40xala-technologies%2Fui-system)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![SSR Safe](https://img.shields.io/badge/SSR-Safe-green.svg)](https://nextjs.org/)
+[![Norwegian Compliance](https://img.shields.io/badge/Norwegian-Compliant-red.svg)](https://www.digdir.no/)
 
 ## Overview
 
-A production-ready, semantic, and Norwegian-compliant UI component library for use across all Xala apps (Web, Mobile, Admin, Docs). Built following the PASEPAGE principle with full accessibility and government compliance.
+A production-ready UI component library built for enterprise applications with Norwegian government compliance, full SSR compatibility, and comprehensive multiplatform support. Features 161+ semantic components, design token system, and specialized chat interface components.
 
-## Features
+## Key Features
 
-### 🇳🇴 Norwegian Compliance
-- **NSM Classification**: Support for ÅPEN, BEGRENSET, KONFIDENSIELT, HEMMELIG
-- **GDPR Compliance**: Built-in data protection and privacy features
-- **WCAG 2.2 AA**: Full accessibility compliance with Norwegian standards
-- **Municipality Themes**: Pre-built themes for major Norwegian cities
+### 🏛️ **Norwegian Enterprise Compliance**
 
-### 🎨 Design System
-- **Design Tokens**: CSS custom properties for consistent styling
-- **Norwegian Typography**: Optimized for æ, ø, å characters
-- **Color Accessibility**: WCAG AA compliant contrast ratios (4.5:1)
-- **Touch Targets**: 44px minimum following Norwegian mobile standards
+- **NSM Classification**: ÅPEN, BEGRENSET, KONFIDENSIELT, HEMMELIG support
+- **DigDir Standards**: Complete compliance with Norwegian digital standards
+- **WCAG 2.2 AAA**: Full accessibility compliance
+- **GDPR Ready**: Built-in privacy and data protection features
 
-### 🧩 Component Architecture
-- **Semantic Components**: No raw HTML elements in pages
-- **PASEPAGE Compliant**: Separation of data and presentation logic
-- **Platform Agnostic**: Shared components for web and mobile
-- **TypeScript First**: Full type safety and IntelliSense support
+### 🌐 **Multiplatform Architecture**
 
-## Installation
+- **Web Applications**: React/Next.js optimized layouts
+- **Mobile Apps**: Touch-friendly components and responsive design
+- **Desktop Applications**: Electron-compatible layouts
+- **SSR/SSG**: Full server-side rendering support
+
+### 🎨 **Design Token System**
+
+- **Semantic Tokens**: `bg-primary`, `text-foreground`, `border-border`
+- **Norwegian Color Palette**: Government-compliant color schemes
+- **Dynamic Theming**: Light/dark mode with municipal themes
+- **CSS Variables**: Complete design token integration
+
+### 💬 **Chat Interface Components**
+
+- **MessageBubble**: Specialized chat messages with avatars and metadata
+- **CodeBlock**: 20+ programming languages with syntax highlighting
+- **ActionBar**: 15+ predefined actions with Norwegian translations
+- **ScrollArea**: Smooth message scrolling
+- **Box**: Flexible layout containers
+- **Separator**: Visual message grouping
+
+### 🧩 **161+ Components**
+
+- **Layout**: PageLayout, Section, Container, Grid, Stack, Card
+- **Forms**: Input, Select, Textarea with Norwegian validation
+- **Data Display**: DataTable, Badge, Tooltip, Avatar
+- **Navigation**: Breadcrumb, Pagination, Tabs, CommandPalette
+- **Feedback**: Alert, Toast, Modal, Progress, Skeleton
+
+## Quick Installation
 
 ```bash
-pnpm add @xala-mock/ui-system
+# Using npm
+npm install @xala-technologies/ui-system
+
+# Using pnpm (recommended)
+pnpm add @xala-technologies/ui-system
+
+# Using yarn
+yarn add @xala-technologies/ui-system
 ```
 
-## Usage
-
-### Basic Setup
+## Basic Setup
 
 ```tsx
-import { UISystemProvider } from '@xala-mock/ui-system';
+import { DesignSystemProvider, PageLayout, Button } from '@xala-technologies/ui-system';
 
 function App() {
   return (
-    <UISystemProvider 
-      theme="norwegian-municipal"
-      language="nb"
-      municipality="Drammen"
-    >
-      {/* Your app components */}
-    </UISystemProvider>
+    <DesignSystemProvider>
+      <PageLayout>
+        <Button variant="primary">Kom i gang</Button>
+      </PageLayout>
+    </DesignSystemProvider>
   );
 }
 ```
 
-### Using Components
+## Platform-Specific Quick Start Guides
+
+- **[Web Applications Guide](./docs/quick-start/web-applications.md)** - React, Next.js, Remix
+- **[Mobile Applications Guide](./docs/quick-start/mobile-applications.md)** - React Native, Expo
+- **[Desktop Applications Guide](./docs/quick-start/desktop-applications.md)** - Electron, Tauri
+- **[Chat Interface Guide](./docs/quick-start/chat-interfaces.md)** - AI Chat, Messaging Apps
+
+## Documentation
+
+### 📚 **Core Documentation**
+
+- **[Architecture Guide](./docs/architecture.md)** - System design and patterns
+- **[Component Library](./docs/components/README.md)** - Complete component reference
+- **[Design Tokens](./docs/design-tokens.md)** - Token system and theming
+- **[Norwegian Compliance](./docs/norwegian-compliance.md)** - Government standards
+
+### 🛠️ **Implementation Guides**
+
+- **[Getting Started](./docs/getting-started.md)** - First steps and setup
+- **[Layout System](./docs/layouts/README.md)** - Responsive layout patterns
+- **[Form Validation](./docs/forms/validation.md)** - Norwegian number validation
+- **[Accessibility](./docs/accessibility/README.md)** - WCAG 2.2 AAA compliance
+
+### 🎯 **Advanced Topics**
+
+- **[SSR Compatibility](./docs/ssr-best-practices.md)** - Server-side rendering
+- **[Performance](./docs/performance.md)** - Optimization strategies
+- **[Testing](./docs/testing/README.md)** - Component testing patterns
+- **[Troubleshooting](./docs/troubleshooting.md)** - Common issues and solutions
+
+## Design Principles
+
+### 🚫 **No Raw HTML**
 
 ```tsx
-import { Button, Input, Form } from '@xala-mock/ui-system';
+// ❌ Avoid raw HTML elements
+<div className="flex gap-4">
+  <span>Text content</span>
+</div>
 
-function ContactForm() {
-  return (
-    <Form>
-      <Input 
-        labelKey="form.name" 
-        required 
-        validation={{ personalNumber: false }}
-      />
-      <Button variant="primary" size="medium">
-        Send
-      </Button>
-    </Form>
-  );
-}
+// ✅ Use semantic components
+<Stack direction="row" gap="4">
+  <Text>Text content</Text>
+</Stack>
 ```
 
-### Norwegian-Specific Components
+### 🎨 **Design Tokens Only**
 
 ```tsx
-import { 
-  PersonalNumberInput, 
-  OrganizationNumberInput 
-} from '@xala-mock/ui-system';
+// ❌ Avoid hardcoded styles
+<Button style={{ backgroundColor: '#1976d2', padding: '16px' }}>
 
-function NorwegianForm() {
-  return (
-    <Form>
-      <PersonalNumberInput 
-        labelKey="form.personalNumber"
-        required
-      />
-      <OrganizationNumberInput 
-        labelKey="form.organizationNumber"
-        enableBRREGCheck
-      />
-    </Form>
-  );
-}
+// ✅ Use semantic design tokens
+<Button variant="primary" size="lg">
 ```
 
-## Municipality Themes
+### 🏗️ **Composition Pattern**
 
-Supported Norwegian municipalities with pre-configured branding:
-
-- **Drammen**: Blue (#0ea5e9) + Red (#dc2626)
-- **Oslo**: Red (#dc2626) + White (#ffffff)
-- **Bergen**: Navy (#0369a1) + Orange (#f59e0b)
-- **Trondheim**: Green (#16a34a) + Blue (#0ea5e9)
-- **Stavanger**: Purple (#7c3aed) + Red (#dc2626)
-
-## Compliance Standards
-
-### Accessibility (WCAG 2.2 AA)
-- Color contrast ratio: 4.5:1 minimum
-- Focus indicators: 2px visible outline
-- Screen reader support: Semantic HTML and ARIA labels
-- Keyboard navigation: Full keyboard accessibility
-
-### Norwegian Standards (NSM)
-- Data classification support
-- Security level indicators
-- Government branding compliance
-- Municipal identity integration
-
-### GDPR Compliance
-- Data protection by design
-- Privacy-first component defaults
-- Audit logging capabilities
-- Consent management integration
-
-## Development
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development
-pnpm dev
-
-# Build package
-pnpm build
-
-# Run tests
-pnpm test
-
-# Validate compliance
-pnpm validate:components
-pnpm test:accessibility
+```tsx
+// ✅ Compose layouts semantically
+<PageLayout>
+  <Section variant="hero">
+    <Container>
+      <Stack direction="col" gap="6" align="center">
+        <Heading level={1}>Velkommen</Heading>
+        <Text variant="lead">Enterprise-grade Norwegian application</Text>
+        <Button variant="primary" size="lg">
+          Kom i gang
+        </Button>
+      </Stack>
+    </Container>
+  </Section>
+</PageLayout>
 ```
 
-## Scripts
+## Norwegian Compliance Features
 
-- `build`: Build TypeScript and generate CSS tokens
-- `dev`: Start development with watch mode
-- `test`: Run Jest tests with accessibility checks
-- `validate:components`: Ensure no raw HTML in semantic exports
-- `validate:pasepages`: Validate PASEPAGE architecture
-- `generate:css`: Generate CSS from design tokens
-- `generate:tokens`: Generate token definitions
+### 🏛️ **NSM Classification System**
 
-## Architecture
+```tsx
+<ClassificationIndicator level="KONFIDENSIELT" />
+<MessageBubble classification="BEGRENSET">
+  Sensitive business information
+</MessageBubble>
+```
 
-### PASEPAGE Compliance
-- **Pages**: Data orchestration only, no layout logic
-- **Components**: Handle all styling, layout, and interactions
-- **Tokens**: Design system values, no hardcoded styles
-- **Validation**: Build-time checks for compliance
+### 📝 **Norwegian Form Validation**
 
-### Norwegian Integration
-- **Language Support**: Bokmål (nb), Nynorsk (nn), English (en)
-- **Date Formats**: dd.MM.yyyy (Norwegian standard)
-- **Number Formats**: Norwegian decimal separators
-- **Validation**: Personal numbers, organization numbers, postal codes
+```tsx
+<PersonalNumberInput
+  placeholder="Fødselsnummer (11 siffer)"
+  validation="strict"
+/>
+<OrganizationNumberInput
+  placeholder="Organisasjonsnummer (9 siffer)"
+  brreg={true}
+/>
+```
 
-## License
+### 🌐 **Localization Support**
 
-MIT - See LICENSE file for details.
+```tsx
+<DesignSystemProvider locale="nb-NO" fallback="en">
+  <Button>{t('common.submit')}</Button> {/* "Send inn" */}
+</DesignSystemProvider>
+```
+
+## Version History
+
+- **v4.7.1** - Chat interface components export fix
+- **v4.7.0** - Major chat interface components release
+- **v4.6.x** - SSR compatibility and module system fixes
+- **v4.5.x** - Norwegian compliance and design token system
+- **v4.0.x** - Enterprise architecture and multiplatform support
+
+## Enterprise Support
+
+**Xala Technologies AS** provides enterprise support for Norwegian government and business applications:
+
+- 🏛️ **Government Compliance**: NSM, DigDir, WCAG 2.2 AAA certification
+- 🔒 **Security**: ISO27001, GDPR compliance consulting
+- 🚀 **Implementation**: Architecture consulting and migration support
+- 📞 **Support**: Priority enterprise support channels
 
 ## Contributing
 
-This package follows strict Norwegian compliance and accessibility standards. Please ensure all contributions maintain WCAG 2.2 AA compliance and NSM security guidelines. 
+We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md).
+
+## License
+
+MIT License - see [LICENSE](./LICENSE) file for details.
+
+---
+
+**Built with ❤️ in Norway 🇳🇴 for enterprise applications worldwide**
