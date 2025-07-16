@@ -3,6 +3,13 @@
  * Testing actual component functionality with Jest and React Testing Library
  */
 
+// eslint-disable-next-line no-undef
+declare global {
+  interface Window {
+    FormData: typeof FormData;
+  }
+}
+
 import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

@@ -112,9 +112,9 @@ export interface ToastProps extends ActionFeedbackComponentProps {
   /** Controls pause state (for pure component state management) */
   isPaused?: boolean;
   /** Callback when visibility changes */
-  onVisibilityChange?: (visible: boolean) => void;
+  onVisibilityChange?: (_visible: boolean) => void;
   /** Callback when pause state changes */
-  onPauseChange?: (paused: boolean) => void;
+  onPauseChange?: (_paused: boolean) => void;
   /** Toast message text */
   message?: string;
   /** Toast title text */
@@ -224,7 +224,7 @@ export interface ConfirmationModalProps extends Omit<ModalProps, 'children' | 'f
 
 // Loading overlay props
 export interface LoadingOverlayProps extends ComponentProps {
-  visible: boolean;
+  _visible: boolean;
   message?: string; // Loading message text
   progress?: number; // Progress percentage (0-100)
   size?: 'sm' | 'md' | 'lg';

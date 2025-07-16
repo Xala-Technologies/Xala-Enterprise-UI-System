@@ -175,7 +175,7 @@ const generateCalendarGrid = (
   const monthIndex = month.getMonth();
 
   const firstDayOfMonth = new Date(year, monthIndex, 1);
-  const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
+  const _lastDayOfMonth = new Date(year, monthIndex + 1, 0);
   const firstDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7; // Monday = 0
 
   const startDate = new Date(firstDayOfMonth);

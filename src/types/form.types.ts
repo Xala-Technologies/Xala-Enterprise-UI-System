@@ -80,7 +80,7 @@ export interface TextAreaProps extends FormComponentProps {
   /** Current character length (for pure component state management) */
   currentLength?: number;
   /** Callback when length changes */
-  onLengthChange?: (length: number) => void;
+  onLengthChange?: (_length: number) => void;
   value?: string;
   defaultValue?: string;
   onChange?: (value: string, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;

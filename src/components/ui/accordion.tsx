@@ -218,7 +218,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           aria-label={norwegian?.accessibilityLabel || 'Accordion'}
           {...props}
         >
-          {items.map((item, _index) => (
+          {items.map((item, __index) => (
             <AccordionItem key={item.id} value={item.id} variant={variant} disabled={item.disabled}>
               <AccordionTrigger
                 variant={variant}
