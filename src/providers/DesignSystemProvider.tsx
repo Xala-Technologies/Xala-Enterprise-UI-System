@@ -30,9 +30,9 @@ interface DesignSystemContextValue {
   isLoading: boolean;
 
   // Simple _theme management
-  setTemplate: (templateId: string) => Promise<void>;
+  setTemplate: (_templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
-  setDarkMode: (isDark: boolean) => void;
+  setDarkMode: (_isDark: boolean) => void;
 
   // Template utilities
   getAvailableTemplates: () => Promise<string[]>;
@@ -271,7 +271,7 @@ export const useTheme = (): {
   _theme: ThemeTemplate | null;
   mode: 'LIGHT' | 'DARK';
   isLoading: boolean;
-  setTemplate: (templateId: string) => Promise<void>;
+  setTemplate: (_templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
 } => {
   const { currentTemplate, isDarkMode, isLoading, setTemplate, toggleDarkMode } = useDesignSystem();
@@ -292,7 +292,7 @@ export const useTemplates = (): {
   availableTemplates: () => Promise<string[]>;
   currentTemplateId: string;
   reloadTemplate: () => Promise<void>;
-  setTemplate: (templateId: string) => Promise<void>;
+  setTemplate: (_templateId: string) => Promise<void>;
 } => {
   const { _templateId, getAvailableTemplates, reloadTemplate, setTemplate } = useDesignSystem();
 

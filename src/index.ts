@@ -38,6 +38,42 @@ export { Card, CardContent, CardFooter, CardHeader } from './components/ui';
 // Types: Layout
 export type { ContainerProps, GridProps, LayoutComponentProps, PageLayoutProps, SectionProps, StackProps } from './types/layout.types';
 
+// Layout System Components - All Platforms
+export {
+  AdminContent,
+  // Admin Layout Components
+  AdminLayout, AdminSidebar, AdminTopBar,
+  // Base Layout Components
+  BaseLayout, DesktopHeader,
+  // Desktop Layout Components
+  DesktopLayout, DesktopLayoutComposition, DesktopMainContent, DesktopSidebar, DesktopStatusBar, DesktopToolbar, Footer, Header, LayoutComposition, MainContent, MobileBottomNavigation, MobileContent, MobileDrawer, MobileHeader,
+  // Mobile Layout Components
+  MobileLayout, MobileLayoutComposition, Sidebar, TabletHeader,
+  // Tablet Layout Components
+  TabletLayout, TabletSidebar,
+  // Platform utilities
+  usePlatform, WebContent, WebFooter,
+  // Web Layout Components
+  WebLayout, WebNavbar
+} from './layouts';
+
+// Types: Layout System
+export type {
+  AdminContentProps,
+  // Admin Layout Types
+  AdminLayoutProps, AdminSidebarProps, AdminTopBarProps,
+  // Base Layout Types
+  BaseLayoutProps, DesktopHeaderProps,
+  // Desktop Layout Types
+  DesktopLayoutProps, DesktopMainContentProps, DesktopSidebarProps, DesktopStatusBarProps, DesktopToolbarProps, FooterProps, HeaderProps, MainContentProps, MobileBottomNavigationProps, MobileContentProps, MobileDrawerProps, MobileHeaderProps,
+  // Mobile Layout Types
+  MobileLayoutProps, SidebarProps, TabletHeaderProps,
+  // Tablet Layout Types
+  TabletLayoutProps, TabletSidebarProps, WebContentProps, WebFooterProps,
+  // Web Layout Types
+  WebLayoutProps, WebNavbarProps
+} from './layouts';
+
 // Navigation Components
 export { Tabs } from './components/navigation/NavigationComponents';
 export { Breadcrumb, Pagination, TabsContent, TabsList, TabsTrigger } from './components/ui';
