@@ -1,8 +1,8 @@
 /**
- * @fileoverview useTokens Hook - Direct Design Token Access
- * @description Provides direct access to design tokens from current theme with type safety
- * @version 3.2.0
- * @compliance Enterprise Standards, Type-safe, Framework-agnostic
+ * @fileoverview useTokens Hook - SSR-Safe Design Token Access
+ * @description Provides direct access to design tokens from current theme with type safety and SSR compatibility
+ * @version 4.6.3
+ * @compliance Enterprise Standards, Type-safe, Framework-agnostic, SSR-Safe
  */
 
 import { useMemo } from 'react';
@@ -188,17 +188,28 @@ function extractTokensFromTheme(theme: ThemeTemplate): DesignTokens {
 }
 
 /**
- * Get base template based on dark mode preference
+ * Get base template based on dark mode preference (SSR-safe)
  */
 function getBaseTemplate(isDarkMode: boolean = false): ThemeTemplate {
   return isDarkMode ? (baseDarkTemplate as ThemeTemplate) : (baseLightTemplate as ThemeTemplate);
 }
 
 /**
+ * SSR-safe media query check for dark mode
+ */
+function getSSRSafeDarkMode(): boolean {
+  if (typeof window === 'undefined') {
+    return false; // Default to light mode during SSR
+  }
+  
+  return window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+}
+
+/**
  * Normalize color tokens with type safety using base template fallbacks
  */
 function normalizeColorTokens(colors: Record<string, unknown>): ColorTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseColors = baseTemplate.colors as Record<string, unknown>;
 
@@ -251,7 +262,7 @@ function normalizeColorTokens(colors: Record<string, unknown>): ColorTokens {
  * Normalize typography tokens using base template fallbacks
  */
 function normalizeTypographyTokens(typography: Record<string, unknown>): TypographyTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseTypography = baseTemplate.typography as Record<string, unknown>;
 
@@ -271,7 +282,7 @@ function normalizeTypographyTokens(typography: Record<string, unknown>): Typogra
  * Normalize spacing tokens using base template fallbacks
  */
 function normalizeSpacingTokens(spacing: Record<string, unknown>): SpacingTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseSpacing = baseTemplate.spacing as Record<string, string>;
 
@@ -282,7 +293,7 @@ function normalizeSpacingTokens(spacing: Record<string, unknown>): SpacingTokens
  * Normalize branding tokens using base template fallbacks
  */
 function normalizeBrandingTokens(branding: Record<string, unknown>): BrandingTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseBranding = baseTemplate.branding as Record<string, unknown>;
 
@@ -299,7 +310,7 @@ function normalizeBrandingTokens(branding: Record<string, unknown>): BrandingTok
  * Normalize accessibility tokens using base template fallbacks
  */
 function normalizeAccessibilityTokens(accessibility: Record<string, unknown>): AccessibilityTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseAccessibility = baseTemplate.accessibility as Record<string, unknown>;
 
@@ -317,7 +328,7 @@ function normalizeAccessibilityTokens(accessibility: Record<string, unknown>): A
  * Normalize responsive tokens using base template fallbacks
  */
 function normalizeResponsiveTokens(responsive: Record<string, unknown>): ResponsiveTokens {
-  const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+  const isDarkMode = getSSRSafeDarkMode();
   const baseTemplate = getBaseTemplate(isDarkMode);
   const baseResponsive = baseTemplate.responsive as Record<string, unknown>;
   const baseBreakpoints = baseResponsive.breakpoints as Record<string, string>;
@@ -351,7 +362,7 @@ export interface UseTokensResult {
   responsive: ResponsiveTokens;
   
   // Utility functions
-  getToken: (_path: string, _fallback?: unknown) => unknown;
+  getToken: (path: string, fallback?: unknown) => unknown;
   hasToken: (path: string) => boolean;
   
   // Theme info
@@ -365,9 +376,52 @@ export interface UseTokensResult {
 }
 
 /**
- * Hook for accessing design tokens from current theme
+ * Hook for accessing design tokens from current theme (SSR-safe)
  */
 export const useTokens = (): UseTokensResult => {
+  // ✅ SSR-safe hook usage
+  if (typeof window === 'undefined') {
+    // Return safe defaults during SSR
+    const baseTokens = createBaseTemplateTokens();
+    return {
+      tokens: baseTokens,
+      isLoading: false,
+      error: undefined,
+      colors: baseTokens.colors,
+      typography: baseTokens.typography,
+      spacing: baseTokens.spacing,
+      branding: baseTokens.branding,
+      accessibility: baseTokens.accessibility,
+      responsive: baseTokens.responsive,
+      getToken: (path: string, fallback?: unknown): unknown => {
+        const keys = path.split('.');
+        let value: unknown = baseTokens;
+        for (const key of keys) {
+          if (value && typeof value === 'object' && key in value) {
+            value = (value as Record<string, unknown>)[key];
+          } else {
+            return fallback;
+          }
+        }
+        return value;
+      },
+      hasToken: (path: string): boolean => {
+        const keys = path.split('.');
+        let value: unknown = baseTokens;
+        for (const key of keys) {
+          if (value && typeof value === 'object' && key in value) {
+            value = (value as Record<string, unknown>)[key];
+          } else {
+            return false;
+          }
+        }
+        return true;
+      },
+      themeInfo: baseTokens.theme,
+    };
+  }
+
+  // ✅ Client-side: Use actual context and processing
   const { currentTemplate, isLoading } = useDesignSystem();
 
   const tokens = useMemo((): DesignTokens => {
@@ -437,15 +491,15 @@ export const useTokens = (): UseTokensResult => {
 };
 
 // =============================================================================
-// BASE TEMPLATE FALLBACK TOKENS
+// BASE TEMPLATE FALLBACK TOKENS (SSR-Safe)
 // =============================================================================
 
 /**
- * Create base template tokens using actual base JSON templates
+ * Create base template tokens using actual base JSON templates (SSR-safe)
  */
 function createBaseTemplateTokens(): DesignTokens {
   try {
-    const isDarkMode = window?.matchMedia?.('(prefers-color-scheme: dark)')?.matches || false;
+    const isDarkMode = getSSRSafeDarkMode();
     const baseTemplate = getBaseTemplate(isDarkMode);
     
     return extractTokensFromTheme(baseTemplate);
@@ -540,4 +594,4 @@ function createEmergencyFallbackTokens(): DesignTokens {
   };
 }
 
-logger.info('useTokens hook initialized with base template integration'); 
+logger.info('SSR-safe useTokens hook initialized'); 

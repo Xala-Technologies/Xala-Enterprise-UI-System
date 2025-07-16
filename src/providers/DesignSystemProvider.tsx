@@ -1,11 +1,11 @@
+'use client'; // ✅ Add this directive at the top
+
 /**
- * @fileoverview Simplified SSR-Safe DesignSystemProvider - Production Strategy
- * @description Simple _theme provider without governance complexity - SSR compatible
- * @version 4.0.0
+ * @fileoverview SSR-Safe DesignSystemProvider - Production Strategy
+ * @description Truly SSR-safe theme provider with React module resolution safety
+ * @version 4.6.3
  * @compliance SSR-Safe, Production-ready, Framework-agnostic
  */
-
-// ✅ Pure provider - no client-side directives needed
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Logger } from '../lib/utils/multiplatform-logger';
@@ -30,16 +30,32 @@ interface DesignSystemContextValue {
   isLoading: boolean;
 
   // Simple _theme management
-  setTemplate: (_templateId: string) => Promise<void>;
+  setTemplate: (templateId: string) => Promise<void>;
   toggleDarkMode: () => void;
-  setDarkMode: (_isDark: boolean) => void;
+  setDarkMode: (isDark: boolean) => void;
 
   // Template utilities
   getAvailableTemplates: () => Promise<string[]>;
   reloadTemplate: () => Promise<void>;
 }
 
-const DesignSystemContext = createContext<DesignSystemContextValue | null>(null);
+// ✅ SSR-safe context creation
+let DesignSystemContext: React.Context<DesignSystemContextValue | null> | null = null;
+
+if (typeof window !== 'undefined') {
+  DesignSystemContext = createContext<DesignSystemContextValue | null>(null);
+} else {
+  // SSR fallback
+  DesignSystemContext = {
+    Provider: ({ children }: { children: React.ReactNode }) => children,
+    Consumer: ({
+      children,
+    }: {
+      children: (value: DesignSystemContextValue | null) => React.ReactNode;
+    }) => children(null),
+    displayName: 'DesignSystemContext',
+  } as unknown as React.Context<DesignSystemContextValue | null>;
+}
 
 // =============================================================================
 // SIMPLIFIED PROVIDER PROPS (No Governance)
@@ -47,12 +63,38 @@ const DesignSystemContext = createContext<DesignSystemContextValue | null>(null)
 
 export interface DesignSystemProviderProps {
   children: React.ReactNode;
-  _templateId?: string;
+  templateId?: string;
   initialDarkMode?: boolean;
   autoDetectDarkMode?: boolean;
   // SSR-specific props
   ssrTemplate?: ThemeTemplate; // Pre-loaded template for SSR
-  enableSSRFallback?: boolean;
+}
+
+// =============================================================================
+// SSR-SAFE MEDIA QUERY HOOK
+// =============================================================================
+
+function useSSRSafeMediaQuery(query: string, fallback: boolean = false): boolean {
+  // ✅ Only use hooks in browser
+  if (typeof window === 'undefined') {
+    return fallback;
+  }
+
+  const [matches, setMatches] = useState(fallback);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+
+    const mediaQuery = window.matchMedia(query);
+    setMatches(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent): void => setMatches(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+
+    return (): void => mediaQuery.removeEventListener('change', handleChange);
+  }, [query]);
+
+  return matches;
 }
 
 // =============================================================================
@@ -61,40 +103,37 @@ export interface DesignSystemProviderProps {
 
 export function DesignSystemProvider({
   children,
-  _templateId,
-  initialDarkMode: _initialDarkMode = false,
-  autoDetectDarkMode: _autoDetectDarkMode = false,
-  ssrTemplate: _ssrTemplate,
-  enableSSRFallback: _enableSSRFallback = true,
+  templateId = 'base-light',
+  initialDarkMode = false,
+  autoDetectDarkMode = false,
+  ssrTemplate,
 }: DesignSystemProviderProps): JSX.Element {
-  // ✅ SSR-safe initialization
-  const [currentTemplate, setCurrentTemplate] = useState<ThemeTemplate | null>(null);
-  const [currentTemplateId, setCurrentTemplateId] = useState('base-light');
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  // ✅ Only use hooks in browser
+  if (typeof window === 'undefined') {
+    // SSR: Return simple wrapper
+    return <>{children}</>;
+  }
+
+  // ✅ Client-side: Full functionality
+  const [currentTemplate, setCurrentTemplate] = useState<ThemeTemplate | null>(ssrTemplate || null);
+  const [currentTemplateId, setCurrentTemplateId] = useState(templateId);
+  const [isDarkMode, setIsDarkMode] = useState(initialDarkMode);
   const [isLoading, setIsLoading] = useState(true);
 
   const templateLoader = TemplateLoader.getInstance();
 
-  // ✅ SSR-safe browser detection
+  // ✅ SSR-safe browser detection using media query hook
+  const prefersDark = useSSRSafeMediaQuery('(prefers-color-scheme: dark)', false);
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      setIsDarkMode(mediaQuery.matches);
-
-      const handleChange = (e: MediaQueryListEvent): void => setIsDarkMode(e.matches);
-      mediaQuery.addEventListener('change', handleChange);
-
-      return (): void => mediaQuery.removeEventListener('change', handleChange);
+    if (autoDetectDarkMode) {
+      setIsDarkMode(prefersDark);
     }
-    return undefined;
-  }, []);
+  }, [prefersDark, autoDetectDarkMode]);
 
   // ✅ SSR-safe template loading
   useEffect(() => {
-    // Only load template client-side if not provided via SSR
-    if (typeof window !== 'undefined') {
-      loadTemplate(currentTemplateId);
-    }
+    loadTemplate(currentTemplateId);
   }, [currentTemplateId, isDarkMode]);
 
   const loadTemplate = async (_templateId: string): Promise<void> => {
@@ -115,22 +154,18 @@ export function DesignSystemProvider({
     } catch (error) {
       logger.error('Failed to load template:', { _templateId, error });
 
-      // ✅ SSR fallback to emergency template
-      if (typeof window !== 'undefined') {
-        const emergencyTemplate = templateLoader.getEmergencyFallback(
-          isDarkMode ? 'DARK' : 'LIGHT'
-        );
-        setCurrentTemplate(emergencyTemplate);
-        logger.warn('Using emergency fallback template', { _templateId, isDarkMode });
-      }
+      // ✅ Fallback to emergency template
+      const emergencyTemplate = templateLoader.getEmergencyFallback(isDarkMode ? 'DARK' : 'LIGHT');
+      setCurrentTemplate(emergencyTemplate);
+      logger.warn('Using emergency fallback template', { _templateId, isDarkMode });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const setTemplate = async (_templateId: string): Promise<void> => {
-    logger.info('Switching template', { from: currentTemplateId, to: _templateId });
-    setCurrentTemplateId(_templateId);
+  const setTemplate = async (newTemplateId: string): Promise<void> => {
+    logger.info('Switching template', { from: currentTemplateId, to: newTemplateId });
+    setCurrentTemplateId(newTemplateId);
   };
 
   const toggleDarkMode = (): void => {
@@ -138,9 +173,9 @@ export function DesignSystemProvider({
     setIsDarkMode(!isDarkMode);
   };
 
-  const setDarkMode = (_isDark: boolean): void => {
-    logger.info('Setting dark mode', { mode: _isDark });
-    setIsDarkMode(_isDark);
+  const setDarkMode = (isDark: boolean): void => {
+    logger.info('Setting dark mode', { mode: isDark });
+    setIsDarkMode(isDark);
   };
 
   const getAvailableTemplates = async (): Promise<string[]> => {
@@ -148,7 +183,7 @@ export function DesignSystemProvider({
   };
 
   const reloadTemplate = async (): Promise<void> => {
-    logger.info('Reloading current template', { _templateId: currentTemplateId });
+    logger.info('Reloading current template', { templateId: currentTemplateId });
     await loadTemplate(currentTemplateId);
   };
 
@@ -226,7 +261,7 @@ export function DesignSystemProvider({
           });
         }
 
-        logger.info('CSS custom properties applied', { _templateId: template.id });
+        logger.info('CSS custom properties applied', { templateId: template.id });
       } catch (error) {
         logger.error('Failed to apply CSS custom properties', { error });
       }
@@ -245,19 +280,50 @@ export function DesignSystemProvider({
     reloadTemplate,
   };
 
+  // ✅ Use SSR-safe provider rendering
+  if (!DesignSystemContext) {
+    // During SSR or when React context creation failed, render children directly
+    return <>{children}</>;
+  }
+
   return <DesignSystemContext.Provider value={value}>{children}</DesignSystemContext.Provider>;
 }
 
 // =============================================================================
-// CONTEXT HOOK
+// CONTEXT HOOK WITH SSR SAFETY
 // =============================================================================
 
 export const useDesignSystem = (): DesignSystemContextValue => {
-  const context = useContext(DesignSystemContext);
-  if (!context) {
-    throw new Error('useDesignSystem must be used within DesignSystemProvider');
+  const defaultValue: DesignSystemContextValue = {
+    currentTemplate: null,
+    _templateId: 'base-light',
+    isDarkMode: false,
+    isLoading: false,
+    setTemplate: async () => {},
+    toggleDarkMode: () => {},
+    setDarkMode: () => {},
+    getAvailableTemplates: async () => [],
+    reloadTemplate: async () => {},
+  };
+
+  // ✅ SSR-safe hook usage
+  if (typeof window === 'undefined') {
+    // Return safe defaults during SSR
+    return defaultValue;
   }
-  return context;
+
+  // ✅ Client-side: Use actual context
+  if (!DesignSystemContext) {
+    return defaultValue;
+  }
+
+  try {
+    const context = useContext(DesignSystemContext);
+    return context || defaultValue;
+  } catch (error) {
+    logger.warn('useDesignSystem failed, using defaults:', error);
+    return defaultValue;
+  }
 };
 
 // =============================================================================
@@ -304,4 +370,4 @@ export const useTemplates = (): {
   };
 };
 
-logger.info('Simplified SSR-safe DesignSystemProvider initialized');
+logger.info('SSR-safe DesignSystemProvider initialized');

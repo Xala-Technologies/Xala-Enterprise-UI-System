@@ -1,7 +1,7 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "4.6.2",
-  "description": "SSR-safe, production-ready UI system with JSON template integration",
+  "version": "4.6.3",
+  "description": "SSR-safe, production-ready UI system with JSON template integration and React.createContext compatibility",
   "keywords": [
     "ui-system",
     "design-tokens",
@@ -23,7 +23,8 @@
   "sideEffects": [
     "*.css",
     "./src/providers/DesignSystemProvider.tsx",
-    "./dist/providers/DesignSystemProvider.js"
+    "./dist/providers/DesignSystemProvider.js",
+    "./dist/providers/ClientDesignSystemProvider.js"
   ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -94,8 +95,9 @@
   ],
   "scripts": {
     "dev": "echo 'Use pnpm build for development builds'",
-    "build": "pnpm run clean && pnpm run build:ts && pnpm run fix:imports && pnpm run build:css",
+    "build": "pnpm run clean && pnpm run build:ts && pnpm run fix:imports && pnpm run build:css && pnpm run postbuild",
     "build:watch": "pnpm run build:ts --watch",
+    "postbuild": "node scripts/fix-ssr-compatibility.cjs",
     "build:ts": "tsc --project tsconfig.build.json",
     "build:css": "mkdir -p dist && echo '/* Enterprise UI System Tokens */' > dist/tokens.css",
     "clean": "rimraf dist",
