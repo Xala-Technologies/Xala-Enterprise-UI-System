@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "4.6.3",
+  "version": "4.6.4",
   "description": "SSR-safe, production-ready UI system with JSON template integration and React.createContext compatibility",
   "keywords": [
     "ui-system",
