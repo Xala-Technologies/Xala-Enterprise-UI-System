@@ -6,6 +6,30 @@ Welcome to the UI System v4.0.0 - a production-ready, SSR-compatible component l
 
 ## ⚡ **Quick Start**
 
+---
+
+## 🚦 Critical UI Development Rules
+
+To ensure accessibility, maintainability, and visual consistency, all applications using the Xala UI System **must** follow these rules:
+
+- **Mandatory Design Token Usage:** All colors, spacing, typography, border radius, and shadows must use design tokens only. No hardcoded or arbitrary values.
+- **No Inline Styles or Arbitrary className:** Do not use `style={{}}` or direct `className` for styling. Use only semantic UI System components and their props.
+- **No Raw HTML Elements in Pages:** Never use `div`, `span`, `p`, or other raw HTML in pages. Use semantic components from the UI System.
+- **8pt Grid System:** All spacing and sizing must follow the 8pt grid (e.g., spacing[8]=32px, spacing[16]=64px, etc.).
+- **Component Tokens:** Use pre-configured variants for all components (e.g., `variant="primary"`, `padding="8"`, `radius="xl"`).
+- **Accessibility:** All components/pages must meet WCAG 2.2 AAA. Use tokens for color contrast and sizing.
+- **Localization:** All user-facing text must be localizable. Supported: English (default), Norwegian Bokmål, French, Arabic.
+- **Strict TypeScript:** No `any` types. Use explicit types and interfaces everywhere. Strict mode must be enabled.
+- **SOLID Principles:** Components must be small, focused, and composable. Max 200 lines per file, max 20 lines per function.
+- **No Hardcoded Styling:** Never use hardcoded colors, spacing, or typography values.
+- **No Forbidden Patterns:**
+  - `className="p-4 mb-6 text-blue-600 bg-gray-100 h-12 w-64"`  // Forbidden
+  - `style={{ padding: '16px' }}`                               // Forbidden
+  - `className="text-[18px] bg-[#f0f0f0]"`                    // Forbidden
+  - `<div className="flex flex-col">`                          // Forbidden
+
+---
+
 ### **1. Installation**
 
 ```bash
