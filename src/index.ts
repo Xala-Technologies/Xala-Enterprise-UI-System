@@ -153,8 +153,10 @@ export { BottomNavigation } from './components/platform/mobile/BottomNavigation'
 export type { PlatformComponentProps as PlatformComponentPropsType, PlatformDetection as PlatformDetectionType, PlatformTypes as PlatformTypesType, ResponsiveBreakpoints as ResponsiveBreakpointsType, TouchFriendlyProps as TouchFriendlyPropsType } from './types/platform.types';
 
 // ===== HOOKS =====
-export { useUISystem } from './hooks';
-export { useTokens } from './hooks/useTokens';
+export { useUi, useTokens, useTheme, useLayout, useWhiteLabel, useSSR } from './providers/UiProvider/UiProvider';
+export { useComponent, useComponentVariant } from './hooks/useComponent';
+export { useMediaQuery, useResponsive, useBreakpoint } from './hooks/useMediaQuery';
+export { useDebounce, useDebouncedCallback, useThrottle, useLoadingTimeout } from './hooks/useDebounce';
 
 // ===== CORE TYPES =====
 export type { AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory, ComponentFactoryFunction, ConfigurationService, EventPublisher, LocalizationService, PerformanceMonitor, ThemeManager, UISystemService } from './lib/interfaces/ui-system.interface';
