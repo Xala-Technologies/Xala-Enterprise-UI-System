@@ -221,10 +221,36 @@ For SaaS applications currently using v4:
    }
    ```
 
+## 🔄 Token Transformation System
+
+The v5 architecture includes a comprehensive token transformation pipeline that enables:
+
+### Implemented Transformers
+- **TypeScript Types**: Generate type-safe interfaces with full IntelliSense support
+- **CSS Variables**: Create runtime-themeable custom properties
+- **Tailwind Config**: Generate utility-first configurations
+
+### Usage Example
+```typescript
+import { 
+  generateTypeScriptTypes,
+  generateCSSVariables,
+  generateTailwindConfig 
+} from '@xala-technologies/ui-system/tokens/transformers';
+
+// Transform tokens into multiple formats
+const types = generateTypeScriptTypes(theme);
+const css = generateCSSVariables(theme);
+const tailwind = generateTailwindConfig(theme);
+```
+
+For complete documentation, see the [Token Transformers Guide](./token-transformers.md).
+
 ## 📝 Next Steps
 
-1. Complete the UiProvider implementation
-2. Define the token schema and types
-3. Implement SSR-safe theme switching
-4. Create a minimal set of updated components
-5. Test in a real SaaS application
+1. ✅ Complete the UiProvider implementation
+2. ✅ Define the token schema and types
+3. ✅ Implement token transformation pipeline
+4. [ ] Implement SSR-safe theme switching
+5. [ ] Create JSON schema validation
+6. [ ] Test in real SaaS applications

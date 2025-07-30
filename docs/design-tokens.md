@@ -59,7 +59,18 @@ const { colors, spacing, typography } = useTokens();
 
 ---
 
+## Token Transformation
+
+The v5 architecture includes a comprehensive token transformation system that converts design tokens into multiple output formats:
+
+- **TypeScript Types**: Generate type-safe interfaces for compile-time safety
+- **CSS Variables**: Create runtime-themeable custom properties
+- **Tailwind Config**: Generate utility-first configuration files
+
+For detailed documentation on token transformation, see the [Token Transformers Guide](./token-transformers.md).
+
 ## Further Reading
+- [Token Transformers Guide](./token-transformers.md)
 - [Theming Guide](./themes.md)
 - [Component Architecture](./components/README.md)
 - [Accessibility Principles](./architecture.md)

@@ -54,6 +54,11 @@ Complete documentation for the @xala-technologies/ui-system - A Norwegian-compli
 - Usage, extension, and compliance
 - WCAG/NSM/GDPR accessibility and validation
 
+**[docs/token-transformers.md](./token-transformers.md)** 🆕
+- Token transformation pipeline
+- TypeScript, CSS, and Tailwind generators
+- Multi-theme support and automation
+
 **[docs/themes.md](./themes.md)**
 - Theming strategies and custom theme creation
 - Brand consistency and accessibility
