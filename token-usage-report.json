@@ -1,0 +1,1334 @@
+{
+  "timestamp": "2025-07-30T23:13:09.359Z",
+  "summary": {
+    "fullyMigrated": 65,
+    "partiallyMigrated": 0,
+    "notMigrated": 15,
+    "usingTokens": 3,
+    "usingTailwind": 43,
+    "usingCssVars": 21,
+    "hasHardcodedValues": 0
+  },
+  "patterns": {
+    "useTokensHook": {
+      "count": 6,
+      "files": [
+        "src/components/ui/input.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/ui/button.tsx"
+      ]
+    },
+    "cssVariables": {
+      "count": 666,
+      "files": [
+        "src/components/UISystemProvider.tsx",
+        "src/components/ui/scroll-area.tsx",
+        "src/components/ui/card.tsx",
+        "src/components/form/Select.tsx",
+        "src/components/data-display/Tooltip.tsx",
+        "src/components/action-feedback/ToastIcon.tsx",
+        "src/components/action-feedback/ToastHelpers.ts",
+        "src/components/action-feedback/Toast.tsx",
+        "src/components/action-feedback/PriorityIndicator.tsx",
+        "src/components/action-feedback/Modal.tsx",
+        "src/components/action-feedback/ClassificationIndicator.tsx",
+        "src/components/action-feedback/ButtonIcon.tsx",
+        "src/components/action-feedback/ButtonHelpers.ts",
+        "src/components/action-feedback/ButtonConfirmation.tsx",
+        "src/components/action-feedback/AlertIcon.tsx",
+        "src/components/action-feedback/AlertHelpers.ts",
+        "src/components/action-feedback/AlertContent.tsx",
+        "src/components/action-feedback/AlertActions.tsx",
+        "src/components/platform/mobile/MobileHeader.tsx",
+        "src/components/platform/mobile/BottomNavigation.tsx",
+        "src/components/platform/desktop/DesktopSidebar.tsx"
+      ]
+    },
+    "tailwindClasses": {
+      "count": 244,
+      "files": [
+        "src/components/ui/tree-view.tsx",
+        "src/components/ui/timeline.tsx",
+        "src/components/ui/time-picker.tsx",
+        "src/components/ui/textarea.tsx",
+        "src/components/ui/switch.tsx",
+        "src/components/ui/slider.tsx",
+        "src/components/ui/skeleton.tsx",
+        "src/components/ui/select.tsx",
+        "src/components/ui/radio.tsx",
+        "src/components/ui/progress.tsx",
+        "src/components/ui/pagination.tsx",
+        "src/components/ui/message-bubble.tsx",
+        "src/components/ui/icon-button.tsx",
+        "src/components/ui/drawer.tsx",
+        "src/components/ui/divider.tsx",
+        "src/components/ui/date-picker.tsx",
+        "src/components/ui/command-palette.tsx",
+        "src/components/ui/code-block.tsx",
+        "src/components/ui/checkbox.tsx",
+        "src/components/ui/calendar.tsx",
+        "src/components/ui/breadcrumb.tsx",
+        "src/components/ui/avatar.tsx",
+        "src/components/ui/action-bar.tsx",
+        "src/components/ui/accordion.tsx",
+        "src/components/navigation/NavigationComponents.tsx",
+        "src/components/global-search/GlobalSearch.tsx",
+        "src/components/filter-bar/FilterBar.tsx",
+        "src/components/feedback/FeedbackComponents.tsx",
+        "src/components/data-table/DataTable.tsx",
+        "src/components/cards/CardComponents.tsx"
+      ]
+    },
+    "cvaUsage": {
+      "count": 81,
+      "files": [
+        "src/components/ui/typography.tsx",
+        "src/components/ui/tree-view.tsx",
+        "src/components/ui/tooltip.tsx",
+        "src/components/ui/timeline.tsx",
+        "src/components/ui/time-picker.tsx",
+        "src/components/ui/textarea.tsx",
+        "src/components/ui/tabs-individual.tsx",
+        "src/components/ui/switch.tsx",
+        "src/components/ui/slider.tsx",
+        "src/components/ui/skeleton.tsx",
+        "src/components/ui/separator.tsx",
+        "src/components/ui/select.tsx",
+        "src/components/ui/scroll-area.tsx",
+        "src/components/ui/radio.tsx",
+        "src/components/ui/progress.tsx",
+        "src/components/ui/pagination.tsx",
+        "src/components/ui/message-bubble.tsx",
+        "src/components/ui/icon-button.tsx",
+        "src/components/ui/drawer.tsx",
+        "src/components/ui/divider.tsx",
+        "src/components/ui/date-picker.tsx",
+        "src/components/ui/context-menu.tsx",
+        "src/components/ui/command-palette.tsx",
+        "src/components/ui/code-block.tsx",
+        "src/components/ui/checkbox.tsx",
+        "src/components/ui/calendar.tsx",
+        "src/components/ui/breadcrumb.tsx",
+        "src/components/ui/box.tsx",
+        "src/components/ui/badge.tsx",
+        "src/components/ui/avatar.tsx",
+        "src/components/ui/alert.tsx",
+        "src/components/ui/action-bar.tsx",
+        "src/components/ui/accordion.tsx",
+        "src/components/navigation/NavigationComponents.tsx",
+        "src/components/layout/Stack.tsx",
+        "src/components/layout/Grid.tsx",
+        "src/components/layout/Container.tsx",
+        "src/components/global-search/GlobalSearch.tsx",
+        "src/components/filter-bar/FilterBar.tsx",
+        "src/components/feedback/FeedbackComponents.tsx",
+        "src/components/data-table/DataTable.tsx",
+        "src/components/cards/CardComponents.tsx",
+        "src/components/action-feedback/ButtonBase.tsx"
+      ]
+    },
+    "hardcodedColors": {
+      "count": 0,
+      "files": []
+    },
+    "hardcodedSpacing": {
+      "count": 0,
+      "files": []
+    },
+    "themeContext": {
+      "count": 0,
+      "files": []
+    },
+    "designSystemProvider": {
+      "count": 0,
+      "files": []
+    }
+  },
+  "components": {
+    "UISystemProvider.tsx": {
+      "file": "src/components/UISystemProvider.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 2,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "typography.tsx": {
+      "file": "src/components/ui/typography.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "tree-view.tsx": {
+      "file": "src/components/ui/tree-view.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 4,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "tooltip.tsx": {
+      "file": "src/components/ui/tooltip.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "timeline.tsx": {
+      "file": "src/components/ui/timeline.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 8,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "time-picker.tsx": {
+      "file": "src/components/ui/time-picker.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 5,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "textarea.tsx": {
+      "file": "src/components/ui/textarea.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 2,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "tabs-individual.tsx": {
+      "file": "src/components/ui/tabs-individual.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "switch.tsx": {
+      "file": "src/components/ui/switch.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 5,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "slider.tsx": {
+      "file": "src/components/ui/slider.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 8,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "skeleton.tsx": {
+      "file": "src/components/ui/skeleton.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 2,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "separator.tsx": {
+      "file": "src/components/ui/separator.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "select.tsx": {
+      "file": "src/components/ui/select.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 1,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "scroll-area.tsx": {
+      "file": "src/components/ui/scroll-area.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 2,
+        "tailwindClasses": 0,
+        "cvaUsage": 4,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "radio.tsx": {
+      "file": "src/components/ui/radio.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 10,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "progress.tsx": {
+      "file": "src/components/ui/progress.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 9,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "pagination.tsx": {
+      "file": "src/components/ui/pagination.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 4,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "message-bubble.tsx": {
+      "file": "src/components/ui/message-bubble.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 11,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "input.tsx": {
+      "file": "src/components/ui/input.tsx",
+      "patterns": {
+        "useTokensHook": 1,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "icon-button.tsx": {
+      "file": "src/components/ui/icon-button.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 1,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "drawer.tsx": {
+      "file": "src/components/ui/drawer.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 3,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "divider.tsx": {
+      "file": "src/components/ui/divider.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 1,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "date-picker.tsx": {
+      "file": "src/components/ui/date-picker.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 5,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "context-menu.tsx": {
+      "file": "src/components/ui/context-menu.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "command-palette.tsx": {
+      "file": "src/components/ui/command-palette.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 17,
+        "cvaUsage": 4,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "code-block.tsx": {
+      "file": "src/components/ui/code-block.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 9,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "checkbox.tsx": {
+      "file": "src/components/ui/checkbox.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 11,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "card.tsx": {
+      "file": "src/components/ui/card.tsx",
+      "patterns": {
+        "useTokensHook": 4,
+        "cssVariables": 3,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "calendar.tsx": {
+      "file": "src/components/ui/calendar.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 18,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "button.tsx": {
+      "file": "src/components/ui/button.tsx",
+      "patterns": {
+        "useTokensHook": 1,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "breadcrumb.tsx": {
+      "file": "src/components/ui/breadcrumb.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 6,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "box.tsx": {
+      "file": "src/components/ui/box.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "badge.tsx": {
+      "file": "src/components/ui/badge.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "avatar.tsx": {
+      "file": "src/components/ui/avatar.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 2,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "alert.tsx": {
+      "file": "src/components/ui/alert.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "action-bar.tsx": {
+      "file": "src/components/ui/action-bar.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 19,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "accordion.tsx": {
+      "file": "src/components/ui/accordion.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 4,
+        "cvaUsage": 4,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "NavigationComponents.tsx": {
+      "file": "src/components/navigation/NavigationComponents.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 9,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Stack.tsx": {
+      "file": "src/components/layout/Stack.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Section.tsx": {
+      "file": "src/components/layout/Section.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "PageLayout.tsx": {
+      "file": "src/components/layout/PageLayout.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Grid.tsx": {
+      "file": "src/components/layout/Grid.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Container.tsx": {
+      "file": "src/components/layout/Container.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Card.tsx": {
+      "file": "src/components/layout/Card.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "GlobalSearch.tsx": {
+      "file": "src/components/global-search/GlobalSearch.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 11,
+        "cvaUsage": 2,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "TextArea.tsx": {
+      "file": "src/components/form/TextArea.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Select.tsx": {
+      "file": "src/components/form/Select.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 46,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "PersonalNumberInput.tsx": {
+      "file": "src/components/form/PersonalNumberInput.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "OrganizationNumberInput.tsx": {
+      "file": "src/components/form/OrganizationNumberInput.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Input.tsx": {
+      "file": "src/components/form/Input.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Form.tsx": {
+      "file": "src/components/form/Form.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "FilterBar.tsx": {
+      "file": "src/components/filter-bar/FilterBar.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 11,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "FeedbackComponents.tsx": {
+      "file": "src/components/feedback/FeedbackComponents.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 14,
+        "cvaUsage": 4,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "DataTable.tsx": {
+      "file": "src/components/data-display/DataTable.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Tooltip.tsx": {
+      "file": "src/components/data-display/Tooltip.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 14,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Tag.tsx": {
+      "file": "src/components/data-display/Tag.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "KeyValueList.tsx": {
+      "file": "src/components/data-display/KeyValueList.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "Badge.tsx": {
+      "file": "src/components/data-display/Badge.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "CardComponents.tsx": {
+      "file": "src/components/cards/CardComponents.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 18,
+        "cvaUsage": 3,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ToastIcon.tsx": {
+      "file": "src/components/action-feedback/ToastIcon.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 8,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ToastHelpers.ts": {
+      "file": "src/components/action-feedback/ToastHelpers.ts",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 54,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Toast.tsx": {
+      "file": "src/components/action-feedback/Toast.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 68,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "PriorityIndicator.tsx": {
+      "file": "src/components/action-feedback/PriorityIndicator.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 2,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Modal.tsx": {
+      "file": "src/components/action-feedback/Modal.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 76,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ClassificationIndicator.tsx": {
+      "file": "src/components/action-feedback/ClassificationIndicator.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 2,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ButtonIcon.tsx": {
+      "file": "src/components/action-feedback/ButtonIcon.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 8,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ButtonHelpers.ts": {
+      "file": "src/components/action-feedback/ButtonHelpers.ts",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 48,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ButtonConfirmation.tsx": {
+      "file": "src/components/action-feedback/ButtonConfirmation.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 31,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "ButtonBase.tsx": {
+      "file": "src/components/action-feedback/ButtonBase.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 1,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Button.tsx": {
+      "file": "src/components/action-feedback/Button.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "AlertIcon.tsx": {
+      "file": "src/components/action-feedback/AlertIcon.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 2,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "AlertHelpers.ts": {
+      "file": "src/components/action-feedback/AlertHelpers.ts",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 44,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "AlertContent.tsx": {
+      "file": "src/components/action-feedback/AlertContent.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 21,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "AlertBase.tsx": {
+      "file": "src/components/action-feedback/AlertBase.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "AlertActions.tsx": {
+      "file": "src/components/action-feedback/AlertActions.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 18,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "Alert.tsx": {
+      "file": "src/components/action-feedback/Alert.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 0,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 0,
+      "status": "not-migrated"
+    },
+    "MobileHeader.tsx": {
+      "file": "src/components/platform/mobile/MobileHeader.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 67,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "BottomNavigation.tsx": {
+      "file": "src/components/platform/mobile/BottomNavigation.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 69,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    },
+    "DesktopSidebar.tsx": {
+      "file": "src/components/platform/desktop/DesktopSidebar.tsx",
+      "patterns": {
+        "useTokensHook": 0,
+        "cssVariables": 81,
+        "tailwindClasses": 0,
+        "cvaUsage": 0,
+        "hardcodedColors": 0,
+        "hardcodedSpacing": 0,
+        "themeContext": 0,
+        "designSystemProvider": 0
+      },
+      "score": 100,
+      "status": "fully-migrated"
+    }
+  }
+}
