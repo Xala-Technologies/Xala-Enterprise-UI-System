@@ -106,8 +106,8 @@
 ### Token Transformation
 - [ ] Create token transformation pipeline for different outputs
 - [x] Implement CSS variable output transformer
-- [ ] Implement Tailwind config output transformer
-- [ ] Implement TypeScript type output generator
+- [x] Implement Tailwind config output transformer
+- [x] Implement TypeScript type output generator
 - [ ] Create JSON schema validation for tokens
 - [ ] Implement token serialization/deserialization
 - [ ] Create versioning system for token sets

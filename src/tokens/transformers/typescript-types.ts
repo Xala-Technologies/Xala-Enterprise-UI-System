@@ -17,6 +17,13 @@ export interface TokenSystem {
   colors: Record<string, unknown>;
   typography: Record<string, unknown>;
   spacing: Record<string, unknown>;
+  borderRadius?: Record<string, unknown>;
+  shadows?: Record<string, unknown>;
+  zIndex?: Record<string, unknown>;
+  animation?: Record<string, unknown>;
+  transitions?: Record<string, unknown>;
+  components?: Record<string, unknown>;
+  forms?: Record<string, unknown>;
   branding: Record<string, unknown>;
   accessibility: Record<string, unknown>;
   responsive: Record<string, unknown>;

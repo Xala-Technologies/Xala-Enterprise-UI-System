@@ -23,6 +23,16 @@ export {
   type CSSVariableResult,
 } from './css-variables';
 
+// Tailwind Config transformer exports
+export {
+  TailwindConfigTransformer,
+  generateTailwindConfig,
+  generateMultiThemeTailwindConfig,
+  type TailwindConfigOptions,
+  type TailwindConfigResult,
+} from './tailwind-config';
+
 // Re-export default transformers
 export { default as TypeScriptTransformer } from './typescript-types';
 export { default as CSSTransformer } from './css-variables';
+export { default as TailwindTransformer } from './tailwind-config';
