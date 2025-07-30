@@ -11,6 +11,79 @@ The token transformation system provides automated generation of:
 
 ## Available Transformers
 
+### JSON Schema Transformer
+
+Generates JSON Schema for token validation and documentation, enabling automated validation and IDE support.
+
+#### Features
+- Generates JSON Schema (draft 07, 2019-09, or 2020-12)
+- Includes examples and descriptions
+- Supports split schemas for each token category
+- Provides basic validation functionality
+- Enables VS Code IntelliSense for theme files
+
+#### Usage
+
+```typescript
+import { generateJSONSchema, validateTokensAgainstSchema } from '@xala-technologies/ui-system/tokens/transformers';
+
+const result = generateJSONSchema(theme, {
+  draft: '2020-12',              // Schema draft version
+  includeExamples: true,         // Include examples
+  includeDescriptions: true,     // Include descriptions
+  strictRequired: false,         // Make all properties required
+  schemaId: 'https://example.com/schema.json',
+  splitSchemas: false            // Generate separate schemas
+});
+
+// Access generated schema
+const { schema, schemas, full } = result;
+
+// Validate tokens against schema
+const validation = validateTokensAgainstSchema(tokens, schema);
+if (!validation.valid) {
+  console.error('Validation errors:', validation.errors);
+}
+```
+
+#### Example Output
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xala-technologies.com/schemas/design-tokens.json",
+  "title": "Design Token System",
+  "type": "object",
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "name": { "type": "string" },
+        "mode": { "type": "string", "enum": ["LIGHT", "DARK"] },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+      },
+      "required": ["id", "name", "mode", "version"]
+    },
+    "colors": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z]+$": {
+          "type": "object",
+          "patternProperties": {
+            "^(50|100|200|300|400|500|600|700|800|900|950)$": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["metadata", "colors", "typography", "spacing"]
+}
+```
+
 ### TypeScript Type Transformer
 
 Generates strongly-typed interfaces and type definitions from design tokens, ensuring type safety throughout your application.
@@ -365,9 +438,68 @@ const result = generateTypeScriptTypes(theme, {
 });
 ```
 
+## JSON Schema Validation
+
+### Using with AJV
+
+For production validation, use the ajv library:
+
+```bash
+npm install ajv ajv-cli
+```
+
+```typescript
+import Ajv from 'ajv';
+import { generateJSONSchema } from '@xala-technologies/ui-system/tokens/transformers';
+
+// Generate schema
+const { schema } = generateJSONSchema(baseTheme);
+
+// Create validator
+const ajv = new Ajv({ allErrors: true });
+const validate = ajv.compile(schema);
+
+// Validate theme
+const valid = validate(customTheme);
+if (!valid) {
+  console.error('Theme validation failed:', validate.errors);
+}
+```
+
+### VS Code Integration
+
+Add schema reference to your theme files for IntelliSense:
+
+```json
+{
+  "$schema": "./path/to/token-schema.json",
+  "id": "my-theme",
+  "name": "My Custom Theme",
+  "colors": {
+    // VS Code will provide autocomplete and validation!
+  }
+}
+```
+
+### CI/CD Validation
+
+```yaml
+# .github/workflows/validate-themes.yml
+name: Validate Themes
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install -g ajv-cli
+      - run: ajv validate -s schemas/token-schema.json -d "themes/*.json"
+```
+
 ## Future Enhancements
 
-- **JSON Schema Transformer**: Generate JSON schema for token validation
 - **Platform-Specific Transformers**: React Native, Flutter support
 - **Design Tool Integration**: Figma, Sketch plugin support
 - **Real-time Preview**: Live transformation preview in development
+- **Schema Evolution**: Automatic migration between schema versions

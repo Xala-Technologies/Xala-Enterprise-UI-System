@@ -32,7 +32,17 @@ export {
   type TailwindConfigResult,
 } from './tailwind-config';
 
+// JSON Schema transformer exports
+export {
+  JSONSchemaTransformer,
+  generateJSONSchema,
+  validateTokensAgainstSchema,
+  type JSONSchemaOptions,
+  type JSONSchemaResult,
+} from './json-schema';
+
 // Re-export default transformers
 export { default as TypeScriptTransformer } from './typescript-types';
 export { default as CSSTransformer } from './css-variables';
 export { default as TailwindTransformer } from './tailwind-config';
+export { default as SchemaTransformer } from './json-schema';

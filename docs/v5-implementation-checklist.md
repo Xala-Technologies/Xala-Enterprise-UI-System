@@ -108,7 +108,7 @@
 - [x] Implement CSS variable output transformer
 - [x] Implement Tailwind config output transformer
 - [x] Implement TypeScript type output generator
-- [ ] Create JSON schema validation for tokens
+- [x] Create JSON schema validation for tokens
 - [ ] Implement token serialization/deserialization
 - [ ] Create versioning system for token sets
 - [ ] Implement token diffing for change detection
