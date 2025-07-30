@@ -211,7 +211,3 @@ We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md
 ## License
 
 MIT License - see [LICENSE](./LICENSE) file for details.
-
----
-
-**Built with ❤️ in Norway 🇳🇴 for enterprise applications worldwide**

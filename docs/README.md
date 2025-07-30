@@ -21,7 +21,6 @@ Complete documentation for the @xala-technologies/ui-system - A Norwegian-compli
 ### 📋 Planning & Strategy
 
 **[docs/planning/](./planning/README.md)**
-
 - Architecture roadmap and future planning
 - Production strategy and design decisions
 - Long-term technical vision
@@ -29,15 +28,39 @@ Complete documentation for the @xala-technologies/ui-system - A Norwegian-compli
 ### 🛠️ Implementation & Deployment
 
 **[docs/implementation/](./implementation/README.md)**
-
-- NPM package creation and publishing
-- Deployment strategies and configurations
+- In-depth implementation and integration guide
+- Theming, localization, SSR, accessibility, security, and troubleshooting
+- NPM package creation, publishing, and deployment
 - Production readiness checklists
+
+### 🏗️ Layouts
+
+**[docs/layouts.md](./layouts.md)**
+- Overview of all layouts (BaseLayout, Admin, Desktop, Mobile, Tablet, Web)
+- Responsive, composable, and accessible layout strategies
+- Usage, extension, and best practices
+
+### 🧩 Components
+
+**[docs/components/README.md](./components/README.md)**
+- Individual component guides for all UI, feedback, data, navigation, and form elements
+- Usage, props, accessibility, localization, and theming
+- SOLID, composition, and code quality notes
+
+### 🎨 Design Tokens & Themes
+
+**[docs/design-tokens.md](./design-tokens.md)**
+- Design token system overview
+- Usage, extension, and compliance
+- WCAG/NSM/GDPR accessibility and validation
+
+**[docs/themes.md](./themes.md)**
+- Theming strategies and custom theme creation
+- Brand consistency and accessibility
 
 ### 🧪 Testing & Compatibility
 
 **[docs/testing/](./testing/README.md)**
-
 - Test infrastructure and strategies
 - SSR compatibility solutions
 - Cross-platform testing approaches
@@ -45,9 +68,17 @@ Complete documentation for the @xala-technologies/ui-system - A Norwegian-compli
 ### 📊 Reports & Analysis
 
 **[docs/reports/](./reports/README.md)**
-
 - Code quality analysis reports
 - Refactoring progress tracking
+
+---
+
+All documentation covers:
+- **Accessibility** (WCAG 2.2 AA, NSM)
+- **Localization** (EN, NB, FR, AR)
+- **Security & GDPR compliance**
+- **SOLID principles & code quality**
+- **AppRouter and SSR best practices**
 - Compliance violation audits
 
 ### 🧩 Components

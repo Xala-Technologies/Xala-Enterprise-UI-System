@@ -34,20 +34,57 @@ Complete pre-publishing validation checklist and package readiness verification 
 - Import path fixes
 - Core functionality validation
 
-## 🚀 Implementation Status
+## 🚀 Implementation Guide
 
-### ✅ Completed
+### 1. Setup & Installation
+- Install: `pnpm add @xala-technologies/ui-system`
+- Import `UISystemProvider` at your app root.
+- Ensure strict mode is enabled in `tsconfig.json`.
 
-- **Build System**: TypeScript compilation successful
-- **Package Configuration**: package.json properly configured
-- **Type Declarations**: .d.ts files generated correctly
-- **ES Module Setup**: Modern module configuration ready
-- **Security**: All vulnerabilities resolved
-- **Performance**: 43% under build time targets
+### 2. Theming & Design Tokens
+- Use `UISystemProvider` for theme injection.
+- Reference all colors, spacing, and typography via design tokens (never hardcode values).
+- See [Design Tokens Guide](../design-tokens.md) and [Themes Guide](../themes.md).
 
-### 🔄 Current Focus
+### 3. Localization & Internationalization
+- All user-facing text must use the localization system (see `/src/localization`).
+- Supported languages: English (primary/fallback), Norwegian Bokmål, French, Arabic.
+- Use the `useLocale` hook in components.
 
-- npm package publishing
+### 4. Server-Side Rendering (SSR)
+- All components are SSR-safe (no 'use client').
+- Follow [SSR Best Practices](../ssr-best-practices.md) for integration.
+
+### 5. Accessibility & Compliance
+- All components/layouts are WCAG 2.2 AA, NSM, and GDPR compliant.
+- Use ARIA roles, keyboard navigation, and focus management as documented in each component.
+- Validate customizations with `/src/tokens/validation/` utilities.
+
+### 6. Security Best Practices
+- Never hardcode secrets or sensitive data.
+- Validate all user input with strict TypeScript types.
+- Use parameterized queries for backend/database operations.
+- Follow GDPR and NSM guidelines for data handling.
+
+### 7. Advanced Usage
+- Extend tokens/themes via `/src/tokens/themes/` and `UISystemProvider`.
+- Compose new layouts using only design system components.
+- Add new components following SOLID and composition-over-inheritance principles.
+- Maintain low cyclomatic complexity and file/function length limits.
+
+### 8. Troubleshooting & FAQ
+- See [Troubleshooting Guide](../troubleshooting.md) for common issues.
+- For CI/CD, see [Reports & Analysis](../reports/README.md).
+- For test setup, see [Testing Guide](../testing/README.md).
+
+---
+
+## Cross-References
+- [Component Documentation](../components/README.md)
+- [Layouts Guide](../layouts.md)
+- [Design Tokens Guide](../design-tokens.md)
+- [Themes Guide](../themes.md)
+- [Accessibility Principles](../architecture.md)
 - Framework integration testing
 - Bundle optimization
 - Documentation completion
