@@ -162,6 +162,22 @@ export { useDebounce, useDebouncedCallback, useThrottle, useLoadingTimeout } fro
 export type { AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory, ComponentFactoryFunction, ConfigurationService, EventPublisher, LocalizationService, PerformanceMonitor, ThemeManager, UISystemService } from './lib/interfaces/ui-system.interface';
 export type { AccessibilityLevel, AuditTrailEntry, ComponentAccessibilityConfig, ComponentDefinition, ComponentType, PerformanceMetrics, SupportedLanguage, ThemeColors, ThemeDefinition, UISystemConfig, UISystemOptions } from './lib/types/core.types';
 
+// =============================================================================
+// TOKENS & THEME SYSTEM
+// =============================================================================
+
+// Base tokens and utilities
+export { default as tokens } from './tokens/base';
+export { default as baseTokens } from './tokens/base';
+export * from './tokens/base';
+
+// Theme system
+export * from './tokens/themes';
+export { default as tumTumSahour } from './tokens/themes/tum-tum-sahour';
+export { default as lightTheme } from './tokens/themes/light';
+export { default as darkTheme } from './tokens/themes/dark';
+export { v5ThemeRegistry, v5ThemeUtils } from './tokens/themes/registry';
+
 // ===== COMPATIBILITY ALIASES (Deprecated - will be removed in v5.0) =====
 // @deprecated Use Button instead
 export { Button as ActionButton } from './components/ui/button';

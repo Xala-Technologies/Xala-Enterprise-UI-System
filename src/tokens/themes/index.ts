@@ -205,6 +205,14 @@ export function getCompatibleThemes(prefersDark: boolean): ThemeModel[] {
 }
 
 // =============================================================================
+// Built-in Themes
+// =============================================================================
+
+export { default as lightTheme } from './light';
+export { default as darkTheme } from './dark';
+export { default as tumTumSahour } from './tum-tum-sahour';
+
+// =============================================================================
 // THEME SYSTEM COMPONENTS EXPORT
 // =============================================================================
 
