@@ -130,6 +130,44 @@ export {
   type GridItemVariant,
   type GridAreaVariant
 } from './grid';
+export {
+  Container,
+  Section,
+  Wrapper,
+  FlexContainer,
+  CenteredContainer,
+  ContainerComposition,
+  containerVariants,
+  sectionVariants,
+  wrapperVariants,
+  type ContainerProps,
+  type SectionProps,
+  type WrapperProps,
+  type FlexContainerProps,
+  type CenteredContainerProps,
+  type ContainerVariant,
+  type SectionVariant,
+  type WrapperVariant
+} from './container';
+export {
+  Spacer,
+  PaddingBox,
+  MarginBox,
+  Stack,
+  Inline,
+  SpacingComposition,
+  spacerVariants,
+  paddingVariants,
+  marginVariants,
+  type SpacerProps,
+  type PaddingBoxProps,
+  type MarginBoxProps,
+  type StackProps,
+  type InlineProps,
+  type SpacerVariant,
+  type PaddingVariant,
+  type MarginVariant
+} from './spacing';
 
 // Loading components
 export {
