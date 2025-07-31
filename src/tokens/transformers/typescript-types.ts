@@ -346,6 +346,12 @@ export class TypeScriptTypeTransformer implements TokenTransformer<TypeScriptTyp
     output += `  | \`accessibility.\${keyof AccessibilityTokens}\`\n`;
     output += `  | \`responsive.\${keyof ResponsiveTokens}\`;\n\n`;
 
+    // Token value type
+    if (includeJSDoc) {
+      output += `/**\n * Token value type union\n */\n`;
+    }
+    output += `export type TokenValue = string | number | boolean | string[] | Record<string, unknown>;\n\n`;
+
     return output;
   }
 

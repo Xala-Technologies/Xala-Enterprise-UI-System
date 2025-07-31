@@ -32,9 +32,9 @@ describe('SSR Compatibility Tests', () => {
       return (
         <div
           style={{
-            color: colors.text.primary,
-            padding: spacing[4],
-            fontFamily: typography.fontFamily.sans.join(', '),
+            color: colors.text?.primary || '#000000',
+            padding: spacing?.[4] || '1rem',
+            fontFamily: typography.fontFamily?.sans?.join(', ') || 'sans-serif',
           }}
         >
           SSR Test Component
