@@ -113,6 +113,23 @@ export {
   type NavigationGroupVariant,
   type NavigationLinkVariant
 } from './navigation';
+export {
+  Grid,
+  GridItem,
+  GridArea,
+  ResponsiveGrid,
+  GridComposition,
+  gridVariants,
+  gridItemVariants,
+  gridAreaVariants,
+  type GridProps,
+  type GridItemProps,
+  type GridAreaProps,
+  type ResponsiveGridProps,
+  type GridVariant,
+  type GridItemVariant,
+  type GridAreaVariant
+} from './grid';
 
 // Loading components
 export {
