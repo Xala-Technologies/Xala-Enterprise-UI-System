@@ -12,3 +12,16 @@ export { useComponent, useComponentVariant } from './useComponent';
 export { useMediaQuery, useResponsive, useBreakpoint } from './useMediaQuery';
 export { useDebounce, useDebouncedCallback, useThrottle, useLoadingTimeout } from './useDebounce';
 export { useThemeTransition, themeTransitionPresets } from './useThemeTransition';
+
+// Layout hooks
+export { 
+  useResponsiveLayout,
+  LayoutSwitcher,
+  withResponsiveLayout,
+  ResponsiveLayout,
+  type UseResponsiveLayoutOptions,
+  type UseResponsiveLayoutReturn,
+  type LayoutSwitcherProps,
+  type ResponsiveLayoutProps,
+  type LayoutType,
+} from './useResponsiveLayout';

@@ -310,11 +310,11 @@
 
 ### Platform-Specific Layouts
 - [x] Update MobileLayout to use token system
-- [ ] Update TabletLayout to use token system
-- [ ] Update DesktopLayout to use token system
-- [ ] Update WebLayout to use token system
-- [ ] Update AdminLayout to use token system
-- [ ] Create responsive layout switching
+- [x] Update TabletLayout to use token system
+- [x] Update DesktopLayout to use token system
+- [x] Update WebLayout to use token system
+- [x] Update AdminLayout to use token system
+- [x] Create responsive layout switching
 - [ ] Implement platform-specific features
 - [ ] Create layout preview system
 

@@ -3,7 +3,18 @@
  * Refactored into smaller, focused components following SOLID principles
  */
 
-// Import components for composition
+// Import v5.0 components
+import {
+  DesktopLayout as DesktopLayoutV5,
+  DesktopHeader as DesktopHeaderV5,
+  DesktopSidebar as DesktopSidebarV5,
+  DesktopMainContent as DesktopMainContentV5,
+  DesktopToolbar as DesktopToolbarV5,
+  DesktopStatusBar as DesktopStatusBarV5,
+  DesktopLayoutComposition as DesktopLayoutCompositionV5,
+} from './DesktopLayout';
+
+// Import legacy components for composition
 import { DesktopHeader } from './components/DesktopHeader';
 import { DesktopLayout } from './components/DesktopLayout';
 import { DesktopMainContent } from './components/DesktopMainContent';
@@ -11,26 +22,37 @@ import { DesktopSidebar } from './components/DesktopSidebar';
 import { DesktopStatusBar } from './components/DesktopStatusBar';
 import { DesktopToolbar } from './components/DesktopToolbar';
 
-// Core components
-export { DesktopHeader } from './components/DesktopHeader';
-export { DesktopLayout } from './components/DesktopLayout';
-export { DesktopMainContent } from './components/DesktopMainContent';
-export { DesktopSidebar } from './components/DesktopSidebar';
-export { DesktopStatusBar } from './components/DesktopStatusBar';
-export { DesktopToolbar } from './components/DesktopToolbar';
+// Export v5.0 components as primary
+export {
+  DesktopLayoutV5 as DesktopLayout,
+  DesktopHeaderV5 as DesktopHeader,
+  DesktopSidebarV5 as DesktopSidebar,
+  DesktopMainContentV5 as DesktopMainContent,
+  DesktopToolbarV5 as DesktopToolbar,
+  DesktopStatusBarV5 as DesktopStatusBar,
+  DesktopLayoutCompositionV5 as DesktopLayoutComposition,
+};
 
-// Variants and types
+// Export legacy components with suffix
+export {
+  DesktopHeader as DesktopHeaderLegacy,
+  DesktopLayout as DesktopLayoutLegacy,
+  DesktopMainContent as DesktopMainContentLegacy,
+  DesktopSidebar as DesktopSidebarLegacy,
+  DesktopStatusBar as DesktopStatusBarLegacy,
+  DesktopToolbar as DesktopToolbarLegacy,
+};
+
+// Export all variants
+export * from './DesktopLayout';
+
+// Variants and types from legacy
 export {
     desktopHeaderVariants,
     desktopMainContentVariants,
     desktopSidebarVariants,
     desktopStatusBarVariants,
     desktopToolbarVariants,
-    type DesktopHeaderVariant,
-    type DesktopMainContentVariant,
-    type DesktopSidebarVariant,
-    type DesktopStatusBarVariant,
-    type DesktopToolbarVariant
 } from './variants';
 
 export type {
@@ -41,13 +63,3 @@ export type {
     DesktopStatusBarProps,
     DesktopToolbarProps
 } from './types';
-
-// Composition helper
-export const DesktopLayoutComposition = {
-  Header: DesktopHeader,
-  Sidebar: DesktopSidebar,
-  MainContent: DesktopMainContent,
-  Toolbar: DesktopToolbar,
-  StatusBar: DesktopStatusBar,
-  Layout: DesktopLayout,
-};

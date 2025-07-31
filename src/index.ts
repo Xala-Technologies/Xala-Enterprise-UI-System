@@ -157,6 +157,35 @@ export { useUi, useTokens, useTheme, useLayout, useWhiteLabel, useSSR } from './
 export { useComponent, useComponentVariant } from './hooks/useComponent';
 export { useMediaQuery, useResponsive, useBreakpoint } from './hooks/useMediaQuery';
 export { useDebounce, useDebouncedCallback, useThrottle, useLoadingTimeout } from './hooks/useDebounce';
+export { 
+  useResponsiveLayout,
+  LayoutSwitcher,
+  withResponsiveLayout,
+  ResponsiveLayout,
+  type UseResponsiveLayoutOptions,
+  type UseResponsiveLayoutReturn,
+  type LayoutSwitcherProps,
+  type ResponsiveLayoutProps,
+  type LayoutType,
+} from './hooks/useResponsiveLayout';
+
+// ===== RESPONSIVE LAYOUT PROVIDERS =====
+export {
+  ResponsiveLayoutProvider,
+  useResponsiveLayoutContext,
+  ResponsiveLayoutWrapper,
+  LayoutRoute,
+  ResponsiveLayoutDetector,
+  LayoutTransition,
+} from './providers/ResponsiveLayoutProvider';
+export type {
+  ResponsiveLayoutProviderProps,
+  ResponsiveLayoutContextValue,
+  ResponsiveLayoutWrapperProps,
+  LayoutRouteProps,
+  ResponsiveLayoutDetectorProps,
+  LayoutTransitionProps,
+} from './providers/ResponsiveLayoutProvider';
 
 // ===== CORE TYPES =====
 export type { AccessibilityService, AuditTrailFilter, AuditTrailService, ComponentFactory, ComponentFactoryFunction, ConfigurationService, EventPublisher, LocalizationService, PerformanceMonitor, ThemeManager, UISystemService } from './lib/interfaces/ui-system.interface';

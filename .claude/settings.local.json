@@ -37,7 +37,12 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"feat(scaffold): complete Story 1 - Project Setup & Infrastructure\n\n- Initialize scaffolding project structure with package.json\n- Install all core and development dependencies\n- Configure TypeScript with strict mode and ES2022 target\n- Setup build pipeline with tsup and bundle analysis\n- Initialize Git configuration files\n- Create basic CLI entry point and source structure\n\nAll tasks in Story 1.1-1.6 completed successfully.\")"
+      "Bash(git commit -m \"feat(scaffold): complete Story 1 - Project Setup & Infrastructure\n\n- Initialize scaffolding project structure with package.json\n- Install all core and development dependencies\n- Configure TypeScript with strict mode and ES2022 target\n- Setup build pipeline with tsup and bundle analysis\n- Initialize Git configuration files\n- Create basic CLI entry point and source structure\n\nAll tasks in Story 1.1-1.6 completed successfully.\")",
+      "Bash(npm run build:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)"
     ],
     "deny": []
   }
