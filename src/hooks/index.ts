@@ -25,3 +25,26 @@ export {
   type ResponsiveLayoutProps,
   type LayoutType,
 } from './useResponsiveLayout';
+
+// Platform-specific hooks
+export {
+  useTouchGestures,
+  Swipeable,
+  type TouchGestureConfig,
+  type SwipeEvent,
+  type PinchEvent,
+  type TapEvent,
+  type TouchGestureHandlers,
+  type UseTouchGesturesReturn,
+  type SwipeableProps,
+} from './useTouchGestures';
+
+export {
+  useKeyboardShortcuts,
+  commonShortcuts,
+  KeyboardShortcutDisplay,
+  type KeyboardShortcut,
+  type UseKeyboardShortcutsOptions,
+  type UseKeyboardShortcutsReturn,
+  type KeyboardShortcutDisplayProps,
+} from './useKeyboardShortcuts';
