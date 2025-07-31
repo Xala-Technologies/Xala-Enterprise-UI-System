@@ -1,12 +1,63 @@
 /**
- * @fileoverview SSR-Safe Typography Component - Production Strategy Implementation
- * @description Typography component using useTokens hook for JSON template integration
+ * @fileoverview Typography Component v5.0.0 - Token-Based Design System
+ * @description Modern Typography component using design tokens with SSR compatibility
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
+
+// =============================================================================
+// TYPOGRAPHY VARIANTS USING DESIGN TOKENS
+// =============================================================================
+
+/**
+ * Typography variants using token-based styling
+ * Combines CVA with runtime token access for maximum flexibility
+ */
+const typographyVariants = cva(
+  // Base classes - framework-agnostic styling
+  '',
+  {
+    variants: {
+      variant: {
+        h1: '',
+        h2: '',
+        h3: '',
+        h4: '',
+        h5: '',
+        h6: '',
+        body: '',
+        bodyLarge: '',
+        bodySmall: '',
+        lead: '',
+        large: '',
+        small: '',
+        muted: '',
+        code: '',
+        blockquote: '',
+      },
+      align: {
+        left: 'text-left',
+        center: 'text-center',
+        right: 'text-right',
+        justify: 'text-justify',
+      },
+      truncate: {
+        true: 'truncate',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      variant: 'body',
+      align: 'left',
+      truncate: false,
+    },
+  }
+);
 
 /**
  * Typography variant types
@@ -32,17 +83,19 @@ export type TypographyAlign = 'left' | 'center' | 'right' | 'justify';
 /**
  * Typography component props interface
  */
-export interface TypographyProps extends HTMLAttributes<HTMLElement> {
+export interface TypographyProps
+  extends HTMLAttributes<HTMLElement>,
+    VariantProps<typeof typographyVariants> {
   /** Typography variant */
-  variant?: TypographyVariant;
+  readonly variant?: TypographyVariant;
   /** Text color */
-  textColor?: TypographyColor;
+  readonly textColor?: TypographyColor;
   /** Text alignment */
-  align?: TypographyAlign;
+  readonly align?: TypographyAlign;
   /** HTML element type */
-  as?: React.ElementType;
+  readonly as?: React.ElementType;
   /** Truncate long text */
-  truncate?: boolean;
+  readonly truncate?: boolean;
 }
 
 /**
@@ -237,7 +290,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     return (
       <Component
         ref={ref}
-        className={className}
+        className={cn(typographyVariants({ variant, align, truncate }), className)}
         style={typographyStyles}
         {...props}
       />

@@ -1,11 +1,14 @@
 /**
- * Stack layout component with responsive design and enterprise compliance
- * Uses design tokens and CSS variables for spacing and alignment
+ * @fileoverview Stack Component v5.0.0 - Token-Based Design System
+ * @description Modern Stack layout component using design tokens with SSR compatibility
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
-import { cn } from '@/lib/utils/cn';
+import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
  * Stack variants using class-variance-authority
@@ -77,20 +80,18 @@ export interface StackProps extends HTMLAttributes<HTMLDivElement> {
   readonly as?: keyof JSX.IntrinsicElements;
 }
 
+// =============================================================================
+// STACK COMPONENT
+// =============================================================================
+
 /**
- * Stack component
- * @param direction - Stack direction
- * @param gap - Gap between items
- * @param align - Alignment along cross axis
- * @param justify - Alignment along main axis
- * @param wrap - Enable wrapping
- * @param className - Additional CSS classes
- * @param as - HTML element type
- * @param props - Additional props
- * @returns Stack JSX element
+ * Stack component with token-based styling
  */
 export const Stack = forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction, gap, align, justify, wrap, as: Component = 'div', ...props }, ref) => {
+  ({ className, direction, gap, align, justify, wrap, as: Component = 'div', style, ...props }, ref) => {
+    // ✅ Access design tokens for dynamic spacing control
+    const { spacing } = useTokens();
+    
     const ElementType = Component as React.ElementType;
 
     // Convert string values to known variants or use as fallback
@@ -103,6 +104,23 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
     const normalizedGap = gap && gapOptions.includes(gap as typeof gapOptions[number])
       ? (gap as BaseStackVariants['gap'])
       : ('md' as const);
+
+    // Get dynamic gap styles from tokens when needed
+    const getDynamicGapStyle = (): React.CSSProperties => {
+      // If using a custom gap value (not in predefined options), use tokens
+      if (gap && !gapOptions.includes(gap as typeof gapOptions[number])) {
+        const gapValue = spacing?.[gap as keyof typeof spacing] || gap;
+        return {
+          gap: gapValue,
+        };
+      }
+      return {};
+    };
+
+    const dynamicStyles: React.CSSProperties = {
+      ...getDynamicGapStyle(),
+      ...style,
+    };
 
     return (
       <ElementType
@@ -117,6 +135,7 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
           }),
           className
         )}
+        style={dynamicStyles}
         {...props}
       />
     );

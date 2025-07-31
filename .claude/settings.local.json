@@ -25,6 +25,8 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(npm test -- --testNamePattern=\"Input\")",
+      "Bash(cd:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: migrate Button and Input components to v5.0 token-based architecture\n\n- Migrate Button component to hybrid CVA + token approach\n  * Implement token-based styling with runtime CSS generation\n  * Add comprehensive variant system (primary, secondary, outline, ghost, destructive, success, warning, link)\n  * Support loading states with animated spinner\n  * Maintain full accessibility compliance\n  * Add size variants (sm, md, lg, xl, icon)\n\n- Migrate Input component to v5.0 token system\n  * Create token-based styling with runtime CSS generation\n  * Support variant system (default, filled, outline)\n  * Add state management (default, error, success)\n  * Implement size variants (sm, md, lg)\n  * Maintain backward compatibility with existing APIs\n\n- Update implementation checklist\n  * Mark Button and Input migrations as completed\n  * Document component migration strategy\n\n- Architecture improvements\n  * Create reusable token-to-CSS pattern\n  * Implement CVA integration for base classes\n  * Maintain SSR compatibility throughout\n  * Preserve enterprise standards compliance\n\n🤖 Generated with [Claude Code](https://claude.ai/code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
       "Bash(cd:*)"
     ],
     "deny": []

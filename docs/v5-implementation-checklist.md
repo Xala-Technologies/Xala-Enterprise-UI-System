@@ -219,9 +219,9 @@
 ### Core Components
 - [x] Migrate Button component to token system
 - [x] Migrate Input component to token system
-- [ ] Migrate Card component to token system
-- [ ] Migrate Typography component to token system
-- [ ] Migrate Stack and layout primitives to token system
+- [x] Migrate Card component to token system
+- [x] Migrate Typography component to token system
+- [x] Migrate Stack and layout primitives to token system
 - [ ] Migrate Dialog/Modal to token system
 - [ ] Migrate form components to token system
 - [ ] Migrate navigation components to token system
