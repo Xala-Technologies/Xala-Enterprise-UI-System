@@ -75,9 +75,18 @@ export { TimePicker, type TimePickerProps } from './time-picker';
 
 // Chat Interface Components
 export {
-    ActionBar, actionBarVariants,
-    actionButtonVariants,
-    defaultActions, type ActionBarProps,
+    ActionBar,
+    defaultActions, 
+    type ActionBarProps,
+    type ActionBarVariant, 
+    type ActionBarSize, 
+    type ActionBarOrientation, 
+    type ActionBarVisibility, 
+    type ActionBarPosition, 
+    type ActionBarRounded,
+    type ActionButtonVariant, 
+    type ActionButtonSize, 
+    type ActionButtonShape,
     type ActionConfig,
     type ActionType
 } from './action-bar';

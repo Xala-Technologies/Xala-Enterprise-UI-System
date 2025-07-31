@@ -56,8 +56,8 @@ export interface CalendarProps extends HTMLAttributes<HTMLDivElement> {
   readonly norwegianHolidays?: NorwegianHoliday[];
   readonly showWeekNumbers?: boolean;
   readonly showOtherMonthDays?: boolean;
-  readonly onDateSelect?: (_date: Date) => void;
-  readonly onMonthChange?: (_month: Date) => void;
+  readonly onDateSelect?: (date: Date) => void;
+  readonly onMonthChange?: (month: Date) => void;
   readonly variant?: CalendarVariant;
   readonly size?: CalendarSize;
 }
@@ -135,7 +135,7 @@ const generateCalendarGrid = (
   const monthIndex = month.getMonth();
 
   const firstDayOfMonth = new Date(year, monthIndex, 1);
-  const _lastDayOfMonth = new Date(year, monthIndex + 1, 0);
+  // const _lastDayOfMonth = new Date(year, monthIndex + 1, 0); // Unused
   const firstDayOfWeek = (firstDayOfMonth.getDay() + 6) % 7; // Monday = 0
 
   const startDate = new Date(firstDayOfMonth);

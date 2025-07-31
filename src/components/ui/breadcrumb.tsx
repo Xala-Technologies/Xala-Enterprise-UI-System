@@ -155,7 +155,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       maxItems = 0,
       showHome = false,
       homeIcon,
-      homeHref = '/', // eslint-disable-line @typescript-eslint/no-unused-vars
+      homeHref: _homeHref = '/',
       onHomeClick,
       variant = 'default',
       size = 'default',

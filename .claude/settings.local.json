@@ -18,7 +18,14 @@
       "Bash(do if ! grep -q \"useTokens\" \"$f\")",
       "Bash(then echo \"$f\")",
       "Bash(fi)",
-      "Bash(npx ts-node:*)"
+      "Bash(npx ts-node:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(npm test -- Button)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(npm test -- --testNamePattern=\"Input\")",
+      "Bash(cd:*)"
     ],
     "deny": []
   }

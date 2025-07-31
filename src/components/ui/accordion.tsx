@@ -135,7 +135,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
+    const { colors, spacing, getToken } = useTokens();
     
     // Get border radius
     const borderRadius = {
@@ -313,7 +313,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
+    const { colors, spacing, getToken } = useTokens();
     
     // Get border radius
     const borderRadius = {
@@ -325,7 +325,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
       switch (size) {
         case 'sm':
           return {
-            fontSize: typography.fontSize.sm,
+            fontSize: '0.875rem',
             paddingTop: spacing[2],
             paddingBottom: spacing[2],
             paddingLeft: spacing[3],
@@ -333,7 +333,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
           };
         case 'lg':
           return {
-            fontSize: typography.fontSize.lg,
+            fontSize: '1.125rem',
             paddingTop: spacing[5],
             paddingBottom: spacing[5],
             paddingLeft: spacing[5],
@@ -341,7 +341,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
           };
         default: // md
           return {
-            fontSize: typography.fontSize.md,
+            fontSize: '1rem',
             paddingTop: spacing[4],
             paddingBottom: spacing[4],
             paddingLeft: spacing[4],
@@ -375,7 +375,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
       width: '100%',
       alignItems: 'center',
       justifyContent: 'space-between',
-      fontWeight: typography.fontWeight.medium,
+      fontWeight: '500',
       transition: 'all 150ms ease-in-out',
       cursor: 'pointer',
       border: 'none',

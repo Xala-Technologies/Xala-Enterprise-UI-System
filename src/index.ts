@@ -114,7 +114,7 @@ export type {
 } from './layouts';
 
 // ===== CHAT INTERFACE COMPONENTS =====
-export { ActionBar, actionBarVariants, actionButtonVariants, defaultActions, type ActionBarProps, type ActionConfig, type ActionType } from './components/ui/action-bar';
+export { ActionBar, defaultActions, type ActionBarProps, type ActionBarVariant, type ActionBarSize, type ActionBarOrientation, type ActionBarVisibility, type ActionBarPosition, type ActionBarRounded, type ActionButtonVariant, type ActionButtonSize, type ActionButtonShape, type ActionConfig, type ActionType } from './components/ui/action-bar';
 export { Box, type BoxProps } from './components/ui/box';
 export { CodeBlock, languageConfig, type CodeBlockProps } from './components/ui/code-block';
 export { MessageBubble, messageBubbleAvatarVariants, messageBubbleMetadataVariants, messageBubbleVariants, type MessageBubbleProps } from './components/ui/message-bubble';

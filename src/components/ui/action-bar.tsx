@@ -1,114 +1,29 @@
 /**
- * @fileoverview ActionBar Component - Norwegian Compliance
- * @description Action bar component for message actions in chat interfaces
- * @version 1.0.0
- * @compliance WCAG 2.2 AAA, Norwegian Enterprise Standards
+ * @fileoverview SSR-Safe ActionBar Component - Production Strategy Implementation
+ * @description Action bar component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useState, type HTMLAttributes } from 'react';
-import { cn } from '../../lib/utils/cn';
-import { useTokens } from '@/hooks/useTokens';
+import React, { forwardRef, useState, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * ActionBar component variants using semantic design tokens
+ * ActionBar variant types
  */
-const actionBarVariants = cva('flex items-center gap-1 transition-opacity', {
-  variants: {
-    variant: {
-      default: 'bg-background/80 backdrop-blur-sm border border-border/50',
-      ghost: 'bg-transparent',
-      floating: 'bg-background/95 backdrop-blur-md border border-border/30 shadow-lg',
-      inline: 'bg-transparent',
-    },
-    size: {
-      sm: 'p-1 gap-0.5',
-      md: 'p-2 gap-1',
-      lg: 'p-3 gap-2',
-    },
-    orientation: {
-      horizontal: 'flex-row',
-      vertical: 'flex-col',
-    },
-    visibility: {
-      always: 'opacity-100',
-      hover: 'opacity-0 group-hover:opacity-100',
-      focus: 'opacity-0 group-focus-within:opacity-100',
-      'hover-focus': 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100',
-    },
-    position: {
-      'top-left': 'top-2 left-2',
-      'top-right': 'top-2 right-2',
-      'bottom-left': 'bottom-2 left-2',
-      'bottom-right': 'bottom-2 right-2',
-      'top-center': 'top-2 left-1/2 -translate-x-1/2',
-      'bottom-center': 'bottom-2 left-1/2 -translate-x-1/2',
-      relative: 'relative',
-    },
-    rounded: {
-      none: 'rounded-none',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      full: 'rounded-full',
-    },
-  },
-  compoundVariants: [
-    {
-      position: [
-        'top-left',
-        'top-right',
-        'bottom-left',
-        'bottom-right',
-        'top-center',
-        'bottom-center',
-      ],
-      className: 'absolute',
-    },
-  ],
-  defaultVariants: {
-    variant: 'default',
-    size: 'md',
-    orientation: 'horizontal',
-    visibility: 'hover',
-    position: 'relative',
-    rounded: 'md',
-  },
-});
+export type ActionBarVariant = 'default' | 'ghost' | 'floating' | 'inline';
+export type ActionBarSize = 'sm' | 'md' | 'lg';
+export type ActionBarOrientation = 'horizontal' | 'vertical';
+export type ActionBarVisibility = 'always' | 'hover' | 'focus' | 'hover-focus';
+export type ActionBarPosition = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'top-center' | 'bottom-center' | 'relative';
+export type ActionBarRounded = 'none' | 'sm' | 'md' | 'lg' | 'full';
 
 /**
- * ActionBar button variants
+ * ActionButton variant types
  */
-const actionButtonVariants = cva(
-  'inline-flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default: 'text-muted-foreground hover:text-foreground hover:bg-muted/50',
-        ghost: 'text-muted-foreground hover:text-foreground hover:bg-muted/30',
-        outline:
-          'text-muted-foreground hover:text-foreground border border-border hover:bg-muted/50',
-        primary: 'text-primary hover:text-primary-foreground hover:bg-primary/90',
-        destructive: 'text-destructive hover:text-destructive-foreground hover:bg-destructive/90',
-        success: 'text-green-600 hover:text-green-50 hover:bg-green-600/90',
-      },
-      size: {
-        sm: 'h-6 w-6 p-1 text-xs',
-        md: 'h-8 w-8 p-1.5 text-sm',
-        lg: 'h-10 w-10 p-2 text-base',
-      },
-      shape: {
-        square: 'rounded-md',
-        circle: 'rounded-full',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-      shape: 'square',
-    },
-  }
-);
+export type ActionButtonVariant = 'default' | 'ghost' | 'outline' | 'primary' | 'destructive' | 'success';
+export type ActionButtonSize = 'sm' | 'md' | 'lg';
+export type ActionButtonShape = 'square' | 'circle';
 
 /**
  * Common action types with Norwegian labels
@@ -382,9 +297,13 @@ export const defaultActions: Record<ActionType, Omit<ActionConfig, 'onClick'>> =
 /**
  * ActionBar Props interface
  */
-export interface ActionBarProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof actionBarVariants> {
+export interface ActionBarProps extends HTMLAttributes<HTMLDivElement> {
+  readonly variant?: ActionBarVariant;
+  readonly size?: ActionBarSize;
+  readonly orientation?: ActionBarOrientation;
+  readonly visibility?: ActionBarVisibility;
+  readonly position?: ActionBarPosition;
+  readonly rounded?: ActionBarRounded;
   /** List of actions to display */
   readonly actions: ActionConfig[];
   /** Show action labels */
@@ -406,6 +325,7 @@ const ActionButton: React.FC<{
   showLabel?: boolean;
   showTooltip?: boolean;
 }> = ({ action, size = 'md', showLabel = false, showTooltip = true }) => {
+  const { colors, spacing, typography, getToken } = useTokens();
   const [isLoading, setIsLoading] = useState(action.loading || false);
 
   const handleClick = async (): Promise<void> => {
@@ -414,27 +334,160 @@ const ActionButton: React.FC<{
     setIsLoading(true);
     try {
       await action.onClick();
-    } catch (error) {
+    } catch (_error) {
       // Action failed - error handling should be done by the parent component
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Get border radius
+  const borderRadius = {
+    md: (getToken('borderRadius.md') as string) || '0.375rem',
+    full: (getToken('borderRadius.full') as string) || '9999px',
+  };
+
+  // Size styles
+  const getSizeStyles = (): React.CSSProperties => {
+    switch (size) {
+      case 'sm':
+        return {
+          height: '24px',
+          width: showLabel ? 'auto' : '24px',
+          padding: spacing[1],
+          fontSize: typography.fontSize.xs,
+        };
+      case 'lg':
+        return {
+          height: '40px',
+          width: showLabel ? 'auto' : '40px',
+          padding: spacing[2],
+          fontSize: typography.fontSize.base,
+        };
+      default: // md
+        return {
+          height: '32px',
+          width: showLabel ? 'auto' : '32px',
+          padding: spacing[1.5],
+          fontSize: typography.fontSize.sm,
+        };
+    }
+  };
+
+  // Variant styles
+  const getVariantStyles = (): React.CSSProperties => {
+    const actionVariant = action.variant || 'default';
+    
+    switch (actionVariant) {
+      case 'ghost':
+        return {
+          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          backgroundColor: 'transparent',
+        };
+      case 'outline':
+        return {
+          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          backgroundColor: 'transparent',
+          border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+        };
+      case 'primary':
+        return {
+          color: colors.primary?.[600] || '#2563eb',
+          backgroundColor: 'transparent',
+        };
+      case 'destructive':
+        return {
+          color: colors.danger?.[600] || '#dc2626',
+          backgroundColor: 'transparent',
+        };
+      case 'success':
+        return {
+          color: colors.success?.[600] || '#16a34a',
+          backgroundColor: 'transparent',
+        };
+      case 'default':
+      default:
+        return {
+          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          backgroundColor: 'transparent',
+        };
+    }
+  };
+
+  const sizeStyles = getSizeStyles();
+  const variantStyles = getVariantStyles();
+
+  const buttonStyles: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: showLabel ? spacing[2] : 0,
+    borderRadius: showLabel ? borderRadius.md : borderRadius.full,
+    border: 'none',
+    cursor: (action.disabled || isLoading) ? 'not-allowed' : 'pointer',
+    transition: 'all 200ms ease-in-out',
+    outline: 'none',
+    opacity: (action.disabled || isLoading) ? 0.5 : 1,
+    ...sizeStyles,
+    ...variantStyles,
+    ...(showLabel && {
+      paddingLeft: spacing[3],
+      paddingRight: spacing[3],
+      width: 'auto',
+    }),
+  };
+
   const buttonContent = (
     <button
-      className={cn(
-        actionButtonVariants({
-          variant: action.variant || 'default',
-          size,
-          shape: showLabel ? 'square' : 'circle',
-        }),
-        showLabel && 'px-3 gap-2 w-auto',
-        (action.disabled || isLoading) && 'opacity-50 cursor-not-allowed'
-      )}
+      style={buttonStyles}
       onClick={handleClick}
       disabled={action.disabled || isLoading}
       aria-label={action.label}
+      onMouseEnter={(e) => {
+        if (!action.disabled && !isLoading) {
+          const actionVariant = action.variant || 'default';
+          switch (actionVariant) {
+            case 'ghost':
+              e.currentTarget.style.backgroundColor = `${colors.neutral?.[500] || '#6b7280'}30`; // 30% opacity
+              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+              break;
+            case 'outline':
+              e.currentTarget.style.backgroundColor = `${colors.neutral?.[500] || '#6b7280'}50`; // 50% opacity
+              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+              break;
+            case 'primary':
+              e.currentTarget.style.backgroundColor = `${colors.primary?.[500] || '#3b82f6'}E6`; // 90% opacity
+              e.currentTarget.style.color = colors.background?.default || '#ffffff';
+              break;
+            case 'destructive':
+              e.currentTarget.style.backgroundColor = `${colors.danger?.[500] || '#ef4444'}E6`; // 90% opacity
+              e.currentTarget.style.color = colors.background?.default || '#ffffff';
+              break;
+            case 'success':
+              e.currentTarget.style.backgroundColor = `${colors.success?.[600] || '#16a34a'}E6`; // 90% opacity
+              e.currentTarget.style.color = colors.success?.[50] || '#f0fdf4';
+              break;
+            default:
+              e.currentTarget.style.backgroundColor = `${colors.neutral?.[500] || '#6b7280'}50`; // 50% opacity
+              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+          }
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!action.disabled && !isLoading) {
+          // Reset to original styles
+          Object.assign(e.currentTarget.style, variantStyles);
+        }
+      }}
+      onFocus={(e) => {
+        if (!action.disabled && !isLoading) {
+          e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+          e.currentTarget.style.outlineOffset = '2px';
+        }
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.outline = 'none';
+      }}
     >
       {isLoading ? (
         <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -455,7 +508,11 @@ const ActionButton: React.FC<{
       ) : (
         action.icon
       )}
-      {showLabel && <span className="text-xs">{action.label}</span>}
+      {showLabel && (
+        <span style={{ fontSize: typography.fontSize.xs }}>
+          {action.label}
+        </span>
+      )}
     </button>
   );
 
@@ -524,7 +581,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     },
     ref
   ) => {
-    const _tokens = useTokens();
+    const { colors, spacing, getToken } = useTokens();
     const [showMoreActions, setShowMoreActions] = useState(false);
 
     // Split actions if maxActions is specified
@@ -535,17 +592,57 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          actionBarVariants({
-            variant,
-            size,
-            orientation,
-            visibility,
-            position,
-            rounded,
+        className={className}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: size === 'sm' ? spacing[0.5] : size === 'lg' ? spacing[2] : spacing[1],
+          transition: 'opacity 200ms ease-in-out',
+          flexDirection: orientation === 'vertical' ? 'column' : 'row',
+          opacity: visibility === 'always' ? 1 : 0,
+          position: position === 'relative' ? 'relative' : 'absolute',
+          backgroundColor: variant === 'ghost' || variant === 'inline' ? 'transparent' : 
+                          variant === 'floating' ? `${colors.background?.default || '#ffffff'}F2` : // 95% opacity
+                          `${colors.background?.default || '#ffffff'}CC`, // 80% opacity
+          backdropFilter: variant === 'floating' ? 'blur(12px)' : variant === 'default' ? 'blur(4px)' : 'none',
+          border: variant === 'floating' ? `1px solid ${colors.border?.default || '#e5e7eb'}4D` : // 30% opacity
+                 variant === 'default' ? `1px solid ${colors.border?.default || '#e5e7eb'}80` : 'none', // 50% opacity
+          borderRadius: rounded === 'none' ? '0' :
+                      rounded === 'sm' ? (getToken('borderRadius.sm') as string) || '0.125rem' :
+                      rounded === 'lg' ? (getToken('borderRadius.lg') as string) || '0.5rem' :
+                      rounded === 'full' ? (getToken('borderRadius.full') as string) || '9999px' :
+                      (getToken('borderRadius.md') as string) || '0.375rem',
+          padding: size === 'sm' ? spacing[1] : size === 'lg' ? spacing[3] : spacing[2],
+          boxShadow: variant === 'floating' ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : 'none',
+          ...(position !== 'relative' && {
+            top: position === 'top-left' || position === 'top-right' || position === 'top-center' ? spacing[2] : 'auto',
+            bottom: position === 'bottom-left' || position === 'bottom-right' || position === 'bottom-center' ? spacing[2] : 'auto',
+            left: position === 'top-left' || position === 'bottom-left' ? spacing[2] :
+                 position === 'top-center' || position === 'bottom-center' ? '50%' : 'auto',
+            right: position === 'top-right' || position === 'bottom-right' ? spacing[2] : 'auto',
+            transform: (position === 'top-center' || position === 'bottom-center') ? 'translateX(-50%)' : 'none',
           }),
-          className
-        )}
+        }}
+        onMouseEnter={(e) => {
+          if (visibility === 'hover' || visibility === 'hover-focus') {
+            e.currentTarget.style.opacity = '1';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (visibility === 'hover' || visibility === 'hover-focus') {
+            e.currentTarget.style.opacity = '0';
+          }
+        }}
+        onFocusCapture={(e) => {
+          if (visibility === 'focus' || visibility === 'hover-focus') {
+            e.currentTarget.style.opacity = '1';
+          }
+        }}
+        onBlurCapture={(e) => {
+          if (visibility === 'focus' || visibility === 'hover-focus') {
+            e.currentTarget.style.opacity = '0';
+          }
+        }}
         {...props}
       >
         {/* Visible actions */}
@@ -601,7 +698,3 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
 
 ActionBar.displayName = 'ActionBar';
 
-/**
- * ActionBar component variants export
- */
-export { actionBarVariants, actionButtonVariants };

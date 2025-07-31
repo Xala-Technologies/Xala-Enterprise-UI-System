@@ -38,7 +38,7 @@ export interface NorwegianActionContext {
  */
 export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly isOpen?: boolean;
-  readonly open?: boolean;
+  // readonly open?: boolean; // Unused - keeping for API compatibility
   readonly onOpenChange?: (open: boolean) => void;
   readonly title?: string;
   readonly titleKey?: string;
@@ -354,7 +354,6 @@ export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       title,
       titleKey,
       size = 'md',
-      // eslint-disable-next-line no-unused-vars
       centered: _centered = true,
       closable = true,
       closeOnEscape = true,

@@ -71,7 +71,6 @@ export interface TableColumn<T = unknown> {
   readonly width?: string;
   /** Column render function */
 
-  // eslint-disable-next-line no-unused-vars
   readonly render?: (_value: unknown, _item: T, _index: number) => ReactNode;
   /** Column align */
   readonly align?: 'left' | 'center' | 'right';

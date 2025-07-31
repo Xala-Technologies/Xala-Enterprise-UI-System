@@ -1,194 +1,315 @@
 /**
- * @fileoverview SSR-Safe Button Component - Production Strategy Implementation
- * @description Button component using useTokens hook for JSON template integration
- * @version 4.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @fileoverview Button Component v5.0.0 - Token-Based Design System
+ * @description Modern Button component using design tokens with SSR compatibility
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
 // ✅ NO 'use client' directive - works in SSR
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
 
-export interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive';
-  size?: 'sm' | 'md' | 'lg';
-  children: React.ReactNode;
-  onClick?: () => void;
-  disabled?: boolean;
-  loading?: boolean;
-  fullWidth?: boolean;
-  type?: 'button' | 'submit' | 'reset';
-  className?: string;
-  style?: React.CSSProperties;
+// =============================================================================
+// BUTTON VARIANTS USING DESIGN TOKENS
+// =============================================================================
+
+/**
+ * Button variants using token-based styling
+ * Combines CVA with runtime token access for maximum flexibility
+ */
+const buttonVariants = cva(
+  // Base classes - framework-agnostic styling
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-150 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        primary: '',
+        secondary: '',
+        outline: '',
+        ghost: '',
+        destructive: '',
+        success: '',
+        warning: '',
+        link: 'underline-offset-4 hover:underline',
+      },
+      size: {
+        sm: '',
+        md: '',
+        lg: '',
+        xl: '',
+        icon: '',
+      },
+      fullWidth: {
+        true: 'w-full',
+        false: 'w-auto',
+      },
+    },
+    defaultVariants: {
+      variant: 'primary',
+      size: 'md',
+      fullWidth: false,
+    },
+  }
+);
+
+// =============================================================================
+// BUTTON COMPONENT INTERFACE
+// =============================================================================
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  readonly loading?: boolean;
+  readonly loadingText?: string;
+  readonly icon?: React.ReactNode;
+  readonly iconPosition?: 'left' | 'right';
+  readonly asChild?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
-  size = 'md',
-  children,
-  disabled = false,
-  loading = false,
-  fullWidth = false,
-  type = 'button',
-  className,
-  style,
-  ...props
+// =============================================================================
+// LOADING SPINNER COMPONENT
+// =============================================================================
+
+const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = ({ 
+  size = 'md' 
 }) => {
-  // ✅ Hook safely accesses tokens through app-owned context
-  const { colors, spacing, typography, getToken } = useTokens();
-
-  // Get additional tokens with fallbacks
-  const borderRadius = {
-    md: (getToken('borderRadius.md') as string) || '0.375rem',
-  };
-  const motion = {
-    duration: {
-      normal: (getToken('motion.duration.normal') as string) || '150ms',
-    },
-    easing: {
-      easeInOut: (getToken('motion.easing.easeInOut') as string) || 'ease-in-out',
-    },
-  };
-
-  // ✅ All styling comes from JSON templates (no hard-coded values)
-  const getVariantStyles = (): React.CSSProperties => {
-    switch (variant) {
-      case 'primary':
-        return {
-          backgroundColor: colors.primary?.[500] || '#3b82f6',
-          color: colors.background?.default || '#ffffff',
-          border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
-        };
-      case 'secondary':
-        return {
-          backgroundColor: colors.secondary?.[100] || '#e9d5ff',
-          color: colors.secondary?.[900] || '#581c87',
-          border: `1px solid ${colors.secondary?.[300] || '#d8b4fe'}`,
-        };
-      case 'outline':
-        return {
-          backgroundColor: 'transparent',
-          color: colors.primary?.[500] || '#3b82f6',
-          border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
-        };
-      case 'ghost':
-        return {
-          backgroundColor: 'transparent',
-          color: colors.text?.primary || '#000000',
-          border: 'none',
-        };
-      case 'destructive':
-        return {
-          backgroundColor: colors.status?.error || '#ef4444',
-          color: colors.background?.default || '#ffffff',
-          border: `1px solid ${colors.status?.error || '#ef4444'}`,
-        };
-      default:
-        return {};
-    }
-  };
-
-  const getSizeStyles = (): React.CSSProperties => {
-    switch (size) {
-      case 'sm':
-        return {
-          padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[3] || '0.75rem'}`,
-          fontSize: typography?.fontSize?.sm || '0.875rem',
-          minHeight: '32px',
-        };
-      case 'md':
-        return {
-          padding: `${spacing?.[3] || '0.75rem'} ${spacing?.[4] || '1rem'}`,
-          fontSize: typography?.fontSize?.base || '1rem',
-          minHeight: '40px',
-        };
-      case 'lg':
-        return {
-          padding: `${spacing?.[4] || '1rem'} ${spacing?.[6] || '1.5rem'}`,
-          fontSize: typography?.fontSize?.lg || '1.125rem',
-          minHeight: '48px',
-        };
-      default:
-        return {};
-    }
-  };
-
-  const baseStyles: React.CSSProperties = {
-    // Reset default button styles
-    outline: 'none',
-    border: 'none',
-    margin: 0,
-    textDecoration: 'none',
-    appearance: 'none',
-    background: 'none',
-
-    // Layout
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-    width: fullWidth ? '100%' : 'auto',
-
-    // Typography from JSON templates
-    fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    fontWeight: typography?.fontWeight?.medium || 500,
-    lineHeight: typography?.lineHeight?.normal || 1.5,
-
-    // Spacing and layout from JSON templates
-    borderRadius: borderRadius.md,
-
-    // Transitions from JSON templates
-    transition: `all ${motion.duration.normal} ${motion.easing.easeInOut}`,
-
-    // States
-    cursor: disabled || loading ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    userSelect: 'none',
-
-    // Focus handling (removed pseudo-selector for SSR compatibility)
-  };
-
-  const loadingStyles: React.CSSProperties = loading
-    ? {
-        color: 'transparent',
-        pointerEvents: 'none',
-      }
-    : {};
-
-  const combinedStyles: React.CSSProperties = {
-    ...baseStyles,
-    ...getVariantStyles(),
-    ...getSizeStyles(),
-    ...loadingStyles,
-    ...style,
-  };
+  const spinnerSize = {
+    sm: '14px',
+    md: '16px', 
+    lg: '18px',
+    xl: '20px',
+    icon: '16px',
+  }[size];
 
   return (
-    <button
-      type={type}
-      className={className}
-      style={combinedStyles}
-      disabled={disabled || loading}
-      {...props}
-    >
-      {loading && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
-            height: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
-            border: '2px solid transparent',
-            borderTop: `2px solid ${variant === 'outline' || variant === 'ghost' ? (colors.primary?.[500] || '#3b82f6') : (colors.background?.default || '#ffffff')}`,
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-          }}
-          aria-hidden="true"
-        />
-      )}
-      {children}
-    </button>
+    <div
+      style={{
+        width: spinnerSize,
+        height: spinnerSize,
+        border: '2px solid transparent',
+        borderTop: '2px solid currentColor',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite',
+      }}
+      aria-hidden="true"
+    />
   );
 };
+
+// =============================================================================
+// BUTTON COMPONENT
+// =============================================================================
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({
+    className,
+    variant = 'primary',
+    size = 'md',
+    fullWidth = false,
+    loading = false,
+    loadingText,
+    icon,
+    iconPosition = 'left',
+    disabled,
+    children,
+    style,
+    ...props
+  }, ref) => {
+    // ✅ Access design tokens for complete styling control
+    const { colors, spacing, typography, getToken } = useTokens();
+    
+    const isDisabled = disabled || loading;
+    
+    // Get token-based styles for variant
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'primary':
+          return {
+            backgroundColor: colors.primary?.[500] || '#3b82f6',
+            color: colors.background?.default || '#ffffff',
+            border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
+          };
+        case 'secondary':
+          return {
+            backgroundColor: colors.secondary?.[100] || '#f3f4f6',
+            color: colors.secondary?.[900] || '#111827',
+            border: `1px solid ${colors.secondary?.[300] || '#d1d5db'}`,
+          };
+        case 'outline':
+          return {
+            backgroundColor: 'transparent',
+            color: colors.primary?.[500] || '#3b82f6',
+            border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
+          };
+        case 'ghost':
+          return {
+            backgroundColor: 'transparent',
+            color: colors.text?.primary || '#111827',
+            border: 'none',
+          };
+        case 'destructive':
+          return {
+            backgroundColor: colors.status?.error || '#ef4444',
+            color: colors.background?.default || '#ffffff',
+            border: `1px solid ${colors.status?.error || '#ef4444'}`,
+          };
+        case 'success':
+          return {
+            backgroundColor: colors.status?.success || '#10b981',
+            color: colors.background?.default || '#ffffff',
+            border: `1px solid ${colors.status?.success || '#10b981'}`,
+          };
+        case 'warning':
+          return {
+            backgroundColor: colors.status?.warning || '#f59e0b',
+            color: colors.background?.default || '#ffffff',
+            border: `1px solid ${colors.status?.warning || '#f59e0b'}`,
+          };
+        case 'link':
+          return {
+            backgroundColor: 'transparent',
+            color: colors.primary?.[500] || '#3b82f6',
+            border: 'none',
+            textDecoration: 'underline',
+            textUnderlineOffset: '4px',
+          };
+        default:
+          return {};
+      }
+    };
+
+    // Get token-based styles for size
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            height: '36px',
+            padding: `0 ${spacing?.[3] || '0.75rem'}`,
+            fontSize: typography?.fontSize?.sm || '0.875rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'md':
+          return {
+            height: '40px',
+            padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[4] || '1rem'}`,
+            fontSize: typography?.fontSize?.base || '1rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'lg':
+          return {
+            height: '44px',
+            padding: `0 ${spacing?.[8] || '2rem'}`,
+            fontSize: typography?.fontSize?.base || '1rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'xl':
+          return {
+            height: '48px',
+            padding: `0 ${spacing?.[12] || '3rem'}`,
+            fontSize: typography?.fontSize?.lg || '1.125rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'icon':
+          return {
+            height: '40px',
+            width: '40px',
+            padding: '0',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        default:
+          return {};
+      }
+    };
+    
+    // Base styles from tokens
+    const baseStyles: React.CSSProperties = {
+      // Reset
+      outline: 'none',
+      border: 'none',
+      margin: 0,
+      textDecoration: 'none',
+      appearance: 'none',
+      
+      // Layout
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing?.[2] || '0.5rem',
+      position: 'relative',
+      whiteSpace: 'nowrap',
+      width: fullWidth ? '100%' : 'auto',
+      
+      // Typography
+      fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontWeight: typography?.fontWeight?.medium || 500,
+      lineHeight: typography?.lineHeight?.normal || 1.5,
+      
+      // Interaction
+      cursor: isDisabled ? 'not-allowed' : 'pointer',
+      opacity: isDisabled && !loading ? 0.5 : 1,
+      userSelect: 'none',
+      
+      // Transitions
+      transition: 'all 150ms ease-in-out',
+    };
+
+    // Combine all styles
+    const dynamicStyles: React.CSSProperties = {
+      ...baseStyles,
+      ...getVariantStyles(),
+      ...getSizeStyles(),
+      ...style,
+    };
+
+    const renderContent = () => {
+      if (loading) {
+        return (
+          <>
+            <LoadingSpinner size={size || undefined} />
+            <span style={{ visibility: loading ? 'hidden' : 'visible' }}>
+              {loadingText || children}
+            </span>
+          </>
+        );
+      }
+
+      if (icon && iconPosition === 'left') {
+        return (
+          <>
+            <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>
+            <span>{children}</span>
+          </>
+        );
+      }
+
+      if (icon && iconPosition === 'right') {
+        return (
+          <>
+            <span>{children}</span>
+            <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>
+          </>
+        );
+      }
+
+      return children;
+    };
+
+    return (
+      <button
+        className={cn(buttonVariants({ variant, size, fullWidth }), className)}
+        ref={ref}
+        disabled={isDisabled}
+        style={dynamicStyles}
+        aria-busy={loading}
+        aria-disabled={isDisabled}
+        {...props}
+      >
+        {renderContent()}
+      </button>
+    );
+  }
+);
+
+Button.displayName = 'Button';

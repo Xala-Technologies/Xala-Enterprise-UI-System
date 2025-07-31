@@ -1,90 +1,22 @@
 /**
- * Slider component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Slider Component - Production Strategy Implementation
+ * @description Slider component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-/* eslint-disable no-unused-vars */
-
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type InputHTMLAttributes } from 'react';
-import { useTokens } from '@/hooks/useTokens';
+import React, { forwardRef, useState, useCallback, useEffect, type InputHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Slider track variants using class-variance-authority
+ * Slider variant types
  */
-const sliderTrackVariants = cva(
-  'relative h-2 w-full grow overflow-hidden rounded-full bg-secondary cursor-pointer',
-  {
-    variants: {
-      variant: {
-        default: 'bg-secondary',
-        success: 'bg-green-100',
-        warning: 'bg-yellow-100',
-        destructive: 'bg-red-100',
-      },
-      size: {
-        sm: 'h-1',
-        default: 'h-2',
-        lg: 'h-3',
-      },
-      disabled: {
-        true: 'cursor-not-allowed opacity-50',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-      disabled: false,
-    },
-  }
-);
+export type SliderVariant = 'default' | 'success' | 'warning' | 'destructive';
 
 /**
- * Slider range variants
+ * Slider size types
  */
-const sliderRangeVariants = cva('absolute h-full bg-primary transition-all duration-200', {
-  variants: {
-    variant: {
-      default: 'bg-primary',
-      success: 'bg-green-500',
-      warning: 'bg-yellow-500',
-      destructive: 'bg-red-500',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
-
-/**
- * Slider thumb variants
- */
-const sliderThumbVariants = cva(
-  'block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-grab active:cursor-grabbing',
-  {
-    variants: {
-      variant: {
-        default: 'border-primary',
-        success: 'border-green-500',
-        warning: 'border-yellow-500',
-        destructive: 'border-red-500',
-      },
-      size: {
-        sm: 'h-4 w-4',
-        default: 'h-5 w-5',
-        lg: 'h-6 w-6',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export type SliderSize = 'sm' | 'default' | 'lg';
 
 /**
  * Slider component props interface
@@ -93,8 +25,9 @@ export interface SliderProps
   extends Omit<
       InputHTMLAttributes<HTMLInputElement>,
       'size' | 'type' | 'disabled' | 'value' | 'defaultValue'
-    >,
-    Omit<VariantProps<typeof sliderTrackVariants>, 'disabled'> {
+    > {
+  readonly variant?: SliderVariant;
+  readonly size?: SliderSize;
   readonly min?: number;
   readonly max?: number;
   readonly step?: number;
@@ -171,7 +104,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const { colors, spacing, typography, getToken } = useTokens();
     const [internalValue, setInternalValue] = React.useState(value || defaultValue);
     const [dragging, setDragging] = React.useState(false);
 
@@ -187,14 +120,14 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const displayHelperText = errorText || successText || helperText;
 
     // Update internal value when prop changes
-    React.useEffect(() => {
+    useEffect(() => {
       if (value !== undefined) {
         setInternalValue(value);
       }
     }, [value]);
 
     // Calculate percentage for positioning
-    const getPercentage = React.useCallback(
+    const getPercentage = useCallback(
       (val: number): number => {
         return ((val - min) / (max - min)) * 100;
       },
@@ -202,7 +135,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     );
 
     // Format value for display
-    const formatDisplayValue = React.useCallback(
+    const formatDisplayValue = useCallback(
       (val: number): string => {
         return formatValue ? formatValue(val) : val.toString();
       },
@@ -210,7 +143,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     );
 
     // Handle value change
-    const handleValueChange = React.useCallback(
+    const handleValueChange = useCallback(
       (newValue: number[]): void => {
         setInternalValue(newValue);
         onValueChange?.(newValue);
@@ -219,7 +152,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     );
 
     // Mouse/touch event handlers
-    const handlePointerDown = React.useCallback(
+    const handlePointerDown = useCallback(
       (event: React.PointerEvent<HTMLDivElement>): void => {
         if (disabled) return;
 
@@ -236,7 +169,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [disabled, min, max, step, handleValueChange]
     );
 
-    const handlePointerMove = React.useCallback(
+    const handlePointerMove = useCallback(
       (event: PointerEvent): void => {
         if (!dragging || disabled || !sliderId) return;
 
@@ -254,12 +187,12 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       [dragging, disabled, sliderId, min, max, step, handleValueChange]
     );
 
-    const handlePointerUp = React.useCallback((): void => {
+    const handlePointerUp = useCallback((): void => {
       setDragging(false);
     }, []);
 
     // Add global event listeners for dragging
-    React.useEffect(() => {
+    useEffect(() => {
       if (dragging) {
         document.addEventListener('pointermove', handlePointerMove);
         document.addEventListener('pointerup', handlePointerUp);
@@ -276,12 +209,118 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     const currentValue = internalValue[0] || min;
     const percentage = getPercentage(currentValue);
 
+    // Get border radius
+    const borderRadius = {
+      full: (getToken('borderRadius.full') as string) || '9999px',
+    };
+
+    // Size styles
+    const getSizeStyles = (): { track: React.CSSProperties; thumb: React.CSSProperties } => {
+      switch (size) {
+        case 'sm':
+          return {
+            track: { height: '4px' },
+            thumb: { height: '16px', width: '16px' },
+          };
+        case 'lg':
+          return {
+            track: { height: '12px' },
+            thumb: { height: '24px', width: '24px' },
+          };
+        default: // default
+          return {
+            track: { height: '8px' },
+            thumb: { height: '20px', width: '20px' },
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): { background: string; indicator: string; thumb: string } => {
+      switch (actualVariant) {
+        case 'success':
+          return {
+            background: colors.success?.[100] || '#dcfce7',
+            indicator: colors.success?.[500] || '#22c55e',
+            thumb: colors.success?.[500] || '#22c55e',
+          };
+        case 'warning':
+          return {
+            background: colors.warning?.[100] || '#fef3c7',
+            indicator: colors.warning?.[500] || '#eab308',
+            thumb: colors.warning?.[500] || '#eab308',
+          };
+        case 'destructive':
+          return {
+            background: colors.danger?.[100] || '#fee2e2',
+            indicator: colors.danger?.[500] || '#ef4444',
+            thumb: colors.danger?.[500] || '#ef4444',
+          };
+        case 'default':
+        default:
+          return {
+            background: colors.neutral?.[200] || '#e5e7eb',
+            indicator: colors.primary?.[500] || '#3b82f6',
+            thumb: colors.primary?.[500] || '#3b82f6',
+          };
+      }
+    };
+
+    const sizeStyles = getSizeStyles();
+    const variantStyles = getVariantStyles();
+
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      position: 'relative',
+    };
+
+    // Track styles
+    const trackStyles: React.CSSProperties = {
+      position: 'relative',
+      width: '100%',
+      flexGrow: 1,
+      overflow: 'hidden',
+      borderRadius: borderRadius.full,
+      backgroundColor: variantStyles.background,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      outline: 'none',
+      ...sizeStyles.track,
+    };
+
+    // Range fill styles
+    const rangeStyles: React.CSSProperties = {
+      position: 'absolute',
+      height: '100%',
+      backgroundColor: variantStyles.indicator,
+      transition: 'all 200ms ease-in-out',
+      width: `${percentage}%`,
+    };
+
+    // Thumb styles
+    const thumbStyles: React.CSSProperties = {
+      position: 'absolute',
+      top: '50%',
+      left: `${percentage}%`,
+      transform: 'translate(-50%, -50%)',
+      display: 'block',
+      borderRadius: borderRadius.full,
+      border: `2px solid ${variantStyles.thumb}`,
+      backgroundColor: colors.background?.default || '#ffffff',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+      transition: 'all 200ms ease-in-out',
+      cursor: disabled ? 'not-allowed' : 'grab',
+      pointerEvents: disabled ? 'none' : 'auto',
+      ...sizeStyles.thumb,
+    };
+
     const sliderElement = (
-      <div className="slider-container relative">
+      <div style={containerStyles}>
         <div
           id={sliderId}
           ref={ref}
-          className={cn(sliderTrackVariants({ variant: actualVariant, size, disabled }), className)}
+          className={className}
+          style={trackStyles}
           onPointerDown={handlePointerDown}
           role="slider"
           aria-valuemin={min}
@@ -292,34 +331,51 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
           aria-required={required}
           aria-disabled={disabled}
           tabIndex={disabled ? -1 : 0}
+          onFocus={(e) => {
+            if (!disabled) {
+              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+              e.currentTarget.style.outlineOffset = '2px';
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+          }}
           {...props}
         >
           {/* Range fill */}
-          <div
-            className={cn(sliderRangeVariants({ variant: actualVariant }))}
-            style={{ width: `${percentage}%` }}
-          />
+          <div style={rangeStyles} />
 
           {/* Thumb */}
           <div
-            className={cn(
-              'absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2',
-              sliderThumbVariants({ variant: actualVariant, size })
-            )}
-            style={{ left: `${percentage}%` }}
+            style={{
+              ...thumbStyles,
+              cursor: dragging ? 'grabbing' : (disabled ? 'not-allowed' : 'grab'),
+            }}
           />
 
           {/* Tick marks */}
           {showTicks && (
-            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+            }}>
               {Array.from({ length: Math.floor((max - min) / step) + 1 }, (_, i) => {
                 const tickValue = min + i * step;
                 const tickPercentage = getPercentage(tickValue);
                 return (
                   <div
                     key={i}
-                    className="absolute w-0.5 h-full bg-muted-foreground/30"
-                    style={{ left: `${tickPercentage}%` }}
+                    style={{
+                      position: 'absolute',
+                      width: '2px',
+                      height: '100%',
+                      backgroundColor: `${colors.text?.secondary || colors.neutral?.[500] || '#6b7280'}30`, // 30% opacity
+                      left: `${tickPercentage}%`,
+                    }}
                   />
                 );
               })}
@@ -328,16 +384,29 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
           {/* Marks */}
           {marks && (
-            <div className="absolute -bottom-6 left-0 w-full pointer-events-none">
+            <div style={{
+              position: 'absolute',
+              bottom: '-24px',
+              left: 0,
+              width: '100%',
+              pointerEvents: 'none',
+            }}>
               {marks.map(mark => {
                 const markPercentage = getPercentage(mark.value);
                 return (
                   <div
                     key={mark.value}
-                    className="absolute transform -translate-x-1/2"
-                    style={{ left: `${markPercentage}%` }}
+                    style={{
+                      position: 'absolute',
+                      left: `${markPercentage}%`,
+                      transform: 'translateX(-50%)',
+                    }}
                   >
-                    <div className="text-xs text-muted-foreground whitespace-nowrap">
+                    <div style={{
+                      fontSize: typography.fontSize.xs,
+                      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                      whiteSpace: 'nowrap',
+                    }}>
                       {mark.label}
                     </div>
                   </div>
@@ -350,8 +419,22 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {/* Value display */}
         {showValue && (
           <div
-            className="absolute -top-8 transform -translate-x-1/2 px-2 py-1 text-xs bg-popover text-popover-foreground rounded shadow-md pointer-events-none"
-            style={{ left: `${percentage}%` }}
+            style={{
+              position: 'absolute',
+              top: '-32px',
+              left: `${percentage}%`,
+              transform: 'translateX(-50%)',
+              paddingLeft: spacing[2],
+              paddingRight: spacing[2],
+              paddingTop: spacing[1],
+              paddingBottom: spacing[1],
+              fontSize: typography.fontSize.xs,
+              backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
+              color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+              borderRadius: (getToken('borderRadius.sm') as string) || '0.125rem',
+              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              pointerEvents: 'none',
+            }}
           >
             {formatDisplayValue(currentValue)}
           </div>
@@ -360,33 +443,69 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     );
 
     if (!label && !displayHelperText) {
-      return <div className={cn('slider-wrapper', { 'pb-8': marks })}>{sliderElement}</div>;
+      return (
+        <div style={{ paddingBottom: marks ? '32px' : '0' }}>
+          {sliderElement}
+        </div>
+      );
     }
 
+    const fieldStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[3],
+      paddingBottom: marks ? '32px' : '0',
+    };
+
+    const labelRowStyles: React.CSSProperties = {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    };
+
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      cursor: disabled ? 'not-allowed' : 'default',
+      opacity: disabled ? 0.7 : 1,
+      color: (error || errorText) ? (colors.danger?.[600] || '#dc2626') : 
+             (success || successText) ? (colors.success?.[700] || '#15803d') :
+             (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+    };
+
+    const valueDisplayStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    const helperTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: (error || errorText) ? (colors.danger?.[600] || '#dc2626') :
+             (success || successText) ? (colors.success?.[600] || '#16a34a') :
+             (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+    };
+
+    const requiredStyles: React.CSSProperties = {
+      color: colors.danger?.[600] || '#dc2626',
+      marginLeft: spacing[1],
+    };
+
     return (
-      <div className={cn('slider-field space-y-3', { 'pb-8': marks })}>
+      <div style={fieldStyles}>
         {label && (
-          <div className="flex justify-between items-center">
-            <label
-              htmlFor={sliderId}
-              className={cn(
-                'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-                {
-                  'text-destructive': error || errorText,
-                  'text-green-700': success || successText,
-                }
-              )}
-            >
+          <div style={labelRowStyles}>
+            <label htmlFor={sliderId} style={labelStyles}>
               {label}
               {required && (
-                <span className="text-destructive ml-1" aria-label="required">
+                <span style={requiredStyles} aria-label="required">
                   *
                 </span>
               )}
             </label>
 
             {showValue && (
-              <span className="text-sm text-muted-foreground">
+              <span style={valueDisplayStyles}>
                 {formatDisplayValue(currentValue)}
               </span>
             )}
@@ -396,14 +515,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         {sliderElement}
 
         {displayHelperText && (
-          <p
-            id={`${sliderId}-helper`}
-            className={cn('text-xs', {
-              'text-destructive': error || errorText,
-              'text-green-600': success || successText,
-              'text-muted-foreground': !error && !errorText && !success && !successText,
-            })}
-          >
+          <p id={`${sliderId}-helper`} style={helperTextStyles}>
             {displayHelperText}
           </p>
         )}
@@ -414,8 +526,3 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
 
 Slider.displayName = 'Slider';
 
-/**
- * Slider variants type exports
- */
-export type SliderVariant = VariantProps<typeof sliderTrackVariants>['variant'];
-export type SliderSize = VariantProps<typeof sliderTrackVariants>['size'];

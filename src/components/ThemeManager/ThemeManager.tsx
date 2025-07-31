@@ -13,7 +13,7 @@ export interface ThemeManagerProps {
   readonly showTransitionOptions?: boolean;
   readonly allowCustomThemes?: boolean;
   readonly themes?: TokenSystem[];
-  readonly onThemeChange?: (theme: string) => void;
+  readonly onThemeChange?: (_theme: string) => void;
   readonly className?: string;
 }
 
@@ -33,12 +33,12 @@ const transitionOptions: TransitionOption[] = [
 export const ThemeManager = ({
   showPreview = true,
   showTransitionOptions = true,
-  allowCustomThemes = false,
+  allowCustomThemes: _allowCustomThemes = false,
   themes = [],
   onThemeChange,
   className = '',
 }: ThemeManagerProps): JSX.Element => {
-  const { theme, setTheme: baseSetTheme, availableThemes } = useTheme();
+  const { theme, setTheme: _baseSetTheme, availableThemes } = useTheme();
   const tokens = useTokens();
   const [selectedTransition, setSelectedTransition] = useState<keyof typeof themeTransitionPresets>('smooth');
   const [isExpanded, setIsExpanded] = useState(false);

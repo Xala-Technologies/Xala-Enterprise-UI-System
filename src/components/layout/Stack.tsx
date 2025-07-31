@@ -99,9 +99,8 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
         ? (direction as BaseStackVariants['direction'])
         : ('vertical' as const);
 
-    const normalizedGap = (['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const).includes(
-      gap as any
-    )
+    const gapOptions = ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
+    const normalizedGap = gap && gapOptions.includes(gap as typeof gapOptions[number])
       ? (gap as BaseStackVariants['gap'])
       : ('md' as const);
 

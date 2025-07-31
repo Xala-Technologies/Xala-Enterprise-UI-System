@@ -104,10 +104,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     };
     
     // Get variant colors
-    const getVariantColors = () => {
-      const actualVariant = error || errorText ? 'destructive' : variant;
+    const getVariantColors = (): { borderColor: string; backgroundColor: string; color: string } => {
       const isChecked = checked || indeterminate;
       
+      const actualVariant = error || errorText ? 'destructive' : variant;
       switch (actualVariant) {
         case 'destructive':
           return {

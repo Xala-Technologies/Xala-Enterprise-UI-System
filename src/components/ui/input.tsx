@@ -1,225 +1,236 @@
 /**
- * @fileoverview SSR-Safe Input Component - Production Strategy Implementation
- * @description Input component using useTokens hook for JSON template integration
- * @version 4.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @fileoverview Input Component v5.0.0 - Token-Based Design System
+ * @description Modern Input component using design tokens with SSR compatibility
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
 // ✅ NO 'use client' directive - works in SSR
 import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
 
-export interface InputProps {
-  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
-  placeholder?: string;
-  value?: string;
-  defaultValue?: string;
-  onChange?: (value: string, event?: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeEvent?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (_event: React.FocusEvent<HTMLInputElement>) => void;
-  onBlur?: (_event: React.FocusEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-  required?: boolean;
-  autoComplete?: string;
-  autoFocus?: boolean;
-  readOnly?: boolean;
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'filled' | 'outline';
-  error?: boolean;
-  success?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-  'data-testid'?: string;
-  id?: string;
-  name?: string;
-  'aria-label'?: string;
-  'aria-describedby'?: string;
+// =============================================================================
+// INPUT VARIANTS USING DESIGN TOKENS
+// =============================================================================
+
+/**
+ * Input variants using token-based styling
+ * Combines CVA with runtime token access for maximum flexibility
+ */
+const inputVariants = cva(
+  // Base classes - framework-agnostic styling
+  'flex w-full border transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: '',
+        filled: '',
+        outline: '',
+      },
+      size: {
+        sm: '',
+        md: '',
+        lg: '',
+      },
+      state: {
+        default: '',
+        error: '',
+        success: '',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+      state: 'default',
+    },
+  }
+);
+
+// =============================================================================
+// INPUT COMPONENT INTERFACE
+// =============================================================================
+
+export interface InputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'onChange'>,
+    VariantProps<typeof inputVariants> {
+  readonly variant?: 'default' | 'filled' | 'outline';
+  readonly size?: 'sm' | 'md' | 'lg';
+  readonly state?: 'default' | 'error' | 'success';
+  readonly error?: boolean;
+  readonly success?: boolean;
+  readonly onChange?: (value: string, event?: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly onChangeEvent?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  readonly onChangeNative?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const Input: React.FC<InputProps> = ({
-  type = 'text',
-  placeholder,
-  value,
-  defaultValue,
-  onChange,
-  onChangeEvent,
-  onFocus,
-  onBlur,
-  disabled = false,
-  required = false,
-  autoComplete,
-  autoFocus = false,
-  readOnly = false,
-  size = 'md',
-  variant = 'default',
-  error = false,
-  success = false,
-  className,
-  style,
-  'data-testid': testId,
-  id,
-  name,
-  'aria-label': ariaLabel,
-  'aria-describedby': ariaDescribedBy,
-  ...props
-}) => {
-  // ✅ Hook safely accesses tokens through app-owned context
-  const { colors, spacing, typography, getToken } = useTokens();
+// =============================================================================
+// INPUT COMPONENT
+// =============================================================================
 
-  // Get additional tokens with fallbacks
-  const borderRadius = {
-    md: (getToken('borderRadius.md') as string) || '0.375rem',
-  };
-  const motion = {
-    duration: {
-      fast: (getToken('motion.duration.fast') as string) || '150ms',
-    },
-    easing: {
-      easeInOut: (getToken('motion.easing.easeInOut') as string) || 'ease-in-out',
-    },
-  };
+export const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({
+    className,
+    type = 'text',
+    variant = 'default',
+    size = 'md',
+    state,
+    error = false,
+    success = false,
+    disabled,
+    onChange,
+    onChangeEvent,
+    style,
+    ...props
+  }, ref) => {
+    // ✅ Access design tokens for complete styling control
+    const { colors, spacing, typography, getToken } = useTokens();
+    
+    // Determine state based on props
+    const currentState = error ? 'error' : success ? 'success' : state || 'default';
+    
+    // Get token-based styles for variant
+    const getVariantStyles = (): React.CSSProperties => {
+      const baseStyles = {
+        backgroundColor: colors.background?.default || '#ffffff',
+        color: colors.text?.primary || '#000000',
+      };
 
-  // ✅ All styling comes from JSON templates (no hard-coded values)
-  const getVariantStyles = (): React.CSSProperties => {
-    const baseInputStyles = {
-      backgroundColor: colors.background?.default || '#ffffff',
-      border: `1px solid ${colors.border?.default || '#e5e7eb'}`,
+      switch (variant) {
+        case 'filled':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.secondary?.[50] || colors.background?.paper || '#f8f9fa',
+            border: '1px solid transparent',
+          };
+        case 'outline':
+          return {
+            backgroundColor: 'transparent',
+            color: colors.text?.primary || '#000000',
+            border: `2px solid ${colors.border?.default || '#e5e7eb'}`,
+          };
+        default:
+          return {
+            ...baseStyles,
+            border: `1px solid ${colors.border?.default || '#e5e7eb'}`,
+          };
+      }
     };
 
-    if (error) {
-      return {
-        ...baseInputStyles,
-        borderColor: colors.status?.error || '#ef4444',
-        backgroundColor: colors.background?.default || '#ffffff',
-      };
-    }
+    // Get token-based styles for size
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            height: '32px',
+            padding: `0 ${spacing?.[3] || '0.75rem'}`,
+            fontSize: typography?.fontSize?.sm || '0.875rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'md':
+          return {
+            height: '40px',
+            padding: `0 ${spacing?.[4] || '1rem'}`,
+            fontSize: typography?.fontSize?.base || '1rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        case 'lg':
+          return {
+            height: '48px', 
+            padding: `0 ${spacing?.[4] || '1rem'}`,
+            fontSize: typography?.fontSize?.lg || '1.125rem',
+            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
+          };
+        default:
+          return {};
+      }
+    };
 
-    if (success) {
-      return {
-        ...baseInputStyles,
-        borderColor: colors.status?.success || '#10b981',
-        backgroundColor: colors.background?.default || '#ffffff',
-      };
-    }
+    // Get token-based styles for state
+    const getStateStyles = (): React.CSSProperties => {
+      switch (currentState) {
+        case 'error':
+          return {
+            borderColor: colors.status?.error || '#ef4444',
+            // Focus styles would need to be added via CSS classes or pseudo-selectors
+          };
+        case 'success':
+          return {
+            borderColor: colors.status?.success || '#10b981',
+          };
+        default:
+          return {};
+      }
+    };
+    
+    // Base styles from tokens
+    const baseStyles: React.CSSProperties = {
+      // Reset
+      appearance: 'none',
+      outline: 'none',
+      margin: 0,
+      
+      // Layout
+      display: 'flex',
+      width: '100%',
+      alignItems: 'center',
+      
+      // Typography
+      fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontWeight: typography?.fontWeight?.normal || 400,
+      lineHeight: typography?.lineHeight?.normal || 1.5,
+      
+      // Interaction
+      cursor: disabled ? 'not-allowed' : 'text',
+      opacity: disabled ? 0.5 : 1,
+      
+      // Transitions
+      transition: 'border-color 150ms ease-in-out, box-shadow 150ms ease-in-out',
+    };
 
-    switch (variant) {
-      case 'filled':
-        return {
-          backgroundColor: colors.secondary?.[50] || colors.background?.paper || '#f8f9fa',
-          border: `1px solid transparent`,
-        };
-      case 'outline':
-        return {
-          backgroundColor: 'transparent',
-          border: `2px solid ${colors.border?.default || '#e5e7eb'}`,
-        };
-      default:
-        return baseInputStyles;
-    }
-  };
+    // Combine all styles
+    const dynamicStyles: React.CSSProperties = {
+      ...baseStyles,
+      ...getVariantStyles(),
+      ...getSizeStyles(),
+      ...getStateStyles(),
+      ...style,
+    };
 
-  const getSizeStyles = (): React.CSSProperties => {
-    switch (size) {
-      case 'sm':
-        return {
-          padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[3] || '0.75rem'}`,
-          fontSize: typography?.fontSize?.sm || '0.875rem',
-          minHeight: '32px',
-        };
-      case 'md':
-        return {
-          padding: `${spacing?.[3] || '0.75rem'} ${spacing?.[4] || '1rem'}`,
-          fontSize: typography?.fontSize?.base || '1rem',
-          minHeight: '40px',
-        };
-      case 'lg':
-        return {
-          padding: `${spacing?.[4] || '1rem'} ${spacing?.[5] || spacing?.[4] || '1rem'}`,
-          fontSize: typography?.fontSize?.lg || '1.125rem',
-          minHeight: '48px',
-        };
-      default:
-        return {};
-    }
-  };
+    // Handle change events to support both interfaces
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+      const inputValue = event.target.value;
 
-  const baseStyles: React.CSSProperties = {
-    // Reset default input styles
-    appearance: 'none',
-    outline: 'none',
-    margin: 0,
+      // Call the string-based onChange if provided
+      if (onChange) {
+        onChange(inputValue, event);
+      }
 
-    // Layout
-    display: 'block',
-    width: '100%',
-    position: 'relative',
+      // Call the event-based onChangeEvent if provided
+      if (onChangeEvent) {
+        onChangeEvent(event);
+      }
+      
+      // Call the native onChange if provided in props
+      if (props.onChangeNative) {
+        props.onChangeNative(event);
+      }
+    };
 
-    // Typography from JSON templates
-    fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    fontWeight: typography?.fontWeight?.normal || 400,
-    lineHeight: typography?.lineHeight?.normal || 1.5,
-    color: colors.text?.primary || '#000000',
+    return (
+      <input
+        className={cn(inputVariants({ variant, size, state: currentState }), className)}
+        type={type}
+        ref={ref}
+        disabled={disabled}
+        style={dynamicStyles}
+        aria-invalid={error || currentState === 'error'}
+        onChange={handleChange}
+        {...props}
+      />
+    );
+  }
+);
 
-    // Border radius from JSON templates
-    borderRadius: borderRadius.md,
-
-    // Transitions from JSON templates
-    transition: `border-color ${motion.duration.fast} ${motion.easing.easeInOut}, box-shadow ${motion.duration.fast} ${motion.easing.easeInOut}`,
-
-    // Placeholder styling (removed pseudo-selector for SSR compatibility)
-
-    // States
-    cursor: disabled ? 'not-allowed' : 'text',
-    opacity: disabled ? 0.5 : 1,
-  };
-
-  const combinedStyles: React.CSSProperties = {
-    ...baseStyles,
-    ...getVariantStyles(),
-    ...getSizeStyles(),
-    ...style,
-  };
-
-  // Handle change events to support both interfaces
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const inputValue = event.target.value;
-
-    // Call the string-based onChange if provided
-    if (onChange) {
-      onChange(inputValue, event);
-    }
-
-    // Call the event-based onChangeEvent if provided
-    if (onChangeEvent) {
-      onChangeEvent(event);
-    }
-  };
-
-  // Handle focus and blur for focus ring styling
-  const finalStyles = combinedStyles;
-  return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      defaultValue={defaultValue}
-      onChange={handleChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
-      disabled={disabled}
-      required={required}
-      autoComplete={autoComplete}
-      autoFocus={autoFocus}
-      readOnly={readOnly}
-      className={className}
-      style={finalStyles}
-      data-testid={testId}
-      id={id}
-      name={name}
-      aria-label={ariaLabel}
-      aria-describedby={ariaDescribedBy}
-      aria-invalid={error ? 'true' : undefined}
-      {...props}
-    />
-  );
-};
+Input.displayName = 'Input';

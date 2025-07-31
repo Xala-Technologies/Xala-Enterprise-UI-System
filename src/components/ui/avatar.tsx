@@ -71,8 +71,8 @@ function getInitials(name: string): string {
 /**
  * Status indicator component
  */
-function StatusIndicator({ status, size }: { status: UserStatus; size: AvatarSize }) {
-  const { colors, spacing } = useTokens();
+function StatusIndicator({ status, size }: { status: UserStatus; size: AvatarSize }): React.ReactElement {
+  const { colors } = useTokens();
   
   const statusColors = {
     online: colors.success?.[500] || '#22c55e',
@@ -124,7 +124,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     style,
     ...props
   }, ref) => {
-    const { colors, spacing, typography, getToken } = useTokens();
+    const { colors, typography, getToken } = useTokens();
     
     const borderRadius = {
       md: (getToken('borderRadius.md') as string) || '0.375rem',
