@@ -8,6 +8,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, useState, type HTMLAttributes } from 'react';
 import { cn } from '../../lib/utils/cn';
+import { useTokens } from '@/hooks/useTokens';
 
 /**
  * ActionBar component variants using semantic design tokens
@@ -523,6 +524,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     },
     ref
   ) => {
+    const tokens = useTokens();
     const [showMoreActions, setShowMoreActions] = useState(false);
 
     // Split actions if maxActions is specified

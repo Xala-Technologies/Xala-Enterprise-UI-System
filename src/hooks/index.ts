@@ -11,3 +11,4 @@ export { useUi, useTokens, useTheme, usePlatform, useLayout, useWhiteLabel, useS
 export { useComponent, useComponentVariant } from './useComponent';
 export { useMediaQuery, useResponsive, useBreakpoint } from './useMediaQuery';
 export { useDebounce, useDebouncedCallback, useThrottle, useLoadingTimeout } from './useDebounce';
+export { useThemeTransition, themeTransitionPresets } from './useThemeTransition';

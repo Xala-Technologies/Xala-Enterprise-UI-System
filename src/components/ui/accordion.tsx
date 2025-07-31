@@ -7,6 +7,7 @@
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '@/hooks/useTokens';
 
 /**
  * Accordion container variants
@@ -208,6 +209,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
+    
     // If items are provided, render them automatically
     if (items) {
       return (
@@ -272,6 +275,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     { value, variant = 'default', disabled = false, children, className, ...props },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
     return (
       <div
         ref={ref}
@@ -316,6 +320,8 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
     },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
+    
     return (
       <button
         ref={ref}
@@ -371,6 +377,7 @@ export const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps
     { children, variant = 'default', size = 'md', state, isOpen = false, className, ...props },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
     return (
       <div
         ref={ref}

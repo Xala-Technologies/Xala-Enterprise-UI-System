@@ -10,6 +10,7 @@ import React from 'react';
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '@/hooks/useTokens';
 
 /**
  * Switch track variants using class-variance-authority
@@ -107,6 +108,8 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
+    
     // Generate ID if not provided and label exists
     const switchId =
       id || (label ? `switch-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);

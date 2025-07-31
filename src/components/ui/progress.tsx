@@ -8,6 +8,7 @@ import React from 'react';
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '@/hooks/useTokens';
 
 /**
  * Progress variants using class-variance-authority with semantic design tokens
@@ -130,6 +131,8 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
+    
     // Calculate percentage
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 

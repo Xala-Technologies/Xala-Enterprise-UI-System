@@ -10,6 +10,7 @@ import React from 'react';
 import { cn } from '@/lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '@/hooks/useTokens';
 
 /**
  * Slider track variants using class-variance-authority
@@ -170,6 +171,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     },
     ref
   ): React.ReactElement => {
+    const tokens = useTokens();
     const [internalValue, setInternalValue] = React.useState(value || defaultValue);
     const [dragging, setDragging] = React.useState(false);
 
