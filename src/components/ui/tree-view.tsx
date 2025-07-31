@@ -1,41 +1,17 @@
 /**
- * TreeView components with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe TreeView Components - Production Strategy Implementation
+ * @description TreeView components using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Tree view variants
+ * TreeView variant types
  */
-const treeViewVariants = cva('space-y-1');
-
-/**
- * Tree view item variants
- */
-const treeViewItemVariants = cva(
-  [
-    'flex items-center space-x-2 rounded-md px-2 py-1 text-sm',
-    'hover:bg-accent hover:text-accent-foreground',
-    'focus:bg-accent focus:text-accent-foreground focus:outline-none',
-    'data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground',
-  ],
-  {
-    variants: {
-      variant: {
-        default: '',
-        ghost: 'hover:bg-transparent',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+export type TreeViewVariant = 'default' | 'ghost';
 
 /**
  * TreeView data interface
@@ -51,9 +27,7 @@ export interface TreeViewData {
 /**
  * TreeView component props interface
  */
-export interface TreeViewProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'>,
-    VariantProps<typeof treeViewVariants> {
+export interface TreeViewProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   readonly data: TreeViewData[];
   readonly selectedId?: string;
   readonly expandedIds?: string[];
@@ -64,32 +38,25 @@ export interface TreeViewProps
 /**
  * TreeViewItem component props interface
  */
-export interface TreeViewItemProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'>,
-    VariantProps<typeof treeViewItemVariants> {
+export interface TreeViewItemProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   readonly item: TreeViewData;
   readonly level?: number;
   readonly selected?: boolean;
   readonly expanded?: boolean;
+  readonly variant?: TreeViewVariant;
   readonly onSelect?: (_id: string, _item: TreeViewData) => void;
   readonly onToggle?: (_id: string) => void;
 }
 
 /**
- * Enhanced TreeView component
- * @param data - Tree data structure
- * @param selectedId - Currently selected item ID
- * @param expandedIds - Array of expanded item IDs
- * @param onSelect - Selection handler
- * @param onExpand - Expand handler
- * @param className - Additional CSS classes
- * @returns TreeView JSX element
+ * Enhanced TreeView component with token-based styling
  */
 export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
   (
-    { data, selectedId, expandedIds = [], onSelect, onExpand, className, ...props },
+    { data, selectedId, expandedIds = [], onSelect, onExpand, className, style, ...props },
     ref
   ): React.ReactElement => {
+    const { spacing } = useTokens();
     const [internalExpanded, setInternalExpanded] = useState<string[]>(expandedIds);
 
     const handleToggle = (id: string): void => {
@@ -105,8 +72,16 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
       onSelect?.(id, item);
     };
 
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[1],
+      ...style,
+    };
+
     return (
-      <div ref={ref} role="tree" className={cn(treeViewVariants(), className)} {...props}>
+      <div ref={ref} role="tree" className={className} style={containerStyles} {...props}>
         {data.map(item => (
           <TreeViewItem
             key={item.id}
@@ -126,15 +101,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
 TreeView.displayName = 'TreeView';
 
 /**
- * Enhanced TreeViewItem component
- * @param item - Tree item data
- * @param level - Nesting level
- * @param selected - Selection state
- * @param expanded - Expansion state
- * @param onSelect - Selection handler
- * @param onToggle - Toggle handler
- * @param className - Additional CSS classes
- * @returns TreeViewItem JSX element
+ * Enhanced TreeViewItem component with token-based styling
  */
 export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
   (
@@ -147,12 +114,19 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
       onToggle,
       variant = 'default',
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
     const hasChildren = item.children && item.children.length > 0;
     const paddingLeft = level * 16 + 8;
+
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
 
     const handleClick = (): void => {
       if (!item.disabled) {
@@ -167,8 +141,92 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
       }
     };
 
+    // Item styles
+    const getItemStyles = (): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        display: 'flex',
+        alignItems: 'center',
+        gap: spacing[2],
+        borderRadius: borderRadius.md,
+        paddingLeft: spacing[2],
+        paddingRight: spacing[2],
+        paddingTop: spacing[1],
+        paddingBottom: spacing[1],
+        fontSize: typography.fontSize.sm,
+        cursor: item.disabled ? 'not-allowed' : 'pointer',
+        outline: 'none',
+        transition: 'all 150ms ease-in-out',
+        paddingLeft,
+      };
+
+      if (item.disabled) {
+        return {
+          ...baseStyles,
+          opacity: 0.5,
+          pointerEvents: 'none',
+        };
+      }
+
+      if (selected) {
+        return {
+          ...baseStyles,
+          backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
+          color: colors.accent?.foreground || colors.text?.primary || '#111827',
+        };
+      }
+
+      return {
+        ...baseStyles,
+        backgroundColor: 'transparent',
+        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      };
+    };
+
+    // Toggle button styles
+    const toggleButtonStyles: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '16px',
+      height: '16px',
+      borderRadius: borderRadius.md,
+      border: 'none',
+      backgroundColor: 'transparent',
+      cursor: 'pointer',
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      transition: 'all 150ms ease-in-out',
+    };
+
+    // Spacer styles
+    const spacerStyles: React.CSSProperties = {
+      width: '16px',
+      height: '16px',
+      flexShrink: 0,
+    };
+
+    // Icon styles
+    const iconStyles: React.CSSProperties = {
+      flexShrink: 0,
+      display: 'flex',
+      alignItems: 'center',
+    };
+
+    // Label styles
+    const labelStyles: React.CSSProperties = {
+      flex: 1,
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+    };
+
+    // Children container styles
+    const childrenContainerStyles: React.CSSProperties = {
+      marginLeft: spacing[4],
+    };
+
     return (
-      <div ref={ref}>
+      <div ref={ref} style={style}>
         <div
           role="treeitem"
           tabIndex={item.disabled ? -1 : 0}
@@ -176,37 +234,72 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
           aria-expanded={hasChildren ? expanded : undefined}
           data-selected={selected}
           data-disabled={item.disabled}
-          className={cn(treeViewItemVariants({ variant }), className)}
-          style={{ paddingLeft }}
+          className={className}
+          style={getItemStyles()}
           onClick={handleClick}
+          onMouseEnter={(e) => {
+            if (!item.disabled && !selected && variant !== 'ghost') {
+              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+              e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!item.disabled && !selected) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            }
+          }}
+          onFocus={(e) => {
+            if (!item.disabled) {
+              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+              e.currentTarget.style.outlineOffset = '2px';
+              if (!selected) {
+                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+              }
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+            if (!item.disabled && !selected) {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            }
+          }}
           {...props}
         >
-          {hasChildren && (
+          {hasChildren ? (
             <button
               type="button"
               onClick={handleToggleClick}
-              className="flex items-center justify-center w-4 h-4 hover:bg-accent rounded"
+              style={toggleButtonStyles}
               aria-label={expanded ? 'Collapse' : 'Expand'}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
             >
               {expanded ? '▼' : '▶'}
             </button>
+          ) : (
+            <div style={spacerStyles} />
           )}
 
-          {!hasChildren && <div className="w-4" />}
+          {item.icon && <span style={iconStyles}>{item.icon}</span>}
 
-          {item.icon && <span className="flex-shrink-0">{item.icon}</span>}
-
-          <span className="flex-1 truncate">{item.label}</span>
+          <span style={labelStyles}>{item.label}</span>
         </div>
 
         {hasChildren && expanded && (
-          <div className="ml-4">
+          <div style={childrenContainerStyles}>
             {item.children?.map(child => (
               <TreeViewItem
                 key={child.id}
                 item={child}
                 level={level + 1}
-                selected={child.id === item.id}
+                selected={selected && child.id === item.id}
                 expanded={expanded}
                 onSelect={onSelect}
                 onToggle={onToggle}

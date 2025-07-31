@@ -1,32 +1,12 @@
 /**
- * ContextMenu components with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe ContextMenu Component - Production Strategy Implementation
+ * @description Context menu component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
-
-/**
- * Context menu content variants
- */
-const contextMenuContentVariants = cva([
-  'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1',
-  'text-popover-foreground shadow-md',
-  'animate-in fade-in-0 zoom-in-95',
-]);
-
-/**
- * Context menu item variants
- */
-const contextMenuItemVariants = cva([
-  'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5',
-  'text-sm outline-none transition-colors',
-  'focus:bg-accent focus:text-accent-foreground',
-  'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-]);
+import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
  * ContextMenu component props interface
@@ -47,9 +27,7 @@ export interface ContextMenuTriggerProps extends HTMLAttributes<HTMLDivElement> 
 /**
  * ContextMenuContent component props interface
  */
-export interface ContextMenuContentProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof contextMenuContentVariants> {
+export interface ContextMenuContentProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
   readonly visible?: boolean;
   readonly x?: number;
@@ -59,9 +37,7 @@ export interface ContextMenuContentProps
 /**
  * ContextMenuItem component props interface
  */
-export interface ContextMenuItemProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof contextMenuItemVariants> {
+export interface ContextMenuItemProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
   readonly disabled?: boolean;
   readonly onSelect?: () => void;
@@ -69,13 +45,9 @@ export interface ContextMenuItemProps
 
 /**
  * Enhanced ContextMenu component
- * @param children - Trigger element
- * @param content - Context menu content
- * @param className - Additional CSS classes
- * @returns ContextMenu JSX element
  */
 export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ children, content, className, ...props }, ref): React.ReactElement => {
+  ({ children, content, className, style, ...props }, ref): React.ReactElement => {
     const [isVisible, setIsVisible] = useState(false);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
@@ -89,13 +61,31 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       setIsVisible(false);
     };
 
+    const containerStyles: React.CSSProperties = {
+      position: 'relative',
+      ...style,
+    };
+
+    const overlayStyles: React.CSSProperties = {
+      position: 'fixed',
+      inset: 0,
+      zIndex: 40,
+    };
+
+    const menuStyles: React.CSSProperties = {
+      position: 'fixed',
+      zIndex: 50,
+      left: position.x,
+      top: position.y,
+    };
+
     return (
-      <div ref={ref} className={cn('relative', className)} {...props}>
+      <div ref={ref} className={className} style={containerStyles} {...props}>
         <div onContextMenu={handleContextMenu}>{children}</div>
         {isVisible && (
           <>
-            <div className="fixed inset-0 z-40" onClick={handleClose} />
-            <div className="fixed z-50" style={{ left: position.x, top: position.y }}>
+            <div style={overlayStyles} onClick={handleClose} />
+            <div style={menuStyles}>
               {content}
             </div>
           </>
@@ -109,18 +99,20 @@ ContextMenu.displayName = 'ContextMenu';
 
 /**
  * Enhanced ContextMenuTrigger component
- * @param children - Trigger content
- * @param onContextMenu - Context menu handler
- * @param className - Additional CSS classes
- * @returns ContextMenuTrigger JSX element
  */
 export const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerProps>(
-  ({ children, onContextMenu, className, ...props }, ref): React.ReactElement => {
+  ({ children, onContextMenu, className, style, ...props }, ref): React.ReactElement => {
+    const triggerStyles: React.CSSProperties = {
+      cursor: 'context-menu',
+      ...style,
+    };
+
     return (
       <div
         ref={ref}
         onContextMenu={onContextMenu}
-        className={cn('cursor-context-menu', className)}
+        className={className}
+        style={triggerStyles}
         {...props}
       >
         {children}
@@ -133,22 +125,45 @@ ContextMenuTrigger.displayName = 'ContextMenuTrigger';
 
 /**
  * Enhanced ContextMenuContent component
- * @param children - Menu items
- * @param visible - Visibility state
- * @param x - X position
- * @param y - Y position
- * @param className - Additional CSS classes
- * @returns ContextMenuContent JSX element
  */
 export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
-  ({ children, visible = false, x = 0, y = 0, className, ...props }, ref): React.ReactElement => {
+  ({ children, visible = false, x = 0, y = 0, className, style, ...props }, ref): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     if (!visible) return <></>;
+
+    // Get border radius and shadows
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+    
+    const shadows = {
+      md: (getToken('shadows.md') as string) || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    };
+
+    const contentStyles: React.CSSProperties = {
+      position: 'fixed',
+      left: x,
+      top: y,
+      zIndex: 50,
+      minWidth: '8rem',
+      overflow: 'hidden',
+      borderRadius: borderRadius.md,
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      backgroundColor: colors.popover?.default || colors.background?.paper || colors.background?.default || '#ffffff',
+      padding: spacing[1],
+      color: colors.popover?.foreground || colors.text?.primary || colors.neutral?.[900] || '#111827',
+      boxShadow: shadows.md,
+      // Animation would typically be handled by CSS animations in a real implementation
+      animation: 'fadeIn 150ms ease-out, scaleIn 150ms ease-out',
+      ...style,
+    };
 
     return (
       <div
         ref={ref}
-        className={cn(contextMenuContentVariants(), className)}
-        style={{ position: 'fixed', left: x, top: y }}
+        className={className}
+        style={contentStyles}
         role="menu"
         {...props}
       >
@@ -162,18 +177,37 @@ ContextMenuContent.displayName = 'ContextMenuContent';
 
 /**
  * Enhanced ContextMenuItem component
- * @param children - Item content
- * @param disabled - Disabled state
- * @param onSelect - Selection handler
- * @param className - Additional CSS classes
- * @returns ContextMenuItem JSX element
  */
 export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
-  ({ children, disabled = false, onSelect, className, ...props }, ref): React.ReactElement => {
+  ({ children, disabled = false, onSelect, className, style, ...props }, ref): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     const handleClick = (): void => {
       if (!disabled) {
         onSelect?.();
       }
+    };
+
+    // Get border radius
+    const borderRadius = {
+      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+    };
+
+    const itemStyles: React.CSSProperties = {
+      position: 'relative',
+      display: 'flex',
+      cursor: disabled ? 'not-allowed' : 'default',
+      userSelect: 'none',
+      alignItems: 'center',
+      borderRadius: borderRadius.sm,
+      padding: `${spacing[1.5]} ${spacing[2]}`,
+      fontSize: typography.fontSize.sm,
+      outline: 'none',
+      transition: 'all 150ms ease-in-out',
+      pointerEvents: disabled ? 'none' : 'auto',
+      opacity: disabled ? 0.5 : 1,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      ...style,
     };
 
     return (
@@ -181,8 +215,33 @@ export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
         ref={ref}
         role="menuitem"
         data-disabled={disabled}
-        className={cn(contextMenuItemVariants(), className)}
+        className={className}
+        style={itemStyles}
         onClick={handleClick}
+        onMouseEnter={(e) => {
+          if (!disabled) {
+            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!disabled) {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+          }
+        }}
+        onFocus={(e) => {
+          if (!disabled) {
+            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+          }
+        }}
+        onBlur={(e) => {
+          if (!disabled) {
+            e.currentTarget.style.backgroundColor = 'transparent';
+            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+          }
+        }}
         {...props}
       >
         {children}

@@ -1,47 +1,24 @@
 /**
- * Tooltip component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Tooltip Component - Production Strategy Implementation
+ * @description Tooltip component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Tooltip variants using class-variance-authority
+ * Tooltip side types
  */
-const tooltipVariants = cva(
-  [
-    'absolute z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5',
-    'text-xs text-popover-foreground shadow-md',
-    'animate-in fade-in-0 zoom-in-95',
-    'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
-    'data-[state=closed]:zoom-out-95',
-  ],
-  {
-    variants: {
-      side: {
-        top: 'bottom-full left-1/2 mb-2 -translate-x-1/2',
-        bottom: 'top-full left-1/2 mt-2 -translate-x-1/2',
-        left: 'right-full top-1/2 mr-2 -translate-y-1/2',
-        right: 'left-full top-1/2 ml-2 -translate-y-1/2',
-      },
-    },
-    defaultVariants: {
-      side: 'top',
-    },
-  }
-);
+export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Tooltip content props interface
  */
-export interface TooltipContentProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof tooltipVariants> {
+export interface TooltipContentProps extends HTMLAttributes<HTMLDivElement> {
   readonly content: string;
+  readonly side?: TooltipSide;
 }
 
 /**
@@ -50,20 +27,13 @@ export interface TooltipContentProps
 export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
   readonly content: string;
-  readonly side?: 'top' | 'bottom' | 'left' | 'right';
+  readonly side?: TooltipSide;
   readonly disabled?: boolean;
   readonly delayDuration?: number; // Not implemented
 }
 
 /**
- * Enhanced Tooltip component
- * @param children - Element to attach tooltip to
- * @param content - Tooltip text content
- * @param side - Tooltip position (top, bottom, left, right)
- * @param disabled - Whether tooltip is disabled
- * @param delayDuration - Delay before showing tooltip (not implemented)
- * @param className - Additional CSS classes
- * @returns Enhanced Tooltip JSX element
+ * Enhanced Tooltip component with token-based styling
  */
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (
@@ -74,25 +44,128 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       disabled = false,
       delayDuration: _delayDuration,
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken, shadows } = useTokens();
+
     if (disabled || !content) {
-      return <div ref={ref}>{children}</div>;
+      return <div ref={ref} className={className} style={style}>{children}</div>;
     }
 
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      position: 'relative',
+      display: 'inline-block',
+      ...style,
+    };
+
+    // Position styles based on side
+    const getPositionStyles = (): React.CSSProperties => {
+      switch (side) {
+        case 'top':
+          return {
+            bottom: '100%',
+            left: '50%',
+            marginBottom: spacing[2],
+            transform: 'translateX(-50%)',
+          };
+        case 'bottom':
+          return {
+            top: '100%',
+            left: '50%',
+            marginTop: spacing[2],
+            transform: 'translateX(-50%)',
+          };
+        case 'left':
+          return {
+            right: '100%',
+            top: '50%',
+            marginRight: spacing[2],
+            transform: 'translateY(-50%)',
+          };
+        case 'right':
+          return {
+            left: '100%',
+            top: '50%',
+            marginLeft: spacing[2],
+            transform: 'translateY(-50%)',
+          };
+        default:
+          return {};
+      }
+    };
+
+    // Tooltip content styles
+    const tooltipStyles: React.CSSProperties = {
+      position: 'absolute',
+      zIndex: 50,
+      overflow: 'hidden',
+      borderRadius: borderRadius.md,
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
+      paddingLeft: spacing[3],
+      paddingRight: spacing[3],
+      paddingTop: spacing[1.5],
+      paddingBottom: spacing[1.5],
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      opacity: 0,
+      visibility: 'hidden',
+      transition: 'all 200ms ease-in-out',
+      maxWidth: '200px',
+      wordWrap: 'break-word',
+      ...getPositionStyles(),
+    };
+
     return (
-      <div ref={ref} className={cn('relative inline-block group', className)} {...props}>
+      <div 
+        ref={ref} 
+        className={className} 
+        style={containerStyles}
+        onMouseEnter={(e) => {
+          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
+          if (tooltip) {
+            tooltip.style.opacity = '1';
+            tooltip.style.visibility = 'visible';
+          }
+        }}
+        onMouseLeave={(e) => {
+          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
+          if (tooltip) {
+            tooltip.style.opacity = '0';
+            tooltip.style.visibility = 'hidden';
+          }
+        }}
+        onFocus={(e) => {
+          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
+          if (tooltip) {
+            tooltip.style.opacity = '1';
+            tooltip.style.visibility = 'visible';
+          }
+        }}
+        onBlur={(e) => {
+          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
+          if (tooltip) {
+            tooltip.style.opacity = '0';
+            tooltip.style.visibility = 'hidden';
+          }
+        }}
+        {...props}
+      >
         {children}
         <div
-          className={cn(
-            'invisible opacity-0 group-hover:visible group-hover:opacity-100',
-            'transition-all duration-200',
-            tooltipVariants({ side })
-          )}
+          style={tooltipStyles}
           role="tooltip"
-          aria-hidden="true"
+          aria-live="polite"
         >
           {content}
         </div>
@@ -104,16 +177,75 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 Tooltip.displayName = 'Tooltip';
 
 /**
- * Enhanced TooltipContent component for custom positioning
- * @param content - Tooltip text content
- * @param side - Tooltip position
- * @param className - Additional CSS classes
- * @returns TooltipContent JSX element
+ * Enhanced TooltipContent component for custom positioning with token-based styling
  */
 export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
-  ({ content, side = 'top', className, ...props }, ref): React.ReactElement => {
+  ({ content, side = 'top', className, style, ...props }, ref): React.ReactElement => {
+    const { colors, spacing, typography, getToken, shadows } = useTokens();
+
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Position styles based on side
+    const getPositionStyles = (): React.CSSProperties => {
+      switch (side) {
+        case 'top':
+          return {
+            bottom: '100%',
+            left: '50%',
+            marginBottom: spacing[2],
+            transform: 'translateX(-50%)',
+          };
+        case 'bottom':
+          return {
+            top: '100%',
+            left: '50%',
+            marginTop: spacing[2],
+            transform: 'translateX(-50%)',
+          };
+        case 'left':
+          return {
+            right: '100%',
+            top: '50%',
+            marginRight: spacing[2],
+            transform: 'translateY(-50%)',
+          };
+        case 'right':
+          return {
+            left: '100%',
+            top: '50%',
+            marginLeft: spacing[2],
+            transform: 'translateY(-50%)',
+          };
+        default:
+          return {};
+      }
+    };
+
+    const contentStyles: React.CSSProperties = {
+      position: 'absolute',
+      zIndex: 50,
+      overflow: 'hidden',
+      borderRadius: borderRadius.md,
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
+      paddingLeft: spacing[3],
+      paddingRight: spacing[3],
+      paddingTop: spacing[1.5],
+      paddingBottom: spacing[1.5],
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      maxWidth: '200px',
+      wordWrap: 'break-word',
+      ...getPositionStyles(),
+      ...style,
+    };
+
     return (
-      <div ref={ref} className={cn(tooltipVariants({ side }), className)} role="tooltip" {...props}>
+      <div ref={ref} className={className} style={contentStyles} role="tooltip" {...props}>
         {content}
       </div>
     );
@@ -123,15 +255,17 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
 TooltipContent.displayName = 'TooltipContent';
 
 /**
- * Simple TooltipTrigger wrapper component
- * @param children - Trigger element
- * @param className - Additional CSS classes
- * @returns TooltipTrigger JSX element
+ * Simple TooltipTrigger wrapper component with token-based styling
  */
 export const TooltipTrigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ children, className, ...props }, ref): React.ReactElement => {
+  ({ children, className, style, ...props }, ref): React.ReactElement => {
+    const triggerStyles: React.CSSProperties = {
+      display: 'inline-block',
+      ...style,
+    };
+
     return (
-      <div ref={ref} className={cn('inline-block', className)} {...props}>
+      <div ref={ref} className={className} style={triggerStyles} {...props}>
         {children}
       </div>
     );
@@ -139,8 +273,3 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivE
 );
 
 TooltipTrigger.displayName = 'TooltipTrigger';
-
-/**
- * Tooltip variants type exports
- */
-export type TooltipSide = VariantProps<typeof tooltipVariants>['side'];

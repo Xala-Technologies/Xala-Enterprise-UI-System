@@ -1,83 +1,32 @@
 /**
- * Timeline components - Pure presentational components
- * Displays chronological events with Norwegian compliance
- * No client-side logic or state management
+ * @fileoverview SSR-Safe Timeline Components - Production Strategy Implementation
+ * @description Timeline components using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Norwegian Enterprise Standards
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Timeline container variants
+ * Timeline orientation types
  */
-const timelineVariants = cva(['relative'], {
-  variants: {
-    orientation: {
-      vertical: 'flex flex-col',
-      horizontal: 'flex flex-row items-center space-x-4 overflow-x-auto',
-    },
-    variant: {
-      default: '',
-      compact: 'space-y-2',
-      spacious: 'space-y-6',
-    },
-  },
-  defaultVariants: {
-    orientation: 'vertical',
-    variant: 'default',
-  },
-});
+export type TimelineOrientation = 'vertical' | 'horizontal';
 
 /**
- * Timeline item variants
+ * Timeline variant types
  */
-const timelineItemVariants = cva(['relative flex'], {
-  variants: {
-    orientation: {
-      vertical: 'pb-8 last:pb-0',
-      horizontal: 'flex-shrink-0',
-    },
-    status: {
-      default: '',
-      completed: '[&>*]:text-green-600',
-      current: '[&>*]:text-primary',
-      pending: '[&>*]:text-muted-foreground',
-      error: '[&>*]:text-destructive',
-    },
-  },
-  defaultVariants: {
-    orientation: 'vertical',
-    status: 'default',
-  },
-});
+export type TimelineVariant = 'default' | 'compact' | 'spacious';
 
 /**
- * Timeline item dot variants
+ * Timeline status types
  */
-const timelineDotVariants = cva(
-  ['absolute rounded-full border-2 bg-background', 'flex items-center justify-center', 'z-10'],
-  {
-    variants: {
-      size: {
-        sm: 'h-3 w-3',
-        md: 'h-4 w-4',
-        lg: 'h-6 w-6',
-      },
-      status: {
-        default: 'border-border bg-background',
-        completed: 'border-green-600 bg-green-600',
-        current: 'border-primary bg-primary',
-        pending: 'border-muted bg-muted',
-        error: 'border-destructive bg-destructive',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      status: 'default',
-    },
-  }
-);
+export type TimelineStatus = 'default' | 'completed' | 'current' | 'pending' | 'error';
+
+/**
+ * Timeline size types
+ */
+export type TimelineSize = 'sm' | 'md' | 'lg';
 
 /**
  * Timeline item data interface
@@ -87,7 +36,7 @@ export interface TimelineItemData {
   readonly title: string;
   readonly description?: string;
   readonly timestamp?: string;
-  readonly status?: 'default' | 'completed' | 'current' | 'pending' | 'error';
+  readonly status?: TimelineStatus;
   readonly icon?: ReactNode;
   readonly metadata?: Record<string, unknown>;
 }
@@ -95,15 +44,17 @@ export interface TimelineItemData {
 /**
  * Timeline component props interface
  */
-export interface TimelineProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof timelineVariants> {
+export interface TimelineProps extends HTMLAttributes<HTMLDivElement> {
   /** Timeline items data */
   readonly items: TimelineItemData[];
   /** Show connecting line between items */
   readonly showLine?: boolean;
   /** Timeline item size */
-  readonly itemSize?: 'sm' | 'md' | 'lg';
+  readonly itemSize?: TimelineSize;
+  /** Timeline orientation */
+  readonly orientation?: TimelineOrientation;
+  /** Timeline variant */
+  readonly variant?: TimelineVariant;
   /** Norwegian compliance metadata */
   readonly norwegian?: {
     readonly classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
@@ -114,15 +65,17 @@ export interface TimelineProps
 /**
  * TimelineItem component props interface
  */
-export interface TimelineItemProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof timelineItemVariants> {
+export interface TimelineItemProps extends HTMLAttributes<HTMLDivElement> {
   /** Timeline item data */
   readonly item: TimelineItemData;
   /** Show connecting line to next item */
   readonly showLine?: boolean;
   /** Item size */
-  readonly size?: 'sm' | 'md' | 'lg';
+  readonly size?: TimelineSize;
+  /** Timeline orientation */
+  readonly orientation?: TimelineOrientation;
+  /** Item status */
+  readonly status?: TimelineStatus;
   /** Position in timeline (first, middle, last) */
   readonly position?: 'first' | 'middle' | 'last';
 }
@@ -155,16 +108,7 @@ function formatTimestamp(timestamp: string, format: 'norwegian' | 'iso' = 'norwe
 }
 
 /**
- * Timeline component - Pure presentational component
- * @param items - Array of timeline items
- * @param orientation - Timeline orientation (vertical or horizontal)
- * @param variant - Timeline spacing variant
- * @param showLine - Show connecting line between items
- * @param itemSize - Size of timeline item dots
- * @param norwegian - Norwegian compliance configuration
- * @param className - Additional CSS classes
- * @param props - Additional HTML attributes
- * @returns Timeline JSX element
+ * Enhanced Timeline component with token-based styling
  */
 export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
   (
@@ -176,14 +120,52 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
       itemSize = 'md',
       norwegian: _norwegian,
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { spacing } = useTokens();
+
+    // Container styles
+    const getContainerStyles = (): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        position: 'relative',
+      };
+
+      if (orientation === 'horizontal') {
+        return {
+          ...baseStyles,
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: spacing[4],
+          overflowX: 'auto',
+        };
+      }
+
+      // Vertical orientation
+      const verticalStyles: React.CSSProperties = {
+        ...baseStyles,
+        display: 'flex',
+        flexDirection: 'column',
+      };
+
+      switch (variant) {
+        case 'compact':
+          return { ...verticalStyles, gap: spacing[2] };
+        case 'spacious':
+          return { ...verticalStyles, gap: spacing[6] };
+        default:
+          return { ...verticalStyles, gap: spacing[4] };
+      }
+    };
+
     return (
       <div
         ref={ref}
-        className={cn(timelineVariants({ orientation, variant }), className)}
+        className={className}
+        style={{ ...getContainerStyles(), ...style }}
         role="list"
         aria-label="Timeline"
         {...props}
@@ -207,16 +189,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
 Timeline.displayName = 'Timeline';
 
 /**
- * TimelineItem component - Pure presentational component
- * @param item - Timeline item data
- * @param orientation - Timeline orientation
- * @param status - Item status
- * @param showLine - Show connecting line to next item
- * @param size - Item dot size
- * @param position - Item position in timeline
- * @param className - Additional CSS classes
- * @param props - Additional HTML attributes
- * @returns TimelineItem JSX element
+ * Enhanced TimelineItem component with token-based styling
  */
 export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
   (
@@ -228,71 +201,263 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
       size = 'md',
       position = 'middle',
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
     const isVertical = orientation === 'vertical';
+    const itemStatus = item.status || status;
+
+    // Get border radius
+    const borderRadius = {
+      full: (getToken('borderRadius.full') as string) || '9999px',
+    };
+
+    // Item container styles
+    const itemStyles: React.CSSProperties = {
+      position: 'relative',
+      display: 'flex',
+      paddingBottom: isVertical && position !== 'last' ? spacing[8] : 0,
+      flexShrink: orientation === 'horizontal' ? 0 : undefined,
+      ...style,
+    };
+
+    // Dot container styles
+    const dotContainerStyles: React.CSSProperties = {
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    };
+
+    // Dot size styles
+    const getDotSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return { height: '12px', width: '12px' };
+        case 'lg':
+          return { height: '24px', width: '24px' };
+        default: // md
+          return { height: '16px', width: '16px' };
+      }
+    };
+
+    // Dot status styles
+    const getDotStatusStyles = (): React.CSSProperties => {
+      switch (itemStatus) {
+        case 'completed':
+          return {
+            borderColor: colors.success?.[600] || '#16a34a',
+            backgroundColor: colors.success?.[600] || '#16a34a',
+            color: colors.background?.default || '#ffffff',
+          };
+        case 'current':
+          return {
+            borderColor: colors.primary?.[500] || '#3b82f6',
+            backgroundColor: colors.primary?.[500] || '#3b82f6',
+            color: colors.background?.default || '#ffffff',
+          };
+        case 'pending':
+          return {
+            borderColor: colors.neutral?.[300] || '#d1d5db',
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          };
+        case 'error':
+          return {
+            borderColor: colors.danger?.[500] || '#ef4444',
+            backgroundColor: colors.danger?.[500] || '#ef4444',
+            color: colors.background?.default || '#ffffff',
+          };
+        default:
+          return {
+            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+            backgroundColor: colors.background?.default || '#ffffff',
+            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+          };
+      }
+    };
+
+    const dotSizeStyles = getDotSizeStyles();
+    const dotStatusStyles = getDotStatusStyles();
+
+    // Timeline dot styles
+    const dotStyles: React.CSSProperties = {
+      position: 'absolute',
+      borderRadius: borderRadius.full,
+      border: '2px solid',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 10,
+      ...dotSizeStyles,
+      ...dotStatusStyles,
+    };
+
+    // Connecting line styles
+    const lineStyles: React.CSSProperties = {
+      backgroundColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+    };
+
+    // Content styles
+    const contentStyles: React.CSSProperties = {
+      flex: 1,
+      marginLeft: isVertical ? spacing[6] : spacing[4],
+    };
+
+    // Content container styles
+    const contentContainerStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[1],
+    };
+
+    // Title styles
+    const titleStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    };
+
+    // Description styles
+    const descriptionStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    // Timestamp styles
+    const timestampStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    // Status badge styles
+    const getStatusBadgeStyles = (): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        borderRadius: borderRadius.full,
+        paddingLeft: spacing[2],
+        paddingRight: spacing[2],
+        paddingTop: spacing[1],
+        paddingBottom: spacing[1],
+        fontSize: typography.fontSize.xs,
+        fontWeight: typography.fontWeight.medium,
+      };
+
+      switch (itemStatus) {
+        case 'completed':
+          return {
+            ...baseStyles,
+            backgroundColor: `${colors.success?.[500] || '#22c55e'}1A`, // 10% opacity
+            color: colors.success?.[700] || '#15803d',
+          };
+        case 'current':
+          return {
+            ...baseStyles,
+            backgroundColor: `${colors.primary?.[500] || '#3b82f6'}1A`, // 10% opacity
+            color: colors.primary?.[600] || '#2563eb',
+          };
+        case 'pending':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          };
+        case 'error':
+          return {
+            ...baseStyles,
+            backgroundColor: `${colors.danger?.[500] || '#ef4444'}1A`, // 10% opacity
+            color: colors.danger?.[600] || '#dc2626',
+          };
+        default:
+          return baseStyles;
+      }
+    };
 
     return (
       <div
         ref={ref}
-        className={cn(timelineItemVariants({ orientation, status }), className)}
+        className={className}
+        style={itemStyles}
         role="listitem"
         {...props}
       >
         {/* Timeline dot and line */}
-        <div className="relative flex flex-col items-center">
+        <div style={dotContainerStyles}>
           {/* Connecting line (before dot) */}
           {isVertical && position !== 'first' && (
-            <div className="absolute -top-8 h-8 w-0.5 bg-border" />
+            <div 
+              style={{
+                position: 'absolute',
+                top: '-32px',
+                height: '32px',
+                width: '2px',
+                ...lineStyles,
+              }}
+            />
           )}
 
           {/* Timeline dot */}
-          <div className={cn(timelineDotVariants({ size, status: item.status || status }))}>
-            {item.icon && <span className="text-xs">{item.icon}</span>}
+          <div style={dotStyles}>
+            {item.icon && (
+              <span style={{ fontSize: typography.fontSize.xs }}>
+                {item.icon}
+              </span>
+            )}
           </div>
 
           {/* Connecting line (after dot) */}
           {isVertical && showLine && position !== 'last' && (
-            <div className="absolute top-6 h-8 w-0.5 bg-border" />
+            <div 
+              style={{
+                position: 'absolute',
+                top: '24px',
+                height: '32px',
+                width: '2px',
+                ...lineStyles,
+              }}
+            />
           )}
 
           {/* Horizontal connecting line */}
           {!isVertical && showLine && position !== 'last' && (
-            <div className="absolute left-6 top-1/2 h-0.5 w-8 bg-border -translate-y-1/2" />
+            <div 
+              style={{
+                position: 'absolute',
+                left: '24px',
+                top: '50%',
+                height: '2px',
+                width: '32px',
+                transform: 'translateY(-50%)',
+                ...lineStyles,
+              }}
+            />
           )}
         </div>
 
         {/* Content */}
-        <div className={cn('flex-1', isVertical ? 'ml-6' : 'ml-4')}>
-          <div className="space-y-1">
-            <h4 className="text-sm font-medium leading-none">{item.title}</h4>
+        <div style={contentStyles}>
+          <div style={contentContainerStyles}>
+            <h4 style={titleStyles}>{item.title}</h4>
 
             {item.description && (
-              <p className="text-sm text-muted-foreground">{item.description}</p>
+              <p style={descriptionStyles}>{item.description}</p>
             )}
 
             {item.timestamp && (
-              <time className="text-xs text-muted-foreground">
+              <time style={timestampStyles}>
                 {formatTimestamp(item.timestamp)}
               </time>
             )}
 
             {/* Status indicator */}
-            {item.status && item.status !== 'default' && (
-              <div
-                className={cn(
-                  'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium',
-                  {
-                    'bg-green-100 text-green-700': item.status === 'completed',
-                    'bg-primary/10 text-primary': item.status === 'current',
-                    'bg-muted text-muted-foreground': item.status === 'pending',
-                    'bg-destructive/10 text-destructive': item.status === 'error',
-                  }
-                )}
-              >
-                {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+            {itemStatus && itemStatus !== 'default' && (
+              <div style={getStatusBadgeStyles()}>
+                {itemStatus.charAt(0).toUpperCase() + itemStatus.slice(1)}
               </div>
             )}
           </div>

@@ -1,58 +1,32 @@
 /**
- * DatePicker component - Pure presentational component
- * Supports Norwegian locale and enterprise standards
- * No client-side logic or state management
+ * @fileoverview SSR-Safe DatePicker Component - Production Strategy Implementation
+ * @description Date picker component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * DatePicker input variants
+ * DatePicker variant types
  */
-const datePickerVariants = cva(
-  [
-    'flex h-10 w-full rounded-md border border-input',
-    'bg-background px-3 py-2 text-sm',
-    'ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium',
-    'placeholder:text-muted-foreground',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'border-input',
-        outline: 'border-2 border-input',
-        filled: 'bg-muted border-muted',
-      },
-      size: {
-        sm: 'h-8 text-xs',
-        md: 'h-10 text-sm',
-        lg: 'h-12 text-base',
-      },
-      state: {
-        default: '',
-        error: 'border-destructive focus-visible:ring-destructive',
-        success: 'border-green-500 focus-visible:ring-green-500',
-        warning: 'border-yellow-500 focus-visible:ring-yellow-500',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-      state: 'default',
-    },
-  }
-);
+export type DatePickerVariant = 'default' | 'outline' | 'filled';
+
+/**
+ * DatePicker size types
+ */
+export type DatePickerSize = 'sm' | 'md' | 'lg';
+
+/**
+ * DatePicker state types
+ */
+export type DatePickerState = 'default' | 'error' | 'success' | 'warning';
 
 /**
  * DatePicker props interface
  */
-export interface DatePickerProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'>,
-    VariantProps<typeof datePickerVariants> {
+export interface DatePickerProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   /** Label for the date picker */
   readonly label?: string;
   /** Error message to display */
@@ -63,26 +37,22 @@ export interface DatePickerProps
   readonly required?: boolean;
   /** Show Norwegian date format hint */
   readonly showFormatHint?: boolean;
+  /** Input styling variant */
+  readonly variant?: DatePickerVariant;
+  /** Input size */
+  readonly size?: DatePickerSize;
+  /** Input state */
+  readonly state?: DatePickerState;
 }
 
 /**
- * DatePicker component - Pure presentational component
- * @param variant - Input styling variant
- * @param size - Input size
- * @param state - Input state (error, success, warning)
- * @param label - Input label
- * @param error - Error message
- * @param helperText - Helper text
- * @param required - Required field indicator
- * @param showFormatHint - Show Norwegian date format hint
- * @param className - Additional CSS classes
- * @param props - Additional input attributes
- * @returns DatePicker JSX element
+ * Enhanced DatePicker component with Norwegian locale support
  */
 export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       state = 'default',
@@ -96,22 +66,141 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
     const inputId = props.id || 'date-picker';
     const hasError = Boolean(error) || state === 'error';
     const currentState = hasError ? 'error' : state;
 
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            height: '32px',
+            padding: `0 ${spacing[2]}`,
+            fontSize: typography.fontSize.xs,
+          };
+        case 'lg':
+          return {
+            height: '48px',
+            padding: `0 ${spacing[4]}`,
+            fontSize: typography.fontSize.base,
+          };
+        default:
+          return {
+            height: '40px',
+            padding: `0 ${spacing[3]}`,
+            fontSize: typography.fontSize.sm,
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'outline':
+          return {
+            backgroundColor: colors.background?.default || '#ffffff',
+            border: `2px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'filled':
+          return {
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            border: `1px solid ${colors.neutral?.[100] || '#f3f4f6'}`,
+          };
+        default:
+          return {
+            backgroundColor: colors.background?.default || '#ffffff',
+            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+      }
+    };
+
+    // State styles
+    const getStateStyles = (): React.CSSProperties => {
+      switch (currentState) {
+        case 'error':
+          return {
+            borderColor: colors.danger?.[500] || '#ef4444',
+          };
+        case 'success':
+          return {
+            borderColor: colors.success?.[500] || '#22c55e',
+          };
+        case 'warning':
+          return {
+            borderColor: colors.warning?.[500] || '#f59e0b',
+          };
+        default:
+          return {};
+      }
+    };
+
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[2],
+      ...style,
+    };
+
+    // Input styles
+    const inputStyles: React.CSSProperties = {
+      display: 'flex',
+      width: '100%',
+      borderRadius: borderRadius.md,
+      fontFamily: typography.fontFamily.sans.join(', '),
+      fontWeight: typography.fontWeight.normal,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      transition: 'all 150ms ease-in-out',
+      outline: 'none',
+      ...getSizeStyles(),
+      ...getVariantStyles(),
+      ...getStateStyles(),
+    };
+
+    // Label styles
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      color: hasError 
+        ? colors.danger?.[500] || '#ef4444'
+        : colors.text?.primary || colors.neutral?.[900] || '#111827',
+    };
+
+    // Required indicator styles
+    const requiredStyles: React.CSSProperties = {
+      marginLeft: spacing[1],
+      color: colors.danger?.[500] || '#ef4444',
+    };
+
+    // Helper text styles
+    const helperTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    // Error text styles
+    const errorTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.danger?.[500] || '#ef4444',
+    };
+
     return (
-      <div className="flex flex-col space-y-2">
+      <div className={className} style={containerStyles}>
         {label && (
           <label
             htmlFor={inputId}
-            className={cn(
-              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-              hasError && 'text-destructive'
-            )}
+            style={labelStyles}
           >
             {label}
-            {required && <span className="ml-1 text-destructive">*</span>}
+            {required && <span style={requiredStyles}>*</span>}
           </label>
         )}
 
@@ -119,27 +208,42 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           ref={ref}
           type="date"
           id={inputId}
-          className={cn(datePickerVariants({ variant, size, state: currentState }), className)}
+          style={inputStyles}
           placeholder={placeholder}
           aria-invalid={hasError}
           aria-describedby={
             error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
           }
+          onFocus={(e) => {
+            if (currentState === 'error') {
+              e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+            } else if (currentState === 'success') {
+              e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+            } else if (currentState === 'warning') {
+              e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+            } else {
+              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+            }
+            e.currentTarget.style.outlineOffset = '2px';
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+          }}
           {...props}
         />
 
         {showFormatHint && !error && !helperText && (
-          <p className="text-xs text-muted-foreground">Format: dd.mm.åååå (norsk datoformat)</p>
+          <p style={helperTextStyles}>Format: dd.mm.åååå (norsk datoformat)</p>
         )}
 
         {helperText && !error && (
-          <p id={`${inputId}-helper`} className="text-xs text-muted-foreground">
+          <p id={`${inputId}-helper`} style={helperTextStyles}>
             {helperText}
           </p>
         )}
 
         {error && (
-          <p id={`${inputId}-error`} className="text-xs text-destructive">
+          <p id={`${inputId}-error`} style={errorTextStyles}>
             {error}
           </p>
         )}

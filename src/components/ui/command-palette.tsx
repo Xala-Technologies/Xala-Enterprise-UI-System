@@ -1,13 +1,22 @@
 /**
- * Command Palette component with enterprise compliance
- * Search and shortcuts interface using semantic design tokens
+ * @fileoverview SSR-Safe Command Palette Component - Production Strategy Implementation
+ * @description Command palette component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
+import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+/**
+ * Command palette variant types
+ */
+export type CommandPaletteVariant = 'default' | 'center' | 'top';
+
+/**
+ * Command palette size types
+ */
+export type CommandPaletteSize = 'sm' | 'default' | 'lg' | 'xl';
 
 /**
  * Command palette text configuration interface
@@ -38,102 +47,6 @@ const defaultTexts: CommandPaletteTexts = {
 };
 
 /**
- * Command palette variants using semantic design tokens
- */
-const commandPaletteVariants = cva(
-  [
-    'fixed inset-0 z-50 flex items-start justify-center',
-    'bg-background/80 backdrop-blur-sm',
-    'data-[state=open]:animate-in data-[state=closed]:animate-out',
-    'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'pt-[20vh]',
-        center: 'items-center pt-0',
-        top: 'pt-16',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
-
-/**
- * Command dialog variants using semantic design tokens
- */
-const commandDialogVariants = cva(
-  [
-    'w-full max-w-lg bg-background rounded-lg border border-border shadow-lg',
-    'data-[state=open]:animate-in data-[state=closed]:animate-out',
-    'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
-    'data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-top-[48%]',
-  ],
-  {
-    variants: {
-      size: {
-        sm: 'max-w-sm',
-        default: 'max-w-lg',
-        lg: 'max-w-xl',
-        xl: 'max-w-2xl',
-      },
-    },
-    defaultVariants: {
-      size: 'default',
-    },
-  }
-);
-
-/**
- * Command input variants using semantic design tokens
- */
-const commandInputVariants = cva(
-  [
-    'flex h-12 w-full rounded-md bg-transparent px-3 py-3 text-sm',
-    'placeholder:text-muted-foreground',
-    'focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'border-b border-border',
-        ghost: 'border-none',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
-
-/**
- * Command item variants using semantic design tokens
- */
-const commandItemVariants = cva(
-  [
-    'relative flex cursor-pointer select-none items-center rounded-sm px-3 py-2',
-    'text-sm outline-none transition-colors',
-    'data-[selected]:bg-accent data-[selected]:text-accent-foreground',
-    'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-  ],
-  {
-    variants: {
-      variant: {
-        default: '',
-        destructive:
-          'text-destructive data-[selected]:bg-destructive data-[selected]:text-destructive-foreground',
-        success: 'text-success data-[selected]:bg-success data-[selected]:text-success-foreground',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
-
-/**
  * Command item interface
  */
 export interface CommandItem {
@@ -160,9 +73,7 @@ export interface CommandGroup {
 /**
  * Command palette component props interface
  */
-export interface CommandPaletteProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof commandPaletteVariants> {
+export interface CommandPaletteProps extends HTMLAttributes<HTMLDivElement> {
   readonly isOpen?: boolean;
   readonly onClose?: () => void;
   readonly searchValue?: string;
@@ -173,7 +84,8 @@ export interface CommandPaletteProps
   readonly emptyMessage?: string;
   readonly maxResults?: number;
   readonly showShortcuts?: boolean;
-  readonly size?: 'sm' | 'default' | 'lg' | 'xl';
+  readonly variant?: CommandPaletteVariant;
+  readonly size?: CommandPaletteSize;
   readonly texts?: Partial<CommandPaletteTexts>;
 }
 
@@ -233,7 +145,7 @@ const filterGroups = (
  * Search icon component
  */
 const SearchIcon = (): React.ReactElement => (
-  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
     <path
       fillRule="evenodd"
       d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
@@ -245,36 +157,43 @@ const SearchIcon = (): React.ReactElement => (
 /**
  * Keyboard shortcut component
  */
-const KeyboardShortcut: React.FC<{ keys: string[] }> = ({ keys }): React.ReactElement => (
-  <div className="ml-auto flex gap-1">
-    {keys.map((key, index) => (
-      <kbd
-        key={index}
-        className="pointer-events-none h-5 select-none items-center gap-1 rounded bg-muted px-1.5 font-mono text-xs font-medium text-muted-foreground"
-      >
-        {key}
-      </kbd>
-    ))}
-  </div>
-);
+const KeyboardShortcut: React.FC<{ keys: string[] }> = ({ keys }): React.ReactElement => {
+  const { colors, spacing, typography } = useTokens();
+  
+  return (
+    <div style={{ 
+      marginLeft: 'auto',
+      display: 'flex',
+      gap: spacing[1],
+    }}>
+      {keys.map((key, index) => (
+        <kbd
+          key={index}
+          style={{
+            pointerEvents: 'none',
+            height: '20px',
+            userSelect: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: spacing[1],
+            borderRadius: '4px',
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            padding: `0 ${spacing[1.5]}`,
+            fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
+            fontSize: typography.fontSize.xs,
+            fontWeight: typography.fontWeight.medium,
+            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          }}
+        >
+          {key}
+        </kbd>
+      ))}
+    </div>
+  );
+};
 
 /**
  * Enhanced Command Palette component
- * @param isOpen - Whether palette is open
- * @param onClose - Close handler
- * @param searchValue - Current search value
- * @param onSearchChange - Search change handler
- * @param items - Flat list of command items
- * @param groups - Grouped command items
- * @param placeholder - Search input placeholder (deprecated, use texts.searchPlaceholder)
- * @param emptyMessage - Message when no results (deprecated, use texts.emptyMessage)
- * @param maxResults - Maximum results to show
- * @param showShortcuts - Show keyboard shortcuts
- * @param variant - Palette positioning variant
- * @param size - Dialog size
- * @param texts - Text configuration for localization
- * @param className - Additional CSS classes
- * @returns Enhanced Command Palette JSX element
  */
 export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
   (
@@ -293,10 +212,13 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
       size = 'default',
       texts: userTexts,
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     // Merge default texts with user provided texts
     const texts: CommandPaletteTexts = {
       ...defaultTexts,
@@ -320,6 +242,149 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     const totalResults = hasGroups
       ? filteredGroups.reduce((acc, group) => acc + group.items.length, 0)
       : filteredItems.length;
+
+    // Get border radius
+    const borderRadius = {
+      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
+      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Get shadows
+    const shadows = {
+      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    };
+
+    // Variant positioning styles
+    const getVariantPositioning = (): React.CSSProperties => {
+      switch (variant) {
+        case 'center':
+          return {
+            alignItems: 'center',
+            paddingTop: 0,
+          };
+        case 'top':
+          return {
+            paddingTop: '4rem',
+          };
+        default:
+          return {
+            paddingTop: '20vh',
+          };
+      }
+    };
+
+    // Size styles for dialog
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return { maxWidth: '24rem' };
+        case 'lg':
+          return { maxWidth: '36rem' };
+        case 'xl':
+          return { maxWidth: '42rem' };
+        default:
+          return { maxWidth: '32rem' };
+      }
+    };
+
+    // Overlay styles
+    const overlayStyles: React.CSSProperties = {
+      position: 'fixed',
+      inset: 0,
+      zIndex: 50,
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      backgroundColor: `${colors.background?.default || '#ffffff'}CC`, // 80% opacity
+      backdropFilter: 'blur(4px)',
+      ...getVariantPositioning(),
+      ...style,
+    };
+
+    // Dialog styles
+    const dialogStyles: React.CSSProperties = {
+      width: '100%',
+      backgroundColor: colors.background?.default || '#ffffff',
+      borderRadius: borderRadius.lg,
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      boxShadow: shadows.lg,
+      ...getSizeStyles(),
+    };
+
+    // Input styles
+    const inputStyles: React.CSSProperties = {
+      display: 'flex',
+      height: '48px',
+      width: '100%',
+      borderRadius: borderRadius.md,
+      backgroundColor: 'transparent',
+      padding: `${spacing[3]} ${spacing[3]}`,
+      fontSize: typography.fontSize.sm,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      outline: 'none',
+      border: 'none',
+      borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+    };
+
+    // Command item styles
+    const getItemStyles = (item: CommandItem, isSelected: boolean): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        position: 'relative',
+        display: 'flex',
+        cursor: item.disabled ? 'not-allowed' : 'pointer',
+        userSelect: 'none',
+        alignItems: 'center',
+        borderRadius: borderRadius.sm,
+        padding: `${spacing[2]} ${spacing[3]}`,
+        fontSize: typography.fontSize.sm,
+        outline: 'none',
+        transition: 'all 150ms ease-in-out',
+        pointerEvents: item.disabled ? 'none' : 'auto',
+        opacity: item.disabled ? 0.5 : 1,
+      };
+
+      if (isSelected) {
+        switch (item.variant) {
+          case 'destructive':
+            return {
+              ...baseStyles,
+              backgroundColor: colors.danger?.[500] || '#ef4444',
+              color: colors.background?.default || '#ffffff',
+            };
+          case 'success':
+            return {
+              ...baseStyles,
+              backgroundColor: colors.success?.[500] || '#22c55e',
+              color: colors.background?.default || '#ffffff',
+            };
+          default:
+            return {
+              ...baseStyles,
+              backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
+              color: colors.accent?.foreground || colors.text?.primary || '#111827',
+            };
+        }
+      }
+
+      switch (item.variant) {
+        case 'destructive':
+          return {
+            ...baseStyles,
+            color: colors.danger?.[500] || '#ef4444',
+          };
+        case 'success':
+          return {
+            ...baseStyles,
+            color: colors.success?.[500] || '#22c55e',
+          };
+        default:
+          return {
+            ...baseStyles,
+            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+          };
+      }
+    };
 
     const handleOverlayClick = (): void => {
       if (onClose) {
@@ -346,28 +411,37 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
 
     return (
       <div
-        className={cn(commandPaletteVariants({ variant }), className)}
+        className={className}
+        style={overlayStyles}
         data-state={isOpen ? 'open' : 'closed'}
         onKeyDown={handleKeyDown}
         {...props}
       >
         {/* Overlay */}
-        <div className="fixed inset-0" onClick={handleOverlayClick} aria-hidden="true" />
+        <div 
+          style={{ position: 'fixed', inset: 0 }} 
+          onClick={handleOverlayClick} 
+          aria-hidden="true" 
+        />
 
         {/* Command dialog */}
         <div
           ref={ref}
-          className={cn(commandDialogVariants({ size }))}
+          style={dialogStyles}
           data-state={isOpen ? 'open' : 'closed'}
           role="dialog"
           aria-modal="true"
           aria-label={texts.ariaLabel}
         >
           {/* Search input */}
-          <div className="flex items-center px-3">
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            padding: `0 ${spacing[3]}`,
+          }}>
             <SearchIcon />
             <input
-              className={cn(commandInputVariants({ variant: 'ghost' }))}
+              style={inputStyles}
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={e => onSearchChange?.(e.target.value)}
@@ -376,9 +450,19 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           </div>
 
           {/* Results */}
-          <div className="max-h-80 overflow-y-auto p-2">
+          <div style={{
+            maxHeight: '20rem',
+            overflowY: 'auto',
+            padding: spacing[2],
+          }}>
             {totalResults === 0 ? (
-              <div className="py-6 text-center text-sm text-muted-foreground">
+              <div style={{
+                paddingTop: spacing[6],
+                paddingBottom: spacing[6],
+                textAlign: 'center',
+                fontSize: typography.fontSize.sm,
+                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+              }}>
                 {noResultsMessage}
               </div>
             ) : (
@@ -386,26 +470,55 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
                 {/* Grouped items */}
                 {hasGroups &&
                   filteredGroups.map(group => (
-                    <div key={group.id} className="mb-2">
-                      <div className="px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                    <div key={group.id} style={{ marginBottom: spacing[2] }}>
+                      <div style={{
+                        padding: `${spacing[1.5]} ${spacing[3]}`,
+                        fontSize: typography.fontSize.xs,
+                        fontWeight: typography.fontWeight.medium,
+                        color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                      }}>
                         {group.label}
                       </div>
-                      <div className="space-y-1">
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
                         {group.items.map(item => (
                           <div
                             key={item.id}
-                            className={cn(commandItemVariants({ variant: item.variant }))}
+                            style={getItemStyles(item, false)}
                             data-selected={false}
                             data-disabled={item.disabled}
                             onClick={() => handleItemSelect(item)}
+                            onMouseEnter={(e) => {
+                              if (!item.disabled) {
+                                const hoverStyles = getItemStyles(item, true);
+                                e.currentTarget.style.backgroundColor = hoverStyles.backgroundColor || 'transparent';
+                                e.currentTarget.style.color = hoverStyles.color || 'inherit';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!item.disabled) {
+                                const normalStyles = getItemStyles(item, false);
+                                e.currentTarget.style.backgroundColor = normalStyles.backgroundColor || 'transparent';
+                                e.currentTarget.style.color = normalStyles.color || 'inherit';
+                              }
+                            }}
                           >
                             {item.icon && (
-                              <span className="mr-2 h-4 w-4 flex-shrink-0">{item.icon}</span>
+                              <span style={{
+                                marginRight: spacing[2],
+                                height: '16px',
+                                width: '16px',
+                                flexShrink: 0,
+                              }}>{item.icon}</span>
                             )}
-                            <div className="flex-1">
-                              <div className="font-medium">{item.label}</div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontWeight: typography.fontWeight.medium }}>
+                                {item.label}
+                              </div>
                               {item.description && (
-                                <div className="text-xs text-muted-foreground">
+                                <div style={{
+                                  fontSize: typography.fontSize.xs,
+                                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                                }}>
                                   {item.description}
                                 </div>
                               )}
@@ -421,22 +534,48 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
 
                 {/* Flat items */}
                 {hasItems && !hasGroups && (
-                  <div className="space-y-1">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
                     {filteredItems.map(item => (
                       <div
                         key={item.id}
-                        className={cn(commandItemVariants({ variant: item.variant }))}
+                        style={getItemStyles(item, false)}
                         data-selected={false}
                         data-disabled={item.disabled}
                         onClick={() => handleItemSelect(item)}
+                        onMouseEnter={(e) => {
+                          if (!item.disabled) {
+                            const hoverStyles = getItemStyles(item, true);
+                            e.currentTarget.style.backgroundColor = hoverStyles.backgroundColor || 'transparent';
+                            e.currentTarget.style.color = hoverStyles.color || 'inherit';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!item.disabled) {
+                            const normalStyles = getItemStyles(item, false);
+                            e.currentTarget.style.backgroundColor = normalStyles.backgroundColor || 'transparent';
+                            e.currentTarget.style.color = normalStyles.color || 'inherit';
+                          }
+                        }}
                       >
                         {item.icon && (
-                          <span className="mr-2 h-4 w-4 flex-shrink-0">{item.icon}</span>
+                          <span style={{
+                            marginRight: spacing[2],
+                            height: '16px',
+                            width: '16px',
+                            flexShrink: 0,
+                          }}>{item.icon}</span>
                         )}
-                        <div className="flex-1">
-                          <div className="font-medium">{item.label}</div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: typography.fontWeight.medium }}>
+                            {item.label}
+                          </div>
                           {item.description && (
-                            <div className="text-xs text-muted-foreground">{item.description}</div>
+                            <div style={{
+                              fontSize: typography.fontSize.xs,
+                              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                            }}>
+                              {item.description}
+                            </div>
                           )}
                         </div>
                         {showShortcuts && item.shortcut && (
@@ -451,14 +590,46 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           </div>
 
           {/* Footer */}
-          <div className="border-t border-border px-3 py-2">
-            <div className="flex items-center text-xs text-muted-foreground">
+          <div style={{
+            borderTop: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            padding: `${spacing[2]} ${spacing[3]}`,
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              fontSize: typography.fontSize.xs,
+              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+            }}>
               <span>{texts.keyboardHint.pressText}</span>
-              <kbd className="mx-1 h-5 select-none items-center gap-1 rounded bg-muted px-1.5 font-mono font-medium">
+              <kbd style={{
+                margin: `0 ${spacing[1]}`,
+                height: '20px',
+                userSelect: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: spacing[1],
+                borderRadius: '4px',
+                backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+                padding: `0 ${spacing[1.5]}`,
+                fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
+                fontWeight: typography.fontWeight.medium,
+              }}>
                 Enter
               </kbd>
               <span>{texts.keyboardHint.selectText}</span>
-              <kbd className="mx-1 h-5 select-none items-center gap-1 rounded bg-muted px-1.5 font-mono font-medium">
+              <kbd style={{
+                margin: `0 ${spacing[1]}`,
+                height: '20px',
+                userSelect: 'none',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: spacing[1],
+                borderRadius: '4px',
+                backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+                padding: `0 ${spacing[1.5]}`,
+                fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
+                fontWeight: typography.fontWeight.medium,
+              }}>
                 Esc
               </kbd>
               <span>{texts.keyboardHint.closeText}</span>
@@ -471,9 +642,3 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
 );
 
 CommandPalette.displayName = 'CommandPalette';
-
-/**
- * Command palette variants type exports
- */
-export type CommandPaletteVariant = VariantProps<typeof commandPaletteVariants>['variant'];
-export type CommandPaletteSize = VariantProps<typeof commandDialogVariants>['size'];

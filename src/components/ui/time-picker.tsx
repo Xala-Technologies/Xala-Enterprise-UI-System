@@ -1,58 +1,32 @@
 /**
- * TimePicker component - Pure presentational component
- * Supports Norwegian locale and enterprise standards
- * No client-side logic or state management
+ * @fileoverview SSR-Safe TimePicker Component - Production Strategy Implementation
+ * @description TimePicker component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Norwegian Enterprise Standards
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * TimePicker input variants
+ * TimePicker variant types
  */
-const timePickerVariants = cva(
-  [
-    'flex h-10 w-full rounded-md border border-input',
-    'bg-background px-3 py-2 text-sm',
-    'ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium',
-    'placeholder:text-muted-foreground',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'border-input',
-        outline: 'border-2 border-input',
-        filled: 'bg-muted border-muted',
-      },
-      size: {
-        sm: 'h-8 text-xs',
-        md: 'h-10 text-sm',
-        lg: 'h-12 text-base',
-      },
-      state: {
-        default: '',
-        error: 'border-destructive focus-visible:ring-destructive',
-        success: 'border-green-500 focus-visible:ring-green-500',
-        warning: 'border-yellow-500 focus-visible:ring-yellow-500',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
-      state: 'default',
-    },
-  }
-);
+export type TimePickerVariant = 'default' | 'outline' | 'filled';
+
+/**
+ * TimePicker size types
+ */
+export type TimePickerSize = 'sm' | 'md' | 'lg';
+
+/**
+ * TimePicker state types
+ */
+export type TimePickerState = 'default' | 'error' | 'success' | 'warning';
 
 /**
  * TimePicker props interface
  */
-export interface TimePickerProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'>,
-    VariantProps<typeof timePickerVariants> {
+export interface TimePickerProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   /** Label for the time picker */
   readonly label?: string;
   /** Error message to display */
@@ -65,27 +39,22 @@ export interface TimePickerProps
   readonly showFormatHint?: boolean;
   /** Use 24-hour format (default for Norwegian locale) */
   readonly use24Hour?: boolean;
+  /** TimePicker variant */
+  readonly variant?: TimePickerVariant;
+  /** TimePicker size */
+  readonly size?: TimePickerSize;
+  /** TimePicker state */
+  readonly state?: TimePickerState;
 }
 
 /**
- * TimePicker component - Pure presentational component
- * @param variant - Input styling variant
- * @param size - Input size
- * @param state - Input state (error, success, warning)
- * @param label - Input label
- * @param error - Error message
- * @param helperText - Helper text
- * @param required - Required field indicator
- * @param showFormatHint - Show Norwegian time format hint
- * @param use24Hour - Use 24-hour format
- * @param className - Additional CSS classes
- * @param props - Additional input attributes
- * @returns TimePicker JSX element
+ * Enhanced TimePicker component with token-based styling
  */
 export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
   (
     {
       className,
+      style,
       variant = 'default',
       size = 'md',
       state = 'default',
@@ -100,41 +69,203 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     const inputId = props.id || 'time-picker';
     const hasError = Boolean(error) || state === 'error';
     const currentState = hasError ? 'error' : state;
 
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            height: '32px',
+            fontSize: typography.fontSize.xs,
+          };
+        case 'lg':
+          return {
+            height: '48px',
+            fontSize: typography.fontSize.base,
+          };
+        default: // md
+          return {
+            height: '40px',
+            fontSize: typography.fontSize.sm,
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'outline':
+          return {
+            border: '2px solid',
+            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+          };
+        case 'filled':
+          return {
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            borderColor: colors.neutral?.[100] || '#f3f4f6',
+          };
+        default:
+          return {
+            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+          };
+      }
+    };
+
+    // State styles
+    const getStateStyles = (): React.CSSProperties => {
+      switch (currentState) {
+        case 'error':
+          return {
+            borderColor: colors.danger?.[500] || '#ef4444',
+          };
+        case 'success':
+          return {
+            borderColor: colors.success?.[500] || '#22c55e',
+          };
+        case 'warning':
+          return {
+            borderColor: colors.warning?.[500] || '#f59e0b',
+          };
+        default:
+          return {};
+      }
+    };
+
+    const sizeStyles = getSizeStyles();
+    const variantStyles = getVariantStyles();
+    const stateStyles = getStateStyles();
+
+    // Input styles
+    const inputStyles: React.CSSProperties = {
+      display: 'flex',
+      width: '100%',
+      borderRadius: borderRadius.md,
+      border: '1px solid',
+      backgroundColor: variant === 'filled' 
+        ? (colors.neutral?.[100] || '#f3f4f6')
+        : (colors.background?.default || '#ffffff'),
+      paddingLeft: spacing[3],
+      paddingRight: spacing[3],
+      paddingTop: spacing[2],
+      paddingBottom: spacing[2],
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      outline: 'none',
+      transition: 'all 150ms ease-in-out',
+      ...(props.disabled && {
+        cursor: 'not-allowed',
+        opacity: 0.5,
+      }),
+      ...sizeStyles,
+      ...variantStyles,
+      ...stateStyles,
+      ...style,
+    };
+
+    // Label styles
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      color: hasError 
+        ? (colors.danger?.[500] || '#ef4444')
+        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+    };
+
+    // Helper text styles
+    const helperTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    // Error text styles
+    const errorTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.danger?.[500] || '#ef4444',
+    };
+
+    // Format hint styles
+    const formatHintStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    // Required indicator styles
+    const requiredStyles: React.CSSProperties = {
+      marginLeft: spacing[1],
+      color: colors.danger?.[500] || '#ef4444',
+    };
+
+    // Placeholder color
+    const placeholderColor = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+
     return (
-      <div className="flex flex-col space-y-2">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
         {label && (
-          <label
-            htmlFor={inputId}
-            className={cn(
-              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-              hasError && 'text-destructive'
-            )}
-          >
+          <label htmlFor={inputId} style={labelStyles}>
             {label}
-            {required && <span className="ml-1 text-destructive">*</span>}
+            {required && <span style={requiredStyles}>*</span>}
           </label>
         )}
 
-        <input
-          ref={ref}
-          type="time"
-          id={inputId}
-          className={cn(timePickerVariants({ variant, size, state: currentState }), className)}
-          placeholder={placeholder}
-          step={props.step || 300} // 5 minute steps by default
-          aria-invalid={hasError}
-          aria-describedby={
-            error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
-          }
-          {...props}
-        />
+        <>
+          {/* CSS for placeholder styling */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              #${inputId}::placeholder {
+                color: ${placeholderColor};
+              }
+            `
+          }} />
+          <input
+            ref={ref}
+            type="time"
+            id={inputId}
+            className={className}
+            style={inputStyles}
+            placeholder={placeholder}
+            step={props.step || 300} // 5 minute steps by default
+            aria-invalid={hasError}
+            aria-describedby={
+              error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
+            }
+            onFocus={(e) => {
+              if (!props.disabled) {
+                switch (currentState) {
+                  case 'error':
+                    e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+                    break;
+                  case 'success':
+                    e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+                    break;
+                  case 'warning':
+                    e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+                    break;
+                  default:
+                    e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                    break;
+                }
+                e.currentTarget.style.outlineOffset = '2px';
+              }
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.outline = 'none';
+            }}
+            {...props}
+          />
+        </>
 
         {showFormatHint && !error && !helperText && (
-          <p className="text-xs text-muted-foreground">
+          <p style={formatHintStyles}>
             {use24Hour
               ? 'Format: tt:mm (24-timers format)'
               : 'Format: tt:mm AM/PM (12-timers format)'}
@@ -142,13 +273,13 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         )}
 
         {helperText && !error && (
-          <p id={`${inputId}-helper`} className="text-xs text-muted-foreground">
+          <p id={`${inputId}-helper`} style={helperTextStyles}>
             {helperText}
           </p>
         )}
 
         {error && (
-          <p id={`${inputId}-error`} className="text-xs text-destructive">
+          <p id={`${inputId}-error`} style={errorTextStyles}>
             {error}
           </p>
         )}

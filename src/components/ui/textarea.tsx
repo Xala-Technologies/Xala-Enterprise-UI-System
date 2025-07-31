@@ -1,53 +1,32 @@
 /**
- * Textarea component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Textarea Component - Production Strategy Implementation
+ * @description Textarea component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type TextareaHTMLAttributes } from 'react';
+import React, { forwardRef, type TextareaHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Textarea variants using class-variance-authority
+ * Textarea variant types
  */
-const textareaVariants = cva(
-  'flex w-full rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',
-  {
-    variants: {
-      variant: {
-        default: 'border-input focus-visible:ring-ring',
-        destructive: 'border-destructive focus-visible:ring-destructive text-destructive',
-        success: 'border-green-500 focus-visible:ring-green-500 text-green-800',
-        warning: 'border-yellow-500 focus-visible:ring-yellow-500 text-yellow-800',
-      },
-      size: {
-        sm: 'px-3 py-2 text-xs min-h-[80px]',
-        default: 'px-3 py-2 min-h-[100px]',
-        lg: 'px-4 py-3 text-base min-h-[120px]',
-      },
-      resize: {
-        none: 'resize-none',
-        vertical: 'resize-y',
-        horizontal: 'resize-x',
-        both: 'resize',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-      resize: 'vertical',
-    },
-  }
-);
+export type TextareaVariant = 'default' | 'destructive' | 'success' | 'warning';
+
+/**
+ * Textarea size types
+ */
+export type TextareaSize = 'sm' | 'default' | 'lg';
+
+/**
+ * Textarea resize types
+ */
+export type TextareaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 
 /**
  * Textarea component props interface
  */
-export interface TextareaProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaVariants> {
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   readonly label?: string;
   readonly helperText?: string;
   readonly errorText?: string;
@@ -58,36 +37,22 @@ export interface TextareaProps
   readonly maxLength?: number;
   readonly showCharacterCount?: boolean;
   readonly autoResize?: boolean;
+  readonly variant?: TextareaVariant;
+  readonly size?: TextareaSize;
+  readonly resize?: TextareaResize;
 }
 
 /**
- * Enhanced Textarea component
- * @param variant - Textarea variant (default, destructive, success, warning)
- * @param size - Textarea size (sm, default, lg)
- * @param resize - Resize behavior (none, vertical, horizontal, both)
- * @param label - Textarea label
- * @param helperText - Helper text below textarea
- * @param errorText - Error text (overrides helperText when present)
- * @param successText - Success text (overrides helperText when present)
- * @param required - Whether textarea is required
- * @param error - Error state
- * @param success - Success state
- * @param maxLength - Maximum character length
- * @param showCharacterCount - Whether to show character count
- * @param autoResize - Whether to auto-resize based on content
- * @param className - Additional CSS classes
- * @param id - Textarea ID
- * @param value - Textarea value (for controlled components)
- * @param props - Additional textarea props
- * @returns Enhanced Textarea JSX element
+ * Enhanced Textarea component with token-based styling
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       className,
-      variant,
-      size,
-      resize,
+      style,
+      variant = 'default',
+      size = 'default',
+      resize = 'vertical',
       label,
       helperText,
       errorText,
@@ -105,6 +70,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     // Generate ID if not provided and label exists
     const textareaId =
       id || (label ? `textarea-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
@@ -119,6 +86,159 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     // Character count for display
     const currentLength = typeof value === 'string' ? value.length : 0;
     const showCount = showCharacterCount && (maxLength !== undefined || currentLength > 0);
+
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            paddingLeft: spacing[3],
+            paddingRight: spacing[3],
+            paddingTop: spacing[2],
+            paddingBottom: spacing[2],
+            fontSize: typography.fontSize.xs,
+            minHeight: '80px',
+          };
+        case 'lg':
+          return {
+            paddingLeft: spacing[4],
+            paddingRight: spacing[4],
+            paddingTop: spacing[3],
+            paddingBottom: spacing[3],
+            fontSize: typography.fontSize.base,
+            minHeight: '120px',
+          };
+        default:
+          return {
+            paddingLeft: spacing[3],
+            paddingRight: spacing[3],
+            paddingTop: spacing[2],
+            paddingBottom: spacing[2],
+            fontSize: typography.fontSize.sm,
+            minHeight: '100px',
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (actualVariant) {
+        case 'destructive':
+          return {
+            borderColor: colors.danger?.[500] || '#ef4444',
+            color: colors.danger?.[500] || '#ef4444',
+          };
+        case 'success':
+          return {
+            borderColor: colors.success?.[500] || '#22c55e',
+            color: colors.success?.[800] || '#166534',
+          };
+        case 'warning':
+          return {
+            borderColor: colors.warning?.[500] || '#f59e0b',
+            color: colors.warning?.[800] || '#92400e',
+          };
+        default:
+          return {
+            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+          };
+      }
+    };
+
+    // Resize styles
+    const getResizeStyles = (): React.CSSProperties => {
+      if (autoResize) {
+        return { resize: 'none' };
+      }
+      
+      switch (resize) {
+        case 'none':
+          return { resize: 'none' };
+        case 'horizontal':
+          return { resize: 'horizontal' };
+        case 'both':
+          return { resize: 'both' };
+        default: // vertical
+          return { resize: 'vertical' };
+      }
+    };
+
+    const sizeStyles = getSizeStyles();
+    const variantStyles = getVariantStyles();
+    const resizeStyles = getResizeStyles();
+
+    // Textarea styles
+    const textareaStyles: React.CSSProperties = {
+      display: 'flex',
+      width: '100%',
+      borderRadius: borderRadius.md,
+      border: '1px solid',
+      backgroundColor: colors.background?.default || '#ffffff',
+      outline: 'none',
+      transition: 'all 150ms ease-in-out',
+      ...(props.disabled && {
+        cursor: 'not-allowed',
+        opacity: 0.5,
+      }),
+      ...sizeStyles,
+      ...variantStyles,
+      ...resizeStyles,
+      ...style,
+    };
+
+    // Placeholder styles
+    const placeholderColor = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+
+    // Label styles
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      color: error || errorText 
+        ? (colors.danger?.[500] || '#ef4444')
+        : success || successText
+        ? (colors.success?.[700] || '#15803d')
+        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+    };
+
+    // Helper text styles
+    const helperTextStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      flex: 1,
+      color: error || errorText 
+        ? (colors.danger?.[500] || '#ef4444') 
+        : success || successText
+        ? (colors.success?.[600] || '#16a34a')
+        : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+    };
+
+    // Character count styles
+    const getCharCountStyles = (): React.CSSProperties => {
+      const isOverLimit = maxLength !== undefined && currentLength > maxLength;
+      const isNearLimit = maxLength !== undefined && currentLength > maxLength * 0.9;
+      
+      return {
+        fontSize: typography.fontSize.xs,
+        marginLeft: 'auto',
+        color: isOverLimit 
+          ? (colors.danger?.[500] || '#ef4444')
+          : isNearLimit
+          ? (colors.warning?.[600] || '#d97706')
+          : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+      };
+    };
+
+    // Required indicator styles
+    const requiredStyles: React.CSSProperties = {
+      marginLeft: spacing[1],
+      color: colors.danger?.[500] || '#ef4444',
+    };
 
     // Auto-resize handler
     const handleChange = React.useCallback(
@@ -143,24 +263,51 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, [autoResize, ref, value]);
 
     const textareaElement = (
-      <textarea
-        id={textareaId}
-        ref={ref}
-        className={cn(
-          textareaVariants({ variant: actualVariant, size, resize }),
-          {
-            'resize-none': autoResize, // Disable manual resize when auto-resize is enabled
-          },
-          className
-        )}
-        aria-invalid={error || !!errorText}
-        aria-describedby={displayHelperText || showCount ? `${textareaId}-helper` : undefined}
-        aria-required={required}
-        maxLength={maxLength}
-        value={value}
-        onChange={handleChange}
-        {...props}
-      />
+      <>
+        {/* CSS for placeholder styling */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            #${textareaId}::placeholder {
+              color: ${placeholderColor};
+            }
+          `
+        }} />
+        <textarea
+          id={textareaId}
+          ref={ref}
+          className={className}
+          style={textareaStyles}
+          aria-invalid={error || !!errorText}
+          aria-describedby={displayHelperText || showCount ? `${textareaId}-helper` : undefined}
+          aria-required={required}
+          maxLength={maxLength}
+          value={value}
+          onChange={handleChange}
+          onFocus={(e) => {
+            if (!props.disabled) {
+              switch (actualVariant) {
+                case 'destructive':
+                  e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+                  break;
+                case 'success':
+                  e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+                  break;
+                case 'warning':
+                  e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+                  break;
+                default:
+                  e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                  break;
+              }
+              e.currentTarget.style.outlineOffset = '2px';
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+          }}
+          {...props}
+        />
+      </>
     );
 
     if (!label && !displayHelperText && !showCount) {
@@ -168,21 +315,15 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     return (
-      <div className="textarea-field space-y-1.5">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] }}>
         {label && (
           <label
             htmlFor={textareaId}
-            className={cn(
-              'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-              {
-                'text-destructive': error || errorText,
-                'text-green-700': success || successText,
-              }
-            )}
+            style={labelStyles}
           >
             {label}
             {required && (
-              <span className="text-destructive ml-1" aria-label="required">
+              <span style={requiredStyles} aria-label="required">
                 *
               </span>
             )}
@@ -191,27 +332,18 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         {textareaElement}
 
-        <div className="flex justify-between items-start">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {displayHelperText && (
             <p
               id={`${textareaId}-helper`}
-              className={cn('text-xs flex-1', {
-                'text-destructive': error || errorText,
-                'text-green-600': success || successText,
-                'text-muted-foreground': !error && !errorText && !success && !successText,
-              })}
+              style={helperTextStyles}
             >
               {displayHelperText}
             </p>
           )}
 
           {showCount && (
-            <p
-              className={cn('text-xs text-muted-foreground ml-auto', {
-                'text-destructive': maxLength !== undefined && currentLength > maxLength,
-                'text-yellow-600': maxLength !== undefined && currentLength > maxLength * 0.9,
-              })}
-            >
+            <p style={getCharCountStyles()}>
               {currentLength}
               {maxLength !== undefined && `/${maxLength}`}
             </p>
@@ -223,10 +355,3 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 );
 
 Textarea.displayName = 'Textarea';
-
-/**
- * Textarea variants type exports
- */
-export type TextareaVariant = VariantProps<typeof textareaVariants>['variant'];
-export type TextareaSize = VariantProps<typeof textareaVariants>['size'];
-export type TextareaResize = VariantProps<typeof textareaVariants>['resize'];

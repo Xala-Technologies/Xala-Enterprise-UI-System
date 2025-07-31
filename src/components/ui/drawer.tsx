@@ -1,150 +1,27 @@
 /**
- * Drawer/Sheet component with enterprise compliance
- * Mobile-friendly slide-out panels using semantic design tokens
+ * @fileoverview SSR-Safe Drawer Component - Production Strategy Implementation
+ * @description Drawer/Sheet component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Drawer overlay variants using semantic design tokens
+ * Drawer overlay variant types
  */
-const drawerOverlayVariants = cva(
-  [
-    'fixed inset-0 z-50 bg-background/80 backdrop-blur-sm',
-    'data-[state=open]:animate-in data-[state=closed]:animate-out',
-    'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-background/80',
-        dark: 'bg-background/90',
-        light: 'bg-background/60',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+export type DrawerOverlayVariant = 'default' | 'dark' | 'light';
 
 /**
- * Drawer content variants using semantic design tokens
+ * Drawer side types
  */
-const drawerContentVariants = cva(
-  [
-    'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out',
-    'data-[state=open]:animate-in data-[state=closed]:animate-out',
-    'data-[state=closed]:duration-300 data-[state=open]:duration-500',
-  ],
-  {
-    variants: {
-      side: {
-        top: [
-          'inset-x-0 top-0 border-b border-border',
-          'data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
-        ],
-        bottom: [
-          'inset-x-0 bottom-0 border-t border-border',
-          'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
-        ],
-        left: [
-          'inset-y-0 left-0 h-full w-3/4 border-r border-border',
-          'data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left',
-          'sm:max-w-sm',
-        ],
-        right: [
-          'inset-y-0 right-0 h-full w-3/4 border-l border-border',
-          'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right',
-          'sm:max-w-sm',
-        ],
-      },
-      size: {
-        sm: '',
-        default: '',
-        lg: '',
-        xl: '',
-        full: '',
-      },
-    },
-    compoundVariants: [
-      {
-        side: ['top', 'bottom'],
-        size: 'sm',
-        class: 'max-h-48',
-      },
-      {
-        side: ['top', 'bottom'],
-        size: 'default',
-        class: 'max-h-64',
-      },
-      {
-        side: ['top', 'bottom'],
-        size: 'lg',
-        class: 'max-h-80',
-      },
-      {
-        side: ['top', 'bottom'],
-        size: 'xl',
-        class: 'max-h-96',
-      },
-      {
-        side: ['top', 'bottom'],
-        size: 'full',
-        class: 'max-h-screen',
-      },
-      {
-        side: ['left', 'right'],
-        size: 'sm',
-        class: 'w-1/2 sm:max-w-xs',
-      },
-      {
-        side: ['left', 'right'],
-        size: 'default',
-        class: 'w-3/4 sm:max-w-sm',
-      },
-      {
-        side: ['left', 'right'],
-        size: 'lg',
-        class: 'w-4/5 sm:max-w-md',
-      },
-      {
-        side: ['left', 'right'],
-        size: 'xl',
-        class: 'w-5/6 sm:max-w-lg',
-      },
-      {
-        side: ['left', 'right'],
-        size: 'full',
-        class: 'w-full sm:max-w-none',
-      },
-    ],
-    defaultVariants: {
-      side: 'right',
-      size: 'default',
-    },
-  }
-);
+export type DrawerSide = 'top' | 'bottom' | 'left' | 'right';
 
 /**
- * Drawer header variants using semantic design tokens
+ * Drawer size types
  */
-const drawerHeaderVariants = cva('flex flex-col space-y-1.5 text-center sm:text-left', {
-  variants: {
-    size: {
-      sm: 'pb-2',
-      default: 'pb-4',
-      lg: 'pb-6',
-    },
-  },
-  defaultVariants: {
-    size: 'default',
-  },
-});
+export type DrawerSize = 'sm' | 'default' | 'lg' | 'xl' | 'full';
 
 /**
  * Drawer component props interface
@@ -152,9 +29,9 @@ const drawerHeaderVariants = cva('flex flex-col space-y-1.5 text-center sm:text-
 export interface DrawerProps extends HTMLAttributes<HTMLDivElement> {
   readonly isOpen?: boolean;
   readonly onClose?: () => void;
-  readonly side?: 'top' | 'bottom' | 'left' | 'right';
-  readonly size?: 'sm' | 'default' | 'lg' | 'xl' | 'full';
-  readonly overlayVariant?: 'default' | 'dark' | 'light';
+  readonly side?: DrawerSide;
+  readonly size?: DrawerSize;
+  readonly overlayVariant?: DrawerOverlayVariant;
   readonly closeOnOverlayClick?: boolean;
   readonly closeOnEscape?: boolean;
   readonly showCloseButton?: boolean;
@@ -189,7 +66,7 @@ export interface DrawerFooterProps extends HTMLAttributes<HTMLDivElement> {
  * Close icon component
  */
 const CloseIcon = (): React.ReactElement => (
-  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -199,18 +76,7 @@ const CloseIcon = (): React.ReactElement => (
 );
 
 /**
- * Enhanced Drawer component
- * @param isOpen - Whether drawer is open
- * @param onClose - Close handler
- * @param side - Side to slide out from
- * @param size - Drawer size
- * @param overlayVariant - Overlay styling variant
- * @param closeOnOverlayClick - Close when clicking overlay
- * @param closeOnEscape - Close on escape key
- * @param showCloseButton - Show close button
- * @param children - Drawer content
- * @param className - Additional CSS classes
- * @returns Enhanced Drawer JSX element
+ * Enhanced Drawer component with token-based styling
  */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
@@ -225,10 +91,13 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       showCloseButton = true,
       children,
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, getToken } = useTokens();
+
     const handleOverlayClick = (): void => {
       if (closeOnOverlayClick && onClose) {
         onClose();
@@ -245,11 +114,148 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       return <></>;
     }
 
+    // Get shadows
+    const shadows = {
+      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    };
+
+    // Overlay styles
+    const getOverlayStyles = (): React.CSSProperties => {
+      const baseOpacity = overlayVariant === 'dark' ? 0.9 : overlayVariant === 'light' ? 0.6 : 0.8;
+      return {
+        position: 'fixed',
+        inset: 0,
+        zIndex: 50,
+        backgroundColor: `${colors.background?.default || '#ffffff'}${Math.round(baseOpacity * 255).toString(16).padStart(2, '0')}`,
+        backdropFilter: 'blur(4px)',
+        transition: 'all 150ms ease-in-out',
+      };
+    };
+
+    // Side positioning styles
+    const getSideStyles = (): React.CSSProperties => {
+      switch (side) {
+        case 'top':
+          return {
+            top: 0,
+            left: 0,
+            right: 0,
+            borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'bottom':
+          return {
+            bottom: 0,
+            left: 0,
+            right: 0,
+            borderTop: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'left':
+          return {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            height: '100%',
+            borderRight: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'right':
+          return {
+            top: 0,
+            bottom: 0,
+            right: 0,
+            height: '100%',
+            borderLeft: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        default:
+          return {};
+      }
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      if (side === 'top' || side === 'bottom') {
+        switch (size) {
+          case 'sm':
+            return { maxHeight: '12rem' }; // 192px
+          case 'lg':
+            return { maxHeight: '20rem' }; // 320px
+          case 'xl':
+            return { maxHeight: '24rem' }; // 384px
+          case 'full':
+            return { maxHeight: '100vh' };
+          default:
+            return { maxHeight: '16rem' }; // 256px
+        }
+      } else {
+        switch (size) {
+          case 'sm':
+            return { width: '50%', maxWidth: '20rem' }; // max-w-xs
+          case 'lg':
+            return { width: '80%', maxWidth: '28rem' }; // max-w-md
+          case 'xl':
+            return { width: '83.333333%', maxWidth: '32rem' }; // max-w-lg
+          case 'full':
+            return { width: '100%', maxWidth: 'none' };
+          default:
+            return { width: '75%', maxWidth: '24rem' }; // max-w-sm
+        }
+      }
+    };
+
+    // Close button positioning
+    const getCloseButtonPosition = (): React.CSSProperties => {
+      const baseStyles = {
+        position: 'absolute' as const,
+        zIndex: 10,
+      };
+
+      switch (side) {
+        case 'top':
+        case 'bottom':
+          return { ...baseStyles, right: spacing[4], top: spacing[4] };
+        case 'left':
+          return { ...baseStyles, right: spacing[4], top: spacing[4] };
+        case 'right':
+          return { ...baseStyles, left: spacing[4], top: spacing[4] };
+        default:
+          return { ...baseStyles, right: spacing[4], top: spacing[4] };
+      }
+    };
+
+    // Content styles
+    const contentStyles: React.CSSProperties = {
+      position: 'fixed',
+      zIndex: 50,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[4],
+      backgroundColor: colors.background?.default || '#ffffff',
+      padding: spacing[6],
+      boxShadow: shadows.lg,
+      transition: 'all 300ms ease-in-out',
+      ...getSideStyles(),
+      ...getSizeStyles(),
+      ...style,
+    };
+
+    // Close button styles
+    const closeButtonStyles: React.CSSProperties = {
+      ...getCloseButtonPosition(),
+      opacity: 0.7,
+      cursor: 'pointer',
+      transition: 'opacity 150ms ease-in-out',
+      outline: 'none',
+      backgroundColor: 'transparent',
+      border: 'none',
+      padding: spacing[1],
+      borderRadius: '2px',
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    };
+
     return (
       <>
         {/* Overlay */}
         <div
-          className={cn(drawerOverlayVariants({ variant: overlayVariant }))}
+          style={getOverlayStyles()}
           data-state={isOpen ? 'open' : 'closed'}
           onClick={handleOverlayClick}
           onKeyDown={handleKeyDown}
@@ -259,7 +265,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         {/* Drawer content */}
         <div
           ref={ref}
-          className={cn(drawerContentVariants({ side, size }), className)}
+          className={className}
+          style={contentStyles}
           data-state={isOpen ? 'open' : 'closed'}
           role="dialog"
           aria-modal="true"
@@ -271,16 +278,21 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
           {showCloseButton && onClose && (
             <button
               onClick={onClose}
-              className={cn(
-                'absolute z-10 rounded-sm opacity-70 ring-offset-background transition-opacity',
-                'hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-                'disabled:pointer-events-none',
-                side === 'top' && 'right-4 top-4',
-                side === 'bottom' && 'right-4 top-4',
-                side === 'left' && 'right-4 top-4',
-                side === 'right' && 'left-4 top-4'
-              )}
+              style={closeButtonStyles}
               aria-label="Lukk"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.7';
+              }}
+              onFocus={(e) => {
+                e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                e.currentTarget.style.outlineOffset = '2px';
+              }}
+              onBlur={(e) => {
+                e.currentTarget.style.outline = 'none';
+              }}
             >
               <CloseIcon />
             </button>
@@ -296,78 +308,116 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
 Drawer.displayName = 'Drawer';
 
 /**
- * DrawerHeader component
- * @param title - Header title
- * @param description - Header description
- * @param size - Header size
- * @param children - Custom header content
- * @param className - Additional CSS classes
- * @returns DrawerHeader JSX element
+ * Enhanced DrawerHeader component
  */
 export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
   (
-    { title, description, size = 'default', children, className, ...props },
+    { title, description, size = 'default', children, className, style, ...props },
     ref
-  ): React.ReactElement => (
-    <div ref={ref} className={cn(drawerHeaderVariants({ size }), className)} {...props}>
-      {children || (
-        <>
-          {title && (
-            <h2 className="text-lg font-semibold leading-none tracking-tight text-foreground">
-              {title}
-            </h2>
-          )}
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
-        </>
-      )}
-    </div>
-  )
+  ): React.ReactElement => {
+    const { colors, spacing, typography } = useTokens();
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return { paddingBottom: spacing[2] };
+        case 'lg':
+          return { paddingBottom: spacing[6] };
+        default:
+          return { paddingBottom: spacing[4] };
+      }
+    };
+
+    const headerStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[1.5],
+      textAlign: 'center',
+      ...getSizeStyles(),
+      ...style,
+      // Override text alignment for larger screens (simulate sm:text-left)
+      '@media (min-width: 640px)': {
+        textAlign: 'left',
+      },
+    };
+
+    const titleStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.lg,
+      fontWeight: typography.fontWeight.semibold,
+      lineHeight: typography.lineHeight.none,
+      letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    };
+
+    const descriptionStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    return (
+      <div ref={ref} className={className} style={headerStyles} {...props}>
+        {children || (
+          <>
+            {title && <h2 style={titleStyles}>{title}</h2>}
+            {description && <p style={descriptionStyles}>{description}</p>}
+          </>
+        )}
+      </div>
+    );
+  }
 );
 
 DrawerHeader.displayName = 'DrawerHeader';
 
 /**
- * DrawerBody component
- * @param children - Body content
- * @param className - Additional CSS classes
- * @returns DrawerBody JSX element
+ * Enhanced DrawerBody component
  */
 export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
-  ({ children, className, ...props }, ref): React.ReactElement => (
-    <div ref={ref} className={cn('flex-1 overflow-auto', className)} {...props}>
-      {children}
-    </div>
-  )
+  ({ children, className, style, ...props }, ref): React.ReactElement => {
+    const bodyStyles: React.CSSProperties = {
+      flex: 1,
+      overflow: 'auto',
+      ...style,
+    };
+
+    return (
+      <div ref={ref} className={className} style={bodyStyles} {...props}>
+        {children}
+      </div>
+    );
+  }
 );
 
 DrawerBody.displayName = 'DrawerBody';
 
 /**
- * DrawerFooter component
- * @param children - Footer content
- * @param className - Additional CSS classes
- * @returns DrawerFooter JSX element
+ * Enhanced DrawerFooter component
  */
 export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
-  ({ children, className, ...props }, ref): React.ReactElement => (
-    <div
-      ref={ref}
-      className={cn(
-        'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-4',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  )
+  ({ children, className, style, ...props }, ref): React.ReactElement => {
+    const { spacing } = useTokens();
+
+    const footerStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column-reverse',
+      paddingTop: spacing[4],
+      gap: spacing[2],
+      ...style,
+      // Override for larger screens (simulate sm:flex-row sm:justify-end sm:space-x-2)
+      '@media (min-width: 640px)': {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        gap: spacing[2],
+      },
+    };
+
+    return (
+      <div ref={ref} className={className} style={footerStyles} {...props}>
+        {children}
+      </div>
+    );
+  }
 );
 
 DrawerFooter.displayName = 'DrawerFooter';
-
-/**
- * Drawer variants type exports
- */
-export type DrawerSide = 'top' | 'bottom' | 'left' | 'right';
-export type DrawerSize = 'sm' | 'default' | 'lg' | 'xl' | 'full';
-export type DrawerOverlayVariant = VariantProps<typeof drawerOverlayVariants>['variant'];
