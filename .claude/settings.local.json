@@ -13,7 +13,12 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(cd:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(for f in *.tsx)",
+      "Bash(do if ! grep -q \"useTokens\" \"$f\")",
+      "Bash(then echo \"$f\")",
+      "Bash(fi)",
+      "Bash(npx ts-node:*)"
     ],
     "deny": []
   }

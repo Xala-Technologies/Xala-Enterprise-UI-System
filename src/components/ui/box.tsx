@@ -1,209 +1,137 @@
 /**
- * @fileoverview Box Component - Norwegian Compliance
- * @description Flexible layout container component for chat interfaces
- * @version 1.0.0
- * @compliance WCAG 2.2 AAA, Norwegian Enterprise Standards
+ * @fileoverview SSR-Safe Box Component - Production Strategy Implementation
+ * @description Flexible layout container using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../../lib/utils/cn';
+import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Box component variants using semantic design tokens
+ * Box variant types
  */
-const boxVariants = cva('relative', {
-  variants: {
-    variant: {
-      default: '',
-      outline: 'border border-border',
-      filled: 'bg-muted',
-      ghost: 'bg-transparent',
-      elevated: 'bg-background shadow-sm border border-border',
-    },
-    size: {
-      xs: 'p-1',
-      sm: 'p-2',
-      md: 'p-4',
-      lg: 'p-6',
-      xl: 'p-8',
-      none: '',
-    },
-    radius: {
-      none: 'rounded-none',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      xl: 'rounded-xl',
-      full: 'rounded-full',
-    },
-    display: {
-      block: 'block',
-      flex: 'flex',
-      inline: 'inline',
-      'inline-block': 'inline-block',
-      'inline-flex': 'inline-flex',
-      grid: 'grid',
-      hidden: 'hidden',
-    },
-    flex: {
-      initial: 'flex-initial',
-      '1': 'flex-1',
-      auto: 'flex-auto',
-      none: 'flex-none',
-    },
-    direction: {
-      row: 'flex-row',
-      'row-reverse': 'flex-row-reverse',
-      col: 'flex-col',
-      'col-reverse': 'flex-col-reverse',
-    },
-    justify: {
-      start: 'justify-start',
-      end: 'justify-end',
-      center: 'justify-center',
-      between: 'justify-between',
-      around: 'justify-around',
-      evenly: 'justify-evenly',
-    },
-    align: {
-      start: 'items-start',
-      end: 'items-end',
-      center: 'items-center',
-      baseline: 'items-baseline',
-      stretch: 'items-stretch',
-    },
-    gap: {
-      none: 'gap-0',
-      xs: 'gap-1',
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6',
-      xl: 'gap-8',
-    },
-    wrap: {
-      nowrap: 'flex-nowrap',
-      wrap: 'flex-wrap',
-      'wrap-reverse': 'flex-wrap-reverse',
-    },
-    overflow: {
-      visible: 'overflow-visible',
-      hidden: 'overflow-hidden',
-      scroll: 'overflow-scroll',
-      auto: 'overflow-auto',
-      'x-hidden': 'overflow-x-hidden',
-      'y-hidden': 'overflow-y-hidden',
-      'x-scroll': 'overflow-x-scroll',
-      'y-scroll': 'overflow-y-scroll',
-      'x-auto': 'overflow-x-auto',
-      'y-auto': 'overflow-y-auto',
-    },
-    position: {
-      static: 'static',
-      relative: 'relative',
-      absolute: 'absolute',
-      fixed: 'fixed',
-      sticky: 'sticky',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'none',
-    radius: 'md',
-    display: 'block',
-    flex: 'initial',
-    direction: 'row',
-    justify: 'start',
-    align: 'start',
-    gap: 'none',
-    wrap: 'nowrap',
-    overflow: 'visible',
-    position: 'relative',
-  },
-});
+export type BoxVariant = 'default' | 'outline' | 'filled' | 'ghost' | 'elevated';
+
+/**
+ * Box size types
+ */
+export type BoxSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none';
+
+/**
+ * Box radius types
+ */
+export type BoxRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
+
+/**
+ * Box display types
+ */
+export type BoxDisplay = 'block' | 'flex' | 'inline' | 'inline-block' | 'inline-flex' | 'grid' | 'hidden';
+
+/**
+ * Box flex types
+ */
+export type BoxFlex = 'initial' | '1' | 'auto' | 'none';
+
+/**
+ * Box direction types
+ */
+export type BoxDirection = 'row' | 'row-reverse' | 'col' | 'col-reverse';
+
+/**
+ * Box justify types
+ */
+export type BoxJustify = 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly';
+
+/**
+ * Box align types
+ */
+export type BoxAlign = 'start' | 'end' | 'center' | 'baseline' | 'stretch';
+
+/**
+ * Box gap types
+ */
+export type BoxGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Box wrap types
+ */
+export type BoxWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
+
+/**
+ * Box overflow types
+ */
+export type BoxOverflow = 'visible' | 'hidden' | 'scroll' | 'auto' | 'x-hidden' | 'y-hidden' | 'x-scroll' | 'y-scroll' | 'x-auto' | 'y-auto';
+
+/**
+ * Box position types
+ */
+export type BoxPosition = 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
 
 /**
  * Box Props interface
  */
-export interface BoxProps extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof boxVariants> {
+export interface BoxProps extends HTMLAttributes<HTMLDivElement> {
+  /** Box variant */
+  variant?: BoxVariant;
+  /** Box padding size */
+  size?: BoxSize;
+  /** Border radius */
+  radius?: BoxRadius;
+  /** Display type */
+  display?: BoxDisplay;
+  /** Flex value */
+  flex?: BoxFlex;
+  /** Flex direction */
+  direction?: BoxDirection;
+  /** Justify content */
+  justify?: BoxJustify;
+  /** Align items */
+  align?: BoxAlign;
+  /** Gap between items */
+  gap?: BoxGap;
+  /** Flex wrap */
+  wrap?: BoxWrap;
+  /** Overflow behavior */
+  overflow?: BoxOverflow;
+  /** Position type */
+  position?: BoxPosition;
   /** Child content */
-  readonly children?: React.ReactNode;
-  /** Custom element type - limited to common HTML elements */
-  readonly as?:
-    | 'div'
-    | 'section'
-    | 'article'
-    | 'main'
-    | 'aside'
-    | 'header'
-    | 'footer'
-    | 'nav'
-    | 'span';
+  children?: React.ReactNode;
+  /** Custom element type */
+  as?: 'div' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer' | 'nav' | 'span';
   /** Custom width */
-  readonly w?: string;
+  w?: string;
   /** Custom height */
-  readonly h?: string;
+  h?: string;
   /** Custom max width */
-  readonly maxW?: string;
+  maxW?: string;
   /** Custom max height */
-  readonly maxH?: string;
+  maxH?: string;
   /** Custom min width */
-  readonly minW?: string;
+  minW?: string;
   /** Custom min height */
-  readonly minH?: string;
+  minH?: string;
 }
 
 /**
  * Box component for flexible layout containers
- *
- * @example
- * ```tsx
- * // Basic container
- * <Box size="md" variant="outline">
- *   <p>Content here</p>
- * </Box>
- *
- * // Flex container
- * <Box display="flex" direction="col" gap="md" align="center">
- *   <div>Item 1</div>
- *   <div>Item 2</div>
- * </Box>
- *
- * // Chat message container
- * <Box
- *   variant="elevated"
- *   size="sm"
- *   display="flex"
- *   direction="col"
- *   gap="xs"
- *   maxW="lg"
- * >
- *   <span>User message content</span>
- * </Box>
- *
- * // Custom element
- * <Box as="article" variant="filled" size="lg">
- *   <h2>Article Title</h2>
- *   <p>Article content...</p>
- * </Box>
- * ```
  */
 export const Box = forwardRef<HTMLDivElement, BoxProps>(
   (
     {
-      className,
-      variant,
-      size,
-      radius,
-      display,
-      flex,
-      direction,
-      justify,
-      align,
-      gap,
-      wrap,
-      overflow,
-      position,
+      variant = 'default',
+      size = 'none',
+      radius = 'md',
+      display = 'block',
+      flex = 'initial',
+      direction = 'row',
+      justify = 'start',
+      align = 'start',
+      gap = 'none',
+      wrap = 'nowrap',
+      overflow = 'visible',
+      position = 'relative',
       children,
       as: Component = 'div',
       w,
@@ -212,12 +140,195 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       maxH,
       minW,
       minH,
+      className,
       style,
       ...props
     },
     ref
   ) => {
-    const customStyles = {
+    const { colors, spacing, typography, shadows, getToken } = useTokens();
+    
+    // Get border radius values
+    const borderRadiusMap = {
+      none: '0',
+      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
+      xl: (getToken('borderRadius.xl') as string) || '0.75rem',
+      full: (getToken('borderRadius.full') as string) || '9999px',
+    };
+    
+    // Get variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'outline':
+          return {
+            border: `1px solid ${colors.border?.default || colors.neutral?.[200]}`,
+          };
+        case 'filled':
+          return {
+            backgroundColor: colors.background?.subtle || colors.neutral?.[50],
+          };
+        case 'ghost':
+          return {
+            backgroundColor: 'transparent',
+          };
+        case 'elevated':
+          return {
+            backgroundColor: colors.background?.default || '#ffffff',
+            boxShadow: shadows?.sm || '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+            border: `1px solid ${colors.border?.default || colors.neutral?.[200]}`,
+          };
+        default:
+          return {};
+      }
+    };
+    
+    // Get padding based on size
+    const getPadding = (): string | undefined => {
+      switch (size) {
+        case 'xs':
+          return spacing[1];
+        case 'sm':
+          return spacing[2];
+        case 'md':
+          return spacing[4];
+        case 'lg':
+          return spacing[6];
+        case 'xl':
+          return spacing[8];
+        case 'none':
+        default:
+          return undefined;
+      }
+    };
+    
+    // Get gap value
+    const getGapValue = (): string => {
+      switch (gap) {
+        case 'xs':
+          return spacing[1];
+        case 'sm':
+          return spacing[2];
+        case 'md':
+          return spacing[4];
+        case 'lg':
+          return spacing[6];
+        case 'xl':
+          return spacing[8];
+        case 'none':
+        default:
+          return '0';
+      }
+    };
+    
+    // Get flex direction value
+    const getFlexDirection = (): React.CSSProperties['flexDirection'] => {
+      switch (direction) {
+        case 'row-reverse':
+          return 'row-reverse';
+        case 'col':
+          return 'column';
+        case 'col-reverse':
+          return 'column-reverse';
+        default:
+          return 'row';
+      }
+    };
+    
+    // Get justify content value
+    const getJustifyContent = (): React.CSSProperties['justifyContent'] => {
+      switch (justify) {
+        case 'end':
+          return 'flex-end';
+        case 'center':
+          return 'center';
+        case 'between':
+          return 'space-between';
+        case 'around':
+          return 'space-around';
+        case 'evenly':
+          return 'space-evenly';
+        default:
+          return 'flex-start';
+      }
+    };
+    
+    // Get align items value
+    const getAlignItems = (): React.CSSProperties['alignItems'] => {
+      switch (align) {
+        case 'end':
+          return 'flex-end';
+        case 'center':
+          return 'center';
+        case 'baseline':
+          return 'baseline';
+        case 'stretch':
+          return 'stretch';
+        default:
+          return 'flex-start';
+      }
+    };
+    
+    // Get overflow values
+    const getOverflowStyles = (): React.CSSProperties => {
+      switch (overflow) {
+        case 'hidden':
+          return { overflow: 'hidden' };
+        case 'scroll':
+          return { overflow: 'scroll' };
+        case 'auto':
+          return { overflow: 'auto' };
+        case 'x-hidden':
+          return { overflowX: 'hidden' };
+        case 'y-hidden':
+          return { overflowY: 'hidden' };
+        case 'x-scroll':
+          return { overflowX: 'scroll' };
+        case 'y-scroll':
+          return { overflowY: 'scroll' };
+        case 'x-auto':
+          return { overflowX: 'auto' };
+        case 'y-auto':
+          return { overflowY: 'auto' };
+        default:
+          return { overflow: 'visible' };
+      }
+    };
+    
+    // Get flex value
+    const getFlexValue = (): string | number => {
+      switch (flex) {
+        case '1':
+          return 1;
+        case 'auto':
+          return 'auto';
+        case 'none':
+          return 'none';
+        default:
+          return 'initial';
+      }
+    };
+    // Build box styles
+    const boxStyles: React.CSSProperties = {
+      position,
+      display,
+      borderRadius: borderRadiusMap[radius],
+      padding: getPadding(),
+      fontFamily: typography.fontFamily.sans.join(', '),
+      ...getVariantStyles(),
+      ...(display === 'flex' || display === 'inline-flex' ? {
+        flexDirection: getFlexDirection(),
+        justifyContent: getJustifyContent(),
+        alignItems: getAlignItems(),
+        gap: getGapValue(),
+        flexWrap: wrap,
+        flex: getFlexValue(),
+      } : {}),
+      ...(display === 'grid' ? {
+        gap: getGapValue(),
+      } : {}),
+      ...getOverflowStyles(),
       ...(w && { width: w }),
       ...(h && { height: h }),
       ...(maxW && { maxWidth: maxW }),
@@ -230,24 +341,8 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     return (
       <Component
         ref={ref}
-        className={cn(
-          boxVariants({
-            variant,
-            size,
-            radius,
-            display,
-            flex,
-            direction,
-            justify,
-            align,
-            gap,
-            wrap,
-            overflow,
-            position,
-          }),
-          className
-        )}
-        style={customStyles}
+        className={className}
+        style={boxStyles}
         {...props}
       >
         {children}
@@ -257,8 +352,3 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
 );
 
 Box.displayName = 'Box';
-
-/**
- * Box component variants export
- */
-export { boxVariants };

@@ -200,8 +200,8 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       items,
       variant = 'default',
       size = 'md',
-      multiple: _multiple = false,
-      collapsible: _collapsible = true,
+      multiple = false,
+      collapsible = true,
       norwegian,
       className,
       children,
@@ -209,7 +209,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const _tokens = useTokens();
     
     // If items are provided, render them automatically
     if (items) {
@@ -221,7 +221,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           aria-label={norwegian?.accessibilityLabel || 'Accordion'}
           {...props}
         >
-          {items.map((item, __index) => (
+          {items.map((item) => (
             <AccordionItem key={item.id} value={item.id} variant={variant} disabled={item.disabled}>
               <AccordionTrigger
                 variant={variant}
@@ -275,7 +275,7 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
     { value, variant = 'default', disabled = false, children, className, ...props },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const _tokens = useTokens();
     return (
       <div
         ref={ref}
@@ -320,7 +320,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
     },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const _tokens = useTokens();
     
     return (
       <button
@@ -377,7 +377,7 @@ export const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps
     { children, variant = 'default', size = 'md', state, isOpen = false, className, ...props },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const _tokens = useTokens();
     return (
       <div
         ref={ref}

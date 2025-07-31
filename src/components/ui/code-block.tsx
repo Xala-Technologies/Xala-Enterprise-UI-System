@@ -1,63 +1,27 @@
 /**
- * @fileoverview CodeBlock Component - Norwegian Compliance
- * @description Code display component with syntax highlighting for AI-generated code
- * @version 1.0.0
- * @compliance WCAG 2.2 AAA, Norwegian Enterprise Standards
+ * @fileoverview SSR-Safe CodeBlock Component - Production Strategy Implementation
+ * @description Code display component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useState, type HTMLAttributes } from 'react';
-import { cn } from '../../lib/utils/cn';
-
-/**
- * CodeBlock component variants using semantic design tokens
- */
-const codeBlockVariants = cva('relative overflow-hidden rounded-lg border bg-muted/30', {
-  variants: {
-    variant: {
-      default: 'bg-muted/30 border-border',
-      filled: 'bg-muted border-border',
-      outline: 'bg-background border-2 border-border',
-      ghost: 'bg-transparent border-transparent',
-    },
-    size: {
-      sm: 'text-xs',
-      md: 'text-sm',
-      lg: 'text-base',
-    },
-    maxHeight: {
-      none: '',
-      sm: 'max-h-32',
-      md: 'max-h-64',
-      lg: 'max-h-96',
-      xl: 'max-h-[600px]',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'md',
-    maxHeight: 'lg',
-  },
-});
+import React, { forwardRef, useState, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * CodeBlock header variants
+ * CodeBlock variant types
  */
-const codeBlockHeaderVariants = cva(
-  'flex items-center justify-between px-4 py-2 border-b border-border bg-muted/50',
-  {
-    variants: {
-      variant: {
-        default: 'bg-muted/50 border-border',
-        filled: 'bg-muted border-border',
-        minimal: 'bg-transparent border-transparent',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+export type CodeBlockVariant = 'default' | 'filled' | 'outline' | 'ghost';
+
+/**
+ * CodeBlock size types
+ */
+export type CodeBlockSize = 'sm' | 'md' | 'lg';
+
+/**
+ * CodeBlock max height types
+ */
+export type CodeBlockMaxHeight = 'none' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Language configuration for syntax highlighting
@@ -90,9 +54,7 @@ const languageConfig = {
 /**
  * CodeBlock Props interface
  */
-export interface CodeBlockProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onCopy'>,
-    VariantProps<typeof codeBlockVariants> {
+export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onCopy'> {
   /** Code content to display */
   readonly code: string;
   /** Programming language for syntax highlighting */
@@ -121,6 +83,12 @@ export interface CodeBlockProps
   readonly collapsible?: boolean;
   /** Initially collapsed */
   readonly defaultCollapsed?: boolean;
+  /** CodeBlock styling variant */
+  readonly variant?: CodeBlockVariant;
+  /** CodeBlock size */
+  readonly size?: CodeBlockSize;
+  /** Maximum height constraint */
+  readonly maxHeight?: CodeBlockMaxHeight;
 }
 
 /**
@@ -130,6 +98,7 @@ const CopyButton: React.FC<{
   code: string;
   onCopy?: (code: string) => void;
 }> = ({ code, onCopy }) => {
+  const { colors, spacing, typography, getToken } = useTokens();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (): Promise<void> => {
@@ -139,30 +108,59 @@ const CopyButton: React.FC<{
       onCopy?.(code);
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
-      console.error('Failed to copy code:', error);
+      // Copy failed - handled silently
     }
+  };
+
+  const borderRadius = {
+    md: (getToken('borderRadius.md') as string) || '0.375rem',
+  };
+
+  const buttonStyles: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: spacing[2],
+    padding: `${spacing[1]} ${spacing[2]}`,
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.medium,
+    transition: 'all 150ms ease-in-out',
+    backgroundColor: colors.background?.default || '#ffffff',
+    border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+    borderRadius: borderRadius.md,
+    color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    cursor: 'pointer',
+    outline: 'none',
   };
 
   return (
     <button
       onClick={handleCopy}
-      className={cn(
-        'inline-flex items-center gap-2 px-2 py-1 text-xs font-medium transition-colors',
-        'bg-background hover:bg-muted border border-border rounded-md',
-        'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
-      )}
+      style={buttonStyles}
       aria-label={copied ? 'Kopiert!' : 'Kopier kode'}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+      }}
+      onFocus={(e) => {
+        e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+        e.currentTarget.style.outlineOffset = '2px';
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.outline = 'none';
+      }}
     >
       {copied ? (
         <>
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           Kopiert!
         </>
       ) : (
         <>
-          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -185,6 +183,8 @@ const DownloadButton: React.FC<{
   filename: string;
   onDownload?: (code: string, filename: string) => void;
 }> = ({ code, filename, onDownload }) => {
+  const { colors, spacing, typography, getToken } = useTokens();
+
   const handleDownload = (): void => {
     try {
       const blob = new Blob([code], { type: 'text/plain' });
@@ -198,21 +198,50 @@ const DownloadButton: React.FC<{
       URL.revokeObjectURL(url);
       onDownload?.(code, filename);
     } catch (error) {
-      console.error('Failed to download code:', error);
+      // Download failed - handled silently
     }
+  };
+
+  const borderRadius = {
+    md: (getToken('borderRadius.md') as string) || '0.375rem',
+  };
+
+  const buttonStyles: React.CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: spacing[2],
+    padding: `${spacing[1]} ${spacing[2]}`,
+    fontSize: typography.fontSize.xs,
+    fontWeight: typography.fontWeight.medium,
+    transition: 'all 150ms ease-in-out',
+    backgroundColor: colors.background?.default || '#ffffff',
+    border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+    borderRadius: borderRadius.md,
+    color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    cursor: 'pointer',
+    outline: 'none',
   };
 
   return (
     <button
       onClick={handleDownload}
-      className={cn(
-        'inline-flex items-center gap-2 px-2 py-1 text-xs font-medium transition-colors',
-        'bg-background hover:bg-muted border border-border rounded-md',
-        'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
-      )}
+      style={buttonStyles}
       aria-label={`Last ned ${filename}`}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+      }}
+      onFocus={(e) => {
+        e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+        e.currentTarget.style.outlineOffset = '2px';
+      }}
+      onBlur={(e) => {
+        e.currentTarget.style.outline = 'none';
+      }}
     >
-      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -231,62 +260,52 @@ const DownloadButton: React.FC<{
 const LineNumbers: React.FC<{
   lines: number;
   highlightLines?: number[];
-}> = ({ lines, highlightLines = [] }) => (
-  <div className="flex flex-col text-xs text-muted-foreground select-none pr-4 border-r border-border">
-    {Array.from({ length: lines }, (_, i) => (
-      <span
-        key={i + 1}
-        className={cn(
-          'min-h-[1.25rem] leading-5 px-2 py-0',
-          highlightLines.includes(i + 1) && 'bg-accent/20 text-accent-foreground'
-        )}
-      >
-        {i + 1}
-      </span>
-    ))}
-  </div>
-);
+}> = ({ lines, highlightLines = [] }) => {
+  const { colors, spacing, typography } = useTokens();
+  
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      userSelect: 'none',
+      paddingRight: spacing[4],
+      borderRight: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+    }}>
+      {Array.from({ length: lines }, (_, i) => (
+        <span
+          key={i + 1}
+          style={{
+            minHeight: '1.25rem',
+            lineHeight: '1.25',
+            paddingLeft: spacing[2],
+            paddingRight: spacing[2],
+            paddingTop: 0,
+            paddingBottom: 0,
+            backgroundColor: highlightLines.includes(i + 1) 
+              ? `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}33` 
+              : 'transparent',
+            color: highlightLines.includes(i + 1) 
+              ? (colors.accent?.foreground || colors.text?.primary || '#111827')
+              : 'inherit',
+          }}
+        >
+          {i + 1}
+        </span>
+      ))}
+    </div>
+  );
+};
 
 /**
  * CodeBlock component for displaying code with syntax highlighting
- *
- * @example
- * ```tsx
- * // Basic code block
- * <CodeBlock
- *   code={`function hello() {
- *   console.log("Hello, world!");
- * }`}
- *   language="javascript"
- *   showCopy
- * />
- *
- * // Code block with filename and line numbers
- * <CodeBlock
- *   code={codeContent}
- *   language="typescript"
- *   filename="example.ts"
- *   showLineNumbers
- *   showCopy
- *   showDownload
- * />
- *
- * // Collapsible code block
- * <CodeBlock
- *   code={longCode}
- *   language="python"
- *   collapsible
- *   defaultCollapsed
- * />
- * ```
  */
 export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
   (
     {
       className,
-      variant,
-      size,
-      maxHeight,
+      style,
       code,
       language = 'text',
       showLanguage = true,
@@ -301,48 +320,175 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
       highlightLines = [],
       collapsible = false,
       defaultCollapsed = false,
+      variant = 'default',
+      size = 'md',
+      maxHeight = 'lg',
       ...props
     },
     ref
   ) => {
+    const { colors, spacing, typography, getToken } = useTokens();
     const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+    
     const languageInfo = languageConfig[language] || languageConfig.text;
     const displayFilename = filename || `code${languageInfo.extension}`;
     const codeLines = code.split('\n');
     const lineCount = codeLines.length;
 
+    // Get border radius
+    const borderRadius = {
+      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return { fontSize: typography.fontSize.xs };
+        case 'lg':
+          return { fontSize: typography.fontSize.base };
+        default:
+          return { fontSize: typography.fontSize.sm };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'filled':
+          return {
+            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
+            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'outline':
+          return {
+            backgroundColor: colors.background?.default || '#ffffff',
+            border: `2px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+        case 'ghost':
+          return {
+            backgroundColor: 'transparent',
+            border: '1px solid transparent',
+          };
+        default:
+          return {
+            backgroundColor: `${colors.neutral?.[100] || '#f3f4f6'}4D`, // 30% opacity
+            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+          };
+      }
+    };
+
+    // Max height styles
+    const getMaxHeightStyles = (): React.CSSProperties => {
+      switch (maxHeight) {
+        case 'sm':
+          return { maxHeight: '8rem' };
+        case 'md':
+          return { maxHeight: '16rem' };
+        case 'lg':
+          return { maxHeight: '24rem' };
+        case 'xl':
+          return { maxHeight: '600px' };
+        default:
+          return {};
+      }
+    };
+
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      position: 'relative',
+      overflow: 'hidden',
+      borderRadius: borderRadius.lg,
+      ...getVariantStyles(),
+      ...getSizeStyles(),
+      ...getMaxHeightStyles(),
+      ...style,
+    };
+
+    // Header styles
+    const headerStyles: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: `${spacing[2]} ${spacing[4]}`,
+      borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      backgroundColor: `${colors.neutral?.[100] || '#f3f4f6'}80`, // 50% opacity
+    };
+
+    const collapsibleButtonStyles: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: spacing[1],
+      padding: `${spacing[1]} ${spacing[2]}`,
+      fontSize: typography.fontSize.xs,
+      fontWeight: typography.fontWeight.medium,
+      transition: 'all 150ms ease-in-out',
+      backgroundColor: colors.background?.default || '#ffffff',
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      borderRadius: borderRadius.md,
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      cursor: 'pointer',
+      outline: 'none',
+    };
+
     return (
       <div
         ref={ref}
-        className={cn(codeBlockVariants({ variant, size, maxHeight }), className)}
+        className={className}
+        style={containerStyles}
         {...props}
       >
         {/* Header */}
         {(showLanguage || showCopy || showDownload || filename || header || collapsible) && (
-          <div className={cn(codeBlockHeaderVariants({ variant: 'default' }))}>
-            <div className="flex items-center gap-3">
-              {filename && <span className="text-sm font-medium text-foreground">{filename}</span>}
+          <div style={headerStyles}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+              {filename && (
+                <span style={{
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.medium,
+                  color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+                }}>{filename}</span>
+              )}
               {showLanguage && !filename && (
-                <span className="text-xs font-medium text-muted-foreground">
+                <span style={{
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                }}>
                   {languageInfo.label}
                 </span>
               )}
               {header}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
               {collapsible && (
                 <button
                   onClick={() => setIsCollapsed(!isCollapsed)}
-                  className={cn(
-                    'inline-flex items-center gap-1 px-2 py-1 text-xs font-medium transition-colors',
-                    'bg-background hover:bg-muted border border-border rounded-md',
-                    'focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
-                  )}
+                  style={collapsibleButtonStyles}
                   aria-label={isCollapsed ? 'Vis kode' : 'Skjul kode'}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                    e.currentTarget.style.outlineOffset = '2px';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.outline = 'none';
+                  }}
                 >
                   <svg
-                    className={cn('w-3 h-3 transition-transform', isCollapsed && 'rotate-180')}
+                    style={{
+                      width: '12px',
+                      height: '12px',
+                      transition: 'transform 150ms ease-in-out',
+                      transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -369,35 +515,53 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
 
         {/* Code content */}
         {!isCollapsed && (
-          <div className="relative">
-            <div
-              className={cn(
-                'overflow-auto',
-                maxHeight && 'scrollbar-thin scrollbar-thumb-border scrollbar-track-background'
-              )}
-            >
-              <div className="flex">
+          <div style={{ position: 'relative' }}>
+            <div style={{
+              overflow: 'auto',
+              ...(maxHeight !== 'none' && {
+                scrollbarWidth: 'thin',
+                scrollbarColor: `${colors.border?.default || '#e5e7eb'} ${colors.background?.default || '#ffffff'}`,
+              }),
+            }}>
+              <div style={{ display: 'flex' }}>
                 {/* Line numbers */}
                 {showLineNumbers && (
                   <LineNumbers lines={lineCount} highlightLines={highlightLines} />
                 )}
 
                 {/* Code */}
-                <pre
-                  className={cn(
-                    'flex-1 p-4 m-0 bg-transparent text-foreground font-mono leading-relaxed',
-                    !wrap && 'overflow-x-auto',
-                    wrap && 'whitespace-pre-wrap break-words'
-                  )}
-                >
-                  <code className={cn('block', `language-${language}`)}>
+                <pre style={{
+                  flex: 1,
+                  padding: spacing[4],
+                  margin: 0,
+                  backgroundColor: 'transparent',
+                  color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+                  fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
+                  lineHeight: typography.lineHeight.relaxed,
+                  overflow: wrap ? 'visible' : 'auto',
+                  whiteSpace: wrap ? 'pre-wrap' : 'pre',
+                  wordBreak: wrap ? 'break-word' : 'normal',
+                }}>
+                  <code style={{ display: 'block' }}>
                     {codeLines.map((line, index) => (
                       <span
                         key={index}
-                        className={cn(
-                          'block min-h-[1.25rem]',
-                          highlightLines.includes(index + 1) && 'bg-accent/10 px-2 -mx-2 rounded'
-                        )}
+                        style={{
+                          display: 'block',
+                          minHeight: '1.25rem',
+                          backgroundColor: highlightLines.includes(index + 1) 
+                            ? `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}1A` // 10% opacity
+                            : 'transparent',
+                          padding: highlightLines.includes(index + 1) 
+                            ? `0 ${spacing[2]}` 
+                            : '0',
+                          margin: highlightLines.includes(index + 1) 
+                            ? `0 -${spacing[2]}` 
+                            : '0',
+                          borderRadius: highlightLines.includes(index + 1) 
+                            ? borderRadius.md 
+                            : '0',
+                        }}
                       >
                         {line || '\n'}
                       </span>
@@ -416,6 +580,6 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
 CodeBlock.displayName = 'CodeBlock';
 
 /**
- * CodeBlock component variants export
+ * Export language configuration
  */
-export { codeBlockHeaderVariants, codeBlockVariants, languageConfig };
+export { languageConfig };

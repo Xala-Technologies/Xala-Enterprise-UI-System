@@ -1,62 +1,22 @@
 /**
- * Calendar component with enterprise compliance and Norwegian holidays support
- * Uses semantic design tokens and pure presentational patterns
+ * @fileoverview SSR-Safe Calendar Component - Production Strategy Implementation
+ * @description Calendar component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
+import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Calendar variants using semantic design tokens
+ * Calendar variant types
  */
-const calendarVariants = cva('p-4 border border-border rounded-md bg-background text-foreground', {
-  variants: {
-    variant: {
-      default: 'border-border',
-      compact: 'p-2',
-      elevated: 'shadow-lg border-border',
-    },
-    size: {
-      sm: 'text-xs',
-      default: 'text-sm',
-      lg: 'text-base',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'default',
-  },
-});
+export type CalendarVariant = 'default' | 'compact' | 'elevated';
 
 /**
- * Calendar day variants using semantic design tokens
+ * Calendar size types
  */
-const calendarDayVariants = cva(
-  [
-    'h-8 w-8 rounded-md flex items-center justify-center text-sm transition-colors',
-    'hover:bg-accent hover:text-accent-foreground',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-  ],
-  {
-    variants: {
-      state: {
-        default: 'text-foreground',
-        selected: 'bg-primary text-primary-foreground hover:bg-primary/80',
-        today: 'bg-accent text-accent-foreground font-medium',
-        otherMonth: 'text-muted-foreground/50',
-        disabled: 'text-muted-foreground/30 cursor-not-allowed hover:bg-transparent',
-        holiday: 'text-destructive font-medium',
-        weekend: 'text-muted-foreground',
-      },
-    },
-    defaultVariants: {
-      state: 'default',
-    },
-  }
-);
+export type CalendarSize = 'sm' | 'default' | 'lg';
 
 /**
  * Norwegian holiday interface
@@ -87,9 +47,7 @@ export interface CalendarDate {
 /**
  * Calendar component props interface
  */
-export interface CalendarProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof calendarVariants> {
+export interface CalendarProps extends HTMLAttributes<HTMLDivElement> {
   readonly selectedDate?: Date;
   readonly currentMonth?: Date;
   readonly minDate?: Date;
@@ -100,6 +58,8 @@ export interface CalendarProps
   readonly showOtherMonthDays?: boolean;
   readonly onDateSelect?: (_date: Date) => void;
   readonly onMonthChange?: (_month: Date) => void;
+  readonly variant?: CalendarVariant;
+  readonly size?: CalendarSize;
 }
 
 /**
@@ -234,7 +194,7 @@ const getWeekNumber = (date: Date): number => {
  * Navigation icons
  */
 const ChevronLeftIcon = (): React.ReactElement => (
-  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
     <path
       fillRule="evenodd"
       d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -244,7 +204,7 @@ const ChevronLeftIcon = (): React.ReactElement => (
 );
 
 const ChevronRightIcon = (): React.ReactElement => (
-  <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -255,20 +215,6 @@ const ChevronRightIcon = (): React.ReactElement => (
 
 /**
  * Enhanced Calendar component
- * @param selectedDate - Currently selected date
- * @param currentMonth - Month to display
- * @param minDate - Minimum selectable date
- * @param maxDate - Maximum selectable date
- * @param disabledDates - Array of disabled dates
- * @param norwegianHolidays - Norwegian holidays to highlight
- * @param showWeekNumbers - Show week numbers
- * @param showOtherMonthDays - Show days from other months
- * @param onDateSelect - Date selection handler
- * @param onMonthChange - Month change handler
- * @param variant - Calendar styling variant
- * @param size - Calendar size
- * @param className - Additional CSS classes
- * @returns Enhanced Calendar JSX element
  */
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
   (
@@ -286,10 +232,13 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       variant = 'default',
       size = 'default',
       className,
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
     const monthNames = getNorwegianMonthNames();
     const dayNames = getNorwegianDayNames();
     const currentYear = currentMonth.getFullYear();
@@ -303,6 +252,68 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       disabledDates,
       holidays
     );
+
+    // Get border radius
+    const borderRadius = {
+      md: (getToken('borderRadius.md') as string) || '0.375rem',
+    };
+    
+    // Get shadows
+    const shadows = {
+      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+    };
+
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return { 
+            fontSize: typography.fontSize.xs,
+            padding: spacing[2],
+          };
+        case 'lg':
+          return { 
+            fontSize: typography.fontSize.base,
+            padding: spacing[4],
+          };
+        default:
+          return { 
+            fontSize: typography.fontSize.sm,
+            padding: spacing[4],
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      switch (variant) {
+        case 'compact':
+          return {
+            padding: spacing[2],
+          };
+        case 'elevated':
+          return {
+            boxShadow: shadows.lg,
+          };
+        default:
+          return {};
+      }
+    };
+
+    // Calendar container styles
+    const calendarStyles: React.CSSProperties = {
+      borderRadius: borderRadius.md,
+      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      backgroundColor: colors.background?.default || '#ffffff',
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontFamily: typography.fontFamily.sans.join(', '),
+      ...getSizeStyles(),
+      ...getVariantStyles(),
+      ...style,
+    };
+
+    // Day cell size
+    const dayCellSize = size === 'sm' ? '28px' : size === 'lg' ? '40px' : '32px';
 
     const handleDateClick = (calendarDate: CalendarDate): void => {
       if (!calendarDate.isDisabled && onDateSelect) {
@@ -322,54 +333,156 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       onMonthChange?.(nextMonth);
     };
 
-    const getDayState = (
-      calendarDate: CalendarDate
-    ): 'default' | 'selected' | 'today' | 'otherMonth' | 'disabled' | 'holiday' | 'weekend' => {
-      if (calendarDate.isDisabled) return 'disabled';
-      if (calendarDate.isSelected) return 'selected';
-      if (calendarDate.isToday) return 'today';
-      if (calendarDate.isOtherMonth) return 'otherMonth';
-      if (calendarDate.isHoliday) return 'holiday';
-      if (calendarDate.isWeekend) return 'weekend';
-      return 'default';
+    const getDayStyles = (calendarDate: CalendarDate): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        height: dayCellSize,
+        width: dayCellSize,
+        borderRadius: borderRadius.md,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: size === 'sm' ? typography.fontSize.xs : typography.fontSize.sm,
+        transition: 'all 150ms ease-in-out',
+        border: 'none',
+        cursor: calendarDate.isDisabled ? 'not-allowed' : 'pointer',
+        backgroundColor: 'transparent',
+        outline: 'none',
+      };
+
+      if (calendarDate.isDisabled) {
+        return {
+          ...baseStyles,
+          color: `${colors.text?.secondary || colors.neutral?.[500] || '#6b7280'}30`,
+          cursor: 'not-allowed',
+        };
+      }
+
+      if (calendarDate.isSelected) {
+        return {
+          ...baseStyles,
+          backgroundColor: colors.primary?.[500] || '#3b82f6',
+          color: colors.background?.default || '#ffffff',
+        };
+      }
+
+      if (calendarDate.isToday) {
+        return {
+          ...baseStyles,
+          backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
+          color: colors.accent?.foreground || colors.text?.primary || '#111827',
+          fontWeight: typography.fontWeight.medium,
+        };
+      }
+
+      if (calendarDate.isOtherMonth) {
+        return {
+          ...baseStyles,
+          color: `${colors.text?.secondary || colors.neutral?.[500] || '#6b7280'}50`,
+        };
+      }
+
+      if (calendarDate.isHoliday) {
+        return {
+          ...baseStyles,
+          color: colors.danger?.[500] || '#ef4444',
+          fontWeight: typography.fontWeight.medium,
+        };
+      }
+
+      if (calendarDate.isWeekend) {
+        return {
+          ...baseStyles,
+          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+        };
+      }
+
+      return {
+        ...baseStyles,
+        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      };
+    };
+
+    const buttonStyles: React.CSSProperties = {
+      padding: spacing[1],
+      borderRadius: borderRadius.md,
+      backgroundColor: 'transparent',
+      border: 'none',
+      cursor: 'pointer',
+      transition: 'background-color 150ms ease-in-out',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     };
 
     return (
       <div
         ref={ref}
-        className={cn(calendarVariants({ variant, size }), className)}
+        className={className}
+        style={calendarStyles}
         role="application"
         aria-label="Kalender"
         {...props}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between',
+          marginBottom: spacing[4],
+        }}>
           <button
             onClick={handlePrevMonth}
-            className="p-1 hover:bg-accent rounded-md transition-colors"
+            style={buttonStyles}
             aria-label="Forrige måned"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
           >
             <ChevronLeftIcon />
           </button>
 
-          <h2 className="font-semibold text-foreground">
+          <h2 style={{
+            fontWeight: typography.fontWeight.semibold,
+            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+          }}>
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </h2>
 
           <button
             onClick={handleNextMonth}
-            className="p-1 hover:bg-accent rounded-md transition-colors"
+            style={buttonStyles}
             aria-label="Neste måned"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
           >
             <ChevronRightIcon />
           </button>
         </div>
 
         {/* Days grid */}
-        <div className="grid grid-cols-7 gap-1">
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: showWeekNumbers ? 'auto repeat(7, 1fr)' : 'repeat(7, 1fr)',
+          gap: spacing[1],
+        }}>
           {/* Week number header */}
           {showWeekNumbers && (
-            <div className="h-8 flex items-center justify-center text-xs text-muted-foreground font-medium">
+            <div style={{
+              height: dayCellSize,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: typography.fontSize.xs,
+              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+              fontWeight: typography.fontWeight.medium,
+            }}>
               Uke
             </div>
           )}
@@ -378,7 +491,15 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
           {dayNames.map(day => (
             <div
               key={day}
-              className="h-8 flex items-center justify-center text-xs text-muted-foreground font-medium"
+              style={{
+                height: dayCellSize,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: typography.fontSize.xs,
+                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                fontWeight: typography.fontWeight.medium,
+              }}
             >
               {day}
             </div>
@@ -393,7 +514,14 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               <React.Fragment key={calendarDate.date.toISOString()}>
                 {/* Week number */}
                 {showWeekNumbers && isStartOfWeek && (
-                  <div className="h-8 flex items-center justify-center text-xs text-muted-foreground">
+                  <div style={{
+                    height: dayCellSize,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: typography.fontSize.xs,
+                    color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                  }}>
                     {getWeekNumber(calendarDate.date)}
                   </div>
                 )}
@@ -403,14 +531,34 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                   <button
                     onClick={() => handleDateClick(calendarDate)}
                     disabled={calendarDate.isDisabled}
-                    className={cn(calendarDayVariants({ state: getDayState(calendarDate) }))}
+                    style={getDayStyles(calendarDate)}
                     aria-label={`${calendarDate.day}. ${monthNames[calendarDate.month]} ${calendarDate.year}${calendarDate.holidayName ? ` - ${calendarDate.holidayName}` : ''}`}
                     title={calendarDate.holidayName}
+                    onMouseEnter={(e) => {
+                      if (!calendarDate.isDisabled && !calendarDate.isSelected) {
+                        e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+                        e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!calendarDate.isDisabled && !calendarDate.isSelected) {
+                        const styles = getDayStyles(calendarDate);
+                        e.currentTarget.style.backgroundColor = styles.backgroundColor || 'transparent';
+                        e.currentTarget.style.color = styles.color || 'inherit';
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                      e.currentTarget.style.outlineOffset = '2px';
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.outline = 'none';
+                    }}
                   >
                     {calendarDate.day}
                   </button>
                 ) : (
-                  <div className="h-8 w-8" />
+                  <div style={{ height: dayCellSize, width: dayCellSize }} />
                 )}
               </React.Fragment>
             );
@@ -418,17 +566,39 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         </div>
 
         {/* Legend */}
-        <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1">
-            <div className="h-3 w-3 rounded bg-primary" />
+        <div style={{
+          marginTop: spacing[4],
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: spacing[2],
+          fontSize: typography.fontSize.xs,
+          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
+            <div style={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              backgroundColor: colors.primary?.[500] || '#3b82f6',
+            }} />
             <span>Valgt</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="h-3 w-3 rounded bg-accent" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
+            <div style={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
+            }} />
             <span>I dag</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="h-3 w-3 rounded bg-destructive" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
+            <div style={{
+              height: '12px',
+              width: '12px',
+              borderRadius: '2px',
+              backgroundColor: colors.danger?.[500] || '#ef4444',
+            }} />
             <span>Helligdag</span>
           </div>
         </div>
@@ -438,9 +608,3 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 );
 
 Calendar.displayName = 'Calendar';
-
-/**
- * Calendar variants type exports
- */
-export type CalendarVariant = VariantProps<typeof calendarVariants>['variant'];
-export type CalendarSize = VariantProps<typeof calendarVariants>['size'];

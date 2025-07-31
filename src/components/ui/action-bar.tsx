@@ -415,7 +415,7 @@ const ActionButton: React.FC<{
     try {
       await action.onClick();
     } catch (error) {
-      console.error(`Action ${action.type} failed:`, error);
+      // Action failed - error handling should be done by the parent component
     } finally {
       setIsLoading(false);
     }
@@ -524,7 +524,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     },
     ref
   ) => {
-    const tokens = useTokens();
+    const _tokens = useTokens();
     const [showMoreActions, setShowMoreActions] = useState(false);
 
     // Split actions if maxActions is specified

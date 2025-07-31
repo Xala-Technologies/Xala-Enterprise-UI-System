@@ -1,109 +1,67 @@
 /**
- * Divider component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Divider Component - Production Strategy Implementation
+ * @description Divider component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
+import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Divider variants using class-variance-authority
+ * Divider orientation types
  */
-const dividerVariants = cva('border-border', {
-  variants: {
-    orientation: {
-      horizontal: 'w-full border-t',
-      vertical: 'h-full border-l',
-    },
-    variant: {
-      default: 'border-border',
-      primary: 'border-primary/30',
-      secondary: 'border-secondary/30',
-      muted: 'border-muted-foreground/20',
-      destructive: 'border-destructive/30',
-      success: 'border-green-500/30',
-      warning: 'border-yellow-500/30',
-    },
-    size: {
-      sm: '',
-      default: '',
-      lg: '',
-    },
-    style: {
-      solid: 'border-solid',
-      dashed: 'border-dashed',
-      dotted: 'border-dotted',
-    },
-  },
-  compoundVariants: [
-    // Horizontal divider sizes
-    {
-      orientation: 'horizontal',
-      size: 'sm',
-      className: 'border-t-[0.5px]',
-    },
-    {
-      orientation: 'horizontal',
-      size: 'default',
-      className: 'border-t',
-    },
-    {
-      orientation: 'horizontal',
-      size: 'lg',
-      className: 'border-t-2',
-    },
-    // Vertical divider sizes
-    {
-      orientation: 'vertical',
-      size: 'sm',
-      className: 'border-l-[0.5px]',
-    },
-    {
-      orientation: 'vertical',
-      size: 'default',
-      className: 'border-l',
-    },
-    {
-      orientation: 'vertical',
-      size: 'lg',
-      className: 'border-l-2',
-    },
-  ],
-  defaultVariants: {
-    orientation: 'horizontal',
-    variant: 'default',
-    size: 'default',
-    style: 'solid',
-  },
-});
+export type DividerOrientation = 'horizontal' | 'vertical';
+
+/**
+ * Divider variant types
+ */
+export type DividerVariant = 'default' | 'primary' | 'secondary' | 'muted' | 'destructive' | 'success' | 'warning';
+
+/**
+ * Divider size types
+ */
+export type DividerSize = 'sm' | 'default' | 'lg';
+
+/**
+ * Divider style types
+ */
+export type DividerStyle = 'solid' | 'dashed' | 'dotted';
+
+/**
+ * Divider spacing types
+ */
+export type DividerSpacing = 'none' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Label position types
+ */
+export type LabelPosition = 'left' | 'center' | 'right';
 
 /**
  * Divider component props interface
  */
-export interface DividerProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'style'>,
-    VariantProps<typeof dividerVariants> {
-  readonly label?: string;
-  readonly labelPosition?: 'left' | 'center' | 'right';
-  readonly spacing?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-  readonly decorative?: boolean;
+export interface DividerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** Divider orientation */
+  orientation?: DividerOrientation;
+  /** Divider color variant */
+  variant?: DividerVariant;
+  /** Divider thickness */
+  size?: DividerSize;
+  /** Border style */
+  borderStyle?: DividerStyle;
+  /** Optional label text */
+  label?: string;
+  /** Label position */
+  labelPosition?: LabelPosition;
+  /** Spacing around divider */
+  spacing?: DividerSpacing;
+  /** Whether divider is decorative */
+  decorative?: boolean;
 }
 
 /**
- * Enhanced Divider component
- * @param orientation - Divider orientation (horizontal, vertical)
- * @param variant - Divider variant (default, primary, secondary, muted, destructive, success, warning)
- * @param size - Divider thickness (sm, default, lg)
- * @param style - Border style (solid, dashed, dotted)
- * @param label - Optional label text to display on the divider
- * @param labelPosition - Position of the label (left, center, right)
- * @param spacing - Spacing around the divider (none, sm, md, lg, xl)
- * @param decorative - Whether the divider is purely decorative (affects accessibility)
- * @param className - Additional CSS classes
- * @returns Enhanced Divider JSX element
+ * Divider component
  */
 export const Divider = forwardRef<HTMLDivElement, DividerProps>(
   (
@@ -111,24 +69,96 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       orientation = 'horizontal',
       variant = 'default',
       size = 'default',
-      style = 'solid',
+      borderStyle = 'solid',
       label,
       labelPosition = 'center',
       spacing = 'md',
       decorative = true,
       className,
+      style,
       ...props
     },
     ref
-  ): React.ReactElement => {
-    const spacingClasses = {
-      none: '',
-      sm: orientation === 'horizontal' ? 'my-2' : 'mx-2',
-      md: orientation === 'horizontal' ? 'my-4' : 'mx-4',
-      lg: orientation === 'horizontal' ? 'my-6' : 'mx-6',
-      xl: orientation === 'horizontal' ? 'my-8' : 'mx-8',
+  ) => {
+    const { colors, spacing: spacingTokens, typography, getToken } = useTokens();
+    // Get variant color with opacity
+    const getVariantColor = (): string => {
+      const opacity = 0.3;
+      switch (variant) {
+        case 'primary':
+          return `rgba(${hexToRgb(colors.primary?.[500] || '#3b82f6')}, ${opacity})`;
+        case 'secondary':
+          return `rgba(${hexToRgb(colors.secondary?.[500] || '#8b5cf6')}, ${opacity})`;
+        case 'muted':
+          return `rgba(${hexToRgb(colors.text?.secondary || colors.neutral?.[500] || '#6b7280')}, 0.2)`;
+        case 'destructive':
+          return `rgba(${hexToRgb(colors.danger?.[500] || '#ef4444')}, ${opacity})`;
+        case 'success':
+          return `rgba(${hexToRgb(colors.success?.[500] || '#22c55e')}, ${opacity})`;
+        case 'warning':
+          return `rgba(${hexToRgb(colors.warning?.[500] || '#f59e0b')}, ${opacity})`;
+        default:
+          return colors.border?.default || colors.neutral?.[200] || '#e5e7eb';
+      }
+    };
+    
+    // Get border width based on size
+    const getBorderWidth = (): string => {
+      switch (size) {
+        case 'sm':
+          return '0.5px';
+        case 'lg':
+          return '2px';
+        default:
+          return '1px';
+      }
+    };
+    
+    // Get spacing values
+    const getSpacingValue = (): string => {
+      switch (spacing) {
+        case 'none':
+          return '0';
+        case 'sm':
+          return spacingTokens[2];
+        case 'md':
+          return spacingTokens[4];
+        case 'lg':
+          return spacingTokens[6];
+        case 'xl':
+          return spacingTokens[8];
+        default:
+          return spacingTokens[4];
+      }
     };
 
+    // Base divider styles
+    const baseDividerStyles: React.CSSProperties = {
+      borderColor: getVariantColor(),
+      borderStyle: borderStyle,
+      boxSizing: 'border-box',
+      display: 'block',
+      ...(orientation === 'horizontal' ? {
+        width: '100%',
+        height: 0,
+        borderTopWidth: getBorderWidth(),
+        borderBottomWidth: 0,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        marginTop: getSpacingValue(),
+        marginBottom: getSpacingValue(),
+      } : {
+        width: 0,
+        height: '100%',
+        borderLeftWidth: getBorderWidth(),
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+        borderRightWidth: 0,
+        marginLeft: getSpacingValue(),
+        marginRight: getSpacingValue(),
+      }),
+    };
+    
     // Simple divider without label
     if (!label) {
       return (
@@ -136,11 +166,11 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           ref={ref}
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
-          className={cn(
-            dividerVariants({ orientation, variant, size, style }),
-            spacingClasses[spacing],
-            className
-          )}
+          className={className}
+          style={{
+            ...baseDividerStyles,
+            ...style,
+          }}
           {...props}
         />
       );
@@ -154,51 +184,84 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           ref={ref}
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
-          className={cn(
-            dividerVariants({ orientation, variant, size, style }),
-            spacingClasses[spacing],
-            className
-          )}
+          className={className}
+          style={{
+            ...baseDividerStyles,
+            ...style,
+          }}
           {...props}
         />
       );
     }
 
-    const labelPositionClasses = {
-      left: 'justify-start',
-      center: 'justify-center',
-      right: 'justify-end',
+    // Container styles for labeled divider
+    const containerStyles: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      marginTop: getSpacingValue(),
+      marginBottom: getSpacingValue(),
+      width: '100%',
     };
-
+    
+    // Label styles
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      fontFamily: typography.fontFamily.sans.join(', '),
+      color: colors.text?.secondary || colors.neutral?.[500],
+      backgroundColor: colors.background?.default || '#ffffff',
+      paddingLeft: spacingTokens[2],
+      paddingRight: spacingTokens[2],
+      lineHeight: typography.lineHeight.tight,
+    };
+    
+    // Label container styles
+    const labelContainerStyles: React.CSSProperties = {
+      display: 'flex',
+      justifyContent: labelPosition,
+      paddingLeft: labelPosition === 'center' ? spacingTokens[3] : labelPosition === 'right' ? spacingTokens[3] : 0,
+      paddingRight: labelPosition === 'center' ? spacingTokens[3] : labelPosition === 'left' ? spacingTokens[3] : 0,
+    };
+    
+    // Line segment styles
+    const lineStyles: React.CSSProperties = {
+      flex: 1,
+      height: 0,
+      borderTopWidth: getBorderWidth(),
+      borderTopStyle: borderStyle,
+      borderTopColor: getVariantColor(),
+      borderBottomWidth: 0,
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+    };
+    
     return (
       <div
         ref={ref}
         role={decorative ? 'presentation' : 'separator'}
         aria-label={!decorative ? label : undefined}
-        className={cn('flex items-center', spacingClasses[spacing], className)}
+        className={className}
+        style={{
+          ...containerStyles,
+          ...style,
+        }}
         {...props}
       >
         {/* Left divider line (hidden when label is on the left) */}
         {labelPosition !== 'left' && (
-          <div className={cn('flex-1', dividerVariants({ orientation, variant, size, style }))} />
+          <div style={lineStyles} />
         )}
 
         {/* Label */}
-        <div
-          className={cn(
-            'flex',
-            labelPositionClasses[labelPosition],
-            labelPosition === 'center' ? 'px-3' : labelPosition === 'right' ? 'pl-3' : 'pr-3'
-          )}
-        >
-          <span className="text-sm font-medium text-muted-foreground bg-background px-2">
+        <div style={labelContainerStyles}>
+          <span style={labelStyles}>
             {label}
           </span>
         </div>
 
         {/* Right divider line (hidden when label is on the right) */}
         {labelPosition !== 'right' && (
-          <div className={cn('flex-1', dividerVariants({ orientation, variant, size, style }))} />
+          <div style={lineStyles} />
         )}
       </div>
     );
@@ -208,9 +271,11 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
 Divider.displayName = 'Divider';
 
 /**
- * Divider variants type exports
+ * Helper function to convert hex to RGB
  */
-export type DividerVariant = VariantProps<typeof dividerVariants>['variant'];
-export type DividerSize = VariantProps<typeof dividerVariants>['size'];
-export type DividerOrientation = VariantProps<typeof dividerVariants>['orientation'];
-export type DividerStyle = VariantProps<typeof dividerVariants>['style'];
+function hexToRgb(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : '0, 0, 0';
+}

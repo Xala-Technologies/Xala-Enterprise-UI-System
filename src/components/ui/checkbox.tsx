@@ -1,17 +1,18 @@
 /**
- * Checkbox component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Checkbox Component - Production Strategy Implementation
+ * @description Checkbox component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
  * Check icon component
  */
-const CheckIcon = ({ className }: { className?: string }): React.ReactElement => (
-  <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+const CheckIcon = (): React.ReactElement => (
+  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
     <path
       fillRule="evenodd"
       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -23,8 +24,8 @@ const CheckIcon = ({ className }: { className?: string }): React.ReactElement =>
 /**
  * Indeterminate icon component
  */
-const IndeterminateIcon = ({ className }: { className?: string }): React.ReactElement => (
-  <svg className={className} viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+const IndeterminateIcon = (): React.ReactElement => (
+  <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
     <path
       fillRule="evenodd"
       d="M5 10a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1z"
@@ -34,72 +35,45 @@ const IndeterminateIcon = ({ className }: { className?: string }): React.ReactEl
 );
 
 /**
- * Checkbox variants using class-variance-authority with semantic design tokens
+ * Checkbox variant types
  */
-const checkboxVariants = cva(
-  'peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200',
-  {
-    variants: {
-      variant: {
-        default:
-          'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary',
-        destructive:
-          'border-destructive data-[state=checked]:bg-destructive data-[state=checked]:text-destructive-foreground data-[state=checked]:border-destructive',
-        success:
-          'border-success data-[state=checked]:bg-success data-[state=checked]:text-success-foreground data-[state=checked]:border-success',
-        warning:
-          'border-warning data-[state=checked]:bg-warning data-[state=checked]:text-warning-foreground data-[state=checked]:border-warning',
-      },
-      size: {
-        sm: 'h-3 w-3',
-        default: 'h-4 w-4',
-        lg: 'h-5 w-5',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export type CheckboxVariant = 'default' | 'destructive' | 'success' | 'warning';
+
+/**
+ * Checkbox size types
+ */
+export type CheckboxSize = 'sm' | 'default' | 'lg';
 
 /**
  * Checkbox component props interface
  */
-export interface CheckboxProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>,
-    VariantProps<typeof checkboxVariants> {
+export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+  /** Checkbox variant */
+  readonly variant?: CheckboxVariant;
+  /** Checkbox size */
+  readonly size?: CheckboxSize;
+  /** Checkbox label */
   readonly label?: string;
+  /** Additional description text */
   readonly description?: string;
+  /** Error state */
   readonly error?: boolean;
+  /** Error text to display */
   readonly errorText?: string;
+  /** Indeterminate state */
   readonly indeterminate?: boolean;
+  /** Whether checkbox is required */
   readonly required?: boolean;
 }
 
 /**
- * Checkbox component with enhanced features
- * @param variant - Checkbox variant (default, destructive, success, warning)
- * @param size - Checkbox size (sm, default, lg)
- * @param label - Checkbox label
- * @param description - Additional description text
- * @param error - Error state
- * @param errorText - Error text to display
- * @param indeterminate - Indeterminate state
- * @param required - Whether checkbox is required
- * @param checked - Checked state
- * @param disabled - Disabled state
- * @param className - Additional CSS classes
- * @param id - Checkbox ID
- * @param props - Additional input props
- * @returns Enhanced Checkbox JSX element
+ * Checkbox component
  */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
-      className,
-      variant,
-      size,
+      variant = 'default',
+      size = 'default',
       label,
       description,
       error,
@@ -109,10 +83,78 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       checked,
       disabled,
       id,
+      className,
+      style,
       ...props
     },
     ref
-  ): React.ReactElement => {
+  ) => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
+    // Get border radius
+    const borderRadius = {
+      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+    };
+    
+    // Size mappings
+    const sizeMap = {
+      sm: { width: '12px', height: '12px' },
+      default: { width: '16px', height: '16px' },
+      lg: { width: '20px', height: '20px' },
+    };
+    
+    // Get variant colors
+    const getVariantColors = () => {
+      const actualVariant = error || errorText ? 'destructive' : variant;
+      const isChecked = checked || indeterminate;
+      
+      switch (actualVariant) {
+        case 'destructive':
+          return {
+            borderColor: isChecked ? (colors.danger?.[500] || '#ef4444') : (colors.danger?.[300] || '#fca5a5'),
+            backgroundColor: isChecked ? (colors.danger?.[500] || '#ef4444') : 'transparent',
+            color: isChecked ? (colors.background?.default || '#ffffff') : 'currentColor',
+          };
+        case 'success':
+          return {
+            borderColor: isChecked ? (colors.success?.[500] || '#22c55e') : (colors.success?.[300] || '#86efac'),
+            backgroundColor: isChecked ? (colors.success?.[500] || '#22c55e') : 'transparent',
+            color: isChecked ? (colors.background?.default || '#ffffff') : 'currentColor',
+          };
+        case 'warning':
+          return {
+            borderColor: isChecked ? (colors.warning?.[500] || '#f59e0b') : (colors.warning?.[300] || '#fcd34d'),
+            backgroundColor: isChecked ? (colors.warning?.[500] || '#f59e0b') : 'transparent',
+            color: isChecked ? (colors.background?.default || '#ffffff') : 'currentColor',
+          };
+        default:
+          return {
+            borderColor: isChecked ? (colors.primary?.[500] || '#3b82f6') : (colors.border?.default || colors.neutral?.[300] || '#d1d5db'),
+            backgroundColor: isChecked ? (colors.primary?.[500] || '#3b82f6') : 'transparent',
+            color: isChecked ? (colors.background?.default || '#ffffff') : 'currentColor',
+          };
+      }
+    };
+    
+    const variantColors = getVariantColors();
+    
+    // Checkbox styles
+    const checkboxStyles: React.CSSProperties = {
+      ...sizeMap[size],
+      flexShrink: 0,
+      borderRadius: borderRadius.sm,
+      border: '1px solid',
+      borderColor: variantColors.borderColor,
+      backgroundColor: variantColors.backgroundColor,
+      color: variantColors.color,
+      transition: 'all 200ms ease-in-out',
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.5 : 1,
+      appearance: 'none',
+      position: 'relative',
+      outline: 'none',
+      ...style,
+    };
     // Generate ID if not provided and label exists
     const checkboxId =
       id || (label ? `checkbox-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
@@ -124,38 +166,49 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const checkboxState = indeterminate ? 'indeterminate' : checked ? 'checked' : 'unchecked';
 
     const checkboxElement = (
-      <div className="checkbox-container relative flex items-center">
+      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
         <input
           id={checkboxId}
           ref={ref}
           type="checkbox"
-          className={cn(checkboxVariants({ variant: actualVariant, size }), className)}
+          className={className}
+          style={checkboxStyles}
           checked={checked}
           disabled={disabled}
           aria-invalid={error || !!errorText}
           aria-describedby={description || errorText ? `${checkboxId}-description` : undefined}
           aria-required={required}
           data-state={checkboxState}
+          onFocus={(e) => {
+            e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+            e.currentTarget.style.outlineOffset = '2px';
+            props.onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+            props.onBlur?.(e);
+          }}
           {...props}
         />
 
         {/* Visual indicator overlay */}
         <div
-          className={cn(
-            'absolute pointer-events-none flex items-center justify-center text-current transition-opacity duration-200',
-            {
-              'h-3 w-3': size === 'sm',
-              'h-4 w-4': size === 'default',
-              'h-5 w-5': size === 'lg',
-              'opacity-100': checked || indeterminate,
-              'opacity-0': !checked && !indeterminate,
-            }
-          )}
+          style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'currentColor',
+            transition: 'opacity 200ms ease-in-out',
+            ...sizeMap[size],
+            opacity: checked || indeterminate ? 1 : 0,
+          }}
         >
           {indeterminate ? (
-            <IndeterminateIcon className="h-full w-full" />
+            <IndeterminateIcon />
           ) : checked ? (
-            <CheckIcon className="h-full w-full" />
+            <CheckIcon />
           ) : null}
         </div>
       </div>
@@ -166,31 +219,36 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     }
 
     return (
-      <div className="checkbox-field space-y-1.5">
-        <div className="flex items-start space-x-3">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] || '0.375rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing[3] }}>
           {checkboxElement}
 
           {label && (
-            <div className="flex-1 space-y-1">
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
               <label
                 htmlFor={checkboxId}
-                className={cn(
-                  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer',
-                  {
-                    'text-destructive': error || errorText,
-                  }
-                )}
+                style={{
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.medium,
+                  lineHeight: typography.lineHeight.none,
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  opacity: disabled ? 0.7 : 1,
+                  color: error || errorText ? (colors.danger?.[500] || '#ef4444') : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+                }}
               >
                 {label}
                 {required && (
-                  <span className="text-destructive ml-1" aria-label="required">
+                  <span style={{ color: colors.danger?.[500] || '#ef4444', marginLeft: spacing[1] }} aria-label="required">
                     *
                   </span>
                 )}
               </label>
 
               {description && (
-                <p id={`${checkboxId}-description`} className="text-xs text-muted-foreground">
+                <p id={`${checkboxId}-description`} style={{
+                  fontSize: typography.fontSize.xs,
+                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+                }}>
                   {description}
                 </p>
               )}
@@ -199,7 +257,11 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
         </div>
 
         {errorText && (
-          <p id={`${checkboxId}-description`} className="text-xs text-destructive ml-7">
+          <p id={`${checkboxId}-description`} style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.danger?.[500] || '#ef4444',
+            marginLeft: `calc(${spacing[4]} + ${spacing[3]})`,
+          }}>
             {errorText}
           </p>
         )}
@@ -271,6 +333,8 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
     },
     ref
   ): React.ReactElement => {
+    const { colors, spacing, typography } = useTokens();
+    
     // Use value prop or defaultValue as controlled/uncontrolled values
     const selectedValues = value || defaultValue || [];
 
@@ -316,14 +380,18 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
         aria-describedby={description || errorText ? `${groupId}-description` : undefined}
         aria-invalid={error || !!errorText}
         aria-required={required}
-        className={cn(
-          'checkbox-group',
-          {
-            'flex flex-col space-y-3': orientation === 'vertical',
-            'flex flex-row flex-wrap gap-6': orientation === 'horizontal',
-          },
-          className
-        )}
+        style={{
+          display: 'flex',
+          ...(orientation === 'vertical' ? {
+            flexDirection: 'column' as const,
+            gap: spacing[3],
+          } : {
+            flexDirection: 'row' as const,
+            flexWrap: 'wrap' as const,
+            gap: spacing[6],
+          }),
+        }}
+        className={className}
       >
         {options.map(option => {
           const isSelected = selectedValues.includes(option.value);
@@ -351,30 +419,40 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
     // If label or description provided, wrap in a fieldset
     if (label || description || errorText) {
       return (
-        <div className="checkbox-group-field space-y-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
           {label && (
             <label
               id={`${groupId}-label`}
-              className={cn(
-                'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-                error && 'text-destructive'
-              )}
+              style={{
+                fontSize: typography.fontSize.sm,
+                fontWeight: typography.fontWeight.medium,
+                lineHeight: typography.lineHeight.none,
+                cursor: disabled ? 'not-allowed' : 'pointer',
+                opacity: disabled ? 0.7 : 1,
+                color: error ? (colors.danger?.[500] || '#ef4444') : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+              }}
             >
               {label}
-              {required && <span className="text-destructive ml-1">*</span>}
+              {required && <span style={{ color: colors.danger?.[500] || '#ef4444', marginLeft: spacing[1] }}>*</span>}
             </label>
           )}
 
           {groupElement}
 
           {description && !errorText && (
-            <p id={`${groupId}-description`} className="text-xs text-muted-foreground">
+            <p id={`${groupId}-description`} style={{
+              fontSize: typography.fontSize.xs,
+              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+            }}>
               {description}
             </p>
           )}
 
           {errorText && (
-            <p id={`${groupId}-description`} className="text-xs text-destructive">
+            <p id={`${groupId}-description`} style={{
+              fontSize: typography.fontSize.xs,
+              color: colors.danger?.[500] || '#ef4444',
+            }}>
               {errorText}
             </p>
           )}
@@ -388,8 +466,3 @@ export const CheckboxGroup = forwardRef<HTMLDivElement, CheckboxGroupProps>(
 
 CheckboxGroup.displayName = 'CheckboxGroup';
 
-/**
- * Checkbox variants type exports
- */
-export type CheckboxVariant = VariantProps<typeof checkboxVariants>['variant'];
-export type CheckboxSize = VariantProps<typeof checkboxVariants>['size'];

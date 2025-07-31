@@ -55,33 +55,33 @@ export const Button: React.FC<ButtonProps> = ({
     switch (variant) {
       case 'primary':
         return {
-          backgroundColor: colors.primary[500],
-          color: colors.background.default,
-          border: `1px solid ${colors.primary[500]}`,
+          backgroundColor: colors.primary?.[500] || '#3b82f6',
+          color: colors.background?.default || '#ffffff',
+          border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
         };
       case 'secondary':
         return {
-          backgroundColor: colors.secondary[100],
-          color: colors.secondary[900],
-          border: `1px solid ${colors.secondary[300]}`,
+          backgroundColor: colors.secondary?.[100] || '#e9d5ff',
+          color: colors.secondary?.[900] || '#581c87',
+          border: `1px solid ${colors.secondary?.[300] || '#d8b4fe'}`,
         };
       case 'outline':
         return {
           backgroundColor: 'transparent',
-          color: colors.primary[500],
-          border: `1px solid ${colors.primary[500]}`,
+          color: colors.primary?.[500] || '#3b82f6',
+          border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
         };
       case 'ghost':
         return {
           backgroundColor: 'transparent',
-          color: colors.text.primary,
+          color: colors.text?.primary || '#000000',
           border: 'none',
         };
       case 'destructive':
         return {
-          backgroundColor: colors.status.error,
-          color: colors.background.default,
-          border: `1px solid ${colors.status.error}`,
+          backgroundColor: colors.status?.error || '#ef4444',
+          color: colors.background?.default || '#ffffff',
+          border: `1px solid ${colors.status?.error || '#ef4444'}`,
         };
       default:
         return {};
@@ -92,20 +92,20 @@ export const Button: React.FC<ButtonProps> = ({
     switch (size) {
       case 'sm':
         return {
-          padding: `${spacing[2]} ${spacing[3]}`,
-          fontSize: typography.fontSize.sm,
+          padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[3] || '0.75rem'}`,
+          fontSize: typography?.fontSize?.sm || '0.875rem',
           minHeight: '32px',
         };
       case 'md':
         return {
-          padding: `${spacing[3]} ${spacing[4]}`,
-          fontSize: typography.fontSize.base,
+          padding: `${spacing?.[3] || '0.75rem'} ${spacing?.[4] || '1rem'}`,
+          fontSize: typography?.fontSize?.base || '1rem',
           minHeight: '40px',
         };
       case 'lg':
         return {
-          padding: `${spacing[4]} ${spacing[6]}`,
-          fontSize: typography.fontSize.lg,
+          padding: `${spacing?.[4] || '1rem'} ${spacing?.[6] || '1.5rem'}`,
+          fontSize: typography?.fontSize?.lg || '1.125rem',
           minHeight: '48px',
         };
       default:
@@ -130,9 +130,9 @@ export const Button: React.FC<ButtonProps> = ({
     width: fullWidth ? '100%' : 'auto',
 
     // Typography from JSON templates
-    fontFamily: typography.fontFamily.sans.join(', '),
-    fontWeight: typography.fontWeight.medium,
-    lineHeight: typography.lineHeight.normal,
+    fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontWeight: typography?.fontWeight?.medium || 500,
+    lineHeight: typography?.lineHeight?.normal || 1.5,
 
     // Spacing and layout from JSON templates
     borderRadius: borderRadius.md,
@@ -181,7 +181,7 @@ export const Button: React.FC<ButtonProps> = ({
             width: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
             height: size === 'sm' ? '16px' : size === 'lg' ? '24px' : '20px',
             border: '2px solid transparent',
-            borderTop: `2px solid ${variant === 'outline' || variant === 'ghost' ? colors.primary[500] : colors.background.default}`,
+            borderTop: `2px solid ${variant === 'outline' || variant === 'ghost' ? (colors.primary?.[500] || '#3b82f6') : (colors.background?.default || '#ffffff')}`,
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
           }}

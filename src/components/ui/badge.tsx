@@ -1,73 +1,149 @@
 /**
- * Badge component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Badge Component - Production Strategy Implementation
+ * @description Badge component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
+import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Badge variants using class-variance-authority with semantic design tokens
+ * Badge variant types
  */
-const badgeVariants = cva(
-  'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-  {
-    variants: {
-      variant: {
-        default: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/80',
-        secondary:
-          'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        destructive:
-          'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
-        outline: 'text-foreground',
-        success: 'border-transparent bg-success text-success-foreground hover:bg-success/80',
-        warning: 'border-transparent bg-warning text-warning-foreground hover:bg-warning/80',
-        info: 'border-transparent bg-info text-info-foreground hover:bg-info/80',
-      },
-      size: {
-        default: 'px-2.5 py-0.5',
-        sm: 'px-2 py-0.5 text-xs',
-        lg: 'px-3 py-1 text-sm',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning' | 'info';
+
+/**
+ * Badge size types
+ */
+export type BadgeSize = 'default' | 'sm' | 'lg';
 
 /**
  * Badge component props interface
  */
-export interface BadgeProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {
-  readonly asChild?: boolean;
+export interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: BadgeVariant;
+  size?: BadgeSize;
+  children?: React.ReactNode;
 }
 
 /**
  * Badge component
- * @param variant - Badge variant
- * @param size - Badge size
- * @param className - Additional CSS classes
- * @param asChild - Render as child element
- * @param props - Additional div props
- * @returns Badge JSX element
  */
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
-  ({ className, variant, size, /* asChild = false, */ ...props }, ref): React.ReactElement => {
-    return <div ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props} />;
+  ({ variant = 'default', size = 'default', className, style, children, ...props }, ref) => {
+    const { colors, spacing, typography, getToken } = useTokens();
+    
+    // Get additional tokens with fallbacks
+    const borderRadius = {
+      full: (getToken('borderRadius.full') as string) || '9999px',
+    };
+    
+    // Size styles
+    const getSizeStyles = (): React.CSSProperties => {
+      switch (size) {
+        case 'sm':
+          return {
+            paddingLeft: spacing[2],
+            paddingRight: spacing[2],
+            paddingTop: '2px',
+            paddingBottom: '2px',
+            fontSize: typography.fontSize.xs,
+          };
+        case 'lg':
+          return {
+            paddingLeft: spacing[3],
+            paddingRight: spacing[3],
+            paddingTop: spacing[1],
+            paddingBottom: spacing[1],
+            fontSize: typography.fontSize.sm,
+          };
+        default:
+          return {
+            paddingLeft: '10px', // ~2.5 in spacing
+            paddingRight: '10px',
+            paddingTop: '2px',
+            paddingBottom: '2px',
+            fontSize: typography.fontSize.xs,
+          };
+      }
+    };
+    
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      const baseStyles = {
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'transparent',
+      };
+      
+      switch (variant) {
+        case 'secondary':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.secondary?.[100] || '#e9d5ff',
+            color: colors.secondary?.[900] || '#581c87',
+          };
+        case 'destructive':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.danger?.[500] || '#ef4444',
+            color: colors.background?.default || '#ffffff',
+          };
+        case 'outline':
+          return {
+            ...baseStyles,
+            backgroundColor: 'transparent',
+            borderColor: colors.border?.default || colors.neutral?.[200],
+            color: colors.text?.primary || colors.neutral?.[900],
+          };
+        case 'success':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.success?.[500] || '#22c55e',
+            color: colors.background?.default || '#ffffff',
+          };
+        case 'warning':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.warning?.[500] || '#f59e0b',
+            color: colors.background?.default || '#ffffff',
+          };
+        case 'info':
+          return {
+            ...baseStyles,
+            backgroundColor: colors.info?.[500] || '#3b82f6',
+            color: colors.background?.default || '#ffffff',
+          };
+        default:
+          return {
+            ...baseStyles,
+            backgroundColor: colors.primary?.[500] || '#3b82f6',
+            color: colors.background?.default || '#ffffff',
+          };
+      }
+    };
+    
+    const badgeStyles: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      borderRadius: borderRadius.full,
+      fontFamily: typography.fontFamily.sans.join(', '),
+      fontWeight: typography.fontWeight.semibold,
+      lineHeight: 1,
+      transition: 'all 0.2s ease-in-out',
+      cursor: 'default',
+      ...getSizeStyles(),
+      ...getVariantStyles(),
+      ...style,
+    };
+    
+    return (
+      <div ref={ref} className={className} style={badgeStyles} {...props}>
+        {children}
+      </div>
+    );
   }
 );
 
 Badge.displayName = 'Badge';
-
-/**
- * Badge variants type export
- */
-export type BadgeVariant = VariantProps<typeof badgeVariants>['variant'];
-export type BadgeSize = VariantProps<typeof badgeVariants>['size'];

@@ -81,14 +81,14 @@ export {
     type ActionConfig,
     type ActionType
 } from './action-bar';
-export { Box, boxVariants, type BoxProps } from './box';
+export { Box, type BoxProps } from './box';
 export {
-    CodeBlock, codeBlockHeaderVariants, codeBlockVariants, languageConfig, type CodeBlockProps
+    CodeBlock, languageConfig, type CodeBlockProps
 } from './code-block';
 export {
     MessageBubble, messageBubbleAvatarVariants,
     messageBubbleMetadataVariants, messageBubbleVariants, type MessageBubbleProps
 } from './message-bubble';
 export { ScrollArea, scrollAreaVariants, type ScrollAreaProps } from './scroll-area';
-export { Separator, separatorVariants, type SeparatorProps } from './separator';
+export { Separator, type SeparatorProps } from './separator';
 

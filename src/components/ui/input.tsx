@@ -82,36 +82,36 @@ export const Input: React.FC<InputProps> = ({
   // ✅ All styling comes from JSON templates (no hard-coded values)
   const getVariantStyles = (): React.CSSProperties => {
     const baseInputStyles = {
-      backgroundColor: colors.background.default,
-      border: `1px solid ${colors.border.default}`,
+      backgroundColor: colors.background?.default || '#ffffff',
+      border: `1px solid ${colors.border?.default || '#e5e7eb'}`,
     };
 
     if (error) {
       return {
         ...baseInputStyles,
-        borderColor: colors.status.error,
-        backgroundColor: colors.background.default,
+        borderColor: colors.status?.error || '#ef4444',
+        backgroundColor: colors.background?.default || '#ffffff',
       };
     }
 
     if (success) {
       return {
         ...baseInputStyles,
-        borderColor: colors.status.success,
-        backgroundColor: colors.background.default,
+        borderColor: colors.status?.success || '#10b981',
+        backgroundColor: colors.background?.default || '#ffffff',
       };
     }
 
     switch (variant) {
       case 'filled':
         return {
-          backgroundColor: colors.secondary[50] || colors.background.paper,
+          backgroundColor: colors.secondary?.[50] || colors.background?.paper || '#f8f9fa',
           border: `1px solid transparent`,
         };
       case 'outline':
         return {
           backgroundColor: 'transparent',
-          border: `2px solid ${colors.border.default}`,
+          border: `2px solid ${colors.border?.default || '#e5e7eb'}`,
         };
       default:
         return baseInputStyles;
@@ -122,20 +122,20 @@ export const Input: React.FC<InputProps> = ({
     switch (size) {
       case 'sm':
         return {
-          padding: `${spacing[2]} ${spacing[3]}`,
-          fontSize: typography.fontSize.sm,
+          padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[3] || '0.75rem'}`,
+          fontSize: typography?.fontSize?.sm || '0.875rem',
           minHeight: '32px',
         };
       case 'md':
         return {
-          padding: `${spacing[3]} ${spacing[4]}`,
-          fontSize: typography.fontSize.base,
+          padding: `${spacing?.[3] || '0.75rem'} ${spacing?.[4] || '1rem'}`,
+          fontSize: typography?.fontSize?.base || '1rem',
           minHeight: '40px',
         };
       case 'lg':
         return {
-          padding: `${spacing[4]} ${spacing[5] || spacing[4]}`,
-          fontSize: typography.fontSize.lg,
+          padding: `${spacing?.[4] || '1rem'} ${spacing?.[5] || spacing?.[4] || '1rem'}`,
+          fontSize: typography?.fontSize?.lg || '1.125rem',
           minHeight: '48px',
         };
       default:
@@ -155,10 +155,10 @@ export const Input: React.FC<InputProps> = ({
     position: 'relative',
 
     // Typography from JSON templates
-    fontFamily: typography.fontFamily.sans.join(', '),
-    fontWeight: typography.fontWeight.normal,
-    lineHeight: typography.lineHeight.normal,
-    color: colors.text.primary,
+    fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    fontWeight: typography?.fontWeight?.normal || 400,
+    lineHeight: typography?.lineHeight?.normal || 1.5,
+    color: colors.text?.primary || '#000000',
 
     // Border radius from JSON templates
     borderRadius: borderRadius.md,

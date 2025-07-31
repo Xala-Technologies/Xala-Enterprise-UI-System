@@ -1,92 +1,244 @@
 /**
- * Typography components inspired by Equinor Design System
- * Enterprise-grade typography with design tokens and accessibility
+ * @fileoverview SSR-Safe Typography Component - Production Strategy Implementation
+ * @description Typography component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Typography variants using class-variance-authority
+ * Typography variant types
  */
-const typographyVariants = cva('text-foreground', {
-  variants: {
-    variant: {
-      h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-      h2: 'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
-      h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
-      h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
-      h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
-      h6: 'scroll-m-20 text-base font-semibold tracking-tight',
-      body: 'leading-7 [&:not(:first-child)]:mt-6',
-      bodyLarge: 'text-lg leading-7 [&:not(:first-child)]:mt-6',
-      bodySmall: 'text-sm leading-6 [&:not(:first-child)]:mt-4',
-      lead: 'text-xl text-muted-foreground',
-      large: 'text-lg font-semibold',
-      small: 'text-sm font-medium leading-none',
-      muted: 'text-sm text-muted-foreground',
-      code: 'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
-      blockquote: 'mt-6 border-l-2 pl-6 italic',
-    },
-    textColor: {
-      default: 'text-foreground',
-      muted: 'text-muted-foreground',
-      primary: 'text-primary',
-      secondary: 'text-secondary-foreground',
-      destructive: 'text-destructive',
-      success: 'text-green-600',
-      warning: 'text-yellow-600',
-      info: 'text-blue-600',
-    },
-    align: {
-      left: 'text-left',
-      center: 'text-center',
-      right: 'text-right',
-      justify: 'text-justify',
-    },
-  },
-  defaultVariants: {
-    variant: 'body',
-    textColor: 'default',
-    align: 'left',
-  },
-});
+export type TypographyVariant = 
+  | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+  | 'body' | 'bodyLarge' | 'bodySmall'
+  | 'lead' | 'large' | 'small' | 'muted'
+  | 'code' | 'blockquote';
+
+/**
+ * Typography color types
+ */
+export type TypographyColor = 
+  | 'default' | 'muted' | 'primary' | 'secondary'
+  | 'destructive' | 'success' | 'warning' | 'info';
+
+/**
+ * Typography alignment types
+ */
+export type TypographyAlign = 'left' | 'center' | 'right' | 'justify';
 
 /**
  * Typography component props interface
  */
-export interface TypographyProps
-  extends HTMLAttributes<HTMLElement>,
-    VariantProps<typeof typographyVariants> {
-  readonly as?: React.ElementType;
-  readonly truncate?: boolean;
+export interface TypographyProps extends HTMLAttributes<HTMLElement> {
+  /** Typography variant */
+  variant?: TypographyVariant;
+  /** Text color */
+  textColor?: TypographyColor;
+  /** Text alignment */
+  align?: TypographyAlign;
+  /** HTML element type */
+  as?: React.ElementType;
+  /** Truncate long text */
+  truncate?: boolean;
 }
 
 /**
  * Typography component
- * @param variant - Typography variant
- * @param textColor - Text color
- * @param align - Text alignment
- * @param as - HTML element type
- * @param truncate - Truncate long text
- * @param className - Additional CSS classes
- * @param props - Additional props
- * @returns Typography JSX element
  */
 export const Typography = forwardRef<HTMLElement, TypographyProps>(
   (
-    { className, variant, textColor, align, as: Component = 'p', truncate, ...props },
+    { 
+      variant = 'body',
+      textColor = 'default',
+      align = 'left',
+      as: Component = 'p',
+      truncate,
+      className,
+      style,
+      ...props 
+    },
     ref
-  ): React.ReactElement => {
+  ) => {
+    const { colors, typography, spacing, getToken } = useTokens();
+    
+    // Get variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      const baseStyles: React.CSSProperties = {
+        fontFamily: typography.fontFamily.sans.join(', '),
+        color: colors.text?.primary || colors.neutral?.[900],
+      };
+      
+      switch (variant) {
+        case 'h1':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize['4xl'],
+            fontWeight: typography.fontWeight.extrabold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[5],
+          };
+        case 'h2':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize['3xl'],
+            fontWeight: typography.fontWeight.semibold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[4],
+            paddingBottom: spacing[2],
+            borderBottomWidth: '1px',
+            borderBottomStyle: 'solid',
+            borderBottomColor: colors.border?.default || colors.neutral?.[200],
+          };
+        case 'h3':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize['2xl'],
+            fontWeight: typography.fontWeight.semibold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[3],
+          };
+        case 'h4':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.xl,
+            fontWeight: typography.fontWeight.semibold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[3],
+          };
+        case 'h5':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.semibold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[2],
+          };
+        case 'h6':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.base,
+            fontWeight: typography.fontWeight.semibold,
+            letterSpacing: typography.letterSpacing?.tight || '-0.025em',
+            lineHeight: typography.lineHeight.tight,
+            marginBottom: spacing[2],
+          };
+        case 'bodyLarge':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.lg,
+            lineHeight: typography.lineHeight.relaxed,
+          };
+        case 'bodySmall':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.sm,
+            lineHeight: typography.lineHeight.normal,
+          };
+        case 'lead':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.xl,
+            color: colors.text?.secondary || colors.neutral?.[500],
+            lineHeight: typography.lineHeight.relaxed,
+          };
+        case 'large':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.lg,
+            fontWeight: typography.fontWeight.semibold,
+          };
+        case 'small':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.sm,
+            fontWeight: typography.fontWeight.medium,
+            lineHeight: typography.lineHeight.none,
+          };
+        case 'muted':
+          return {
+            ...baseStyles,
+            fontSize: typography.fontSize.sm,
+            color: colors.text?.secondary || colors.neutral?.[500],
+          };
+        case 'code':
+          return {
+            fontFamily: typography.fontFamily.mono.join(', '),
+            fontSize: typography.fontSize.sm,
+            fontWeight: typography.fontWeight.semibold,
+            backgroundColor: colors.background?.subtle || colors.neutral?.[100],
+            color: colors.text?.primary || colors.neutral?.[900],
+            paddingLeft: '0.3rem',
+            paddingRight: '0.3rem',
+            paddingTop: '0.2rem',
+            paddingBottom: '0.2rem',
+            borderRadius: (getToken('borderRadius.md') as string) || '0.375rem',
+          };
+        case 'blockquote':
+          return {
+            ...baseStyles,
+            fontStyle: 'italic',
+            marginTop: spacing[6],
+            paddingLeft: spacing[6],
+            borderLeftWidth: '2px',
+            borderLeftStyle: 'solid',
+            borderLeftColor: colors.border?.default || colors.neutral?.[300],
+          };
+        default:
+          return {
+            ...baseStyles,
+            lineHeight: typography.lineHeight.relaxed,
+          };
+      }
+    };
+    
+    // Get text color
+    const getTextColor = (): string => {
+      switch (textColor) {
+        case 'muted':
+          return colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+        case 'primary':
+          return colors.primary?.[500] || '#3b82f6';
+        case 'secondary':
+          return colors.secondary?.[500] || '#8b5cf6';
+        case 'destructive':
+          return colors.danger?.[500] || '#ef4444';
+        case 'success':
+          return colors.success?.[600] || '#16a34a';
+        case 'warning':
+          return colors.warning?.[600] || '#d97706';
+        case 'info':
+          return colors.info?.[600] || '#2563eb';
+        default:
+          return colors.text?.primary || colors.neutral?.[900] || '#111827';
+      }
+    };
+    
+    // Build final styles
+    const typographyStyles: React.CSSProperties = {
+      ...getVariantStyles(),
+      color: getTextColor(),
+      textAlign: align,
+      ...(truncate ? {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      } : {}),
+      ...style,
+    };
+    
     return (
       <Component
         ref={ref}
-        className={cn(
-          typographyVariants({ variant, textColor, align }),
-          truncate && 'truncate',
-          className
-        )}
+        className={className}
+        style={typographyStyles}
         {...props}
       />
     );
@@ -97,12 +249,8 @@ Typography.displayName = 'Typography';
 
 /**
  * Get appropriate HTML element from variant
- * @param variant - Typography variant
- * @returns HTML element tag
  */
- 
-// eslint-disable-next-line no-unused-vars
-function _getElementFromVariant(variant: string | null | undefined): React.ElementType {
+export function getElementFromVariant(variant: TypographyVariant): React.ElementType {
   switch (variant) {
     case 'h1':
       return 'h1';
@@ -164,10 +312,3 @@ export const Blockquote = forwardRef<HTMLQuoteElement, TypographyProps>(
 );
 
 Blockquote.displayName = 'Blockquote';
-
-/**
- * Typography variants type exports
- */
-export type TypographyVariant = VariantProps<typeof typographyVariants>['variant'];
-export type TypographyColor = VariantProps<typeof typographyVariants>['textColor'];
-export type TypographyAlign = VariantProps<typeof typographyVariants>['align'];

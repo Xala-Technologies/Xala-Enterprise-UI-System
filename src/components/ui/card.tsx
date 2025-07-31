@@ -47,25 +47,25 @@ export const Card: React.FC<CardProps> = ({
     switch (variant) {
       case 'default':
         return {
-          backgroundColor: colors.background.paper,
-          border: `1px solid ${colors.border.default}`,
+          backgroundColor: colors.background?.paper || '#f8f9fa',
+          border: `1px solid ${colors.border?.default || '#e5e7eb'}`,
           boxShadow: elevation.sm,
         };
       case 'elevated':
         return {
-          backgroundColor: colors.background.paper,
+          backgroundColor: colors.background?.paper || '#f8f9fa',
           border: 'none',
           boxShadow: elevation.md,
         };
       case 'outlined':
         return {
-          backgroundColor: colors.background.default,
-          border: `2px solid ${colors.border.default}`,
+          backgroundColor: colors.background?.default || '#ffffff',
+          border: `2px solid ${colors.border?.default || '#e5e7eb'}`,
           boxShadow: 'none',
         };
       case 'flat':
         return {
-          backgroundColor: colors.background.paper,
+          backgroundColor: colors.background?.paper || '#f8f9fa',
           border: 'none',
           boxShadow: 'none',
         };
@@ -79,13 +79,13 @@ export const Card: React.FC<CardProps> = ({
       case 'none':
         return { padding: '0' };
       case 'sm':
-        return { padding: spacing[3] };
+        return { padding: spacing?.[3] || '0.75rem' };
       case 'md':
-        return { padding: spacing[4] };
+        return { padding: spacing?.[4] || '1rem' };
       case 'lg':
-        return { padding: spacing[6] };
+        return { padding: spacing?.[6] || '1.5rem' };
       case 'xl':
-        return { padding: spacing[8] };
+        return { padding: spacing?.[8] || '2rem' };
       default:
         return {};
     }
@@ -137,8 +137,8 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ children, className, sty
   const { spacing, colors } = useTokens();
 
   const headerStyles: React.CSSProperties = {
-    padding: `${spacing[4]} ${spacing[4]} ${spacing[2]} ${spacing[4]}`,
-    borderBottom: `1px solid ${colors.border.muted}`,
+    padding: `${spacing?.[4] || '1rem'} ${spacing?.[4] || '1rem'} ${spacing?.[2] || '0.5rem'} ${spacing?.[4] || '1rem'}`,
+    borderBottom: `1px solid ${colors.border?.muted || '#e5e7eb'}`,
     ...style,
   };
 
@@ -165,7 +165,7 @@ export const CardContent: React.FC<CardContentProps> = ({
   const { spacing } = useTokens();
 
   const contentStyles: React.CSSProperties = {
-    padding: spacing[4],
+    padding: spacing?.[4] || '1rem',
     ...style,
   };
 
@@ -187,8 +187,8 @@ export const CardFooter: React.FC<CardFooterProps> = ({ children, className, sty
   const { spacing, colors } = useTokens();
 
   const footerStyles: React.CSSProperties = {
-    padding: `${spacing[2]} ${spacing[4]} ${spacing[4]} ${spacing[4]}`,
-    borderTop: `1px solid ${colors.border.muted}`,
+    padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[4] || '1rem'} ${spacing?.[4] || '1rem'} ${spacing?.[4] || '1rem'}`,
+    borderTop: `1px solid ${colors.border?.muted || '#e5e7eb'}`,
     ...style,
   };
 

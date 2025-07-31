@@ -1,195 +1,190 @@
 /**
- * @fileoverview Separator Component - Norwegian Compliance
- * @description Separator component for visual message grouping in chat interfaces
- * @version 1.0.0
- * @compliance WCAG 2.2 AAA, Norwegian Enterprise Standards
+ * @fileoverview SSR-Safe Separator Component - Production Strategy Implementation
+ * @description Separator component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
-import { cn } from '../../lib/utils/cn';
+import React, { forwardRef, type HTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Separator component variants using semantic design tokens
+ * Separator orientation types
  */
-const separatorVariants = cva('shrink-0 bg-border', {
-  variants: {
-    orientation: {
-      horizontal: 'h-[1px] w-full',
-      vertical: 'h-full w-[1px]',
-    },
-    variant: {
-      default: 'bg-border',
-      muted: 'bg-muted',
-      accent: 'bg-accent',
-      destructive: 'bg-destructive/20',
-    },
-    size: {
-      sm: '',
-      md: '',
-      lg: '',
-    },
-    spacing: {
-      none: '',
-      sm: '',
-      md: '',
-      lg: '',
-      xl: '',
-    },
-  },
-  compoundVariants: [
-    // Horizontal spacing variants
-    {
-      orientation: 'horizontal',
-      spacing: 'sm',
-      className: 'my-2',
-    },
-    {
-      orientation: 'horizontal',
-      spacing: 'md',
-      className: 'my-4',
-    },
-    {
-      orientation: 'horizontal',
-      spacing: 'lg',
-      className: 'my-6',
-    },
-    {
-      orientation: 'horizontal',
-      spacing: 'xl',
-      className: 'my-8',
-    },
-    // Vertical spacing variants
-    {
-      orientation: 'vertical',
-      spacing: 'sm',
-      className: 'mx-2',
-    },
-    {
-      orientation: 'vertical',
-      spacing: 'md',
-      className: 'mx-4',
-    },
-    {
-      orientation: 'vertical',
-      spacing: 'lg',
-      className: 'mx-6',
-    },
-    {
-      orientation: 'vertical',
-      spacing: 'xl',
-      className: 'mx-8',
-    },
-    // Size variants
-    {
-      size: 'sm',
-      orientation: 'horizontal',
-      className: 'h-[0.5px]',
-    },
-    {
-      size: 'lg',
-      orientation: 'horizontal',
-      className: 'h-[2px]',
-    },
-    {
-      size: 'sm',
-      orientation: 'vertical',
-      className: 'w-[0.5px]',
-    },
-    {
-      size: 'lg',
-      orientation: 'vertical',
-      className: 'w-[2px]',
-    },
-  ],
-  defaultVariants: {
-    orientation: 'horizontal',
-    variant: 'default',
-    size: 'md',
-    spacing: 'none',
-  },
-});
+export type SeparatorOrientation = 'horizontal' | 'vertical';
+
+/**
+ * Separator variant types
+ */
+export type SeparatorVariant = 'default' | 'muted' | 'accent' | 'destructive';
+
+/**
+ * Separator size types
+ */
+export type SeparatorSize = 'sm' | 'md' | 'lg';
+
+/**
+ * Separator spacing types
+ */
+export type SeparatorSpacing = 'none' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * Label position types
+ */
+export type LabelPosition = 'start' | 'center' | 'end';
 
 /**
  * Separator Props interface
  */
-export interface SeparatorProps
-  extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof separatorVariants> {
+export interface SeparatorProps extends HTMLAttributes<HTMLDivElement> {
+  /** Separator orientation */
+  orientation?: SeparatorOrientation;
+  /** Separator color variant */
+  variant?: SeparatorVariant;
+  /** Separator thickness */
+  size?: SeparatorSize;
+  /** Spacing around separator */
+  spacing?: SeparatorSpacing;
   /** Decorative separator (no semantic meaning) */
-  readonly decorative?: boolean;
+  decorative?: boolean;
   /** Label text for the separator */
-  readonly label?: string;
+  label?: string;
   /** Position of the label */
-  readonly labelPosition?: 'start' | 'center' | 'end';
+  labelPosition?: LabelPosition;
 }
 
 /**
- * Separator component for visual message grouping
- *
- * @example
- * ```tsx
- * // Basic separator
- * <Separator />
- *
- * // Separator with label
- * <Separator label="Today" labelPosition="center" />
- *
- * // Vertical separator
- * <Separator orientation="vertical" spacing="md" />
- *
- * // Accent separator
- * <Separator variant="accent" spacing="lg" />
- * ```
+ * Separator component
  */
 export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
   (
     {
-      className,
       orientation = 'horizontal',
-      variant,
-      size,
-      spacing,
+      variant = 'default',
+      size = 'md',
+      spacing = 'none',
       decorative = true,
       label,
       labelPosition = 'center',
+      className,
+      style,
       ...props
     },
     ref
   ) => {
+    const { colors, spacing: spacingTokens, typography } = useTokens();
+    
+    // Get variant color
+    const getVariantColor = (): string => {
+      switch (variant) {
+        case 'muted':
+          return colors.background?.subtle || colors.neutral?.[100] || '#f3f4f6';
+        case 'accent':
+          return colors.accent?.[500] || colors.primary?.[500] || '#3b82f6';
+        case 'destructive':
+          return `rgba(${hexToRgb(colors.danger?.[500] || '#ef4444')}, 0.2)`;
+        default:
+          return colors.border?.default || colors.neutral?.[200] || '#e5e7eb';
+      }
+    };
+    
+    // Get size value
+    const getSize = (): string => {
+      switch (size) {
+        case 'sm':
+          return '0.5px';
+        case 'lg':
+          return '2px';
+        default:
+          return '1px';
+      }
+    };
+    
+    // Get spacing value
+    const getSpacingValue = (): string => {
+      switch (spacing) {
+        case 'sm':
+          return spacingTokens[2];
+        case 'md':
+          return spacingTokens[4];
+        case 'lg':
+          return spacingTokens[6];
+        case 'xl':
+          return spacingTokens[8];
+        default:
+          return '0';
+      }
+    };
+    
+    // Base separator styles
+    const separatorStyles: React.CSSProperties = {
+      flexShrink: 0,
+      backgroundColor: getVariantColor(),
+      ...(orientation === 'horizontal' ? {
+        width: '100%',
+        height: getSize(),
+        marginTop: getSpacingValue(),
+        marginBottom: getSpacingValue(),
+      } : {
+        height: '100%',
+        width: getSize(),
+        marginLeft: getSpacingValue(),
+        marginRight: getSpacingValue(),
+      }),
+    };
     // If there's a label, render with label wrapper
-    if (label) {
+    if (label && orientation === 'horizontal') {
+      const containerStyles: React.CSSProperties = {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: getSpacingValue(),
+        marginBottom: getSpacingValue(),
+      };
+      
+      const labelStyles: React.CSSProperties = {
+        fontSize: typography.fontSize.sm,
+        fontFamily: typography.fontFamily.sans.join(', '),
+        color: colors.text?.secondary || colors.neutral?.[500],
+        backgroundColor: colors.background?.default || '#ffffff',
+        paddingLeft: spacingTokens[3],
+        paddingRight: spacingTokens[3],
+      };
+      
+      const lineStyles: React.CSSProperties = {
+        flex: 1,
+        height: getSize(),
+        backgroundColor: getVariantColor(),
+      };
+      
       return (
         <div
-          className={cn(
-            'relative flex items-center',
-            orientation === 'horizontal' ? 'w-full' : 'h-full flex-col',
-            spacing && separatorVariants({ orientation, spacing }),
-            className
-          )}
+          ref={ref}
+          className={className}
+          style={{
+            ...containerStyles,
+            ...style,
+          }}
+          {...props}
         >
           {labelPosition !== 'start' && (
             <div
-              className={cn(separatorVariants({ orientation, variant, size }), 'flex-1')}
+              style={lineStyles}
               role={decorative ? 'presentation' : 'separator'}
-              {...(orientation && { 'aria-orientation': orientation })}
+              aria-orientation={orientation}
             />
           )}
 
-          <span
-            className={cn(
-              'text-sm text-muted-foreground bg-background',
-              orientation === 'horizontal' ? 'px-3' : 'py-3'
-            )}
-          >
+          <span style={labelStyles}>
             {label}
           </span>
 
           {labelPosition !== 'end' && (
             <div
-              className={cn(separatorVariants({ orientation, variant, size }), 'flex-1')}
+              style={lineStyles}
               role={decorative ? 'presentation' : 'separator'}
-              {...(orientation && { 'aria-orientation': orientation })}
+              aria-orientation={orientation}
             />
           )}
         </div>
@@ -200,9 +195,13 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     return (
       <div
         ref={ref}
-        className={cn(separatorVariants({ orientation, variant, size, spacing }), className)}
+        className={className}
+        style={{
+          ...separatorStyles,
+          ...style,
+        }}
         role={decorative ? 'presentation' : 'separator'}
-        {...(orientation && { 'aria-orientation': orientation })}
+        aria-orientation={orientation}
         {...props}
       />
     );
@@ -212,6 +211,11 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
 Separator.displayName = 'Separator';
 
 /**
- * Separator component variants export
+ * Helper function to convert hex to RGB
  */
-export { separatorVariants };
+function hexToRgb(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : '0, 0, 0';
+}

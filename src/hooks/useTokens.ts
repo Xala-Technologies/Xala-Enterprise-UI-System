@@ -26,23 +26,30 @@ const logger = Logger.create({
 // =============================================================================
 
 export interface ColorTokens {
-  primary: Record<string, string>;
-  secondary: Record<string, string>;
-  background: {
+  primary?: Record<string, string>;
+  secondary?: Record<string, string>;
+  neutral?: Record<string, string>;
+  success?: Record<string, string>;
+  warning?: Record<string, string>;
+  danger?: Record<string, string>;
+  info?: Record<string, string>;
+  accent?: Record<string, string>;
+  background?: {
     default: string;
     paper: string;
     elevated: string;
+    subtle?: string;
   };
-  text: {
+  text?: {
     primary: string;
     secondary: string;
     muted: string;
   };
-  border: {
+  border?: {
     default: string;
     muted: string;
   };
-  status: {
+  status?: {
     success: string;
     warning: string;
     error: string;
@@ -90,6 +97,7 @@ export interface TypographyTokens {
   fontSize: Record<string, string>;
   fontWeight: Record<string, number>;
   lineHeight: Record<string, number>;
+  letterSpacing?: Record<string, string>;
 }
 
 export interface SpacingTokens extends Record<string, string> {
@@ -360,6 +368,7 @@ export interface UseTokensResult {
   branding: BrandingTokens;
   accessibility: AccessibilityTokens;
   responsive: ResponsiveTokens;
+  shadows?: Record<string, string>;
   
   // Utility functions
   getToken: (path: string, fallback?: unknown) => unknown;
@@ -393,6 +402,7 @@ export const useTokens = (): UseTokensResult => {
       branding: baseTokens.branding,
       accessibility: baseTokens.accessibility,
       responsive: baseTokens.responsive,
+      shadows: undefined,
       getToken: (path: string, fallback?: unknown): unknown => {
         const keys = path.split('.');
         let value: unknown = baseTokens;
@@ -480,6 +490,7 @@ export const useTokens = (): UseTokensResult => {
     branding: tokens.branding,
     accessibility: tokens.accessibility,
     responsive: tokens.responsive,
+    shadows: getToken('shadows') as Record<string, string> | undefined,
     
     // Utility functions
     getToken,
