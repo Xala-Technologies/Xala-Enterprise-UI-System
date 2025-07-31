@@ -11,3 +11,8 @@ export * from './norwegian-compliance';
 export * from './responsive';
 export * from './layout-inspector';
 export * from './layout-debugger';
+export * from './layout-performance';
+export * from './layout-shift-detector';
+export * from './content-sizing';
+export * from './scroll-management';
+export * from './focus-trap';
