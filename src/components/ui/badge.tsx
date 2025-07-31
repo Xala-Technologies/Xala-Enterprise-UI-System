@@ -1,12 +1,47 @@
 /**
- * @fileoverview SSR-Safe Badge Component - Production Strategy Implementation
- * @description Badge component using useTokens hook for JSON template integration
+ * @fileoverview Badge Component v5.0.0 - Token-Based Design System
+ * @description Modern Badge component using design tokens with SSR compatibility
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
+
+// =============================================================================
+// BADGE VARIANTS USING DESIGN TOKENS
+// =============================================================================
+
+/**
+ * Badge variants using token-based styling
+ */
+const badgeVariants = cva(
+  'inline-flex items-center rounded-full border font-semibold transition-colors cursor-default',
+  {
+    variants: {
+      variant: {
+        default: '',
+        secondary: '',
+        destructive: '',
+        outline: '',
+        success: '',
+        warning: '',
+        info: '',
+      },
+      size: {
+        default: 'px-2.5 py-0.5 text-xs',
+        sm: 'px-2 py-0.5 text-xs',
+        lg: 'px-3 py-1 text-sm',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
 
 /**
  * Badge variant types
@@ -21,10 +56,11 @@ export type BadgeSize = 'default' | 'sm' | 'lg';
 /**
  * Badge component props interface
  */
-export interface BadgeProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: BadgeVariant;
-  size?: BadgeSize;
-  children?: React.ReactNode;
+export interface BadgeProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {
+  readonly variant?: BadgeVariant;
+  readonly size?: BadgeSize;
 }
 
 /**
@@ -139,7 +175,12 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     };
     
     return (
-      <div ref={ref} className={className} style={badgeStyles} {...props}>
+      <div 
+        ref={ref} 
+        className={cn(badgeVariants({ variant, size }), className)} 
+        style={badgeStyles} 
+        {...props}
+      >
         {children}
       </div>
     );

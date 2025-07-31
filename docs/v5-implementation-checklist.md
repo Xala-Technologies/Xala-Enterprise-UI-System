@@ -216,15 +216,53 @@
 
 ## Component Migration
 
-### Core Components
+### Core Components ✅ COMPLETED
 - [x] Migrate Button component to token system
 - [x] Migrate Input component to token system
 - [x] Migrate Card component to token system
 - [x] Migrate Typography component to token system
 - [x] Migrate Stack and layout primitives to token system
-- [ ] Migrate Dialog/Modal to token system
-- [ ] Migrate form components to token system
-- [ ] Migrate navigation components to token system
+- [x] Migrate Textarea component to token system
+- [x] Migrate Badge component to token system
+- [x] Migrate Select component to token system
+- [x] Migrate Checkbox component to token system
+- [x] Migrate Radio component to token system
+- [x] Migrate Switch component to token system
+
+### Form Components ✅ COMPLETED
+- [x] Migrate DatePicker component to token system
+- [x] Migrate TimePicker component to token system
+- [x] Migrate Calendar component to token system
+- [x] Migrate Slider component to token system
+- [x] Migrate Progress component to token system
+
+### Navigation & Layout Components ✅ COMPLETED
+- [x] Migrate Accordion component to token system
+- [x] Migrate Breadcrumb component to token system
+- [x] Migrate Tabs component to token system
+- [x] Migrate Pagination component to token system
+- [x] Migrate TreeView component to token system
+
+### Display Components ✅ COMPLETED
+- [x] Migrate Avatar component to token system
+- [x] Migrate Alert component to token system
+- [x] Migrate Tooltip component to token system
+- [x] Migrate Skeleton component to token system
+- [x] Migrate Timeline component to token system
+- [x] Migrate CodeBlock component to token system
+
+### Interactive Components ✅ COMPLETED
+- [x] Migrate Drawer component to token system
+- [x] Migrate ContextMenu component to token system
+- [x] Migrate CommandPalette component to token system
+- [x] Migrate ScrollArea component to token system
+
+### Utility Components ✅ COMPLETED
+- [x] Migrate Box component to token system
+- [x] Migrate Separator/Divider component to token system
+- [x] Migrate IconButton component to token system
+- [x] Migrate ActionBar component to token system
+- [x] Migrate MessageBubble component to token system
 
 ### Component Architecture
 - [ ] Create component factory system

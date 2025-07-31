@@ -1,12 +1,53 @@
 /**
- * @fileoverview SSR-Safe Textarea Component - Production Strategy Implementation
- * @description Textarea component using useTokens hook for JSON template integration
+ * @fileoverview Textarea Component v5.0.0 - Token-Based Design System
+ * @description Modern Textarea component using design tokens with SSR compatibility
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
 import React, { forwardRef, type TextareaHTMLAttributes } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
+
+// =============================================================================
+// TEXTAREA VARIANTS USING DESIGN TOKENS
+// =============================================================================
+
+/**
+ * Textarea variants using token-based styling
+ * Combines CVA with runtime token access for maximum flexibility
+ */
+const textareaVariants = cva(
+  // Base classes - framework-agnostic styling
+  'flex w-full border transition-all duration-150 ease-in-out resize-y min-h-[100px] placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: '',
+        destructive: '',
+        success: '',
+        warning: '',
+      },
+      size: {
+        sm: 'min-h-[80px]',
+        default: 'min-h-[100px]',
+        lg: 'min-h-[120px]',
+      },
+      resize: {
+        none: 'resize-none',
+        vertical: 'resize-y',
+        horizontal: 'resize-x',
+        both: 'resize',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+      resize: 'vertical',
+    },
+  }
+);
 
 /**
  * Textarea variant types
@@ -26,7 +67,9 @@ export type TextareaResize = 'none' | 'vertical' | 'horizontal' | 'both';
 /**
  * Textarea component props interface
  */
-export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextareaProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement>,
+    VariantProps<typeof textareaVariants> {
   readonly label?: string;
   readonly helperText?: string;
   readonly errorText?: string;
@@ -275,7 +318,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         <textarea
           id={textareaId}
           ref={ref}
-          className={className}
+          className={cn(textareaVariants({ variant: actualVariant, size, resize: autoResize ? 'none' : resize }), className)}
           style={textareaStyles}
           aria-invalid={error || !!errorText}
           aria-describedby={displayHelperText || showCount ? `${textareaId}-helper` : undefined}
