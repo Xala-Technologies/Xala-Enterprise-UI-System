@@ -319,7 +319,7 @@
 - [x] Create layout preview system
 
 ### Layout Components
-- [ ] Create Header component with token support
+- [x] Create Header component with token support
 - [ ] Create Sidebar component with token support
 - [ ] Create Footer component with token support
 - [ ] Create MainContent component with token support

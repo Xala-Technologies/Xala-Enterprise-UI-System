@@ -44,6 +44,23 @@ export {
   type HeaderVariant,
   type HeaderSectionVariant
 } from './header';
+export {
+  Sidebar,
+  SidebarHeader,
+  SidebarSection,
+  SidebarItem,
+  SidebarComposition,
+  sidebarVariants,
+  sidebarOverlayVariants,
+  sidebarContentVariants,
+  type SidebarProps,
+  type SidebarHeaderProps,
+  type SidebarSectionProps,
+  type SidebarItemProps,
+  type SidebarVariant,
+  type SidebarOverlayVariant,
+  type SidebarContentVariant
+} from './sidebar';
 
 // Navigation components
 export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
