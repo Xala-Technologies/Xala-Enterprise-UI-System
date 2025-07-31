@@ -615,6 +615,45 @@ const whiteLabelConfig = migrateThemeToWhiteLabel(oldTheme, {
 });
 ```
 
+## Future Integration: Localization
+
+While localization is maintained as a separate system in the UI System, future versions may integrate locale-specific token overrides with white-label configurations:
+
+### Potential Integration Points
+
+1. **Locale-Specific Typography**
+   ```typescript
+   // Future: Locale-aware white label config
+   const futureWhiteLabelConfig = {
+     // ... base config
+     localeOverrides: {
+       'ar': {
+         typography: {
+           fontFamily: { sans: ['Arabic Font', 'system-ui'] },
+           textDirection: 'rtl'
+         }
+       },
+       'zh': {
+         typography: {
+           fontSize: { base: '16px' } // Larger for CJK
+         }
+       }
+     }
+   };
+   ```
+
+2. **Brand + Locale Combinations**
+   - Healthcare brand with Norwegian-specific adjustments
+   - Finance brand with Arabic RTL layout tokens
+   - Education brand with locale-specific spacing
+
+3. **Dynamic Token Loading**
+   - Load locale-specific token overrides on demand
+   - Merge with white-label base configuration
+   - Maintain performance with lazy loading
+
+**Note**: Currently, localization is handled by the separate `useLocalization` hook. See the [Localization Guide](../localization.md) for text translation needs.
+
 ## Next Steps
 
 - [Token Serialization](./token-serialization.md)

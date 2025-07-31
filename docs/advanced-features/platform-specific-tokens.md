@@ -674,6 +674,43 @@ const styles = {
 };
 ```
 
+## Future Integration: Localization
+
+Platform-specific tokens currently focus on visual and interaction patterns. Text content and translations are handled by the separate localization system. However, future integration possibilities include:
+
+### Platform + Locale Combinations
+
+1. **Mobile Platform Localization**
+   ```typescript
+   // Future: Platform and locale aware tokens
+   const platformLocaleTokens = {
+     'ios-ar': {
+       typography: {
+         textAlign: 'right',
+         fontFamily: { sans: ['-apple-system-arabic', 'Arial'] }
+       }
+     },
+     'android-zh': {
+       typography: {
+         fontSize: { base: '16px' }, // Larger for Chinese on mobile
+         lineHeight: { base: 1.6 }
+       }
+     }
+   };
+   ```
+
+2. **Locale-Specific Platform Adjustments**
+   - Touch target sizes for different language text lengths
+   - Platform-specific font stacks per locale
+   - RTL layout adjustments for mobile vs desktop
+
+3. **Content Adaptation**
+   - Platform-specific copy (handled by localization)
+   - Locale-aware spacing for text expansion
+   - Dynamic layout adjustments based on text length
+
+**Note**: Text translations and copy variations are managed through the `useLocalization` hook. See the [Localization Guide](../localization.md) for implementation details.
+
 ## Next Steps
 
 - [Testing Token Systems](./testing-tokens.md)

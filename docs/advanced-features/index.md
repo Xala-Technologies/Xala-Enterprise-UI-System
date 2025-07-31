@@ -288,12 +288,34 @@ describe('Advanced Features', () => {
    - Monitor transition performance
    - Optimize platform-specific code
 
+## 🌐 Localization
+
+Localization (i18n) is maintained as a **separate system** from the token transformation pipeline:
+
+- **Current Implementation**: Basic `useLocalization` hook for text translations
+- **Supported Languages**: English, Norwegian Bokmål, French, Arabic
+- **Documentation**: [Localization Guide](../localization.md) and [useLocalization Hook](../hooks/useLocalization.md)
+
+### Why Separate?
+
+1. **Different Concerns**: Tokens handle visual design; localization handles content
+2. **Independent Evolution**: Each system can evolve without affecting the other
+3. **Clear Boundaries**: Easier to understand and maintain
+
+### Future Integration Possibilities
+
+While currently separate, future versions may introduce:
+- Locale-specific token overrides (typography for RTL languages)
+- Platform + locale combinations
+- White label + locale configurations
+
 ## 📖 Related Documentation
 
 - [Token Transformers](../token-transformers/) - Core transformation pipeline
 - [Component Documentation](../components/) - Component-specific tokens
 - [Getting Started](../getting-started.md) - Basic setup guide
 - [Architecture](../v5-architecture.md) - System architecture
+- [Localization Guide](../localization.md) - Text translation system
 
 ## 🆘 Troubleshooting
 
