@@ -91,7 +91,7 @@ export {
   // Tablet Layout Components
   TabletLayout, TabletSidebar,
   // Platform utilities
-  usePlatform, WebContent, WebFooter,
+  useLayoutPlatform, WebContent, WebFooter,
   // Web Layout Components
   WebLayout, WebNavbar
 } from './layouts';

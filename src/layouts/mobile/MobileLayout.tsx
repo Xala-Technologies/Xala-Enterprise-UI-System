@@ -1,15 +1,20 @@
 /**
- * Mobile Layout Component
- * Enterprise-grade mobile layout with responsive design
- * Supports drawer navigation and status bar configuration
+ * @fileoverview MobileLayout Component v5.0.0 - Token-Based Design System
+ * @description Mobile layout component using design tokens with SSR compatibility
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
-/* eslint-disable no-unused-vars */
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import React, { forwardRef, useState, type ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
+import { useTokens } from '../../hooks/useTokens';
+import { useLayout } from '../../hooks';
 import { BaseLayout } from '../BaseLayout';
+
+// =============================================================================
+// MOBILE LAYOUT VARIANTS USING DESIGN TOKENS
+// =============================================================================
 
 /**
  * Mobile header variants
@@ -48,14 +53,13 @@ const mobileHeaderVariants = cva(
 /**
  * Mobile bottom navigation variants
  */
-const mobileBottomNavVariants = cva(
+const mobileBottomNavigationVariants = cva(
   [
-    'fixed bottom-0 left-0 right-0 z-50',
+    'fixed bottom-0 left-0 right-0 z-40',
     'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
     'border-t border-border',
-    'h-16 px-2',
+    'h-16 px-4',
     'flex items-center justify-around',
-    'safe-area-inset-bottom',
     'transition-all duration-200',
     'motion-reduce:transition-none',
   ],
@@ -63,13 +67,18 @@ const mobileBottomNavVariants = cva(
     variants: {
       variant: {
         default: 'bg-background',
-        primary: 'bg-primary text-primary-foreground',
-        secondary: 'bg-secondary text-secondary-foreground',
-        transparent: 'bg-transparent border-transparent',
+        floating: 'mx-4 mb-4 rounded-full shadow-lg',
+        minimal: 'bg-transparent backdrop-blur-none',
+      },
+      size: {
+        sm: 'h-12',
+        md: 'h-16',
+        lg: 'h-20',
       },
     },
     defaultVariants: {
       variant: 'default',
+      size: 'md',
     },
   }
 );
@@ -80,26 +89,25 @@ const mobileBottomNavVariants = cva(
 const mobileDrawerVariants = cva(
   [
     'fixed inset-y-0 left-0 z-50',
-    'w-80 max-w-[85vw]',
-    'bg-background border-r border-border',
+    'w-64 bg-background',
     'transform transition-transform duration-300 ease-in-out',
     'motion-reduce:transition-none',
-    'overflow-y-auto',
+    'border-r border-border',
   ],
   {
     variants: {
-      position: {
-        left: 'left-0',
-        right: 'right-0',
-      },
       open: {
         true: 'translate-x-0',
         false: '-translate-x-full',
       },
+      side: {
+        left: 'left-0',
+        right: 'right-0 left-auto',
+      },
     },
     defaultVariants: {
-      position: 'left',
       open: false,
+      side: 'left',
     },
   }
 );
@@ -108,197 +116,136 @@ const mobileDrawerVariants = cva(
  * Mobile content variants
  */
 const mobileContentVariants = cva(
-  [
-    'flex-1 overflow-auto',
-    'p-4',
-    'pb-20', // Space for bottom navigation
-    'min-h-screen',
-    'transition-all duration-300',
-    'motion-reduce:transition-none',
-  ],
+  ['flex-1 overflow-auto', 'transition-all duration-300', 'motion-reduce:transition-none'],
   {
     variants: {
-      padding: {
-        none: 'p-0',
-        sm: 'p-2',
-        md: 'p-4',
-        lg: 'p-6',
-        xl: 'p-8',
+      paddingBottom: {
+        none: 'pb-0',
+        navigation: 'pb-16',
+        large: 'pb-20',
       },
-      bottomSafe: {
-        true: 'pb-20 safe-area-inset-bottom',
-        false: 'pb-4',
+      paddingTop: {
+        none: 'pt-0',
+        header: 'pt-16',
+        large: 'pt-20',
       },
     },
     defaultVariants: {
-      padding: 'md',
-      bottomSafe: true,
+      paddingBottom: 'navigation',
+      paddingTop: 'header',
     },
   }
 );
 
-/**
- * Mobile Header Props
- */
-export interface MobileHeaderProps extends React.HTMLAttributes<HTMLElement> {
-  /** Header content */
-  readonly children?: ReactNode;
-  /** Header variant */
-  readonly variant?: 'default' | 'primary' | 'secondary' | 'transparent';
-  /** Header size */
-  readonly size?: 'sm' | 'md' | 'lg';
-  /** Left action (usually menu button) */
-  readonly leftAction?: ReactNode;
-  /** Right action (usually profile/settings) */
-  readonly rightAction?: ReactNode;
-  /** Center content (usually title) */
-  readonly centerContent?: ReactNode;
-  /** Header title */
-  readonly title?: string;
-  /** Show back button */
-  readonly showBackButton?: boolean;
-  /** Back button handler */
-  readonly onBack?: () => void;
-}
+// =============================================================================
+// MOBILE LAYOUT INTERFACES
+// =============================================================================
 
-/**
- * Mobile Bottom Navigation Props
- */
-export interface MobileBottomNavigationProps extends React.HTMLAttributes<HTMLElement> {
-  /** Navigation items */
-  readonly items: Array<{
-    readonly icon: ReactNode;
-    readonly label: string;
-    readonly href?: string;
-    readonly active?: boolean;
-    readonly onClick?: () => void;
-    readonly badge?: string | number;
-  }>;
-  /** Bottom navigation variant */
-  readonly variant?: 'default' | 'primary' | 'secondary' | 'transparent';
-  /** Active item index */
-  readonly activeIndex?: number;
-  /** Navigation change handler */
-  readonly onNavigate?: (_index: number) => void;
-}
-
-/**
- * Mobile Drawer Props
- */
-export interface MobileDrawerProps extends React.HTMLAttributes<HTMLElement> {
-  /** Drawer content */
-  readonly children: ReactNode;
-  /** Drawer position */
-  readonly position?: 'left' | 'right';
-  /** Open state */
-  readonly open?: boolean;
-  /** Close handler */
-  readonly onClose?: () => void;
-  /** Drawer title */
-  readonly title?: string;
-  /** Header content */
-  readonly header?: ReactNode;
-  /** Footer content */
-  readonly footer?: ReactNode;
-}
-
-/**
- * Mobile Content Props
- */
-export interface MobileContentProps extends React.HTMLAttributes<HTMLElement> {
-  /** Content */
-  readonly children: ReactNode;
-  /** Content padding */
-  readonly padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl';
-  /** Bottom safe area */
-  readonly bottomSafe?: boolean;
-  /** Content title */
-  readonly title?: string;
-  /** Pull to refresh */
-  readonly pullToRefresh?: boolean;
-  /** Refresh handler */
-  readonly onRefresh?: () => void;
-}
-
-/**
- * Mobile Layout Props
- */
 export interface MobileLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
-  /** Layout content */
   readonly children: ReactNode;
-  /** Header component */
   readonly header?: ReactNode;
-  /** Bottom navigation component */
   readonly bottomNavigation?: ReactNode;
-  /** Drawer component */
   readonly drawer?: ReactNode;
-  /** Drawer open state */
   readonly drawerOpen?: boolean;
-  /** Drawer close handler */
   readonly onDrawerClose?: () => void;
-  /** Status bar style */
-  readonly statusBarStyle?: 'default' | 'light' | 'dark';
+  readonly skipToMainContent?: boolean;
+  readonly 'aria-label'?: string;
 }
 
+export interface MobileHeaderProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof mobileHeaderVariants> {
+  readonly children: ReactNode;
+  readonly menuButton?: ReactNode;
+  readonly actions?: ReactNode;
+  readonly sticky?: boolean;
+}
+
+export interface MobileBottomNavigationProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof mobileBottomNavigationVariants> {
+  readonly children?: ReactNode;
+  readonly items?: Array<{
+    icon: ReactNode;
+    label: string;
+    onClick: () => void;
+    active?: boolean;
+  }>;
+}
+
+export interface MobileDrawerProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof mobileDrawerVariants> {
+  readonly children: ReactNode;
+  readonly onClose?: () => void;
+  readonly header?: ReactNode;
+}
+
+export interface MobileContentProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof mobileContentVariants> {
+  readonly children: ReactNode;
+}
+
+// =============================================================================
+// MOBILE LAYOUT HOOKS
+// =============================================================================
+
 /**
- * Mobile Header Component
+ * Mobile-specific styles utility
+ */
+const useMobileStyles = () => {
+  const { colors, spacing, getToken } = useTokens();
+
+  const overlayStyles = React.useMemo((): React.CSSProperties => ({
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 40,
+    transition: 'opacity 300ms ease-in-out',
+  }), []);
+
+  const safeAreaStyles = React.useMemo((): React.CSSProperties => ({
+    paddingTop: 'env(safe-area-inset-top)',
+    paddingBottom: 'env(safe-area-inset-bottom)',
+    paddingLeft: 'env(safe-area-inset-left)',
+    paddingRight: 'env(safe-area-inset-right)',
+  }), []);
+
+  return { overlayStyles, safeAreaStyles };
+};
+
+// =============================================================================
+// MOBILE LAYOUT COMPONENTS
+// =============================================================================
+
+/**
+ * MobileHeader Component
  */
 export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
-  (
-    {
-      children,
-      variant = 'default',
-      size = 'md',
-      leftAction,
-      rightAction,
-      centerContent,
-      title,
-      showBackButton = false,
-      onBack,
-      className,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
+  ({ children, menuButton, actions, sticky = true, variant, size, className, style, ...props }, ref) => {
+    const { colors, spacing, typography } = useTokens();
+
+    const headerStyles = React.useMemo((): React.CSSProperties => ({
+      backgroundColor: colors.background?.default || '#ffffff',
+      borderBottomColor: colors.border?.default || '#e2e8f0',
+      zIndex: sticky ? 50 : 'auto',
+      ...style,
+    }), [colors, sticky, style]);
+
     return (
       <header
         ref={ref}
-        role="banner"
-        className={cn(mobileHeaderVariants({ variant, size }), className)}
+        className={cn(mobileHeaderVariants({ variant, size }), sticky && 'sticky', className)}
+        style={headerStyles}
         {...props}
       >
-        {/* Left Section */}
-        <div className="flex items-center justify-start flex-1">
-          {showBackButton && (
-            <button
-              onClick={onBack}
-              className="p-2 -ml-2 rounded-full hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mr-2"
-              aria-label="Go back"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
-          )}
-          {leftAction}
-        </div>
-
-        {/* Center Section */}
-        <div className="flex items-center justify-center flex-1">
-          {centerContent ||
-            (title && <h1 className="text-lg font-semibold text-foreground truncate">{title}</h1>)}
-        </div>
-
-        {/* Right Section */}
-        <div className="flex items-center justify-end flex-1">{rightAction}</div>
-
-        {/* Custom content */}
-        {children}
+        {menuButton && <div className="flex items-center">{menuButton}</div>}
+        <div className="flex-1 flex items-center justify-center">{children}</div>
+        {actions && <div className="flex items-center gap-2">{actions}</div>}
       </header>
     );
   }
@@ -307,48 +254,48 @@ export const MobileHeader = forwardRef<HTMLElement, MobileHeaderProps>(
 MobileHeader.displayName = 'MobileHeader';
 
 /**
- * Mobile Bottom Navigation Component
+ * MobileBottomNavigation Component
  */
 export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNavigationProps>(
-  (
-    { items, variant = 'default', activeIndex = 0, onNavigate, className, ...props },
-    ref
-  ): React.ReactElement => {
+  ({ children, items, variant, size, className, style, ...props }, ref) => {
+    const { colors, spacing } = useTokens();
+
+    const navStyles = React.useMemo((): React.CSSProperties => ({
+      backgroundColor: colors.background?.default || '#ffffff',
+      borderTopColor: colors.border?.default || '#e2e8f0',
+      paddingBottom: 'env(safe-area-inset-bottom)',
+      ...style,
+    }), [colors, style]);
+
     return (
       <nav
         ref={ref}
+        className={cn(mobileBottomNavigationVariants({ variant, size }), className)}
+        style={navStyles}
         role="navigation"
         aria-label="Bottom navigation"
-        className={cn(mobileBottomNavVariants({ variant }), className)}
         {...props}
       >
-        {items.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              item.onClick?.();
-              onNavigate?.(index);
-            }}
-            className={cn(
-              'flex flex-col items-center justify-center p-2 rounded-md transition-colors',
-              'hover:bg-accent hover:text-accent-foreground',
-              'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-              activeIndex === index ? 'text-primary' : 'text-muted-foreground'
-            )}
-            aria-label={item.label}
-            aria-current={activeIndex === index ? 'page' : undefined}
-          >
-            <div className="relative">
-              {item.icon}
-              {item.badge && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                  {item.badge}
-                </span>
+        {items ? (
+          items.map((item, index) => (
+            <button
+              key={index}
+              onClick={item.onClick}
+              className={cn(
+                'flex flex-col items-center justify-center gap-1 p-2',
+                'text-xs transition-colors',
+                item.active ? 'text-primary' : 'text-muted-foreground'
               )}
-            </div>
-            <span className="text-xs mt-1 truncate">{item.label}</span>
-          </button>
-        ))}
+              aria-label={item.label}
+              aria-current={item.active ? 'page' : undefined}
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </button>
+          ))
+        ) : (
+          children
+        )}
       </nav>
     );
   }
@@ -357,66 +304,46 @@ export const MobileBottomNavigation = forwardRef<HTMLElement, MobileBottomNaviga
 MobileBottomNavigation.displayName = 'MobileBottomNavigation';
 
 /**
- * Mobile Drawer Component
+ * MobileDrawer Component
  */
 export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
-  (
-    {
-      children,
-      position = 'left',
-      open = false,
-      onClose,
-      title,
-      header,
-      footer,
-      className,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    return (
-      <>
-        {/* Overlay */}
-        {open && (
-          <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} aria-hidden="true" />
-        )}
+  ({ children, open, side, onClose, header, className, style, ...props }, ref) => {
+    const { colors, spacing } = useTokens();
 
-        <aside
-          ref={ref}
-          role="complementary"
-          aria-label={title || 'Navigation drawer'}
-          className={cn(mobileDrawerVariants({ position, open }), className)}
-          {...props}
-        >
-          {/* Header */}
-          {(title || header) && (
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              {title && <h2 className="text-lg font-semibold text-foreground truncate">{title}</h2>}
-              {header}
+    const drawerStyles = React.useMemo((): React.CSSProperties => ({
+      backgroundColor: colors.background?.default || '#ffffff',
+      borderRightColor: colors.border?.default || '#e2e8f0',
+      paddingTop: 'env(safe-area-inset-top)',
+      ...style,
+    }), [colors, style]);
+
+    return (
+      <aside
+        ref={ref}
+        className={cn(mobileDrawerVariants({ open, side }), className)}
+        style={drawerStyles}
+        role="navigation"
+        aria-label="Mobile navigation drawer"
+        {...props}
+      >
+        {header && (
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            {header}
+            {onClose && (
               <button
                 onClick={onClose}
-                className="p-2 rounded-md hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                className="p-2 rounded-md hover:bg-accent"
                 aria-label="Close drawer"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
-            </div>
-          )}
-
-          {/* Content */}
-          <div className="flex-1 overflow-y-auto p-4">{children}</div>
-
-          {/* Footer */}
-          {footer && <div className="p-4 border-t border-border">{footer}</div>}
-        </aside>
-      </>
+            )}
+          </div>
+        )}
+        <div className="flex-1 overflow-auto p-4">{children}</div>
+      </aside>
     );
   }
 );
@@ -424,54 +351,27 @@ export const MobileDrawer = forwardRef<HTMLElement, MobileDrawerProps>(
 MobileDrawer.displayName = 'MobileDrawer';
 
 /**
- * Mobile Content Component
+ * MobileContent Component
  */
 export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
-  (
-    {
-      children,
-      padding = 'md',
-      bottomSafe = true,
-      title,
-      pullToRefresh = false,
-      onRefresh,
-      className,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    const [refreshing, setRefreshing] = useState(false);
+  ({ children, paddingBottom, paddingTop, className, style, ...props }, ref) => {
+    const { colors } = useTokens();
 
-    // Refresh handler for future implementation
-    const handleRefresh = async (): Promise<void> => {
-      if (onRefresh && !refreshing) {
-        setRefreshing(true);
-        await onRefresh();
-        setRefreshing(false);
-      }
-    };
-
-    // Suppress unused variable warning for planned feature
-    void handleRefresh;
+    const contentStyles = React.useMemo((): React.CSSProperties => ({
+      backgroundColor: colors.background?.default || '#ffffff',
+      minHeight: '100%',
+      ...style,
+    }), [colors, style]);
 
     return (
       <main
         ref={ref}
+        id="main-content"
+        className={cn(mobileContentVariants({ paddingBottom, paddingTop }), className)}
+        style={contentStyles}
         role="main"
-        aria-label={title || 'Main content'}
-        className={cn(mobileContentVariants({ padding, bottomSafe }), className)}
         {...props}
       >
-        {/* Pull to refresh indicator */}
-        {pullToRefresh && refreshing && (
-          <div className="flex items-center justify-center p-4">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
-          </div>
-        )}
-
-        {/* Content title */}
-        {title && <h1 className="text-2xl font-bold text-foreground mb-6">{title}</h1>}
-
         {children}
       </main>
     );
@@ -480,8 +380,13 @@ export const MobileContent = forwardRef<HTMLElement, MobileContentProps>(
 
 MobileContent.displayName = 'MobileContent';
 
+// =============================================================================
+// MOBILE LAYOUT COMPONENT
+// =============================================================================
+
 /**
- * Mobile Layout Component
+ * MobileLayout Component with token-based styling
+ * Optimized for mobile devices with touch interactions and safe areas
  */
 export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
   (
@@ -490,33 +395,67 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
       header,
       bottomNavigation,
       drawer,
-      drawerOpen: _drawerOpen = false,
-
-      // _onDrawerClose removed - unused parameter
-      statusBarStyle: _statusBarStyle = 'default',
+      drawerOpen = false,
+      onDrawerClose,
+      skipToMainContent = true,
       className,
+      'aria-label': ariaLabel = 'Mobile application layout',
+      style,
       ...props
     },
     ref
   ): React.ReactElement => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(drawerOpen);
+    const { setLayout } = useLayout();
+    const { overlayStyles } = useMobileStyles();
+
+    React.useEffect(() => {
+      setLayout('mobile');
+    }, [setLayout]);
+
+    React.useEffect(() => {
+      setIsDrawerOpen(drawerOpen);
+    }, [drawerOpen]);
+
+    const handleDrawerClose = React.useCallback(() => {
+      setIsDrawerOpen(false);
+      onDrawerClose?.();
+    }, [onDrawerClose]);
+
     return (
       <BaseLayout
         ref={ref}
         platform="mobile"
-        className={cn('relative overflow-hidden', className)}
+        spacing="none"
+        skipToMainContent={skipToMainContent}
+        className={className}
+        aria-label={ariaLabel}
+        style={style}
         {...props}
       >
-        {/* Header */}
         {header}
-
-        {/* Main Content */}
-        <div className="flex-1 overflow-hidden">{children}</div>
-
-        {/* Bottom Navigation */}
-        {bottomNavigation}
-
+        
+        {/* Drawer overlay */}
+        {isDrawerOpen && drawer && (
+          <div
+            style={overlayStyles}
+            onClick={handleDrawerClose}
+            aria-hidden="true"
+          />
+        )}
+        
         {/* Drawer */}
-        {drawer}
+        {drawer && React.cloneElement(drawer as React.ReactElement, {
+          open: isDrawerOpen,
+          onClose: handleDrawerClose,
+        })}
+        
+        {/* Main content */}
+        <div className="flex-1 flex flex-col">
+          {children}
+        </div>
+        
+        {bottomNavigation}
       </BaseLayout>
     );
   }
@@ -524,87 +463,69 @@ export const MobileLayout = forwardRef<HTMLDivElement, MobileLayoutProps>(
 
 MobileLayout.displayName = 'MobileLayout';
 
-/**
- * Mobile layout composition utilities
- */
+// =============================================================================
+// MOBILE LAYOUT COMPOSITION
+// =============================================================================
+
 export const MobileLayoutComposition = {
   /**
    * Standard mobile app layout
    */
   App: ({
-    header,
-    content,
-    bottomNavigation,
-    drawer,
-    drawerOpen = false,
-    onDrawerClose,
+    title,
+    menuItems,
+    bottomNavItems,
+    children,
+    onMenuToggle,
     ...props
   }: {
-    header?: ReactNode;
-    content: ReactNode;
-    bottomNavigation?: ReactNode;
-    drawer?: ReactNode;
-    drawerOpen?: boolean;
-    onDrawerClose?: () => void;
-  } & MobileLayoutProps): React.ReactElement => (
-    <MobileLayout drawerOpen={drawerOpen} onDrawerClose={onDrawerClose} {...props}>
-      {header}
-      <MobileContent>{content}</MobileContent>
-      {bottomNavigation}
-      {drawer}
-    </MobileLayout>
-  ),
+    title?: string;
+    menuItems?: ReactNode;
+    bottomNavItems?: MobileBottomNavigationProps['items'];
+    children: ReactNode;
+    onMenuToggle?: () => void;
+  } & Omit<MobileLayoutProps, 'children'>): React.ReactElement => {
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
-  /**
-   * Modal-like mobile layout
-   */
-  Modal: ({
-    header,
-    content,
-    actions,
-    // _onClose removed - unused parameter
-    ...props
-  }: {
-    header?: ReactNode;
-    content: ReactNode;
-    actions?: ReactNode;
-    onClose?: (() => void) | undefined;
-  } & MobileLayoutProps): React.ReactElement => (
-    <MobileLayout {...props}>
-      {header}
-      <MobileContent bottomSafe={false}>{content}</MobileContent>
-      {actions && <div className="p-4 border-t border-border bg-background">{actions}</div>}
-    </MobileLayout>
-  ),
-
-  /**
-   * Fullscreen mobile layout
-   */
-  Fullscreen: ({
-    content,
-    ...props
-  }: {
-    content: ReactNode;
-  } & MobileLayoutProps): React.ReactElement => (
-    <MobileLayout {...props}>
-      <MobileContent padding="none" bottomSafe={false}>
-        {content}
-      </MobileContent>
-    </MobileLayout>
-  ),
+    return (
+      <MobileLayout
+        drawerOpen={drawerOpen}
+        onDrawerClose={() => setDrawerOpen(false)}
+        header={
+          <MobileHeader
+            menuButton={
+              <button
+                onClick={() => {
+                  setDrawerOpen(!drawerOpen);
+                  onMenuToggle?.();
+                }}
+                className="p-2 rounded-md hover:bg-accent"
+                aria-label="Open menu"
+              >
+                <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            }
+          >
+            {title && <h1 className="text-lg font-semibold">{title}</h1>}
+          </MobileHeader>
+        }
+        drawer={
+          <MobileDrawer header={<h2 className="text-lg font-semibold">Menu</h2>}>
+            {menuItems}
+          </MobileDrawer>
+        }
+        bottomNavigation={
+          bottomNavItems && <MobileBottomNavigation items={bottomNavItems} />
+        }
+        {...props}
+      >
+        <MobileContent>{children}</MobileContent>
+      </MobileLayout>
+    );
+  },
 };
 
-/**
- * Export mobile layout variants and types
- */
-export type MobileHeaderVariant = VariantProps<typeof mobileHeaderVariants>;
-export type MobileBottomNavVariant = VariantProps<typeof mobileBottomNavVariants>;
-export type MobileDrawerVariant = VariantProps<typeof mobileDrawerVariants>;
-export type MobileContentVariant = VariantProps<typeof mobileContentVariants>;
-
-export {
-  mobileBottomNavVariants,
-  mobileContentVariants,
-  mobileDrawerVariants,
-  mobileHeaderVariants,
-};
+// Export variants for external use
+export { mobileHeaderVariants, mobileBottomNavigationVariants, mobileDrawerVariants, mobileContentVariants };

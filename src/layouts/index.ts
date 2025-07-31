@@ -78,4 +78,4 @@ export type {
 } from './admin/AdminLayout';
 
 // Platform utilities
-export { usePlatform } from './BaseLayout';
+export { useLayoutPlatform } from './BaseLayout';
