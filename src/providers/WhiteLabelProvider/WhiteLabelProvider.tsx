@@ -136,7 +136,11 @@ export const WhiteLabelProvider = ({
 
   // Update config partially
   const updateConfig = useCallback((updates: Partial<WhiteLabelConfig>) => {
-    setConfigState(prev => prev ? mergeDeep(prev, updates) as WhiteLabelConfig : null);
+    setConfigState(prev => {
+      if (!prev) return null;
+      // Create a new object to avoid mutating readonly properties
+      return { ...prev, ...updates } as WhiteLabelConfig;
+    });
   }, []);
 
   // Reset config

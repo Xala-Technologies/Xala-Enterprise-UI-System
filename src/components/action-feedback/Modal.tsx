@@ -39,7 +39,7 @@ export interface NorwegianActionContext {
 export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly isOpen?: boolean;
   // readonly open?: boolean; // Unused - keeping for API compatibility
-  readonly onOpenChange?: (open: boolean) => void;
+  readonly onOpenChange?: (_open: boolean) => void;
   readonly title?: string;
   readonly titleKey?: string;
   readonly size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -72,7 +72,6 @@ const getCategoryIcon = (category: string): string => {
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
-  // eslint-disable-next-line no-unused-vars
   const { size: _size = 'md', centered: _centered = true, norwegian: _norwegian } = props;
 
   // Base modal overlay styles

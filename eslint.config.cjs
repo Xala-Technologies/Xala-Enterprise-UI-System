@@ -25,6 +25,7 @@ module.exports = [
       'jest.config.js',
       'tests/mocks/**/*.js',
       'tests/setup/**/*.js',
+      'scripts/xala-scaffold/**/*',
     ],
     languageOptions: {
       parser: tsParser,
@@ -48,6 +49,15 @@ module.exports = [
         fetch: 'readonly',
         process: 'readonly',
         NodeJS: 'readonly',
+        sessionStorage: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        HTMLLinkElement: 'readonly',
+        FormData: 'readonly',
+        Event: 'readonly',
+        Buffer: 'readonly',
+        JSX: 'readonly',
       },
     },
     plugins: {
@@ -81,7 +91,7 @@ module.exports = [
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    files: ['tests/**/*.{ts,tsx}', '**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -111,6 +121,15 @@ module.exports = [
         navigator: 'readonly',
         process: 'readonly',
         require: 'readonly',
+        localStorage: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLDivElement: 'readonly',
+        HTMLButtonElement: 'readonly',
+        HTMLLinkElement: 'readonly',
+        FormData: 'readonly',
+        Event: 'readonly',
+        Buffer: 'readonly',
+        JSX: 'readonly',
       },
     },
     plugins: {
@@ -139,7 +158,7 @@ module.exports = [
     },
   },
   {
-    files: ['scripts/**/*.js', '*.config.{js,cjs}', 'tests/**/*.js', 'tests/setup/**/*.js'],
+    files: ['scripts/**/*.js', '*.config.{js,cjs}', 'tests/**/*.js', 'tests/setup/**/*.js', 'jest.config.comprehensive.js'],
     languageOptions: {
       sourceType: 'commonjs',
       globals: {
@@ -202,6 +221,7 @@ module.exports = [
       'src/rtl/tests/**/*.ts',
       'scripts/**/*.js',
       'scripts/**/*.cjs',
+      'scripts/xala-scaffold/**/*',
     ],
   },
 ];

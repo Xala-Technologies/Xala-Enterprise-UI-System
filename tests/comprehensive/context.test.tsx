@@ -7,10 +7,7 @@ import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UiProvider } from '../../src/providers/UiProvider/UiProvider';
-import { useTokens } from '../../src/hooks/useTokens';
-import { useTheme } from '../../src/hooks/useTheme';
-import { usePlatform } from '../../src/hooks/usePlatform';
-import { useLayout } from '../../src/hooks/useLayout';
+import { useTokens, useTheme, usePlatform, useLayout } from '../../src/providers/UiProvider/UiProvider';
 import { useComponent } from '../../src/hooks/useComponent';
 
 describe('Context Provider Tests', () => {

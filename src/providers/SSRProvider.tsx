@@ -6,7 +6,8 @@
  */
 
 import React, { createContext, useContext, useMemo } from 'react';
-import { SSRContext, createSSRContext } from '../utils/ssr';
+import type { SSRContext} from '../utils/ssr';
+import { createSSRContext } from '../utils/ssr';
 
 // =============================================================================
 // SSR CONTEXT

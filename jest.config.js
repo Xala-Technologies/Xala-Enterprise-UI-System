@@ -25,6 +25,7 @@ export default {
     '<rootDir>/tests/**/*.(test|spec).(ts|tsx)',
   ],
   setupFilesAfterEnv: [
+    '<rootDir>/tests/setup.ts',
     '<rootDir>/tests/setup/jest.setup.js',
     '<rootDir>/tests/setup/norwegian.setup.js',
     '<rootDir>/tests/setup/accessibility.setup.js',

@@ -6,9 +6,10 @@
  */
 
 import React, { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react';
-import { 
+import type { 
   ThemeSnapshot, 
-  HydrationMismatch,
+  HydrationMismatch} from '../utils/ssr';
+import {
   useHydrationMismatchDetection,
   useThemeHydration,
   extractThemeSnapshot,

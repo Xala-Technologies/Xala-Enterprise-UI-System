@@ -42,7 +42,15 @@
       "Bash(cd:*)",
       "Bash(cd:*)",
       "Bash(cd:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(pnpm run test:*)",
+      "Bash(pnpm run:*)",
+      "Bash(cd:*)",
+      "Bash(npx enterprise-standards:*)"
     ],
     "deny": []
   }
