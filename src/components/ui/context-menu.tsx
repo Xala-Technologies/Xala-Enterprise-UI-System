@@ -150,9 +150,9 @@ export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentP
       overflow: 'hidden',
       borderRadius: borderRadius.md,
       border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.popover?.default || colors.background?.paper || colors.background?.default || '#ffffff',
+      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
       padding: spacing[1],
-      color: colors.popover?.foreground || colors.text?.primary || colors.neutral?.[900] || '#111827',
+      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
       boxShadow: shadows.md,
       // Animation would typically be handled by CSS animations in a real implementation
       animation: 'fadeIn 150ms ease-out, scaleIn 150ms ease-out',

@@ -148,7 +148,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
         alignItems: 'center',
         gap: spacing[2],
         borderRadius: borderRadius.md,
-        paddingLeft: spacing[2],
+        paddingLeft,
         paddingRight: spacing[2],
         paddingTop: spacing[1],
         paddingBottom: spacing[1],
@@ -156,7 +156,6 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         outline: 'none',
         transition: 'all 150ms ease-in-out',
-        paddingLeft,
       };
 
       if (item.disabled) {

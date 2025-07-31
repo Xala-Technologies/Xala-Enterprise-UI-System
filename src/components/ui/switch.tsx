@@ -1,68 +1,29 @@
 /**
- * Switch component with shadcn-ui style and enterprise compliance
- * Uses design tokens and CSS variables for theming
+ * @fileoverview SSR-Safe Switch Component - Production Strategy Implementation
+ * @description Switch component using useTokens hook for JSON template integration
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-/* eslint-disable no-unused-vars */
-
-import React from 'react';
-
-import { cn } from '@/lib/utils/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type InputHTMLAttributes } from 'react';
-import { useTokens } from '@/hooks/useTokens';
+import React, { forwardRef, type InputHTMLAttributes } from 'react';
+import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Switch track variants using class-variance-authority
+ * Switch variant types
  */
-const switchTrackVariants = cva(
-  'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50',
-  {
-    variants: {
-      variant: {
-        default: 'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-        destructive: 'data-[state=checked]:bg-destructive data-[state=unchecked]:bg-input',
-        success: 'data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-input',
-        warning: 'data-[state=checked]:bg-yellow-500 data-[state=unchecked]:bg-input',
-      },
-      size: {
-        sm: 'h-4 w-7',
-        default: 'h-6 w-11',
-        lg: 'h-7 w-12',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
-  }
-);
+export type SwitchVariant = 'default' | 'destructive' | 'success' | 'warning';
 
 /**
- * Switch thumb variants using class-variance-authority
+ * Switch size types
  */
-const switchThumbVariants = cva(
-  'pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform',
-  {
-    variants: {
-      size: {
-        sm: 'h-3 w-3 data-[state=checked]:translate-x-3 data-[state=unchecked]:translate-x-0',
-        default: 'h-5 w-5 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0',
-        lg: 'h-5 w-5 data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0',
-      },
-    },
-    defaultVariants: {
-      size: 'default',
-    },
-  }
-);
+export type SwitchSize = 'sm' | 'default' | 'lg';
 
 /**
  * Switch component props interface
  */
-export interface SwitchProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>,
-    VariantProps<typeof switchTrackVariants> {
+export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
+  readonly variant?: SwitchVariant;
+  readonly size?: SwitchSize;
   readonly label?: string;
   readonly description?: string;
   readonly error?: boolean;
@@ -92,8 +53,9 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      variant,
-      size,
+      style,
+      variant = 'default',
+      size = 'default',
       label,
       description,
       error,
@@ -108,7 +70,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref
   ): React.ReactElement => {
-    const tokens = useTokens();
+    const { colors, spacing, typography, getToken, shadows } = useTokens();
     
     // Generate ID if not provided and label exists
     const switchId =
@@ -130,14 +92,127 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       [onCheckedChange, onChange]
     );
 
+    // Get border radius
+    const borderRadius = {
+      full: (getToken('borderRadius.full') as string) || '9999px',
+    };
+
+    // Size styles
+    const getSizeStyles = (): { track: React.CSSProperties; thumb: React.CSSProperties } => {
+      switch (size) {
+        case 'sm':
+          return {
+            track: { height: '16px', width: '28px' },
+            thumb: { height: '12px', width: '12px' },
+          };
+        case 'lg':
+          return {
+            track: { height: '28px', width: '48px' },
+            thumb: { height: '20px', width: '20px' },
+          };
+        default: // default
+          return {
+            track: { height: '24px', width: '44px' },
+            thumb: { height: '20px', width: '20px' },
+          };
+      }
+    };
+
+    // Variant styles
+    const getVariantStyles = (): React.CSSProperties => {
+      const baseColor = colors.neutral?.[300] || '#d1d5db';
+      
+      switch (actualVariant) {
+        case 'destructive':
+          return {
+            backgroundColor: checked ? (colors.danger?.[500] || '#ef4444') : baseColor,
+          };
+        case 'success':
+          return {
+            backgroundColor: checked ? (colors.success?.[500] || '#22c55e') : baseColor,
+          };
+        case 'warning':
+          return {
+            backgroundColor: checked ? (colors.warning?.[500] || '#eab308') : baseColor,
+          };
+        case 'default':
+        default:
+          return {
+            backgroundColor: checked ? (colors.primary?.[500] || '#3b82f6') : baseColor,
+          };
+      }
+    };
+
+    const sizeStyles = getSizeStyles();
+
+    // Track styles
+    const trackStyles: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      flexShrink: 0,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      borderRadius: borderRadius.full,
+      border: '2px solid transparent',
+      transition: 'all 200ms ease-in-out',
+      opacity: disabled ? 0.5 : 1,
+      outline: 'none',
+      position: 'relative',
+      ...sizeStyles.track,
+      ...getVariantStyles(),
+      ...style,
+    };
+
+    // Thumb styles
+    const getThumbTransform = (): string => {
+      if (!checked) return 'translateX(0px)';
+      
+      switch (size) {
+        case 'sm':
+          return 'translateX(12px)';
+        case 'lg':
+          return 'translateX(20px)';
+        default:
+          return 'translateX(20px)';
+      }
+    };
+
+    const thumbStyles: React.CSSProperties = {
+      pointerEvents: 'none',
+      display: 'block',
+      borderRadius: borderRadius.full,
+      backgroundColor: colors.background?.default || '#ffffff',
+      boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      transition: 'transform 200ms ease-in-out',
+      transform: getThumbTransform(),
+      ...sizeStyles.thumb,
+    };
+
+    // Container styles
+    const containerStyles: React.CSSProperties = {
+      position: 'relative',
+    };
+
+    // Input styles (visually hidden)
+    const inputStyles: React.CSSProperties = {
+      position: 'absolute',
+      width: '1px',
+      height: '1px',
+      padding: 0,
+      margin: '-1px',
+      overflow: 'hidden',
+      clip: 'rect(0, 0, 0, 0)',
+      whiteSpace: 'nowrap',
+      border: 0,
+    };
+
     const switchElement = (
-      <div className="switch-container relative">
+      <div style={containerStyles}>
         <input
           id={switchId}
           ref={ref}
           type="checkbox"
           role="switch"
-          className="sr-only peer"
+          style={inputStyles}
           checked={checked}
           disabled={disabled}
           aria-invalid={error || !!errorText}
@@ -150,11 +225,21 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
         {/* Switch track */}
         <div
-          className={cn(switchTrackVariants({ variant: actualVariant, size }), className)}
+          className={className}
+          style={trackStyles}
           data-state={switchState}
+          onFocus={(e) => {
+            if (!disabled) {
+              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+              e.currentTarget.style.outlineOffset = '2px';
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.outline = 'none';
+          }}
         >
           {/* Switch thumb */}
-          <div className={cn(switchThumbVariants({ size }))} data-state={switchState} />
+          <div style={thumbStyles} data-state={switchState} />
         </div>
       </div>
     );
@@ -163,32 +248,68 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       return switchElement;
     }
 
+    const fieldStyles: React.CSSProperties = {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[1.5],
+    };
+
+    const rowStyles: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: spacing[3],
+    };
+
+    const labelContainerStyles: React.CSSProperties = {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: spacing[1],
+    };
+
+    const labelStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.sm,
+      fontWeight: typography.fontWeight.medium,
+      lineHeight: typography.lineHeight.none,
+      cursor: disabled ? 'not-allowed' : 'pointer',
+      opacity: disabled ? 0.7 : 1,
+      color: (error || errorText) ? (colors.danger?.[600] || '#dc2626') : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+    };
+
+    const descriptionStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+    };
+
+    const errorStyles: React.CSSProperties = {
+      fontSize: typography.fontSize.xs,
+      color: colors.danger?.[600] || '#dc2626',
+      marginLeft: size === 'sm' ? '32px' : size === 'lg' ? '52px' : '48px',
+    };
+
+    const requiredStyles: React.CSSProperties = {
+      color: colors.danger?.[600] || '#dc2626',
+      marginLeft: spacing[1],
+    };
+
     return (
-      <div className="switch-field space-y-1.5">
-        <div className="flex items-start space-x-3">
+      <div style={fieldStyles}>
+        <div style={rowStyles}>
           {switchElement}
 
           {label && (
-            <div className="flex-1 space-y-1">
-              <label
-                htmlFor={switchId}
-                className={cn(
-                  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer',
-                  {
-                    'text-destructive': error || errorText,
-                  }
-                )}
-              >
+            <div style={labelContainerStyles}>
+              <label htmlFor={switchId} style={labelStyles}>
                 {label}
                 {required && (
-                  <span className="text-destructive ml-1" aria-label="required">
+                  <span style={requiredStyles} aria-label="required">
                     *
                   </span>
                 )}
               </label>
 
               {description && (
-                <p id={`${switchId}-description`} className="text-xs text-muted-foreground">
+                <p id={`${switchId}-description`} style={descriptionStyles}>
                   {description}
                 </p>
               )}
@@ -197,7 +318,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         </div>
 
         {errorText && (
-          <p id={`${switchId}-description`} className="text-xs text-destructive ml-14">
+          <p id={`${switchId}-description`} style={errorStyles}>
             {errorText}
           </p>
         )}
@@ -208,8 +329,3 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(
 
 Switch.displayName = 'Switch';
 
-/**
- * Switch variants type exports
- */
-export type SwitchVariant = VariantProps<typeof switchTrackVariants>['variant'];
-export type SwitchSize = VariantProps<typeof switchTrackVariants>['size'];

@@ -336,10 +336,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       textAlign: 'center',
       ...getSizeStyles(),
       ...style,
-      // Override text alignment for larger screens (simulate sm:text-left)
-      '@media (min-width: 640px)': {
-        textAlign: 'left',
-      },
+      // Note: Media queries not supported in inline styles, use CSS-in-JS or CSS classes for responsive behavior
     };
 
     const titleStyles: React.CSSProperties = {
@@ -404,12 +401,7 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
       paddingTop: spacing[4],
       gap: spacing[2],
       ...style,
-      // Override for larger screens (simulate sm:flex-row sm:justify-end sm:space-x-2)
-      '@media (min-width: 640px)': {
-        flexDirection: 'row',
-        justifyContent: 'flex-end',
-        gap: spacing[2],
-      },
+      // Note: Media queries not supported in inline styles, use CSS-in-JS or CSS classes for responsive behavior
     };
 
     return (
