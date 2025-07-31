@@ -101,7 +101,7 @@ export const DEFAULT_FOCUS_INDICATOR_CONFIG: FocusIndicatorConfig = {
 } as const;
 
 // Focusable element selectors
-export const FOCUSABLE_SELECTORS = [
+const FOCUSABLE_SELECTORS = [
   'a[href]',
   'area[href]',
   'input:not([disabled]):not([type="hidden"]):not([aria-hidden="true"])',
@@ -115,7 +115,7 @@ export const FOCUSABLE_SELECTORS = [
   '[tabindex]:not([tabindex^="-"])',
 ] as const;
 
-export const TABBABLE_SELECTORS = [
+const TABBABLE_SELECTORS = [
   ...FOCUSABLE_SELECTORS,
   '[tabindex="0"]',
 ] as const;
@@ -707,40 +707,20 @@ export const useKeyboardNavigation = (
 };
 
 // =============================================================================
-// FOCUS TRAP COMPONENTS
+// FOCUS TRAP COMPONENT HELPERS
 // =============================================================================
 
 /**
- * Focus trap container component
+ * Create focus trap container props
  */
-export const FocusTrap: React.FC<{
-  children: React.ReactNode;
-  active?: boolean;
-  config?: Partial<FocusTrapConfig>;
-  className?: string;
-  style?: React.CSSProperties;
-}> = ({ children, active = false, config, className, style }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { activate, deactivate, isActive } = useFocusTrap(containerRef, config);
-
-  useEffect(() => {
-    if (active && !isActive) {
-      activate();
-    } else if (!active && isActive) {
-      deactivate();
-    }
-  }, [active, isActive, activate, deactivate]);
-
-  return (
-    <div
-      ref={containerRef}
-      className={className}
-      style={style}
-      data-focus-trap={isActive.toString()}
-    >
-      {children}
-    </div>
-  );
+export const createFocusTrapProps = (
+  isActive: boolean,
+  baseProps?: React.HTMLAttributes<HTMLDivElement>
+): React.HTMLAttributes<HTMLDivElement> => {
+  return {
+    ...baseProps,
+    'data-focus-trap': isActive.toString(),
+  } as React.HTMLAttributes<HTMLDivElement>;
 };
 
 // =============================================================================

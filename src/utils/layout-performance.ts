@@ -13,12 +13,12 @@ import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 
 export interface LayoutPerformanceMetrics {
   // Core Web Vitals
-  readonly cls: number; // Cumulative Layout Shift
-  readonly lcp: number; // Largest Contentful Paint
-  readonly fid: number; // First Input Delay
-  readonly inp: number; // Interaction to Next Paint
-  readonly fcp: number; // First Contentful Paint
-  readonly ttfb: number; // Time to First Byte
+  cls: number; // Cumulative Layout Shift
+  lcp: number; // Largest Contentful Paint
+  fid: number; // First Input Delay
+  inp: number; // Interaction to Next Paint
+  fcp: number; // First Contentful Paint
+  ttfb: number; // Time to First Byte
   
   // Layout-specific metrics
   readonly layoutTime: number;
@@ -301,7 +301,7 @@ const collectWebVitals = (): Promise<Partial<LayoutPerformanceMetrics>> => {
       if (navigationEntries.length > 0) {
         const nav = navigationEntries[0];
         metrics.ttfb = nav.responseStart - nav.requestStart;
-        metrics.fcp = nav.loadEventEnd - nav.navigationStart;
+        metrics.fcp = nav.loadEventEnd - nav.fetchStart;
       }
       checkComplete();
     } catch (error) {

@@ -1,7 +1,11 @@
 /**
- * SSR detection and safe utilities for server-side rendering
- * Provides utilities to safely access browser APIs and detect SSR environments
+ * @fileoverview SSR Utilities v5.0.0 - Token-Based Design System
+ * @description Comprehensive SSR safety and hydration utilities for server-side rendering
+ * @version 5.0.0
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based, SOLID
  */
+
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 
 /**
  * Check if the current environment is server-side

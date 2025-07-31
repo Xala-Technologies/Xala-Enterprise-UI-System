@@ -172,6 +172,10 @@ const useSplitResize = ({
         document.body.style.userSelect = '';
       };
     }
+
+    return () => {
+      // Cleanup function for when isResizing is false
+    };
   }, [isResizing, orientation, handleMouseMove, handleMouseUp]);
 
   return {

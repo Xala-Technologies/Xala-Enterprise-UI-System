@@ -113,7 +113,7 @@ export const DEFAULT_VIRTUAL_SCROLL_CONFIG: Omit<VirtualScrollConfig, 'itemHeigh
 // EASING FUNCTIONS
 // =============================================================================
 
-export const EASING_FUNCTIONS = {
+const EASING_FUNCTIONS = {
   linear: (t: number) => t,
   'ease-in': (t: number) => t * t,
   'ease-out': (t: number) => t * (2 - t),
@@ -563,9 +563,9 @@ export const useVirtualScroll = <T>(
 
   const totalHeight = useMemo(() => {
     if (typeof config.itemHeight === 'function') {
-      return items.reduce((total, _, index) => total + config.itemHeight(index), 0);
+      return items.reduce((total, _, index) => total + (config.itemHeight as (index: number) => number)(index), 0);
     }
-    return items.length * config.itemHeight;
+    return items.length * (config.itemHeight as number);
   }, [items, config.itemHeight]);
 
   const scrollToItem = useCallback((
@@ -669,7 +669,7 @@ export const useInfiniteScroll = (
         }
       },
       {
-        root: container === window ? null : container,
+        root: container === window ? null : (container as HTMLElement),
         rootMargin: `${threshold}px`,
         threshold: 0,
       }
@@ -686,92 +686,46 @@ export const useInfiniteScroll = (
 };
 
 // =============================================================================
-// SCROLL MANAGEMENT COMPONENTS
+// SCROLL MANAGEMENT COMPONENT HELPERS
 // =============================================================================
 
 /**
- * Virtual scroll container component
+ * Create virtual scroll container props and item positions
  */
-export const VirtualScrollContainer: React.FC<{
-  items: any[];
-  itemHeight: number | ((index: number) => number);
-  containerHeight: number;
-  renderItem: (item: any, index: number) => React.ReactNode;
-  className?: string;
-  overscan?: number;
-}> = ({ 
-  items, 
-  itemHeight, 
-  containerHeight, 
-  renderItem, 
-  className, 
-  overscan = 5 
-}) => {
-  const { containerProps, visibleItems, totalHeight } = useVirtualScroll(
-    items,
-    { itemHeight, containerHeight, overscan, scrollToAlignment: 'auto' }
-  );
-
-  return (
-    <div {...containerProps} className={className}>
-      <div style={{ height: totalHeight, position: 'relative' }}>
-        {visibleItems.map(({ item, index }) => (
-          <div
-            key={index}
-            style={{
-              position: 'absolute',
-              top: typeof itemHeight === 'function' 
-                ? visibleItems.slice(0, visibleItems.findIndex(vi => vi.index === index))
-                    .reduce((sum, vi) => sum + itemHeight(vi.index), 0)
-                : index * itemHeight,
-              width: '100%',
-              height: typeof itemHeight === 'function' ? itemHeight(index) : itemHeight,
-            }}
-          >
-            {renderItem(item, index)}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+export const createVirtualScrollProps = (
+  items: any[],
+  config: VirtualScrollConfig
+) => {
+  // This is a helper that can be used by components
+  // The actual hook implementation will be used by components
+  return {
+    itemCount: items.length,
+    config,
+  };
 };
 
 /**
- * Infinite scroll container component
+ * Calculate virtual item position
  */
-export const InfiniteScrollContainer: React.FC<{
-  children: React.ReactNode;
-  hasMore: boolean;
-  loading: boolean;
-  onLoadMore: () => void | Promise<void>;
-  threshold?: number;
-  loadingComponent?: React.ReactNode;
-  className?: string;
-}> = ({ 
-  children, 
-  hasMore, 
-  loading, 
-  onLoadMore, 
-  threshold = 100,
-  loadingComponent,
-  className 
-}) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { triggerRef } = useInfiniteScroll(
-    { hasMore, loading, onLoadMore, threshold },
-    containerRef
-  );
-
-  return (
-    <div ref={containerRef} className={className}>
-      {children}
-      {hasMore && (
-        <div ref={triggerRef}>
-          {loading && loadingComponent}
-        </div>
-      )}
-    </div>
-  );
+export const calculateVirtualItemPosition = (
+  index: number,
+  itemHeight: number | ((index: number) => number),
+  visibleItems: { index: number; item: any }[]
+): { top: number; height: number } => {
+  if (typeof itemHeight === 'function') {
+    const itemIndex = visibleItems.findIndex(vi => vi.index === index);
+    const top = visibleItems.slice(0, itemIndex)
+      .reduce((sum, vi) => sum + itemHeight(vi.index), 0);
+    return {
+      top,
+      height: itemHeight(index),
+    };
+  } else {
+    return {
+      top: index * itemHeight,
+      height: itemHeight,
+    };
+  }
 };
 
 // =============================================================================

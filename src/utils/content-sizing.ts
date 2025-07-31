@@ -37,6 +37,8 @@ export interface AdaptiveSizing {
   readonly maxWidth?: string;
   readonly minHeight?: string;
   readonly maxHeight?: string;
+  readonly width?: string;
+  readonly height?: string;
   readonly aspectRatio?: string;
   readonly flexBasis?: string;
   readonly flexGrow?: number;
@@ -94,7 +96,7 @@ export const DEFAULT_AUTO_SIZING_CONFIG: AutoSizingConfig = {
   updateInterval: 100,
 } as const;
 
-export const COMMON_ASPECT_RATIOS = {
+const COMMON_ASPECT_RATIOS = {
   square: '1:1',
   golden: '1.618:1',
   widescreen: '16:9',
@@ -105,7 +107,7 @@ export const COMMON_ASPECT_RATIOS = {
 } as const;
 
 // Reading speed constants (words per minute)
-export const READING_SPEEDS = {
+const READING_SPEEDS = {
   slow: 150,
   average: 200,
   fast: 250,
@@ -217,7 +219,7 @@ const calculateContainerSizing = (
   containerHeight: number,
   contentAspectRatio?: string
 ): AdaptiveSizing => {
-  const sizing: AdaptiveSizing = {
+  let sizing: Partial<AdaptiveSizing> = {
     maxWidth: `${containerWidth}px`,
     maxHeight: `${containerHeight}px`,
   };
@@ -231,14 +233,23 @@ const calculateContainerSizing = (
     const heightBasedWidth = containerHeight * aspectRatio;
     
     if (widthBasedHeight <= containerHeight) {
-      sizing.width = `${containerWidth}px`;
-      sizing.height = `${widthBasedHeight}px`;
+      sizing = {
+        ...sizing,
+        width: `${containerWidth}px`,
+        height: `${widthBasedHeight}px`,
+      };
     } else {
-      sizing.width = `${heightBasedWidth}px`;
-      sizing.height = `${containerHeight}px`;
+      sizing = {
+        ...sizing,
+        width: `${heightBasedWidth}px`,
+        height: `${containerHeight}px`,
+      };
     }
     
-    sizing.aspectRatio = contentAspectRatio;
+    sizing = {
+      ...sizing,
+      aspectRatio: contentAspectRatio,
+    };
   }
 
   return sizing;

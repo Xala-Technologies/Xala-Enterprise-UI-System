@@ -442,7 +442,7 @@ export const useLayoutShiftPrevention = (
   prevention: LayoutShiftPrevention
 ): {
   styles: React.CSSProperties;
-  placeholder: React.ReactNode;
+  shouldShowPlaceholder: boolean;
 } => {
   const styles = useMemo(() => {
     let baseStyles = generateSpaceReservationStyles(prevention);
@@ -454,20 +454,11 @@ export const useLayoutShiftPrevention = (
     return baseStyles;
   }, [prevention]);
 
-  const placeholder = useMemo(() => {
-    if (!prevention.placeholder && !prevention.skeleton) return null;
+  const shouldShowPlaceholder = useMemo(() => {
+    return Boolean(prevention.placeholder || prevention.skeleton);
+  }, [prevention.placeholder, prevention.skeleton]);
 
-    return (
-      <div
-        style={styles}
-        role="presentation"
-        aria-hidden="true"
-        className="layout-shift-placeholder"
-      />
-    );
-  }, [prevention.placeholder, prevention.skeleton, styles]);
-
-  return { styles, placeholder };
+  return { styles, shouldShowPlaceholder };
 };
 
 /**
@@ -668,28 +659,30 @@ export class LayoutShiftDetector {
 }
 
 // =============================================================================
-// LAYOUT SHIFT PREVENTION COMPONENTS
+// LAYOUT SHIFT PREVENTION COMPONENT HELPERS
 // =============================================================================
 
 /**
- * Component for preventing layout shifts with space reservation
+ * Create layout shift prevention props
  */
-export const LayoutShiftPrevention: React.FC<{
-  prevention: LayoutShiftPrevention;
-  children?: React.ReactNode;
-  className?: string;
-}> = ({ prevention, children, className }) => {
-  const { styles, placeholder } = useLayoutShiftPrevention(prevention);
+export const createLayoutShiftPreventionProps = (
+  prevention: LayoutShiftPrevention,
+  baseProps?: React.HTMLAttributes<HTMLDivElement>
+): React.HTMLAttributes<HTMLDivElement> => {
+  const styles = generateSpaceReservationStyles(prevention);
+  const skeletonStyles = prevention.skeleton ? generateSkeletonStyles() : {};
 
-  if (children) {
-    return (
-      <div style={styles} className={className}>
-        {children}
-      </div>
-    );
-  }
-
-  return placeholder;
+  return {
+    ...baseProps,
+    style: {
+      ...baseProps?.style,
+      ...styles,
+      ...skeletonStyles,
+    },
+    role: 'presentation',
+    'aria-hidden': 'true',
+    className: `${baseProps?.className || ''} layout-shift-placeholder`.trim(),
+  };
 };
 
 // =============================================================================

@@ -423,6 +423,10 @@ const useSidebarResize = (
         document.body.style.userSelect = '';
       };
     }
+
+    return () => {
+      // Cleanup function for when isResizing is false
+    };
   }, [isResizing, handleMouseMove, handleMouseUp]);
 
   return {
@@ -510,6 +514,10 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
         document.addEventListener('keydown', handleEscape);
         return () => document.removeEventListener('keydown', handleEscape);
       }
+
+      return () => {
+        // Cleanup function for when open is false
+      };
     }, [open, onClose]);
 
     // Prevent body scroll when mobile sidebar is open
@@ -520,6 +528,10 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           document.body.style.overflow = '';
         };
       }
+
+      return () => {
+        // Cleanup function for when shouldShowOverlay is false
+      };
     }, [shouldShowOverlay]);
 
     return (
