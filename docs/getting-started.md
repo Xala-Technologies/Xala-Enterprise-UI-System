@@ -1,8 +1,8 @@
-# Getting Started - UI System v4.0.0
+# Getting Started - UI System v5.0.0
 
-## 🚀 **Production-Ready SSR-Safe UI System**
+## 🚀 **Production-Ready SSR-Safe UI System with Token Transformation**
 
-Welcome to the UI System v4.0.0 - a production-ready, SSR-compatible component library with JSON template integration.
+Welcome to the UI System v5.0.0 - a production-ready, SSR-compatible component library with comprehensive token transformation, theme management, and white-label support.
 
 ## ⚡ **Quick Start**
 
@@ -34,13 +34,13 @@ To ensure accessibility, maintainability, and visual consistency, all applicatio
 
 ```bash
 # Using npm
-npm install @xala-technologies/ui-system@^4.0.0
+npm install @xala-technologies/ui-system@^5.0.0
 
 # Using pnpm (recommended)
-pnpm add @xala-technologies/ui-system@^4.0.0
+pnpm add @xala-technologies/ui-system@^5.0.0
 
 # Using yarn
-yarn add @xala-technologies/ui-system@^4.0.0
+yarn add @xala-technologies/ui-system@^5.0.0
 ```
 
 ### **2. Basic Setup**
@@ -49,7 +49,7 @@ yarn add @xala-technologies/ui-system@^4.0.0
 
 ```typescript
 // app/layout.tsx
-import { DesignSystemProvider } from '@xala-technologies/ui-system';
+import { UiProvider } from '@xala-technologies/ui-system';
 
 export default function RootLayout({
   children,
@@ -59,13 +59,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <DesignSystemProvider
-          templateId="base-light"
-          autoDetectDarkMode={true}
-          enableSSRFallback={true}
+        <UiProvider
+          defaultTheme="light"
+          platformConfig={{
+            mobileBreakpoint: 768,
+            tabletBreakpoint: 1024,
+            desktopBreakpoint: 1440
+          }}
+          enableSSR={true}
+          enableHydration={true}
         >
           {children}
-        </DesignSystemProvider>
+        </UiProvider>
       </body>
     </html>
   );
@@ -93,11 +98,69 @@ export default function HomePage() {
 }
 ```
 
-### **3. That's It! 🎉**
+### **3. Using Design Tokens**
+
+```typescript
+// app/components/MyComponent.tsx
+import { useTokens, useTheme } from '@xala-technologies/ui-system/hooks';
+
+export function MyComponent() {
+  const tokens = useTokens();
+  const { theme, setTheme } = useTheme();
+  
+  return (
+    <div style={{ 
+      backgroundColor: tokens.colors.background, 
+      color: tokens.colors.text 
+    }}>
+      <h1 style={{ fontSize: tokens.typography.fontSize.xl }}>
+        Hello from {theme} theme!
+      </h1>
+      <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+        Toggle Theme
+      </button>
+    </div>
+  );
+}
+```
+
+### **4. White Label Support**
+
+```typescript
+// app/layout.tsx with white labeling
+import { UiProvider } from '@xala-technologies/ui-system';
+import { healthcareTemplate } from '@xala-technologies/ui-system/config';
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
+        <UiProvider
+          defaultTheme="light"
+          whiteLabelConfig={healthcareTemplate}
+          customTokens={{
+            colors: {
+              primary: { 500: '#0066cc' }
+            }
+          }}
+        >
+          {children}
+        </UiProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### **5. That's It! 🎉**
 
 Your components now work seamlessly in SSR environments with:
 
 - ✅ **Zero configuration required**
+- ✅ **Full token system with transformations**
+- ✅ **Smooth theme transitions**
+- ✅ **White label support**
+- ✅ **TypeScript IntelliSense for all tokens**
 - ✅ **No 'use client' directives needed**
 - ✅ **Automatic fallback handling**
 - ✅ **Full TypeScript support**

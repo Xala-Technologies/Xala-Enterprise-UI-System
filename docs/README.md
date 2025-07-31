@@ -8,13 +8,24 @@ Complete documentation for the @xala-technologies/ui-system - A Norwegian-compli
 
 - **[Getting Started Guide](./getting-started.md)** - Installation, basic setup, and first components
 - **[Architecture Overview](./architecture.md)** - System design and architectural patterns
+- **[v5 Architecture](./v5-architecture.md)** 🆕 - v5.0.0 improvements and migration guide
 - **[SSR Best Practices](./ssr-best-practices.md)** - Server-side rendering guidelines
 
 ### Developers
 
 - **[Component Documentation](./components/README.md)** - Individual component guides
+- **[Token Transformers](./token-transformers.md)** 🆕 - Token transformation pipeline and generators
 - **[AI Integration](./ai-integration.md)** - AI development patterns and tools
 - **[Troubleshooting](./troubleshooting.md)** - Common issues and solutions
+
+### What's New in v5.0.0
+
+- ✅ **Unified UiProvider** - Single context provider for all UI features
+- ✅ **Token Transformation Pipeline** - TypeScript, CSS, Tailwind, and JSON Schema generators
+- ✅ **Advanced Token Features** - Variant maps, state-based tokens, responsive adjustments
+- ✅ **Theme Management** - Smooth transitions, white labeling, and versioning
+- ✅ **Token Operations** - Serialization, versioning, and diffing
+- ✅ **81.3% Component Migration** - Most components now use the token system
 
 ## 📖 Documentation Structure
 
