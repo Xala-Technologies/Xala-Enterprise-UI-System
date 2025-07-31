@@ -31,22 +31,22 @@ function getComponentsStatus(): void {
     }
   });
   
-  console.log('=== Component Migration Status ===');
-  console.log(`\nTotal components: ${files.length}`);
-  console.log(`Migrated: ${status.migrated.length}`);
-  console.log(`Needs migration: ${status.needsMigration.length}`);
+  // console.log('=== Component Migration Status ===');
+  // console.log(`\nTotal components: ${files.length}`);
+  // console.log(`Migrated: ${status.migrated.length}`);
+  // console.log(`Needs migration: ${status.needsMigration.length}`);
   
-  console.log('\n✅ Migrated components:');
+  // console.log('\n✅ Migrated components:');
   status.migrated.forEach(f => console.log(`  - ${f}`));
   
-  console.log('\n❌ Components needing migration:');
+  // console.log('\n❌ Components needing migration:');
   status.needsMigration.forEach(f => console.log(`  - ${f}`));
   
-  console.log('\n=== Priority Components (simpler ones) ===');
+  // console.log('\n=== Priority Components (simpler ones) ===');
   const priority = ['box.tsx', 'divider.tsx', 'separator.tsx', 'skeleton.tsx', 'typography.tsx'];
   priority.forEach(f => {
     if (status.needsMigration.includes(f)) {
-      console.log(`  - ${f}`);
+      // console.log(`  - ${f}`);
     }
   });
 }

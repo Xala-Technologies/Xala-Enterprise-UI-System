@@ -89,12 +89,8 @@ export interface TableAction<T = unknown> {
   /** Action icon */
   readonly icon?: ReactNode;
   /** Action handler */
-
-  // eslint-disable-next-line no-unused-vars
   readonly onClick: (_item: T, _index: number) => void;
   /** Action disabled check */
-
-  // eslint-disable-next-line no-unused-vars
   readonly disabled?: (_item: T, _index: number) => boolean;
   /** Action variant */
   readonly variant?: 'default' | 'primary' | 'secondary' | 'destructive';
@@ -126,21 +122,14 @@ export interface DataTableProps<T = unknown>
   /** Sort direction */
   readonly sortDirection?: 'asc' | 'desc';
   /** Sort change handler */
-
-  // eslint-disable-next-line no-unused-vars
   readonly onSort?: (_column: string, _direction: 'asc' | 'desc') => void;
   /** Row selection */
   readonly selectedRows?: readonly string[];
   /** Row selection handler */
-  // eslint-disable-next-line no-unused-vars
   readonly onRowSelect?: (_selectedRows: readonly string[]) => void;
   /** Row key extractor */
-
-  // eslint-disable-next-line no-unused-vars
   readonly rowKey?: (_item: T, _index: number) => string;
   /** Row click handler */
-
-  // eslint-disable-next-line no-unused-vars
   readonly onRowClick?: (_item: T, _index: number) => void;
 }
 

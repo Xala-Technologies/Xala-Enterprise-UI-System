@@ -224,7 +224,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
         variant: 'ghost',
         onClick: () => {
           // This could trigger a dropdown or modal with remaining actions
-          console.log('More actions:', moreActions);
+          // console.log('More actions:', moreActions);
         },
       };
       

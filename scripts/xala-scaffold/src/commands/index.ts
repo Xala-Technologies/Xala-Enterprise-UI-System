@@ -67,6 +67,53 @@ export async function registerCommands(program: Command): Promise<void> {
     const { default: configCommand } = await import('./config.js').catch(() => ({ default: null }));
     if (configCommand) registerCommand(configCommand);
     
+    // Import and configure AI command (different architecture)
+    const { AICommand } = await import('./ai.js').catch(() => ({ AICommand: null }));
+    if (AICommand) {
+      try {
+        // Create mock services for AI command (in production, use proper DI)
+        const mockLogger = logger;
+        const mockConfig = { get: (key: string, defaultValue?: any) => defaultValue };
+        const mockLocalization = { t: (key: string, defaultValue?: string) => defaultValue || key };
+        const mockFileSystem = {
+          writeFile: async (path: string, content: string) => {
+            const fs = await import('fs/promises');
+            await fs.writeFile(path, content, 'utf-8');
+          },
+          readFile: async (path: string) => {
+            const fs = await import('fs/promises');
+            return fs.readFile(path, 'utf-8');
+          },
+          exists: async (path: string) => {
+            const fs = await import('fs/promises');
+            try {
+              await fs.access(path);
+              return true;
+            } catch {
+              return false;
+            }
+          },
+          readDirectory: async (path: string) => {
+            const fs = await import('fs/promises');
+            return fs.readdir(path);
+          }
+        };
+        
+        const aiCommandInstance = new AICommand(
+          mockLogger as any,
+          mockConfig as any,
+          mockLocalization as any,
+          mockFileSystem as any
+        );
+        
+        // Configure AI command with the program
+        aiCommandInstance.configureCommand(program);
+        logger.debug('AI command configured successfully');
+      } catch (error) {
+        logger.warn('Failed to configure AI command:', error);
+      }
+    }
+    
   } catch (error) {
     logger.error('Failed to load commands:', error);
   }

@@ -8,8 +8,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderToString } from 'react-dom/server';
 import { UiProvider } from '../../src/providers/UiProvider/UiProvider';
-import { useTokens } from '../../src/hooks/useTokens';
-import { useTheme } from '../../src/hooks/useTheme';
+import { useTokens, useTheme } from '../../src/providers/UiProvider/UiProvider';
 import { Button } from '../../src/components/action-feedback/Button';
 import { 
   generateCSSVariables,

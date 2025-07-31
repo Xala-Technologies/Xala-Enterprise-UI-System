@@ -86,7 +86,7 @@ export interface LayoutPreviewConfig {
   /** Layout description */
   description?: string;
   /** Layout props */
-  props?: Record<string, any>;
+  props?: Record<string, unknown>;
   /** Sample content */
   content?: {
     header?: React.ReactNode;

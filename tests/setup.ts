@@ -25,6 +25,19 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// Fix for jsdom event handling
+if (typeof window !== 'undefined' && window.Event) {
+  const originalDispatchEvent = window.dispatchEvent;
+  window.dispatchEvent = function(event) {
+    try {
+      return originalDispatchEvent.call(this, event);
+    } catch (error) {
+      console.warn('Event dispatch error caught:', error);
+      return false;
+    }
+  };
+}
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}

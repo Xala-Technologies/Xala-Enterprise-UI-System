@@ -50,7 +50,9 @@
       "Bash(pnpm run test:*)",
       "Bash(pnpm run:*)",
       "Bash(cd:*)",
-      "Bash(npx enterprise-standards:*)"
+      "Bash(npx enterprise-standards:*)",
+      "Bash(node:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

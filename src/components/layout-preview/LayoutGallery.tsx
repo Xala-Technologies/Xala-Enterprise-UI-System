@@ -265,7 +265,7 @@ const LayoutGalleryFilters: React.FC<{
   const allTypes = layouts.map(l => l.type);
   const uniqueTypes = Array.from(new Set(allTypes));
 
-  const toggleType = (type: LayoutType) => {
+  const toggleType = (type: LayoutType): void => {
     if (selectedTypes.includes(type)) {
       onFilterChange(selectedTypes.filter(t => t !== type));
     } else {
@@ -337,7 +337,7 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
     });
 
     // Handle layout selection
-    const handleLayoutSelect = (type: LayoutType) => {
+    const handleLayoutSelect = (type: LayoutType): void => {
       if (selectable) {
         const newSelection = selectedLayouts.includes(type)
           ? selectedLayouts.filter(t => t !== type)
@@ -347,7 +347,7 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
     };
 
     // Handle comparison selection
-    const handleComparisonSelect = (type: LayoutType) => {
+    const handleComparisonSelect = (type: LayoutType): void => {
       if (selectedForComparison.includes(type)) {
         setSelectedForComparison(prev => prev.filter(t => t !== type));
       } else if (selectedForComparison.length < 4) {

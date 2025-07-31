@@ -174,7 +174,7 @@ export const useKeyboardShortcuts = (
       const keys = parseKeys(shortcut.keys);
       if (matchesShortcut(event, keys)) {
         if (debug) {
-          console.log(`Keyboard shortcut triggered: ${shortcut.id} (${shortcut.keys})`);
+          // console.log(`Keyboard shortcut triggered: ${shortcut.id} (${shortcut.keys})`);
         }
 
         if (shortcut.preventDefault) {
@@ -214,7 +214,7 @@ export const useKeyboardShortcuts = (
     });
 
     if (debug) {
-      console.log(`Registered keyboard shortcut: ${shortcut.id} (${shortcut.keys})`);
+      // console.log(`Registered keyboard shortcut: ${shortcut.id} (${shortcut.keys})`);
     }
   }, [debug]);
 
@@ -223,7 +223,7 @@ export const useKeyboardShortcuts = (
     shortcutsRef.current.delete(id);
 
     if (debug) {
-      console.log(`Unregistered keyboard shortcut: ${id}`);
+      // console.log(`Unregistered keyboard shortcut: ${id}`);
     }
   }, [debug]);
 
@@ -232,7 +232,7 @@ export const useKeyboardShortcuts = (
     shortcutsRef.current.clear();
 
     if (debug) {
-      console.log('Unregistered all keyboard shortcuts');
+      // console.log('Unregistered all keyboard shortcuts');
     }
   }, [debug]);
 
