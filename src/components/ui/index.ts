@@ -76,6 +76,19 @@ export {
   type FooterVariant,
   type FooterSectionVariant
 } from './footer';
+export {
+  MainContent,
+  MainContentHeader,
+  MainContentSection,
+  MainContentComposition,
+  mainContentVariants,
+  mainContentHeaderVariants,
+  type MainContentProps,
+  type MainContentHeaderProps,
+  type MainContentSectionProps,
+  type MainContentVariant,
+  type MainContentHeaderVariant
+} from './main-content';
 
 // Navigation components
 export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
