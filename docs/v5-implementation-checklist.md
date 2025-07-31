@@ -316,7 +316,7 @@
 - [x] Update AdminLayout to use token system
 - [x] Create responsive layout switching
 - [x] Implement platform-specific features
-- [ ] Create layout preview system
+- [x] Create layout preview system
 
 ### Layout Components
 - [ ] Create Header component with token support

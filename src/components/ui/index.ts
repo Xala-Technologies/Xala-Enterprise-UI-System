@@ -29,6 +29,21 @@ export { Tooltip, TooltipContent, TooltipTrigger, type TooltipContentProps, type
 
 // Layout components
 export { Card, CardContent, CardFooter, CardHeader, type CardContentProps, type CardFooterProps, type CardHeaderProps, type CardProps } from './card';
+export { 
+  Header, 
+  HeaderSection, 
+  HeaderTitle, 
+  HeaderLogo, 
+  HeaderComposition,
+  headerVariants,
+  headerSectionVariants,
+  type HeaderProps, 
+  type HeaderSectionProps, 
+  type HeaderTitleProps, 
+  type HeaderLogoProps,
+  type HeaderVariant,
+  type HeaderSectionVariant
+} from './header';
 
 // Navigation components
 export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
