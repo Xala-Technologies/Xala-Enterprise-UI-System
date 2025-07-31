@@ -4,7 +4,7 @@
  */
 
 import React, { createContext, useContext, useMemo, useCallback, useState, useEffect } from 'react';
-import { TokenSystem } from '../../tokens/types';
+import type { TokenSystem } from '../../tokens/types';
 import { mergeDeep } from '../../utils/object';
 
 export interface WhiteLabelConfig {

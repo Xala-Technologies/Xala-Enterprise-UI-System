@@ -20,7 +20,7 @@ export interface ColorScale {
 export interface ColorTokens {
   primary: ColorScale;
   secondary?: ColorScale;
-  neutral?: ColorScale;
+  neutral: ColorScale;
   success?: ColorScale;
   warning?: ColorScale;
   danger?: ColorScale;

@@ -3,7 +3,7 @@
  * Manages versions, migrations, and compatibility for design tokens
  */
 
-import { TokenSystem } from '../types';
+import type { TokenSystem } from '../types';
 import { deepClone, get, set } from '../../utils/object';
 import { TokenSerializer } from '../serialization';
 
@@ -61,7 +61,13 @@ export class SemanticVersion {
     this.build = parsed.build;
   }
 
-  private parse(version: string): SemanticVersion {
+  private parse(version: string): {
+    major: number;
+    minor: number;
+    patch: number;
+    prerelease?: string;
+    build?: string;
+  } {
     const match = version.match(
       /^v?(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$/
     );
@@ -508,8 +514,10 @@ export class TokenVersionManager {
     };
 
     if (options?.format === 'yaml') {
-      const yaml = await import('js-yaml');
-      return yaml.dump(history);
+      // TODO: Add js-yaml dependency and types
+      // const yaml = await import('js-yaml');
+      // return yaml.dump(history);
+      throw new Error('YAML format not yet implemented');
     }
 
     return JSON.stringify(history, null, 2);

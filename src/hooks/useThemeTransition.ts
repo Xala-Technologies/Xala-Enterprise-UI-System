@@ -4,8 +4,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTheme } from './useTheme';
-import { useTokens } from './useTokens';
+import { useTheme, useTokens } from '../providers/UiProvider/UiProvider';
 
 export interface ThemeTransitionOptions {
   duration?: number;

@@ -342,5 +342,4 @@ export const componentVariantMaps: ComponentVariantMaps = {
   alert: alertVariantMap,
 };
 
-// Export individual maps for tree shaking
-export { buttonVariantMap, inputVariantMap, cardVariantMap, badgeVariantMap, alertVariantMap };
+// Individual maps are already exported inline with their declarations

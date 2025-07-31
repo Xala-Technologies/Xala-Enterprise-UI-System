@@ -3,8 +3,8 @@
  * Pre-defined migrations for common token system changes
  */
 
-import { TokenMigration } from './token-versioning';
-import { TokenSystem } from '../types';
+import type { TokenMigration } from './token-versioning';
+import type { TokenSystem, ColorTokens } from '../types';
 import { get, set } from '../../utils/object';
 
 /**
@@ -33,7 +33,10 @@ const migration_1_0_0_to_2_0_0: TokenMigration = {
         gray: 'neutral',
       };
       
-      newTokens.colors = {};
+      newTokens.colors = {
+        primary: {} as any,
+        neutral: {} as any,
+      } as ColorTokens;
       
       for (const [oldName, newName] of Object.entries(colorMapping)) {
         if (oldColors[oldName]) {
@@ -67,7 +70,10 @@ const migration_1_0_0_to_2_0_0: TokenMigration = {
         neutral: 'gray',
       };
       
-      oldTokens.colors = {};
+      oldTokens.colors = {
+        primary: {} as any,
+        neutral: {} as any,
+      } as ColorTokens;
       
       for (const [newName, oldName] of Object.entries(reverseMapping)) {
         if (newColors[newName]) {

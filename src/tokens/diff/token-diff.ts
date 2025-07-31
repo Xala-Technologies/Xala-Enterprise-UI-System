@@ -3,7 +3,7 @@
  * Calculates and visualizes differences between token sets
  */
 
-import { TokenSystem } from '../types';
+import type { TokenSystem } from '../types';
 import { deepClone, get } from '../../utils/object';
 
 export type DiffType = 'added' | 'modified' | 'removed' | 'unchanged';

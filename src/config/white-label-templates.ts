@@ -3,7 +3,7 @@
  * Pre-configured templates for common white label scenarios
  */
 
-import { WhiteLabelConfig } from '../providers/WhiteLabelProvider';
+import type { WhiteLabelConfig } from '../providers/WhiteLabelProvider';
 import { TokenSystem } from '../tokens/types';
 
 /**
@@ -38,6 +38,18 @@ export const healthcareTemplate: WhiteLabelConfig = {
           50: '#e6fff9',
           500: '#00b386',
           900: '#004d39',
+        },
+        neutral: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
         },
         success: {
           50: '#f0fdf4',
@@ -225,6 +237,18 @@ export const educationTemplate: WhiteLabelConfig = {
           500: '#8b5cf6',
           900: '#4c1d95',
         },
+        neutral: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
+        },
       },
     },
   ],
@@ -303,6 +327,18 @@ export const ecommerceTemplate: WhiteLabelConfig = {
           50: '#e0e7ff',
           500: '#6366f1',
           900: '#312e81',
+        },
+        neutral: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
         },
       },
     },
@@ -385,6 +421,18 @@ export const governmentTemplate: WhiteLabelConfig = {
         secondary: {
           50: '#f3f4f6',
           500: '#6b7280',
+          900: '#111827',
+        },
+        neutral: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
           900: '#111827',
         },
       },

@@ -225,23 +225,42 @@ For SaaS applications currently using v4:
 
 The v5 architecture includes a comprehensive token transformation pipeline that enables:
 
-### Implemented Transformers
+### ✅ Implemented Transformers
 - **TypeScript Types**: Generate type-safe interfaces with full IntelliSense support
-- **CSS Variables**: Create runtime-themeable custom properties
+- **CSS Variables**: Create runtime-themeable custom properties with utility classes
 - **Tailwind Config**: Generate utility-first configurations
+- **JSON Schema**: Validate token structures with comprehensive schemas
+
+### ✅ Advanced Token Features
+- **Variant Token Maps**: Define component-specific token variations
+- **State-Based Tokens**: Map tokens to interactive states (hover, focus, active, disabled)
+- **Responsive Tokens**: Breakpoint-aware token adjustments
+- **Platform-Specific Tokens**: Adapt tokens for web, mobile, and desktop platforms
 
 ### Usage Example
 ```typescript
 import { 
-  generateTypeScriptTypes,
-  generateCSSVariables,
-  generateTailwindConfig 
+  TypeScriptTypeTransformer,
+  CSSVariableTransformer,
+  TailwindConfigTransformer,
+  JSONSchemaTransformer
 } from '@xala-technologies/ui-system/tokens/transformers';
 
 // Transform tokens into multiple formats
-const types = generateTypeScriptTypes(theme);
-const css = generateCSSVariables(theme);
-const tailwind = generateTailwindConfig(theme);
+const typeTransformer = new TypeScriptTypeTransformer();
+const types = typeTransformer.transform(tokens);
+
+const cssTransformer = new CSSVariableTransformer();
+const css = cssTransformer.transform(tokens, {
+  generateUtilityClasses: true,
+  generateMediaQueries: true
+});
+
+const tailwindTransformer = new TailwindConfigTransformer();
+const tailwindConfig = tailwindTransformer.transform(tokens);
+
+const schemaTransformer = new JSONSchemaTransformer();
+const schema = schemaTransformer.transform(tokens);
 ```
 
 For complete documentation, see the [Token Transformers Guide](./token-transformers.md).

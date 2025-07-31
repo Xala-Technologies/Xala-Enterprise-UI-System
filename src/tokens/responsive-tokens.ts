@@ -19,7 +19,7 @@ export interface ResponsiveTokenValue<T = string> {
 }
 
 export interface ResponsiveTokenMap {
-  [key: string]: ResponsiveTokenValue | TokenReference;
+  [key: string]: ResponsiveTokenValue<string | TokenReference> | TokenReference;
 }
 
 export interface ResponsiveBreakpoints {
@@ -49,58 +49,58 @@ export const defaultBreakpoints: ResponsiveBreakpoints = {
 export const responsiveTypography: ResponsiveTokenMap = {
   // Font sizes that scale with viewport
   displayLarge: {
-    base: { token: 'typography.fontSize.4xl', fallback: '2.25rem' },
-    md: { token: 'typography.fontSize.5xl', fallback: '3rem' },
-    lg: { token: 'typography.fontSize.6xl', fallback: '3.75rem' },
-    xl: { token: 'typography.fontSize.7xl', fallback: '4.5rem' },
-  },
+    base: { token: 'typography.fontSize.4xl', fallback: '2.25rem' } as TokenReference,
+    md: { token: 'typography.fontSize.5xl', fallback: '3rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.6xl', fallback: '3.75rem' } as TokenReference,
+    xl: { token: 'typography.fontSize.7xl', fallback: '4.5rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   displayMedium: {
-    base: { token: 'typography.fontSize.3xl', fallback: '1.875rem' },
-    md: { token: 'typography.fontSize.4xl', fallback: '2.25rem' },
-    lg: { token: 'typography.fontSize.5xl', fallback: '3rem' },
-  },
+    base: { token: 'typography.fontSize.3xl', fallback: '1.875rem' } as TokenReference,
+    md: { token: 'typography.fontSize.4xl', fallback: '2.25rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.5xl', fallback: '3rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   displaySmall: {
-    base: { token: 'typography.fontSize.2xl', fallback: '1.5rem' },
-    md: { token: 'typography.fontSize.3xl', fallback: '1.875rem' },
-    lg: { token: 'typography.fontSize.4xl', fallback: '2.25rem' },
-  },
+    base: { token: 'typography.fontSize.2xl', fallback: '1.5rem' } as TokenReference,
+    md: { token: 'typography.fontSize.3xl', fallback: '1.875rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.4xl', fallback: '2.25rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   headingLarge: {
-    base: { token: 'typography.fontSize.xl', fallback: '1.25rem' },
-    md: { token: 'typography.fontSize.2xl', fallback: '1.5rem' },
-    lg: { token: 'typography.fontSize.3xl', fallback: '1.875rem' },
-  },
+    base: { token: 'typography.fontSize.xl', fallback: '1.25rem' } as TokenReference,
+    md: { token: 'typography.fontSize.2xl', fallback: '1.5rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.3xl', fallback: '1.875rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   headingMedium: {
-    base: { token: 'typography.fontSize.lg', fallback: '1.125rem' },
-    md: { token: 'typography.fontSize.xl', fallback: '1.25rem' },
-    lg: { token: 'typography.fontSize.2xl', fallback: '1.5rem' },
-  },
+    base: { token: 'typography.fontSize.lg', fallback: '1.125rem' } as TokenReference,
+    md: { token: 'typography.fontSize.xl', fallback: '1.25rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.2xl', fallback: '1.5rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   headingSmall: {
-    base: { token: 'typography.fontSize.base', fallback: '1rem' },
-    md: { token: 'typography.fontSize.lg', fallback: '1.125rem' },
-    lg: { token: 'typography.fontSize.xl', fallback: '1.25rem' },
-  },
+    base: { token: 'typography.fontSize.base', fallback: '1rem' } as TokenReference,
+    md: { token: 'typography.fontSize.lg', fallback: '1.125rem' } as TokenReference,
+    lg: { token: 'typography.fontSize.xl', fallback: '1.25rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   body: {
-    base: { token: 'typography.fontSize.sm', fallback: '0.875rem' },
-    md: { token: 'typography.fontSize.base', fallback: '1rem' },
-  },
+    base: { token: 'typography.fontSize.sm', fallback: '0.875rem' } as TokenReference,
+    md: { token: 'typography.fontSize.base', fallback: '1rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   caption: {
-    base: { token: 'typography.fontSize.xs', fallback: '0.75rem' },
-    md: { token: 'typography.fontSize.sm', fallback: '0.875rem' },
-  },
+    base: { token: 'typography.fontSize.xs', fallback: '0.75rem' } as TokenReference,
+    md: { token: 'typography.fontSize.sm', fallback: '0.875rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
 
   // Line heights that adjust with font size
   lineHeightDisplay: {
-    base: { token: 'typography.lineHeight.tight', fallback: '1.25' },
-    lg: { token: 'typography.lineHeight.snug', fallback: '1.375' },
-  },
+    base: { token: 'typography.lineHeight.tight', fallback: '1.25' } as TokenReference,
+    lg: { token: 'typography.lineHeight.snug', fallback: '1.375' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   lineHeightHeading: {
-    base: { token: 'typography.lineHeight.snug', fallback: '1.375' },
-    lg: { token: 'typography.lineHeight.normal', fallback: '1.5' },
-  },
+    base: { token: 'typography.lineHeight.snug', fallback: '1.375' } as TokenReference,
+    lg: { token: 'typography.lineHeight.normal', fallback: '1.5' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   lineHeightBody: {
-    base: { token: 'typography.lineHeight.normal', fallback: '1.5' },
-    lg: { token: 'typography.lineHeight.relaxed', fallback: '1.625' },
-  },
+    base: { token: 'typography.lineHeight.normal', fallback: '1.5' } as TokenReference,
+    lg: { token: 'typography.lineHeight.relaxed', fallback: '1.625' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
 };
 
 // =============================================================================
@@ -110,42 +110,42 @@ export const responsiveTypography: ResponsiveTokenMap = {
 export const responsiveSpacing: ResponsiveTokenMap = {
   // Component padding that scales
   containerPadding: {
-    base: { token: 'spacing.4', fallback: '1rem' },
-    md: { token: 'spacing.6', fallback: '1.5rem' },
-    lg: { token: 'spacing.8', fallback: '2rem' },
-    xl: { token: 'spacing.12', fallback: '3rem' },
-  },
+    base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+    md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+    lg: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+    xl: { token: 'spacing.12', fallback: '3rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   sectionPadding: {
-    base: { token: 'spacing.8', fallback: '2rem' },
-    md: { token: 'spacing.12', fallback: '3rem' },
-    lg: { token: 'spacing.16', fallback: '4rem' },
-    xl: { token: 'spacing.20', fallback: '5rem' },
-  },
+    base: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+    md: { token: 'spacing.12', fallback: '3rem' } as TokenReference,
+    lg: { token: 'spacing.16', fallback: '4rem' } as TokenReference,
+    xl: { token: 'spacing.20', fallback: '5rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   cardPadding: {
-    base: { token: 'spacing.4', fallback: '1rem' },
-    md: { token: 'spacing.6', fallback: '1.5rem' },
-    lg: { token: 'spacing.8', fallback: '2rem' },
-  },
+    base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+    md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+    lg: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   buttonPadding: {
-    base: { token: 'spacing.3', fallback: '0.75rem' },
-    md: { token: 'spacing.4', fallback: '1rem' },
-  },
+    base: { token: 'spacing.3', fallback: '0.75rem' } as TokenReference,
+    md: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
 
   // Gaps that adjust for different screens
   gridGap: {
-    base: { token: 'spacing.4', fallback: '1rem' },
-    md: { token: 'spacing.6', fallback: '1.5rem' },
-    lg: { token: 'spacing.8', fallback: '2rem' },
-  },
+    base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+    md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+    lg: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   stackGap: {
-    base: { token: 'spacing.2', fallback: '0.5rem' },
-    md: { token: 'spacing.3', fallback: '0.75rem' },
-    lg: { token: 'spacing.4', fallback: '1rem' },
-  },
+    base: { token: 'spacing.2', fallback: '0.5rem' } as TokenReference,
+    md: { token: 'spacing.3', fallback: '0.75rem' } as TokenReference,
+    lg: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
   formGap: {
-    base: { token: 'spacing.3', fallback: '0.75rem' },
-    md: { token: 'spacing.4', fallback: '1rem' },
-  },
+    base: { token: 'spacing.3', fallback: '0.75rem' } as TokenReference,
+    md: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+  } as ResponsiveTokenValue<TokenReference>,
 };
 
 // =============================================================================
@@ -156,12 +156,12 @@ export const responsiveLayout: ResponsiveTokenMap = {
   // Container widths
   containerMaxWidth: {
     base: '100%',
-    sm: { token: 'breakpoints.sm', fallback: '640px' },
-    md: { token: 'breakpoints.md', fallback: '768px' },
-    lg: { token: 'breakpoints.lg', fallback: '1024px' },
-    xl: { token: 'breakpoints.xl', fallback: '1280px' },
-    '2xl': { token: 'breakpoints.2xl', fallback: '1536px' },
-  },
+    sm: { token: 'breakpoints.sm', fallback: '640px' } as TokenReference,
+    md: { token: 'breakpoints.md', fallback: '768px' } as TokenReference,
+    lg: { token: 'breakpoints.lg', fallback: '1024px' } as TokenReference,
+    xl: { token: 'breakpoints.xl', fallback: '1280px' } as TokenReference,
+    '2xl': { token: 'breakpoints.2xl', fallback: '1536px' } as TokenReference,
+  } as ResponsiveTokenValue<string | TokenReference>,
 
   // Grid columns
   gridColumns: {
@@ -171,7 +171,7 @@ export const responsiveLayout: ResponsiveTokenMap = {
     lg: '4',
     xl: '6',
     '2xl': '12',
-  },
+  } as ResponsiveTokenValue<string>,
 
   // Sidebar widths
   sidebarWidth: {
@@ -179,7 +179,7 @@ export const responsiveLayout: ResponsiveTokenMap = {
     md: '240px',
     lg: '280px',
     xl: '320px',
-  },
+  } as ResponsiveTokenValue<string>,
 
   // Modal widths
   modalWidth: {
@@ -188,7 +188,7 @@ export const responsiveLayout: ResponsiveTokenMap = {
     md: '640px',
     lg: '768px',
     xl: '1024px',
-  },
+  } as ResponsiveTokenValue<string>,
 };
 
 // =============================================================================
@@ -198,56 +198,56 @@ export const responsiveLayout: ResponsiveTokenMap = {
 export const responsiveComponents = {
   button: {
     height: {
-      base: { token: 'sizing.10', fallback: '2.5rem' },
-      md: { token: 'sizing.12', fallback: '3rem' },
-    },
+      base: { token: 'sizing.10', fallback: '2.5rem' } as TokenReference,
+      md: { token: 'sizing.12', fallback: '3rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     paddingX: {
-      base: { token: 'spacing.4', fallback: '1rem' },
-      md: { token: 'spacing.6', fallback: '1.5rem' },
-    },
+      base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+      md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     fontSize: {
-      base: { token: 'typography.fontSize.sm', fallback: '0.875rem' },
-      md: { token: 'typography.fontSize.base', fallback: '1rem' },
-    },
+      base: { token: 'typography.fontSize.sm', fallback: '0.875rem' } as TokenReference,
+      md: { token: 'typography.fontSize.base', fallback: '1rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
   },
 
   input: {
     height: {
-      base: { token: 'sizing.10', fallback: '2.5rem' },
-      md: { token: 'sizing.12', fallback: '3rem' },
-    },
+      base: { token: 'sizing.10', fallback: '2.5rem' } as TokenReference,
+      md: { token: 'sizing.12', fallback: '3rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     paddingX: {
-      base: { token: 'spacing.3', fallback: '0.75rem' },
-      md: { token: 'spacing.4', fallback: '1rem' },
-    },
+      base: { token: 'spacing.3', fallback: '0.75rem' } as TokenReference,
+      md: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     fontSize: {
-      base: { token: 'typography.fontSize.sm', fallback: '0.875rem' },
-      md: { token: 'typography.fontSize.base', fallback: '1rem' },
-    },
+      base: { token: 'typography.fontSize.sm', fallback: '0.875rem' } as TokenReference,
+      md: { token: 'typography.fontSize.base', fallback: '1rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
   },
 
   card: {
     padding: {
-      base: { token: 'spacing.4', fallback: '1rem' },
-      md: { token: 'spacing.6', fallback: '1.5rem' },
-      lg: { token: 'spacing.8', fallback: '2rem' },
-    },
+      base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+      md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+      lg: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     gap: {
-      base: { token: 'spacing.3', fallback: '0.75rem' },
-      md: { token: 'spacing.4', fallback: '1rem' },
-    },
+      base: { token: 'spacing.3', fallback: '0.75rem' } as TokenReference,
+      md: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
   },
 
   modal: {
     padding: {
-      base: { token: 'spacing.4', fallback: '1rem' },
-      md: { token: 'spacing.6', fallback: '1.5rem' },
-      lg: { token: 'spacing.8', fallback: '2rem' },
-    },
+      base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+      md: { token: 'spacing.6', fallback: '1.5rem' } as TokenReference,
+      lg: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
     margin: {
-      base: { token: 'spacing.4', fallback: '1rem' },
-      md: { token: 'spacing.8', fallback: '2rem' },
-    },
+      base: { token: 'spacing.4', fallback: '1rem' } as TokenReference,
+      md: { token: 'spacing.8', fallback: '2rem' } as TokenReference,
+    } as ResponsiveTokenValue<TokenReference>,
   },
 };
 
@@ -377,10 +377,4 @@ export function getResponsiveValue<T>(
 // EXPORTS
 // =============================================================================
 
-export {
-  defaultBreakpoints,
-  responsiveTypography,
-  responsiveSpacing,
-  responsiveLayout,
-  responsiveComponents,
-};
+// Exports are already done inline with the declarations

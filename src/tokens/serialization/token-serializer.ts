@@ -3,7 +3,7 @@
  * Handles conversion of tokens between different formats for storage and transmission
  */
 
-import { TokenSystem } from '../types';
+import type { TokenSystem } from '../types';
 import { validateTokensAgainstSchema, generateJSONSchema } from '../transformers';
 
 export interface SerializationOptions {
@@ -182,74 +182,48 @@ export class TokenSerializer {
    * YAML serialization (requires dynamic import)
    */
   private static async serializeToYAML(tokens: TokenSystem): Promise<string> {
-    try {
-      const yaml = await import('js-yaml');
-      return yaml.dump(tokens);
-    } catch (error) {
-      throw new Error('YAML serialization requires js-yaml package');
-    }
+    // TODO: Add js-yaml dependency
+    throw new Error('YAML serialization not yet implemented - requires js-yaml package');
   }
 
   /**
    * YAML deserialization
    */
   private static async deserializeFromYAML(data: string): Promise<TokenSystem> {
-    try {
-      const yaml = await import('js-yaml');
-      return yaml.load(data) as TokenSystem;
-    } catch (error) {
-      throw new Error('YAML deserialization requires js-yaml package');
-    }
+    // TODO: Add js-yaml dependency
+    throw new Error('YAML deserialization not yet implemented - requires js-yaml package');
   }
 
   /**
    * TOML serialization (requires dynamic import)
    */
   private static async serializeToTOML(tokens: TokenSystem): Promise<string> {
-    try {
-      const toml = await import('@iarna/toml');
-      return toml.stringify(tokens as any);
-    } catch (error) {
-      throw new Error('TOML serialization requires @iarna/toml package');
-    }
+    // TODO: Add @iarna/toml dependency
+    throw new Error('TOML serialization not yet implemented - requires @iarna/toml package');
   }
 
   /**
    * TOML deserialization
    */
   private static async deserializeFromTOML(data: string): Promise<TokenSystem> {
-    try {
-      const toml = await import('@iarna/toml');
-      return toml.parse(data) as unknown as TokenSystem;
-    } catch (error) {
-      throw new Error('TOML deserialization requires @iarna/toml package');
-    }
+    // TODO: Add @iarna/toml dependency
+    throw new Error('TOML deserialization not yet implemented - requires @iarna/toml package');
   }
 
   /**
    * Binary serialization using MessagePack
    */
   private static async serializeToBinary(tokens: TokenSystem): Promise<string> {
-    try {
-      const msgpack = await import('@msgpack/msgpack');
-      const encoded = msgpack.encode(tokens);
-      return Buffer.from(encoded).toString('base64');
-    } catch (error) {
-      throw new Error('Binary serialization requires @msgpack/msgpack package');
-    }
+    // TODO: Add @msgpack/msgpack dependency
+    throw new Error('Binary serialization not yet implemented - requires @msgpack/msgpack package');
   }
 
   /**
    * Binary deserialization
    */
   private static async deserializeFromBinary(data: string | Buffer): Promise<TokenSystem> {
-    try {
-      const msgpack = await import('@msgpack/msgpack');
-      const buffer = typeof data === 'string' ? Buffer.from(data, 'base64') : data;
-      return msgpack.decode(buffer) as TokenSystem;
-    } catch (error) {
-      throw new Error('Binary deserialization requires @msgpack/msgpack package');
-    }
+    // TODO: Add @msgpack/msgpack dependency
+    throw new Error('Binary deserialization not yet implemented - requires @msgpack/msgpack package');
   }
 
   /**

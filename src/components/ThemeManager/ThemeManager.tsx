@@ -4,10 +4,9 @@
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { useTheme } from '../../hooks/useTheme';
-import { useTokens } from '../../hooks/useTokens';
+import { useTheme, useTokens } from '../../providers/UiProvider/UiProvider';
 import { useThemeTransition, themeTransitionPresets } from '../../hooks/useThemeTransition';
-import { TokenSystem } from '../../tokens/types';
+import type { TokenSystem } from '../../tokens/types';
 
 export interface ThemeManagerProps {
   readonly showPreview?: boolean;
@@ -50,7 +49,7 @@ export const ThemeManager = ({
 
   // Combine built-in and custom themes
   const allThemes = useMemo(() => {
-    const builtInThemes = availableThemes.map(t => ({
+    const builtInThemes = availableThemes.map((t: string) => ({
       id: t,
       name: t.charAt(0).toUpperCase() + t.slice(1),
       category: 'built-in',
