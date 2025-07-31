@@ -93,6 +93,26 @@ export {
 // Navigation components
 export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
 export { Pagination, type PaginationProps, type PaginationSize, type PaginationVariant } from './pagination';
+export {
+  Navigation,
+  NavigationItem,
+  NavigationGroup,
+  NavigationLink,
+  NavigationComposition,
+  navigationVariants,
+  navigationItemVariants,
+  navigationGroupVariants,
+  navigationLinkVariants,
+  type NavigationProps,
+  type NavigationItemProps,
+  type NavigationGroupProps,
+  type NavigationLinkProps,
+  type NavigationItemData,
+  type NavigationVariant,
+  type NavigationItemVariant,
+  type NavigationGroupVariant,
+  type NavigationLinkVariant
+} from './navigation';
 
 // Loading components
 export {
