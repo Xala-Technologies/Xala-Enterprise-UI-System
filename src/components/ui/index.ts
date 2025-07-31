@@ -61,6 +61,21 @@ export {
   type SidebarOverlayVariant,
   type SidebarContentVariant
 } from './sidebar';
+export {
+  Footer,
+  FooterSectionComponent,
+  FooterComposition,
+  footerVariants,
+  footerSectionVariants,
+  type FooterProps,
+  type FooterSection,
+  type FooterLink,
+  type SocialLink,
+  type NewsletterProps,
+  type FooterSectionComponentProps,
+  type FooterVariant,
+  type FooterSectionVariant
+} from './footer';
 
 // Navigation components
 export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
