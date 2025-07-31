@@ -346,3 +346,591 @@ export function safeQuerySelectorAll(selector: string): NodeListOf<Element> {
     return document.createDocumentFragment().childNodes as NodeListOf<Element>;
   }
 }
+
+// =============================================================================
+// ADVANCED SSR UTILITIES
+// =============================================================================
+
+/**
+ * Environment detection types
+ */
+export interface EnvironmentInfo {
+  readonly isServer: boolean;
+  readonly isClient: boolean;
+  readonly isBrowser: boolean;
+  readonly isNode: boolean;
+  readonly isDev: boolean;
+  readonly isProd: boolean;
+  readonly isTest: boolean;
+  readonly framework: 'next' | 'remix' | 'gatsby' | 'vite' | 'webpack' | 'unknown';
+  readonly runtime: 'browser' | 'node' | 'edge' | 'worker' | 'unknown';
+}
+
+/**
+ * SSR context interface
+ */
+export interface SSRContext {
+  readonly isSSR: boolean;
+  readonly isHydrating: boolean;
+  readonly isHydrated: boolean;
+  readonly canUseDOM: boolean;
+  readonly userAgent: string;
+  readonly headers: Record<string, string>;
+  readonly cookies: Record<string, string>;
+  readonly url: string;
+  readonly pathname: string;
+  readonly search: string;
+}
+
+/**
+ * Hydration mismatch detection
+ */
+export interface HydrationMismatch {
+  readonly type: 'content' | 'attribute' | 'structure';
+  readonly element: string;
+  readonly expected: string;
+  readonly actual: string;
+  readonly path: string;
+}
+
+/**
+ * Theme snapshot for SSR
+ */
+export interface ThemeSnapshot {
+  readonly theme: string;
+  readonly mode: 'light' | 'dark' | 'auto';
+  readonly tokens: Record<string, any>;
+  readonly timestamp: number;
+  readonly version: string;
+}
+
+// =============================================================================
+// ENVIRONMENT DETECTION
+// =============================================================================
+
+/**
+ * Comprehensive environment detection
+ */
+export function detectEnvironment(): EnvironmentInfo {
+  const isServer = typeof window === 'undefined';
+  const isClient = !isServer;
+  const isBrowser = isClient && typeof document !== 'undefined';
+  const isNode = typeof process !== 'undefined' && process.versions?.node;
+  
+  // Development/production detection
+  const isDev = process.env.NODE_ENV === 'development';
+  const isProd = process.env.NODE_ENV === 'production';
+  const isTest = process.env.NODE_ENV === 'test';
+  
+  // Framework detection
+  let framework: EnvironmentInfo['framework'] = 'unknown';
+  if (typeof process !== 'undefined') {
+    if (process.env.NEXT_RUNTIME) framework = 'next';
+    else if (process.env.REMIX_DEV_SERVER_WS_PORT) framework = 'remix';
+    else if (process.env.GATSBY_EXECUTING_COMMAND) framework = 'gatsby';
+    else if (process.env.VITE) framework = 'vite';
+    else if (process.env.WEBPACK_DEV_SERVER) framework = 'webpack';
+  }
+  
+  // Runtime detection
+  let runtime: EnvironmentInfo['runtime'] = 'unknown';
+  if (isServer) {
+    if (typeof globalThis !== 'undefined' && 'EdgeRuntime' in globalThis) runtime = 'edge';
+    else if (typeof globalThis !== 'undefined' && 'WorkerGlobalScope' in globalThis) runtime = 'worker';
+    else if (isNode) runtime = 'node';
+  } else {
+    runtime = 'browser';
+  }
+  
+  return {
+    isServer,
+    isClient,
+    isBrowser,
+    isNode: Boolean(isNode),
+    isDev,
+    isProd,
+    isTest,
+    framework,
+    runtime,
+  };
+}
+
+/**
+ * Check if DOM can be safely used
+ */
+export function canUseDOM(): boolean {
+  return !!(
+    typeof window !== 'undefined' &&
+    window.document &&
+    window.document.createElement
+  );
+}
+
+/**
+ * Check if we're in a browser environment (not just client-side)
+ */
+export function isBrowserEnvironment(): boolean {
+  return canUseDOM() && typeof window.navigator !== 'undefined';
+}
+
+/**
+ * Check if we're in Node.js environment
+ */
+export function isNodeEnvironment(): boolean {
+  return (
+    typeof process !== 'undefined' &&
+    process.versions != null &&
+    process.versions.node != null
+  );
+}
+
+/**
+ * Check if we're in an Edge Runtime environment
+ */
+export function isEdgeRuntime(): boolean {
+  return typeof globalThis !== 'undefined' && 'EdgeRuntime' in globalThis;
+}
+
+/**
+ * Check if we're in a Web Worker environment
+ */
+export function isWebWorker(): boolean {
+  return (
+    typeof globalThis !== 'undefined' &&
+    'importScripts' in globalThis &&
+    typeof navigator !== 'undefined' &&
+    typeof location !== 'undefined'
+  );
+}
+
+// =============================================================================
+// SSR CONTEXT PROVIDER
+// =============================================================================
+
+/**
+ * Create SSR context from server request
+ */
+export function createSSRContext(options: {
+  userAgent?: string;
+  headers?: Record<string, string>;
+  cookies?: Record<string, string>;
+  url?: string;
+  pathname?: string;
+  search?: string;
+} = {}): SSRContext {
+  const {
+    userAgent = '',
+    headers = {},
+    cookies = {},
+    url = '',
+    pathname = '',
+    search = '',
+  } = options;
+
+  return {
+    isSSR: isServer(),
+    isHydrating: false,
+    isHydrated: false,
+    canUseDOM: canUseDOM(),
+    userAgent,
+    headers,
+    cookies,
+    url,
+    pathname,
+    search,
+  };
+}
+
+/**
+ * SSR context hook
+ */
+export function useSSRContext(): SSRContext {
+  const [context, setContext] = useState<SSRContext>(() =>
+    createSSRContext()
+  );
+  
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [isHydrating, setIsHydrating] = useState(false);
+
+  useEffect(() => {
+    setIsHydrating(true);
+    
+    // Update context with client-side information
+    const updatedContext: SSRContext = {
+      ...context,
+      isSSR: false,
+      isHydrating: true,
+      isHydrated: false,
+      canUseDOM: canUseDOM(),
+      userAgent: safeUserAgent(),
+      url: isClient() ? window.location.href : '',
+      pathname: isClient() ? window.location.pathname : '',
+      search: isClient() ? window.location.search : '',
+    };
+
+    setContext(updatedContext);
+
+    // Mark as hydrated after next tick
+    const timeoutId = setTimeout(() => {
+      setIsHydrating(false);
+      setIsHydrated(true);
+      setContext(prev => ({
+        ...prev,
+        isHydrating: false,
+        isHydrated: true,
+      }));
+    }, 0);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return { ...context, isHydrating, isHydrated };
+}
+
+// =============================================================================
+// HYDRATION UTILITIES
+// =============================================================================
+
+/**
+ * Hook to safely use client-side only code
+ */
+export function useIsomorphicLayoutEffect(
+  effect: React.EffectCallback,
+  deps?: React.DependencyList
+): void {
+  if (isServer()) {
+    return useEffect(effect, deps);
+  } else {
+    return useEffect(effect, deps);
+  }
+}
+
+/**
+ * Hook to get hydration-safe value
+ */
+export function useHydrationSafeValue<T>(
+  serverValue: T,
+  clientValue: T
+): T {
+  const [value, setValue] = useState(serverValue);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    setIsHydrated(true);
+    setValue(clientValue);
+  }, [clientValue]);
+
+  return isHydrated ? clientValue : serverValue;
+}
+
+/**
+ * Hook to detect hydration mismatch
+ */
+export function useHydrationMismatchDetection(): {
+  mismatches: HydrationMismatch[];
+  hasMismatches: boolean;
+  clearMismatches: () => void;
+} {
+  const [mismatches, setMismatches] = useState<HydrationMismatch[]>([]);
+
+  const clearMismatches = useCallback(() => {
+    setMismatches([]);
+  }, []);
+
+  useEffect(() => {
+    if (!canUseDOM()) return;
+
+    // Detect hydration mismatches
+    const observer = new MutationObserver((mutations) => {
+      const newMismatches: HydrationMismatch[] = [];
+
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              const element = node as Element;
+              
+              // Check for hydration warnings in console
+              const originalError = console.error;
+              console.error = (...args: any[]) => {
+                const message = args.join(' ');
+                if (message.includes('hydration') || message.includes('mismatch')) {
+                  newMismatches.push({
+                    type: 'content',
+                    element: element.tagName,
+                    expected: 'unknown',
+                    actual: 'unknown',
+                    path: getElementPath(element),
+                  });
+                }
+                originalError.apply(console, args);
+              };
+            }
+          });
+        }
+      });
+
+      if (newMismatches.length > 0) {
+        setMismatches(prev => [...prev, ...newMismatches]);
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return {
+    mismatches,
+    hasMismatches: mismatches.length > 0,
+    clearMismatches,
+  };
+}
+
+/**
+ * Get element path for debugging
+ */
+function getElementPath(element: Element): string {
+  const path: string[] = [];
+  let current: Element | null = element;
+
+  while (current && current.nodeType === Node.ELEMENT_NODE) {
+    let selector = current.nodeName.toLowerCase();
+    
+    if (current.id) {
+      selector += `#${current.id}`;
+    } else if (current.className) {
+      const classes = current.className.split(' ').filter(Boolean);
+      if (classes.length > 0) {
+        selector += `.${classes.join('.')}`;
+      }
+    }
+
+    path.unshift(selector);
+    current = current.parentElement;
+  }
+
+  return path.join(' > ');
+}
+
+// =============================================================================
+// THEME SERIALIZATION & HYDRATION
+// =============================================================================
+
+/**
+ * Serialize theme state for SSR
+ */
+export function serializeThemeState(theme: {
+  theme: string;
+  mode: 'light' | 'dark' | 'auto';
+  tokens: Record<string, any>;
+}): string {
+  const snapshot: ThemeSnapshot = {
+    ...theme,
+    timestamp: Date.now(),
+    version: '5.0.0',
+  };
+
+  try {
+    return JSON.stringify(snapshot);
+  } catch (error) {
+    console.warn('Failed to serialize theme state:', error);
+    return JSON.stringify({
+      theme: 'default',
+      mode: 'light' as const,
+      tokens: {},
+      timestamp: Date.now(),
+      version: '5.0.0',
+    });
+  }
+}
+
+/**
+ * Deserialize theme state from SSR
+ */
+export function deserializeThemeState(serialized: string): ThemeSnapshot | null {
+  if (!serialized) return null;
+
+  try {
+    const snapshot = JSON.parse(serialized) as ThemeSnapshot;
+    
+    // Validate snapshot structure
+    if (
+      typeof snapshot.theme === 'string' &&
+      ['light', 'dark', 'auto'].includes(snapshot.mode) &&
+      typeof snapshot.tokens === 'object' &&
+      typeof snapshot.timestamp === 'number' &&
+      typeof snapshot.version === 'string'
+    ) {
+      return snapshot;
+    }
+    
+    return null;
+  } catch (error) {
+    console.warn('Failed to deserialize theme state:', error);
+    return null;
+  }
+}
+
+/**
+ * Inject theme snapshot into HTML
+ */
+export function injectThemeSnapshot(snapshot: ThemeSnapshot): string {
+  const serialized = serializeThemeState(snapshot);
+  return `<script id="__THEME_SNAPSHOT__" type="application/json">${serialized}</script>`;
+}
+
+/**
+ * Extract theme snapshot from HTML
+ */
+export function extractThemeSnapshot(): ThemeSnapshot | null {
+  if (!canUseDOM()) return null;
+
+  const script = document.getElementById('__THEME_SNAPSHOT__');
+  if (!script) return null;
+
+  return deserializeThemeState(script.textContent || '');
+}
+
+/**
+ * Hook for theme hydration
+ */
+export function useThemeHydration(fallbackTheme: ThemeSnapshot): {
+  theme: ThemeSnapshot;
+  isHydrated: boolean;
+  hydrateTheme: (newTheme: ThemeSnapshot) => void;
+} {
+  const [theme, setTheme] = useState<ThemeSnapshot>(fallbackTheme);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    // Try to extract theme from SSR snapshot
+    const ssrTheme = extractThemeSnapshot();
+    if (ssrTheme) {
+      setTheme(ssrTheme);
+    }
+    setIsHydrated(true);
+  }, []);
+
+  const hydrateTheme = useCallback((newTheme: ThemeSnapshot) => {
+    setTheme(newTheme);
+  }, []);
+
+  return {
+    theme,
+    isHydrated,
+    hydrateTheme,
+  };
+}
+
+// =============================================================================
+// SSR-SAFE HOOKS
+// =============================================================================
+
+/**
+ * SSR-safe useState that handles hydration mismatches
+ */
+export function useSSRSafeState<T>(
+  initialValue: T | (() => T),
+  serverValue?: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const [state, setState] = useState<T>(() => {
+    if (isServer() && serverValue !== undefined) {
+      return serverValue;
+    }
+    return typeof initialValue === 'function' 
+      ? (initialValue as () => T)() 
+      : initialValue;
+  });
+
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  useEffect(() => {
+    if (!isHydrated) {
+      setIsHydrated(true);
+      // Update to client value if different from server
+      if (serverValue !== undefined) {
+        const clientValue = typeof initialValue === 'function' 
+          ? (initialValue as () => T)() 
+          : initialValue;
+        if (clientValue !== serverValue) {
+          setState(clientValue);
+        }
+      }
+    }
+  }, [initialValue, serverValue, isHydrated]);
+
+  return [state, setState];
+}
+
+/**
+ * SSR-safe useEffect that only runs on client
+ */
+export function useClientEffect(
+  effect: React.EffectCallback,
+  deps?: React.DependencyList
+): void {
+  useEffect(() => {
+    if (!canUseDOM()) return;
+    return effect();
+  }, deps);
+}
+
+/**
+ * SSR-safe media query hook
+ */
+export function useSSRSafeMediaQuery(
+  query: string,
+  fallback: boolean = false
+): boolean {
+  const [matches, setMatches] = useSSRSafeState(fallback, fallback);
+
+  useClientEffect(() => {
+    const mediaQuery = safeMatchMedia(query);
+    if (!mediaQuery) return;
+
+    setMatches(mediaQuery.matches);
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setMatches(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [query]);
+
+  return matches;
+}
+
+// =============================================================================
+// DEFAULT EXPORT
+// =============================================================================
+
+export const SSRUtils = {
+  // Environment detection
+  detectEnvironment,
+  canUseDOM,
+  isBrowserEnvironment,
+  isNodeEnvironment,
+  isEdgeRuntime,
+  isWebWorker,
+  
+  // SSR Context
+  createSSRContext,
+  
+  // Theme serialization
+  serializeThemeState,
+  deserializeThemeState,
+  injectThemeSnapshot,
+  extractThemeSnapshot,
+  
+  // Utilities
+  getElementPath,
+};
+
+export default SSRUtils;
