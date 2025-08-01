@@ -52,7 +52,16 @@
       "Bash(cd:*)",
       "Bash(npx enterprise-standards:*)",
       "Bash(node:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm publish:*)",
+      "Bash(ls:*)",
+      "Bash(pnpm pack:*)",
+      "Bash(timeout 60 pnpm test)",
+      "Bash(npx jest:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }

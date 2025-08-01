@@ -1,6 +1,6 @@
 /**
  * ThemeManager Component
- * Provides UI for theme management, switching, and customization
+ * Provides UI for theme management, _switching, and customization
  */
 
 import React, { useState, useCallback, useMemo } from 'react';
@@ -33,12 +33,11 @@ const transitionOptions: TransitionOption[] = [
 export const ThemeManager = ({
   showPreview = true,
   showTransitionOptions = true,
-  allowCustomThemes: _allowCustomThemes = false,
   themes = [],
   onThemeChange,
   className = '',
 }: ThemeManagerProps): JSX.Element => {
-  const { theme, setTheme: _baseSetTheme, availableThemes } = useTheme();
+  const { theme, availableThemes } = useTheme();
   const tokens = useTokens();
   const [selectedTransition, setSelectedTransition] = useState<keyof typeof themeTransitionPresets>('smooth');
   const [isExpanded, setIsExpanded] = useState(false);

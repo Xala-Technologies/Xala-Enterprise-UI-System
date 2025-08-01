@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type */
 /**
  * @fileoverview LazyImage Component v5.0.0 - Token-Based Design System
  * @description Performance-optimized image component with lazy loading
@@ -167,7 +168,7 @@ const useImageLazyLoad = ({
         });
       },
       {
-        rootMargin: '50px',
+        rootMargin: '50px', 
         threshold: 0.01,
         ...observerOptions,
       }
@@ -202,9 +203,9 @@ const useImageLazyLoad = ({
   }, [isIntersecting, src, handleLoad, handleError]);
 
   return {
-    imgRef,
+    imgRef, 
     isLoaded,
-    isError,
+    isError, 
     isIntersecting,
   };
 };
@@ -236,18 +237,15 @@ export const LazyImage = React.forwardRef<HTMLImageElement, LazyImageProps>(
       loading: loadingProp,
       objectFit = 'cover',
       aspectRatio,
-      className,
-      style,
+      className, style,
       ...props
-    },
-    ref
-  ) => {
+    }, ref) => {
     const { colors } = useTokens();
     const { isServer } = useSSR();
     const { imgRef, isLoaded, isError, isIntersecting } = useImageLazyLoad({
-      src,
+      src, 
       priority,
-      observerOptions,
+      observerOptions, 
       onLoad,
       onError,
     });

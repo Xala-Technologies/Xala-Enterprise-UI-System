@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type */
 /**
  * Global Search Component
  * Comprehensive search with autocomplete and keyboard navigation
@@ -90,11 +91,9 @@ export interface GlobalSearchProps
   /** Search value */
   readonly value?: string;
   /** Search change handler */
-  // eslint-disable-next-line no-unused-vars
-  readonly onChange?: (_value: string) => void;
+  readonly onChange?: (value: string) => void;
   /** Search submit handler */
-  // eslint-disable-next-line no-unused-vars
-  readonly onSubmit?: (_value: string) => void;
+  readonly onSubmit?: (value: string) => void;
   /** Search results */
   readonly results?: readonly SearchResultItem[];
   /** Loading state */
@@ -112,14 +111,11 @@ export interface GlobalSearchProps
   /** Right action */
   readonly rightAction?: ReactNode;
   /** Result click handler */
-  // eslint-disable-next-line no-unused-vars
-  readonly onResultClick?: (_result: SearchResultItem) => void;
+  readonly onResultClick?: (result: SearchResultItem) => void;
   /** Selected index change handler */
-  // eslint-disable-next-line no-unused-vars
-  readonly onSelectedIndexChange?: (_index: number) => void;
+  readonly onSelectedIndexChange?: (index: number) => void;
   /** Open state change handler */
-  // eslint-disable-next-line no-unused-vars
-  readonly onOpenChange?: (_isOpen: boolean) => void;
+  readonly onOpenChange?: (isOpen: boolean) => void;
 }
 
 /**

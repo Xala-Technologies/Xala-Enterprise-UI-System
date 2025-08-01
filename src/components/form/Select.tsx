@@ -244,7 +244,10 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             {labelKey ? t(labelKey) : label}
             {required && (
               <span
-                style={{ color: 'var(--color-danger-500)', marginLeft: 'var(--spacing-1)' }}
+                style={{
+                  color: 'var(--color-danger-500)',
+                  marginLeft: 'var(--spacing-1)',
+                }}
                 aria-label={'form.required'}
               >
                 *

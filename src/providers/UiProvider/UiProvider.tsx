@@ -199,7 +199,8 @@ export const UiProvider: React.FC<UiProviderProps> = ({
   }, [enableSSR]);
   
   // Avoid rendering until hydrated to prevent flash/mismatch
-  if (!isServer() && !isHydrated) {
+  // But always render in static generation context (renderToStaticMarkup)
+  if (!isServer() && !isHydrated && enableHydration) {
     return null; // Or a minimal loading state
   }
   

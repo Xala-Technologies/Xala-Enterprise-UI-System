@@ -61,18 +61,29 @@ export interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
 
 // Helper functions
 const getClassificationIcon = (level: string): string => {
-  const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
+  const icons = {
+    ÅPEN: '🟢',
+    BEGRENSET: '🟡',
+    KONFIDENSIELT: '🔴',
+    HEMMELIG: '⚫'
+  };
   return icons[level as keyof typeof icons] || '📋';
 };
 
 const getCategoryIcon = (category: string): string => {
-  const icons = { system: '⚙️', validation: '✅', security: '🔒', process: '🔄', user: '👤' };
+  const icons = {
+    system: '⚙️',
+    validation: '✅',
+    security: '🔒',
+    process: '🔄',
+    user: '👤'
+  };
   return icons[category as keyof typeof icons] || '📋';
 };
 
 // Helper function to generate CSS using design tokens
 const getModalStyles = (props: ModalProps): React.CSSProperties => {
-  const { size: _size = 'md', centered: _centered = true, norwegian: _norwegian } = props;
+  const { centered = true } = props;
 
   // Base modal overlay styles
   const overlayStyles: React.CSSProperties = {
@@ -83,9 +94,9 @@ const getModalStyles = (props: ModalProps): React.CSSProperties => {
     bottom: 0,
     backgroundColor: 'var(--color-black-alpha-50)',
     display: 'flex',
-    alignItems: _centered ? 'center' : 'flex-start',
+    alignItems: centered ? 'center' : 'flex-start',
     justifyContent: 'center',
-    zIndex: 'var(--z-index-modal)',
+    zIndex: 1000,
     padding: 'var(--spacing-4)',
     backdropFilter: 'blur(var(--blur-sm))',
     animation: 'modal-fade-in var(--transition-duration-normal) ease-out',
@@ -306,10 +317,7 @@ const ModalBody = ({
 };
 
 // Focus trap hook
-const useFocusTrap = (
-  isOpen: boolean,
-  enabled: boolean,
-  containerRef: React.RefObject<HTMLElement>
+const useFocusTrap = (isOpen: boolean, enabled: boolean, containerRef: React.RefObject<HTMLElement>
 ): void => {
   React.useEffect(() => {
     if (!isOpen || !enabled || !containerRef.current) return;
@@ -348,12 +356,10 @@ const useFocusTrap = (
 export const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
   // eslint-disable-next-line no-unused-vars
   (props, _ref): React.ReactElement => {
-    const {
-      isOpen,
-      title,
+    const { isOpen, title,
       titleKey,
       size = 'md',
-      centered: _centered = true,
+      centered = true,
       closable = true,
       closeOnEscape = true,
       closeOnOverlay = true,
