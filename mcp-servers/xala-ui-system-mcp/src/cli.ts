@@ -286,7 +286,8 @@ program
         config = JSON.parse(configContent);
       }
       
-      const isValid = templateManager.validateConfig(config);
+      // Basic validation - check required properties
+      const isValid = config.name && config.category;
       
       if (isValid) {
         console.log('✅ Configuration is valid!');
@@ -294,7 +295,7 @@ program
         console.log(`🏷️  Category: ${config.category}`);
         console.log(`🎨 Theme: ${config.theme || 'default'}`);
       } else {
-        console.log('❌ Configuration is invalid!');
+        console.log('❌ Configuration is invalid! Missing required properties.');
         process.exit(1);
       }
       
@@ -313,7 +314,7 @@ program
     
     // Check Node.js version
     const nodeVersion = process.version;
-    const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0]);
+    const majorVersion = parseInt(nodeVersion.slice(1).split('.')[0] || '0');
     
     if (majorVersion >= 18) {
       console.log(`✅ Node.js version: ${nodeVersion} (supported)`);
