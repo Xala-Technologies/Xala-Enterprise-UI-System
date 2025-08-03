@@ -78,3 +78,18 @@ export type {
   HydrationContextValue,
   HydrationWrapperProps,
 } from './HydrationProvider';
+
+// Theme Provider (New Industry-Standard Theme System)
+export {
+  ThemeProvider,
+  ThemeScript,
+  useTheme,
+  themeUtils,
+  withTheme,
+  getServerSideTheme,
+} from './ThemeProvider';
+
+export type {
+  ThemeProviderProps,
+  ThemeScriptProps,
+} from './ThemeProvider';

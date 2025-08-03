@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Script Example</title>
+  
+  <!-- CRITICAL: Place this script in <head> before any CSS to prevent theme flash -->
+  <script>
+    /**
+     * Theme Flash Prevention Script
+     * 
+     * This script must be placed in the <head> before any CSS files
+     * to prevent theme flash during page load and SSR hydration.
+     */
+    (function() {
+      try {
+        // Configuration - should match your app's theme settings
+        var STORAGE_KEY = 'ui-theme';
+        var DEFAULT_THEME = 'system';
+        
+        // Get saved theme from localStorage
+        var savedTheme = localStorage.getItem(STORAGE_KEY) || DEFAULT_THEME;
+        var resolvedTheme = savedTheme;
+        
+        // Resolve 'system' theme to actual theme
+        if (savedTheme === 'system') {
+          resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        // Apply theme immediately
+        var root = document.documentElement;
+        root.setAttribute('data-theme', resolvedTheme);
+        root.classList.add('theme-' + resolvedTheme);
+        
+        // Mark as JavaScript enabled (for fallback handling)
+        root.classList.remove('no-js');
+        
+      } catch (e) {
+        // Fallback to light theme if anything fails
+        console.warn('Theme initialization failed, falling back to light theme:', e);
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.classList.add('theme-light');
+      }
+    })();
+  </script>
+  
+  <!-- Add no-js class for graceful degradation -->
+  <script>document.documentElement.classList.add('no-js');</script>
+  
+  <!-- Your CSS files come after the theme script -->
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <h1>Theme System Demo</h1>
+  <p>This page demonstrates the theme flash prevention script.</p>
+  
+  <div class="theme-controls">
+    <button onclick="setTheme('light')">Light Theme</button>
+    <button onclick="setTheme('dark')">Dark Theme</button>
+    <button onclick="setTheme('high-contrast')">High Contrast</button>
+    <button onclick="setTheme('system')">System Theme</button>
+  </div>
+  
+  <script>
+    // Theme switching functions (use the ThemeSwitcher class in real apps)
+    function setTheme(theme) {
+      try {
+        localStorage.setItem('ui-theme', theme);
+        
+        var resolvedTheme = theme;
+        if (theme === 'system') {
+          resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        
+        var root = document.documentElement;
+        
+        // Add transition class
+        root.style.setProperty('--theme-transition-duration', '200ms');
+        root.classList.add('theme-transitioning');
+        
+        // Apply new theme
+        root.setAttribute('data-theme', resolvedTheme);
+        root.className = root.className.replace(/theme-\w+/g, '');
+        root.classList.add('theme-' + resolvedTheme);
+        
+        // Remove transition class after transition
+        setTimeout(function() {
+          root.classList.remove('theme-transitioning');
+        }, 250);
+        
+        // Dispatch custom event
+        var event = new CustomEvent('themeChange', {
+          detail: { theme: theme, resolvedTheme: resolvedTheme }
+        });
+        window.dispatchEvent(event);
+        
+      } catch (e) {
+        console.error('Failed to set theme:', e);
+      }
+    }
+    
+    // Listen for system theme changes
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        var currentTheme = localStorage.getItem('ui-theme') || 'system';
+        if (currentTheme === 'system') {
+          setTheme('system'); // Re-apply system theme
+        }
+      });
+    }
+  </script>
+</body>
+</html>

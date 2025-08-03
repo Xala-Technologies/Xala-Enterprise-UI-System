@@ -61,7 +61,12 @@
       "Bash(pnpm pack:*)",
       "Bash(timeout 60 pnpm test)",
       "Bash(npx jest:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)"
     ],
     "deny": []
   }

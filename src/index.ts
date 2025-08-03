@@ -11,6 +11,50 @@
 export { UISystemProvider as LegacyUISystemProvider } from './components/UISystemProvider';
 export { DesignSystemProvider, DesignSystemProvider as UISystemProvider } from './providers/DesignSystemProvider';
 
+// Theme System (New Industry-Standard)
+export {
+  ThemeProvider,
+  ThemeScript,
+  useTheme,
+  themeUtils,
+  withTheme,
+  getServerSideTheme,
+} from './providers/ThemeProvider';
+export type {
+  ThemeProviderProps,
+  ThemeScriptProps,
+} from './providers/ThemeProvider';
+
+export {
+  ThemeSwitcher,
+  getThemeSwitcher,
+  getServerTheme,
+  generateThemeScript,
+  themeTransitionCSS,
+} from './lib/theme/theme-switcher';
+export type {
+  Theme,
+  ThemeSwitcherConfig,
+} from './lib/theme/theme-switcher';
+
+export {
+  THEME_DEFINITIONS,
+  validateTheme,
+  createTheme,
+  mergeThemes,
+  getTheme,
+  getAvailableThemes,
+  themeToCSS,
+  generateAllThemeCSS,
+  themeUtils as configThemeUtils,
+} from './config/themes';
+export type {
+  ColorToken,
+  ThemeColors,
+  ThemeDefinition,
+  ThemeRegistry,
+} from './config/themes';
+
 // ===== CORE UI COMPONENTS =====
 
 // Button Components (Primary exports)

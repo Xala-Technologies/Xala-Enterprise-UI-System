@@ -29,6 +29,33 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Theme flash prevention */
+    visibility: hidden;
+  }
+
+  html[data-theme] {
+    /* Make content visible once theme is applied */
+    visibility: visible;
+  }
+
+  /* Fallback for when JS fails to load */
+  html.no-js {
+    visibility: visible;
+  }
+
+  /* Theme transition animations */
+  .theme-transitioning {
+    transition: 
+      background-color var(--theme-transition-duration, 200ms) ease-in-out,
+      color var(--theme-transition-duration, 200ms) ease-in-out,
+      border-color var(--theme-transition-duration, 200ms) ease-in-out,
+      box-shadow var(--theme-transition-duration, 200ms) ease-in-out;
+  }
+  
+  .theme-transitioning *,
+  .theme-transitioning *::before,
+  .theme-transitioning *::after {
+    transition: inherit !important;
   }
 
   body {
@@ -207,6 +234,14 @@
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+    }
+
+    /* Disable theme transitions for reduced motion */
+    .theme-transitioning,
+    .theme-transitioning *,
+    .theme-transitioning *::before,
+    .theme-transitioning *::after {
+      transition: none !important;
     }
   }
 

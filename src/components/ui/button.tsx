@@ -9,37 +9,36 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 
 // =============================================================================
 // BUTTON VARIANTS USING DESIGN TOKENS
 // =============================================================================
 
 /**
- * Button variants using token-based styling
- * Combines CVA with runtime token access for maximum flexibility
+ * Button variants using semantic Tailwind classes
+ * Pure CVA implementation with design token classes
  */
 const buttonVariants = cva(
-  // Base classes - framework-agnostic styling
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all duration-150 ease-in-out focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  // Base classes using semantic tokens
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
-        primary: '',
-        secondary: '',
-        outline: '',
-        ghost: '',
-        destructive: '',
-        success: '',
-        warning: '',
-        link: 'underline-offset-4 hover:underline',
+        primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        outline: 'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        success: 'bg-success text-success-foreground hover:bg-success/90',
+        warning: 'bg-warning text-warning-foreground hover:bg-warning/90',
+        link: 'text-primary underline-offset-4 hover:underline',
       },
       size: {
-        sm: '',
-        md: '',
-        lg: '',
-        xl: '',
-        icon: '',
+        sm: 'h-9 px-3 text-xs',
+        md: 'h-10 px-4 py-2',
+        lg: 'h-11 px-8',
+        xl: 'h-12 px-12 text-base',
+        icon: 'h-10 w-10',
       },
       fullWidth: {
         true: 'w-full',
@@ -75,24 +74,20 @@ export interface ButtonProps
 const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = ({ 
   size = 'md' 
 }) => {
-  const spinnerSize = {
-    sm: '14px',
-    md: '16px', 
-    lg: '18px',
-    xl: '20px',
-    icon: '16px',
+  const spinnerSizeClass = {
+    sm: 'h-3.5 w-3.5',
+    md: 'h-4 w-4', 
+    lg: 'h-4.5 w-4.5',
+    xl: 'h-5 w-5',
+    icon: 'h-4 w-4',
   }[size];
 
   return (
     <div
-      style={{
-        width: spinnerSize,
-        height: spinnerSize,
-        border: '2px solid transparent',
-        borderTop: '2px solid currentColor',
-        borderRadius: '50%',
-        animation: 'spin 1s linear infinite',
-      }}
+      className={cn(
+        'animate-spin rounded-full border-2 border-transparent border-t-current',
+        spinnerSizeClass
+      )}
       aria-hidden="true"
     />
   );
@@ -114,161 +109,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     iconPosition = 'left',
     disabled,
     children,
-    style,
     ...props
   }, ref) => {
-    // ✅ Access design tokens for complete styling control
-    const { colors, spacing, typography, getToken } = useTokens();
-    
     const isDisabled = disabled || loading;
-    
-    // Get token-based styles for variant
-    const getVariantStyles = (): React.CSSProperties => {
-      switch (variant) {
-        case 'primary':
-          return {
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
-          };
-        case 'secondary':
-          return {
-            backgroundColor: colors.secondary?.[100] || '#f3f4f6',
-            color: colors.secondary?.[900] || '#111827',
-            border: `1px solid ${colors.secondary?.[300] || '#d1d5db'}`,
-          };
-        case 'outline':
-          return {
-            backgroundColor: 'transparent',
-            color: colors.primary?.[500] || '#3b82f6',
-            border: `1px solid ${colors.primary?.[500] || '#3b82f6'}`,
-          };
-        case 'ghost':
-          return {
-            backgroundColor: 'transparent',
-            color: colors.text?.primary || '#111827',
-            border: 'none',
-          };
-        case 'destructive':
-          return {
-            backgroundColor: colors.status?.error || '#ef4444',
-            color: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.status?.error || '#ef4444'}`,
-          };
-        case 'success':
-          return {
-            backgroundColor: colors.status?.success || '#10b981',
-            color: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.status?.success || '#10b981'}`,
-          };
-        case 'warning':
-          return {
-            backgroundColor: colors.status?.warning || '#f59e0b',
-            color: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.status?.warning || '#f59e0b'}`,
-          };
-        case 'link':
-          return {
-            backgroundColor: 'transparent',
-            color: colors.primary?.[500] || '#3b82f6',
-            border: 'none',
-            textDecoration: 'underline',
-            textUnderlineOffset: '4px',
-          };
-        default:
-          return {};
-      }
-    };
-
-    // Get token-based styles for size
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return {
-            height: '36px',
-            padding: `0 ${spacing?.[3] || '0.75rem'}`,
-            fontSize: typography?.fontSize?.sm || '0.875rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'md':
-          return {
-            height: '40px',
-            padding: `${spacing?.[2] || '0.5rem'} ${spacing?.[4] || '1rem'}`,
-            fontSize: typography?.fontSize?.base || '1rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'lg':
-          return {
-            height: '44px',
-            padding: `0 ${spacing?.[8] || '2rem'}`,
-            fontSize: typography?.fontSize?.base || '1rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'xl':
-          return {
-            height: '48px',
-            padding: `0 ${spacing?.[12] || '3rem'}`,
-            fontSize: typography?.fontSize?.lg || '1.125rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'icon':
-          return {
-            height: '40px',
-            width: '40px',
-            padding: '0',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        default:
-          return {};
-      }
-    };
-    
-    // Base styles from tokens
-    const baseStyles: React.CSSProperties = {
-      // Reset
-      outline: 'none',
-      border: 'none',
-      margin: 0,
-      textDecoration: 'none',
-      appearance: 'none',
-      
-      // Layout
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: spacing?.[2] || '0.5rem',
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: fullWidth ? '100%' : 'auto',
-      
-      // Typography
-      fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      fontWeight: typography?.fontWeight?.medium || 500,
-      lineHeight: typography?.lineHeight?.normal || 1.5,
-      
-      // Interaction
-      cursor: isDisabled ? 'not-allowed' : 'pointer',
-      opacity: isDisabled && !loading ? 0.5 : 1,
-      userSelect: 'none',
-      
-      // Transitions
-      transition: 'all 150ms ease-in-out',
-    };
-
-    // Combine all styles
-    const dynamicStyles: React.CSSProperties = {
-      ...baseStyles,
-      ...getVariantStyles(),
-      ...getSizeStyles(),
-      ...style,
-    };
 
     const renderContent = () => {
       if (loading) {
         return (
           <>
             <LoadingSpinner size={size || undefined} />
-            <span style={{ visibility: loading ? 'hidden' : 'visible' }}>
+            <span className={loading ? 'sr-only' : undefined}>
               {loadingText || children}
             </span>
           </>
@@ -278,7 +128,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (icon && iconPosition === 'left') {
         return (
           <>
-            <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>
+            <span className="flex items-center">{icon}</span>
             <span>{children}</span>
           </>
         );
@@ -288,7 +138,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return (
           <>
             <span>{children}</span>
-            <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>
+            <span className="flex items-center">{icon}</span>
           </>
         );
       }
@@ -301,7 +151,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, fullWidth }), className)}
         ref={ref}
         disabled={isDisabled}
-        style={dynamicStyles}
         aria-busy={loading}
         aria-disabled={isDisabled}
         {...props}

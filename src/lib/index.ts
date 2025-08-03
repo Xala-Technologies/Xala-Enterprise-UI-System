@@ -51,3 +51,16 @@ export {
   safeGet,
 } from './utils/validation';
 export type { ValidationResult } from './utils/validation';
+
+// Theme System
+export {
+  ThemeSwitcher,
+  getThemeSwitcher,
+  getServerTheme,
+  generateThemeScript,
+  themeTransitionCSS,
+} from './theme/theme-switcher';
+export type {
+  Theme,
+  ThemeSwitcherConfig,
+} from './theme/theme-switcher';

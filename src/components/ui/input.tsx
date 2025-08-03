@@ -9,35 +9,34 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 
 // =============================================================================
 // INPUT VARIANTS USING DESIGN TOKENS
 // =============================================================================
 
 /**
- * Input variants using token-based styling
- * Combines CVA with runtime token access for maximum flexibility
+ * Input variants using semantic Tailwind classes
+ * Pure CVA implementation with design token classes
  */
 const inputVariants = cva(
-  // Base classes - framework-agnostic styling
-  'flex w-full border transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
+  // Base classes using semantic tokens
+  'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: '',
-        filled: '',
-        outline: '',
+        default: 'border-input bg-background',
+        filled: 'border-transparent bg-muted',
+        outline: 'border-2 border-input bg-transparent',
       },
       size: {
-        sm: '',
-        md: '',
-        lg: '',
+        sm: 'h-8 px-3 text-xs',
+        md: 'h-10 px-3 py-2 text-sm',
+        lg: 'h-12 px-4 py-3 text-base',
       },
       state: {
         default: '',
-        error: '',
-        success: '',
+        error: 'border-destructive focus-visible:ring-destructive',
+        success: 'border-success focus-visible:ring-success',
       },
     },
     defaultVariants: {
@@ -81,122 +80,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     disabled,
     onChange,
     onChangeEvent,
-    style,
     ...props
   }, ref) => {
-    // ✅ Access design tokens for complete styling control
-    const { colors, spacing, typography, getToken } = useTokens();
-    
     // Determine state based on props
     const currentState = error ? 'error' : success ? 'success' : state || 'default';
-    
-    // Get token-based styles for variant
-    const getVariantStyles = (): React.CSSProperties => {
-      const baseStyles = {
-        backgroundColor: colors.background?.default || '#ffffff',
-        color: colors.text?.primary || '#000000',
-      };
-
-      switch (variant) {
-        case 'filled':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.secondary?.[50] || colors.background?.paper || '#f8f9fa',
-            border: '1px solid transparent',
-          };
-        case 'outline':
-          return {
-            backgroundColor: 'transparent',
-            color: colors.text?.primary || '#000000',
-            border: `2px solid ${colors.border?.default || '#e5e7eb'}`,
-          };
-        default:
-          return {
-            ...baseStyles,
-            border: `1px solid ${colors.border?.default || '#e5e7eb'}`,
-          };
-      }
-    };
-
-    // Get token-based styles for size
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return {
-            height: '32px',
-            padding: `0 ${spacing?.[3] || '0.75rem'}`,
-            fontSize: typography?.fontSize?.sm || '0.875rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'md':
-          return {
-            height: '40px',
-            padding: `0 ${spacing?.[4] || '1rem'}`,
-            fontSize: typography?.fontSize?.base || '1rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        case 'lg':
-          return {
-            height: '48px', 
-            padding: `0 ${spacing?.[4] || '1rem'}`,
-            fontSize: typography?.fontSize?.lg || '1.125rem',
-            borderRadius: getToken('borderRadius.md') as string || '0.375rem',
-          };
-        default:
-          return {};
-      }
-    };
-
-    // Get token-based styles for state
-    const getStateStyles = (): React.CSSProperties => {
-      switch (currentState) {
-        case 'error':
-          return {
-            borderColor: colors.status?.error || '#ef4444',
-            // Focus styles would need to be added via CSS classes or pseudo-selectors
-          };
-        case 'success':
-          return {
-            borderColor: colors.status?.success || '#10b981',
-          };
-        default:
-          return {};
-      }
-    };
-    
-    // Base styles from tokens
-    const baseStyles: React.CSSProperties = {
-      // Reset
-      appearance: 'none',
-      outline: 'none',
-      margin: 0,
-      
-      // Layout
-      display: 'flex',
-      width: '100%',
-      alignItems: 'center',
-      
-      // Typography
-      fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      fontWeight: typography?.fontWeight?.normal || 400,
-      lineHeight: typography?.lineHeight?.normal || 1.5,
-      
-      // Interaction
-      cursor: disabled ? 'not-allowed' : 'text',
-      opacity: disabled ? 0.5 : 1,
-      
-      // Transitions
-      transition: 'border-color 150ms ease-in-out, box-shadow 150ms ease-in-out',
-    };
-
-    // Combine all styles
-    const dynamicStyles: React.CSSProperties = {
-      ...baseStyles,
-      ...getVariantStyles(),
-      ...getSizeStyles(),
-      ...getStateStyles(),
-      ...style,
-    };
 
     // Handle change events to support both interfaces
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -224,7 +111,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         type={type}
         ref={ref}
         disabled={disabled}
-        style={dynamicStyles}
         aria-invalid={error || currentState === 'error'}
         onChange={handleChange}
         {...props}

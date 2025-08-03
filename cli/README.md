@@ -1,12 +1,14 @@
-# Xala CLI - Universal Design System CLI
+# Xala CLI - The Most Intelligent Component Generation System
 
-The comprehensive command-line interface for the Xala Universal Design System. Build beautiful, accessible, and compliant applications across all platforms with AI-powered generation and enterprise-grade features.
+The revolutionary AI-powered CLI for enterprise-grade, multi-platform component generation. Works seamlessly with LLMs of all sizes (7B to GPT-4) and generates production-ready code with built-in compliance, performance optimization, and intelligent suggestions.
 
 [![npm version](https://badge.fury.io/js/@xala-technologies/xala-cli.svg)](https://badge.fury.io/js/@xala-technologies/xala-cli)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![LLM Compatible](https://img.shields.io/badge/LLM-7B%20to%20GPT4-blue)](https://xala.no)
+[![WCAG AAA](https://img.shields.io/badge/WCAG-AAA%20Compliant-green)](https://www.w3.org/WAI/WCAG2AAA-Conformance)
 
-> **Production Ready** - TypeScript compilation working perfectly with comprehensive CLI functionality.
+> **Production Ready** - v5.0 Architecture with Pure CVA Components, Multi-Platform Support, and AI-Powered Generation
 
 ## Installation
 

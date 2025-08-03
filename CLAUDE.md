@@ -285,3 +285,21 @@ pnpm run test:coverage
 
 _Updated to align with project standards v6.1.0_  
 _Platform: library | Environment: development_
+
+
+For Pure Components (following v5.0 architecture):
+  - ✅ No hooks in UI components
+  - ✅ Pure presentational with CVA variants
+  - ✅ CSS custom properties for theming
+  - ✅ ForwardRef properly implemented
+  - ✅ Parent components handle all state
+  - ✅ SSR-safe implementation
+  - ✅ WCAG AAA accessibility
+
+  For Providers (application-level state):
+  - ✅ Hooks allowed (they're not UI components)
+  - ✅ Handle application state and side effects
+  - ✅ Provide context to the application
+  - ✅ SSR-safe with hydration support
+  - ✅ Enterprise compliance (NSM, GDPR)
+  - ✅ Telemetry and analytics support
