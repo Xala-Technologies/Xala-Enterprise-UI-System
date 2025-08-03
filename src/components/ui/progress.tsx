@@ -1,29 +1,102 @@
 /**
- * @fileoverview SSR-Safe Progress Components - Production Strategy Implementation
- * @description Progress components using useTokens hook for JSON template integration
- * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @fileoverview CVA Progress Components - Pure CSS Animations
+ * @description Progress components using CVA pattern with semantic Tailwind classes
+ * @version 5.1.0
+ * @compliance CVA pattern, Pure CSS animations, Framework-agnostic
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
 /**
- * Progress variant types
+ * Progress component variants using CVA
  */
-export type ProgressVariant = 'default' | 'success' | 'warning' | 'destructive';
+const progressVariants = cva(
+  "relative w-full overflow-hidden rounded-full transition-all duration-300 ease-in-out",
+  {
+    variants: {
+      variant: {
+        default: "bg-neutral-200 dark:bg-neutral-800",
+        success: "bg-success-100 dark:bg-success-900/20",
+        warning: "bg-warning-100 dark:bg-warning-900/20",
+        destructive: "bg-destructive-100 dark:bg-destructive-900/20",
+      },
+      size: {
+        sm: "h-2",
+        default: "h-4",
+        lg: "h-6",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+);
 
-/**
- * Progress size types
- */
-export type ProgressSize = 'sm' | 'default' | 'lg';
+const progressIndicatorVariants = cva(
+  "h-full w-full flex-1 transition-all duration-300 ease-in-out",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary-600 dark:bg-primary-500",
+        success: "bg-success-600 dark:bg-success-500",
+        warning: "bg-warning-600 dark:bg-warning-500",
+        destructive: "bg-destructive-600 dark:bg-destructive-500",
+      },
+      animated: {
+        true: "transition-transform duration-300 ease-in-out",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      animated: false,
+    },
+  }
+);
+
+const progressIndeterminateVariants = cva(
+  "absolute inset-0 rounded-full",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary-600/30 dark:bg-primary-500/30",
+        success: "bg-success-600/30 dark:bg-success-500/30",
+        warning: "bg-warning-600/30 dark:bg-warning-500/30",
+        destructive: "bg-destructive-600/30 dark:bg-destructive-500/30",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+const progressIndeterminateBarVariants = cva(
+  "h-full w-1/3 rounded-full animate-[progress-indeterminate_2s_ease-in-out_infinite]",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary-600 dark:bg-primary-500",
+        success: "bg-success-600 dark:bg-success-500",
+        warning: "bg-warning-600 dark:bg-warning-500",
+        destructive: "bg-destructive-600 dark:bg-destructive-500",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 /**
  * Progress component props interface
  */
-export interface ProgressProps extends HTMLAttributes<HTMLDivElement> {
-  readonly variant?: ProgressVariant;
-  readonly size?: ProgressSize;
+export interface ProgressProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof progressVariants> {
   readonly value?: number;
   readonly max?: number;
   readonly label?: string;
@@ -54,7 +127,7 @@ const getDisplayValue = (
 };
 
 /**
- * Enhanced Progress component
+ * Enhanced Progress component using CVA pattern
  * @param variant - Progress variant (default, success, warning, destructive)
  * @param size - Progress size (sm, default, lg)
  * @param value - Current progress value
@@ -73,7 +146,6 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
   (
     {
       className,
-      style,
       variant = 'default',
       size = 'default',
       value = 0,
@@ -88,97 +160,11 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
     // Calculate percentage
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
     // Format display value
     const displayValue = getDisplayValue(showPercentage, showValue, percentage, value, max);
-
-    // Get border radius
-    const borderRadius = {
-      full: (getToken('borderRadius.full') as string) || '9999px',
-    };
-
-    // Size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return { height: '8px' };
-        case 'lg':
-          return { height: '24px' };
-        default: // default
-          return { height: '16px' };
-      }
-    };
-
-    // Variant styles
-    const getVariantStyles = (): { background: React.CSSProperties; indicator: React.CSSProperties } => {
-      switch (variant) {
-        case 'success':
-          return {
-            background: { backgroundColor: `${colors.success?.[500] || '#22c55e'}1A` }, // 10% opacity
-            indicator: { backgroundColor: colors.success?.[500] || '#22c55e' },
-          };
-        case 'warning':
-          return {
-            background: { backgroundColor: `${colors.warning?.[500] || '#eab308'}1A` }, // 10% opacity
-            indicator: { backgroundColor: colors.warning?.[500] || '#eab308' },
-          };
-        case 'destructive':
-          return {
-            background: { backgroundColor: `${colors.danger?.[500] || '#ef4444'}1A` }, // 10% opacity
-            indicator: { backgroundColor: colors.danger?.[500] || '#ef4444' },
-          };
-        case 'default':
-        default:
-          return {
-            background: { backgroundColor: colors.neutral?.[200] || '#e5e7eb' },
-            indicator: { backgroundColor: colors.primary?.[500] || '#3b82f6' },
-          };
-      }
-    };
-
-    const sizeStyles = getSizeStyles();
-    const variantStyles = getVariantStyles();
-
-    // Progress track styles
-    const trackStyles: React.CSSProperties = {
-      position: 'relative',
-      width: '100%',
-      overflow: 'hidden',
-      borderRadius: borderRadius.full,
-      transition: 'all 300ms ease-in-out',
-      ...sizeStyles,
-      ...variantStyles.background,
-      ...style,
-    };
-
-    // Progress indicator styles  
-    const indicatorStyles: React.CSSProperties = {
-      height: '100%',
-      width: '100%',
-      flex: 1,
-      transition: 'all 300ms ease-in-out',
-      transform: `translateX(-${100 - percentage}%)`,
-      ...variantStyles.indicator,
-    };
-
-    // Indeterminate styles
-    const indeterminateTrackStyles: React.CSSProperties = {
-      height: '100%',
-      width: '100%',
-      backgroundColor: `${variantStyles.indicator.backgroundColor}30`, // 30% opacity
-      // Note: CSS animations would need to be defined in CSS for proper indeterminate animation
-    };
-
-    const indeterminateBarStyles: React.CSSProperties = {
-      height: '100%',
-      width: '33.333333%',
-      ...variantStyles.indicator,
-      // Note: Animation would be handled by CSS keyframes in a real implementation
-    };
 
     const progressElement = (
       <div
@@ -189,18 +175,20 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
         aria-valuenow={indeterminate ? undefined : value}
         aria-label={label}
         aria-describedby={helperText ? `${label}-helper` : undefined}
-        className={className}
-        style={trackStyles}
+        className={cn(progressVariants({ variant, size }), className)}
         {...props}
       >
         {indeterminate ? (
           // Indeterminate progress animation
-          <div style={indeterminateTrackStyles}>
-            <div style={indeterminateBarStyles} />
+          <div className={cn(progressIndeterminateVariants({ variant }))}>
+            <div className={cn(progressIndeterminateBarVariants({ variant }))} />
           </div>
         ) : (
           // Determinate progress
-          <div style={indicatorStyles} />
+          <div 
+            className={cn(progressIndicatorVariants({ variant, animated }))}
+            style={{ transform: `translateX(-${100 - percentage}%)` }}
+          />
         )}
       </div>
     );
@@ -209,48 +197,28 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
       return progressElement;
     }
 
-    const fieldStyles: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: spacing[2],
-    };
-
-    const labelRowStyles: React.CSSProperties = {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    };
-
-    const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-    };
-
-    const valueStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-    };
-
-    const helperStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-    };
-
     return (
-      <div style={fieldStyles}>
+      <div className="flex flex-col gap-2">
         {/* Label and value */}
         {(label || displayValue) && (
-          <div style={labelRowStyles}>
-            {label && <label style={labelStyles}>{label}</label>}
-            {displayValue && <span style={valueStyles}>{displayValue}</span>}
+          <div className="flex justify-between items-center">
+            {label && (
+              <label className="text-sm font-medium text-foreground">
+                {label}
+              </label>
+            )}
+            {displayValue && (
+              <span className="text-sm text-muted-foreground">
+                {displayValue}
+              </span>
+            )}
           </div>
         )}
 
         {progressElement}
 
         {helperText && (
-          <p id={`${label}-helper`} style={helperStyles}>
+          <p id={`${label}-helper`} className="text-xs text-muted-foreground">
             {helperText}
           </p>
         )}
@@ -262,12 +230,46 @@ export const Progress = forwardRef<HTMLDivElement, ProgressProps>(
 Progress.displayName = 'Progress';
 
 /**
- * Circular Progress component
+ * Circular Progress component variants using CVA
  */
-export interface CircularProgressProps {
+const circularProgressVariants = cva(
+  "relative inline-flex items-center justify-center",
+  {
+    variants: {
+      size: {
+        sm: "w-8 h-8",
+        default: "w-10 h-10",
+        lg: "w-12 h-12",
+        xl: "w-16 h-16",
+      },
+    },
+    defaultVariants: {
+      size: "default",
+    },
+  }
+);
+
+const circularProgressSvgVariants = cva(
+  "transform -rotate-90 transition-all duration-300 ease-in-out",
+  {
+    variants: {
+      indeterminate: {
+        true: "animate-spin",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      indeterminate: false,
+    },
+  }
+);
+
+/**
+ * Circular Progress component props
+ */
+export interface CircularProgressProps extends VariantProps<typeof circularProgressVariants> {
   readonly value?: number;
   readonly max?: number;
-  readonly size?: number;
   readonly strokeWidth?: number;
   readonly variant?: 'default' | 'success' | 'warning' | 'destructive';
   readonly showValue?: boolean;
@@ -295,12 +297,12 @@ const getCircularDisplayValue = (
   return null;
 };
 
-export const CircularProgress = forwardRef<SVGSVGElement, CircularProgressProps>(
+export const CircularProgress = forwardRef<HTMLDivElement, CircularProgressProps>(
   (
     {
       value = 0,
       max = 100,
-      size = 40,
+      size = 'default',
       strokeWidth = 4,
       variant = 'default',
       showValue = false,
@@ -311,108 +313,82 @@ export const CircularProgress = forwardRef<SVGSVGElement, CircularProgressProps>
     },
     ref
   ): React.ReactElement => {
-    const { colors, typography } = useTokens();
-    
     const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
-    const radius = (size - strokeWidth) / 2;
+    
+    // Size mapping for SVG dimensions
+    const sizeMap = {
+      sm: 32,
+      default: 40,
+      lg: 48,
+      xl: 64,
+    };
+    
+    const svgSize = sizeMap[size as keyof typeof sizeMap];
+    const radius = (svgSize - strokeWidth) / 2;
     const circumference = radius * 2 * Math.PI;
     const strokeDasharray = `${circumference} ${circumference}`;
     const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-    // Color mapping using tokens
-    const getColor = (): string => {
+    // Color mapping using Tailwind classes
+    const getStrokeColor = (): string => {
       switch (variant) {
         case 'success':
-          return colors.success?.[500] || '#22c55e';
+          return 'stroke-success-600 dark:stroke-success-500';
         case 'warning':
-          return colors.warning?.[500] || '#eab308';
+          return 'stroke-warning-600 dark:stroke-warning-500';
         case 'destructive':
-          return colors.danger?.[500] || '#ef4444';
+          return 'stroke-destructive-600 dark:stroke-destructive-500';
         case 'default':
         default:
-          return colors.primary?.[500] || '#3b82f6';
+          return 'stroke-primary-600 dark:stroke-primary-500';
       }
     };
 
     const displayValue = getCircularDisplayValue(showPercentage, showValue, percentage, value);
 
-    const containerStyles: React.CSSProperties = {
-      position: 'relative',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
-
-    const svgStyles: React.CSSProperties = {
-      transform: 'rotate(-90deg)',
-    };
-
-    const backgroundCircleStyles: React.CSSProperties = {
-      stroke: colors.neutral?.[200] || '#e5e7eb',
-      fill: 'transparent',
-    };
-
-    const progressCircleStyles: React.CSSProperties = {
-      stroke: getColor(),
-      fill: 'transparent',
-      strokeLinecap: 'round',
-      transition: 'all 300ms ease-in-out',
-      // Note: Animation for indeterminate state would need CSS keyframes in real implementation
-    };
-
-    const centerTextContainerStyles: React.CSSProperties = {
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    };
-
-    const centerTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      fontWeight: typography.fontWeight.medium,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-    };
-
     return (
-      <div style={containerStyles}>
+      <div ref={ref} className={cn(circularProgressVariants({ size }), className)}>
         <svg
-          ref={ref}
-          className={className}
-          style={svgStyles}
-          width={size}
-          height={size}
+          width={svgSize}
+          height={svgSize}
           aria-valuemin={0}
           aria-valuemax={max}
           aria-valuenow={indeterminate ? undefined : value}
           aria-label={label}
           role="progressbar"
+          className={cn(circularProgressSvgVariants({ indeterminate }))}
         >
           {/* Background circle */}
           <circle
-            cx={size / 2}
-            cy={size / 2}
+            cx={svgSize / 2}
+            cy={svgSize / 2}
             r={radius}
             strokeWidth={strokeWidth}
-            style={backgroundCircleStyles}
+            className="fill-transparent stroke-neutral-200 dark:stroke-neutral-800"
           />
 
           {/* Progress circle */}
           <circle
-            cx={size / 2}
-            cy={size / 2}
+            cx={svgSize / 2}
+            cy={svgSize / 2}
             r={radius}
             strokeWidth={strokeWidth}
             strokeDasharray={indeterminate ? `${circumference * 0.25} ${circumference}` : strokeDasharray}
             strokeDashoffset={indeterminate ? 0 : strokeDashoffset}
-            style={progressCircleStyles}
+            strokeLinecap="round"
+            className={cn(
+              "fill-transparent transition-all duration-300 ease-in-out",
+              getStrokeColor()
+            )}
           />
         </svg>
 
         {/* Center text */}
         {displayValue && (
-          <div style={centerTextContainerStyles}>
-            <span style={centerTextStyles}>{displayValue}</span>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-xs font-medium text-foreground">
+              {displayValue}
+            </span>
           </div>
         )}
       </div>

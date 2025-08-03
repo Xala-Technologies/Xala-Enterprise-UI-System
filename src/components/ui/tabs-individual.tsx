@@ -249,15 +249,13 @@ export const SimpleTabs = forwardRef<HTMLDivElement, SimpleTabsProps>(
     ariaLabel = 'Tab navigation',
     ...props 
   }, ref) => {
-    const [activeTab, setActiveTab] = React.useState(() => {
-      return defaultActiveTab || tabs.find(tab => !tab.isDisabled)?.id || tabs[0]?.id || '';
-    });
+    // Use controlled or default active tab without internal state
+    const activeTab = defaultActiveTab || tabs.find(tab => !tab.isDisabled)?.id || tabs[0]?.id || '';
 
     const handleTabChange = (tabId: string) => {
       const tab = tabs.find(t => t.id === tabId);
       if (!tab || tab.isDisabled) return;
       
-      setActiveTab(tabId);
       onTabChange?.(tabId);
     };
 

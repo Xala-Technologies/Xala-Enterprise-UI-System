@@ -8,7 +8,6 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { Typography } from './typography';
 import { Badge } from './badge';
 import { Separator } from './separator';
@@ -307,7 +306,7 @@ export const NavigationItem = forwardRef<HTMLDivElement, NavigationItemProps>(
     const hasChildren = children.length > 0;
     const isExpandable = hasChildren && onToggleExpand;
     
-    const handleClick = React.useCallback(() => {
+    const handleClick = () => {
       if (disabled) return;
       
       if (isExpandable) {
@@ -315,14 +314,14 @@ export const NavigationItem = forwardRef<HTMLDivElement, NavigationItemProps>(
       } else {
         onClick?.(itemKey);
       }
-    }, [disabled, isExpandable, onToggleExpand, itemKey, onClick]);
+    };
 
-    const handleKeyDown = React.useCallback((e: React.KeyboardEvent) => {
+    const handleKeyDown = (e: React.KeyboardEvent) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         handleClick();
       }
-    }, [handleClick]);
+    };
 
     const ItemContent = (
       <>
@@ -503,16 +502,12 @@ export const NavigationGroup = forwardRef<HTMLDivElement, NavigationGroupProps>(
     className,
     ...props
   }, ref) => {
-    const [internalCollapsed, setInternalCollapsed] = React.useState(defaultCollapsed);
-    const collapsed = controlledCollapsed ?? internalCollapsed;
+    // Use controlled collapsed state only
+    const collapsed = controlledCollapsed ?? defaultCollapsed;
 
-    const handleToggleCollapse = React.useCallback(() => {
-      if (onToggleCollapse) {
-        onToggleCollapse();
-      } else {
-        setInternalCollapsed(prev => !prev);
-      }
-    }, [onToggleCollapse]);
+    const handleToggleCollapse = () => {
+      onToggleCollapse?.();
+    };
 
     return (
       <div ref={ref} className={cn(navigationGroupVariants({ collapsible }), className)} {...props}>
@@ -665,88 +660,28 @@ export const Navigation = forwardRef<HTMLElement, NavigationProps>(
     children,
     ...props
   }, ref) => {
-    const { colors, spacing: tokenSpacing } = useTokens();
-    const [focusedIndex, setFocusedIndex] = React.useState(0);
-    const [expandedKeys, setExpandedKeys] = React.useState<string[]>([]);
+    // Handle item expansion - now requires external state management
+    const handleToggleExpand = (key: string) => {
+      // This should be handled by parent component through props
+      console.warn('Navigation: Item expansion should be handled by parent component');
+    };
 
-    // Handle keyboard navigation
-    React.useEffect(() => {
-      if (!keyboardNavigation) return;
+    // Group items by group property - computed inline
+    const groups: Record<string, NavigationItemData[]> = {};
+    const ungrouped: NavigationItemData[] = [];
 
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter', ' '].includes(e.key)) {
-          return;
+    items.forEach(item => {
+      if (item.group) {
+        if (!groups[item.group]) {
+          groups[item.group] = [];
         }
-
-        e.preventDefault();
-        
-        const flatItems = items.filter(item => !item.disabled);
-        
-        switch (e.key) {
-          case 'ArrowUp':
-          case 'ArrowLeft':
-            setFocusedIndex(prev => (prev > 0 ? prev - 1 : flatItems.length - 1));
-            break;
-          case 'ArrowDown':
-          case 'ArrowRight':
-            setFocusedIndex(prev => (prev < flatItems.length - 1 ? prev + 1 : 0));
-            break;
-          case 'Enter':
-          case ' ':
-            const focusedItem = flatItems[focusedIndex];
-            if (focusedItem && onItemSelect) {
-              onItemSelect(focusedItem.key, focusedItem);
-            }
-            break;
-        }
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [keyboardNavigation, items, focusedIndex, onItemSelect]);
-
-    // Handle item expansion
-    const handleToggleExpand = React.useCallback((key: string) => {
-      setExpandedKeys(prev => 
-        prev.includes(key) 
-          ? prev.filter(k => k !== key)
-          : [...prev, key]
-      );
-    }, []);
-
-    // Custom styles for token-based theming
-    const navigationStyles = React.useMemo((): React.CSSProperties => {
-      const baseStyles: React.CSSProperties = {};
-
-      if (variant === 'filled' || variant === 'elevated') {
-        baseStyles.backgroundColor = colors.background?.paper || '#ffffff';
+        groups[item.group].push(item);
+      } else {
+        ungrouped.push(item);
       }
+    });
 
-      if (variant === 'elevated') {
-        baseStyles.borderColor = colors.border?.default || '#e5e7eb';
-      }
-
-      return baseStyles;
-    }, [colors, variant]);
-
-    // Group items by group property
-    const groupedItems = React.useMemo(() => {
-      const groups: Record<string, NavigationItemData[]> = {};
-      const ungrouped: NavigationItemData[] = [];
-
-      items.forEach(item => {
-        if (item.group) {
-          if (!groups[item.group]) {
-            groups[item.group] = [];
-          }
-          groups[item.group].push(item);
-        } else {
-          ungrouped.push(item);
-        }
-      });
-
-      return { groups, ungrouped };
-    }, [items]);
+    const groupedItems = { groups, ungrouped };
 
     return (
       <nav
@@ -757,7 +692,6 @@ export const Navigation = forwardRef<HTMLElement, NavigationProps>(
           navigationVariants({ variant, orientation, spacing, padding }),
           className
         )}
-        style={navigationStyles}
         {...props}
       >
         {children ? (
@@ -786,7 +720,7 @@ export const Navigation = forwardRef<HTMLElement, NavigationProps>(
                       disabled={item.disabled}
                       shortcut={item.shortcut}
                       children={item.children}
-                      expanded={expandedKeys.includes(item.key)}
+                      expanded={false} // External state management required
                       onToggleExpand={item.children ? handleToggleExpand : undefined}
                     />
                     {showSeparator && index < groupedItems.ungrouped.length - 1 && (

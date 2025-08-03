@@ -5,6 +5,7 @@
 
 export * from './objects';
 export * from './classNames';
+export * from './cn';
 export * from './platform';
 export * from './ssr';
 export * from './norwegian-compliance';

@@ -35,7 +35,7 @@ export const createCommand: CommandMetadata = {
   options: [
     {
       flags: '--platform <platform>',
-      description: 'Target platform',
+      description: 'Target platform (react|nextjs|vue|angular|svelte|react-native|electron)',
       defaultValue: 'react'
     },
     {
@@ -113,6 +113,25 @@ export const createCommand: CommandMetadata = {
 async function collectCreationInfo(type: string, name: string, options: CreateOptions): Promise<any> {
   const questions: any[] = [];
 
+  // Platform selection if not provided
+  if (!options.platform || options.platform === 'react') {
+    questions.push({
+      type: 'list',
+      name: 'platform',
+      message: 'Select target platform:',
+      choices: [
+        { name: 'React', value: 'react' },
+        { name: 'Next.js', value: 'nextjs' },
+        { name: 'Vue 3', value: 'vue' },
+        { name: 'Angular', value: 'angular' },
+        { name: 'Svelte/SvelteKit', value: 'svelte' },
+        { name: 'React Native', value: 'react-native' },
+        { name: 'Electron', value: 'electron' }
+      ],
+      default: 'react'
+    });
+  }
+
   // Component-specific questions
   if (type === 'component' && !options.props) {
     questions.push({
@@ -150,7 +169,7 @@ async function collectCreationInfo(type: string, name: string, options: CreateOp
   return {
     type,
     name,
-    platform: options.platform || 'react',
+    platform: options.platform || answers.platform || 'react',
     output: options.output,
     template: options.template || answers.template,
     props: options.props || answers.props,

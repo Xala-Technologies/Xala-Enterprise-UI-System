@@ -1,82 +1,250 @@
 /**
- * @fileoverview SSR-Safe Drawer Component - Production Strategy Implementation
- * @description Drawer/Sheet component using useTokens hook for JSON template integration
+ * @fileoverview Drawer/Sheet Component - CVA Pattern Implementation
+ * @description Pure CSS drawer with CVA variants, no hooks, external state management
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance CVA Pattern, No hooks, CSS-only styling, WCAG AAA
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
 /**
- * Drawer overlay variant types
+ * Drawer overlay variants using CVA
  */
-export type DrawerOverlayVariant = 'default' | 'dark' | 'light';
+const drawerOverlayVariants = cva(
+  // Base styles - CSS-only backdrop with semantic tokens
+  'fixed inset-0 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+  {
+    variants: {
+      variant: {
+        default: 'bg-black/80',
+        dark: 'bg-black/90',
+        light: 'bg-black/60',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+);
 
 /**
- * Drawer side types
+ * Drawer content variants using CVA
  */
-export type DrawerSide = 'top' | 'bottom' | 'left' | 'right';
+const drawerContentVariants = cva(
+  // Base styles using semantic Tailwind classes
+  'fixed z-50 gap-4 bg-background p-6 shadow-lg transition-all duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out',
+  {
+    variants: {
+      side: {
+        top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+        bottom: 'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+        left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+        right: 'inset-y-0 right-0 h-full w-3/4 border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+      },
+      size: {
+        sm: '',
+        default: '',
+        lg: '',
+        xl: '',
+        full: '',
+      },
+    },
+    compoundVariants: [
+      {
+        side: ['top', 'bottom'],
+        size: 'sm',
+        class: 'max-h-48',
+      },
+      {
+        side: ['top', 'bottom'],
+        size: 'default',
+        class: 'max-h-64',
+      },
+      {
+        side: ['top', 'bottom'],
+        size: 'lg',
+        class: 'max-h-80',
+      },
+      {
+        side: ['top', 'bottom'],
+        size: 'xl',
+        class: 'max-h-96',
+      },
+      {
+        side: ['top', 'bottom'],
+        size: 'full',
+        class: 'max-h-screen',
+      },
+      {
+        side: ['left', 'right'],
+        size: 'sm',
+        class: 'max-w-xs',
+      },
+      {
+        side: ['left', 'right'],
+        size: 'default',
+        class: 'max-w-sm',
+      },
+      {
+        side: ['left', 'right'],
+        size: 'lg',
+        class: 'max-w-md',
+      },
+      {
+        side: ['left', 'right'],
+        size: 'xl',
+        class: 'max-w-lg',
+      },
+      {
+        side: ['left', 'right'],
+        size: 'full',
+        class: 'max-w-full',
+      },
+    ],
+    defaultVariants: {
+      side: 'right',
+      size: 'default',
+    },
+  }
+);
 
 /**
- * Drawer size types
+ * Drawer header variants
  */
-export type DrawerSize = 'sm' | 'default' | 'lg' | 'xl' | 'full';
+const drawerHeaderVariants = cva(
+  'grid gap-1.5 p-4 text-center sm:text-left',
+  {
+    variants: {
+      size: {
+        sm: 'p-3',
+        default: 'p-4',
+        lg: 'p-6',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+/**
+ * Drawer title variants
+ */
+const drawerTitleVariants = cva(
+  'text-lg font-semibold leading-none tracking-tight',
+  {
+    variants: {
+      size: {
+        sm: 'text-base',
+        default: 'text-lg',
+        lg: 'text-xl',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+/**
+ * Drawer description variants
+ */
+const drawerDescriptionVariants = cva(
+  'text-sm text-muted-foreground',
+  {
+    variants: {
+      size: {
+        sm: 'text-xs',
+        default: 'text-sm',
+        lg: 'text-base',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
 
 /**
  * Drawer component props interface
  */
 export interface DrawerProps extends HTMLAttributes<HTMLDivElement> {
-  readonly isOpen?: boolean;
-  readonly onClose?: () => void;
-  readonly side?: DrawerSide;
-  readonly size?: DrawerSize;
-  readonly overlayVariant?: DrawerOverlayVariant;
-  readonly closeOnOverlayClick?: boolean;
-  readonly closeOnEscape?: boolean;
-  readonly showCloseButton?: boolean;
+  readonly open?: boolean;
   readonly children: ReactNode;
 }
 
 /**
- * Drawer header component props interface
+ * Drawer overlay props interface
  */
-export interface DrawerHeaderProps extends HTMLAttributes<HTMLDivElement> {
-  readonly title?: string;
-  readonly description?: string;
-  readonly size?: 'sm' | 'default' | 'lg';
-  readonly children?: ReactNode;
+export interface DrawerOverlayProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof drawerOverlayVariants> {
+  readonly open?: boolean;
 }
 
 /**
- * Drawer body component props interface
+ * Drawer content props interface
+ */
+export interface DrawerContentProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof drawerContentVariants> {
+  readonly open?: boolean;
+  readonly children: ReactNode;
+}
+
+/**
+ * Drawer header props interface
+ */
+export interface DrawerHeaderProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof drawerHeaderVariants> {
+  readonly children: ReactNode;
+}
+
+/**
+ * Drawer title props interface
+ */
+export interface DrawerTitleProps 
+  extends HTMLAttributes<HTMLHeadingElement>,
+    VariantProps<typeof drawerTitleVariants> {
+  readonly children: ReactNode;
+}
+
+/**
+ * Drawer description props interface
+ */
+export interface DrawerDescriptionProps 
+  extends HTMLAttributes<HTMLParagraphElement>,
+    VariantProps<typeof drawerDescriptionVariants> {
+  readonly children: ReactNode;
+}
+
+/**
+ * Drawer body props interface
  */
 export interface DrawerBodyProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
 }
 
 /**
- * Drawer footer component props interface
+ * Drawer footer props interface
  */
 export interface DrawerFooterProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
 }
 
 /**
- * Close icon component
+ * Drawer close button props interface
  */
-const CloseIcon = (): React.ReactElement => (
-  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
-    <path
-      fillRule="evenodd"
-      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
+export interface DrawerCloseProps extends HTMLAttributes<HTMLButtonElement> {
+  readonly children?: ReactNode;
+}
+
 
 /**
- * Enhanced Drawer component with token-based styling
+ * Drawer root component - Pure container, no state management
  */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (

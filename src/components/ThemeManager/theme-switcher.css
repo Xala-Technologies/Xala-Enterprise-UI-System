@@ -1,0 +1,258 @@
+/**
+ * CSS-Only Theme Switcher Styles
+ * Provides theme switching through CSS variables and data attributes
+ * No JavaScript state management required in components
+ */
+
+/* Base CSS variables for light theme */
+:root {
+  /* Primary colors */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e3a8a;
+  --color-primary-900: #1e40af;
+
+  /* Secondary/neutral colors */
+  --color-secondary-50: #f8fafc;
+  --color-secondary-100: #f1f5f9;
+  --color-secondary-200: #e2e8f0;
+  --color-secondary-300: #cbd5e1;
+  --color-secondary-400: #94a3b8;
+  --color-secondary-500: #64748b;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1e293b;
+  --color-secondary-900: #0f172a;
+
+  /* Neutral colors */
+  --color-neutral-50: #f8fafc;
+  --color-neutral-100: #f1f5f9;
+  --color-neutral-200: #e2e8f0;
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-400: #94a3b8;
+  --color-neutral-500: #64748b;
+  --color-neutral-600: #475569;
+  --color-neutral-700: #334155;
+  --color-neutral-800: #1e293b;
+  --color-neutral-900: #0f172a;
+
+  /* Semantic background colors */
+  --color-background-default: #ffffff;
+  --color-background-paper: #f8fafc;
+  --color-background-elevated: #f1f5f9;
+  --color-background-subtle: #f8fafc;
+
+  /* Text colors */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+
+  /* Border colors */
+  --color-border-default: #e2e8f0;
+  --color-border-muted: #f1f5f9;
+
+  /* Status colors */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+}
+
+/* Dark theme variables */
+[data-theme="dark"],
+.theme-dark,
+.dark {
+  /* Primary colors - lighter variants for dark theme */
+  --color-primary-50: #1e3a8a;
+  --color-primary-100: #1e40af;
+  --color-primary-200: #1d4ed8;
+  --color-primary-300: #2563eb;
+  --color-primary-400: #3b82f6;
+  --color-primary-500: #60a5fa;
+  --color-primary-600: #93c5fd;
+  --color-primary-700: #bfdbfe;
+  --color-primary-800: #dbeafe;
+  --color-primary-900: #eff6ff;
+
+  /* Secondary/neutral colors - inverted for dark theme */
+  --color-secondary-50: #0f172a;
+  --color-secondary-100: #1e293b;
+  --color-secondary-200: #334155;
+  --color-secondary-300: #475569;
+  --color-secondary-400: #64748b;
+  --color-secondary-500: #94a3b8;
+  --color-secondary-600: #cbd5e1;
+  --color-secondary-700: #e2e8f0;
+  --color-secondary-800: #f1f5f9;
+  --color-secondary-900: #f8fafc;
+
+  /* Neutral colors - inverted */
+  --color-neutral-50: #0f172a;
+  --color-neutral-100: #1e293b;
+  --color-neutral-200: #334155;
+  --color-neutral-300: #475569;
+  --color-neutral-400: #64748b;
+  --color-neutral-500: #94a3b8;
+  --color-neutral-600: #cbd5e1;
+  --color-neutral-700: #e2e8f0;
+  --color-neutral-800: #f1f5f9;
+  --color-neutral-900: #f8fafc;
+
+  /* Dark theme backgrounds */
+  --color-background-default: #0f172a;
+  --color-background-paper: #1e293b;
+  --color-background-elevated: #334155;
+  --color-background-subtle: #1e293b;
+
+  /* Dark theme text */
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+
+  /* Dark theme borders */
+  --color-border-default: #334155;
+  --color-border-muted: #1e293b;
+
+  /* Status colors - slightly adjusted for dark theme visibility */
+  --color-success: #22c55e;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+}
+
+/* Transition classes for theme switching */
+.theme-transition-instant {
+  /* No transition */
+}
+
+.theme-transition-fast {
+  transition: 
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.theme-transition-smooth {
+  transition: 
+    background-color 300ms ease-in-out,
+    color 300ms ease-in-out,
+    border-color 300ms ease-in-out,
+    box-shadow 300ms ease-in-out;
+}
+
+.theme-transition-slow {
+  transition: 
+    background-color 500ms ease-in-out,
+    color 500ms ease-in-out,
+    border-color 500ms ease-in-out,
+    box-shadow 500ms ease-in-out;
+}
+
+.theme-transition-dramatic {
+  transition: 
+    background-color 1000ms ease-in-out,
+    color 1000ms ease-in-out,
+    border-color 1000ms ease-in-out,
+    box-shadow 1000ms ease-in-out;
+}
+
+/* Utility classes using CSS variables */
+.bg-primary-500 {
+  background-color: var(--color-primary-500);
+}
+
+.bg-background-default {
+  background-color: var(--color-background-default);
+}
+
+.bg-background-paper {
+  background-color: var(--color-background-paper);
+}
+
+.text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.border-default {
+  border-color: var(--color-border-default);
+}
+
+/* Theme-specific component styling */
+.theme-manager {
+  background-color: var(--color-background-default);
+  color: var(--color-text-primary);
+}
+
+.theme-manager .theme-toggle {
+  background-color: var(--color-background-paper);
+  border-color: var(--color-border-default);
+}
+
+.theme-manager .theme-toggle:hover {
+  background-color: var(--color-background-elevated);
+}
+
+.theme-manager .theme-preview-color {
+  /* Theme preview colors will use inline styles with CSS variable fallbacks */
+}
+
+/* Compact theme switcher specific styles */
+.compact-theme-switcher {
+  background-color: var(--color-background-paper);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-default);
+}
+
+.compact-theme-switcher:hover {
+  background-color: var(--color-background-elevated);
+}
+
+/* Focus indicators using CSS variables */
+.theme-focus-ring:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-background-default: #ffffff;
+    --color-border-default: #000000;
+  }
+  
+  [data-theme="dark"],
+  .theme-dark,
+  .dark {
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #cccccc;
+    --color-background-default: #000000;
+    --color-border-default: #ffffff;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .theme-transition-fast,
+  .theme-transition-smooth,
+  .theme-transition-slow,
+  .theme-transition-dramatic {
+    transition: none;
+  }
+}

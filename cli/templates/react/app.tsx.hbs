@@ -1,43 +1,19 @@
 import React from 'react';
-import { UISystemProvider } from '@xala-technologies/ui-system';
-import { useTokens } from '@xala-technologies/ui-system';
-import { useLocalization } from '../hooks/useLocalization';
-import { {{pascalCase name}}Theme } from '../themes/{{name}}.theme';
+import { AppShell } from '@xala-technologies/ui-system';
 
 export interface AppProps {
   readonly children: React.ReactNode;
 }
 
-export default function RootLayout({
-  children
-}: AppProps): JSX.Element {
+export default function App({ children }: AppProps): JSX.Element {
+  // v5.0 Architecture: CSS-only theming via data attributes
   return (
-    <html lang="{{locale}}" dir="{{#if_contains features 'rtl'}}rtl{{else}}ltr{{/if_contains}}">
-      <body>
-        <UISystemProvider theme={ {{pascalCase name}}Theme }>
-          <LocalizedApp>
-            {children}
-          </LocalizedApp>
-        </UISystemProvider>
-      </body>
-    </html>
-  );
-}
-
-function LocalizedApp({ children }: AppProps): JSX.Element {
-  const tokens = useTokens();
-  const { t } = useLocalization();
-
-  return (
-    <div
-      style={{
-        minHeight: '100vh',
-        backgroundColor: tokens.colors.background.primary,
-        color: tokens.colors.text.primary,
-        fontFamily: tokens.typography.fontFamily.sans.join(', ')
-      }}
+    <AppShell 
+      theme="{{theme}}" 
+      industry="{{industry}}"
+      fullHeight
     >
       {children}
-    </div>
+    </AppShell>
   );
 }

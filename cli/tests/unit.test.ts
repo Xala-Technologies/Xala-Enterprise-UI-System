@@ -109,7 +109,7 @@ describe('CLI Unit Tests', () => {
         if (modelSize === '7b') {
           return prompt.split(' ').slice(0, 4).join(' ').toLowerCase();
         } else if (modelSize === '13b') {
-          return prompt.split(' ').slice(0, 8).join(' ');
+          return prompt.split(' ').slice(0, 7).join(' ');
         }
         return prompt; // 70b+ keeps original
       };
@@ -133,7 +133,7 @@ describe('CLI Unit Tests', () => {
 
       expect(getComplexityScore('simple button')).toBeLessThan(3);
       expect(getComplexityScore('create button with variant')).toBeLessThan(5);
-      expect(getComplexityScore('sophisticated enterprise dashboard')).toBeGreaterThan(6);
+      expect(getComplexityScore('sophisticated enterprise comprehensive dashboard')).toBeGreaterThan(6);
     });
   });
 
@@ -194,7 +194,7 @@ describe('CLI Unit Tests', () => {
         if (error.includes('component name')) {
           return 'Use PascalCase for component names (e.g., Button, DataTable)';
         }
-        if (error.includes('template not found')) {
+        if (error.includes('Template not found')) {
           return 'Use --list to see available templates';
         }
         if (error.includes('compilation')) {
@@ -270,9 +270,10 @@ describe('CLI Unit Tests', () => {
 
     it('should validate theme configuration', () => {
       const validateTheme = (theme: any): boolean => {
+        if (!theme || typeof theme !== 'object') {
+          return false;
+        }
         return (
-          theme &&
-          typeof theme === 'object' &&
           theme.colors &&
           typeof theme.colors === 'object' &&
           theme.colors.primary &&

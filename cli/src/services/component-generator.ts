@@ -1,5 +1,6 @@
 import { logger } from '../utils/logger.js';
 import { TemplateEngine } from './template-engine.js';
+import { CVAValidator } from './cva-validator.js';
 
 export interface ComponentConfig {
   readonly type: string;
@@ -28,9 +29,11 @@ export interface GeneratedFile {
 
 export class ComponentGenerator {
   private readonly templateEngine: TemplateEngine;
+  private readonly cvaValidator: CVAValidator;
 
   constructor() {
     this.templateEngine = new TemplateEngine();
+    this.cvaValidator = new CVAValidator();
   }
 
   async create(config: ComponentConfig): Promise<GenerationResult> {
@@ -101,6 +104,14 @@ export class ComponentGenerator {
 
     const content = this.templateEngine.render(templatePath, templateContext);
     const filePath = this.getFilePath(config, 'component');
+
+    // Validate CVA compliance
+    const validationResult = this.cvaValidator.validateFile(filePath, content);
+    if (!validationResult.isCompliant) {
+      logger.warn(`CVA compliance issues found in ${config.name}:`);
+      validationResult.errors.forEach(error => logger.warn(`  - ${error}`));
+      validationResult.warnings.forEach(warning => logger.warn(`  - ${warning}`));
+    }
 
     return {
       path: filePath,
@@ -240,24 +251,56 @@ export class ComponentGenerator {
   private generateImports(config: ComponentConfig): string {
     const imports = [];
 
-    // Platform-specific imports
+    // Platform-specific imports - CVA pattern compliant
     switch (config.platform) {
       case 'react':
+      case 'nextjs':
         imports.push("import React from 'react';");
-        imports.push("import { Card, Stack, Typography, Button } from '@xala-technologies/ui-system';");
-        imports.push("import { useTokens } from '@xala-technologies/ui-system';");
-        imports.push("import { useLocalization } from '../hooks/useLocalization';");
+        imports.push("import { cva, type VariantProps } from 'class-variance-authority';");
+        imports.push("import { cn } from '@xala-technologies/ui-system/utils';");
         break;
       case 'vue':
-        imports.push("import { Card, Stack, Typography, Button } from '@xala-technologies/ui-system';");
-        imports.push("import { useTokens } from '@xala-technologies/ui-system';");
-        imports.push("import { useLocalization } from '../composables/useLocalization';");
+        imports.push("import { cva, type VariantProps } from 'class-variance-authority';");
+        imports.push("import { cn } from '@xala-technologies/ui-system/utils';");
+        break;
+      case 'angular':
+        imports.push("import { Component, Input, Output, EventEmitter } from '@angular/core';");
+        imports.push("import { cva, type VariantProps } from 'class-variance-authority';");
+        break;
+      case 'svelte':
+        imports.push("import { cva, type VariantProps } from 'class-variance-authority';");
+        imports.push("import { cn } from '@xala-technologies/ui-system/utils';");
+        break;
+      case 'react-native':
+        imports.push("import React from 'react';");
+        imports.push("import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';");
+        // Note: CVA is primarily for web, React Native uses StyleSheet
+        break;
+      case 'electron':
+        imports.push("import React from 'react';");
+        imports.push("import { cva, type VariantProps } from 'class-variance-authority';");
+        imports.push("import { cn } from '@xala-technologies/ui-system/utils';");
         break;
     }
 
     // Feature-specific imports
     if (config.features.includes('animations')) {
-      imports.push("import { motion } from 'framer-motion';");
+      switch (config.platform) {
+        case 'react':
+        case 'nextjs':
+        case 'electron':
+          imports.push("import { motion } from 'framer-motion';");
+          break;
+        case 'vue':
+          imports.push("import { Transition } from 'vue';");
+          break;
+        case 'svelte':
+          imports.push("import { fade, slide } from 'svelte/transition';");
+          break;
+        case 'react-native':
+          imports.push("import { Animated } from 'react-native';");
+          break;
+      }
     }
 
     return imports.join('\n');
@@ -419,19 +462,40 @@ export class ComponentGenerator {
     const outputDir = config.output || `./src/${config.type}s`;
     const name = config.name;
     
+    // Get file extension based on platform
+    const getExtension = (type: string): string => {
+      switch (config.platform) {
+        case 'react':
+        case 'nextjs':
+        case 'electron':
+          return type === 'component' ? '.tsx' : '.ts';
+        case 'vue':
+          return type === 'component' ? '.vue' : '.ts';
+        case 'angular':
+          return type === 'component' ? '.component.ts' : '.ts';
+        case 'svelte':
+          return type === 'component' ? '.svelte' : '.ts';
+        case 'react-native':
+          return type === 'component' ? '.tsx' : '.ts';
+        default:
+          return '.tsx';
+      }
+    };
+    
     switch (fileType) {
       case 'component':
-        return `${outputDir}/${name}/${name}.tsx`;
+        return `${outputDir}/${name}/${name}${getExtension('component')}`;
       case 'story':
-        return `${outputDir}/${name}/${name}.stories.tsx`;
+        return `${outputDir}/${name}/${name}.stories${getExtension('story')}`;
       case 'test':
-        return `${outputDir}/${name}/${name}.test.tsx`;
+        const testExt = config.platform === 'angular' ? '.spec.ts' : `.test${getExtension('test')}`;
+        return `${outputDir}/${name}/${name}${testExt}`;
       case 'docs':
         return `${outputDir}/${name}/${name}.md`;
       case 'types':
         return `${outputDir}/${name}/${name}.types.ts`;
       default:
-        return `${outputDir}/${name}/${name}.tsx`;
+        return `${outputDir}/${name}/${name}${getExtension('component')}`;
     }
   }
 

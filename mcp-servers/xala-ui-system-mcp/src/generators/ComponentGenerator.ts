@@ -313,10 +313,9 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
   private generateImports(config: ComponentConfig): string[] {
     const baseImports = [
       'React',
-      'useTokens',
-      'Typography',
-      'Stack',
-      'Container'
+      'cva',
+      'type VariantProps',
+      'cn'
     ];
 
     const conditionalImports: string[] = [];
@@ -324,52 +323,28 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
     // Add category-specific imports
     switch (config.category) {
       case 'layout':
-        conditionalImports.push('WebLayout', 'AdminLayout', 'DesktopLayout');
+        conditionalImports.push('Card', 'CardContent', 'CardDescription', 'CardHeader', 'CardTitle');
         break;
       case 'navigation':
-        conditionalImports.push('GlobalSearch', 'ContextMenu', 'ContextMenuContent', 'ContextMenuItem', 'ContextMenuTrigger');
+        conditionalImports.push('Button', 'Badge');
         break;
       case 'form':
-        conditionalImports.push('Form', 'Input', 'Button', 'Checkbox', 'Select');
+        conditionalImports.push('Button', 'Input', 'Label');
         break;
       case 'data-display':
-        conditionalImports.push('DataTable', 'Avatar', 'Badge', 'Card');
+        conditionalImports.push('Avatar', 'Badge', 'Card');
         break;
       case 'feedback':
-        conditionalImports.push('Alert', 'Progress', 'Skeleton', 'Spinner');
+        conditionalImports.push('Alert', 'Progress');
         break;
       case 'interactive':
-        conditionalImports.push('Button', 'IconButton', 'Drawer', 'CommandPalette');
+        conditionalImports.push('Button');
         break;
     }
 
     // Add feature-specific imports
-    if (config.features.interactive) {
-      conditionalImports.push('Button', 'IconButton');
-    }
-
-    if (config.features.searchable) {
-      conditionalImports.push('GlobalSearch');
-    }
-
-    if (config.features.tooltips) {
-      conditionalImports.push('Tooltip', 'TooltipContent', 'TooltipTrigger');
-    }
-
     if (config.features.icons) {
       conditionalImports.push('lucide-react');
-    }
-
-    if (config.features.badges) {
-      conditionalImports.push('Badge');
-    }
-
-    if (config.features.loading) {
-      conditionalImports.push('Skeleton', 'Spinner');
-    }
-
-    if (config.features.error) {
-      conditionalImports.push('Alert', 'AlertDescription');
     }
 
     return [...new Set([...baseImports, ...conditionalImports])];

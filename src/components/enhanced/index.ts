@@ -1,15 +1,63 @@
 /**
- * @fileoverview Enhanced Theme-Aware Components Export
- * @description Complete export system for production-ready, theme-aware components
+ * @fileoverview Enhanced Components Export - CVA Pattern
+ * @description Complete export system for production-ready components using CVA pattern
  * @version 5.0.0
- * @compliance Multi-theme support, Design token-driven, Production-ready
+ * @compliance CVA-based, SSR-Safe, No hooks, Semantic tokens, Production-ready
  */
 
 // =============================================================================
-// ENHANCED THEME-AWARE COMPONENTS
+// ENHANCED CVA COMPONENTS
 // =============================================================================
 
-// Core enhanced components
+// Import all components first
+import {
+  EnhancedCard,
+  type EnhancedCardProps,
+  type EnhancedCardVariant,
+  enhancedCardVariants,
+} from './ThemeAwareCard';
+
+import {
+  EnhancedSearch,
+  type EnhancedSearchProps,
+  type EnhancedSearchVariant,
+  enhancedSearchVariants,
+} from './ThemeAwareSearch';
+
+import {
+  EnhancedButton,
+  ButtonGroup,
+  type EnhancedButtonProps,
+  type EnhancedButtonVariant,
+  type ButtonGroupProps,
+  enhancedButtonVariants,
+} from './ThemeAwareButton';
+
+// Re-export components
+export {
+  EnhancedCard,
+  type EnhancedCardProps,
+  type EnhancedCardVariant,
+  enhancedCardVariants,
+} from './ThemeAwareCard';
+
+export {
+  EnhancedSearch,
+  type EnhancedSearchProps,
+  type EnhancedSearchVariant,
+  enhancedSearchVariants,
+} from './ThemeAwareSearch';
+
+export {
+  EnhancedButton,
+  ButtonGroup,
+  type EnhancedButtonProps,
+  type EnhancedButtonVariant,
+  type ButtonGroupProps,
+  enhancedButtonVariants,
+} from './ThemeAwareButton';
+
+// Backward compatibility exports
 export {
   ThemeAwareCard,
   type ThemeAwareCardProps,
@@ -21,16 +69,13 @@ export {
   ThemeAwareSearch,
   type ThemeAwareSearchProps,
   type ThemeAwareSearchVariant,
-  type SearchResult,
   themeAwareSearchVariants,
 } from './ThemeAwareSearch';
 
 export {
   ThemeAwareButton,
-  ButtonGroup,
   type ThemeAwareButtonProps,
   type ThemeAwareButtonVariant,
-  type ButtonGroupProps,
   themeAwareButtonVariants,
 } from './ThemeAwareButton';
 
@@ -39,17 +84,17 @@ export {
 // =============================================================================
 
 /**
- * Collection of all enhanced theme-aware components
+ * Collection of all enhanced CVA components
  */
 export const EnhancedComponents = {
   // Cards
-  Card: ThemeAwareCard,
+  Card: EnhancedCard,
   
   // Inputs & Search
-  Search: ThemeAwareSearch,
+  Search: EnhancedSearch,
   
   // Buttons
-  Button: ThemeAwareButton,
+  Button: EnhancedButton,
   ButtonGroup,
 } as const;
 
@@ -57,9 +102,9 @@ export const EnhancedComponents = {
  * Collection of all component variants
  */
 export const EnhancedVariants = {
-  Card: themeAwareCardVariants,
-  Search: themeAwareSearchVariants,
-  Button: themeAwareButtonVariants,
+  Card: enhancedCardVariants,
+  Search: enhancedSearchVariants,
+  Button: enhancedButtonVariants,
 } as const;
 
 // =============================================================================
@@ -67,22 +112,22 @@ export const EnhancedVariants = {
 // =============================================================================
 
 /**
- * Collection of all component prop types
+ * Collection of all enhanced component prop types
  */
 export type EnhancedComponentProps = {
-  Card: ThemeAwareCardProps;
-  Search: ThemeAwareSearchProps;
-  Button: ThemeAwareButtonProps;
+  Card: EnhancedCardProps;
+  Search: EnhancedSearchProps;
+  Button: EnhancedButtonProps;
   ButtonGroup: ButtonGroupProps;
 };
 
 /**
- * Collection of all variant types
+ * Collection of all enhanced variant types
  */
 export type EnhancedVariantTypes = {
-  Card: ThemeAwareCardVariant;
-  Search: ThemeAwareSearchVariant;
-  Button: ThemeAwareButtonVariant;
+  Card: EnhancedCardVariant;
+  Search: EnhancedSearchVariant;
+  Button: EnhancedButtonVariant;
 };
 
 // =============================================================================
@@ -90,9 +135,9 @@ export type EnhancedVariantTypes = {
 // =============================================================================
 
 /**
- * Common theme-aware component patterns
+ * Common enhanced component patterns using CVA
  */
-export const ThemeAwarePatterns = {
+export const EnhancedPatterns = {
   /**
    * Get responsive size based on screen size
    */
@@ -103,23 +148,20 @@ export const ThemeAwarePatterns = {
   },
   
   /**
-   * Get elevation based on hierarchy level
+   * Get component state based on validation
    */
-  getElevationLevel: (level: 'base' | 'raised' | 'floating' | 'modal') => {
-    const levels = {
-      base: 0,
-      raised: 1,
-      floating: 2,
-      modal: 4,
-    } as const;
-    return levels[level];
+  getValidationState: (isValid?: boolean, hasError?: boolean) => {
+    if (hasError) return 'error' as const;
+    if (isValid === true) return 'success' as const;
+    return 'default' as const;
   },
   
   /**
-   * Get animation settings based on performance preferences
+   * Get interaction settings based on context
    */
-  getAnimationSettings: (prefersReducedMotion: boolean) => ({
-    enableAnimations: !prefersReducedMotion,
-    duration: prefersReducedMotion ? '0ms' : '300ms',
+  getInteractionSettings: (clickable: boolean, disabled: boolean) => ({
+    interactive: clickable && !disabled,
+    tabIndex: clickable && !disabled ? 0 : -1,
+    role: clickable ? 'button' : undefined,
   }),
 } as const;

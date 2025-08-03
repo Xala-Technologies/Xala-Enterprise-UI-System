@@ -8,10 +8,10 @@
     "xala": "bin/xala.js"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm --target node18 --clean --sourcemap",
+    "build": "tsup 'src/**/*.ts' --format esm --target node18 --clean --sourcemap --splitting",
     "dev": "tsup src/index.ts --format esm --target node18 --watch",
     "type-check": "tsc --noEmit",
-    "lint": "eslint src --ext .ts",
+    "lint": "eslint src/**/*.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "publish:dry": "npm publish --dry-run",

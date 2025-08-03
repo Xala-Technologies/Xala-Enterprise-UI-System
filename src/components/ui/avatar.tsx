@@ -1,12 +1,81 @@
 /**
- * @fileoverview SSR-Safe Avatar Component - Production Strategy Implementation
- * @description Avatar component using useTokens hook for JSON template integration
+ * @fileoverview Avatar Component v5.0.0 - CVA Pattern Implementation
+ * @description Modern Avatar component using CVA patterns with semantic Tailwind classes
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, CVA-based
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
+
+// =============================================================================
+// CVA VARIANTS
+// =============================================================================
+
+const avatarVariants = cva(
+  'relative flex shrink-0 overflow-hidden select-none items-center justify-center font-medium uppercase transition-colors',
+  {
+    variants: {
+      size: {
+        xs: 'h-6 w-6 text-xs',
+        sm: 'h-8 w-8 text-xs',
+        md: 'h-10 w-10 text-sm',
+        lg: 'h-12 w-12 text-base',
+        xl: 'h-16 w-16 text-lg',
+        '2xl': 'h-20 w-20 text-xl',
+      },
+      variant: {
+        default: 'bg-muted text-muted-foreground',
+        primary: 'bg-primary/10 text-primary',
+        secondary: 'bg-secondary/10 text-secondary',
+        success: 'bg-green-100 text-green-700',
+        warning: 'bg-amber-100 text-amber-700',
+        error: 'bg-red-100 text-red-700',
+      },
+      shape: {
+        circle: 'rounded-full',
+        square: 'rounded-md',
+      },
+      bordered: {
+        true: 'border-2 border-border',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      size: 'md',
+      variant: 'default',
+      shape: 'circle',
+      bordered: false,
+    },
+  }
+);
+
+const statusIndicatorVariants = cva(
+  'absolute bottom-0 right-0 block rounded-full border-2 border-background',
+  {
+    variants: {
+      size: {
+        xs: 'h-1.5 w-1.5',
+        sm: 'h-2 w-2',
+        md: 'h-2.5 w-2.5',
+        lg: 'h-3 w-3',
+        xl: 'h-3.5 w-3.5',
+        '2xl': 'h-4 w-4',
+      },
+      status: {
+        online: 'bg-green-500',
+        offline: 'bg-gray-400',
+        away: 'bg-amber-500',
+        busy: 'bg-red-500',
+      },
+    },
+    defaultVariants: {
+      size: 'md',
+      status: 'online',
+    },
+  }
+);
 
 /**
  * Avatar size options
@@ -31,27 +100,23 @@ export type UserStatus = 'online' | 'offline' | 'away' | 'busy';
 /**
  * Avatar props interface
  */
-export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
-  /** Avatar size */
-  size?: AvatarSize;
-  /** Avatar color variant */
-  variant?: AvatarVariant;
-  /** Avatar shape */
-  shape?: AvatarShape;
+export interface AvatarProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof avatarVariants> {
   /** Image source URL */
-  src?: string;
+  readonly src?: string;
   /** Image alt text */
-  alt?: string;
+  readonly alt?: string;
   /** Person's name for generating initials */
-  name?: string;
+  readonly name?: string;
   /** Custom fallback content */
-  fallback?: ReactNode;
+  readonly fallback?: ReactNode;
   /** Show border around avatar */
-  showBorder?: boolean;
+  readonly showBorder?: boolean;
   /** User status indicator */
-  status?: UserStatus;
+  readonly status?: UserStatus;
   /** Force showing fallback instead of image */
-  showFallback?: boolean;
+  readonly showFallback?: boolean;
 }
 
 /**
@@ -71,39 +136,55 @@ function getInitials(name: string): string {
 /**
  * Status indicator component
  */
-function StatusIndicator({ status, size }: { status: UserStatus; size: AvatarSize }): React.ReactElement {
-  const { colors } = useTokens();
-  
-  const statusColors = {
-    online: colors.success?.[500] || '#22c55e',
-    offline: colors.neutral?.[400] || '#9ca3af',
-    away: colors.warning?.[500] || '#f59e0b',
-    busy: colors.danger?.[500] || '#ef4444',
-  };
-  
-  const sizeMap = {
-    xs: '6px',
-    sm: '8px',
-    md: '10px',
-    lg: '12px',
-    xl: '14px',
-    '2xl': '16px',
-  };
-  
-  const indicatorStyles: React.CSSProperties = {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    display: 'block',
-    width: sizeMap[size],
-    height: sizeMap[size],
-    backgroundColor: statusColors[status],
-    borderRadius: '50%',
-    border: `2px solid ${colors.background?.default || '#ffffff'}`,
-  };
-  
-  return <span style={indicatorStyles} aria-label={`Status: ${status}`} />;
+function StatusIndicator({ 
+  status, 
+  size, 
+  className 
+}: { 
+  status: UserStatus; 
+  size: AvatarSize; 
+  className?: string;
+}): React.ReactElement {
+  return (
+    <span 
+      className={cn(statusIndicatorVariants({ status, size }), className)}
+      aria-label={`Status: ${status}`} 
+    />
+  );
 }
+
+/**
+ * AvatarImage component for displaying images
+ */
+export const AvatarImage = forwardRef<
+  HTMLImageElement,
+  React.ImgHTMLAttributes<HTMLImageElement>
+>(({ className, ...props }, ref) => (
+  <img
+    ref={ref}
+    className={cn('aspect-square h-full w-full object-cover', className)}
+    {...props}
+  />
+));
+AvatarImage.displayName = 'AvatarImage';
+
+/**
+ * AvatarFallback component for fallback content
+ */
+export const AvatarFallback = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <div
+    ref={ref}
+    className={cn(
+      'flex h-full w-full items-center justify-center',
+      className
+    )}
+    {...props}
+  />
+));
+AvatarFallback.displayName = 'AvatarFallback';
 
 /**
  * Avatar component
@@ -113,118 +194,60 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     size = 'md',
     variant = 'default',
     shape = 'circle',
+    bordered = false,
     src,
     alt,
     name,
     fallback,
-    showBorder = false,
+    showBorder,
     status,
     showFallback = false,
     className,
-    style,
+    children,
     ...props
   }, ref) => {
-    const { colors, typography, getToken } = useTokens();
-    
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-      full: (getToken('borderRadius.full') as string) || '9999px',
-    };
-    
     const shouldShowImage = src && !showFallback;
     const initials = name ? getInitials(name) : '';
     const fallbackContent = fallback || initials || '?';
     
-    // Size mappings
-    const sizeStyles = {
-      xs: { width: '24px', height: '24px', fontSize: typography.fontSize.xs },
-      sm: { width: '32px', height: '32px', fontSize: typography.fontSize.sm },
-      md: { width: '40px', height: '40px', fontSize: typography.fontSize.base },
-      lg: { width: '48px', height: '48px', fontSize: typography.fontSize.lg },
-      xl: { width: '64px', height: '64px', fontSize: typography.fontSize.xl },
-      '2xl': { width: '80px', height: '80px', fontSize: typography.fontSize['2xl'] },
-    };
-    
-    // Variant color mappings
-    const getVariantStyles = (): React.CSSProperties => {
-      const baseOpacity = 0.1;
-      switch (variant) {
-        case 'primary':
-          return {
-            backgroundColor: `rgba(${hexToRgb(colors.primary?.[500] || '#3b82f6')}, ${baseOpacity})`,
-            color: colors.primary?.[500] || '#3b82f6',
-          };
-        case 'secondary':
-          return {
-            backgroundColor: `rgba(${hexToRgb(colors.secondary?.[500] || '#8b5cf6')}, ${baseOpacity})`,
-            color: colors.secondary?.[500] || '#8b5cf6',
-          };
-        case 'success':
-          return {
-            backgroundColor: colors.success?.[100] || '#dcfce7',
-            color: colors.success?.[700] || '#15803d',
-          };
-        case 'warning':
-          return {
-            backgroundColor: colors.warning?.[100] || '#fef3c7',
-            color: colors.warning?.[700] || '#b45309',
-          };
-        case 'error':
-          return {
-            backgroundColor: colors.danger?.[100] || '#fee2e2',
-            color: colors.danger?.[700] || '#b91c1c',
-          };
-        default:
-          return {
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            color: colors.neutral?.[600] || '#4b5563',
-          };
-      }
-    };
-    
-    const avatarStyles: React.CSSProperties = {
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      overflow: 'hidden',
-      flexShrink: 0,
-      userSelect: 'none',
-      fontFamily: typography.fontFamily.sans.join(', '),
-      fontWeight: typography.fontWeight.medium,
-      textTransform: 'uppercase',
-      borderRadius: shape === 'circle' ? borderRadius.full : borderRadius.md,
-      border: showBorder ? `2px solid ${colors.border?.default || colors.neutral?.[200]}` : undefined,
-      ...sizeStyles[size],
-      ...getVariantStyles(),
-      ...style,
-    };
-    
-    const imageStyles: React.CSSProperties = {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-      aspectRatio: '1 / 1',
-    };
-    
-    const [imageError, setImageError] = React.useState(false);
+    // Use showBorder prop to override bordered variant
+    const actualBordered = showBorder !== undefined ? showBorder : bordered;
     
     return (
-      <div ref={ref} className={className} style={avatarStyles} {...props}>
-        {shouldShowImage && !imageError ? (
-          <img
-            src={src}
-            alt={alt || name || 'Avatar'}
-            style={imageStyles}
-            loading="lazy"
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-            {fallbackContent}
-          </div>
+      <div 
+        ref={ref} 
+        className={cn(
+          avatarVariants({ 
+            size, 
+            variant, 
+            shape, 
+            bordered: actualBordered 
+          }), 
+          className
+        )} 
+        {...props}
+      >
+        {children || (
+          <>
+            {shouldShowImage ? (
+              <AvatarImage
+                src={src}
+                alt={alt || name || 'Avatar'}
+                loading="lazy"
+              />
+            ) : (
+              <AvatarFallback>
+                {fallbackContent}
+              </AvatarFallback>
+            )}
+            {status && (
+              <StatusIndicator 
+                status={status} 
+                size={size} 
+              />
+            )}
+          </>
         )}
-        {status && <StatusIndicator status={status} size={size} />}
       </div>
     );
   }
@@ -232,12 +255,5 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
 Avatar.displayName = 'Avatar';
 
-/**
- * Helper function to convert hex to RGB
- */
-function hexToRgb(hex: string): string {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-    : '0, 0, 0';
-}
+// Export CVA variants for external use
+export { avatarVariants, statusIndicatorVariants };

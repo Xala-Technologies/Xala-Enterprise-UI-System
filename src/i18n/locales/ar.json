@@ -1,0 +1,423 @@
+{
+  "_rtl": true,
+  "_direction": "rtl",
+  "common": {
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تحرير",
+    "add": "إضافة",
+    "create": "إنشاء",
+    "update": "تحديث",
+    "remove": "إزالة",
+    "close": "إغلاق",
+    "submit": "إرسال",
+    "reset": "إعادة تعيين",
+    "clear": "مسح",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "refresh": "تحديث",
+    "loading": "جاري التحميل...",
+    "success": "نجح",
+    "error": "خطأ",
+    "warning": "تحذير",
+    "info": "معلومات",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا",
+    "next": "التالي",
+    "previous": "السابق",
+    "back": "رجوع",
+    "forward": "إلى الأمام",
+    "home": "الرئيسية",
+    "settings": "الإعدادات",
+    "help": "مساعدة",
+    "about": "حول",
+    "contact": "اتصال",
+    "required": "مطلوب",
+    "optional": "اختياري",
+    "all": "الكل",
+    "none": "لا شيء",
+    "other": "أخرى",
+    "show": "عرض",
+    "hide": "إخفاء",
+    "expand": "توسيع",
+    "collapse": "طي",
+    "open": "فتح",
+    "view": "عرض",
+    "download": "تحميل",
+    "upload": "رفع",
+    "copy": "نسخ",
+    "paste": "لصق",
+    "cut": "قص",
+    "select": "تحديد",
+    "selectAll": "تحديد الكل",
+    "deselect": "إلغاء التحديد",
+    "deselectAll": "إلغاء تحديد الكل",
+    "items": {
+      "zero": "لا توجد عناصر",
+      "one": "عنصر واحد",
+      "two": "عنصران",
+      "few": "{{count}} عناصر",
+      "many": "{{count}} عنصراً",
+      "other": "{{count}} عنصر"
+    }
+  },
+  "navigation": {
+    "menu": "القائمة",
+    "mainMenu": "القائمة الرئيسية",
+    "breadcrumb": "مسار التنقل",
+    "skipToContent": "الانتقال إلى المحتوى الرئيسي",
+    "skipToNavigation": "الانتقال إلى التنقل",
+    "goToHome": "الذهاب إلى الصفحة الرئيسية",
+    "userMenu": "قائمة المستخدم",
+    "notifications": "الإشعارات",
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
+    "dashboard": "لوحة التحكم",
+    "reports": "التقارير",
+    "admin": "الإدارة",
+    "users": "المستخدمون",
+    "roles": "الأدوار",
+    "permissions": "الصلاحيات"
+  },
+  "forms": {
+    "labels": {
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "عنوان البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "phone": "رقم الهاتف",
+      "address": "العنوان",
+      "city": "المدينة",
+      "postalCode": "الرمز البريدي",
+      "country": "البلد",
+      "dateOfBirth": "تاريخ الميلاد",
+      "organization": "المنظمة",
+      "organizationNumber": "رقم المنظمة",
+      "personalNumber": "الرقم الشخصي",
+      "title": "العنوان",
+      "description": "الوصف",
+      "notes": "الملاحظات",
+      "category": "الفئة",
+      "priority": "الأولوية",
+      "status": "الحالة",
+      "startDate": "تاريخ البداية",
+      "endDate": "تاريخ النهاية",
+      "dueDate": "تاريخ الاستحقاق"
+    },
+    "placeholders": {
+      "enterFirstName": "أدخل الاسم الأول",
+      "enterLastName": "أدخل اسم العائلة",
+      "enterEmail": "أدخل عنوان البريد الإلكتروني",
+      "enterPassword": "أدخل كلمة المرور",
+      "confirmPassword": "أكد كلمة المرور",
+      "enterPhone": "أدخل رقم الهاتف",
+      "enterAddress": "أدخل العنوان",
+      "enterCity": "أدخل المدينة",
+      "enterPostalCode": "أدخل الرمز البريدي",
+      "selectCountry": "اختر البلد",
+      "selectDate": "اختر التاريخ",
+      "enterTitle": "أدخل العنوان",
+      "enterDescription": "أدخل الوصف",
+      "enterNotes": "أدخل الملاحظات",
+      "selectCategory": "اختر الفئة",
+      "selectPriority": "اختر الأولوية",
+      "selectStatus": "اختر الحالة",
+      "searchPlaceholder": "بحث..."
+    },
+    "validation": {
+      "required": "هذا الحقل مطلوب",
+      "email": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+      "phone": "يرجى إدخال رقم هاتف صحيح",
+      "password": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+      "passwordMatch": "كلمات المرور غير متطابقة",
+      "minLength": "يجب أن يكون {{min}} أحرف على الأقل",
+      "maxLength": "يجب ألا يزيد عن {{max}} حرف",
+      "numeric": "يجب أن يكون رقماً",
+      "positiveNumber": "يجب أن يكون رقماً موجباً",
+      "date": "يرجى إدخال تاريخ صحيح",
+      "url": "يرجى إدخال رابط صحيح",
+      "organizationNumber": "يرجى إدخال رقم منظمة صحيح",
+      "personalNumber": "يرجى إدخال رقم شخصي صحيح"
+    },
+    "messages": {
+      "saved": "تم حفظ التغييرات بنجاح",
+      "deleted": "تم حذف العنصر بنجاح",
+      "created": "تم إنشاء العنصر بنجاح",
+      "updated": "تم تحديث العنصر بنجاح",
+      "error": "حدث خطأ أثناء معالجة طلبك",
+      "noChanges": "لم يتم إجراء أي تغييرات",
+      "unsavedChanges": "لديك تغييرات غير محفوظة. هل أنت متأكد من الرغبة في المغادرة؟",
+      "confirmDelete": "هل أنت متأكد من رغبتك في حذف هذا العنصر؟",
+      "processing": "جاري المعالجة...",
+      "uploading": "جاري الرفع...",
+      "uploaded": "تم رفع الملف بنجاح",
+      "uploadError": "خطأ في رفع الملف"
+    }
+  },
+  "components": {
+    "dataTable": {
+      "loading": "جاري التحميل...",
+      "selectAllRows": "تحديد جميع الصفوف",
+      "actionsHeader": "الإجراءات",
+      "noData": "لا توجد بيانات متاحة",
+      "pagination": {
+        "previous": "السابق",
+        "next": "التالي",
+        "page": "الصفحة {{current}} من {{total}}",
+        "rowsPerPage": "الصفوف في كل صفحة",
+        "showing": "عرض {{start}} إلى {{end}} من {{total}} إدخال"
+      },
+      "sorting": {
+        "sortBy": "ترتيب حسب {{column}}",
+        "ascending": "ترتيب تصاعدي",
+        "descending": "ترتيب تنازلي",
+        "unsorted": "إزالة الترتيب"
+      },
+      "filtering": {
+        "filter": "تصفية",
+        "clearFilters": "مسح المرشحات",
+        "searchInColumn": "البحث في {{column}}"
+      }
+    },
+    "globalSearch": {
+      "placeholder": "بحث...",
+      "clearSearch": "مسح البحث",
+      "searchResults": "نتائج البحث",
+      "noResults": "لم يتم العثور على نتائج",
+      "searching": "جاري البحث..."
+    },
+    "modal": {
+      "close": "إغلاق النافذة المنبثقة",
+      "confirm": "تأكيد",
+      "cancel": "إلغاء"
+    },
+    "alert": {
+      "info": "معلومات",
+      "success": "نجح",
+      "warning": "تحذير",
+      "error": "خطأ",
+      "dismiss": "تجاهل"
+    },
+    "toast": {
+      "success": "نجح",
+      "error": "خطأ",
+      "warning": "تحذير",
+      "info": "معلومات",
+      "close": "إغلاق الإشعار"
+    },
+    "button": {
+      "loading": "جاري التحميل...",
+      "submit": "إرسال",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "delete": "حذف",
+      "edit": "تحرير",
+      "create": "إنشاء",
+      "update": "تحديث"
+    },
+    "fileUpload": {
+      "dragAndDrop": "اسحب وأفلت الملفات هنا، أو انقر للتحديد",
+      "selectFiles": "تحديد الملفات",
+      "uploadProgress": "تقدم الرفع: {{percent}}%",
+      "uploadComplete": "اكتمل الرفع",
+      "uploadError": "فشل الرفع",
+      "fileTooBig": "الملف كبير جداً. الحد الأقصى للحجم {{maxSize}}",
+      "invalidFileType": "نوع ملف غير صحيح. الأنواع المسموحة: {{types}}"
+    },
+    "pagination": {
+      "first": "الأول",
+      "last": "الأخير",
+      "previous": "السابق",
+      "next": "التالي",
+      "page": "الصفحة",
+      "of": "من",
+      "goToPage": "الذهاب إلى الصفحة {{page}}"
+    },
+    "accordion": {
+      "expand": "توسيع",
+      "collapse": "طي"
+    },
+    "tabs": {
+      "tabList": "قائمة التبويبات",
+      "tab": "تبويب"
+    },
+    "dropdown": {
+      "selectOption": "اختر خياراً",
+      "searchOptions": "البحث في الخيارات",
+      "noOptions": "لا توجد خيارات متاحة"
+    },
+    "calendar": {
+      "today": "اليوم",
+      "previousMonth": "الشهر السابق",
+      "nextMonth": "الشهر التالي",
+      "selectDate": "اختر التاريخ",
+      "currentMonth": "الشهر الحالي"
+    },
+    "timePicker": {
+      "selectTime": "اختر الوقت",
+      "hours": "الساعات",
+      "minutes": "الدقائق",
+      "seconds": "الثواني",
+      "am": "ص",
+      "pm": "م"
+    }
+  },
+  "accessibility": {
+    "skipLink": "الانتقال إلى المحتوى الرئيسي",
+    "menuButton": "فتح القائمة",
+    "closeButton": "إغلاق",
+    "expandButton": "توسيع",
+    "collapseButton": "طي",
+    "sortButton": "ترتيب",
+    "filterButton": "تصفية",
+    "searchButton": "بحث",
+    "clearButton": "مسح",
+    "requiredField": "هذا الحقل مطلوب",
+    "loading": "جاري التحميل",
+    "busy": "مشغول",
+    "disabled": "معطل",
+    "selected": "محدد",
+    "expanded": "موسع",
+    "collapsed": "مطوي",
+    "checked": "محدد",
+    "unchecked": "غير محدد",
+    "pressed": "مضغوط",
+    "unpressed": "غير مضغوط",
+    "currentPage": "الصفحة الحالية",
+    "pageOf": "الصفحة {{current}} من {{total}}",
+    "newWindow": "يفتح في نافذة جديدة",
+    "externalLink": "رابط خارجي",
+    "hasPopup": "له نافذة منبثقة",
+    "invalid": "غير صحيح",
+    "valid": "صحيح",
+    "error": "خطأ",
+    "warning": "تحذير"
+  },
+  "errors": {
+    "generic": "حدث خطأ غير متوقع",
+    "network": "خطأ في الشبكة. يرجى التحقق من اتصالك",
+    "timeout": "انتهت مهلة الطلب. يرجى المحاولة مرة أخرى",
+    "unauthorized": "غير مخول لك تنفيذ هذا الإجراء",
+    "forbidden": "الوصول ممنوع",
+    "notFound": "المورد المطلوب غير موجود",
+    "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً",
+    "validationError": "يرجى التحقق من المدخلات والمحاولة مرة أخرى",
+    "fileUploadError": "فشل رفع الملف",
+    "sessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى"
+  },
+  "status": {
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "pending": "في الانتظار",
+    "completed": "مكتمل",
+    "cancelled": "ملغي",
+    "draft": "مسودة",
+    "published": "منشور",
+    "archived": "مؤرشف",
+    "deleted": "محذوف",
+    "approved": "موافق عليه",
+    "rejected": "مرفوض",
+    "inProgress": "قيد التنفيذ",
+    "onHold": "معلق"
+  },
+  "priority": {
+    "low": "منخفض",
+    "medium": "متوسط",
+    "high": "عالي",
+    "urgent": "عاجل",
+    "critical": "حرج"
+  },
+  "norwegian": {
+    "classification": {
+      "open": "مفتوح",
+      "restricted": "مقيد",
+      "confidential": "سري",
+      "secret": "سري للغاية"
+    },
+    "compliance": {
+      "nsmLevel": "مستوى NSM",
+      "gdprCompliant": "متوافق مع GDPR",
+      "wcagLevel": "مستوى WCAG",
+      "auditTrail": "مسار التدقيق",
+      "dataClassification": "تصنيف البيانات",
+      "acknowledgmentRequired": "الإقرار مطلوب",
+      "acknowledgmentMessage": "أقر بأنني قرأت وفهمت هذه المعلومات"
+    }
+  },
+  "communication": {
+    "chat": {
+      "typeMessage": "اكتب رسالة...",
+      "send": "إرسال",
+      "attachFile": "إرفاق ملف",
+      "addEmoji": "إضافة رمز تعبيري",
+      "bold": "عريض",
+      "italic": "مائل",
+      "online": "متصل",
+      "offline": "غير متصل",
+      "typing": "يكتب...",
+      "messageSent": "تم إرسال الرسالة",
+      "messageReceived": "تم استلام الرسالة"
+    },
+    "forum": {
+      "upvote": "تصويت إيجابي",
+      "downvote": "تصويت سلبي",
+      "reply": "رد",
+      "quote": "اقتباس",
+      "report": "إبلاغ",
+      "share": "مشاركة",
+      "verified": "موثق",
+      "moderator": "مشرف",
+      "admin": "مدير"
+    }
+  },
+  "time": {
+    "now": "الآن",
+    "today": "اليوم",
+    "yesterday": "الأمس",
+    "tomorrow": "غداً",
+    "thisWeek": "هذا الأسبوع",
+    "lastWeek": "الأسبوع الماضي",
+    "thisMonth": "هذا الشهر",
+    "lastMonth": "الشهر الماضي",
+    "ago": "منذ",
+    "in": "خلال",
+    "days": {
+      "zero": "0 أيام",
+      "one": "يوم واحد",
+      "two": "يومان",
+      "few": "{{count}} أيام",
+      "many": "{{count}} يوماً",
+      "other": "{{count}} يوم"
+    },
+    "hours": {
+      "zero": "0 ساعات",
+      "one": "ساعة واحدة",
+      "two": "ساعتان",
+      "few": "{{count}} ساعات",
+      "many": "{{count}} ساعة",
+      "other": "{{count}} ساعة"
+    },
+    "minutes": {
+      "zero": "0 دقائق",
+      "one": "دقيقة واحدة",
+      "two": "دقيقتان",
+      "few": "{{count}} دقائق",
+      "many": "{{count}} دقيقة",
+      "other": "{{count}} دقيقة"
+    },
+    "seconds": {
+      "zero": "0 ثواني",
+      "one": "ثانية واحدة",
+      "two": "ثانيتان",
+      "few": "{{count}} ثواني",
+      "many": "{{count}} ثانية",
+      "other": "{{count}} ثانية"
+    }
+  }
+}

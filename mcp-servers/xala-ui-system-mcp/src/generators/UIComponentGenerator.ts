@@ -10,104 +10,153 @@ export class UIComponentGenerator {
     const componentName = this.toPascalCase(config.name);
     const propsInterface = `${componentName}Props`;
     
-    return `// components/ui/${componentName}.tsx
-import {
-  ${this.generateImports(config).join(',\n  ')}
-} from '@xala-technologies/ui-system';
-import { useTranslation } from 'react-i18next';
-import { ReactNode } from 'react';
+    return `/**
+ * @fileoverview ${componentName} Component - CVA Design System Compliant
+ * @description ${config.description || `${componentName} component using CVA pattern with semantic tokens`}
+ * @version 5.0.0
+ * @compliance CVA-based, SSR-safe, Framework-agnostic, Token-based
+ */
+
+import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@xala-technologies/ui-system/utils';
 ${config.features.icons ? "import { Loader2 } from 'lucide-react';" : ''}
 
-export interface ${propsInterface} {
-  readonly children?: ReactNode;
-  readonly className?: string;
-  readonly variant?: '${config.styling.variant}';
-  readonly size?: '${config.size || 'md'}';
-  readonly disabled?: boolean;
+// =============================================================================
+// ${componentName.toUpperCase()} VARIANTS USING CVA
+// =============================================================================
+
+const ${config.name.toLowerCase()}Variants = cva(
+  // Base classes using semantic tokens
+  '${this.generateBaseClasses(config)}',
+  {
+    variants: {
+      variant: {
+        ${this.generateVariantClasses(config)}
+      },
+      size: {
+        ${this.generateSizeClasses(config)}
+      },
+    },
+    defaultVariants: {
+      variant: '${config.styling.variant}',
+      size: '${config.size || 'md'}',
+    },
+  }
+);
+
+// =============================================================================
+// ${componentName.toUpperCase()} COMPONENT INTERFACE
+// =============================================================================
+
+export interface ${propsInterface}
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof ${config.name.toLowerCase()}Variants> {
+  readonly children?: React.ReactNode;
   readonly loading?: boolean;
-  readonly onClick?: () => void;
+  readonly disabled?: boolean;
   readonly 'data-testid'?: string;
-  readonly 'aria-label'?: string;
 }
 
-export function ${componentName}({
-  children,
-  className,
-  variant = '${config.styling.variant}',
-  size = '${config.size || 'md'}',
-  disabled = false,
-  loading = false,
-  onClick,
-  'data-testid': testId,
-  'aria-label': ariaLabel,
-  ...props
-}: ${propsInterface}): JSX.Element {
-  const { t } = useTranslation();
-  const { colors, spacing } = useTokens();
+// =============================================================================
+// ${componentName.toUpperCase()} COMPONENT
+// =============================================================================
 
-  ${this.generateEventHandlers(config)}
+export const ${componentName} = React.forwardRef<HTMLDivElement, ${propsInterface}>(
+  ({
+    className,
+    variant = '${config.styling.variant}',
+    size = '${config.size || 'md'}',
+    loading = false,
+    disabled = false,
+    children,
+    'data-testid': testId,
+    ...props
+  }, ref) => {
+    const isDisabled = disabled || loading;
 
-  return (
-    <Container
-      className={className}
-      data-testid={testId}
-      aria-label={ariaLabel || t('${config.name.toLowerCase()}.label')}
-      style={{
-        opacity: disabled ? 0.6 : 1,
-        pointerEvents: disabled ? 'none' : 'auto',
-        ...props.style
-      }}
-      {...props}
-    >
-      ${this.generateComponentContent(config)}
-    </Container>
-  );
-}`;
+    return (
+      <div
+        className={cn(${config.name.toLowerCase()}Variants({ variant, size }), className)}
+        ref={ref}
+        data-testid={testId}
+        aria-disabled={isDisabled}
+        {...props}
+      >
+        ${this.generateComponentContent(config)}
+      </div>
+    );
+  }
+);
+
+${componentName}.displayName = '${componentName}';
+`;
   }
 
-  private generateImports(config: ComponentConfig): string[] {
-    const baseImports = [
-      'Container',
-      'Stack',
-      'Typography',
-      'useTokens'
+  private generateBaseClasses(config: ComponentConfig): string {
+    const baseClasses = [
+      'relative',
+      'inline-flex',
+      'items-center',
+      'justify-center',
+      'gap-2',
+      'rounded-lg',
+      'border',
+      'bg-card',
+      'text-card-foreground',
+      'transition-colors',
+      'focus-visible:outline-none',
+      'focus-visible:ring-2',
+      'focus-visible:ring-ring',
+      'focus-visible:ring-offset-2',
+      'disabled:pointer-events-none',
+      'disabled:opacity-50'
     ];
 
-    const conditionalImports: string[] = [];
-
-    if (config.features.interactive) {
-      conditionalImports.push('Button', 'IconButton');
+    // Add category-specific base classes
+    switch (config.category) {
+      case 'layout':
+        baseClasses.push('w-full', 'flex-col');
+        break;
+      case 'interactive':
+        baseClasses.push('cursor-pointer', 'hover:bg-accent');
+        break;
+      case 'data-display':
+        baseClasses.push('p-4', 'shadow-sm');
+        break;
     }
 
-    if (config.features.loading) {
-      conditionalImports.push('Skeleton', 'Spinner');
-    }
+    return baseClasses.join(' ');
+  }
 
-    if (config.features.error) {
-      conditionalImports.push('Alert', 'AlertDescription');
-    }
+  private generateVariantClasses(config: ComponentConfig): string {
+    const variants = {
+      default: 'border-border bg-background hover:bg-accent hover:text-accent-foreground',
+      primary: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90',
+      secondary: 'border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80',
+      outline: 'border-border bg-transparent hover:bg-accent hover:text-accent-foreground',
+      ghost: 'border-transparent bg-transparent hover:bg-accent hover:text-accent-foreground',
+      destructive: 'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/90',
+      success: 'border-transparent bg-success text-success-foreground hover:bg-success/90',
+      warning: 'border-transparent bg-warning text-warning-foreground hover:bg-warning/90',
+    };
 
-    if (config.features.badges) {
-      conditionalImports.push('Badge');
-    }
+    return Object.entries(variants)
+      .map(([key, value]) => `${key}: '${value}'`)
+      .join(',\n        ');
+  }
 
-    if (config.features.tooltips) {
-      conditionalImports.push('Tooltip', 'TooltipContent', 'TooltipTrigger');
-    }
+  private generateSizeClasses(config: ComponentConfig): string {
+    const sizes = {
+      sm: 'h-9 px-3 text-sm',
+      md: 'h-10 px-4 py-2',
+      lg: 'h-11 px-8',
+      xl: 'h-12 px-12 text-base',
+    };
 
-    if (config.features.searchable) {
-      conditionalImports.push('GlobalSearch');
-    }
-
-    if (config.features.collapsible) {
-      conditionalImports.push('Accordion', 'AccordionContent', 'AccordionItem', 'AccordionTrigger');
-    }
-
-    if (config.features.draggable) {
-      conditionalImports.push('Card');
-    }
-
-    return [...new Set([...baseImports, ...conditionalImports])];
+    return Object.entries(sizes)
+      .map(([key, value]) => `${key}: '${value}'`)
+      .join(',\n        ');
   }
 
   private generateEventHandlers(config: ComponentConfig): string {
@@ -144,73 +193,21 @@ export function ${componentName}({
 
     if (config.features.loading) {
       content.push(`{loading && (
-        <Stack direction="horizontal" align="center" gap="sm">
-          <Spinner size="sm" />
-          <Typography variant="body">
-            {t('common.loading')}
-          </Typography>
-        </Stack>
-      )}`);
+          <div className="animate-spin rounded-full border-2 border-transparent border-t-current h-4 w-4" />
+        )}`);
     }
 
-    if (config.features.error) {
-      content.push(`{error && (
-        <Alert variant="destructive">
-          <AlertDescription>
-            {t('${config.name.toLowerCase()}.error')}
-          </AlertDescription>
-        </Alert>
-      )}`);
-    }
-
-    if (config.features.searchable) {
-      content.push(`<GlobalSearch
-        placeholder={t('${config.name.toLowerCase()}.searchPlaceholder')}
-        onSubmit={handleSearch}
-        variant="default"
-        size={size}
-      />`);
-    }
-
-    if (config.features.collapsible) {
-      content.push(`<Accordion>
-        <AccordionItem value="content">
-          <AccordionTrigger onClick={handleToggle}>
-            <Typography variant="h4">
-              {t('${config.name.toLowerCase()}.title')}
-            </Typography>
-          </AccordionTrigger>
-          <AccordionContent>
+    if (config.features.interactive) {
+      content.push(`{children && (
+          <span className="flex-1">
             {children}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>`);
+          </span>
+        )}`);
     } else {
-      content.push(`<Stack direction="vertical" gap="md">
-        <Typography variant="h3">
-          {t('${config.name.toLowerCase()}.title')}
-        </Typography>
-        {children}
-      </Stack>`);
+      content.push(`{children}`);
     }
 
-    if (config.features.interactive && !config.features.collapsible) {
-      content.push(`{config.features.interactive && (
-        <Stack direction="horizontal" gap="sm" style={{ marginTop: spacing.md }}>
-          <Button
-            variant={variant}
-            size={size}
-            disabled={disabled}
-            loading={loading}
-            onClick={handleClick}
-          >
-            {t('${config.name.toLowerCase()}.action')}
-          </Button>
-        </Stack>
-      )}`);
-    }
-
-    return content.join('\n      ');
+    return content.join('\n        ');
   }
 
   private toPascalCase(str: string): string {

@@ -1,26 +1,91 @@
 /**
- * @fileoverview SSR-Safe Breadcrumb Component - Production Strategy Implementation
- * @description Breadcrumb component using useTokens hook for JSON template integration
+ * @fileoverview Breadcrumb Component - CVA Pattern Implementation
+ * @description SSR-safe breadcrumb component using CVA variants and semantic tokens
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance WCAG AAA, CVA Pattern, SSR-Safe, Semantic Tokens
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 
-/**
- * Breadcrumb variant types
- */
-export type BreadcrumbVariant = 'default' | 'primary' | 'secondary';
+// =============================================================================
+// CVA VARIANTS
+// =============================================================================
 
-/**
- * Breadcrumb size types
- */
-export type BreadcrumbSize = 'sm' | 'default' | 'lg';
+const breadcrumbVariants = cva(
+  'flex items-center font-sans',
+  {
+    variants: {
+      variant: {
+        default: 'text-muted-foreground',
+        primary: 'text-primary/80',
+        secondary: 'text-secondary/80',
+      },
+      size: {
+        sm: 'text-xs gap-1',
+        default: 'text-sm gap-2',
+        lg: 'text-base gap-3',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
 
-/**
- * Breadcrumb item interface
- */
+const breadcrumbItemVariants = cva(
+  [
+    'inline-flex items-center gap-2 transition-colors duration-150',
+    'outline-none rounded-sm',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+  ],
+  {
+    variants: {
+      variant: {
+        default: 'text-foreground hover:text-primary',
+        primary: 'text-primary hover:text-primary/80',
+        secondary: 'text-secondary hover:text-secondary/80',
+      },
+      state: {
+        default: '',
+        current: 'font-medium text-foreground cursor-default',
+        disabled: 'opacity-50 cursor-not-allowed pointer-events-none',
+      },
+      interactive: {
+        true: 'cursor-pointer hover:underline',
+        false: 'cursor-default',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      state: 'default',
+      interactive: true,
+    },
+  }
+);
+
+const breadcrumbSeparatorVariants = cva(
+  'inline-flex items-center justify-center text-muted-foreground',
+  {
+    variants: {
+      size: {
+        sm: 'w-3 h-3',
+        default: 'w-4 h-4',
+        lg: 'w-5 h-5',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
+
+// =============================================================================
+// INTERFACES
+// =============================================================================
+
 export interface BreadcrumbItem {
   readonly label: string;
   readonly href?: string;
@@ -29,10 +94,9 @@ export interface BreadcrumbItem {
   readonly disabled?: boolean;
 }
 
-/**
- * Breadcrumb component props interface
- */
-export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
+export interface BreadcrumbProps 
+  extends HTMLAttributes<HTMLElement>,
+    VariantProps<typeof breadcrumbVariants> {
   /** Breadcrumb items */
   readonly items: BreadcrumbItem[];
   /** Custom separator element */
@@ -47,38 +111,20 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   readonly homeHref?: string;
   /** Home click handler */
   readonly onHomeClick?: () => void;
-  /** Breadcrumb styling variant */
-  readonly variant?: BreadcrumbVariant;
-  /** Breadcrumb size */
-  readonly size?: BreadcrumbSize;
 }
 
-/**
- * Get truncated items with ellipsis - pure function
- */
-const getTruncatedItems = (
-  items: BreadcrumbItem[],
-  maxItems: number
-): { beforeEllipsis: BreadcrumbItem[]; afterEllipsis: BreadcrumbItem[]; showEllipsis: boolean } => {
-  if (items.length <= maxItems) {
-    return { beforeEllipsis: items, afterEllipsis: [], showEllipsis: false };
-  }
+export interface BreadcrumbSeparatorProps 
+  extends HTMLAttributes<HTMLSpanElement>,
+    VariantProps<typeof breadcrumbSeparatorVariants> {
+  readonly children?: ReactNode;
+}
 
-  const beforeCount = Math.floor((maxItems - 1) / 2);
-  const afterCount = maxItems - 1 - beforeCount;
+// =============================================================================
+// ICONS
+// =============================================================================
 
-  return {
-    beforeEllipsis: items.slice(0, beforeCount),
-    afterEllipsis: items.slice(-afterCount),
-    showEllipsis: true,
-  };
-};
-
-/**
- * Default Chevron Right Icon
- */
 const ChevronRightIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-full h-full">
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -87,11 +133,8 @@ const ChevronRightIcon = (): React.ReactElement => (
   </svg>
 );
 
-/**
- * Default Home Icon
- */
 const HomeIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-full h-full">
     <path
       fillRule="evenodd"
       d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
@@ -100,41 +143,25 @@ const HomeIcon = (): React.ReactElement => (
   </svg>
 );
 
-/**
- * Ellipsis Icon
- */
 const EllipsisIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4">
+  <svg viewBox="0 0 20 20" fill="currentColor" className="w-full h-full">
     <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
   </svg>
 );
 
-/**
- * Breadcrumb Separator Component
- */
-const BreadcrumbSeparator = forwardRef<
-  HTMLSpanElement,
-  { size?: BreadcrumbSize; children?: ReactNode }
->(
-  ({ size = 'default', children }, ref): React.ReactElement => {
-    const separatorSizeMap = {
-      sm: '12px',
-      default: '16px',
-      lg: '20px',
-    };
-    
+// =============================================================================
+// SUB-COMPONENTS
+// =============================================================================
+
+export const BreadcrumbSeparator = forwardRef<HTMLSpanElement, BreadcrumbSeparatorProps>(
+  ({ size, children, className, ...props }, ref) => {
     return (
       <span
         ref={ref}
         role="presentation"
         aria-hidden="true"
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: separatorSizeMap[size || 'default'],
-          height: separatorSizeMap[size || 'default'],
-        }}
+        className={cn(breadcrumbSeparatorVariants({ size }), className)}
+        {...props}
       >
         {children || <ChevronRightIcon />}
       </span>
@@ -144,9 +171,10 @@ const BreadcrumbSeparator = forwardRef<
 
 BreadcrumbSeparator.displayName = 'BreadcrumbSeparator';
 
-/**
- * Breadcrumb component
- */
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
 export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
   (
     {
@@ -155,120 +183,116 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       maxItems = 0,
       showHome = false,
       homeIcon,
-      homeHref: _homeHref = '/',
+      homeHref = '/',
       onHomeClick,
-      variant = 'default',
-      size = 'default',
+      variant,
+      size,
       className,
-      style,
       ...props
     },
     ref
   ) => {
-    const { colors, typography, spacing } = useTokens();
-    
-    // Get variant styles
-    const getVariantColor = (): string => {
-      switch (variant) {
-        case 'primary':
-          return `rgba(${hexToRgb(colors.primary?.[500] || '#3b82f6')}, 0.8)`;
-        case 'secondary':
-          return `rgba(${hexToRgb(colors.secondary?.[500] || '#8b5cf6')}, 0.8)`;
-        default:
-          return colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+    // Get truncated items with ellipsis - pure function
+    const getTruncatedItems = (
+      items: BreadcrumbItem[],
+      maxItems: number
+    ): { beforeEllipsis: BreadcrumbItem[]; afterEllipsis: BreadcrumbItem[]; showEllipsis: boolean } => {
+      if (items.length <= maxItems) {
+        return { beforeEllipsis: items, afterEllipsis: [], showEllipsis: false };
       }
+
+      const beforeCount = Math.floor((maxItems - 1) / 2);
+      const afterCount = maxItems - 1 - beforeCount;
+
+      return {
+        beforeEllipsis: items.slice(0, beforeCount),
+        afterEllipsis: items.slice(-afterCount),
+        showEllipsis: true,
+      };
     };
-    
-    // Get size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return { fontSize: typography?.fontSize?.xs || '0.75rem' };
-        case 'lg':
-          return { fontSize: typography?.fontSize?.base || '1rem' };
-        default:
-          return { fontSize: typography?.fontSize?.sm || '0.875rem' };
-      }
-    };
-    
-    // Base breadcrumb styles
-    const breadcrumbStyles: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      color: getVariantColor(),
-      fontFamily: typography?.fontFamily?.sans?.join(', ') || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      ...getSizeStyles(),
-      ...style,
-    };
+
     const { beforeEllipsis, afterEllipsis, showEllipsis } =
       maxItems > 0
         ? getTruncatedItems(items, maxItems)
         : { beforeEllipsis: items, afterEllipsis: [], showEllipsis: false };
-
-    const safeSize = size || 'default';
 
     const renderBreadcrumbItem = (
       item: BreadcrumbItem,
       index: number,
       isLast: boolean
     ): React.ReactElement => {
-      const ItemComponent = item.href || item.onClick ? 'button' : 'span';
+      const ItemComponent = item.href ? 'a' : 'button';
+      const isInteractive = !!(item.href || item.onClick) && !item.disabled;
       
-      const itemStyles: React.CSSProperties = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        transition: 'color 150ms ease-in-out',
-        outline: 'none',
-        borderRadius: '4px',
-        padding: '2px 4px',
-        margin: '-2px -4px',
-        fontWeight: isLast ? typography?.fontWeight?.medium || 500 : typography?.fontWeight?.normal || 400,
-        color: isLast ? (colors.text?.primary || colors.neutral?.[900] || '#111827') : 'inherit',
-        cursor: isLast ? 'default' : (item.disabled ? 'not-allowed' : 'pointer'),
-        opacity: item.disabled ? 0.5 : 1,
-        border: 'none',
-        background: 'transparent',
-        textDecoration: 'none',
-      };
-      
-      const hoverStyles = !isLast && !item.disabled ? {
-        '&:hover': {
-          color: variant === 'primary' ? (colors.primary?.[500] || '#3b82f6') : 
-                 variant === 'secondary' ? (colors.secondary?.[500] || '#8b5cf6') : 
-                 (colors.text?.primary || colors.neutral?.[900] || '#111827'),
-        },
-        '&:focus-visible': {
-          outline: '2px solid',
-          outlineColor: colors.primary?.[500] || '#3b82f6',
-          outlineOffset: '2px',
-        },
-      } : {};
+      const itemContent = (
+        <div className="flex items-center gap-1">
+          {item.icon && <span className="w-4 h-4 flex-shrink-0">{item.icon}</span>}
+          <span className="truncate">{item.label}</span>
+        </div>
+      );
+
+      if (item.href && !item.disabled) {
+        return (
+          <React.Fragment key={`${item.label}-${index}`}>
+            <a
+              href={item.href}
+              className={cn(
+                breadcrumbItemVariants({ 
+                  variant, 
+                  state: isLast ? 'current' : 'default',
+                  interactive: isInteractive 
+                }),
+                'px-1 py-0.5 -mx-1 -my-0.5'
+              )}
+              onClick={item.onClick}
+              aria-current={isLast ? 'page' : undefined}
+            >
+              {itemContent}
+            </a>
+            {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
+          </React.Fragment>
+        );
+      }
+
+      if (item.onClick && !item.disabled) {
+        return (
+          <React.Fragment key={`${item.label}-${index}`}>
+            <button
+              type="button"
+              onClick={item.onClick}
+              disabled={item.disabled}
+              className={cn(
+                breadcrumbItemVariants({ 
+                  variant, 
+                  state: item.disabled ? 'disabled' : isLast ? 'current' : 'default',
+                  interactive: isInteractive 
+                }),
+                'px-1 py-0.5 -mx-1 -my-0.5 border-none bg-transparent'
+              )}
+              aria-current={isLast ? 'page' : undefined}
+            >
+              {itemContent}
+            </button>
+            {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
+          </React.Fragment>
+        );
+      }
 
       return (
         <React.Fragment key={`${item.label}-${index}`}>
-          <ItemComponent
-            {...(item.href && { href: item.href })}
-            onClick={item.onClick}
-            disabled={item.disabled}
-            style={{
-              ...itemStyles,
-              ...Object.entries(hoverStyles).reduce((acc, [key, value]) => {
-                if (key.startsWith('&:')) {
-                  // Handle pseudo-classes manually
-                  return acc;
-                }
-                return { ...acc, [key]: value };
-              }, {}),
-            }}
+          <span
+            className={cn(
+              breadcrumbItemVariants({ 
+                variant, 
+                state: item.disabled ? 'disabled' : isLast ? 'current' : 'default',
+                interactive: false 
+              })
+            )}
             aria-current={isLast ? 'page' : undefined}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing?.[1] || '0.25rem' }}>
-              {item.icon && <span style={{ width: '16px', height: '16px' }}>{item.icon}</span>}
-              <span>{item.label}</span>
-            </div>
-          </ItemComponent>
-
-          {!isLast && <BreadcrumbSeparator size={safeSize}>{separator}</BreadcrumbSeparator>}
+            {itemContent}
+          </span>
+          {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
         </React.Fragment>
       );
     };
@@ -277,46 +301,42 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       <nav
         ref={ref}
         aria-label="Breadcrumb"
-        className={className}
-        style={breadcrumbStyles}
+        className={cn(breadcrumbVariants({ variant, size }), className)}
         {...props}
       >
-        <ol style={{ display: 'flex', alignItems: 'center', gap: spacing?.[1] || '0.25rem', listStyle: 'none', margin: 0, padding: 0 }}>
+        <ol className="flex items-center gap-1 list-none m-0 p-0">
           {/* Home Item */}
           {showHome && (
             <>
               <li>
-                <button
-                  onClick={onHomeClick}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    transition: 'color 150ms ease-in-out',
-                    outline: 'none',
-                    borderRadius: '4px',
-                    padding: '2px 4px',
-                    margin: '-2px -4px',
-                    cursor: 'pointer',
-                    border: 'none',
-                    background: 'transparent',
-                    color: 'inherit',
-                  }}
-                  aria-label="Home"
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = variant === 'primary' ? (colors.primary?.[500] || '#3b82f6') : 
-                                                   variant === 'secondary' ? (colors.secondary?.[500] || '#8b5cf6') : 
-                                                   (colors.text?.primary || colors.neutral?.[900] || '#111827');
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'inherit';
-                  }}
-                >
-                  {homeIcon || <HomeIcon />}
-                </button>
+                {homeHref ? (
+                  <a
+                    href={homeHref}
+                    className={cn(
+                      breadcrumbItemVariants({ variant, interactive: true }),
+                      'px-1 py-0.5 -mx-1 -my-0.5 w-5 h-5'
+                    )}
+                    aria-label="Home"
+                  >
+                    {homeIcon || <HomeIcon />}
+                  </a>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={onHomeClick}
+                    className={cn(
+                      breadcrumbItemVariants({ variant, interactive: true }),
+                      'px-1 py-0.5 -mx-1 -my-0.5 w-5 h-5 border-none bg-transparent'
+                    )}
+                    aria-label="Home"
+                  >
+                    {homeIcon || <HomeIcon />}
+                  </button>
+                )}
               </li>
               {items.length > 0 && (
                 <li>
-                  <BreadcrumbSeparator size={safeSize}>{separator}</BreadcrumbSeparator>
+                  <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
                 </li>
               )}
             </>
@@ -331,22 +351,18 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           {showEllipsis && (
             <>
               <li>
-                <BreadcrumbSeparator size={safeSize}>{separator}</BreadcrumbSeparator>
+                <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
               </li>
               <li>
                 <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    color: 'inherit',
-                  }}
+                  className="inline-flex items-center text-muted-foreground w-4 h-4"
                   aria-label="More items"
                 >
                   <EllipsisIcon />
                 </span>
               </li>
               <li>
-                <BreadcrumbSeparator size={safeSize}>{separator}</BreadcrumbSeparator>
+                <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
               </li>
             </>
           )}
@@ -374,12 +390,8 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
 Breadcrumb.displayName = 'Breadcrumb';
 
-/**
- * Helper function to convert hex to RGB
- */
-function hexToRgb(hex: string): string {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-    : '0, 0, 0';
-}
+// Export variants for external use
+export { breadcrumbVariants, breadcrumbItemVariants, breadcrumbSeparatorVariants };
+export type BreadcrumbVariant = VariantProps<typeof breadcrumbVariants>;
+export type BreadcrumbItemVariant = VariantProps<typeof breadcrumbItemVariants>;
+export type BreadcrumbSeparatorVariant = VariantProps<typeof breadcrumbSeparatorVariants>;

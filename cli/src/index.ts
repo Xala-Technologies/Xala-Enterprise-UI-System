@@ -44,6 +44,18 @@ program.addHelpText('before', '\n');
 
 program.addHelpText('after', `
 ${chalk.bold('Examples:')}
+  ${chalk.gray('# Install UI system in existing application')}
+  $ xala install --platform react --setup-providers
+
+  ${chalk.gray('# Analyze existing code for migration compatibility')}
+  $ xala migrate analyze --report
+
+  ${chalk.gray('# Quick check component against UI system standards')}
+  $ xala check src/components/Button.tsx --verbose
+
+  ${chalk.gray('# Integrate with Xaheen full-stack project')}
+  $ xala xaheen init --theme enterprise --compliance gdpr,wcag-aaa
+
   ${chalk.gray('# Initialize design system in new project')}
   $ xala init saas-dashboard --template enterprise --platform react
 
@@ -63,6 +75,8 @@ ${chalk.bold('Examples:')}
   $ xala analyze --performance --accessibility --compliance
 
 ${chalk.bold('Command Categories:')}
+  ${chalk.cyan('Setup:')}       install, migrate, check
+  ${chalk.cyan('Integration:')} xaheen init|sync
   ${chalk.cyan('Project:')}     init, create
   ${chalk.cyan('Tokens:')}      tokens generate|validate|sync
   ${chalk.cyan('Themes:')}      themes create|apply|customize

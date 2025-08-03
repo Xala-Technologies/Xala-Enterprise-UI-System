@@ -211,34 +211,6 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
 
 Skeleton.displayName = 'Skeleton';
 
-/**
- * Helper function to convert hex to RGB
- */
-function hexToRgb(hex: string): string {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-    : '0, 0, 0';
-}
-
-/**
- * CSS keyframe animations (should be added to global styles)
- */
-if (typeof window !== 'undefined' && !document.getElementById('skeleton-animations')) {
-  const style = document.createElement('style');
-  style.id = 'skeleton-animations';
-  style.textContent = `
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-  `;
-  document.head.appendChild(style);
-}
 
 /**
  * Skeleton Text Component - Convenience wrapper for text skeletons
@@ -318,23 +290,18 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     },
     ref
   ) => {
-    const { spacing } = useTokens();
-    
     return (
       <div 
         ref={ref} 
-        className={className}
-        style={{
-          padding: spacing[4],
-          ...style,
-        }}
+        className={cn("p-4", className)}
+        style={style}
         aria-hidden="true" 
         {...props}
       >
         {/* Header with optional avatar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3], marginBottom: spacing[4] }}>
+        <div className="flex items-center gap-3 mb-4">
           {showAvatar && <SkeletonAvatar size={avatarSize} />}
-          <div style={{ flex: 1 }}>
+          <div className="flex-1">
             <SkeletonText lines={titleLines} lineHeight="1.25rem" />
           </div>
         </div>

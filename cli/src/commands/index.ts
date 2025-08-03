@@ -52,6 +52,10 @@ export async function registerCommands(program: Command): Promise<void> {
     // Core commands
     await loadCommand('./init.js', 'initCommand');
     await loadCommand('./create.js', 'createCommand');
+    await loadCommand('./install.js', 'install');
+    await loadCommand('./migrate.js', 'migrate');
+    await loadCommand('./check.js', 'check');
+    await loadCommand('./cva-check.js', 'cvaCheckCommand');
     
     // Token management commands
     await loadCommand('./tokens.js', 'tokensCommand');
@@ -81,6 +85,9 @@ export async function registerCommands(program: Command): Promise<void> {
     
     // Configuration
     await loadCommand('./config.js', 'configCommand');
+    
+    // External tool integrations
+    await loadCommand('../integrations/xaheen-bridge.js', 'xaheenIntegrationCommand');
     
   } catch (error) {
     logger.error('Failed to load commands:', error);

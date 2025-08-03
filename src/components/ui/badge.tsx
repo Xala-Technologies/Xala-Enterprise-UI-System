@@ -1,39 +1,39 @@
 /**
- * @fileoverview Badge Component v5.0.0 - Token-Based Design System
- * @description Modern Badge component using design tokens with SSR compatibility
+ * @fileoverview Badge Component v5.0.0 - CVA Pattern Implementation
+ * @description Modern Badge component using CVA patterns with semantic Tailwind classes
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, CVA-based
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 
 // =============================================================================
-// BADGE VARIANTS USING DESIGN TOKENS
+// BADGE VARIANTS USING CVA PATTERN
 // =============================================================================
 
 /**
- * Badge variants using token-based styling
+ * Badge variants using semantic Tailwind classes
  */
 const badgeVariants = cva(
-  'inline-flex items-center rounded-full border font-semibold transition-colors cursor-default',
+  'inline-flex items-center rounded-full border font-semibold transition-colors cursor-default focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
   {
     variants: {
       variant: {
-        default: '',
-        secondary: '',
-        destructive: '',
-        outline: '',
-        success: '',
-        warning: '',
-        info: '',
+        default: 'bg-primary text-primary-foreground border-transparent hover:bg-primary/90',
+        secondary: 'bg-secondary text-secondary-foreground border-transparent hover:bg-secondary/80',
+        destructive: 'bg-destructive text-destructive-foreground border-transparent hover:bg-destructive/90',
+        outline: 'bg-transparent text-foreground border-border hover:bg-accent hover:text-accent-foreground',
+        success: 'bg-green-500 text-white border-transparent hover:bg-green-600',
+        warning: 'bg-amber-500 text-white border-transparent hover:bg-amber-600',
+        info: 'bg-blue-500 text-white border-transparent hover:bg-blue-600',
       },
       size: {
         default: 'px-2.5 py-0.5 text-xs',
         sm: 'px-2 py-0.5 text-xs',
         lg: 'px-3 py-1 text-sm',
+        xl: 'px-4 py-1.5 text-base',
       },
     },
     defaultVariants: {
@@ -51,7 +51,7 @@ export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline' |
 /**
  * Badge size types
  */
-export type BadgeSize = 'default' | 'sm' | 'lg';
+export type BadgeSize = 'default' | 'sm' | 'lg' | 'xl';
 
 /**
  * Badge component props interface
@@ -67,118 +67,11 @@ export interface BadgeProps
  * Badge component
  */
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
-  ({ variant = 'default', size = 'default', className, style, children, ...props }, ref) => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
-    // Get additional tokens with fallbacks
-    const borderRadius = {
-      full: (getToken('borderRadius.full') as string) || '9999px',
-    };
-    
-    // Size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return {
-            paddingLeft: spacing[2],
-            paddingRight: spacing[2],
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            fontSize: typography.fontSize.xs,
-          };
-        case 'lg':
-          return {
-            paddingLeft: spacing[3],
-            paddingRight: spacing[3],
-            paddingTop: spacing[1],
-            paddingBottom: spacing[1],
-            fontSize: typography.fontSize.sm,
-          };
-        default:
-          return {
-            paddingLeft: '10px', // ~2.5 in spacing
-            paddingRight: '10px',
-            paddingTop: '2px',
-            paddingBottom: '2px',
-            fontSize: typography.fontSize.xs,
-          };
-      }
-    };
-    
-    // Variant styles
-    const getVariantStyles = (): React.CSSProperties => {
-      const baseStyles = {
-        borderWidth: '1px',
-        borderStyle: 'solid',
-        borderColor: 'transparent',
-      };
-      
-      switch (variant) {
-        case 'secondary':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.secondary?.[100] || '#e9d5ff',
-            color: colors.secondary?.[900] || '#581c87',
-          };
-        case 'destructive':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.danger?.[500] || '#ef4444',
-            color: colors.background?.default || '#ffffff',
-          };
-        case 'outline':
-          return {
-            ...baseStyles,
-            backgroundColor: 'transparent',
-            borderColor: colors.border?.default || colors.neutral?.[200],
-            color: colors.text?.primary || colors.neutral?.[900],
-          };
-        case 'success':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.success?.[500] || '#22c55e',
-            color: colors.background?.default || '#ffffff',
-          };
-        case 'warning':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.warning?.[500] || '#f59e0b',
-            color: colors.background?.default || '#ffffff',
-          };
-        case 'info':
-          return {
-            ...baseStyles,
-            backgroundColor: colors.info?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
-          };
-        default:
-          return {
-            ...baseStyles,
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
-          };
-      }
-    };
-    
-    const badgeStyles: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      borderRadius: borderRadius.full,
-      fontFamily: typography.fontFamily.sans.join(', '),
-      fontWeight: typography.fontWeight.semibold,
-      lineHeight: 1,
-      transition: 'all 0.2s ease-in-out',
-      cursor: 'default',
-      ...getSizeStyles(),
-      ...getVariantStyles(),
-      ...style,
-    };
-    
+  ({ variant = 'default', size = 'default', className, children, ...props }, ref) => {
     return (
       <div 
         ref={ref} 
         className={cn(badgeVariants({ variant, size }), className)} 
-        style={badgeStyles} 
         {...props}
       >
         {children}

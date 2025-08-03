@@ -20,17 +20,17 @@ export {
     AccordionItem,
     AccordionTrigger,
     // Data display components
-    Avatar, Blockquote,
+    Avatar as UIAvatar, Blockquote,
     // Navigation components
-    Breadcrumb, Calendar, CardContent,
+    Breadcrumb as UIBreadcrumb, Calendar, CardContent,
     CardFooter, CardHeader,
     // Form components
     Checkbox,
-    CheckboxGroup, CircularProgress, Code,
+    CheckboxGroup, CircularProgress, Code as UICode,
     // Advanced UI components
     CommandPalette, ContextMenu, ContextMenuContent,
     ContextMenuItem, ContextMenuTrigger, DatePicker, Divider, DrawerBody,
-    DrawerFooter, DrawerHeader, Heading, IconButton, Pagination, Radio,
+    DrawerFooter, DrawerHeader, Heading as UIHeading, IconButton as UIIconButton, Pagination, Radio,
     RadioGroup,
     // Dropdown components
     Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator, DropdownLabel,
@@ -46,7 +46,7 @@ export {
     // Individual Tabs components
     TabsContent,
     TabsList,
-    TabsTrigger, Text, Timeline,
+    TabsTrigger, Text as UIText, Timeline,
     TimelineItem, TimePicker, TooltipContent,
     TooltipTrigger, TreeView,
     TreeViewItem, Typography,
@@ -63,9 +63,8 @@ export {
     type CardFooterProps, type CardHeaderProps, type CheckboxGroupProps, type CheckboxOption, type CheckboxProps, type CheckboxSize, type CheckboxVariant, type CircularProgressProps, type CommandGroup, type CommandItem, type CommandPaletteProps, type CommandPaletteSize, type CommandPaletteTexts, type CommandPaletteVariant, type ContextMenuContentProps,
     type ContextMenuItemProps, type ContextMenuProps,
     type ContextMenuTriggerProps, type DatePickerProps, type DividerOrientation, type DividerProps, type DividerSize, type DividerStyle, type DividerVariant, type DrawerBodyProps,
-    type DrawerFooterProps, type DrawerHeaderProps, type DrawerOverlayVariant, type DrawerSide,
-    type DrawerSize, type IconButtonProps, type IconButtonShape, type IconButtonSize, type IconButtonVariant, type NorwegianHoliday, type PaginationProps, type PaginationSize, type PaginationVariant, type RadioGroupProps, type RadioOption, type RadioProps, type RadioSize, type RadioVariant, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonSpeed, type SkeletonTextProps, type SkeletonVariant, type SliderProps, type SliderSize, type SliderVariant, type SwitchProps, type SwitchSize, type SwitchVariant, type TabsContentProps, type TabsListProps, type TabsOrientation, type TabsTriggerProps, type TextareaResize, type TextareaSize, type TextareaVariant, type TimelineItemData, type TimelineItemProps, type TimelineProps, type TimePickerProps, type TooltipContentProps,
-    type TooltipSide, type TreeViewData, type TreeViewItemProps, type TreeViewProps, type TypographyAlign, type TypographyColor, type TypographyProps,
+    type DrawerFooterProps, type DrawerHeaderProps, type IconButtonProps, type IconButtonShape, type IconButtonSize, type IconButtonVariant, type NorwegianHoliday, type PaginationProps, type PaginationSize, type PaginationVariant, type RadioGroupProps, type RadioOption, type RadioProps, type RadioSize, type RadioVariant, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonTextProps, type SliderProps, type SliderSize, type SliderVariant, type SwitchProps, type SwitchSize, type SwitchVariant, type TabsContentProps, type TabsListProps, type TabsOrientation, type TabsTriggerProps, type TextareaResize, type TextareaSize, type TextareaVariant, type TimelineItemData, type TimelineItemProps, type TimelineProps, type TimePickerProps, type TooltipContentProps,
+    type TreeViewData, type TreeViewItemProps, type TreeViewProps, type TypographyAlign, type TypographyColor, type TypographyProps,
     type TypographyVariant, type AlertProps as UIAlertProps,
     type AlertVariant as UIAlertVariant, type BadgeProps as UIBadgeProps, type BadgeSize as UIBadgeSize, type BadgeVariant as UIBadgeVariant, type ButtonProps as UIButtonProps, type CardProps as UICardProps, type DrawerProps as UIDrawerProps, type InputProps as UIInputProps, type ProgressProps as UIProgressProps, type ProgressSize as UIProgressSize, type ProgressVariant as UIProgressVariant, type SelectOption as UISelectOption,
     type SelectProps as UISelectProps, type SelectSize as UISelectSize, type SelectVariant as UISelectVariant, type TextareaProps as UITextareaProps, type TooltipProps as UITooltipProps,
@@ -163,4 +162,168 @@ export type {
     StatisticCardProps,
     StatisticCardVariant
 } from './cards/CardComponents';
+
+// =============================================================================
+// SEMANTIC COMPONENTS - Complete HTML Element Abstraction System
+// =============================================================================
+
+/**
+ * Semantic Components v5.0.0 - Replace all raw HTML elements
+ * Complete semantic component system with design tokens and accessibility
+ */
+export {
+    // Semantic Component Collections
+    SemanticComponents,
+    LayoutComponents,
+    TypographyComponents, 
+    InteractiveComponents,
+    FormComponents,
+    ContentComponents,
+    
+    // Layout Components
+    Box,
+    Section,
+    Article,
+    Header,
+    Footer,
+    Main,
+    Nav,
+    Aside,
+    
+    // Text Components
+    Text,
+    Paragraph,
+    Label,
+    Small,
+    Code,
+    Strong,
+    Emphasis,
+    
+    // Heading Components
+    Heading,
+    PageTitle,
+    SectionTitle,
+    CardTitle,
+    ModalTitle,
+    DisplayHeading,
+    Subtitle,
+    
+    // Button Components (Semantic versions)
+    Button as SemanticButton,
+    PrimaryButton,
+    SecondaryButton,
+    OutlineButton,
+    GhostButton,
+    DestructiveButton,
+    IconButton as SemanticIconButton,
+    
+    // Input Components (Semantic versions)
+    Input as SemanticInput,
+    SearchInput,
+    EmailInput,
+    PasswordInput,
+    PhoneInput,
+    NumberInput,
+    DateInput,
+    FileInput,
+    
+    // List Components
+    List,
+    ListItem,
+    DescriptionList,
+    DescriptionTerm,
+    DescriptionDetails,
+    NavigationList,
+    Checklist,
+    StepsList,
+    FeaturesList,
+    Breadcrumb as SemanticBreadcrumb,
+    TagList,
+    
+    // Link Components
+    Link,
+    NavigationLink,
+    ExternalLink,
+    EmailLink,
+    PhoneLink,
+    DownloadLink,
+    AnchorLink,
+    BreadcrumbLink,
+    ButtonLink,
+    
+    // Image Components
+    Image,
+    Avatar as SemanticAvatar,
+    Logo,
+    HeroImage,
+    Thumbnail,
+    GalleryImage,
+    ProductImage,
+    IconImage,
+    DecorativeImage,
+    
+    // Metadata
+    SEMANTIC_COMPONENTS_VERSION,
+    SEMANTIC_COMPONENTS_METADATA,
+} from './semantic';
+
+// Semantic Component Types
+export type {
+    // Box Types
+    BoxProps,
+    SemanticElement,
+    SemanticRole,
+    
+    // Text Types
+    TextProps,
+    TextElement,
+    TextIntent,
+    TextLevel,
+    
+    // Heading Types
+    HeadingProps,
+    HeadingLevel,
+    HeadingSize,
+    HeadingIntent,
+    
+    // Button Types (Semantic)
+    ButtonProps as SemanticButtonProps,
+    ButtonIntent,
+    ButtonSize as SemanticButtonSize,
+    ButtonLoadingState,
+    IconPosition,
+    
+    // Input Types (Semantic)
+    InputProps as SemanticInputProps,
+    InputType,
+    InputIntent,
+    InputState,
+    InputSize as SemanticInputSize,
+    
+    // List Types
+    ListProps,
+    ListItemProps,
+    DescriptionListProps,
+    DescriptionTermProps,
+    DescriptionDetailsProps,
+    ListType,
+    ListIntent,
+    ListMarker,
+    ListSpacing,
+    
+    // Link Types
+    LinkProps,
+    LinkIntent,
+    LinkVariant,
+    LinkSize,
+    LinkTarget,
+    
+    // Image Types
+    ImageProps,
+    ImageIntent,
+    ImageAspectRatio,
+    ImageFit,
+    ImageLoadingState,
+    ImageSize,
+} from './semantic';
 

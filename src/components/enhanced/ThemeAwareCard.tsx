@@ -1,93 +1,50 @@
 /**
- * @fileoverview Theme-Aware Enhanced Card Component v5.0.0
- * @description Production-ready card component integrated with theme system
+ * @fileoverview Enhanced Card Component v5.0.0 - CVA Pattern
+ * @description Production-ready card component using CVA pattern with semantic tokens
  * @version 5.0.0
- * @compliance Design token-driven, Multi-theme support, WCAG 2.2 AAA
+ * @compliance CVA-based, SSR-Safe, No hooks, Semantic tokens, WCAG 2.2 AAA
  */
 
 import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, useState, type HTMLAttributes, useMemo } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { forwardRef, type HTMLAttributes } from 'react';
 
 // =============================================================================
-// THEME-AWARE CARD VARIANTS
+// ENHANCED CARD VARIANTS
 // =============================================================================
 
 /**
- * Theme-aware card variants that adapt to any theme
+ * Enhanced card variants using semantic tokens - CVA pattern
  */
-const themeAwareCardVariants = cva(
-  [
-    'relative',
-    'overflow-hidden', 
-    'transition-all',
-    'cursor-pointer',
-    'group',
-    'motion-reduce:transition-none',
-    'focus:outline-none',
-    'focus-visible:ring-2',
-    'focus-visible:ring-offset-2',
-  ],
+const enhancedCardVariants = cva(
+  // Base classes using semantic tokens
+  'relative block rounded-lg border bg-card text-card-foreground transition-all duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
   {
     variants: {
       variant: {
-        default: [
-          'bg-background',
-          'hover:bg-background',
-          'border',
-          'border-border',
-          'hover:border-border',
-        ],
-        elevated: [
-          'bg-background',
-          'hover:bg-background',
-          'border-0',
-        ],
-        outlined: [
-          'bg-transparent',
-          'hover:bg-muted/50',
-          'border-2',
-          'border-border',
-          'hover:border-primary/20',
-        ],
-        ghost: [
-          'bg-transparent',
-          'hover:bg-muted/50',
-          'border-0',
-        ],
-        filled: [
-          'bg-muted',
-          'hover:bg-muted/80',
-          'border-0',
-        ],
+        default: 'border-border bg-card shadow-sm',
+        elevated: 'border-none bg-card shadow-md hover:shadow-lg',
+        outlined: 'border-2 border-border bg-background shadow-none',
+        flat: 'border-none bg-card shadow-none',
+        ghost: 'border-none bg-transparent shadow-none hover:bg-muted/50',
+        filled: 'border-none bg-muted shadow-none hover:bg-muted/80',
       },
-      size: {
-        sm: 'p-4',
-        md: 'p-6', 
+      padding: {
+        none: 'p-0',
+        sm: 'p-3',
+        md: 'p-6',
         lg: 'p-8',
-        xl: 'p-10',
+        xl: 'p-12',
       },
       interactive: {
-        true: 'hover:scale-[1.02] active:scale-[0.98]',
-        false: '',
-      },
-      rounded: {
-        none: 'rounded-none',
-        sm: 'rounded-sm',
-        md: 'rounded-md',
-        lg: 'rounded-lg',
-        xl: 'rounded-xl',
-        '2xl': 'rounded-2xl',
-        '3xl': 'rounded-3xl',
-        full: 'rounded-full',
+        true: 'cursor-pointer hover:shadow-lg transition-shadow',
+        false: 'cursor-default',
       },
     },
     defaultVariants: {
       variant: 'elevated',
-      size: 'md',
-      interactive: true,
-      rounded: 'lg',
+      padding: 'md',
+      interactive: false,
     },
   }
 );
@@ -97,11 +54,11 @@ const themeAwareCardVariants = cva(
 // =============================================================================
 
 /**
- * Enhanced card component props with full theme integration
+ * Enhanced card component props using CVA pattern
  */
-export interface ThemeAwareCardProps
+export interface EnhancedCardProps
   extends HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof themeAwareCardVariants> {
+    VariantProps<typeof enhancedCardVariants> {
   /** Card header content */
   readonly header?: React.ReactNode;
   
@@ -128,125 +85,34 @@ export interface ThemeAwareCardProps
   /** Error state */
   readonly error?: boolean;
   readonly errorMessage?: string;
-  
-  /** Card click handler */
-  readonly onClick?: () => void;
-  
-  /** Custom spacing multiplier */
-  readonly spacing?: number;
-  
-  /** Enable theme-specific animations */
-  readonly enableAnimations?: boolean;
-  
-  /** Custom elevation level (0-5) */
-  readonly elevation?: 0 | 1 | 2 | 3 | 4 | 5;
 }
 
 // =============================================================================
-// THEME-AWARE CARD COMPONENT
+// ENHANCED CARD COMPONENT
 // =============================================================================
 
 /**
- * Enhanced theme-aware card component
+ * Enhanced card component using CVA pattern
  */
-export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      interactive,
-      rounded,
-      header,
-      children,
-      footer,
-      image,
-      actions,
-      loading = false,
-      error = false,
-      errorMessage,
-      onClick,
-      spacing = 1,
-      enableAnimations = true,
-      elevation = 2,
-      style,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    const [isImageLoaded, setIsImageLoaded] = useState(false);
-    const [imageError, setImageError] = useState(false);
-    
-    // ✅ Access theme tokens
-    const { 
-      colors, 
-      spacing: spacingTokens, 
-      elevation: elevationTokens,
-      borderRadius,
-      motion,
-      componentSizing,
-      themeInfo 
-    } = useTokens();
-    
-    // Calculate dynamic styling based on current theme
-    const cardStyles = useMemo((): React.CSSProperties => {
-      const baseSpacing = spacingTokens?.[4] || '16px';
-      const customSpacing = typeof baseSpacing === 'string' 
-        ? `calc(${baseSpacing} * ${spacing})` 
-        : `${(parseInt(baseSpacing) || 16) * spacing}px`;
-      
-      // Get elevation shadow based on theme
-      const elevationLevels = ['none', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
-      const shadowKey = elevationLevels[elevation] || 'md';
-      const boxShadow = elevationTokens?.[shadowKey] || 'none';
-      
-      // Get border radius from theme
-      const borderRadiusValue = borderRadius?.lg || '8px';
-      
-      // Animation settings
-      const transitionDuration = enableAnimations 
-        ? (motion?.duration?.normal || '300ms')
-        : '0ms';
-      const transitionEasing = motion?.easing?.easeOut || 'ease-out';
-      
-      return {
-        boxShadow: variant === 'elevated' ? boxShadow : 'none',
-        borderRadius: borderRadiusValue,
-        transition: `all ${transitionDuration} ${transitionEasing}`,
-        '--card-spacing': customSpacing,
-        ...style,
-      };
-    }, [
-      spacingTokens, 
-      spacing, 
-      elevationTokens, 
-      elevation, 
-      borderRadius, 
-      variant, 
-      enableAnimations, 
-      motion,
-      style
-    ]);
-    
-    // Theme-aware hover effects
-    const hoverStyles = useMemo((): React.CSSProperties => {
-      if (!interactive || !enableAnimations) return {};
-      
-      const elevationLevels = ['sm', 'md', 'lg', 'xl', '2xl', '2xl'] as const;
-      const hoverShadowKey = elevationLevels[Math.min(elevation + 1, 5)] || 'lg';
-      const hoverShadow = elevationTokens?.[hoverShadowKey] || 'none';
-      
-      return {
-        '--hover-shadow': variant === 'elevated' ? hoverShadow : 'none',
-        '--hover-transform': 'translateY(-2px)',
-      };
-    }, [interactive, enableAnimations, elevation, elevationTokens, variant]);
-
-    const handleClick = (): void => {
-      if (onClick && !loading && !error) {
-        onClick();
-      }
-    };
+export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
+  ({
+    className,
+    variant = 'elevated',
+    padding = 'md',
+    interactive,
+    header,
+    children,
+    footer,
+    image,
+    actions,
+    loading = false,
+    error = false,
+    errorMessage,
+    onClick,
+    ...props
+  }, ref) => {
+    // Determine if card is interactive
+    const isInteractive = interactive ?? !!onClick;
 
     const getAspectRatioClass = (): string => {
       switch (image?.aspectRatio) {
@@ -258,22 +124,33 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
       }
     };
 
+    const handleClick = (): void => {
+      if (onClick && !loading && !error) {
+        onClick();
+      }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent): void => {
+      if (onClick && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        handleClick();
+      }
+    };
+
     // Loading skeleton
     if (loading) {
       return (
         <div
           ref={ref}
           className={cn(
-            themeAwareCardVariants({
+            enhancedCardVariants({
               variant: 'default',
-              size,
+              padding,
               interactive: false,
-              rounded,
             }),
             'animate-pulse',
             className
           )}
-          style={cardStyles}
           {...props}
         >
           <div className="space-y-4">
@@ -295,16 +172,14 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
         <div
           ref={ref}
           className={cn(
-            themeAwareCardVariants({
+            enhancedCardVariants({
               variant: 'outlined',
-              size,
+              padding,
               interactive: false,
-              rounded,
             }),
             'border-destructive/50 bg-destructive/5',
             className
           )}
-          style={cardStyles}
           {...props}
         >
           <div className="flex items-center gap-3 text-destructive">
@@ -326,43 +201,17 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
       <div
         ref={ref}
         className={cn(
-          themeAwareCardVariants({
+          enhancedCardVariants({
             variant,
-            size,
-            interactive: interactive && !loading && !error,
-            rounded,
+            padding,
+            interactive: isInteractive && !loading && !error,
           }),
-          'focus-visible:ring-primary',
           className
         )}
-        style={{ ...cardStyles, ...hoverStyles }}
         onClick={handleClick}
-        onMouseEnter={(e) => {
-          if (interactive && enableAnimations && !loading && !error) {
-            const target = e.currentTarget as HTMLElement;
-            target.style.boxShadow = getComputedStyle(target).getPropertyValue('--hover-shadow') || '';
-            target.style.transform = getComputedStyle(target).getPropertyValue('--hover-transform') || '';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (interactive && enableAnimations && !loading && !error) {
-            const target = e.currentTarget as HTMLElement;
-            target.style.boxShadow = cardStyles.boxShadow || '';
-            target.style.transform = '';
-          }
-        }}
         role={onClick ? 'button' : undefined}
         tabIndex={onClick ? 0 : undefined}
-        onKeyDown={
-          onClick 
-            ? (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleClick();
-                }
-              }
-            : undefined
-        }
+        onKeyDown={onClick ? handleKeyDown : undefined}
         {...props}
       >
         {/* Background Image */}
@@ -372,8 +221,6 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
               src={image.src}
               alt={image.alt}
               className="w-full h-full object-cover"
-              onLoad={() => setIsImageLoaded(true)}
-              onError={() => setImageError(true)}
             />
             <div className="absolute inset-0 bg-black/40" />
           </div>
@@ -381,16 +228,11 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
         
         {/* Top Image */}
         {image?.position === 'top' && (
-          <div className={cn('relative mb-4 -m-6 mx-0 overflow-hidden', getAspectRatioClass())}>
+          <div className={cn('relative mb-4 -m-6 mx-0 overflow-hidden rounded-t-lg', getAspectRatioClass())}>
             <img
               src={image.src}
               alt={image.alt}
-              className={cn(
-                'w-full h-full object-cover transition-transform duration-300',
-                'group-hover:scale-105'
-              )}
-              onLoad={() => setIsImageLoaded(true)}
-              onError={() => setImageError(true)}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
@@ -423,23 +265,24 @@ export const ThemeAwareCard = forwardRef<HTMLDivElement, ThemeAwareCardProps>(
             </div>
           )}
         </div>
-        
-        {/* Theme indicator (dev mode) */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="absolute top-2 left-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded text-[10px]">
-            {themeInfo.name} ({themeInfo.mode})
-          </div>
-        )}
       </div>
     );
   }
 );
 
-ThemeAwareCard.displayName = 'ThemeAwareCard';
+EnhancedCard.displayName = 'EnhancedCard';
+
+// Backward compatibility export
+export const ThemeAwareCard = EnhancedCard;
 
 // =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 
-export type ThemeAwareCardVariant = VariantProps<typeof themeAwareCardVariants>;
-export { themeAwareCardVariants };
+export type EnhancedCardVariant = VariantProps<typeof enhancedCardVariants>;
+export { enhancedCardVariants };
+
+// Backward compatibility exports
+export type ThemeAwareCardProps = EnhancedCardProps;
+export type ThemeAwareCardVariant = EnhancedCardVariant;
+export const themeAwareCardVariants = enhancedCardVariants;

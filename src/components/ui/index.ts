@@ -25,7 +25,7 @@ export { Blockquote, Code, Heading, Text, Typography, type TypographyAlign, type
 // Feedback components
 export { Alert, AlertDescription, AlertTitle, type AlertProps, type AlertVariant } from './alert';
 export { CircularProgress, Progress, type CircularProgressProps, type ProgressProps, type ProgressSize, type ProgressVariant } from './progress';
-export { Tooltip, TooltipContent, TooltipTrigger, type TooltipContentProps, type TooltipProps, type TooltipSide } from './tooltip';
+export { Tooltip, TooltipContent, TooltipTrigger, TooltipArrow, type TooltipContentProps, type TooltipProps, type TooltipTriggerProps, type TooltipArrowProps } from './tooltip';
 
 // Layout components
 export { Card, CardContent, CardFooter, CardHeader, type CardContentProps, type CardFooterProps, type CardHeaderProps, type CardProps } from './card';
@@ -171,8 +171,11 @@ export {
 
 // Loading components
 export {
-    Skeleton, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonText, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonSpeed, type SkeletonTextProps, type SkeletonVariant
+    Skeleton, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonText, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonTextProps
 } from './skeleton';
+export {
+    Spinner, DotsSpinner, PulseSpinner, type SpinnerProps, type DotsSpinnerProps, type PulseSpinnerProps
+} from './spinner';
 
 // Accordion components
 export {
@@ -185,9 +188,9 @@ export { TabsContent, TabsList, TabsTrigger, type TabsContentProps, type TabsLis
 // Command Palette
 export { CommandPalette, type CommandGroup, type CommandItem, type CommandPaletteProps, type CommandPaletteSize, type CommandPaletteTexts, type CommandPaletteVariant } from './command-palette';
 
-// Drawer
+// Legacy Drawer (being replaced by Sheet)
 export {
-    Drawer, DrawerBody, DrawerFooter, DrawerHeader, type DrawerBodyProps, type DrawerFooterProps, type DrawerHeaderProps, type DrawerOverlayVariant, type DrawerProps, type DrawerSide, type DrawerSize
+    Drawer, DrawerBody, DrawerFooter, DrawerHeader, type DrawerBodyProps, type DrawerFooterProps, type DrawerHeaderProps, type DrawerProps
 } from './drawer';
 
 // Calendar
@@ -290,4 +293,56 @@ export {
 } from './message-bubble';
 export { ScrollArea, scrollAreaVariants, type ScrollAreaProps } from './scroll-area';
 export { Separator, type SeparatorProps } from './separator';
+
+// Overlay components (CVA Pattern)
+export {
+    Dialog,
+    DialogOverlay,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+    DialogClose,
+    type DialogProps,
+    type DialogOverlayProps,
+    type DialogContentProps,
+    type DialogHeaderProps,
+    type DialogTitleProps,
+    type DialogDescriptionProps,
+    type DialogFooterProps,
+    type DialogCloseProps
+} from './dialog';
+
+export {
+    Sheet,
+    SheetOverlay,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription,
+    SheetFooter,
+    SheetClose,
+    type SheetProps,
+    type SheetOverlayProps,
+    type SheetContentProps,
+    type SheetHeaderProps,
+    type SheetTitleProps,
+    type SheetDescriptionProps,
+    type SheetFooterProps,
+    type SheetCloseProps
+} from './sheet';
+
+export {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverClose,
+    type PopoverProps,
+    type PopoverTriggerProps,
+    type PopoverContentProps,
+    type PopoverArrowProps,
+    type PopoverCloseProps
+} from './popover';
 

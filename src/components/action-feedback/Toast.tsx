@@ -1,204 +1,155 @@
-// Toast component for @xala-mock/ui-system
-// Norwegian-compliant toast notification with accessibility and positioning
+/**
+ * @fileoverview CVA Toast Component - Pure CSS Animations
+ * @description Toast component using CVA pattern with pure CSS animations
+ * @version 5.1.0
+ * @compliance CVA pattern, Pure CSS animations, External state management
+ */
 
 import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
-import type { ToastProps } from '../../types/action-feedback.types';
 import { CloseButton } from './AlertActions';
 import ClassificationIndicator from './ClassificationIndicator';
 import PriorityIndicator from './PriorityIndicator';
 import ToastIcon from './ToastIcon';
 
-// Helper function
-// eslint-disable-next-line no-unused-vars
-const _getClassificationIcon = (level: string): string => {
-  const icons = { ÅPEN: '🟢', BEGRENSET: '🟡', KONFIDENSIELT: '🔴', HEMMELIG: '⚫' };
-  return icons[level as keyof typeof icons] || '📋';
-};
-
-// Helper function to generate CSS using design tokens
-const getToastStyles = (props: ToastProps): React.CSSProperties => {
-  const { variant = 'info', position = 'bottom-right', norwegian } = props;
-
-  // Base styles using design tokens
-  const baseStyles: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: 'var(--spacing-3)',
-    padding: 'var(--spacing-4)',
-    minWidth: 'var(--toast-min-width)',
-    maxWidth: 'var(--toast-max-width)',
-    borderRadius: 'var(--border-radius-lg)',
-    border: 'var(--border-width) solid transparent',
-    fontFamily: 'var(--font-family-sans)',
-    fontSize: 'var(--font-size-sm)',
-    lineHeight: 'var(--line-height-normal)',
-    boxShadow: 'var(--shadow-xl)',
-    backdropFilter: 'blur(var(--blur-md))',
-    position: 'fixed',
-    zIndex: 'var(--z-index-toast)',
-    animation: 'toast-slide-in var(--transition-duration-normal) ease-out',
-    cursor: 'pointer',
-    transition: 'all var(--transition-duration-fast) ease',
-  };
-
-  // Position-based styles
-  const positionStyles = getPositionStyles(position);
-
-  // Variant-based styles
-  const variantStyles = getVariantStyles(variant);
-
-  // Priority styling
-  const priorityStyles = getPriorityStyles(norwegian?.priority);
-
-  // Classification styling
-  const classificationStyles = getClassificationStyles(norwegian?.classification);
-
-  return {
-    ...baseStyles,
-    ...positionStyles,
-    ...variantStyles,
-    ...priorityStyles,
-    ...classificationStyles,
-  };
-};
-
-// Get position-based styles
-const getPositionStyles = (position: string): React.CSSProperties => {
-  const positions = {
-    'top-left': { top: 'var(--spacing-4)', left: 'var(--spacing-4)' },
-    'top-center': { top: 'var(--spacing-4)', left: '50%', transform: 'translateX(-50%)' },
-    'top-right': { top: 'var(--spacing-4)', right: 'var(--spacing-4)' },
-    'bottom-left': { bottom: 'var(--spacing-4)', left: 'var(--spacing-4)' },
-    'bottom-center': { bottom: 'var(--spacing-4)', left: '50%', transform: 'translateX(-50%)' },
-    'bottom-right': { bottom: 'var(--spacing-4)', right: 'var(--spacing-4)' },
-  };
-  return positions[position as keyof typeof positions] || positions['bottom-right'];
-};
-
-// Get variant-based styles
-const getVariantStyles = (variant: string): React.CSSProperties => {
-  const variants = {
-    info: {
-      backgroundColor: 'var(--color-blue-600)',
-      borderColor: 'var(--color-blue-700)',
-      color: 'var(--color-white)',
+/**
+ * Toast component variants using CVA
+ */
+const toastVariants = cva(
+  "fixed flex items-start gap-3 p-4 min-w-80 max-w-md rounded-lg border font-sans text-sm leading-normal shadow-xl backdrop-blur-md z-50 cursor-pointer transition-all duration-fast ease-out",
+  {
+    variants: {
+      variant: {
+        info: "bg-blue-600 border-blue-700 text-white",
+        success: "bg-green-600 border-green-700 text-white",
+        warning: "bg-orange-600 border-orange-700 text-white",
+        error: "bg-red-600 border-red-700 text-white",
+      },
+      position: {
+        'top-left': "top-4 left-4 animate-[toast-slide-in-left_300ms_ease-out]",
+        'top-center': "top-4 left-1/2 -translate-x-1/2 animate-[toast-slide-in-top_300ms_ease-out]",
+        'top-right': "top-4 right-4 animate-[toast-slide-in-right_300ms_ease-out]",
+        'bottom-left': "bottom-4 left-4 animate-[toast-slide-in-left_300ms_ease-out]",
+        'bottom-center': "bottom-4 left-1/2 -translate-x-1/2 animate-[toast-slide-in-bottom_300ms_ease-out]",
+        'bottom-right': "bottom-4 right-4 animate-[toast-slide-in-right_300ms_ease-out]",
+      },
+      priority: {
+        low: "opacity-90",
+        medium: "",
+        high: "border-2 shadow-2xl",
+        critical: "border-2 shadow-2xl animate-[toast-pulse_2s_infinite]",
+      },
+      isExiting: {
+        true: "",
+        false: "",
+      },
     },
-    success: {
-      backgroundColor: 'var(--color-green-600)',
-      borderColor: 'var(--color-green-700)',
-      color: 'var(--color-white)',
+    compoundVariants: [
+      {
+        position: ['top-left', 'top-center', 'top-right'],
+        isExiting: true,
+        className: "animate-[toast-slide-out-top_300ms_ease-in] opacity-0",
+      },
+      {
+        position: ['bottom-left', 'bottom-center', 'bottom-right'],
+        isExiting: true,
+        className: "animate-[toast-slide-out-bottom_300ms_ease-in] opacity-0",
+      },
+    ],
+    defaultVariants: {
+      variant: "info",
+      position: "bottom-right",
+      priority: "medium",
+      isExiting: false,
     },
-    warning: {
-      backgroundColor: 'var(--color-orange-600)',
-      borderColor: 'var(--color-orange-700)',
-      color: 'var(--color-white)',
-    },
-    error: {
-      backgroundColor: 'var(--color-red-600)',
-      borderColor: 'var(--color-red-700)',
-      color: 'var(--color-white)',
-    },
-  };
-  return variants[variant as keyof typeof variants] || variants.info;
-};
-
-// Get priority styles
-const getPriorityStyles = (priority?: string): React.CSSProperties => {
-  if (!priority) {
-    return {};
   }
+);
 
-  const priorityStyles: Record<string, React.CSSProperties> = {
-    low: {
-      opacity: '0.9',
+const toastClassificationVariants = cva(
+  "",
+  {
+    variants: {
+      classification: {
+        ÅPEN: "border-l-4 border-l-green-400",
+        BEGRENSET: "border-l-4 border-l-orange-400",
+        KONFIDENSIELT: "border-l-4 border-l-red-400 bg-red-800",
+        HEMMELIG: "border-l-4 border-l-red-300 bg-red-900 shadow-[0_0_0_1px_rgb(248_113_113),0_25px_50px_-12px_rgba(0,0,0,0.25)]",
+      },
     },
-    medium: {
-      // Default styling
-    },
-    high: {
-      borderWidth: 'var(--border-width-thick)',
-      boxShadow: 'var(--shadow-2xl)',
-    },
-    critical: {
-      borderWidth: 'var(--border-width-thick)',
-      boxShadow: 'var(--shadow-2xl)',
-      animation:
-        'toast-pulse 2s infinite, toast-slide-in var(--transition-duration-normal) ease-out',
-    },
-  };
-
-  return priorityStyles[priority] || {};
-};
-
-// Get Norwegian classification styles
-const getClassificationStyles = (classification?: string): React.CSSProperties => {
-  if (!classification) {
-    return {};
   }
+);
 
-  const classificationStyles: Record<string, React.CSSProperties> = {
-    ÅPEN: { borderLeft: 'var(--border-accent-width) solid var(--color-green-400)' },
-    BEGRENSET: { borderLeft: 'var(--border-accent-width) solid var(--color-orange-400)' },
-    KONFIDENSIELT: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-400)',
-      backgroundColor: 'var(--color-red-800)',
-    },
-    HEMMELIG: {
-      borderLeft: 'var(--border-accent-width) solid var(--color-red-300)',
-      backgroundColor: 'var(--color-red-900)',
-      boxShadow: '0 0 0 var(--border-width) var(--color-red-400), var(--shadow-xl)',
-    },
-  };
-
-  return classificationStyles[classification] || {};
-};
 
 // Toast component with forwardRef
+/**
+ * Enhanced Toast component interface with CVA variants
+ */
+export interface ToastProps 
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className'>,
+    VariantProps<typeof toastVariants> {
+  readonly isOpen?: boolean;
+  readonly title?: string;
+  readonly titleKey?: string;
+  readonly message?: string;
+  readonly messageKey?: string;
+  readonly icon?: React.ReactNode;
+  readonly duration?: number;
+  readonly persistent?: boolean;
+  readonly closable?: boolean;
+  readonly pauseOnHover?: boolean;
+  readonly children?: React.ReactNode;
+  readonly className?: string;
+  readonly actions?: Array<{ labelKey: string; onClick?: () => void }>;
+  readonly norwegian?: {
+    classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
+    priority?: 'low' | 'medium' | 'high' | 'critical';
+  };
+  readonly ariaLabel?: string;
+  readonly testId?: string;
+  readonly isVisible?: boolean;
+  readonly isPaused?: boolean;
+  readonly isExiting?: boolean;
+  readonly onClose?: () => void;
+  readonly onOpen?: () => void;
+  readonly onActionClick?: (action: { labelKey: string; onClick?: () => void }) => void;
+  readonly onVisibilityChange?: (visible: boolean) => void;
+  readonly onPauseChange?: (paused: boolean) => void;
+}
+
+/**
+ * Pure Toast component using CVA pattern (stateless)
+ */
 export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
   (props, ref): React.ReactElement => {
     const {
       isOpen = true,
       variant = 'info',
+      position = 'bottom-right',
+      priority = 'medium',
+      isExiting = false,
       title,
       titleKey,
       message,
       messageKey,
       icon,
-      duration: _duration = 5000,
-      position = 'bottom-right',
-      persistent: _persistent = false,
       closable = true,
       pauseOnHover = true,
       children,
-      className = '',
-      style,
+      className,
       actions,
       norwegian,
       ariaLabel,
       testId = 'toast',
-      onClose,
-      onOpen,
-      onActionClick,
       isVisible = true,
-      isPaused: _isPaused = false,
-      onVisibilityChange,
+      onClose,
+      onActionClick,
       onPauseChange,
       ...divProps
     } = props;
 
-    // Pure component - all state managed via props
-    React.useEffect(() => {
-      if (isOpen && !isVisible) {
-        onVisibilityChange?.(true);
-        onOpen?.();
-      } else if (!isOpen && isVisible) {
-        onVisibilityChange?.(false);
-      }
-    }, [isOpen, isVisible, onVisibilityChange, onOpen]);
-
     const handleClose = (): void => {
-      onVisibilityChange?.(false);
       onClose?.();
     };
 
@@ -214,8 +165,6 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       }
     };
 
-    const combinedStyles = { ...getToastStyles(props), ...style };
-
     const getToastRole = (): string => {
       return variant === 'error' || variant === 'warning' ? 'alert' : 'status';
     };
@@ -224,12 +173,6 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
       if (variant === 'error') return 'assertive';
       if (variant === 'warning') return 'assertive';
       return 'polite';
-    };
-
-    // eslint-disable-next-line no-unused-vars
-    const _getVariantIcon = (variant: string): string => {
-      const icons = { info: 'ℹ️', success: '✅', warning: '⚠️', error: '❌' };
-      return icons[variant as keyof typeof icons] || 'ℹ️';
     };
 
     if (!isVisible) {
@@ -242,8 +185,11 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         role={getToastRole()}
         aria-live={getAriaLive()}
         aria-atomic="true"
-        className={className}
-        style={combinedStyles}
+        className={cn(
+          toastVariants({ variant, position, priority, isExiting }),
+          norwegian?.classification && toastClassificationVariants({ classification: norwegian.classification }),
+          className
+        )}
         data-testid={testId}
         data-variant={variant}
         data-position={position}
@@ -255,22 +201,13 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
         {...divProps}
       >
         {/* Toast icon */}
-        <div style={{ flexShrink: 0 }}>{icon || <ToastIcon variant={variant} />}</div>
+        <div className="flex-shrink-0">{icon || <ToastIcon variant={variant} />}</div>
 
         {/* Toast content */}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="flex-1 min-w-0">
           {/* Toast title */}
           {(title || titleKey) && (
-            <div
-              style={{
-                fontSize: 'var(--font-size-base)',
-                fontWeight: 'var(--font-weight-semibold)',
-                marginBottom: 'var(--spacing-1)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--spacing-1)',
-              }}
-            >
+            <div className="text-base font-semibold mb-1 flex items-center gap-1">
               <span>{title || titleKey}</span>
 
               {/* Classification indicator */}
@@ -285,35 +222,18 @@ export const Toast = React.forwardRef<HTMLDivElement, ToastProps>(
 
           {/* Toast message */}
           {(message || messageKey || children) && (
-            <div
-              style={{
-                fontSize: 'var(--font-size-sm)',
-                lineHeight: 'var(--line-height-relaxed)',
-                color: 'inherit',
-              }}
-            >
+            <div className="text-sm leading-relaxed">
               {children || message || messageKey}
             </div>
           )}
 
           {/* Action buttons */}
           {actions && actions.length > 0 && (
-            <div
-              style={{ display: 'flex', gap: 'var(--spacing-2)', marginTop: 'var(--spacing-3)' }}
-            >
+            <div className="flex gap-2 mt-3">
               {actions.map((action, index) => (
                 <button
                   key={index}
-                  style={{
-                    padding: 'var(--spacing-1) var(--spacing-2)',
-                    fontSize: 'var(--font-size-xs)',
-                    fontWeight: 'var(--font-weight-medium)',
-                    backgroundColor: 'transparent',
-                    color: 'currentColor',
-                    border: 'var(--border-width) solid currentColor',
-                    borderRadius: 'var(--border-radius-sm)',
-                    cursor: 'pointer',
-                  }}
+                  className="px-2 py-1 text-xs font-medium bg-transparent text-current border border-current rounded-sm cursor-pointer hover:bg-white/10 transition-colors"
                   onClick={() => onActionClick?.(action)}
                 >
                   {action.labelKey}

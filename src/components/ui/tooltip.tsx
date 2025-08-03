@@ -1,174 +1,195 @@
 /**
- * @fileoverview SSR-Safe Tooltip Component - Production Strategy Implementation
- * @description Tooltip component using useTokens hook for JSON template integration
+ * @fileoverview Tooltip Component - CVA Pattern Implementation
+ * @description Pure CSS tooltip with CVA variants, no hooks, CSS hover behavior
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance CVA Pattern, No hooks, CSS-only styling, WCAG AAA
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../utils/cn';
 
 /**
- * Tooltip side types
+ * Tooltip content variants using CVA
  */
-export type TooltipSide = 'top' | 'bottom' | 'left' | 'right';
+const tooltipContentVariants = cva(
+  // Base styles using semantic Tailwind classes with CSS hover behavior
+  'absolute z-50 overflow-hidden rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus:opacity-100 group-focus:visible transition-all duration-200 ease-in-out pointer-events-none',
+  {
+    variants: {
+      side: {
+        top: 'bottom-full mb-2 animate-slide-up-and-fade',
+        bottom: 'top-full mt-2 animate-slide-down-and-fade',
+        left: 'right-full mr-2 animate-slide-left-and-fade',
+        right: 'left-full ml-2 animate-slide-right-and-fade',
+      },
+      align: {
+        start: '',
+        center: '',
+        end: '',
+      },
+      size: {
+        sm: 'px-2 py-1 text-xs max-w-xs',
+        default: 'px-3 py-1.5 text-xs max-w-sm',
+        lg: 'px-4 py-2 text-sm max-w-md',
+      },
+      delay: {
+        instant: 'transition-delay-0',
+        fast: 'transition-delay-300',
+        normal: 'transition-delay-500',
+        slow: 'transition-delay-700',
+      },
+    },
+    compoundVariants: [
+      // Top/Bottom positioning with alignment
+      {
+        side: ['top', 'bottom'],
+        align: 'start',
+        class: 'left-0',
+      },
+      {
+        side: ['top', 'bottom'],
+        align: 'center',
+        class: 'left-1/2 -translate-x-1/2',
+      },
+      {
+        side: ['top', 'bottom'],
+        align: 'end',
+        class: 'right-0',
+      },
+      // Left/Right positioning with alignment
+      {
+        side: ['left', 'right'],
+        align: 'start',
+        class: 'top-0',
+      },
+      {
+        side: ['left', 'right'],
+        align: 'center',
+        class: 'top-1/2 -translate-y-1/2',
+      },
+      {
+        side: ['left', 'right'],
+        align: 'end',
+        class: 'bottom-0',
+      },
+    ],
+    defaultVariants: {
+      side: 'top',
+      align: 'center',
+      size: 'default',
+      delay: 'normal',
+    },
+  }
+);
 
 /**
- * Tooltip content props interface
+ * Tooltip arrow variants using CVA
  */
-export interface TooltipContentProps extends HTMLAttributes<HTMLDivElement> {
-  readonly content: string;
-  readonly side?: TooltipSide;
+const tooltipArrowVariants = cva(
+  'absolute h-1.5 w-1.5 bg-primary rotate-45 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus:opacity-100 group-focus:visible transition-all duration-200 ease-in-out',
+  {
+    variants: {
+      side: {
+        top: 'top-full -mt-0.5',
+        bottom: 'bottom-full -mb-0.5',
+        left: 'left-full -ml-0.5',
+        right: 'right-full -mr-0.5',
+      },
+      align: {
+        start: '',
+        center: '',
+        end: '',
+      },
+    },
+    compoundVariants: [
+      // Top/Bottom arrow positioning
+      {
+        side: ['top', 'bottom'],
+        align: 'start',
+        class: 'left-3',
+      },
+      {
+        side: ['top', 'bottom'],
+        align: 'center',
+        class: 'left-1/2 -translate-x-1/2',
+      },
+      {
+        side: ['top', 'bottom'],
+        align: 'end',
+        class: 'right-3',
+      },
+      // Left/Right arrow positioning
+      {
+        side: ['left', 'right'],
+        align: 'start',
+        class: 'top-3',
+      },
+      {
+        side: ['left', 'right'],
+        align: 'center',
+        class: 'top-1/2 -translate-y-1/2',
+      },
+      {
+        side: ['left', 'right'],
+        align: 'end',
+        class: 'bottom-3',
+      },
+    ],
+    defaultVariants: {
+      side: 'top',
+      align: 'center',
+    },
+  }
+);
+
+/**
+ * Tooltip trigger variants
+ */
+const tooltipTriggerVariants = cva(
+  'relative inline-block group'
+);
+
+/**
+ * Tooltip component props interface
+ */
+export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
+  readonly children: ReactNode;
 }
 
 /**
  * Tooltip trigger props interface
  */
-export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
+export interface TooltipTriggerProps extends HTMLAttributes<HTMLDivElement> {
   readonly children: ReactNode;
-  readonly content: string;
-  readonly side?: TooltipSide;
-  readonly disabled?: boolean;
-  readonly delayDuration?: number; // Not implemented
+  readonly asChild?: boolean;
 }
 
 /**
- * Enhanced Tooltip component with token-based styling
+ * Tooltip content props interface
+ */
+export interface TooltipContentProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof tooltipContentVariants> {
+  readonly children: ReactNode;
+  readonly showArrow?: boolean;
+}
+
+/**
+ * Tooltip arrow props interface
+ */
+export interface TooltipArrowProps 
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof tooltipArrowVariants> {}
+
+/**
+ * Tooltip root component - Pure container, no state management
  */
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-  (
-    {
-      children,
-      content,
-      side = 'top',
-      disabled = false,
-      delayDuration: _delayDuration,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, typography, getToken, shadows } = useTokens();
-
-    if (disabled || !content) {
-      return <div ref={ref} className={className} style={style}>{children}</div>;
-    }
-
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-    };
-
-    // Container styles
-    const containerStyles: React.CSSProperties = {
-      position: 'relative',
-      display: 'inline-block',
-      ...style,
-    };
-
-    // Position styles based on side
-    const getPositionStyles = (): React.CSSProperties => {
-      switch (side) {
-        case 'top':
-          return {
-            bottom: '100%',
-            left: '50%',
-            marginBottom: spacing[2],
-            transform: 'translateX(-50%)',
-          };
-        case 'bottom':
-          return {
-            top: '100%',
-            left: '50%',
-            marginTop: spacing[2],
-            transform: 'translateX(-50%)',
-          };
-        case 'left':
-          return {
-            right: '100%',
-            top: '50%',
-            marginRight: spacing[2],
-            transform: 'translateY(-50%)',
-          };
-        case 'right':
-          return {
-            left: '100%',
-            top: '50%',
-            marginLeft: spacing[2],
-            transform: 'translateY(-50%)',
-          };
-        default:
-          return {};
-      }
-    };
-
-    // Tooltip content styles
-    const tooltipStyles: React.CSSProperties = {
-      position: 'absolute',
-      zIndex: 50,
-      overflow: 'hidden',
-      borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
-      paddingTop: spacing[1.5],
-      paddingBottom: spacing[1.5],
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-      boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      opacity: 0,
-      visibility: 'hidden',
-      transition: 'all 200ms ease-in-out',
-      maxWidth: '200px',
-      wordWrap: 'break-word',
-      ...getPositionStyles(),
-    };
-
+  ({ children, ...props }, ref): React.ReactElement => {
     return (
-      <div 
-        ref={ref} 
-        className={className} 
-        style={containerStyles}
-        onMouseEnter={(e) => {
-          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
-          if (tooltip) {
-            tooltip.style.opacity = '1';
-            tooltip.style.visibility = 'visible';
-          }
-        }}
-        onMouseLeave={(e) => {
-          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
-          if (tooltip) {
-            tooltip.style.opacity = '0';
-            tooltip.style.visibility = 'hidden';
-          }
-        }}
-        onFocus={(e) => {
-          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
-          if (tooltip) {
-            tooltip.style.opacity = '1';
-            tooltip.style.visibility = 'visible';
-          }
-        }}
-        onBlur={(e) => {
-          const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
-          if (tooltip) {
-            tooltip.style.opacity = '0';
-            tooltip.style.visibility = 'hidden';
-          }
-        }}
-        {...props}
-      >
+      <div ref={ref} {...props}>
         {children}
-        <div
-          style={tooltipStyles}
-          role="tooltip"
-          aria-live="polite"
-        >
-          {content}
-        </div>
       </div>
     );
   }
@@ -177,76 +198,50 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 Tooltip.displayName = 'Tooltip';
 
 /**
- * Enhanced TooltipContent component for custom positioning with token-based styling
+ * Tooltip trigger component with CVA variants
  */
-export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
-  ({ content, side = 'top', className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography, getToken, shadows } = useTokens();
-
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-    };
-
-    // Position styles based on side
-    const getPositionStyles = (): React.CSSProperties => {
-      switch (side) {
-        case 'top':
-          return {
-            bottom: '100%',
-            left: '50%',
-            marginBottom: spacing[2],
-            transform: 'translateX(-50%)',
-          };
-        case 'bottom':
-          return {
-            top: '100%',
-            left: '50%',
-            marginTop: spacing[2],
-            transform: 'translateX(-50%)',
-          };
-        case 'left':
-          return {
-            right: '100%',
-            top: '50%',
-            marginRight: spacing[2],
-            transform: 'translateY(-50%)',
-          };
-        case 'right':
-          return {
-            left: '100%',
-            top: '50%',
-            marginLeft: spacing[2],
-            transform: 'translateY(-50%)',
-          };
-        default:
-          return {};
-      }
-    };
-
-    const contentStyles: React.CSSProperties = {
-      position: 'absolute',
-      zIndex: 50,
-      overflow: 'hidden',
-      borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
-      paddingTop: spacing[1.5],
-      paddingBottom: spacing[1.5],
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-      boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-      maxWidth: '200px',
-      wordWrap: 'break-word',
-      ...getPositionStyles(),
-      ...style,
-    };
+export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
+  ({ className, children, asChild = false, ...props }, ref): React.ReactElement => {
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        ref,
+        className: cn(tooltipTriggerVariants(), className, children.props.className),
+        ...props,
+      });
+    }
 
     return (
-      <div ref={ref} className={className} style={contentStyles} role="tooltip" {...props}>
-        {content}
+      <div
+        ref={ref}
+        className={cn(tooltipTriggerVariants(), className)}
+        tabIndex={0}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+TooltipTrigger.displayName = 'TooltipTrigger';
+
+/**
+ * Tooltip content component with CVA variants
+ */
+export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
+  ({ className, side, align, size, delay, showArrow = true, children, ...props }, ref): React.ReactElement => {
+    return (
+      <div
+        ref={ref}
+        className={cn(tooltipContentVariants({ side, align, size, delay }), className)}
+        role="tooltip"
+        aria-live="polite"
+        {...props}
+      >
+        {showArrow && (
+          <TooltipArrow side={side} align={align} />
+        )}
+        {children}
       </div>
     );
   }
@@ -255,21 +250,18 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
 TooltipContent.displayName = 'TooltipContent';
 
 /**
- * Simple TooltipTrigger wrapper component with token-based styling
+ * Tooltip arrow component with CVA variants
  */
-export const TooltipTrigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ children, className, style, ...props }, ref): React.ReactElement => {
-    const triggerStyles: React.CSSProperties = {
-      display: 'inline-block',
-      ...style,
-    };
-
+export const TooltipArrow = forwardRef<HTMLDivElement, TooltipArrowProps>(
+  ({ className, side, align, ...props }, ref): React.ReactElement => {
     return (
-      <div ref={ref} className={className} style={triggerStyles} {...props}>
-        {children}
-      </div>
+      <div
+        ref={ref}
+        className={cn(tooltipArrowVariants({ side, align }), className)}
+        {...props}
+      />
     );
   }
 );
 
-TooltipTrigger.displayName = 'TooltipTrigger';
+TooltipArrow.displayName = 'TooltipArrow';

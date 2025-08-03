@@ -296,7 +296,6 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
     },
     ref
   ): React.ReactElement => {
-    const { spacing } = useTokens();
 
     return (
       <>
@@ -304,10 +303,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
           ref={ref}
           logo={logo}
           actions={
-            <div
-              className="flex items-center"
-              style={{ gap: spacing?.[2] || '0.5rem' }}
-            >
+            <div className="flex items-center gap-2">
               {actions}
               {/* Mobile menu button */}
               <button
@@ -325,10 +321,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
                 aria-expanded={mobileMenuOpen}
                 aria-label="Toggle mobile menu"
                 onClick={onMobileMenuToggle}
-                style={{
-                  minWidth: spacing?.[11] || '2.75rem',
-                  minHeight: spacing?.[11] || '2.75rem',
-                }}
+                className="min-w-[2.75rem] min-h-[2.75rem]"
               >
                 <span className="sr-only">Open main menu</span>
                 {/* Hamburger icon */}
@@ -366,7 +359,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
               'bg-background border-b border-border',
               'shadow-lg z-40'
             )}
-            style={{ padding: spacing?.[4] || '1rem' }}
+            className="p-4"
           >
             {mobileMenuContent}
           </div>

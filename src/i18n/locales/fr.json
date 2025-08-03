@@ -1,0 +1,406 @@
+{
+  "common": {
+    "ok": "OK",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "remove": "Retirer",
+    "close": "Fermer",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "clear": "Effacer",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "refresh": "Actualiser",
+    "loading": "Chargement...",
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "back": "Retour",
+    "forward": "Avancer",
+    "home": "Accueil",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "about": "À propos",
+    "contact": "Contact",
+    "required": "Obligatoire",
+    "optional": "Optionnel",
+    "all": "Tout",
+    "none": "Aucun",
+    "other": "Autre",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "expand": "Développer",
+    "collapse": "Réduire",
+    "open": "Ouvrir",
+    "view": "Voir",
+    "download": "Télécharger",
+    "upload": "Téléverser",
+    "copy": "Copier",
+    "paste": "Coller",
+    "cut": "Couper",
+    "select": "Sélectionner",
+    "selectAll": "Tout sélectionner",
+    "deselect": "Désélectionner",
+    "deselectAll": "Tout désélectionner",
+    "items": {
+      "zero": "Aucun élément",
+      "one": "1 élément",
+      "other": "{{count}} éléments"
+    }
+  },
+  "navigation": {
+    "menu": "Menu",
+    "mainMenu": "Menu principal",
+    "breadcrumb": "Fil d'Ariane",
+    "skipToContent": "Aller au contenu principal",
+    "skipToNavigation": "Aller à la navigation",
+    "goToHome": "Aller à l'accueil",
+    "userMenu": "Menu utilisateur",
+    "notifications": "Notifications",
+    "profile": "Profil",
+    "logout": "Se déconnecter",
+    "login": "Se connecter",
+    "dashboard": "Tableau de bord",
+    "reports": "Rapports",
+    "admin": "Administration",
+    "users": "Utilisateurs",
+    "roles": "Rôles",
+    "permissions": "Permissions"
+  },
+  "forms": {
+    "labels": {
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "phone": "Numéro de téléphone",
+      "address": "Adresse",
+      "city": "Ville",
+      "postalCode": "Code postal",
+      "country": "Pays",
+      "dateOfBirth": "Date de naissance",
+      "organization": "Organisation",
+      "organizationNumber": "Numéro d'organisation",
+      "personalNumber": "Numéro personnel",
+      "title": "Titre",
+      "description": "Description",
+      "notes": "Notes",
+      "category": "Catégorie",
+      "priority": "Priorité",
+      "status": "Statut",
+      "startDate": "Date de début",
+      "endDate": "Date de fin",
+      "dueDate": "Date d'échéance"
+    },
+    "placeholders": {
+      "enterFirstName": "Saisissez votre prénom",
+      "enterLastName": "Saisissez votre nom de famille",
+      "enterEmail": "Saisissez votre adresse e-mail",
+      "enterPassword": "Saisissez votre mot de passe",
+      "confirmPassword": "Confirmez votre mot de passe",
+      "enterPhone": "Saisissez votre numéro de téléphone",
+      "enterAddress": "Saisissez votre adresse",
+      "enterCity": "Saisissez votre ville",
+      "enterPostalCode": "Saisissez le code postal",
+      "selectCountry": "Sélectionnez le pays",
+      "selectDate": "Sélectionnez une date",
+      "enterTitle": "Saisissez le titre",
+      "enterDescription": "Saisissez la description",
+      "enterNotes": "Saisissez les notes",
+      "selectCategory": "Sélectionnez une catégorie",
+      "selectPriority": "Sélectionnez une priorité",
+      "selectStatus": "Sélectionnez un statut",
+      "searchPlaceholder": "Rechercher..."
+    },
+    "validation": {
+      "required": "Ce champ est obligatoire",
+      "email": "Veuillez saisir une adresse e-mail valide",
+      "phone": "Veuillez saisir un numéro de téléphone valide",
+      "password": "Le mot de passe doit contenir au moins 8 caractères",
+      "passwordMatch": "Les mots de passe ne correspondent pas",
+      "minLength": "Doit contenir au moins {{min}} caractères",
+      "maxLength": "Ne doit pas dépasser {{max}} caractères",
+      "numeric": "Doit être un nombre",
+      "positiveNumber": "Doit être un nombre positif",
+      "date": "Veuillez saisir une date valide",
+      "url": "Veuillez saisir une URL valide",
+      "organizationNumber": "Veuillez saisir un numéro d'organisation valide",
+      "personalNumber": "Veuillez saisir un numéro personnel valide"
+    },
+    "messages": {
+      "saved": "Les modifications ont été enregistrées avec succès",
+      "deleted": "L'élément a été supprimé avec succès",
+      "created": "L'élément a été créé avec succès",
+      "updated": "L'élément a été mis à jour avec succès",
+      "error": "Une erreur s'est produite lors du traitement de votre demande",
+      "noChanges": "Aucune modification n'a été apportée",
+      "unsavedChanges": "Vous avez des modifications non enregistrées. Êtes-vous sûr de vouloir quitter ?",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet élément ?",
+      "processing": "Traitement en cours...",
+      "uploading": "Téléversement en cours...",
+      "uploaded": "Fichier téléversé avec succès",
+      "uploadError": "Erreur lors du téléversement du fichier"
+    }
+  },
+  "components": {
+    "dataTable": {
+      "loading": "Chargement...",
+      "selectAllRows": "Sélectionner toutes les lignes",
+      "actionsHeader": "Actions",
+      "noData": "Aucune donnée disponible",
+      "pagination": {
+        "previous": "Précédent",
+        "next": "Suivant",
+        "page": "Page {{current}} sur {{total}}",
+        "rowsPerPage": "Lignes par page",
+        "showing": "Affichage de {{start}} à {{end}} sur {{total}} entrées"
+      },
+      "sorting": {
+        "sortBy": "Trier par {{column}}",
+        "ascending": "Tri croissant",
+        "descending": "Tri décroissant",
+        "unsorted": "Supprimer le tri"
+      },
+      "filtering": {
+        "filter": "Filtrer",
+        "clearFilters": "Effacer les filtres",
+        "searchInColumn": "Rechercher dans {{column}}"
+      }
+    },
+    "globalSearch": {
+      "placeholder": "Rechercher...",
+      "clearSearch": "Effacer la recherche",
+      "searchResults": "Résultats de recherche",
+      "noResults": "Aucun résultat trouvé",
+      "searching": "Recherche en cours..."
+    },
+    "modal": {
+      "close": "Fermer la modal",
+      "confirm": "Confirmer",
+      "cancel": "Annuler"
+    },
+    "alert": {
+      "info": "Information",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "error": "Erreur",
+      "dismiss": "Rejeter"
+    },
+    "toast": {
+      "success": "Succès",
+      "error": "Erreur",
+      "warning": "Avertissement",
+      "info": "Information",
+      "close": "Fermer la notification"
+    },
+    "button": {
+      "loading": "Chargement...",
+      "submit": "Soumettre",
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "create": "Créer",
+      "update": "Mettre à jour"
+    },
+    "fileUpload": {
+      "dragAndDrop": "Glissez-déposez les fichiers ici, ou cliquez pour sélectionner",
+      "selectFiles": "Sélectionner les fichiers",
+      "uploadProgress": "Progression du téléversement : {{percent}}%",
+      "uploadComplete": "Téléversement terminé",
+      "uploadError": "Échec du téléversement",
+      "fileTooBig": "Le fichier est trop volumineux. Taille maximale : {{maxSize}}",
+      "invalidFileType": "Type de fichier invalide. Types autorisés : {{types}}"
+    },
+    "pagination": {
+      "first": "Premier",
+      "last": "Dernier",
+      "previous": "Précédent",
+      "next": "Suivant",
+      "page": "Page",
+      "of": "sur",
+      "goToPage": "Aller à la page {{page}}"
+    },
+    "accordion": {
+      "expand": "Développer",
+      "collapse": "Réduire"
+    },
+    "tabs": {
+      "tabList": "Liste des onglets",
+      "tab": "Onglet"
+    },
+    "dropdown": {
+      "selectOption": "Sélectionner une option",
+      "searchOptions": "Rechercher des options",
+      "noOptions": "Aucune option disponible"
+    },
+    "calendar": {
+      "today": "Aujourd'hui",
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant",
+      "selectDate": "Sélectionner une date",
+      "currentMonth": "Mois en cours"
+    },
+    "timePicker": {
+      "selectTime": "Sélectionner l'heure",
+      "hours": "Heures",
+      "minutes": "Minutes",
+      "seconds": "Secondes",
+      "am": "AM",
+      "pm": "PM"
+    }
+  },
+  "accessibility": {
+    "skipLink": "Aller au contenu principal",
+    "menuButton": "Ouvrir le menu",
+    "closeButton": "Fermer",
+    "expandButton": "Développer",
+    "collapseButton": "Réduire",
+    "sortButton": "Trier",
+    "filterButton": "Filtrer",
+    "searchButton": "Rechercher",
+    "clearButton": "Effacer",
+    "requiredField": "Ce champ est obligatoire",
+    "loading": "Chargement",
+    "busy": "Occupé",
+    "disabled": "Désactivé",
+    "selected": "Sélectionné",
+    "expanded": "Développé",
+    "collapsed": "Réduit",
+    "checked": "Coché",
+    "unchecked": "Non coché",
+    "pressed": "Pressé",
+    "unpressed": "Non pressé",
+    "currentPage": "Page actuelle",
+    "pageOf": "Page {{current}} sur {{total}}",
+    "newWindow": "Ouvre dans une nouvelle fenêtre",
+    "externalLink": "Lien externe",
+    "hasPopup": "A une popup",
+    "invalid": "Invalide",
+    "valid": "Valide",
+    "error": "Erreur",
+    "warning": "Avertissement"
+  },
+  "errors": {
+    "generic": "Une erreur inattendue s'est produite",
+    "network": "Erreur réseau. Veuillez vérifier votre connexion",
+    "timeout": "Délai d'attente dépassé. Veuillez réessayer",
+    "unauthorized": "Vous n'êtes pas autorisé à effectuer cette action",
+    "forbidden": "Accès interdit",
+    "notFound": "La ressource demandée n'a pas été trouvée",
+    "serverError": "Erreur serveur. Veuillez réessayer plus tard",
+    "validationError": "Veuillez vérifier votre saisie et réessayer",
+    "fileUploadError": "Échec du téléversement du fichier",
+    "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter"
+  },
+  "status": {
+    "active": "Actif",
+    "inactive": "Inactif",
+    "pending": "En attente",
+    "completed": "Terminé",
+    "cancelled": "Annulé",
+    "draft": "Brouillon",
+    "published": "Publié",
+    "archived": "Archivé",
+    "deleted": "Supprimé",
+    "approved": "Approuvé",
+    "rejected": "Rejeté",
+    "inProgress": "En cours",
+    "onHold": "En suspens"
+  },
+  "priority": {
+    "low": "Faible",
+    "medium": "Moyen",
+    "high": "Élevé",
+    "urgent": "Urgent",
+    "critical": "Critique"
+  },
+  "norwegian": {
+    "classification": {
+      "open": "Ouvert",
+      "restricted": "Restreint",
+      "confidential": "Confidentiel",
+      "secret": "Secret"
+    },
+    "compliance": {
+      "nsmLevel": "Niveau NSM",
+      "gdprCompliant": "Conforme RGPD",
+      "wcagLevel": "Niveau WCAG",
+      "auditTrail": "Piste d'audit",
+      "dataClassification": "Classification des données",
+      "acknowledgmentRequired": "Accusé de réception requis",
+      "acknowledgmentMessage": "Je reconnais avoir lu et compris cette information"
+    }
+  },
+  "communication": {
+    "chat": {
+      "typeMessage": "Tapez un message...",
+      "send": "Envoyer",
+      "attachFile": "Joindre un fichier",
+      "addEmoji": "Ajouter un emoji",
+      "bold": "Gras",
+      "italic": "Italique",
+      "online": "En ligne",
+      "offline": "Hors ligne",
+      "typing": "En train de taper...",
+      "messageSent": "Message envoyé",
+      "messageReceived": "Message reçu"
+    },
+    "forum": {
+      "upvote": "Vote positif",
+      "downvote": "Vote négatif",
+      "reply": "Répondre",
+      "quote": "Citer",
+      "report": "Signaler",
+      "share": "Partager",
+      "verified": "Vérifié",
+      "moderator": "Modérateur",
+      "admin": "Administrateur"
+    }
+  },
+  "time": {
+    "now": "Maintenant",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain",
+    "thisWeek": "Cette semaine",
+    "lastWeek": "La semaine dernière",
+    "thisMonth": "Ce mois",
+    "lastMonth": "Le mois dernier",
+    "ago": "il y a",
+    "in": "dans",
+    "days": {
+      "zero": "0 jour",
+      "one": "1 jour",
+      "other": "{{count}} jours"
+    },
+    "hours": {
+      "zero": "0 heure",
+      "one": "1 heure",
+      "other": "{{count}} heures"
+    },
+    "minutes": {
+      "zero": "0 minute",
+      "one": "1 minute",
+      "other": "{{count}} minutes"
+    },
+    "seconds": {
+      "zero": "0 seconde",
+      "one": "1 seconde",
+      "other": "{{count}} secondes"
+    }
+  }
+}

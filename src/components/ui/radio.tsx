@@ -1,326 +1,91 @@
 /**
- * @fileoverview SSR-Safe Radio Component - Production Strategy Implementation
- * @description Radio button components using useTokens hook for JSON template integration
+ * @fileoverview Radio Component v5.0.0 - Token-Based Design System
+ * @description Modern Radio component using design tokens with SSR compatibility
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
  */
 
-import React, { forwardRef, type InputHTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+// ✅ NO 'use client' directive - works in SSR
+import React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '../../lib/utils/cn';
 
-/**
- * Radio variant types
- */
-export type RadioVariant = 'default' | 'destructive' | 'success' | 'warning';
-
-/**
- * Radio size types
- */
-export type RadioSize = 'sm' | 'default' | 'lg';
+// =============================================================================
+// RADIO VARIANTS USING DESIGN TOKENS
+// =============================================================================
 
 /**
  * Radio button icon component
  */
-const RadioIcon = ({ size }: { size: RadioSize }): React.ReactElement => {
-  const iconSize = (() => {
-    switch (size) {
-      case 'sm':
-        return { width: '4px', height: '4px' };
-      case 'lg':
-        return { width: '10px', height: '10px' };
-      default:
-        return { width: '8px', height: '8px' };
-    }
-  })();
-
+const RadioIcon = ({ size }: { size?: 'sm' | 'default' | 'lg' }): React.ReactElement => {
+  const sizeClass = size === 'sm' ? 'h-1 w-1' : size === 'lg' ? 'h-2.5 w-2.5' : 'h-2 w-2';
+  
   return (
-    <div 
-      style={{
-        ...iconSize,
-        borderRadius: '50%',
-        backgroundColor: 'currentColor',
-      }}
-    />
+    <div className={cn('rounded-full bg-current', sizeClass)} />
   );
 };
 
 /**
- * Radio option interface
+ * Radio variants using semantic Tailwind classes
+ * Pure CVA implementation with design token classes
  */
-export interface RadioOption {
-  readonly value: string;
-  readonly label: string;
-  readonly disabled?: boolean;
-  readonly description?: string;
-}
-
-/**
- * Radio component props interface
- */
-export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
-  readonly label?: string;
-  readonly description?: string;
-  readonly error?: boolean;
-  readonly errorText?: string;
-  readonly required?: boolean;
-  readonly variant?: RadioVariant;
-  readonly size?: RadioSize;
-}
-
-/**
- * Radio Group component props interface
- */
-export interface RadioGroupProps {
-  readonly name: string;
-  readonly options: RadioOption[];
-  readonly value?: string;
-  readonly defaultValue?: string;
-  readonly onValueChange?: (value: string) => void;
-  readonly variant?: RadioProps['variant'];
-  readonly size?: RadioProps['size'];
-  readonly orientation?: 'horizontal' | 'vertical';
-  readonly label?: string;
-  readonly description?: string;
-  readonly error?: boolean;
-  readonly errorText?: string;
-  readonly required?: boolean;
-  readonly disabled?: boolean;
-  readonly className?: string;
-  readonly id?: string;
-}
-
-/**
- * Enhanced Radio component with token-based styling
- */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  (
-    {
-      className,
-      style,
-      variant = 'default',
-      size = 'default',
-      label,
-      description,
-      error,
-      errorText,
-      required,
-      checked = false,
-      disabled,
-      id,
-      ...props
+const radioVariants = cva(
+  // Base classes using semantic tokens
+  'aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default: 'border-primary text-primary',
+        destructive: 'border-destructive text-destructive',
+        success: 'border-success text-success',
+        warning: 'border-warning text-warning',
+      },
+      size: {
+        sm: 'h-3 w-3',
+        default: 'h-4 w-4',
+        lg: 'h-5 w-5',
+      },
     },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
 
-    // Generate ID if not provided and label exists
-    const radioId = id || (label ? `radio-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+// =============================================================================
+// COMPONENT TYPES
+// =============================================================================
 
-    // Determine actual variant based on state
-    const actualVariant = error || errorText ? 'destructive' : variant;
+export interface RadioProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'>,
+    VariantProps<typeof radioVariants> {}
 
-    // Determine radio state for aria and styling
-    const radioState = checked ? 'checked' : 'unchecked';
+// =============================================================================
+// COMPONENT IMPLEMENTATION
+// =============================================================================
 
-    // Size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return { height: '12px', width: '12px' };
-        case 'lg':
-          return { height: '20px', width: '20px' };
-        default:
-          return { height: '16px', width: '16px' };
-      }
-    };
-
-    // Variant styles
-    const getVariantStyles = (): { border: string; background: string; color: string } => {
-      switch (actualVariant) {
-        case 'destructive':
-          return {
-            border: colors.danger?.[500] || '#ef4444',
-            background: checked ? (colors.danger?.[500] || '#ef4444') : 'transparent',
-            color: checked ? (colors.background?.default || '#ffffff') : (colors.danger?.[500] || '#ef4444'),
-          };
-        case 'success':
-          return {
-            border: colors.success?.[500] || '#22c55e',
-            background: checked ? (colors.success?.[500] || '#22c55e') : 'transparent',
-            color: checked ? (colors.background?.default || '#ffffff') : (colors.success?.[500] || '#22c55e'),
-          };
-        case 'warning':
-          return {
-            border: colors.warning?.[500] || '#f59e0b',
-            background: checked ? (colors.warning?.[500] || '#f59e0b') : 'transparent',
-            color: checked ? (colors.background?.default || '#ffffff') : (colors.warning?.[500] || '#f59e0b'),
-          };
-        default:
-          return {
-            border: colors.primary?.[500] || '#3b82f6',
-            background: checked ? (colors.primary?.[500] || '#3b82f6') : 'transparent',
-            color: checked ? (colors.background?.default || '#ffffff') : (colors.primary?.[500] || '#3b82f6'),
-          };
-      }
-    };
-
-    const sizeStyles = getSizeStyles();
-    const variantStyles = getVariantStyles();
-
-    // Radio button styles
-    const radioButtonStyles: React.CSSProperties = {
-      position: 'relative',
-      aspectRatio: '1',
-      borderRadius: '50%',
-      border: `1px solid ${variantStyles.border}`,
-      backgroundColor: variantStyles.background,
-      color: variantStyles.color,
-      transition: 'all 200ms ease-in-out',
-      outline: 'none',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1,
-      ...sizeStyles,
-      ...style,
-    };
-
-    // Container styles
-    const containerStyles: React.CSSProperties = {
-      position: 'relative',
-      display: 'flex',
-      alignItems: 'center',
-    };
-
-    // Input styles (hidden)
-    const inputStyles: React.CSSProperties = {
-      position: 'absolute',
-      width: '1px',
-      height: '1px',
-      padding: 0,
-      margin: '-1px',
-      overflow: 'hidden',
-      clip: 'rect(0, 0, 0, 0)',
-      whiteSpace: 'nowrap',
-      border: 0,
-    };
-
-    // Indicator container styles
-    const indicatorStyles: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      height: '100%',
-    };
-
-    // Label styles
-    const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      color: error || errorText 
-        ? (colors.danger?.[500] || '#ef4444')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
-      opacity: disabled ? 0.7 : 1,
-    };
-
-    // Description styles
-    const descriptionStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-    };
-
-    // Error text styles
-    const errorTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.danger?.[500] || '#ef4444',
-    };
-
-    // Required indicator styles
-    const requiredStyles: React.CSSProperties = {
-      marginLeft: spacing[1],
-      color: colors.danger?.[500] || '#ef4444',
-    };
-
-    const radioElement = (
-      <div className={className} style={containerStyles}>
+/**
+ * Radio component using CVA pattern with design tokens
+ * Pure presentational component with external state management
+ */
+export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
+  ({ className, variant, size, checked, ...props }, ref) => {
+    return (
+      <div className="relative flex items-center">
         <input
-          id={radioId}
-          ref={ref}
           type="radio"
-          style={inputStyles}
+          className={cn(radioVariants({ variant, size }), className)}
+          ref={ref}
           checked={checked}
-          disabled={disabled}
-          aria-invalid={error || !!errorText}
-          aria-describedby={description || errorText ? `${radioId}-description` : undefined}
-          aria-required={required}
-          data-state={radioState}
           {...props}
         />
-
-        {/* Visual radio button */}
-        <div
-          style={radioButtonStyles}
-          data-state={radioState}
-          onFocus={(e) => {
-            if (!disabled) {
-              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
-              e.currentTarget.style.outlineOffset = '2px';
-            }
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.outline = 'none';
-          }}
-        >
-          {/* Radio indicator */}
-          {checked && (
-            <div style={indicatorStyles}>
-              <RadioIcon size={size} />
-            </div>
-          )}
-        </div>
-      </div>
-    );
-
-    if (!label && !description && !errorText) {
-      return radioElement;
-    }
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: spacing[3] }}>
-          {radioElement}
-
-          {label && (
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
-              <label htmlFor={radioId} style={labelStyles}>
-                {label}
-                {required && (
-                  <span style={requiredStyles} aria-label="required">
-                    *
-                  </span>
-                )}
-              </label>
-
-              {description && (
-                <p id={`${radioId}-description`} style={descriptionStyles}>
-                  {description}
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-
-        {errorText && (
-          <p 
-            id={`${radioId}-description`} 
-            style={{
-              ...errorTextStyles,
-              marginLeft: `calc(${sizeStyles.width} + ${spacing[3]})`,
-            }}
-          >
-            {errorText}
-          </p>
+        
+        {/* Visual indicator */}
+        {checked && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <RadioIcon size={size || 'default'} />
+          </div>
         )}
       </div>
     );
@@ -328,147 +93,3 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 );
 
 Radio.displayName = 'Radio';
-
-/**
- * Enhanced RadioGroup component with token-based styling
- */
-export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
-  (
-    {
-      name,
-      options,
-      value,
-      defaultValue,
-      onValueChange,
-      variant,
-      size,
-      orientation = 'vertical',
-      label,
-      description,
-      error,
-      errorText,
-      required,
-      disabled,
-      className,
-      id,
-    },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
-    const [selectedValue, setSelectedValue] = React.useState(value || defaultValue || '');
-
-    // Generate ID if not provided and label exists
-    const groupId =
-      id || (label ? `radio-group-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
-
-    React.useEffect(() => {
-      if (value !== undefined) {
-        setSelectedValue(value);
-      }
-    }, [value]);
-
-    const handleChange = (optionValue: string): void => {
-      setSelectedValue(optionValue);
-      onValueChange?.(optionValue);
-    };
-
-    // Group container styles
-    const groupStyles: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: orientation === 'vertical' ? 'column' : 'row',
-      gap: orientation === 'vertical' ? spacing[3] : spacing[6],
-    };
-
-    // Label styles
-    const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
-      color: error || errorText 
-        ? (colors.danger?.[500] || '#ef4444')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
-    };
-
-    // Description styles
-    const descriptionStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-    };
-
-    // Error text styles
-    const errorTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.danger?.[500] || '#ef4444',
-    };
-
-    // Required indicator styles
-    const requiredStyles: React.CSSProperties = {
-      marginLeft: spacing[1],
-      color: colors.danger?.[500] || '#ef4444',
-    };
-
-    const groupElement = (
-      <div
-        ref={ref}
-        role="radiogroup"
-        aria-labelledby={label ? `${groupId}-label` : undefined}
-        aria-describedby={description || errorText ? `${groupId}-description` : undefined}
-        aria-invalid={error || !!errorText}
-        aria-required={required}
-        className={className}
-        style={groupStyles}
-      >
-        {options.map(option => (
-          <Radio
-            key={option.value}
-            name={name}
-            value={option.value}
-            checked={selectedValue === option.value}
-            onChange={() => handleChange(option.value)}
-            disabled={disabled || option.disabled}
-            label={option.label}
-            description={option.description}
-            variant={variant}
-            size={size}
-            error={error}
-          />
-        ))}
-      </div>
-    );
-
-    if (!label && !description && !errorText) {
-      return groupElement;
-    }
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
-        {label && (
-          <label id={`${groupId}-label`} style={labelStyles}>
-            {label}
-            {required && (
-              <span style={requiredStyles} aria-label="required">
-                *
-              </span>
-            )}
-          </label>
-        )}
-
-        {description && (
-          <p id={`${groupId}-description`} style={descriptionStyles}>
-            {description}
-          </p>
-        )}
-
-        {groupElement}
-
-        {errorText && (
-          <p id={`${groupId}-description`} style={errorTextStyles}>
-            {errorText}
-          </p>
-        )}
-      </div>
-    );
-  }
-);
-
-RadioGroup.displayName = 'RadioGroup';
