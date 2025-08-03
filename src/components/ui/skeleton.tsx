@@ -7,6 +7,8 @@
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { useTokens } from '../../hooks/useTokens';
+import { Box } from '../semantic';
+import { cn } from '../../lib/utils/cn';
 
 /**
  * Skeleton variant types
@@ -160,7 +162,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
     // Single skeleton
     if (!lines || lines <= 1) {
       return (
-        <div
+        <Box
           ref={ref}
           className={className}
           style={{
@@ -170,14 +172,14 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
           aria-hidden="true"
           {...props}
         >
-          {shimmer && <div style={shimmerStyles} />}
-        </div>
+          {shimmer && <Box style={shimmerStyles} />}
+        </Box>
       );
     }
 
     // Multiple lines
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
         style={{
@@ -191,7 +193,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
           const lineWidth = isLastLine ? '75%' : '100%';
 
           return (
-            <div
+            <Box
               key={index}
               style={{
                 ...baseSkeletonStyles,
@@ -200,11 +202,11 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
                 marginBottom: index < lines - 1 ? spacing : 0,
               }}
             >
-              {shimmer && <div style={shimmerStyles} />}
-            </div>
+              {shimmer && <Box style={shimmerStyles} />}
+            </Box>
           );
         })}
-      </div>
+      </Box>
     );
   }
 );
@@ -291,7 +293,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     ref
   ) => {
     return (
-      <div 
+      <Box 
         ref={ref} 
         className={cn("p-4", className)}
         style={style}
@@ -299,16 +301,16 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
         {...props}
       >
         {/* Header with optional avatar */}
-        <div className="flex items-center gap-3 mb-4">
+        <Box className="flex items-center gap-3 mb-4">
           {showAvatar && <SkeletonAvatar size={avatarSize} />}
-          <div className="flex-1">
+          <Box className="flex-1">
             <SkeletonText lines={titleLines} lineHeight="1.25rem" />
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Content */}
         <SkeletonText lines={contentLines} />
-      </div>
+      </Box>
     );
   }
 );

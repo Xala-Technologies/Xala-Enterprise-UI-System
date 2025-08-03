@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box, Heading, Text, Button } from '../semantic';
 
 /**
  * Sheet overlay variants using CVA

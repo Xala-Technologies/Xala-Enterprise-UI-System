@@ -7,6 +7,7 @@
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { useTokens } from '../../hooks/useTokens';
+import { Box } from '../semantic';
 
 /**
  * Separator orientation types
@@ -159,7 +160,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
       };
       
       return (
-        <div
+        <Box
           ref={ref}
           className={className}
           style={{
@@ -169,7 +170,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
           {...props}
         >
           {labelPosition !== 'start' && (
-            <div
+            <Box
               style={lineStyles}
               role={decorative ? 'presentation' : 'separator'}
               aria-orientation={orientation}
@@ -181,19 +182,19 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
           </span>
 
           {labelPosition !== 'end' && (
-            <div
+            <Box
               style={lineStyles}
               role={decorative ? 'presentation' : 'separator'}
               aria-orientation={orientation}
             />
           )}
-        </div>
+        </Box>
       );
     }
 
     // Basic separator without label
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
         style={{

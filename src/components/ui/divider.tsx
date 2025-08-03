@@ -7,6 +7,7 @@
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { useTokens } from '../../hooks/useTokens';
+import { Box } from '../semantic';
 
 /**
  * Divider orientation types
@@ -162,7 +163,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     // Simple divider without label
     if (!label) {
       return (
-        <div
+        <Box
           ref={ref}
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
@@ -180,7 +181,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     if (orientation === 'vertical') {
       // Labels are not supported with vertical orientation
       return (
-        <div
+        <Box
           ref={ref}
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}

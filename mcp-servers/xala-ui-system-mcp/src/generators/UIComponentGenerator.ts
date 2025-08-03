@@ -12,7 +12,7 @@ export class UIComponentGenerator {
     
     return `/**
  * @fileoverview ${componentName} Component - CVA Design System Compliant
- * @description ${config.description || `${componentName} component using CVA pattern with semantic tokens`}
+ * @description ${componentName} component using CVA pattern with semantic tokens
  * @version 5.0.0
  * @compliance CVA-based, SSR-safe, Framework-agnostic, Token-based
  */
@@ -20,6 +20,7 @@ export class UIComponentGenerator {
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@xala-technologies/ui-system/utils';
+import { ${this.getSemanticImports(config)} } from '@xala-technologies/ui-system/semantic';
 ${config.features.icons ? "import { Loader2 } from 'lucide-react';" : ''}
 
 // =============================================================================
@@ -50,11 +51,14 @@ const ${config.name.toLowerCase()}Variants = cva(
 // =============================================================================
 
 export interface ${propsInterface}
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof ${config.name.toLowerCase()}Variants> {
   readonly children?: React.ReactNode;
   readonly loading?: boolean;
   readonly disabled?: boolean;
+  readonly intent?: ${this.getIntentType(config)};
+  readonly semanticElement?: ${this.getSemanticElementType(config)};
+  readonly nsmLevel?: 'OPEN' | 'RESTRICTED' | 'CONFIDENTIAL' | 'SECRET';
   readonly 'data-testid'?: string;
 }
 
@@ -62,29 +66,37 @@ export interface ${propsInterface}
 // ${componentName.toUpperCase()} COMPONENT
 // =============================================================================
 
-export const ${componentName} = React.forwardRef<HTMLDivElement, ${propsInterface}>(
+export const ${componentName} = React.forwardRef<HTMLElement, ${propsInterface}>(
   ({
     className,
     variant = '${config.styling.variant}',
     size = '${config.size || 'md'}',
+    intent,
+    semanticElement,
     loading = false,
     disabled = false,
+    nsmLevel,
     children,
     'data-testid': testId,
     ...props
   }, ref) => {
     const isDisabled = disabled || loading;
+    const SemanticComponent = ${this.getSemanticComponent(config)};
 
     return (
-      <div
+      <SemanticComponent
+        as={semanticElement}
+        intent={intent}
+        variant={variant}
         className={cn(${config.name.toLowerCase()}Variants({ variant, size }), className)}
         ref={ref}
         data-testid={testId}
+        data-nsm-level={nsmLevel}
         aria-disabled={isDisabled}
         {...props}
       >
-        ${this.generateComponentContent(config)}
-      </div>
+        ${this.generateSemanticComponentContent(config)}
+      </SemanticComponent>
     );
   }
 );
@@ -115,7 +127,7 @@ ${componentName}.displayName = '${componentName}';
 
     // Add category-specific base classes
     switch (config.category) {
-      case 'layout':
+      case 'layouts':
         baseClasses.push('w-full', 'flex-col');
         break;
       case 'interactive':
@@ -206,6 +218,104 @@ ${componentName}.displayName = '${componentName}';
     } else {
       content.push(`{children}`);
     }
+
+    return content.join('\n        ');
+  }
+
+  private getSemanticImports(config: ComponentConfig): string {
+    const imports = ['Box'];
+    
+    // Add category-specific semantic components
+    switch (config.category) {
+      case 'layouts':
+        imports.push('Container', 'Section', 'Main', 'Header', 'Footer');
+        break;
+      case 'interactive':
+        imports.push('Button', 'Link');
+        break;
+      case 'form':
+        imports.push('Input', 'Label', 'Button');
+        break;
+      case 'navigation':
+        imports.push('Navigation', 'Breadcrumb', 'Nav');
+        break;
+      case 'feedback':
+        imports.push('Toast');
+        break;
+      case 'data-display':
+        imports.push('Text', 'Heading', 'List');
+        break;
+    }
+    
+    return imports.join(', ');
+  }
+
+  private getSemanticComponent(config: ComponentConfig): string {
+    // Return the appropriate semantic component based on category
+    switch (config.category) {
+      case 'layouts':
+        return 'Container';
+      case 'interactive':
+        return 'Button';
+      case 'form':
+        return 'Box';
+      case 'navigation':
+        return 'Navigation';
+      case 'feedback':
+        return 'Toast';
+      case 'data-display':
+        return 'Box';
+      default:
+        return 'Box';
+    }
+  }
+
+  private getIntentType(config: ComponentConfig): string {
+    // Return intent type based on category
+    switch (config.category) {
+      case 'layouts':
+        return "'page' | 'content' | 'sidebar' | 'card' | 'modal'";
+      case 'interactive':
+        return "'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive'";
+      case 'navigation':
+        return "'primary' | 'secondary' | 'sidebar' | 'tabs' | 'breadcrumb'";
+      case 'feedback':
+        return "'info' | 'success' | 'warning' | 'error' | 'loading'";
+      case 'data-display':
+        return "'body' | 'caption' | 'label' | 'code' | 'emphasis'";
+      default:
+        return "string";
+    }
+  }
+
+  private getSemanticElementType(config: ComponentConfig): string {
+    // Return semantic element type based on category
+    switch (config.category) {
+      case 'layouts':
+        return "'div' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer'";
+      case 'interactive':
+        return "'button' | 'a'";
+      case 'form':
+        return "'input' | 'textarea' | 'select' | 'button'";
+      case 'navigation':
+        return "'nav' | 'ul' | 'ol'";
+      case 'data-display':
+        return "'div' | 'span' | 'p' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'";
+      default:
+        return "'div' | 'span'";
+    }
+  }
+
+  private generateSemanticComponentContent(config: ComponentConfig): string {
+    const content: string[] = [];
+
+    if (config.features.loading) {
+      content.push(`{loading && (
+          <div className="animate-spin rounded-full border-2 border-transparent border-t-current h-4 w-4" />
+        )}`);
+    }
+
+    content.push(`{children}`);
 
     return content.join('\n        ');
   }

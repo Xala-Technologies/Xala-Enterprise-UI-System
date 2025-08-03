@@ -50,7 +50,7 @@ export class LocalizationGenerator {
 
   private generateCategorySpecificKeys(config: ComponentConfig): Record<string, any> {
     switch (config.category) {
-      case 'layout':
+      case 'layouts':
         return this.generateLayoutKeys(config);
       case 'navigation':
         return this.generateNavigationKeys(config);

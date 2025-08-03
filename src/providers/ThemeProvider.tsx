@@ -9,7 +9,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { ThemeSwitcher, Theme, ThemeSwitcherConfig, generateThemeScript, themeTransitionCSS } from '../lib/theme/theme-switcher';
+import type { Theme, ThemeSwitcherConfig} from '../lib/theme/theme-switcher';
+import { ThemeSwitcher, generateThemeScript, themeTransitionCSS } from '../lib/theme/theme-switcher';
 
 export interface ThemeProviderProps {
   readonly children: React.ReactNode;

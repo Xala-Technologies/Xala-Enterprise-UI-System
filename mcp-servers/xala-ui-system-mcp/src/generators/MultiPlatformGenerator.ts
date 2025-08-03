@@ -17,6 +17,24 @@ import { TestGenerator } from './TestGenerator';
 import { StoryGenerator } from './StoryGenerator';
 import { DocumentationGenerator } from './DocumentationGenerator';
 
+// Helper to convert string array to ComponentTemplate array
+const ALL_COMPONENTS: ComponentTemplate[] = [
+  'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
+  'data-table', 'virtual-list', 'command-palette', 'global-search',
+  'theme-switcher', 'theme-selector', 'app-shell', 'layout',
+  'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
+  'render-props', 'hoc-collection', 'component-factory',
+  'performance-monitor', 'code-generator'
+] as ComponentTemplate[];
+
+const CORE_COMPONENTS: ComponentTemplate[] = [
+  'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
+  'data-table', 'virtual-list', 'command-palette', 'global-search',
+  'theme-switcher', 'theme-selector', 'app-shell', 'layout',
+  'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
+  'performance-monitor', 'code-generator'
+] as ComponentTemplate[];
+
 export class MultiPlatformGenerator {
   private localizationGenerator: LocalizationGenerator;
   private testGenerator: TestGenerator;
@@ -27,93 +45,49 @@ export class MultiPlatformGenerator {
   private platformConfigs: Record<SupportedPlatform, PlatformTemplateConfig> = {
     'react': {
       platform: 'react',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'render-props', 'hoc-collection', 'component-factory',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: ALL_COMPONENTS,
       templatePath: '/templates/react/',
       fileExtension: '.tsx',
       localizationPattern: 't()'
     },
     'nextjs': {
       platform: 'nextjs',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'render-props', 'hoc-collection', 'component-factory',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: ALL_COMPONENTS,
       templatePath: '/templates/nextjs/',
       fileExtension: '.tsx',
       localizationPattern: 't()'
     },
     'vue': {
       platform: 'vue',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: CORE_COMPONENTS,
       templatePath: '/templates/vue/',
       fileExtension: '.vue',
       localizationPattern: '{{ t() }}'
     },
     'angular': {
       platform: 'angular',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: CORE_COMPONENTS,
       templatePath: '/templates/angular/',
       fileExtension: '.component.ts',
       localizationPattern: '| translate'
     },
     'svelte': {
       platform: 'svelte',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: CORE_COMPONENTS,
       templatePath: '/templates/svelte/',
       fileExtension: '.svelte',
       localizationPattern: '{t()}'
     },
     'electron': {
       platform: 'electron',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: CORE_COMPONENTS,
       templatePath: '/templates/electron/',
       fileExtension: '.tsx',
       localizationPattern: '{t()}'
     },
     'react-native': {
       platform: 'react-native',
-      availableComponents: [
-        'navbar', 'modal', 'sidebar', 'header', 'form', 'card', 'dashboard',
-        'data-table', 'virtual-list', 'command-palette', 'global-search',
-        'theme-switcher', 'theme-selector', 'app-shell', 'layout',
-        'auth-provider', 'theme-provider', 'error-boundary', 'notification-provider',
-        'performance-monitor', 'code-generator'
-      ],
+      availableComponents: CORE_COMPONENTS,
       templatePath: '/templates/react-native/',
       fileExtension: '.tsx',
       localizationPattern: 't()'
@@ -140,7 +114,7 @@ export class MultiPlatformGenerator {
 
     // Validate component availability for platform
     const componentName = this.getComponentTemplateName(config);
-    if (!platformConfig.availableComponents.includes(componentName as ComponentTemplate)) {
+    if (!platformConfig.availableComponents.includes(componentName as any)) {
       throw new Error(`Component ${componentName} not available for platform ${platform}`);
     }
 
@@ -952,6 +926,6 @@ export type ${componentName}Platform = '${platform}';`;
    */
   isComponentAvailable(component: string, platform: SupportedPlatform): boolean {
     const platformConfig = this.platformConfigs[platform];
-    return platformConfig?.availableComponents.includes(component as ComponentTemplate) || false;
+    return platformConfig?.availableComponents.includes(component as any) || false;
   }
 }

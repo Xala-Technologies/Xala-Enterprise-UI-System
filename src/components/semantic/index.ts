@@ -24,6 +24,27 @@ export {
 } from './Box';
 
 // =============================================================================
+// CONTAINER COMPONENTS - Layout Container Elements
+// =============================================================================
+
+export {
+  Container,
+  PageContainer,
+  ContentContainer,
+  CardContainer,
+  HeroContainer,
+  ArticleContainer,
+  SidebarContainer,
+  ModalContainer,
+  containerVariants,
+  intentVariants,
+  type ContainerProps,
+  type ContainerElement,
+  type ContainerIntent,
+  type ContainerVariant,
+} from './Container';
+
+// =============================================================================
 // TEXT COMPONENTS - Typography and Text Elements
 // =============================================================================
 
@@ -112,7 +133,6 @@ export {
   Checklist,
   StepsList,
   FeaturesList,
-  Breadcrumb,
   TagList,
   type ListProps,
   type ListItemProps,
@@ -124,6 +144,72 @@ export {
   type ListMarker,
   type ListSpacing,
 } from './List';
+
+// =============================================================================
+// BREADCRUMB COMPONENTS - Navigation Path Elements
+// =============================================================================
+
+export {
+  Breadcrumb,
+  BreadcrumbSeparator,
+  NavigationBreadcrumb,
+  ProcessBreadcrumb,
+  CategoryBreadcrumb,
+  WorkflowBreadcrumb,
+  breadcrumbVariants,
+  breadcrumbItemVariants,
+  breadcrumbSeparatorVariants,
+  type BreadcrumbProps,
+  type BreadcrumbSeparatorProps,
+  type BreadcrumbItem,
+  type BreadcrumbIntent,
+  type BreadcrumbVariant,
+} from './Breadcrumb';
+
+// =============================================================================  
+// NAVIGATION COMPONENTS - Navigation Structure Elements
+// =============================================================================
+
+export {
+  Navigation,
+  NavigationGroup,
+  PrimaryNavigation,
+  SidebarNavigation,
+  TabNavigation,
+  FooterNavigation,
+  MenuNavigation,
+  StepsNavigation,
+  navigationVariants,
+  navigationItemVariants,
+  navigationGroupVariants,
+  type NavigationProps,
+  type NavigationGroupProps,
+  type NavigationItem,
+  type NavigationIntent,
+  type NavigationVariant,
+} from './Navigation';
+
+// =============================================================================
+// TOAST COMPONENTS - Feedback Notification Elements
+// =============================================================================
+
+export {
+  Toast,
+  SuccessToast,
+  ErrorToast,
+  WarningToast,
+  InfoToast,
+  LoadingToast,
+  ProgressToast,
+  toastVariants,
+  nsmVariants,
+  type ToastProps,
+  type ToastAction,
+  type ToastIntent,
+  type ToastPosition,
+  type ToastPriority,
+  type ToastVariant,
+} from './Toast';
 
 // =============================================================================
 // LINK COMPONENTS - Link and Navigation Elements
@@ -186,6 +272,16 @@ export const SemanticComponents = {
   Nav: Nav,
   Aside: Aside,
   
+  // Container Components
+  Container: Container,
+  PageContainer: PageContainer,
+  ContentContainer: ContentContainer,
+  CardContainer: CardContainer,
+  HeroContainer: HeroContainer,
+  ArticleContainer: ArticleContainer,
+  SidebarContainer: SidebarContainer,
+  ModalContainer: ModalContainer,
+  
   // Text Components  
   Text: Text,
   Paragraph: Paragraph,
@@ -233,8 +329,32 @@ export const SemanticComponents = {
   Checklist: Checklist,
   StepsList: StepsList,
   FeaturesList: FeaturesList,
-  Breadcrumb: Breadcrumb,
   TagList: TagList,
+  
+  // Breadcrumb Components
+  Breadcrumb: Breadcrumb,
+  NavigationBreadcrumb: NavigationBreadcrumb,
+  ProcessBreadcrumb: ProcessBreadcrumb,
+  CategoryBreadcrumb: CategoryBreadcrumb,
+  WorkflowBreadcrumb: WorkflowBreadcrumb,
+  
+  // Navigation Components
+  Navigation: Navigation,
+  PrimaryNavigation: PrimaryNavigation,
+  SidebarNavigation: SidebarNavigation,
+  TabNavigation: TabNavigation,
+  FooterNavigation: FooterNavigation,
+  MenuNavigation: MenuNavigation,
+  StepsNavigation: StepsNavigation,
+  
+  // Toast Components
+  Toast: Toast,
+  SuccessToast: SuccessToast,
+  ErrorToast: ErrorToast,
+  WarningToast: WarningToast,
+  InfoToast: InfoToast,
+  LoadingToast: LoadingToast,
+  ProgressToast: ProgressToast,
   
   // Link Components
   Link: Link,
@@ -275,6 +395,14 @@ export const LayoutComponents = {
   Main: Main,
   Nav: Nav,
   Aside: Aside,
+  Container: Container,
+  PageContainer: PageContainer,
+  ContentContainer: ContentContainer,
+  CardContainer: CardContainer,
+  HeroContainer: HeroContainer,
+  ArticleContainer: ArticleContainer,
+  SidebarContainer: SidebarContainer,
+  ModalContainer: ModalContainer,
 } as const;
 
 /**
@@ -348,8 +476,26 @@ export const ContentComponents = {
   Checklist: Checklist,
   StepsList: StepsList,
   FeaturesList: FeaturesList,
-  Breadcrumb: Breadcrumb,
   TagList: TagList,
+  Breadcrumb: Breadcrumb,
+  NavigationBreadcrumb: NavigationBreadcrumb,
+  ProcessBreadcrumb: ProcessBreadcrumb,
+  CategoryBreadcrumb: CategoryBreadcrumb,
+  WorkflowBreadcrumb: WorkflowBreadcrumb,
+  Navigation: Navigation,
+  PrimaryNavigation: PrimaryNavigation,
+  SidebarNavigation: SidebarNavigation,
+  TabNavigation: TabNavigation,
+  FooterNavigation: FooterNavigation,
+  MenuNavigation: MenuNavigation,
+  StepsNavigation: StepsNavigation,
+  Toast: Toast,
+  SuccessToast: SuccessToast,
+  ErrorToast: ErrorToast,
+  WarningToast: WarningToast,
+  InfoToast: InfoToast,
+  LoadingToast: LoadingToast,
+  ProgressToast: ProgressToast,
   Image: Image,
   Avatar: Avatar,
   Logo: Logo,

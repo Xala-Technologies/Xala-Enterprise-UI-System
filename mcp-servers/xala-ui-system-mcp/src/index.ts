@@ -25,7 +25,7 @@ const ComponentConfigSchema = z.object({
     // v6.0 Multi-platform categories
     'components', 'data-components', 'theme-components', 'layouts', 'providers', 'patterns', 'tools',
     // Legacy categories
-    'layout', 'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
+    'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
   ]),
   platform: z.enum(['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native']).optional(),
   variant: z.string().optional(),
@@ -33,6 +33,7 @@ const ComponentConfigSchema = z.object({
   theme: z.enum(['enterprise', 'finance', 'healthcare', 'education', 'ecommerce', 'productivity', 'oslo', 'bergen', 'drammen']).optional(),
   locale: z.enum(['en', 'nb-NO', 'fr', 'ar']).optional(),
   platformConfig: z.object({
+    platform: z.enum(['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native']),
     architecture: z.enum(['v5-cva', 'semantic', 'hybrid']).optional(),
     features: z.object({
       appRouter: z.boolean().optional(),
@@ -600,7 +601,7 @@ ${result.componentCode.slice(0, 300)}...
       }
       
       if (!acc[category]) acc[category] = [];
-      acc[category].push(component);
+      acc[category]!.push(component);
       return acc;
     }, {} as Record<string, string[]>);
 
@@ -706,7 +707,7 @@ ${this.getPlatformBestPractices(platform)}
   private async handleGenerateLayout(args: any) {
     const layoutConfig = {
       name: args.name,
-      category: 'layout' as const,
+      category: 'layouts' as const,
       layoutType: args.layoutType,
       features: args.features || {},
       styling: {

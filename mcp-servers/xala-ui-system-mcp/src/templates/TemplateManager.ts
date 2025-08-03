@@ -2,10 +2,10 @@
  * Template Manager for Xala UI System MCP
  */
 
-import type { ComponentTemplate, ComponentCategory } from '../types/index.js';
+import type { ComponentTemplateConfig, ComponentCategory } from '../types/index.js';
 
 export class TemplateManager {
-  private templates: Map<string, ComponentTemplate> = new Map();
+  private templates: Map<string, ComponentTemplateConfig> = new Map();
 
   constructor() {
     this.initializeTemplates();
@@ -16,10 +16,10 @@ export class TemplateManager {
     this.addTemplate({
       name: 'admin-dashboard-layout',
       description: 'Complete admin dashboard layout with sidebar, topbar, and content area',
-      category: 'layout',
+      category: 'layouts',
       defaultConfig: {
         name: 'AdminDashboardLayout',
-        category: 'layout',
+        category: 'layouts',
         features: {
           interactive: true,
           searchable: true,
@@ -60,10 +60,10 @@ export class TemplateManager {
     this.addTemplate({
       name: 'saas-web-layout',
       description: 'SaaS application layout with navbar, content, and footer',
-      category: 'layout',
+      category: 'layouts',
       defaultConfig: {
         name: 'SaaSWebLayout',
-        category: 'layout',
+        category: 'layouts',
         features: {
           interactive: true,
           searchable: true,
@@ -446,11 +446,11 @@ export class TemplateManager {
     });
   }
 
-  private addTemplate(template: ComponentTemplate): void {
+  private addTemplate(template: ComponentTemplateConfig): void {
     this.templates.set(template.name, template);
   }
 
-  listTemplates(category?: ComponentCategory | 'all'): ComponentTemplate[] {
+  listTemplates(category?: ComponentCategory | 'all'): ComponentTemplateConfig[] {
     const allTemplates = Array.from(this.templates.values());
     
     if (!category || category === 'all') {
@@ -460,17 +460,17 @@ export class TemplateManager {
     return allTemplates.filter(template => template.category === category);
   }
 
-  getTemplate(name: string): ComponentTemplate | undefined {
+  getTemplate(name: string): ComponentTemplateConfig | undefined {
     return this.templates.get(name);
   }
 
-  getTemplatesByCategory(category: ComponentCategory): ComponentTemplate[] {
+  getTemplatesByCategory(category: ComponentCategory): ComponentTemplateConfig[] {
     return Array.from(this.templates.values()).filter(
       template => template.category === category
     );
   }
 
-  searchTemplates(query: string): ComponentTemplate[] {
+  searchTemplates(query: string): ComponentTemplateConfig[] {
     const lowercaseQuery = query.toLowerCase();
     return Array.from(this.templates.values()).filter(
       template =>

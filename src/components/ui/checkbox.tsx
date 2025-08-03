@@ -9,6 +9,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Input } from '../semantic';
 
 // =============================================================================
 // CHECKBOX VARIANTS USING DESIGN TOKENS
@@ -92,8 +93,9 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const state = indeterminate ? 'indeterminate' : checked ? 'checked' : 'unchecked';
 
     return (
-      <div className="relative flex items-center">
-        <input
+      <Box className="relative flex items-center">
+        <Input
+          as="input"
           type="checkbox"
           className={cn(checkboxVariants({ variant, size }), className)}
           ref={ref}
@@ -103,14 +105,14 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
         />
         
         {/* Visual indicator overlay */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-current">
+        <Box className="pointer-events-none absolute inset-0 flex items-center justify-center text-current">
           {indeterminate ? (
             <IndeterminateIcon />
           ) : checked ? (
             <CheckIcon />
           ) : null}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );

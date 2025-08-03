@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box, Text, Button } from '../semantic';
 
 /**
  * Popover content variants using CVA
@@ -191,9 +192,9 @@ export interface PopoverCloseProps extends HTMLAttributes<HTMLButtonElement> {
 export const Popover = forwardRef<HTMLDivElement, PopoverProps>(
   ({ children, ...props }, ref): React.ReactElement => {
     return (
-      <div ref={ref} {...props}>
+      <Box ref={ref} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -214,13 +215,13 @@ export const PopoverTrigger = forwardRef<HTMLDivElement, PopoverTriggerProps>(
     }
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(popoverTriggerVariants(), className)}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -233,7 +234,7 @@ PopoverTrigger.displayName = 'PopoverTrigger';
 export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
   ({ className, side, align, size, open = false, showArrow = true, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(popoverContentVariants({ side, align, size }), className)}
         data-state={open ? 'open' : 'closed'}
@@ -245,7 +246,7 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
           <PopoverArrow side={side} align={align} />
         )}
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -258,7 +259,7 @@ PopoverContent.displayName = 'PopoverContent';
 export const PopoverArrow = forwardRef<HTMLDivElement, PopoverArrowProps>(
   ({ className, side, align, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(popoverArrowVariants({ side, align }), className)}
         {...props}
@@ -275,7 +276,8 @@ PopoverArrow.displayName = 'PopoverArrow';
 export const PopoverClose = forwardRef<HTMLButtonElement, PopoverCloseProps>(
   ({ className, children, ...props }, ref): React.ReactElement => {
     return (
-      <button
+      <Button
+        as="button"
         ref={ref}
         className={cn(
           'absolute right-2 top-2 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none',
@@ -299,8 +301,8 @@ export const PopoverClose = forwardRef<HTMLButtonElement, PopoverCloseProps>(
             />
           </svg>
         )}
-        <span className="sr-only">Close</span>
-      </button>
+        <Text as="span" className="sr-only">Close</Text>
+      </Button>
     );
   }
 );

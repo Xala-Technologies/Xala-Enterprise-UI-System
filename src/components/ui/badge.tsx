@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box } from '../semantic';
 
 // =============================================================================
 // BADGE VARIANTS USING CVA PATTERN
@@ -69,13 +70,13 @@ export interface BadgeProps
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
   ({ variant = 'default', size = 'default', className, children, ...props }, ref) => {
     return (
-      <div 
+      <Box 
         ref={ref} 
         className={cn(badgeVariants({ variant, size }), className)} 
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );

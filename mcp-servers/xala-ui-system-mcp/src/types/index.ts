@@ -336,7 +336,7 @@ export interface GeneratedFile {
   readonly type: 'component' | 'types' | 'styles' | 'test' | 'story' | 'docs' | 'locale';
 }
 
-export interface ComponentTemplate {
+export interface ComponentTemplateConfig {
   readonly name: string;
   readonly description: string;
   readonly category: ComponentCategory;

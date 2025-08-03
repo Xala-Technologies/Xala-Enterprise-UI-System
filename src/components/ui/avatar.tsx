@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Image, Text } from '../semantic';
 
 // =============================================================================
 // CVA VARIANTS
@@ -146,7 +147,8 @@ function StatusIndicator({
   className?: string;
 }): React.ReactElement {
   return (
-    <span 
+    <Text 
+      as="span"
       className={cn(statusIndicatorVariants({ status, size }), className)}
       aria-label={`Status: ${status}`} 
     />
@@ -160,7 +162,7 @@ export const AvatarImage = forwardRef<
   HTMLImageElement,
   React.ImgHTMLAttributes<HTMLImageElement>
 >(({ className, ...props }, ref) => (
-  <img
+  <Image
     ref={ref}
     className={cn('aspect-square h-full w-full object-cover', className)}
     {...props}
@@ -175,7 +177,7 @@ export const AvatarFallback = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div
+  <Box
     ref={ref}
     className={cn(
       'flex h-full w-full items-center justify-center',
@@ -214,7 +216,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     const actualBordered = showBorder !== undefined ? showBorder : bordered;
     
     return (
-      <div 
+      <Box 
         ref={ref} 
         className={cn(
           avatarVariants({ 
@@ -248,7 +250,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             )}
           </>
         )}
-      </div>
+      </Box>
     );
   }
 );

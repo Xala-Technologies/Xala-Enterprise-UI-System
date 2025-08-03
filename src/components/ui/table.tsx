@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box } from '../semantic';
 
 // =============================================================================
 // TABLE VARIANTS USING CVA PATTERN
@@ -203,13 +204,13 @@ export interface TableCaptionProps
 
 export const Table = forwardRef<HTMLTableElement, TableProps>(
   ({ className, variant, striped, hover, size, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
+    <Box className="relative w-full overflow-auto">
       <table
         ref={ref}
         className={cn(tableVariants({ variant, striped, hover, size }), className)}
         {...props}
       />
-    </div>
+    </Box>
   )
 );
 Table.displayName = 'Table';

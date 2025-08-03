@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box, Text, Heading, Button } from '../semantic';
 
 /**
  * Dialog overlay variants using CVA
@@ -184,9 +185,9 @@ export interface DialogCloseProps extends HTMLAttributes<HTMLButtonElement> {
 export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
   ({ children, ...props }, ref): React.ReactElement => {
     return (
-      <div ref={ref} {...props}>
+      <Box ref={ref} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -199,7 +200,7 @@ Dialog.displayName = 'Dialog';
 export const DialogOverlay = forwardRef<HTMLDivElement, DialogOverlayProps>(
   ({ className, variant, open = false, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(dialogOverlayVariants({ variant }), className)}
         data-state={open ? 'open' : 'closed'}
@@ -217,7 +218,7 @@ DialogOverlay.displayName = 'DialogOverlay';
 export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
   ({ className, size, open = false, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(dialogContentVariants({ size }), className)}
         data-state={open ? 'open' : 'closed'}
@@ -226,7 +227,7 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -239,13 +240,13 @@ DialogContent.displayName = 'DialogContent';
 export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
   ({ className, size, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(dialogHeaderVariants({ size }), className)}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -258,13 +259,14 @@ DialogHeader.displayName = 'DialogHeader';
 export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
   ({ className, size, children, ...props }, ref): React.ReactElement => {
     return (
-      <h2
+      <Heading
+        level={2}
         ref={ref}
         className={cn(dialogTitleVariants({ size }), className)}
         {...props}
       >
         {children}
-      </h2>
+      </Heading>
     );
   }
 );
@@ -277,13 +279,14 @@ DialogTitle.displayName = 'DialogTitle';
 export const DialogDescription = forwardRef<HTMLParagraphElement, DialogDescriptionProps>(
   ({ className, size, children, ...props }, ref): React.ReactElement => {
     return (
-      <p
+      <Text
+        as="p"
         ref={ref}
         className={cn(dialogDescriptionVariants({ size }), className)}
         {...props}
       >
         {children}
-      </p>
+      </Text>
     );
   }
 );
@@ -296,7 +299,7 @@ DialogDescription.displayName = 'DialogDescription';
 export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
   ({ className, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
@@ -305,7 +308,7 @@ export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -318,7 +321,8 @@ DialogFooter.displayName = 'DialogFooter';
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
   ({ className, children, ...props }, ref): React.ReactElement => {
     return (
-      <button
+      <Button
+        as="button"
         ref={ref}
         className={cn(
           'absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
@@ -342,8 +346,8 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
             />
           </svg>
         )}
-        <span className="sr-only">Close</span>
-      </button>
+        <Text as="span" className="sr-only">Close</Text>
+      </Button>
     );
   }
 );

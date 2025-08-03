@@ -7,11 +7,13 @@
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { ThemeManager, CompactThemeSwitcher } from './ThemeManager';
 import type { ThemeManagerProps, CompactThemeSwitcherProps } from './ThemeManager';
+import type {
+  THEME_TRANSITION_CLASSES 
+} from './css-theme-switcher';
 import { 
   createThemeStateManager,
   initializeTheme,
-  applyThemeTransition,
-  THEME_TRANSITION_CLASSES 
+  applyThemeTransition 
 } from './css-theme-switcher';
 import { useTheme, useTokens } from '../../providers/UiProvider/UiProvider';
 

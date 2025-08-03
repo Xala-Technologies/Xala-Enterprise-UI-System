@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box } from '../semantic';
 
 /**
  * Tooltip content variants using CVA
@@ -188,9 +189,9 @@ export interface TooltipArrowProps
 export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ({ children, ...props }, ref): React.ReactElement => {
     return (
-      <div ref={ref} {...props}>
+      <Box ref={ref} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -211,14 +212,14 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, TooltipTriggerProps>(
     }
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(tooltipTriggerVariants(), className)}
         tabIndex={0}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -231,7 +232,7 @@ TooltipTrigger.displayName = 'TooltipTrigger';
 export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
   ({ className, side, align, size, delay, showArrow = true, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(tooltipContentVariants({ side, align, size, delay }), className)}
         role="tooltip"
@@ -242,7 +243,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           <TooltipArrow side={side} align={align} />
         )}
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -255,7 +256,7 @@ TooltipContent.displayName = 'TooltipContent';
 export const TooltipArrow = forwardRef<HTMLDivElement, TooltipArrowProps>(
   ({ className, side, align, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(tooltipArrowVariants({ side, align }), className)}
         {...props}

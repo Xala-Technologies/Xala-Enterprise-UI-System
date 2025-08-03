@@ -9,10 +9,9 @@ import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Logger } from '../../lib/utils/multiplatform-logger';
 import { Container } from '../layout/Container';
 import { Stack } from '../layout/Stack';
-import { Text } from '../typography/Text';
-import { Button } from '../forms/Button';
-import { Alert } from '../feedback/Alert';
-import { useTokens } from '../../hooks/useTokens';
+import { Text } from '../semantic/Text';
+import { Button } from '../ui/button';
+import { Alert } from '../ui/alert';
 
 const logger = Logger.create({
   serviceName: 'ui-system-error-boundary',

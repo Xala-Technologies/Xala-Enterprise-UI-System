@@ -22,6 +22,7 @@ import { TestGenerator } from './TestGenerator';
 import { StoryGenerator } from './StoryGenerator';
 import { DocumentationGenerator } from './DocumentationGenerator';
 import { MultiPlatformGenerator } from './MultiPlatformGenerator';
+import { CliTemplateGenerator } from './CliTemplateGenerator';
 
 export class ComponentGenerator {
   private layoutGenerator: LayoutGenerator;
@@ -35,6 +36,7 @@ export class ComponentGenerator {
   private storyGenerator: StoryGenerator;
   private documentationGenerator: DocumentationGenerator;
   private multiPlatformGenerator: MultiPlatformGenerator;
+  private cliTemplateGenerator: CliTemplateGenerator;
 
   constructor() {
     this.layoutGenerator = new LayoutGenerator();
@@ -48,6 +50,7 @@ export class ComponentGenerator {
     this.storyGenerator = new StoryGenerator();
     this.documentationGenerator = new DocumentationGenerator();
     this.multiPlatformGenerator = new MultiPlatformGenerator();
+    this.cliTemplateGenerator = new CliTemplateGenerator();
   }
 
   async generateComponent(config: ComponentConfig): Promise<GeneratedComponent> {
@@ -58,8 +61,6 @@ export class ComponentGenerator {
 
     // Legacy single-platform generation
     switch (config.category) {
-      case 'layout':
-        return this.generateLayout(config as LayoutConfig);
       case 'page-template':
         return this.generatePageTemplate(config as PageTemplateConfig);
       case 'form':
@@ -87,9 +88,17 @@ export class ComponentGenerator {
 
   /**
    * Generate component for specific platform using v6.0 multi-platform generator
+   * Uses actual CLI templates for 100% alignment
    */
   async generateMultiPlatformComponent(config: ComponentConfig): Promise<GeneratedComponent> {
-    return this.multiPlatformGenerator.generateMultiPlatformComponent(config);
+    // Use CLI template generator for actual template alignment
+    try {
+      return await this.cliTemplateGenerator.generateFromCliTemplate(config);
+    } catch (error) {
+      // Fallback to programmatic generation if template not found
+      console.warn(`CLI template not found, using fallback: ${error}`);
+      return this.multiPlatformGenerator.generateMultiPlatformComponent(config);
+    }
   }
 
   /**
@@ -366,7 +375,7 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
 
     // Add category-specific imports
     switch (config.category) {
-      case 'layout':
+      case 'layouts':
         conditionalImports.push('Card', 'CardContent', 'CardDescription', 'CardHeader', 'CardTitle');
         break;
       case 'navigation':
@@ -493,7 +502,8 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
    * Get available components for a platform
    */
   getAvailableComponents(platform: string): string[] {
-    return this.multiPlatformGenerator.getAvailableComponents(platform as any);
+    const components = this.multiPlatformGenerator.getAvailableComponents(platform as any);
+    return components.map(c => c as string);
   }
 
   /**
@@ -530,7 +540,7 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
       'patterns',          // Advanced Patterns (React/Next.js only)
       'tools',             // Enterprise Tools
       // Legacy categories
-      'layout', 'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
+      'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
     ];
   }
 }

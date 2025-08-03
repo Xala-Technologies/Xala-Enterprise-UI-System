@@ -623,7 +623,7 @@ export class SmartCompositionEngine {
   }
 
   private enforceTypographyHierarchy(layout: LayoutStructure): LayoutStructure {
-    let headingLevel = 1;
+    const headingLevel = 1;
     
     const traverse = (node: any, level: number = 1) => {
       if (node.type === 'Text') {

@@ -9,6 +9,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Input } from '../semantic';
 
 // =============================================================================
 // SELECT VARIANTS USING DESIGN TOKENS
@@ -119,8 +120,9 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     const groupedOptions = getGroupedOptions(options);
 
     return (
-      <div className="relative">
-        <select
+      <Box className="relative">
+        <Input
+          as="select"
           className={cn(selectVariants({ variant, size, state: actualState }), className)}
           ref={ref}
           onChange={e => {
@@ -154,13 +156,13 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               ));
             }
           })}
-        </select>
+        </Input>
 
         {/* Chevron icon */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+        <Box className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
           <ChevronDownIcon />
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );
