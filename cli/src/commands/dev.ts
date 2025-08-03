@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { CommandMetadata } from './index.js';
 import { logger } from '../utils/logger.js';
-import { DevServer } from '../services/dev-server.js';
+import { DevServer, type DevServerConfig } from '../services/dev-server.js';
 import { ValidationError } from '../utils/errors.js';
 
 export interface DevOptions {
@@ -68,14 +68,14 @@ export const devCommand: CommandMetadata = {
       const spinner = ora('Initializing development environment...').start();
       
       try {
-        const serverConfig = {
+        const serverConfig: DevServerConfig = {
           port: options.port || 3001,
           host: options.host || 'localhost',
           platform: options.platform || 'react',
           hotReload: options.hotReload !== false,
           open: options.open !== false,
           https: options.https || false,
-          proxy: options.proxy,
+          ...(options.proxy && { proxy: options.proxy }),
           theme: options.theme || 'base-light'
         };
         

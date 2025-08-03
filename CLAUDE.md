@@ -134,11 +134,13 @@ ComponentName.displayName = 'ComponentName';
 
 **CRITICAL: Follow these rules without exception:**
 
-- ❌ **NO raw HTML elements** (div, span, p, h1-h6, button, input, etc.) in components
-- ✅ **ONLY semantic components** from `@xala-technologies/ui-system`
-- ❌ **NO hardcoded styling** (no style properties, no arbitrary Tailwind values)
-- ✅ **MANDATORY design token usage** for all colors, spacing, typography
-- ✅ **Enhanced 8pt Grid System** - all spacing in 8px increments
+- ❌ **NO SSR dependencies** (no 'use client', no server-side rendering)
+- ❌ **NO client-side state** (no useState, useEffect, useCallback, useMemo)
+- ✅ **ALWAYS create pure presentational components only**
+- ✅ **ALWAYS use design tokens via CSS variables** (bg-primary, text-foreground, border-border)
+- ❌ **NEVER hardcode colors** - use semantic tokens (text-primary, text-muted-foreground, bg-background)
+- ✅ **ALWAYS use class-variance-authority** for component variants
+- ✅ **ALWAYS use forwardRef** for proper ref handling
 - ✅ **WCAG 2.2 AAA compliance** for accessibility
 - ❌ **NO hardcoded user-facing text** - ALL text must use `t()` function
 - ✅ **MANDATORY localization**: English, Norwegian Bokmål, French, Arabic
@@ -153,21 +155,58 @@ ComponentName.displayName = 'ComponentName';
 - **ALWAYS** handle null/undefined cases explicitly
 - **ALWAYS** use readonly properties in interfaces
 
-### Component Requirements
-- **NEVER** use React hooks in UI components (useState, useEffect, etc.)
-- **ALWAYS** create pure presentational components
+### Component Requirements (CRITICAL)
+- **NEVER** use SSR dependencies (no 'use client', no server-side rendering)
+- **NEVER** use client-side state (no useState, useEffect, useCallback, useMemo)
+- **ALWAYS** create pure presentational components only
+- **ALWAYS** use design tokens via CSS variables (bg-primary, text-foreground, border-border)
+- **NEVER** hardcode colors - use semantic tokens (text-primary, text-muted-foreground, bg-background)
+- **ALWAYS** use class-variance-authority for component variants
 - **ALWAYS** use forwardRef for proper ref handling
-- **ALWAYS** use class-variance-authority for variants
-- **NEVER** use client-side state management
-- **NEVER** use 'use client' directive
 
-### Design Token Requirements
-- **ALWAYS** use semantic tokens: `bg-primary`, `text-foreground`, `border-border`
-- **NEVER** hardcode colors: `#1976d2`, `blue`, `red`
-- **ALWAYS** use semantic spacing: `space-2`, `p-4`, `m-4`
-- **ALWAYS** use semantic states: `text-destructive`, `bg-destructive`
-- **SUCCESS** states: `text-green-600`, `bg-green-500`, `border-green-500`
-- **WARNING** states: `text-yellow-600`, `bg-yellow-500`, `border-yellow-500`
+### Design Token Requirements (MANDATORY)
+- **ALWAYS** use semantic color tokens: `bg-primary`, `text-foreground`, `border-border`, `bg-background`
+- **ALWAYS** use semantic spacing: `space-2`, `space-4`, `p-4`, `m-4` (mapped to design system)
+- **ALWAYS** use semantic states: `text-destructive`, `bg-destructive`, `border-destructive` for errors
+- **ALWAYS** use semantic text: `text-muted-foreground` for secondary text
+- **ALWAYS** use semantic interactive: `bg-accent`, `text-accent-foreground` for hover states
+- **NEVER** use hardcoded values: `#1976d2`, `16px`, `red`, `blue` (use tokens instead)
+- **SUCCESS** states: use `text-green-600`, `bg-green-500`, `border-green-500` pattern
+- **WARNING** states: use `text-yellow-600`, `bg-yellow-500`, `border-yellow-500` pattern
+
+## 🚫 FORBIDDEN PATTERNS (NEVER USE)
+
+- **NEVER** use 'any' type
+- **NEVER** ignore TypeScript errors
+- **NEVER** use magic numbers
+- **NEVER** hardcode configuration values
+- **NEVER** create deeply nested code
+- **NEVER** ignore ESLint warnings
+- **NEVER** skip error handling
+- **NEVER** use implicit returns
+- **NEVER** use React hooks in UI components (useState, useEffect, useCallback, useMemo)
+- **NEVER** use 'use client' or SSR dependencies in components
+- **NEVER** hardcode colors (#1976d2, blue, red) - use design tokens instead
+- **NEVER** create stateful components - only pure presentational components
+
+## 🔧 CODE GENERATION CHECKLIST
+
+Before submitting any code, verify:
+
+- [ ] All functions have explicit return types
+- [ ] No 'any' types used anywhere
+- [ ] All imports organized and unused ones removed
+- [ ] All errors properly typed and handled
+- [ ] All magic numbers replaced with constants
+- [ ] JSDoc added to public interfaces
+- [ ] No functions exceed 20 lines
+- [ ] No files exceed 200 lines
+- [ ] All ESLint rules pass
+- [ ] TypeScript strict mode passes
+- [ ] No React hooks used in UI components (pure components only)
+- [ ] All colors use design tokens (no hardcoded values)
+- [ ] Components use class-variance-authority for variants
+- [ ] Components use forwardRef for proper ref handling
 
 ## Testing Strategy
 
@@ -241,3 +280,8 @@ pnpm run test:coverage
 - Reference existing tokens in `src/tokens/` directory
 - Use token transformers for CSS variables, Tailwind config, TypeScript types
 - Never create arbitrary color values
+
+---
+
+_Updated to align with project standards v6.1.0_  
+_Platform: library | Environment: development_

@@ -110,48 +110,49 @@ export class ProjectAnalyzer {
   async analyze(options: AnalysisOptions): Promise<AnalysisResults> {
     logger.info('Starting project analysis...');
 
-    const results: AnalysisResults = {};
     const reportPaths: string[] = [];
     const recommendations: Recommendation[] = [];
 
     try {
-      if (options.performance) {
-        logger.debug('Running performance analysis...');
-        results.performance = await this.analyzePerformance(options);
-        if (options.format !== 'console') {
-          reportPaths.push(`${options.outputDir}/performance-report.${options.format}`);
-        }
+      // Run analyses based on options
+      const performance = options.performance ? await this.analyzePerformance(options) : undefined;
+      if (performance && options.format !== 'console') {
+        reportPaths.push(`${options.outputDir}/performance-report.${options.format}`);
       }
 
-      if (options.accessibility) {
-        logger.debug('Running accessibility analysis...');
-        results.accessibility = await this.analyzeAccessibility(options);
-        if (options.format !== 'console') {
-          reportPaths.push(`${options.outputDir}/accessibility-report.${options.format}`);
-        }
+      const accessibility = options.accessibility ? await this.analyzeAccessibility(options) : undefined;
+      if (accessibility && options.format !== 'console') {
+        reportPaths.push(`${options.outputDir}/accessibility-report.${options.format}`);
       }
 
-      if (options.compliance) {
-        logger.debug('Running compliance analysis...');
-        results.compliance = await this.analyzeCompliance(options);
-        if (options.format !== 'console') {
-          reportPaths.push(`${options.outputDir}/compliance-report.${options.format}`);
-        }
+      const compliance = options.compliance ? await this.analyzeCompliance(options) : undefined;
+      if (compliance && options.format !== 'console') {
+        reportPaths.push(`${options.outputDir}/compliance-report.${options.format}`);
       }
 
-      if (options.bundle) {
-        logger.debug('Running bundle analysis...');
-        results.bundle = await this.analyzeBundle(options);
-        if (options.format !== 'console') {
-          reportPaths.push(`${options.outputDir}/bundle-report.${options.format}`);
-        }
+      const bundle = options.bundle ? await this.analyzeBundle(options) : undefined;
+      if (bundle && options.format !== 'console') {
+        reportPaths.push(`${options.outputDir}/bundle-report.${options.format}`);
       }
 
+      // Build results object for recommendations
+      const resultsForRecommendations: AnalysisResults = {
+        ...(performance && { performance }),
+        ...(accessibility && { accessibility }),
+        ...(compliance && { compliance }),
+        ...(bundle && { bundle }),
+        reportPaths: [],
+        recommendations: []
+      };
+      
       // Generate recommendations based on results
-      recommendations.push(...this.generateRecommendations(results));
+      recommendations.push(...this.generateRecommendations(resultsForRecommendations));
 
       return {
-        ...results,
+        ...(performance && { performance }),
+        ...(accessibility && { accessibility }),
+        ...(compliance && { compliance }),
+        ...(bundle && { bundle }),
         reportPaths,
         recommendations
       };

@@ -8,46 +8,28 @@
 [![WCAG AAA](https://img.shields.io/badge/WCAG-2.2%20AAA-green.svg)](https://docs.xala.ai/accessibility)
 [![Norwegian Compliance](https://img.shields.io/badge/Norwegian-Compliant-red.svg)](https://www.digdir.no/)
 
-## 🎯 **Quick Navigation by Audience**
+## 🎯 **Quick Start**
 
-### 🤖 **For AI Agents & Code Generators**
-**[→ AI Documentation Hub](./docs/AI_DOCUMENTATION_INDEX.md)**
-
-Complete machine-readable specifications, semantic mappings, and intelligent patterns for AI-powered development tools (ChatGPT, Claude, GitHub Copilot, Cursor).
-
-**Quick AI Setup:**
-```bash
-# AI tools can generate complete applications instantly
-"Create a professional SaaS dashboard using Xala UI System with sidebar navigation, stats cards, and data table"
-```
-
-### 👨‍💻 **For Developers**
-**[→ Developer Documentation Hub](./docs/DEVELOPER_DOCUMENTATION_INDEX.md)**
-
-Comprehensive implementation guides for building professional applications across all platforms and frameworks.
-
-**Quick Developer Setup:**
 ```bash
 npm install @xala-technologies/ui-system
-# Ready-to-use components with intelligent defaults
 ```
 
-### 🎨 **For Designers**
-**[→ Designer Documentation Hub](./docs/DESIGNER_DOCUMENTATION_INDEX.md)**
+### For AI Code Generators
+```typescript
+// AI can generate professional layouts instantly
+import { Container, Stack, Text, Button } from '@xala-technologies/ui-system';
 
-Design guidelines, pattern libraries, and resources for creating consistent, accessible user experiences.
+export const Dashboard = (): JSX.Element => (
+  <Container size="xl">
+    <Stack direction="vertical" gap="xl">
+      <Text variant="h1">{t('dashboard.title')}</Text>
+      <Button variant="primary" size="lg">{t('actions.create')}</Button>
+    </Stack>
+  </Container>
+);
+```
 
-**Quick Designer Setup:**
-- [Figma Component Library](https://figma.com/@xala-design-system)
-- [Design Token Documentation](./docs/designers/tokens/)
-- [Pattern Library](./docs/designers/patterns/)
-
-### 🔧 **For Technical Integration**
-**[→ Integration Documentation Hub](./docs/INTEGRATION_DOCUMENTATION_INDEX.md)**
-
-Platform-specific integration guides for seamless implementation across any technology stack.
-
-**Supported Platforms:**
+### Supported Platforms:
 - **Web**: React, Vue, Angular, Svelte, Next.js, Nuxt, Remix
 - **Mobile**: React Native, Flutter, iOS, Android
 - **Desktop**: Electron, Tauri, Qt, WPF

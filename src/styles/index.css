@@ -1,0 +1,266 @@
+/**
+ * Design System Styles Entry Point
+ * Loads all theme files and establishes CSS architecture
+ */
+
+/* CSS Layers for proper cascade order */
+@layer base, theme, components, utilities;
+
+/* Base tokens (theme-agnostic) */
+@import './themes/base.css';
+
+/* Main token definitions */
+@import './tokens.css';
+
+/* Theme-specific tokens */
+@import './themes/light.css';
+@import './themes/dark.css';
+@import './themes/high-contrast.css';
+
+/* Base reset and typography */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
+    color: hsl(var(--color-foreground));
+    background-color: hsl(var(--color-background));
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Focus management */
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: var(--focus-ring-width) solid hsl(var(--color-focus-ring));
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  /* Ensure minimum touch targets */
+  button,
+  input,
+  select,
+  textarea,
+  [role="button"],
+  [role="checkbox"],
+  [role="radio"],
+  [role="switch"] {
+    min-height: var(--min-touch-target);
+    min-width: var(--min-touch-target);
+  }
+
+  /* Typography scale */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: hsl(var(--color-foreground));
+    margin: 0;
+  }
+
+  h1 {
+    font-size: var(--font-size-5xl);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  h2 {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+  }
+
+  h3 {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  h4 {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  h5 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-medium);
+  }
+
+  h6 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+  }
+
+  p {
+    margin: 0;
+    color: hsl(var(--color-foreground));
+  }
+
+  small {
+    font-size: var(--font-size-sm);
+    color: hsl(var(--color-muted-foreground));
+  }
+
+  /* Links */
+  a {
+    color: hsl(var(--color-primary));
+    text-decoration: none;
+    transition: color var(--duration-fast) var(--easing-ease-out);
+  }
+
+  a:hover {
+    color: hsl(var(--color-primary-hover));
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: var(--focus-ring-width) solid hsl(var(--color-focus-ring));
+    outline-offset: var(--focus-ring-offset);
+    border-radius: var(--border-radius-sm);
+  }
+
+  /* Code */
+  code,
+  pre {
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-sm);
+  }
+
+  code {
+    background-color: hsl(var(--color-muted));
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--border-radius-sm);
+  }
+
+  pre {
+    background-color: hsl(var(--color-muted));
+    padding: var(--space-4);
+    border-radius: var(--border-radius-lg);
+    overflow-x: auto;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* Lists */
+  ul, ol {
+    margin: 0;
+    padding-left: var(--space-6);
+  }
+
+  li {
+    margin-bottom: var(--space-1);
+  }
+
+  /* Form elements base styling */
+  input,
+  textarea,
+  select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  /* Disabled state */
+  [disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Hover media query */
+  @media (hover: hover) {
+    button:hover,
+    [role="button"]:hover {
+      transition: all var(--duration-fast) var(--easing-ease-out);
+    }
+  }
+
+  /* High contrast mode adjustments */
+  @media (prefers-contrast: high) {
+    :root:not([data-theme]) {
+      --border-width-1: 2px;
+      --focus-ring-width: 3px;
+    }
+  }
+
+  /* Reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    * {
+      background: transparent !important;
+      color: black !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+      text-decoration: underline;
+    }
+
+    a[href]::after {
+      content: " (" attr(href) ")";
+    }
+
+    abbr[title]::after {
+      content: " (" attr(title) ")";
+    }
+
+    pre,
+    blockquote {
+      border: 1px solid #999;
+      page-break-inside: avoid;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    tr,
+    img {
+      page-break-inside: avoid;
+    }
+
+    img {
+      max-width: 100% !important;
+    }
+
+    p,
+    h2,
+    h3 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    h2,
+    h3 {
+      page-break-after: avoid;
+    }
+  }
+}

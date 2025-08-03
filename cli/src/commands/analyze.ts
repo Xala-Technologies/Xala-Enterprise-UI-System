@@ -195,13 +195,13 @@ function displayBundleResults(bundle: any): void {
   }
 }
 
-function getScoreColor(score: number): string {
+function getScoreColor(score: number): (text: string) => string {
   if (score >= 90) return chalk.green.bold;
   if (score >= 70) return chalk.yellow.bold;
   return chalk.red.bold;
 }
 
-function getComplianceColor(level: string): string {
+function getComplianceColor(level: string): (text: string) => string {
   switch (level) {
     case 'AAA':
       return chalk.green.bold;

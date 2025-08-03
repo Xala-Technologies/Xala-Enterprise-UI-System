@@ -45,7 +45,7 @@ export class AICodeGenerator {
 
   constructor(provider = 'openai') {
     this.provider = provider;
-    this.apiKey = process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY;
+    this.apiKey = process.env.OPENAI_API_KEY || process.env.ANTHROPIC_API_KEY || '';
   }
 
   async generateComponent(request: AIGenerateRequest): Promise<GeneratedCode> {
@@ -272,7 +272,7 @@ export const GeneratedComponent = ({
   private parseGeneratedCode(response: string, request: AIGenerateRequest): GeneratedCode {
     // Extract code from AI response
     const codeMatch = response.match(/```(?:tsx?|jsx?)?\n([\s\S]*?)\n```/);
-    const code = codeMatch ? codeMatch[1] : response;
+    const code = codeMatch?.[1] || response;
     
     // Generate filename based on description
     const componentName = this.extractComponentName(code) || 'GeneratedComponent';
@@ -320,12 +320,12 @@ export const GeneratedComponent = ({
 
   private extractComponentName(code: string): string | null {
     const match = code.match(/export (?:const|function) (\w+)/);
-    return match ? match[1] : null;
+    return match?.[1] || null;
   }
 
   private extractUsedComponents(code: string): ReadonlyArray<string> {
     const componentMatches = code.match(/(?:import|from).*@xala-technologies\/ui-system.*\{([^}]+)\}/);
-    if (!componentMatches) return [];
+    if (!componentMatches?.[1]) return [];
     
     return componentMatches[1]
       .split(',')

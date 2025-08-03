@@ -24,7 +24,12 @@ export interface CommandMetadata {
     readonly description: string;
     readonly required?: boolean;
   }>;
-  readonly action: (...args: any[]) => Promise<void>;
+  readonly subcommands?: ReadonlyArray<{
+    readonly name: string;
+    readonly description: string;
+    readonly action: (...args: any[]) => Promise<void>;
+  }>;
+  readonly action?: (...args: any[]) => Promise<void>;
 }
 
 // Map of registered commands
@@ -109,7 +114,7 @@ export async function registerCommands(program: Command): Promise<void> {
     // Set action handler
     command.action(async (...args) => {
       try {
-        await metadata.action(...args);
+        await metadata.action?.(...args);
       } catch (error) {
         logger.error(`Command "${name}" failed:`, error);
         process.exit(1);
@@ -172,22 +177,22 @@ function levenshteinDistance(a: string, b: string): number {
   }
   
   for (let j = 0; j <= a.length; j++) {
-    matrix[0][j] = j;
+    matrix[0]![j] = j;
   }
   
   for (let i = 1; i <= b.length; i++) {
     for (let j = 1; j <= a.length; j++) {
       if (b.charAt(i - 1) === a.charAt(j - 1)) {
-        matrix[i][j] = matrix[i - 1][j - 1];
+        matrix[i]![j] = matrix[i - 1]![j - 1]!;
       } else {
-        matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1,
-          matrix[i][j - 1] + 1,
-          matrix[i - 1][j] + 1
+        matrix[i]![j] = Math.min(
+          matrix[i - 1]![j - 1]! + 1,
+          matrix[i]![j - 1]! + 1,
+          matrix[i - 1]![j]! + 1
         );
       }
     }
   }
   
-  return matrix[b.length][a.length];
+  return matrix[b.length]![a.length]!;
 }

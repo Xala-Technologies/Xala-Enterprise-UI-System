@@ -2,32 +2,107 @@
 
 The comprehensive command-line interface for the Xala Universal Design System. Build beautiful, accessible, and compliant applications across all platforms with AI-powered generation and enterprise-grade features.
 
+[![npm version](https://badge.fury.io/js/@xala-technologies/xala-cli.svg)](https://badge.fury.io/js/@xala-technologies/xala-cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+
+> **Production Ready** - TypeScript compilation working perfectly with comprehensive CLI functionality.
+
 ## Installation
+
+### Global Installation (Recommended)
 
 ```bash
 npm install -g @xala-technologies/xala-cli
 ```
 
-## Quick Start
+### Alternative Installation Methods
 
 ```bash
-# Initialize a new project
+# Using npx (no global installation)
+npx @xala-technologies/xala-cli init my-project
+
+# Using Yarn
+yarn global add @xala-technologies/xala-cli
+
+# Using pnpm
+pnpm add -g @xala-technologies/xala-cli
+```
+
+### System Requirements
+
+- **Node.js**: ≥18.0.0
+- **npm**: ≥8.0.0
+- **Operating System**: macOS, Linux, Windows
+- **Memory**: ≥4GB RAM (recommended for AI features)
+
+## Quick Start
+
+### 1. Initialize Project
+
+```bash
+# Basic React project
 xala init my-app --platform react --template saas
 
-# Generate component with AI
-xala ai generate "user dashboard with data table and filters"
+# Healthcare application with compliance
+xala init medical-dashboard \
+  --platform react \
+  --template healthcare \
+  --industry healthcare \
+  --accessibility AAA
 
-# Create custom theme
-xala themes create healthcare --brand "Medical Corp"
+# Multi-platform enterprise application
+xala init enterprise-app \
+  --platform react \
+  --template enterprise \
+  --compliance nsm
+```
 
-# Start development server
-xala dev --port 3001 --platform react
+### 2. AI-Powered Generation
 
-# Build for production
-xala build react --optimize
+```bash
+# Generate complete feature from description
+xala ai generate "user management dashboard with data table, search, filters, and CRUD operations" \
+  --platform react \
+  --complexity advanced
 
-# Analyze project
-xala analyze --performance --accessibility --compliance
+# Generate healthcare-specific component
+xala ai generate "patient appointment card with medical data and status indicators" \
+  --industry healthcare \
+  --compliance healthcare
+
+# Interactive AI generation
+xala ai generate "responsive dashboard" --interactive
+```
+
+### 3. Theme Management
+
+```bash
+# Create industry-specific theme
+xala themes create medical-pro \
+  --brand "Healthcare Solutions Inc." \
+  --colors primary=#0891b2,secondary=#065f46 \
+  --industry healthcare \
+  --accessibility AAA
+
+# Apply existing theme
+xala themes apply medical-pro
+
+# Preview theme before creation
+xala themes create fintech-secure --preview
+```
+
+### 4. Development Workflow
+
+```bash
+# Start development server with hot-reload
+xala dev --port 3001 --https --open
+
+# Build for production with optimization
+xala build react --optimize --analyze
+
+# Comprehensive project analysis
+xala analyze --performance --accessibility --compliance --output ./reports
 ```
 
 ## Commands
@@ -158,24 +233,69 @@ module.exports = {
 };
 ```
 
-## Compliance Rules
+## Norwegian Compliance & Enterprise Standards
 
-All generated code follows mandatory compliance rules:
+All generated code follows mandatory compliance rules for Norwegian standards (NSM, GDPR, WCAG AAA):
 
-### ❌ Forbidden
-- Raw HTML elements (div, span, p, button, etc.)
-- Hardcoded styling or colors
-- Hardcoded user-facing text
-- 'any' TypeScript types
-- Files over 200 lines or functions over 20 lines
+### ❌ Forbidden Patterns
+```typescript
+// ❌ Raw HTML elements
+<div className="user-card">
+<button onClick={handleClick}>
 
-### ✅ Required
-- Semantic components from `@xala-technologies/ui-system`
-- Design tokens for all styling
-- Localization with `t()` function
-- Explicit TypeScript return types
-- WCAG 2.2 AAA accessibility
-- 8pt grid system (8px increments)
+// ❌ Hardcoded styling
+style={{ padding: '16px', color: '#ff0000' }}
+
+// ❌ Hardcoded text
+<span>Welcome User</span>
+
+// ❌ TypeScript 'any' types
+const userData: any = props;
+
+// ❌ Non-semantic elements
+<div role="button" onClick={handleClick}>
+```
+
+### ✅ Required Patterns
+```typescript
+// ✅ Semantic components from design system
+<Container>
+  <Text>{t('user.welcome')}</Text>
+  <Button onClick={handleClick} aria-label={t('actions.submit')}>
+    {t('buttons.submit')}
+  </Button>
+</Container>
+
+// ✅ Design tokens for all styling
+const tokens = useTokens();
+<Container 
+  style={{
+    padding: tokens.spacing.md,
+    backgroundColor: tokens.colors.background.primary
+  }}
+>
+
+// ✅ Proper TypeScript interfaces
+interface UserCardProps {
+  readonly name: string;
+  readonly email: string;
+  readonly onEdit?: () => void;
+}
+
+export const UserCard = ({ name, email, onEdit }: UserCardProps): JSX.Element => {
+  const { t } = useLocalization();
+  // Component implementation
+};
+```
+
+### Code Quality Standards
+- **Maximum file size**: 200 lines
+- **Maximum function size**: 20 lines
+- **Test coverage**: ≥95% (branches, functions, lines, statements)
+- **Accessibility**: WCAG 2.2 AAA compliance
+- **Grid system**: 8pt grid (8px increments)
+- **Memory usage**: <50MB per module
+- **Initialization time**: <100ms per module
 
 ## API Integration
 
@@ -230,9 +350,155 @@ xala ai generate "patient appointment card with status indicators"
 xala analyze --performance --accessibility --compliance
 ```
 
+## Documentation
+
+Comprehensive documentation is available in the `/docs` directory:
+
+### Core Documentation
+- **[COMMANDS.md](./docs/COMMANDS.md)** - Complete command reference with examples
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Technical architecture and design patterns
+- **[API.md](./docs/API.md)** - API reference for services and utilities
+- **[TEMPLATES.md](./docs/TEMPLATES.md)** - Template system and platform-specific generation
+- **[TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+
+### Quick Access
+```bash
+# Interactive documentation
+xala docs --interactive
+
+# Command-specific help
+xala init --help
+xala ai generate --help
+xala themes create --help
+
+# Show examples
+xala examples component
+xala examples theme
+xala examples ai-generation
+```
+
+### Key Features Documentation
+
+#### AI-Powered Development
+- Natural language component generation
+- Context-aware code suggestions
+- Compliance validation
+- Multi-provider support (OpenAI, Anthropic)
+
+#### Multi-Platform Support
+- **Web**: React, Vue, Angular
+- **Mobile**: Flutter, React Native, iOS, Android
+- **Desktop**: Electron, Tauri, PWA
+- Consistent design tokens across all platforms
+
+#### Enterprise Compliance
+- **Norwegian Standards**: NSM classification, GDPR compliance
+- **Accessibility**: WCAG 2.2 AAA validation
+- **Security**: Object injection prevention, audit trails
+- **Quality**: 95%+ test coverage, type safety
+
+#### Theme System
+- Industry-specific presets (Healthcare, Finance, Government)
+- Accessibility-first design
+- Multi-language support (EN, NO, FR, AR)
+- Dark mode and high contrast variants
+
+## Diagnostic Commands
+
+```bash
+# Check system compatibility
+xala doctor
+
+# Validate project configuration
+xala config validate
+
+# Run comprehensive analysis
+xala analyze --all --output ./reports
+
+# Debug mode for troubleshooting
+DEBUG=true xala [command]
+```
+
+## Environment Configuration
+
+### Required Environment Variables
+
+```bash
+# AI Integration (choose one)
+export OPENAI_API_KEY="your-openai-key"        # For OpenAI GPT models
+export ANTHROPIC_API_KEY="your-anthropic-key"  # For Claude models
+
+# Optional Configuration
+export XALA_LOG_LEVEL="debug"                  # Logging level
+export XALA_NO_TELEMETRY="true"               # Disable telemetry
+export NODE_OPTIONS="--max-old-space-size=4096" # Increase memory for large projects
+```
+
+### Shell Configuration
+
+Add to your shell profile (`~/.bashrc`, `~/.zshrc`, or `~/.profile`):
+
+```bash
+# Xala CLI configuration
+export OPENAI_API_KEY="your-api-key-here"
+export XALA_LOG_LEVEL="info"
+
+# Optional: Add completion support
+eval "$(xala completion bash)"  # For Bash
+eval "$(xala completion zsh)"   # For Zsh
+```
+
+## Performance Optimization
+
+### Build Performance
+```bash
+# Enable build caching
+xala build --cache
+
+# Use incremental builds
+xala build --incremental --watch
+
+# Parallel platform builds
+xala build all --parallel --max-workers 4
+```
+
+### Development Performance
+```bash
+# Start with performance monitoring
+xala dev --performance-monitor
+
+# Enable memory profiling
+xala dev --memory-profile
+
+# Optimize for large projects
+xala dev --fast-refresh --lazy-compilation
+```
+
 ## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
+```bash
+# Clone the repository
+git clone https://github.com/xala-technologies/xala-cli.git
+cd xala-cli
+
+# Install dependencies
+npm install
+
+# Build the CLI
+npm run build
+
+# Link for local development
+npm link
+
+# Run tests
+npm test
+
+# Validate code quality
+npm run validate
+```
 
 ## License
 
@@ -240,11 +506,33 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Support
 
-- 📖 [Documentation](https://xala.dev/docs)
-- 💬 [Discord Community](https://discord.gg/xala)
-- 🐛 [Issue Tracker](https://github.com/xala-technologies/xala-cli/issues)
-- 📧 [Email Support](mailto:support@xala.dev)
+### Community Resources
+- **📖 Documentation**: [https://xala.dev/docs](https://xala.dev/docs)
+- **💬 Discord Community**: [https://discord.gg/xala](https://discord.gg/xala)
+- **🐛 Issue Tracker**: [GitHub Issues](https://github.com/xala-technologies/xala-cli/issues)
+- **📧 Email Support**: [support@xala.dev](mailto:support@xala.dev)
+
+### Professional Support
+- **🏢 Enterprise Support**: Custom training, priority support, SLA guarantees
+- **🎓 Training Programs**: Team workshops, certification programs
+- **📞 Consulting**: Architecture review, implementation guidance
+
+### Getting Help
+```bash
+# Built-in help system
+xala --help
+xala [command] --help
+
+# System diagnostics
+xala doctor --verbose
+
+# Community examples
+xala examples --category healthcare
+xala examples --platform react
+```
 
 ---
 
-Built with ❤️ by the Xala Technologies team for the global development community.
+**Built with ❤️ by the Xala Technologies team for the global development community.**
+
+*Empowering developers to create accessible, compliant, and beautiful applications across all platforms.*

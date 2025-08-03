@@ -1,0 +1,41 @@
+{
+  "zIndex": {
+    "base": {
+      "auto": "auto",
+      "0": "0",
+      "10": "10",
+      "20": "20",
+      "30": "30",
+      "40": "40",
+      "50": "50"
+    },
+    "semantic": {
+      "hide": "-1",
+      "base": "0",
+      "docked": "10",
+      "dropdown": "1000",
+      "sticky": "1020",
+      "banner": "1030",
+      "overlay": "1040",
+      "modal": "1050",
+      "popover": "1060",
+      "skipLink": "1070",
+      "toast": "1080",
+      "tooltip": "1090"
+    },
+    "component": {
+      "header": "100",
+      "sidebar": "200",
+      "navigation": "300",
+      "dropdown": "1000",
+      "drawer": "1010",
+      "dialog": "1020",
+      "sheet": "1030",
+      "toast": "1040",
+      "tooltip": "1050",
+      "popover": "1060",
+      "loading": "9990",
+      "debug": "9999"
+    }
+  }
+}

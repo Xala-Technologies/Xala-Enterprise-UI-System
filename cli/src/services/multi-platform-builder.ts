@@ -78,7 +78,7 @@ export class MultiPlatformBuilder {
         outputPath: buildResult.outputPath,
         size: buildResult.size,
         buildTime: `${(buildTime / 1000).toFixed(1)}s`,
-        warnings: buildResult.warnings
+        ...(buildResult.warnings && { warnings: buildResult.warnings })
       };
 
     } catch (error) {

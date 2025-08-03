@@ -1,0 +1,44 @@
+{
+  "breakpoints": {
+    "base": {
+      "xs": "320px",
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1536px"
+    },
+    "semantic": {
+      "mobile": "320px",
+      "mobileLg": "480px",
+      "tablet": "768px",
+      "tabletLg": "1024px",
+      "desktop": "1280px",
+      "desktopLg": "1440px",
+      "wide": "1920px"
+    },
+    "container": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px",
+      "2xl": "1400px"
+    },
+    "platform": {
+      "mobile": {
+        "portrait": "320px",
+        "landscape": "568px"
+      },
+      "tablet": {
+        "portrait": "768px",
+        "landscape": "1024px"
+      },
+      "desktop": {
+        "small": "1280px",
+        "medium": "1440px",
+        "large": "1920px",
+        "xlarge": "2560px"
+      }
+    }
+  }
+}

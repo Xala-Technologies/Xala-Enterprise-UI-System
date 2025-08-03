@@ -1,0 +1,96 @@
+/**
+ * Dark Theme
+ * Semantic token mappings for dark color scheme
+ */
+
+@layer theme {
+  [data-theme="dark"] {
+    /* Background Colors */
+    --color-background: 224 71% 4%;
+    --color-foreground: 210 20% 98%;
+    --color-card: 215 28% 17%;
+    --color-card-foreground: 210 20% 98%;
+    --color-popover: 215 28% 17%;
+    --color-popover-foreground: 210 20% 98%;
+    
+    /* Primary Colors */
+    --color-primary: 213 94% 68%;
+    --color-primary-foreground: 224 64% 33%;
+    --color-primary-hover: 212 96% 78%;
+    --color-primary-active: 214 95% 93%;
+    
+    /* Secondary Colors */
+    --color-secondary: 215 28% 17%;
+    --color-secondary-foreground: 210 20% 98%;
+    --color-secondary-hover: 217 19% 27%;
+    --color-secondary-active: 215 14% 34%;
+    
+    /* Muted Colors */
+    --color-muted: 215 28% 17%;
+    --color-muted-foreground: 217 10% 65%;
+    --color-muted-hover: 217 19% 27%;
+    
+    /* Accent Colors */
+    --color-accent: 215 28% 17%;
+    --color-accent-foreground: 210 20% 98%;
+    --color-accent-hover: 217 19% 27%;
+    
+    /* Destructive Colors */
+    --color-destructive: 0 91% 71%;
+    --color-destructive-foreground: 0 63% 31%;
+    --color-destructive-hover: 0 94% 82%;
+    --color-destructive-active: 0 96% 89%;
+    
+    /* Status Colors */
+    --color-success: 142 69% 58%;
+    --color-success-foreground: 144 61% 20%;
+    --color-success-hover: 142 77% 73%;
+    --color-success-muted: 144 61% 20%;
+    
+    --color-warning: 48 96% 53%;
+    --color-warning-foreground: 28 73% 26%;
+    --color-warning-hover: 50 98% 64%;
+    --color-warning-muted: 28 73% 26%;
+    
+    --color-info: 213 94% 68%;
+    --color-info-foreground: 224 64% 33%;
+    --color-info-hover: 212 96% 78%;
+    --color-info-muted: 224 64% 33%;
+    
+    --color-error: 0 91% 71%;
+    --color-error-foreground: 0 63% 31%;
+    --color-error-hover: 0 94% 82%;
+    --color-error-muted: 0 63% 31%;
+    
+    /* Border and Input Colors */
+    --color-border: 215 28% 17%;
+    --color-border-muted: 217 19% 27%;
+    --color-input: 215 28% 17%;
+    --color-input-border: 217 19% 27%;
+    --color-ring: 213 94% 68%;
+    
+    /* Text Colors */
+    --color-text-primary: 210 20% 98%;
+    --color-text-secondary: 220 14% 96%;
+    --color-text-muted: 217 10% 65%;
+    --color-text-disabled: 218 11% 65%;
+    
+    /* Component-specific Colors */
+    --color-sidebar: 215 28% 17%;
+    --color-sidebar-foreground: 210 20% 98%;
+    --color-header: 215 28% 17%;
+    --color-header-foreground: 210 20% 98%;
+    --color-footer: 224 71% 4%;
+    --color-footer-foreground: 210 20% 98%;
+    
+    /* Focus States */
+    --color-focus-ring: 213 94% 68%;
+    --color-focus-ring-offset: 224 71% 4%;
+    
+    /* Norwegian Compliance Colors */
+    --color-nsm-open: 142 69% 58%;
+    --color-nsm-restricted: 48 96% 53%;
+    --color-nsm-confidential: 25 95% 53%;
+    --color-nsm-secret: 0 91% 71%;
+  }
+}

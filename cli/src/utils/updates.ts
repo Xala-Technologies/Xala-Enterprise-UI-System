@@ -11,15 +11,20 @@ export interface UpdateInfo {
 
 export async function checkForUpdates(currentVersion: string): Promise<UpdateInfo | null> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    
     const response = await fetch('https://registry.npmjs.org/@xala-technologies/xala-cli/latest', {
-      timeout: 3000
+      signal: controller.signal
     });
+    
+    clearTimeout(timeoutId);
     
     if (!response.ok) {
       return null;
     }
     
-    const data = await response.json();
+    const data = await response.json() as { version: string };
     const latestVersion = data.version;
     
     const isOutdated = semver.lt(currentVersion, latestVersion);

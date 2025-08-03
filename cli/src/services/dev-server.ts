@@ -41,7 +41,7 @@ export class DevServer {
 
       return {
         localUrl,
-        networkUrl,
+        ...(networkUrl && { networkUrl }),
         port: config.port,
         host: config.host
       };
