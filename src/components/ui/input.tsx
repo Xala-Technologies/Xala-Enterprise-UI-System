@@ -1,14 +1,16 @@
 /**
- * @fileoverview Input Component v5.0.0 - Token-Based Design System
- * @description Modern Input component using design tokens with SSR compatibility
+ * @fileoverview Input Component v5.0.0 - Semantic Component Migration
+ * @description Modern Input component using semantic components with i18n support
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Semantic components, i18n
  */
 
 // ✅ NO 'use client' directive - works in SSR
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Text } from '../semantic';
+import { useTranslation } from '../../i18n';
 
 // =============================================================================
 // INPUT VARIANTS USING DESIGN TOKENS
@@ -82,6 +84,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     onChangeEvent,
     ...props
   }, ref) => {
+    const { t } = useTranslation();
+    
     // Determine state based on props
     const currentState = error ? 'error' : success ? 'success' : state || 'default';
 
@@ -105,8 +109,10 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
+    // For simple cases, use Text component as input wrapper
     return (
-      <input
+      <Text
+        as="input"
         className={cn(inputVariants({ variant, size, state: currentState }), className)}
         type={type}
         ref={ref}
@@ -120,3 +126,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
+
+// Migration note: This component now uses semantic Text component instead of raw HTML input
+// For more complex inputs with labels and helper text, use the full semantic Input component
+// Export semantic input types for compatibility
+export type { InputType, InputIntent, InputState, InputSize } from '../semantic';

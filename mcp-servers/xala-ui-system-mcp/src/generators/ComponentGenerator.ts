@@ -21,6 +21,7 @@ import { LocalizationGenerator } from './LocalizationGenerator';
 import { TestGenerator } from './TestGenerator';
 import { StoryGenerator } from './StoryGenerator';
 import { DocumentationGenerator } from './DocumentationGenerator';
+import { MultiPlatformGenerator } from './MultiPlatformGenerator';
 
 export class ComponentGenerator {
   private layoutGenerator: LayoutGenerator;

@@ -1,24 +1,45 @@
-# Xala UI System MCP Server
+# Xala UI System MCP Server v6.0
 
-A comprehensive Model Context Protocol (MCP) server for generating React components, layouts, pages, and complete applications using the Xala UI System v5.0.0.
+A comprehensive **multi-platform** Model Context Protocol (MCP) server for generating components across **7 platforms** (React, Next.js, Vue, Angular, Svelte, Electron, React Native) using the Xala UI System v5.0 semantic architecture.
 
-## 🚀 Features
+## 🚀 Multi-Platform Features
 
-### **Complete Component Generation**
-- **Layouts**: Admin, Web, Desktop, Mobile, Tablet, Base layouts
-- **Navigation**: Navbars, Sidebars, Breadcrumbs, Tabs, Pagination
-- **Forms**: Contact forms, User profiles, Multi-step forms with validation
-- **Data Display**: Data tables with sorting, filtering, pagination
-- **Page Templates**: Dashboard, Landing, Auth, Profile, Settings, Analytics
-- **UI Components**: Buttons, Cards, Modals, Alerts, and more
+### **Supported Platforms**
 
-### **Enterprise-Grade Features**
-- ✅ **WCAG 2.2 AAA Accessibility** compliance
-- ✅ **Multi-language Support** (English, Norwegian, French, Arabic)
-- ✅ **RTL Language Support** for Arabic
+| Platform | Architecture | Components | Localization | Status |
+|----------|--------------|------------|--------------|--------|
+| **React** | v5.0 CVA Semantic | ✅ Full Library | t() function | Stable |
+| **Next.js** | v5.0 CVA (App/Pages Router) | ✅ Full Library | t() function | Stable |
+| **Vue 3** | Composition API | ✅ Full Library | {{ t() }} | Stable |
+| **Angular** | Standalone Components | ✅ CSS Classes | \| translate | Stable |
+| **Svelte** | SvelteKit Ready | ✅ Full Library | {t()} | Stable |
+| **Electron** | Desktop Native | ✅ Full Library | {t()} | Stable |
+| **React Native** | Expo Compatible | ✅ Full Library | t() function | Stable |
+
+### **Comprehensive Component Library**
+
+| Category | Components | All Platforms | Description |
+|----------|------------|---------------|-------------|
+| **UI Components** | navbar, modal, sidebar, header, form, card, dashboard | ✅ | Core interface components |
+| **Data Components** | data-table, virtual-list, command-palette, global-search | ✅ | Data presentation and interaction |
+| **Theme Components** | theme-switcher, theme-selector | ✅ | Theming and customization |
+| **Layout Components** | app-shell, layout | ✅ | Application structure |
+| **Provider Components** | auth-provider, theme-provider, error-boundary, notification-provider | ✅ | Context and state management |
+| **Advanced Patterns** | render-props, hoc-collection, component-factory | React/Next.js | Advanced composition patterns |
+| **Enterprise Tools** | performance-monitor, code-generator | ✅ | Development and monitoring tools |
+
+**Total: 131+ templates across all platforms**
+
+### **v5.0 Semantic Architecture Features**
+- ✅ **Zero Raw HTML Policy** - Only semantic components in pages
+- ✅ **Mandatory Localization** - All text uses t() functions
+- ✅ **WCAG 2.2 AAA Accessibility** compliance across all platforms
+- ✅ **Multi-language Support** (English, Norwegian Bokmål, French, Arabic)
+- ✅ **RTL Language Support** for Arabic with proper directionality
 - ✅ **TypeScript Strict Mode** with explicit return types
-- ✅ **Responsive Design** with mobile-first approach
-- ✅ **Design Token Integration** via `useTokens()` hook
+- ✅ **Design Token Integration** via semantic props (spacing="lg", variant="hero")
+- ✅ **Platform-Specific Patterns** (React hooks, Vue composables, Angular services)
+- ✅ **Enterprise Compliance** (NSM, GDPR, SOX, HIPAA ready)
 - ✅ **Industry Themes** (Enterprise, Finance, Healthcare, Education, etc.)
 - ✅ **Municipal Themes** (Oslo, Bergen, Drammen)
 
@@ -51,22 +72,38 @@ xala-ui-mcp start
 xala-ui-mcp start --port 3001
 ```
 
-### **3. Generate Your First Component**
+### **3. Generate Multi-Platform Components**
 
 ```bash
-# Using CLI
-xala-ui-mcp generate component --name "UserCard" --category "data-display"
+# Generate for React with v5.0 semantic architecture
+xala-ui-mcp generate component --name "UserCard" --platform "react" --category "components" --semantic
 
-# Using MCP client
+# Generate for Next.js with App Router
+xala-ui-mcp generate component --name "UserCard" --platform "nextjs" --features "appRouter,semantic"
+
+# Generate for Vue 3 with Composition API
+xala-ui-mcp generate component --name "UserCard" --platform "vue" --features "compositionApi,scriptSetup"
+
+# Generate for Angular with standalone components
+xala-ui-mcp generate component --name "UserCard" --platform "angular" --features "standaloneComponents"
+
+# Generate for all platforms
+xala-ui-mcp generate component --name "UserCard" --all-platforms --semantic
+
+# Using MCP client with platform selection
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
   -d '{
-    "method": "generate_component",
+    "method": "generate_multi_platform_component",
     "params": {
       "config": {
         "name": "UserCard",
-        "category": "data-display",
-        "features": { "interactive": true }
+        "platform": "react",
+        "category": "components",
+        "platformConfig": { 
+          "architecture": "semantic",
+          "features": { "serverComponents": true }
+        }
       }
     }
   }'
@@ -127,9 +164,45 @@ code --install-extension xala-technologies.ui-system-mcp
 - 🚀 **Runtime Performance**: <16ms render time
 - 💾 **Memory Usage**: <2MB per component
 
-## 🛠️ Available Tools
+## 🛠️ Available Multi-Platform Tools
 
-### 1. **generate_component**
+### 1. **generate_multi_platform_component** ⚡ NEW
+Generate components for any of the 7 supported platforms with v5.0 semantic architecture.
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "UserCard",
+      "platform": "react",
+      "category": "components",
+      "variant": "default",
+      "theme": "enterprise",
+      "locale": "en",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "serverComponents": true,
+          "appRouter": true
+        }
+      },
+      "features": {
+        "interactive": true,
+        "tooltips": true,
+        "loading": true
+      },
+      "accessibility": {
+        "level": "AAA",
+        "screenReader": true,
+        "keyboardNavigation": true
+      }
+    }
+  }
+}
+```
+
+### 2. **generate_component** (Legacy)
 Generate any React component with full TypeScript, accessibility, and localization support.
 
 ```json
@@ -445,9 +518,20 @@ Validate a component configuration before generation.
 All generated components include localization keys for:
 
 - **English (en)** - Primary language
-- **Norwegian Bokmål (no)** - Full support
+- **Norwegian Bokmål (nb-NO)** - Full support with NSM compliance
 - **French (fr)** - Complete translations
-- **Arabic (ar)** - RTL support included
+- **Arabic (ar)** - RTL support with proper directionality
+
+### **Platform-Specific Localization**
+
+| Platform | Pattern | Example |
+|----------|---------|---------|
+| **React/Next.js** | `t()` function | `{t('welcome.title', { name })}` |
+| **Vue 3** | Template syntax | `{{ t('welcome.title', { name }) }}` |
+| **Angular** | Pipe syntax | `{{ 'welcome.title' \| translate: { name } }}` |
+| **Svelte** | Function call | `{t('welcome.title', { name })}` |
+| **Electron** | Direct call | `{t('welcome.title', { name })}` |
+| **React Native** | Hook pattern | `{t('welcome.title', { name })}` |
 
 Example localization structure:
 ```json
@@ -562,7 +646,166 @@ export const Default = {
 };
 ```
 
-## 🚀 Usage Examples
+## 🚀 Multi-Platform Usage Examples
+
+### **React - v5.0 Semantic Architecture**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "AdminDashboard",
+      "platform": "react",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": { "serverComponents": true }
+      },
+      "sections": [
+        { "name": "metrics", "component": "MetricsGrid" },
+        { "name": "users", "component": "UsersTable" },
+        { "name": "activity", "component": "ActivityFeed" }
+      ]
+    }
+  }
+}
+```
+
+### **Next.js - App Router with SSR**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "ProductCatalog",
+      "platform": "nextjs",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "appRouter": true,
+          "serverComponents": true
+        }
+      }
+    }
+  }
+}
+```
+
+### **Vue 3 - Composition API**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "UserProfile",
+      "platform": "vue",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "compositionApi": true,
+          "scriptSetup": true,
+          "pinia": true
+        }
+      }
+    }
+  }
+}
+```
+
+### **Angular - Standalone Components**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "DataTable",
+      "platform": "angular",
+      "category": "data-components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "standaloneComponents": true,
+          "signals": true,
+          "ngTranslate": true
+        }
+      }
+    }
+  }
+}
+```
+
+### **Svelte - SvelteKit Ready**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "ThemeSwitcher",
+      "platform": "svelte",
+      "category": "theme-components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "svelteKit": true,
+          "stores": true
+        }
+      }
+    }
+  }
+}
+```
+
+### **Electron - Desktop Application**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "WindowControls",
+      "platform": "electron",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "mainProcess": true,
+          "rendererProcess": true,
+          "nativeApis": true
+        }
+      }
+    }
+  }
+}
+```
+
+### **React Native - Mobile Application**
+
+```json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "MobileNavbar",
+      "platform": "react-native",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": {
+          "expo": true,
+          "navigation": true
+        }
+      }
+    }
+  }
+}
+```
 
 ### **Generate a Complete Admin Dashboard**
 

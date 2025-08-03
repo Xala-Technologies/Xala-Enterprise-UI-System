@@ -1,13 +1,15 @@
 /**
- * @fileoverview SSR-Safe Alert Component - Production Strategy Implementation
- * @description Alert component using useTokens hook for JSON template integration
+ * @fileoverview Alert Component v5.0.0 - Semantic Component Migration
+ * @description Alert component using semantic components with i18n support
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Semantic components, i18n
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Heading, Text } from '../semantic';
+import { useTranslation } from '../../i18n';
 
 /**
  * Alert variants using semantic Tailwind classes
@@ -52,15 +54,17 @@ export interface AlertProps
  */
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   ({ variant = 'default', className, children, ...props }, ref) => {
+    const { t } = useTranslation();
+    
     return (
-      <div 
+      <Box 
         ref={ref} 
         role="alert" 
         className={cn(alertVariants({ variant }), className)} 
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -80,13 +84,14 @@ export interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 export const AlertTitle = forwardRef<HTMLHeadingElement, AlertTitleProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <h5 
+      <Heading 
+        as="h5"
         ref={ref} 
         className={cn('mb-1 font-medium leading-none tracking-tight', className)} 
         {...props}
       >
         {children}
-      </h5>
+      </Heading>
     );
   }
 );
@@ -106,18 +111,21 @@ export interface AlertDescriptionProps extends HTMLAttributes<HTMLDivElement> {
 export const AlertDescription = forwardRef<HTMLDivElement, AlertDescriptionProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <div 
+      <Text 
+        as="div"
         ref={ref} 
         className={cn('text-sm [&_p]:leading-relaxed', className)} 
         {...props}
       >
         {children}
-      </div>
+      </Text>
     );
   }
 );
 
 AlertDescription.displayName = 'AlertDescription';
 
+// Migration note: This component now uses semantic Box, Heading, and Text components
+// instead of raw HTML elements and includes i18n support
 // Note: AlertIcon and AlertContent are no longer needed as the base Alert component
 // handles icon positioning through CSS classes. Icons can be placed directly as children.

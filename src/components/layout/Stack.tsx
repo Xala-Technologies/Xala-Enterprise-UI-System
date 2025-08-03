@@ -139,3 +139,5 @@ VStack.displayName = 'VStack';
  */
 export type StackVariants = VariantProps<typeof stackVariants>;
 export { stackVariants };
+
+// Migration note: This component now uses semantic Box component instead of raw HTML elements

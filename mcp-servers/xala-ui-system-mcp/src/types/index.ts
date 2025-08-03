@@ -1,16 +1,34 @@
 /**
- * Comprehensive Types for Xala UI System MCP Server
+ * Comprehensive Types for Xala UI System MCP Server v6.0
+ * Multi-Platform Support with v5.0 Semantic Architecture
  */
 
+// Multi-platform support
+export type SupportedPlatform = 
+  | 'react'
+  | 'nextjs'
+  | 'vue'
+  | 'angular'
+  | 'svelte'
+  | 'electron'
+  | 'react-native';
+
+// Comprehensive component categories from CLI templates
 export type ComponentCategory = 
-  | 'layout'
-  | 'navigation'
-  | 'form'
-  | 'data-display'
-  | 'feedback'
-  | 'interactive'
-  | 'specialized'
-  | 'page-template';
+  | 'components'        // UI Components (navbar, modal, sidebar, header, form, card, dashboard)
+  | 'data-components'   // Data Components (data-table, virtual-list, command-palette, global-search)
+  | 'theme-components'  // Theme Components (theme-switcher, theme-selector)
+  | 'layouts'           // Layout Components (app-shell, layout)
+  | 'providers'         // Provider Components (auth-provider, theme-provider, error-boundary)
+  | 'patterns'          // Advanced Patterns (render-props, hoc-collection, component-factory)
+  | 'tools'             // Enterprise Tools (performance-monitor, code-generator)
+  | 'page-template'     // Legacy support
+  | 'navigation'        // Legacy support
+  | 'form'              // Legacy support
+  | 'data-display'      // Legacy support
+  | 'feedback'          // Legacy support
+  | 'interactive'       // Legacy support
+  | 'specialized';      // Legacy support
 
 export type LayoutType = 
   | 'admin'
@@ -47,13 +65,53 @@ export type MunicipalTheme =
 
 export type SupportedLocale = 
   | 'en'
-  | 'no'
+  | 'nb-NO'  // Updated Norwegian locale
   | 'fr'
   | 'ar';
+
+// Platform-specific architecture options
+export interface PlatformConfig {
+  readonly platform: SupportedPlatform;
+  readonly architecture?: 'v5-cva' | 'semantic' | 'hybrid';
+  readonly features?: PlatformFeatures;
+  readonly outputPath?: string;
+  readonly templateEngine?: 'handlebars' | 'ejs';
+}
+
+export interface PlatformFeatures {
+  // React/Next.js specific
+  readonly appRouter?: boolean;          // Next.js App Router
+  readonly pagesRouter?: boolean;        // Next.js Pages Router
+  readonly serverComponents?: boolean;   // React Server Components
+  
+  // Vue specific
+  readonly compositionApi?: boolean;     // Vue 3 Composition API
+  readonly scriptSetup?: boolean;        // Vue 3 script setup
+  readonly pinia?: boolean;              // Pinia state management
+  
+  // Angular specific
+  readonly standaloneComponents?: boolean; // Angular standalone components
+  readonly signals?: boolean;              // Angular signals
+  readonly ngTranslate?: boolean;          // Angular i18n
+  
+  // Svelte specific
+  readonly svelteKit?: boolean;          // SvelteKit framework
+  readonly stores?: boolean;             // Svelte stores
+  
+  // Electron specific
+  readonly mainProcess?: boolean;        // Electron main process
+  readonly rendererProcess?: boolean;    // Electron renderer process
+  readonly nativeApis?: boolean;         // Native API access
+  
+  // React Native specific
+  readonly expo?: boolean;               // Expo framework
+  readonly navigation?: boolean;         // React Navigation
+}
 
 export interface ComponentConfig {
   readonly name: string;
   readonly category: ComponentCategory;
+  readonly platform?: SupportedPlatform;  // Multi-platform support
   readonly variant?: string;
   readonly size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   readonly theme?: IndustryTheme | MunicipalTheme;
@@ -62,6 +120,7 @@ export interface ComponentConfig {
   readonly styling: StylingOptions;
   readonly accessibility: AccessibilityOptions;
   readonly responsive: ResponsiveOptions;
+  readonly platformConfig?: PlatformConfig;  // Platform-specific configuration
 }
 
 export interface ComponentFeatures {
@@ -267,6 +326,8 @@ export interface GeneratedComponent {
   readonly imports: string[];
   readonly dependencies: string[];
   readonly files: GeneratedFile[];
+  readonly platform: SupportedPlatform;  // Platform information
+  readonly architecture: 'v5-cva' | 'semantic' | 'hybrid'; // Architecture type
 }
 
 export interface GeneratedFile {
@@ -299,6 +360,46 @@ export interface MCPToolConfig {
   readonly handler: string;
 }
 
+// Comprehensive component templates from CLI
+export type UIComponent = 
+  | 'navbar' | 'modal' | 'sidebar' | 'header' | 'form' | 'card' | 'dashboard';
+
+export type DataComponent = 
+  | 'data-table' | 'virtual-list' | 'command-palette' | 'global-search';
+
+export type ThemeComponent = 
+  | 'theme-switcher' | 'theme-selector';
+
+export type LayoutComponent = 
+  | 'app-shell' | 'layout';
+
+export type ProviderComponent = 
+  | 'auth-provider' | 'theme-provider' | 'error-boundary' | 'notification-provider';
+
+export type PatternComponent = 
+  | 'render-props' | 'hoc-collection' | 'component-factory';
+
+export type ToolComponent = 
+  | 'performance-monitor' | 'code-generator';
+
+export type ComponentTemplate = 
+  | UIComponent 
+  | DataComponent 
+  | ThemeComponent 
+  | LayoutComponent 
+  | ProviderComponent 
+  | PatternComponent 
+  | ToolComponent;
+
+// Multi-platform template mapping
+export interface PlatformTemplateConfig {
+  readonly platform: SupportedPlatform;
+  readonly availableComponents: ComponentTemplate[];
+  readonly templatePath: string;
+  readonly fileExtension: string;
+  readonly localizationPattern: string;
+}
+
 export interface GenerationContext {
   readonly projectPath?: string;
   readonly outputPath?: string;
@@ -307,4 +408,7 @@ export interface GenerationContext {
   readonly addTests?: boolean;
   readonly addStories?: boolean;
   readonly addDocs?: boolean;
+  readonly platform?: SupportedPlatform;
+  readonly architecture?: 'v5-cva' | 'semantic' | 'hybrid';
+  readonly templateEngine?: 'handlebars' | 'ejs';
 }

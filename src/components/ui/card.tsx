@@ -1,14 +1,16 @@
 /**
- * @fileoverview Card Component v5.0.0 - Token-Based Design System
- * @description Modern Card component using design tokens with SSR compatibility
+ * @fileoverview Card Component v5.0.0 - Semantic Component Migration
+ * @description Modern Card component using semantic components with i18n support
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Semantic components, i18n
  */
 
 // ✅ NO 'use client' directive - works in SSR
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Heading, Text } from '../semantic';
+import { useTranslation } from '../../i18n';
 
 // =============================================================================
 // CARD VARIANTS USING DESIGN TOKENS
@@ -75,18 +77,20 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     children,
     ...props
   }, ref) => {
+    const { t } = useTranslation();
+    
     // Determine if card is interactive
     const isInteractive = interactive ?? !!onClick;
 
     return (
-      <div
+      <Box
         className={cn(cardVariants({ variant, padding, interactive: isInteractive }), className)}
         ref={ref}
         onClick={onClick}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -104,13 +108,14 @@ export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement>
 export const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <h3 
+      <Heading
+        as="h3"
         className={cn('text-lg font-semibold leading-none tracking-tight', className)} 
         ref={ref}
         {...props}
       >
         {children}
-      </h3>
+      </Heading>
     );
   }
 );
@@ -128,13 +133,14 @@ export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraph
 export const CardDescription = React.forwardRef<HTMLParagraphElement, CardDescriptionProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <p 
+      <Text 
+        as="p"
         className={cn('text-sm text-muted-foreground', className)} 
         ref={ref}
         {...props}
       >
         {children}
-      </p>
+      </Text>
     );
   }
 );
@@ -152,13 +158,13 @@ export interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <div 
+      <Box 
         className={cn('flex flex-col space-y-1.5 p-6 pb-2', className)} 
         ref={ref}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -176,13 +182,13 @@ export interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <div 
+      <Box 
         className={cn('p-6 pt-0', className)} 
         ref={ref}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -200,15 +206,18 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
   ({ children, className, ...props }, ref) => {
     return (
-      <div 
+      <Box 
         className={cn('flex items-center p-6 pt-0', className)} 
         ref={ref}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
 
 CardFooter.displayName = 'CardFooter';
+
+// Migration note: This component now uses semantic Box, Heading, and Text components
+// instead of raw HTML elements and includes i18n support

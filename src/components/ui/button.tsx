@@ -1,14 +1,16 @@
 /**
- * @fileoverview Button Component v5.0.0 - Token-Based Design System
- * @description Modern Button component using design tokens with SSR compatibility
+ * @fileoverview Button Component v5.0.0 - Semantic Component Migration
+ * @description Modern Button component using semantic components with i18n support
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready, Token-based
+ * @compliance SSR-Safe, Framework-agnostic, Production-ready, Semantic components, i18n
  */
 
 // ✅ NO 'use client' directive - works in SSR
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Text } from '../semantic';
+import { useTranslation } from '../../i18n';
 
 // =============================================================================
 // BUTTON VARIANTS USING DESIGN TOKENS
@@ -83,7 +85,8 @@ const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = 
   }[size];
 
   return (
-    <div
+    <Text
+      as="div"
       className={cn(
         'animate-spin rounded-full border-2 border-transparent border-t-current',
         spinnerSizeClass
@@ -111,6 +114,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     children,
     ...props
   }, ref) => {
+    const { t } = useTranslation();
     const isDisabled = disabled || loading;
 
     const renderContent = () => {
@@ -118,9 +122,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return (
           <>
             <LoadingSpinner size={size || undefined} />
-            <span className={loading ? 'sr-only' : undefined}>
-              {loadingText || children}
-            </span>
+            <Text 
+              as="span" 
+              className={loading ? 'sr-only' : undefined}
+            >
+              {loadingText || t('components.button.loading')}
+            </Text>
           </>
         );
       }
@@ -128,8 +135,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (icon && iconPosition === 'left') {
         return (
           <>
-            <span className="flex items-center">{icon}</span>
-            <span>{children}</span>
+            <Text as="span" className="flex items-center">{icon}</Text>
+            <Text as="span">{children}</Text>
           </>
         );
       }
@@ -137,8 +144,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (icon && iconPosition === 'right') {
         return (
           <>
-            <span>{children}</span>
-            <span className="flex items-center">{icon}</span>
+            <Text as="span">{children}</Text>
+            <Text as="span" className="flex items-center">{icon}</Text>
           </>
         );
       }
@@ -147,7 +154,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <button
+      <Text
+        as="button"
         className={cn(buttonVariants({ variant, size, fullWidth }), className)}
         ref={ref}
         disabled={isDisabled}
@@ -156,9 +164,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {renderContent()}
-      </button>
+      </Text>
     );
   }
 );
 
 Button.displayName = 'Button';
+
+// Migration note: This component now uses semantic Text component instead of raw HTML
+// and includes i18n support for loading text
