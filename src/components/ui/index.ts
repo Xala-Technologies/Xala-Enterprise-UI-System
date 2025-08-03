@@ -201,6 +201,61 @@ export {
     ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, type ContextMenuContentProps, type ContextMenuItemProps, type ContextMenuProps, type ContextMenuTriggerProps
 } from './context-menu';
 
+// Dropdown components
+export {
+    Dropdown,
+    DropdownTrigger,
+    DropdownContent,
+    DropdownItem,
+    DropdownSeparator,
+    DropdownLabel,
+    type DropdownProps,
+    type DropdownTriggerProps,
+    type DropdownContentProps,
+    type DropdownItemProps,
+    type DropdownSeparatorProps,
+    type DropdownLabelProps,
+    type DropdownPlacement,
+    type DropdownVariant,
+    type DropdownSize
+} from './dropdown';
+
+export {
+    DropdownMenu,
+    DropdownMenuItem,
+    DropdownMenuCheckboxItem,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSubTrigger,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    type DropdownMenuProps,
+    type DropdownMenuItemProps,
+    type DropdownMenuCheckboxItemProps,
+    type DropdownMenuRadioGroupProps,
+    type DropdownMenuRadioItemProps,
+    type DropdownMenuSubTriggerProps,
+    type DropdownMenuItemData,
+    type DropdownMenuGroup
+} from './dropdown-menu';
+
+export {
+    Combobox,
+    type ComboboxProps,
+    type ComboboxOption,
+    type ComboboxVariant,
+    type ComboboxSize
+} from './combobox';
+
+export {
+    MultiSelect,
+    type MultiSelectProps,
+    type MultiSelectOption,
+    type MultiSelectVariant,
+    type MultiSelectSize,
+    type MultiSelectDisplayMode
+} from './multi-select';
+
 // Timeline
 export { Timeline, TimelineItem, type TimelineItemData, type TimelineItemProps, type TimelineProps } from './timeline';
 

@@ -32,6 +32,11 @@ export {
     ContextMenuItem, ContextMenuTrigger, DatePicker, Divider, DrawerBody,
     DrawerFooter, DrawerHeader, Heading, IconButton, Pagination, Radio,
     RadioGroup,
+    // Dropdown components
+    Dropdown, DropdownTrigger, DropdownContent, DropdownItem, DropdownSeparator, DropdownLabel,
+    DropdownMenu, DropdownMenuItem, DropdownMenuCheckboxItem, DropdownMenuRadioGroup,
+    DropdownMenuRadioItem, DropdownMenuSubTrigger, DropdownMenuLabel, DropdownMenuSeparator,
+    Combobox, MultiSelect,
     // Loading components
     Skeleton,
     SkeletonAvatar,
@@ -63,7 +68,15 @@ export {
     type TooltipSide, type TreeViewData, type TreeViewItemProps, type TreeViewProps, type TypographyAlign, type TypographyColor, type TypographyProps,
     type TypographyVariant, type AlertProps as UIAlertProps,
     type AlertVariant as UIAlertVariant, type BadgeProps as UIBadgeProps, type BadgeSize as UIBadgeSize, type BadgeVariant as UIBadgeVariant, type ButtonProps as UIButtonProps, type CardProps as UICardProps, type DrawerProps as UIDrawerProps, type InputProps as UIInputProps, type ProgressProps as UIProgressProps, type ProgressSize as UIProgressSize, type ProgressVariant as UIProgressVariant, type SelectOption as UISelectOption,
-    type SelectProps as UISelectProps, type SelectSize as UISelectSize, type SelectVariant as UISelectVariant, type TextareaProps as UITextareaProps, type TooltipProps as UITooltipProps
+    type SelectProps as UISelectProps, type SelectSize as UISelectSize, type SelectVariant as UISelectVariant, type TextareaProps as UITextareaProps, type TooltipProps as UITooltipProps,
+    // Dropdown types
+    type DropdownProps, type DropdownTriggerProps, type DropdownContentProps, type DropdownItemProps,
+    type DropdownSeparatorProps, type DropdownLabelProps, type DropdownPlacement, type DropdownVariant,
+    type DropdownSize, type DropdownMenuProps, type DropdownMenuItemProps, type DropdownMenuCheckboxItemProps,
+    type DropdownMenuRadioGroupProps, type DropdownMenuRadioItemProps, type DropdownMenuSubTriggerProps,
+    type DropdownMenuItemData, type DropdownMenuGroup, type ComboboxProps, type ComboboxOption,
+    type ComboboxVariant, type ComboboxSize, type MultiSelectProps, type MultiSelectOption,
+    type MultiSelectVariant, type MultiSelectSize, type MultiSelectDisplayMode
 } from './ui';
 
 // New Components (with specific exports to avoid conflicts)
