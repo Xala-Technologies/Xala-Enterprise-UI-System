@@ -1,54 +1,55 @@
-/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type */
 /**
- * Global Search Component
- * Comprehensive search with autocomplete and keyboard navigation
+ * @fileoverview Global Search Component - Enterprise Search
+ * @description SSR-safe global search with CVA variants and design tokens
+ * @version 5.0.0
+ * @compliance WCAG AAA, NSM, Enterprise Standards, SSR-Safe
  */
 
-import { cn } from '@/lib/utils/cn';
+import React, { forwardRef, type InputHTMLAttributes } from 'react';
+import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, type ReactNode } from 'react';
 
-/**
- * Global search variants using design tokens
- */
+// =============================================================================
+// CVA VARIANTS
+// =============================================================================
+
 const globalSearchVariants = cva(
-  ['relative w-full', 'transition-all duration-200', 'motion-reduce:transition-none'],
+  'flex items-center space-x-2 bg-background border border-border rounded-lg focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-colors',
   {
     variants: {
       variant: {
-        default: 'bg-background border border-border',
-        primary: 'bg-primary/10 border border-primary/20',
-        secondary: 'bg-secondary/10 border border-secondary/20',
+        default: 'bg-background text-foreground',
+        elevated: 'bg-card text-card-foreground shadow-md',
+        outline: 'bg-transparent border-2',
+        ghost: 'bg-transparent border-0',
       },
       size: {
-        sm: 'h-8',
-        md: 'h-10',
-        lg: 'h-12',
+        sm: 'h-9 text-sm px-3',
+        md: 'h-11 text-base px-4',
+        lg: 'h-13 text-lg px-6',
+      },
+      state: {
+        default: '',
+        error: 'border-destructive focus-within:ring-destructive',
+        success: 'border-green-500 focus-within:ring-green-500',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'md',
+      state: 'default',
     },
   }
 );
 
-/**
- * Search input variants using design tokens
- */
 const searchInputVariants = cva(
-  [
-    'w-full bg-transparent outline-none',
-    'text-foreground placeholder:text-muted-foreground',
-    'transition-all duration-200',
-    'motion-reduce:transition-none',
-  ],
+  'flex-1 bg-transparent border-0 outline-none placeholder:text-muted-foreground disabled:opacity-50 disabled:cursor-not-allowed',
   {
     variants: {
       size: {
-        sm: 'px-3 py-1 text-sm',
-        md: 'px-4 py-2 text-base',
-        lg: 'px-5 py-3 text-lg',
+        sm: 'text-sm',
+        md: 'text-base',
+        lg: 'text-lg',
       },
     },
     defaultVariants: {
@@ -57,228 +58,120 @@ const searchInputVariants = cva(
   }
 );
 
-/**
- * Search result item
- */
+// =============================================================================
+// INTERFACES
+// =============================================================================
+
+export interface GlobalSearchProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>,
+    VariantProps<typeof globalSearchVariants> {
+  readonly showSearchIcon?: boolean;
+  readonly showClearButton?: boolean;
+  readonly onClear?: () => void;
+}
+
+export interface GlobalSearchVariant {
+  readonly default: string;
+  readonly elevated: string;
+  readonly outline: string;
+  readonly ghost: string;
+}
+
+export interface SearchInputVariant {
+  readonly sm: string;
+  readonly md: string;
+  readonly lg: string;
+}
+
 export interface SearchResultItem {
-  /** Unique identifier */
   readonly id: string;
-  /** Display title */
   readonly title: string;
-  /** Description */
   readonly description?: string;
-  /** Category */
   readonly category?: string;
-  /** Icon */
-  readonly icon?: ReactNode;
-  /** URL */
+  readonly icon?: React.ReactNode;
   readonly url?: string;
-  /** Click handler */
   readonly onClick?: () => void;
 }
 
-/**
- * Global Search Props
- */
-export interface GlobalSearchProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'results' | 'onChange' | 'onSubmit'> {
-  /** Search variant */
-  readonly variant?: 'default' | 'primary' | 'secondary';
-  /** Search size */
-  readonly size?: 'sm' | 'md' | 'lg';
-  /** Placeholder text */
-  readonly placeholder?: string;
-  /** Search value */
-  readonly value?: string;
-  /** Search change handler */
-  readonly onChange?: (value: string) => void;
-  /** Search submit handler */
-  readonly onSubmit?: (value: string) => void;
-  /** Search results */
-  readonly results?: readonly SearchResultItem[];
-  /** Loading state */
-  readonly loading?: boolean;
-  /** Show results dropdown */
-  readonly isOpen?: boolean;
-  /** Selected result index */
-  readonly selectedIndex?: number;
-  /** Search focus handler */
-  readonly onFocus?: () => void;
-  /** Search blur handler */
-  readonly onBlur?: () => void;
-  /** Left icon */
-  readonly leftIcon?: ReactNode;
-  /** Right action */
-  readonly rightAction?: ReactNode;
-  /** Result click handler */
-  readonly onResultClick?: (result: SearchResultItem) => void;
-  /** Selected index change handler */
-  readonly onSelectedIndexChange?: (index: number) => void;
-  /** Open state change handler */
-  readonly onOpenChange?: (isOpen: boolean) => void;
-}
+// =============================================================================
+// GLOBAL SEARCH COMPONENT
+// =============================================================================
 
-/**
- * Global Search Component
- * @param props - Search properties
- * @returns React.ReactElement
- */
-export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
+export const GlobalSearch = forwardRef<HTMLInputElement, GlobalSearchProps>(
   (
     {
-      variant = 'default',
-      size = 'md',
-      placeholder = 'Search...',
-      value = '',
-      onChange,
-      onSubmit,
-      results = [],
-      loading = false,
-      isOpen = false,
-      selectedIndex = -1,
-      onFocus,
-      onBlur,
-      leftIcon,
-      rightAction,
-      onResultClick,
-      onSelectedIndexChange,
-      onOpenChange,
       className,
+      variant,
+      size,
+      state,
+      showSearchIcon = true,
+      showClearButton = true,
+      onClear,
+      placeholder = 'Search...',
+      value,
+      onChange,
       ...props
     },
     ref
-  ): React.ReactElement => {
-    // Handlers
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-      const newValue = e.target.value;
-      onChange?.(newValue);
-      onOpenChange?.(true);
-      onSelectedIndexChange?.(-1);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        onSelectedIndexChange?.(Math.min(selectedIndex + 1, results.length - 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        onSelectedIndexChange?.(Math.max(selectedIndex - 1, -1));
-      } else if (e.key === 'Enter') {
-        e.preventDefault();
-        if (selectedIndex >= 0 && results[selectedIndex]) {
-          handleResultClick(results[selectedIndex]);
-        } else {
-          onSubmit?.(value);
-        }
-      } else if (e.key === 'Escape') {
-        onOpenChange?.(false);
-        onSelectedIndexChange?.(-1);
-      }
-    };
-
-    const handleFocus = (): void => {
-      onOpenChange?.(true);
-      onFocus?.();
-    };
-
-    const handleBlur = (): void => {
-      // Delay closing to allow for result clicks
-      setTimeout(() => {
-        onOpenChange?.(false);
-        onSelectedIndexChange?.(-1);
-      }, 200);
-      onBlur?.();
-    };
-
-    const handleResultClick = (result: SearchResultItem): void => {
-      onResultClick?.(result);
-      if (!onResultClick) {
-        // Default behavior if no handler provided
-        if (result.onClick) {
-          result.onClick();
-        } else if (result.url) {
-          window.location.href = result.url;
-        }
-      }
+  ) => {
+    const handleClear = () => {
+      onClear?.();
     };
 
     return (
-      <div
-        ref={ref}
-        className={cn(
-          globalSearchVariants({ variant, size }),
-          'rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2',
-          className
-        )}
-        {...props}
-      >
-        <div className="flex items-center">
-          {leftIcon && <div className="flex-shrink-0 ml-3">{leftIcon}</div>}
-
-          <input
-            type="text"
-            value={value}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            placeholder={placeholder}
-            className={cn(searchInputVariants({ size }), leftIcon && 'pl-2', rightAction && 'pr-2')}
-            aria-label="Global search"
-            aria-expanded={isOpen}
-            aria-haspopup="listbox"
-            role="combobox"
-          />
-
-          {rightAction && <div className="flex-shrink-0 mr-3">{rightAction}</div>}
-        </div>
-
-        {/* Search Results */}
-        {isOpen && results.length > 0 && (
-          <div
-            className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-auto rounded-md border border-border bg-popover shadow-lg"
-            role="listbox"
-          >
-            {loading && (
-              <div className="flex items-center justify-center p-4">
-                <div className="text-sm text-muted-foreground">Loading...</div>
-              </div>
-            )}
-
-            {!loading && results.length === 0 && (
-              <div className="flex items-center justify-center p-4">
-                <div className="text-sm text-muted-foreground">No results found</div>
-              </div>
-            )}
-
-            {!loading &&
-              results.map((result, index) => (
-                <div
-                  key={result.id}
-                  className={cn(
-                    'flex items-center px-3 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground',
-                    selectedIndex === index && 'bg-accent text-accent-foreground'
-                  )}
-                  onClick={() => handleResultClick(result)}
-                  onMouseEnter={() => onSelectedIndexChange?.(index)}
-                  role="option"
-                  aria-selected={selectedIndex === index}
-                >
-                  {result.icon && <div className="mr-2">{result.icon}</div>}
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{result.title}</div>
-                    {result.description && (
-                      <div className="text-sm text-muted-foreground truncate">
-                        {result.description}
-                      </div>
-                    )}
-                  </div>
-                  {result.category && (
-                    <div className="ml-2 text-xs text-muted-foreground">{result.category}</div>
-                  )}
-                </div>
-              ))}
+      <div className={cn(globalSearchVariants({ variant, size, state }), className)}>
+        {showSearchIcon && (
+          <div className="flex-shrink-0 text-muted-foreground" aria-hidden="true">
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
           </div>
+        )}
+
+        <input
+          ref={ref}
+          className={cn(searchInputVariants({ size }))}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          role="searchbox"
+          aria-label="Global search"
+          {...props}
+        />
+
+        {showClearButton && value && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="flex-shrink-0 p-1 text-muted-foreground hover:text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm transition-colors"
+            aria-label="Clear search"
+          >
+            <svg
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
         )}
       </div>
     );
@@ -287,10 +180,11 @@ export const GlobalSearch = forwardRef<HTMLDivElement, GlobalSearchProps>(
 
 GlobalSearch.displayName = 'GlobalSearch';
 
-/**
- * Global search variants and types
- */
-export type GlobalSearchVariant = VariantProps<typeof globalSearchVariants>;
-export type SearchInputVariant = VariantProps<typeof searchInputVariants>;
+// Legacy exports for backward compatibility
+export { GlobalSearch as EnhancedGlobalSearch };
+export type { GlobalSearchProps as EnhancedGlobalSearchProps };
 
+// CVA variants for external use
 export { globalSearchVariants, searchInputVariants };
+
+export default GlobalSearch;

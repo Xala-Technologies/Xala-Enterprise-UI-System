@@ -1,206 +1,558 @@
 /**
- * @fileoverview SSR-Safe Tabs Components - Production Strategy Implementation
- * @description Individual tabs components using useTokens hook for JSON template integration
+ * @fileoverview Tabs Component - Enterprise Navigation
+ * @description Horizontal tab navigation with multiple variants and content panels with WCAG AAA compliance
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance WCAG AAA, NSM, Enterprise Standards
  */
 
-import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { useTokens } from '../../hooks/useTokens';
 
-/**
- * Tabs orientation types
- */
-export type TabsOrientation = 'horizontal' | 'vertical';
+// =============================================================================
+// INTERFACES
+// =============================================================================
 
-/**
- * TabsList component props interface
- */
-export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {
-  readonly orientation?: TabsOrientation;
+export interface TabItem {
+  readonly id: string;
+  readonly label: string;
+  readonly content: React.ReactNode;
+  readonly icon?: React.ReactNode;
+  readonly badge?: string | number;
+  readonly isDisabled?: boolean;
+  readonly isClosable?: boolean;
+  readonly isLoading?: boolean;
 }
 
-/**
- * TabsTrigger component props interface
- */
-export interface TabsTriggerProps extends HTMLAttributes<HTMLButtonElement> {
-  readonly value: string;
-  readonly disabled?: boolean;
-  readonly active?: boolean;
+export interface TabsProps {
+  readonly tabs: readonly TabItem[];
+  readonly defaultActiveTab?: string;
+  readonly variant?: 'default' | 'pills' | 'cards' | 'underlined' | 'minimal';
+  readonly size?: 'sm' | 'md' | 'lg';
+  readonly orientation?: 'horizontal' | 'vertical';
+  readonly fullWidth?: boolean;
+  readonly lazyLoad?: boolean;
+  readonly scrollable?: boolean;
+  readonly onTabChange?: (tabId: string) => void;
+  readonly onTabClose?: (tabId: string) => void;
+  readonly className?: string;
+  readonly ariaLabel?: string;
 }
 
-/**
- * TabsContent component props interface
- */
-export interface TabsContentProps extends HTMLAttributes<HTMLDivElement> {
-  readonly value: string;
-  readonly activeValue?: string;
-  readonly children: ReactNode;
-}
+// =============================================================================
+// TABS COMPONENT
+// =============================================================================
 
-/**
- * Enhanced TabsList component with token-based styling
- */
-export const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
-  ({ className, style, orientation = 'horizontal', ...props }, ref): React.ReactElement => {
-    const { colors, spacing, getToken } = useTokens();
+export const Tabs = ({
+  tabs,
+  defaultActiveTab,
+  variant = 'default',
+  size = 'md',
+  orientation = 'horizontal',
+  fullWidth = false,
+  lazyLoad = false,
+  scrollable = false,
+  onTabChange,
+  onTabClose,
+  className = '',
+  ariaLabel = 'Tab navigation'
+}: TabsProps): JSX.Element => {
+  const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
+  
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    return defaultActiveTab || tabs.find(tab => !tab.isDisabled)?.id || tabs[0]?.id || '';
+  });
+  
+  const [loadedTabs, setLoadedTabs] = useState<Set<string>>(() => {
+    const loaded = new Set<string>();
+    if (!lazyLoad) {
+      tabs.forEach(tab => loaded.add(tab.id));
+    } else if (activeTab) {
+      loaded.add(activeTab);
+    }
+    return loaded;
+  });
 
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+  const tabListRef = useRef<HTMLDivElement>(null);
+  const [showScrollButtons, setShowScrollButtons] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Handle tab change
+  const handleTabChange = useCallback((tabId: string) => {
+    const tab = tabs.find(t => t.id === tabId);
+    if (!tab || tab.isDisabled) return;
+
+    setActiveTab(tabId);
+    
+    if (lazyLoad) {
+      setLoadedTabs(prev => new Set([...prev, tabId]));
+    }
+    
+    onTabChange?.(tabId);
+  }, [tabs, lazyLoad, onTabChange]);
+
+  // Handle tab close
+  const handleTabClose = useCallback((tabId: string, event: React.MouseEvent) => {
+    event.stopPropagation();
+    
+    // If closing active tab, switch to next available tab
+    if (tabId === activeTab) {
+      const currentIndex = tabs.findIndex(t => t.id === tabId);
+      const nextTab = tabs.find((t, index) => 
+        index !== currentIndex && !t.isDisabled
+      );
+      
+      if (nextTab) {
+        setActiveTab(nextTab.id);
+        onTabChange?.(nextTab.id);
+      }
+    }
+    
+    onTabClose?.(tabId);
+  }, [activeTab, tabs, onTabChange, onTabClose]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((event: React.KeyboardEvent, tabId: string) => {
+    const currentIndex = tabs.findIndex(t => t.id === tabId);
+    let targetIndex = currentIndex;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        event.preventDefault();
+        targetIndex = currentIndex - 1;
+        while (targetIndex >= 0 && tabs[targetIndex].isDisabled) {
+          targetIndex--;
+        }
+        if (targetIndex >= 0) {
+          handleTabChange(tabs[targetIndex].id);
+        }
+        break;
+      case 'ArrowRight':
+      case 'ArrowDown':
+        event.preventDefault();
+        targetIndex = currentIndex + 1;
+        while (targetIndex < tabs.length && tabs[targetIndex].isDisabled) {
+          targetIndex++;
+        }
+        if (targetIndex < tabs.length) {
+          handleTabChange(tabs[targetIndex].id);
+        }
+        break;
+      case 'Home':
+        event.preventDefault();
+        targetIndex = 0;
+        while (targetIndex < tabs.length && tabs[targetIndex].isDisabled) {
+          targetIndex++;
+        }
+        if (targetIndex < tabs.length) {
+          handleTabChange(tabs[targetIndex].id);
+        }
+        break;
+      case 'End':
+        event.preventDefault();
+        targetIndex = tabs.length - 1;
+        while (targetIndex >= 0 && tabs[targetIndex].isDisabled) {
+          targetIndex--;
+        }
+        if (targetIndex >= 0) {
+          handleTabChange(tabs[targetIndex].id);
+        }
+        break;
+    }
+  }, [tabs, handleTabChange]);
+
+  // Check scroll state
+  const checkScrollState = useCallback(() => {
+    if (!scrollable || !tabListRef.current) return;
+
+    const element = tabListRef.current;
+    const canScrollLeft = element.scrollLeft > 0;
+    const canScrollRight = element.scrollLeft < element.scrollWidth - element.clientWidth;
+    
+    setCanScrollLeft(canScrollLeft);
+    setCanScrollRight(canScrollRight);
+    setShowScrollButtons(element.scrollWidth > element.clientWidth);
+  }, [scrollable]);
+
+  // Scroll tabs
+  const scrollTabs = useCallback((direction: 'left' | 'right') => {
+    if (!tabListRef.current) return;
+    
+    const scrollAmount = 200;
+    const newScrollLeft = direction === 'left' 
+      ? tabListRef.current.scrollLeft - scrollAmount
+      : tabListRef.current.scrollLeft + scrollAmount;
+    
+    tabListRef.current.scrollTo({
+      left: newScrollLeft,
+      behavior: 'smooth'
+    });
+  }, []);
+
+  // Update scroll state on mount and resize
+  useEffect(() => {
+    checkScrollState();
+    
+    const handleResize = () => checkScrollState();
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [checkScrollState]);
+
+  // Generate variant styles
+  const tabListStyles = useMemo(() => {
+    const baseStyles = {
+      display: orientation === 'horizontal' ? 'flex' : 'block',
+      alignItems: orientation === 'horizontal' ? 'center' : 'stretch',
+      flexDirection: orientation === 'horizontal' ? 'row' : 'column',
+      width: fullWidth ? '100%' : 'auto',
+      overflowX: scrollable && orientation === 'horizontal' ? 'auto' : 'visible',
+      overflowY: scrollable && orientation === 'vertical' ? 'auto' : 'visible',
     };
 
-    // List styles
-    const listStyles: React.CSSProperties = {
-      display: 'inline-flex',
-      height: orientation === 'vertical' ? 'auto' : '40px',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: borderRadius.md,
-      backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-      padding: spacing[1],
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-      flexDirection: orientation === 'vertical' ? 'column' : 'row',
-      ...style,
+    switch (variant) {
+      case 'pills':
+        return {
+          ...baseStyles,
+          backgroundColor: colors.background?.elevated,
+          padding: spacing[1],
+          borderRadius: borderRadius?.lg,
+          gap: spacing[1],
+        };
+      case 'cards':
+        return {
+          ...baseStyles,
+          borderBottom: `1px solid ${colors.border?.default}`,
+          gap: spacing[1],
+        };
+      case 'underlined':
+        return {
+          ...baseStyles,
+          borderBottom: `2px solid ${colors.border?.muted}`,
+          gap: spacing[4],
+        };
+      case 'minimal':
+        return {
+          ...baseStyles,
+          gap: spacing[6],
+        };
+      default:
+        return {
+          ...baseStyles,
+          borderBottom: `1px solid ${colors.border?.default}`,
+          gap: spacing[1],
+        };
+    }
+  }, [variant, orientation, fullWidth, scrollable, colors, spacing, borderRadius]);
+
+  // Generate size styles
+  const sizeStyles = useMemo(() => {
+    const sizeMap = {
+      sm: {
+        padding: `${spacing[2]} ${spacing[3]}`,
+        fontSize: typography.fontSize?.sm || '0.875rem',
+        height: componentSizing?.button?.sm || '36px',
+      },
+      md: {
+        padding: `${spacing[3]} ${spacing[4]}`,
+        fontSize: typography.fontSize?.base || '1rem',
+        height: componentSizing?.button?.md || '44px',
+      },
+      lg: {
+        padding: `${spacing[4]} ${spacing[6]}`,
+        fontSize: typography.fontSize?.lg || '1.125rem',
+        height: componentSizing?.button?.lg || '52px',
+      },
     };
+    
+    return sizeMap[size];
+  }, [size, spacing, typography, componentSizing]);
 
-    return (
-      <div
-        ref={ref}
-        role="tablist"
-        aria-orientation={orientation}
-        className={className}
-        style={listStyles}
-        {...props}
-      />
-    );
-  }
-);
+  // Render tab button
+  const renderTabButton = useCallback((tab: TabItem) => {
+    const isActive = tab.id === activeTab;
+    
+    const buttonStyles = useMemo(() => {
+      const baseStyles = {
+        padding: sizeStyles.padding,
+        fontSize: sizeStyles.fontSize,
+        minHeight: sizeStyles.height,
+        color: tab.isDisabled 
+          ? colors.text?.muted 
+          : isActive 
+          ? colors.primary?.[600] || '#2563eb'
+          : colors.text?.secondary,
+        backgroundColor: 'transparent',
+        border: 'none',
+        cursor: tab.isDisabled ? 'not-allowed' : 'pointer',
+        opacity: tab.isDisabled ? 0.5 : 1,
+        transition: `all ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`,
+        flex: fullWidth ? '1' : 'none',
+        minWidth: fullWidth ? '0' : 'auto',
+      };
 
-TabsList.displayName = 'TabsList';
-
-/**
- * Enhanced TabsTrigger component with token-based styling
- */
-export const TabsTrigger = forwardRef<HTMLButtonElement, TabsTriggerProps>(
-  ({ className, style, value, active = false, disabled = false, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-
-    // Get border radius
-    const borderRadius = {
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
-    };
-
-    // Trigger styles
-    const triggerStyles: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      whiteSpace: 'nowrap',
-      borderRadius: borderRadius.sm,
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
-      paddingTop: spacing[1.5],
-      paddingBottom: spacing[1.5],
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      transition: 'all 150ms ease-in-out',
-      outline: 'none',
-      border: 'none',
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      pointerEvents: disabled ? 'none' : 'auto',
-      opacity: disabled ? 0.5 : 1,
-      backgroundColor: active 
-        ? (colors.background?.default || '#ffffff')
-        : 'transparent',
-      color: active 
-        ? (colors.text?.primary || colors.neutral?.[900] || '#111827')
-        : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
-      boxShadow: active ? '0 1px 2px 0 rgba(0, 0, 0, 0.05)' : 'none',
-      ...style,
-    };
+      switch (variant) {
+        case 'pills':
+          return {
+            ...baseStyles,
+            backgroundColor: isActive 
+              ? colors.primary?.[500] || '#3b82f6'
+              : 'transparent',
+            color: isActive 
+              ? 'white' 
+              : tab.isDisabled 
+              ? colors.text?.muted 
+              : colors.text?.primary,
+            borderRadius: borderRadius?.md,
+          };
+        case 'cards':
+          return {
+            ...baseStyles,
+            backgroundColor: isActive 
+              ? colors.background?.paper 
+              : colors.background?.elevated,
+            border: `1px solid ${colors.border?.default}`,
+            borderBottom: isActive ? `1px solid ${colors.background?.paper}` : `1px solid ${colors.border?.default}`,
+            borderRadius: `${borderRadius?.md} ${borderRadius?.md} 0 0`,
+            marginBottom: '-1px',
+          };
+        case 'underlined':
+          return {
+            ...baseStyles,
+            borderBottom: isActive 
+              ? `2px solid ${colors.primary?.[500] || '#3b82f6'}`
+              : '2px solid transparent',
+            marginBottom: '-2px',
+          };
+        case 'minimal':
+          return {
+            ...baseStyles,
+            fontWeight: isActive ? 600 : 400,
+          };
+        default:
+          return {
+            ...baseStyles,
+            backgroundColor: isActive 
+              ? colors.background?.elevated 
+              : 'transparent',
+            borderRadius: `${borderRadius?.md} ${borderRadius?.md} 0 0`,
+          };
+      }
+    }, [isActive, tab.isDisabled, variant, colors, borderRadius, sizeStyles, motion, fullWidth]);
 
     return (
       <button
-        ref={ref}
-        role="tab"
+        key={tab.id}
         type="button"
-        aria-selected={active}
-        aria-controls={`content-${value}`}
-        data-state={active ? 'active' : 'inactive'}
-        data-value={value}
-        disabled={disabled}
-        className={className}
-        style={triggerStyles}
-        onFocus={(e) => {
-          if (!disabled) {
-            e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
-            e.currentTarget.style.outlineOffset = '2px';
-          }
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.outline = 'none';
-        }}
-        onMouseEnter={(e) => {
-          if (!disabled && !active) {
-            e.currentTarget.style.backgroundColor = `${colors.neutral?.[100] || '#f3f4f6'}80`; // 50% opacity
-            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!disabled && !active) {
-            e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
-          }
-        }}
-        {...props}
-      />
+        role="tab"
+        aria-selected={isActive}
+        aria-controls={`tabpanel-${tab.id}`}
+        aria-disabled={tab.isDisabled}
+        id={`tab-${tab.id}`}
+        tabIndex={isActive ? 0 : -1}
+        onClick={() => handleTabChange(tab.id)}
+        onKeyDown={(e) => handleKeyDown(e, tab.id)}
+        disabled={tab.isDisabled}
+        className="inline-flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        style={buttonStyles}
+      >
+        {tab.icon && (
+          <span aria-hidden="true" style={{ width: '16px', height: '16px' }}>
+            {tab.icon}
+          </span>
+        )}
+        
+        <span className={fullWidth ? 'truncate' : ''}>{tab.label}</span>
+        
+        {tab.badge && (
+          <span
+            className="inline-flex items-center justify-center rounded-full text-xs font-medium"
+            style={{
+              minWidth: '18px',
+              height: '18px',
+              backgroundColor: isActive && variant === 'pills' 
+                ? 'rgba(255,255,255,0.2)' 
+                : colors.primary?.[100] || '#dbeafe',
+              color: isActive && variant === 'pills' 
+                ? 'white' 
+                : colors.primary?.[700] || '#1d4ed8',
+              fontSize: typography.fontSize?.xs || '0.75rem',
+              padding: '0 6px'
+            }}
+            aria-label={`${tab.badge} notifications`}
+          >
+            {tab.badge}
+          </span>
+        )}
+
+        {tab.isLoading && (
+          <div
+            className="animate-spin rounded-full border-2 border-current border-t-transparent"
+            style={{ width: '14px', height: '14px' }}
+            aria-label="Loading..."
+          />
+        )}
+
+        {tab.isClosable && (
+          <button
+            type="button"
+            onClick={(e) => handleTabClose(tab.id, e)}
+            className="ml-2 p-1 rounded hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            style={{
+              color: 'currentColor',
+              opacity: 0.7,
+              minWidth: '20px',
+              minHeight: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            aria-label={`Close ${tab.label} tab`}
+          >
+            ✕
+          </button>
+        )}
+      </button>
     );
-  }
-);
+  }, [
+    activeTab,
+    sizeStyles,
+    colors,
+    variant,
+    borderRadius,
+    motion,
+    fullWidth,
+    typography,
+    handleTabChange,
+    handleKeyDown,
+    handleTabClose
+  ]);
 
-TabsTrigger.displayName = 'TabsTrigger';
+  // Render tab content
+  const renderTabContent = useCallback(() => {
+    const activeTabData = tabs.find(tab => tab.id === activeTab);
+    if (!activeTabData) return null;
 
-/**
- * Enhanced TabsContent component with token-based styling
- */
-export const TabsContent = forwardRef<HTMLDivElement, TabsContentProps>(
-  ({ className, style, value, activeValue, children, ...props }, ref): React.ReactElement => {
-    const { colors, spacing } = useTokens();
-    const isActive = value === activeValue;
-
-    // Content styles
-    const contentStyles: React.CSSProperties = {
-      marginTop: spacing[2],
-      outline: 'none',
-      display: isActive ? 'block' : 'none',
-      ...style,
-    };
+    const shouldRenderContent = !lazyLoad || loadedTabs.has(activeTab);
+    if (!shouldRenderContent) return null;
 
     return (
       <div
-        ref={ref}
+        id={`tabpanel-${activeTab}`}
         role="tabpanel"
-        id={`content-${value}`}
-        aria-labelledby={`trigger-${value}`}
-        data-state={isActive ? 'active' : 'inactive'}
-        data-value={value}
-        className={className}
-        style={contentStyles}
+        aria-labelledby={`tab-${activeTab}`}
         tabIndex={0}
-        onFocus={(e) => {
-          e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
-          e.currentTarget.style.outlineOffset = '2px';
+        style={{
+          padding: spacing[4],
+          backgroundColor: variant === 'cards' ? colors.background?.paper : 'transparent',
+          borderRadius: variant === 'cards' ? `0 0 ${borderRadius?.md} ${borderRadius?.md}` : '0',
+          border: variant === 'cards' ? `1px solid ${colors.border?.default}` : 'none',
+          borderTop: variant === 'cards' ? 'none' : undefined,
+          marginTop: variant === 'cards' ? '-1px' : undefined,
         }}
-        onBlur={(e) => {
-          e.currentTarget.style.outline = 'none';
-        }}
-        {...props}
       >
-        {children}
+        {activeTabData.content}
       </div>
     );
-  }
+  }, [activeTab, tabs, lazyLoad, loadedTabs, spacing, variant, colors, borderRadius]);
+
+  return (
+    <div className={`tabs ${className}`} style={{ width: fullWidth ? '100%' : 'auto' }}>
+      {/* Tab List Container */}
+      <div className="relative">
+        {/* Scroll Buttons */}
+        {scrollable && showScrollButtons && orientation === 'horizontal' && (
+          <>
+            <button
+              type="button"
+              onClick={() => scrollTabs('left')}
+              disabled={!canScrollLeft}
+              className="absolute left-0 top-0 z-10 p-2 bg-white border border-gray-300 rounded-l hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                height: sizeStyles.height,
+                color: colors.text?.secondary
+              }}
+              aria-label="Scroll tabs left"
+            >
+              ◀
+            </button>
+            <button
+              type="button"
+              onClick={() => scrollTabs('right')}
+              disabled={!canScrollRight}
+              className="absolute right-0 top-0 z-10 p-2 bg-white border border-gray-300 rounded-r hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                height: sizeStyles.height,
+                color: colors.text?.secondary
+              }}
+              aria-label="Scroll tabs right"
+            >
+              ▶
+            </button>
+          </>
+        )}
+
+        {/* Tab List */}
+        <div
+          ref={tabListRef}
+          role="tablist"
+          aria-label={ariaLabel}
+          style={{
+            ...tabListStyles,
+            paddingLeft: scrollable && showScrollButtons ? '40px' : '0',
+            paddingRight: scrollable && showScrollButtons ? '40px' : '0',
+          }}
+          onScroll={checkScrollState}
+        >
+          {tabs.map(renderTabButton)}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      {renderTabContent()}
+    </div>
+  );
+};
+
+export default Tabs;
+
+// Legacy exports for backward compatibility
+export { Tabs as EnhancedTabs };
+export type { TabsProps as EnhancedTabsProps };
+
+// Individual tab components for compatibility
+export type TabsOrientation = 'horizontal' | 'vertical';
+
+export interface TabsListProps {
+  readonly orientation?: TabsOrientation;
+  readonly className?: string;
+  readonly children?: React.ReactNode;
+}
+
+export interface TabsTriggerProps {
+  readonly value: string;
+  readonly disabled?: boolean;
+  readonly active?: boolean;
+  readonly className?: string;
+  readonly children?: React.ReactNode;
+}
+
+export interface TabsContentProps {
+  readonly value: string;
+  readonly activeValue?: string;
+  readonly children: React.ReactNode;
+  readonly className?: string;
+}
+
+export const TabsList = ({ children, className = '', ...props }: TabsListProps): JSX.Element => (
+  <div className={className} {...props}>{children}</div>
 );
 
-TabsContent.displayName = 'TabsContent';
+export const TabsTrigger = ({ children, className = '', ...props }: TabsTriggerProps): JSX.Element => (
+  <button className={className} {...props}>{children}</button>
+);
+
+export const TabsContent = ({ children, value, activeValue, className = '', ...props }: TabsContentProps): JSX.Element => (
+  <div className={className} style={{ display: value === activeValue ? 'block' : 'none' }} {...props}>{children}</div>
+);

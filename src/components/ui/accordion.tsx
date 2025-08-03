@@ -1,537 +1,361 @@
 /**
- * @fileoverview SSR-Safe Accordion Components - Production Strategy Implementation
- * @description Accordion components using useTokens hook for JSON template integration
+ * @fileoverview Accordion Component - Enterprise Interactive
+ * @description Expandable accordion with icons, badges, and smooth animations with WCAG AAA compliance
  * @version 5.0.0
- * @compliance SSR-Safe, Framework-agnostic, Production-ready
+ * @compliance WCAG AAA, NSM, Enterprise Standards
  */
 
-import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useTokens } from '../../hooks/useTokens';
 
-/**
- * Accordion variant types
- */
-export type AccordionVariant = 'default' | 'ghost' | 'separated';
+// =============================================================================
+// INTERFACES
+// =============================================================================
 
-/**
- * Accordion size types
- */
-export type AccordionSize = 'sm' | 'md' | 'lg';
-
-/**
- * Accordion content state types
- */
-export type AccordionState = 'open' | 'closed';
-
-/**
- * Accordion item data interface
- */
-export interface AccordionItemData {
+export interface AccordionItem {
   readonly id: string;
   readonly title: string;
-  readonly content: ReactNode;
-  readonly disabled?: boolean;
-  readonly defaultOpen?: boolean;
-  readonly icon?: ReactNode;
+  readonly content: React.ReactNode;
+  readonly icon?: React.ReactNode;
+  readonly badge?: string | number;
+  readonly isDisabled?: boolean;
+  readonly isDefaultExpanded?: boolean;
 }
 
-/**
- * Accordion component props interface
- */
-export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
-  /** Accordion styling variant */
-  readonly variant?: AccordionVariant;
-  /** Accordion size */
-  readonly size?: AccordionSize;
-  /** Accordion items data */
-  readonly items?: AccordionItemData[];
-  /** Allow multiple items to be open simultaneously */
-  readonly multiple?: boolean;
-  /** Collapsible behavior */
-  readonly collapsible?: boolean;
-  /** Norwegian compliance metadata */
-  readonly norwegian?: {
-    readonly classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';
-    readonly accessibilityLabel?: string;
-  };
+export interface AccordionProps {
+  readonly items: readonly AccordionItem[];
+  readonly allowMultiple?: boolean;
+  readonly variant?: 'default' | 'bordered' | 'elevated' | 'minimal';
+  readonly size?: 'sm' | 'md' | 'lg';
+  readonly expandIcon?: React.ReactNode;
+  readonly collapseIcon?: React.ReactNode;
+  readonly animationDuration?: number;
+  readonly onItemToggle?: (itemId: string, isExpanded: boolean) => void;
+  readonly className?: string;
+  readonly ariaLabel?: string;
 }
 
-/**
- * AccordionItem component props interface
- */
-export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
-  /** Item styling variant */
-  readonly variant?: AccordionVariant;
-  /** Unique item identifier */
-  readonly value: string;
-  /** Item disabled state */
-  readonly disabled?: boolean;
-  /** Children components (trigger and content) */
-  readonly children: ReactNode;
-}
+// =============================================================================
+// ACCORDION COMPONENT
+// =============================================================================
 
-/**
- * AccordionTrigger component props interface
- */
-export interface AccordionTriggerProps extends HTMLAttributes<HTMLButtonElement> {
-  /** Trigger styling variant */
-  readonly variant?: AccordionVariant;
-  /** Trigger size */
-  readonly size?: AccordionSize;
-  /** Trigger content */
-  readonly children: ReactNode;
-  /** Open state */
-  readonly isOpen?: boolean;
-  /** Click handler */
-  readonly onToggle?: () => void;
-  /** Show expand/collapse icon */
-  readonly showIcon?: boolean;
-  /** Custom icon */
-  readonly icon?: ReactNode;
-}
-
-/**
- * AccordionContent component props interface
- */
-export interface AccordionContentProps extends HTMLAttributes<HTMLDivElement> {
-  /** Content styling variant */
-  readonly variant?: AccordionVariant;
-  /** Content size */
-  readonly size?: AccordionSize;
-  /** Content state */
-  readonly state?: AccordionState;
-  /** Content to display */
-  readonly children: ReactNode;
-  /** Open state */
-  readonly isOpen?: boolean;
-}
-
-/**
- * Accordion component - Pure presentational component
- * @param items - Array of accordion items (optional, can use children instead)
- * @param variant - Accordion styling variant
- * @param size - Accordion size
- * @param multiple - Allow multiple items open
- * @param collapsible - Allow items to be collapsed
- * @param norwegian - Norwegian compliance configuration
- * @param className - Additional CSS classes
- * @param children - Child components (for manual composition)
- * @param props - Additional HTML attributes
- * @returns Accordion JSX element
- */
-export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
-  (
-    {
-      items,
-      variant = 'default',
-      size = 'md',
-      multiple: _multiple,
-      collapsible: _collapsible,
-      norwegian,
-      className,
-      style,
-      children,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, getToken } = useTokens();
-    
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-    };
-
-    // Container styles
-    const getContainerStyles = (): React.CSSProperties => {
-      const baseStyles: React.CSSProperties = {
-        borderTopWidth: '1px',
-        borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
-      };
-
-      switch (variant) {
-        case 'default':
-          return {
-            ...baseStyles,
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-            borderRadius: borderRadius.md,
-          };
-        case 'separated':
-          return {
-            ...baseStyles,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: spacing[2],
-          };
-        case 'ghost':
-        default:
-          return baseStyles;
+export const Accordion = ({
+  items,
+  allowMultiple = false,
+  variant = 'default',
+  size = 'md',
+  expandIcon,
+  collapseIcon,
+  animationDuration = 200,
+  onItemToggle,
+  className = '',
+  ariaLabel = 'Accordion'
+}: AccordionProps): JSX.Element => {
+  const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
+  
+  // Initialize expanded items based on default expanded state
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
+    const defaultExpanded = new Set<string>();
+    items.forEach(item => {
+      if (item.isDefaultExpanded && !item.isDisabled) {
+        defaultExpanded.add(item.id);
       }
-    };
+    });
+    return defaultExpanded;
+  });
 
-    const containerStyles: React.CSSProperties = {
-      ...getContainerStyles(),
-      ...style,
-    };
-    
-    // If items are provided, render them automatically
-    if (items) {
-      return (
-        <div
-          ref={ref}
-          className={className}
-          style={containerStyles}
-          role="region"
-          aria-label={norwegian?.accessibilityLabel || 'Accordion'}
-          {...props}
-        >
-          {items.map((item) => (
-            <AccordionItem key={item.id} value={item.id} variant={variant} disabled={item.disabled}>
-              <AccordionTrigger
-                variant={variant}
-                size={size}
-                isOpen={item.defaultOpen}
-                showIcon={true}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
-                  {item.icon && <span>{item.icon}</span>}
-                  <span>{item.title}</span>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent variant={variant} size={size} isOpen={item.defaultOpen}>
-                {item.content}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </div>
-      );
+  // Handle item toggle
+  const handleItemToggle = useCallback((itemId: string) => {
+    const item = items.find(i => i.id === itemId);
+    if (!item || item.isDisabled) return;
+
+    setExpandedItems(prev => {
+      const newSet = new Set(prev);
+      const wasExpanded = newSet.has(itemId);
+      
+      if (!allowMultiple && !wasExpanded) {
+        // If single mode and expanding, collapse all others
+        newSet.clear();
+        newSet.add(itemId);
+      } else if (wasExpanded) {
+        // Collapsing
+        newSet.delete(itemId);
+      } else {
+        // Expanding
+        newSet.add(itemId);
+      }
+      
+      onItemToggle?.(itemId, !wasExpanded);
+      return newSet;
+    });
+  }, [items, allowMultiple, onItemToggle]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((event: React.KeyboardEvent, itemId: string) => {
+    switch (event.key) {
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        handleItemToggle(itemId);
+        break;
     }
+  }, [handleItemToggle]);
 
-    // Manual composition mode
-    return (
+  // Generate variant styles
+  const accordionStyles = useMemo(() => {
+    const baseStyles = {
+      backgroundColor: colors.background?.paper,
+      borderRadius: borderRadius?.lg,
+    };
+
+    switch (variant) {
+      case 'bordered':
+        return {
+          ...baseStyles,
+          border: `1px solid ${colors.border?.default}`,
+        };
+      case 'elevated':
+        return {
+          ...baseStyles,
+          border: `1px solid ${colors.border?.muted}`,
+          boxShadow: elevation?.md,
+        };
+      case 'minimal':
+        return {
+          backgroundColor: 'transparent',
+        };
+      default:
+        return baseStyles;
+    }
+  }, [variant, colors, borderRadius, elevation]);
+
+  // Generate size-based spacing
+  const sizeStyles = useMemo(() => {
+    const sizeMap = {
+      sm: {
+        padding: spacing[3],
+        fontSize: typography.fontSize?.sm || '0.875rem',
+        iconSize: '16px',
+      },
+      md: {
+        padding: spacing[4],
+        fontSize: typography.fontSize?.base || '1rem',
+        iconSize: '20px',
+      },
+      lg: {
+        padding: spacing[6],
+        fontSize: typography.fontSize?.lg || '1.125rem',
+        iconSize: '24px',
+      },
+    };
+    
+    return sizeMap[size];
+  }, [size, spacing, typography]);
+
+  // Render accordion item
+  const renderAccordionItem = useCallback((item: AccordionItem, index: number) => {
+    const isExpanded = expandedItems.has(item.id);
+    const isFirst = index === 0;
+    const isLast = index === items.length - 1;
+
+    const headerStyles = {
+      padding: sizeStyles.padding,
+      backgroundColor: item.isDisabled 
+        ? colors.background?.elevated 
+        : isExpanded 
+        ? colors.background?.elevated 
+        : 'transparent',
+      borderRadius: variant === 'minimal' 
+        ? '0' 
+        : isFirst 
+        ? `${borderRadius?.lg} ${borderRadius?.lg} 0 0` 
+        : isLast && !isExpanded 
+        ? `0 0 ${borderRadius?.lg} ${borderRadius?.lg}` 
+        : '0',
+      borderBottom: variant !== 'minimal' && !isLast 
+        ? `1px solid ${colors.border?.muted}` 
+        : 'none',
+      cursor: item.isDisabled ? 'not-allowed' : 'pointer',
+      opacity: item.isDisabled ? 0.6 : 1,
+      transition: `all ${animationDuration}ms ${motion?.easing?.ease || 'ease'}`,
+    };
+
+    const contentStyles = {
+      padding: `0 ${sizeStyles.padding} ${sizeStyles.padding}`,
+      borderBottom: variant !== 'minimal' && !isLast 
+        ? `1px solid ${colors.border?.muted}` 
+        : 'none',
+      borderRadius: isLast && isExpanded 
+        ? `0 0 ${borderRadius?.lg} ${borderRadius?.lg}` 
+        : '0',
+    };
+
+    const defaultExpandIcon = (
       <div
-        ref={ref}
-        className={className}
-        style={containerStyles}
-        role="region"
-        aria-label={norwegian?.accessibilityLabel || 'Accordion'}
-        {...props}
+        style={{
+          transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+          transition: `transform ${animationDuration}ms ${motion?.easing?.ease || 'ease'}`,
+          width: sizeStyles.iconSize,
+          height: sizeStyles.iconSize,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: sizeStyles.fontSize
+        }}
+        aria-hidden="true"
       >
-        {children}
+        ▶
       </div>
     );
-  }
-);
-
-Accordion.displayName = 'Accordion';
-
-/**
- * AccordionItem component - Pure presentational component
- * @param value - Unique item identifier
- * @param variant - Item styling variant
- * @param disabled - Item disabled state
- * @param children - Trigger and content components
- * @param className - Additional CSS classes
- * @param props - Additional HTML attributes
- * @returns AccordionItem JSX element
- */
-export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
-  (
-    { value, variant = 'default', disabled = false, children, className, style, ...props },
-    ref
-  ): React.ReactElement => {
-    const { colors, getToken } = useTokens();
-    
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-    };
-
-    // Item styles
-    const getItemStyles = (): React.CSSProperties => {
-      switch (variant) {
-        case 'separated':
-          return {
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-            borderRadius: borderRadius.md,
-          };
-        case 'ghost':
-        case 'default':
-        default:
-          return {};
-      }
-    };
-
-    const itemStyles: React.CSSProperties = {
-      ...getItemStyles(),
-      ...style,
-    };
 
     return (
-      <div
-        ref={ref}
-        data-value={value}
-        data-disabled={disabled}
-        className={className}
-        style={itemStyles}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-
-AccordionItem.displayName = 'AccordionItem';
-
-/**
- * AccordionTrigger component - Pure presentational component
- * @param children - Trigger content
- * @param variant - Trigger styling variant
- * @param size - Trigger size
- * @param isOpen - Open state
- * @param onToggle - Toggle handler
- * @param showIcon - Show expand/collapse icon
- * @param icon - Custom icon
- * @param className - Additional CSS classes
- * @param props - Additional HTML attributes
- * @returns AccordionTrigger JSX element
- */
-export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(
-  (
-    {
-      children,
-      variant = 'default',
-      size = 'md',
-      isOpen = false,
-      onToggle,
-      showIcon = true,
-      icon,
-      className,
-      style,
-      ...props
-    },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, getToken } = useTokens();
-    
-    // Get border radius
-    const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-    };
-
-    // Size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return {
-            fontSize: '0.875rem',
-            paddingTop: spacing[2],
-            paddingBottom: spacing[2],
-            paddingLeft: spacing[3],
-            paddingRight: spacing[3],
-          };
-        case 'lg':
-          return {
-            fontSize: '1.125rem',
-            paddingTop: spacing[5],
-            paddingBottom: spacing[5],
-            paddingLeft: spacing[5],
-            paddingRight: spacing[5],
-          };
-        default: // md
-          return {
-            fontSize: '1rem',
-            paddingTop: spacing[4],
-            paddingBottom: spacing[4],
-            paddingLeft: spacing[4],
-            paddingRight: spacing[4],
-          };
-      }
-    };
-
-    // Variant styles
-    const getVariantStyles = (): React.CSSProperties => {
-      switch (variant) {
-        case 'ghost':
-          return {
-            paddingLeft: 0,
-            paddingRight: 0,
-          };
-        case 'separated':
-          return {
-            borderRadius: borderRadius.md,
-          };
-        case 'default':
-        default:
-          return {
-            textAlign: 'left',
-          };
-      }
-    };
-
-    const triggerStyles: React.CSSProperties = {
-      display: 'flex',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      fontWeight: '500',
-      transition: 'all 150ms ease-in-out',
-      cursor: 'pointer',
-      border: 'none',
-      backgroundColor: 'transparent',
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-      outline: 'none',
-      ...getSizeStyles(),
-      ...getVariantStyles(),
-      ...style,
-    };
-    
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={className}
-        style={triggerStyles}
-        data-state={isOpen ? 'open' : 'closed'}
-        aria-expanded={isOpen}
-        onClick={onToggle}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-          e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = 'transparent';
-          e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
-        }}
-        onFocus={(e) => {
-          e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
-          e.currentTarget.style.outlineOffset = '2px';
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.outline = 'none';
-        }}
-        {...props}
-      >
-        <span style={{ flex: 1, textAlign: 'left' }}>{children}</span>
-        {showIcon && (
-          <span 
-            style={{ 
-              marginLeft: spacing[2], 
-              transition: 'transform 200ms ease-in-out',
-              transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-            }}
+      <div key={item.id} className="accordion-item">
+        {/* Header */}
+        <h3>
+          <button
+            type="button"
+            onClick={() => handleItemToggle(item.id)}
+            onKeyDown={(e) => handleKeyDown(e, item.id)}
+            disabled={item.isDisabled}
+            className="w-full text-left focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            style={headerStyles}
+            aria-expanded={isExpanded}
+            aria-controls={`accordion-content-${item.id}`}
+            id={`accordion-header-${item.id}`}
           >
-            {icon || (
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ height: '16px', width: '16px', flexShrink: 0 }}
-              >
-                <path
-                  d="m4.5 6 3 3 3-3"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                {item.icon && (
+                  <div
+                    className="flex-shrink-0"
+                    style={{
+                      color: item.isDisabled 
+                        ? colors.text?.muted 
+                        : colors.text?.secondary,
+                      width: sizeStyles.iconSize,
+                      height: sizeStyles.iconSize
+                    }}
+                    aria-hidden="true"
+                  >
+                    {item.icon}
+                  </div>
+                )}
+                
+                <span
+                  className="font-medium truncate"
+                  style={{
+                    color: item.isDisabled 
+                      ? colors.text?.muted 
+                      : colors.text?.primary,
+                    fontSize: sizeStyles.fontSize,
+                    lineHeight: typography.lineHeight?.tight || 1.25
+                  }}
+                >
+                  {item.title}
+                </span>
+
+                {item.badge && (
+                  <span
+                    className="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      backgroundColor: colors.primary?.[100] || '#dbeafe',
+                      color: colors.primary?.[700] || '#1d4ed8',
+                      fontSize: typography.fontSize?.xs || '0.75rem',
+                      minWidth: '20px'
+                    }}
+                    aria-label={`${item.badge} items`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex-shrink-0 ml-3">
+                {isExpanded && collapseIcon 
+                  ? collapseIcon 
+                  : expandIcon || defaultExpandIcon}
+              </div>
+            </div>
+          </button>
+        </h3>
+
+        {/* Content */}
+        {isExpanded && (
+          <div
+            id={`accordion-content-${item.id}`}
+            role="region"
+            aria-labelledby={`accordion-header-${item.id}`}
+            style={contentStyles}
+            className="accordion-content"
+          >
+            <div
+              style={{
+                color: colors.text?.secondary,
+                fontSize: sizeStyles.fontSize,
+                lineHeight: typography.lineHeight?.relaxed || 1.625,
+                animation: `accordionSlideDown ${animationDuration}ms ${motion?.easing?.ease || 'ease'}`
+              }}
+            >
+              {item.content}
+            </div>
+          </div>
         )}
-      </button>
-    );
-  }
-);
-
-AccordionTrigger.displayName = 'AccordionTrigger';
-
-/**
- * AccordionContent component - Pure presentational component
- * @param children - Content to display
- * @param variant - Content styling variant
- * @param size - Content size
- * @param isOpen - Open state
- * @param className - Additional CSS classes
- * @param props - Additional HTML attributes
- * @returns AccordionContent JSX element
- */
-export const AccordionContent = forwardRef<HTMLDivElement, AccordionContentProps>(
-  (
-    { children, variant = 'default', size = 'md', state: _state, isOpen = false, className, style, ...props },
-    ref
-  ): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
-    
-    // Size styles
-    const getSizeStyles = (): React.CSSProperties => {
-      switch (size) {
-        case 'sm':
-          return {
-            paddingLeft: spacing[3],
-            paddingRight: spacing[3],
-            paddingBottom: spacing[2],
-          };
-        case 'lg':
-          return {
-            paddingLeft: spacing[5],
-            paddingRight: spacing[5],
-            paddingBottom: spacing[5],
-          };
-        default: // md
-          return {
-            paddingLeft: spacing[4],
-            paddingRight: spacing[4],
-            paddingBottom: spacing[4],
-          };
-      }
-    };
-
-    // Variant styles
-    const getVariantStyles = (): React.CSSProperties => {
-      switch (variant) {
-        case 'ghost':
-          return {
-            paddingLeft: 0,
-            paddingRight: 0,
-          };
-        case 'separated':
-        case 'default':
-        default:
-          return {};
-      }
-    };
-
-    const contentStyles: React.CSSProperties = {
-      overflow: 'hidden',
-      transition: 'all 200ms ease-in-out',
-      display: isOpen ? 'block' : 'none',
-      ...getSizeStyles(),
-      ...getVariantStyles(),
-      ...style,
-    };
-
-    const textStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-    };
-    
-    return (
-      <div
-        ref={ref}
-        className={className}
-        style={contentStyles}
-        data-state={isOpen ? 'open' : 'closed'}
-        role="region"
-        {...props}
-      >
-        <div style={textStyles}>{children}</div>
       </div>
     );
-  }
-);
+  }, [
+    expandedItems,
+    items.length,
+    sizeStyles,
+    colors,
+    borderRadius,
+    variant,
+    motion,
+    animationDuration,
+    typography,
+    expandIcon,
+    collapseIcon,
+    handleItemToggle,
+    handleKeyDown
+  ]);
 
-AccordionContent.displayName = 'AccordionContent';
+  return (
+    <>
+      {/* CSS Animation Keyframes */}
+      <style>
+        {`
+          @keyframes accordionSlideDown {
+            from {
+              opacity: 0;
+              transform: translateY(-8px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          @media (prefers-reduced-motion: reduce) {
+            .accordion-content {
+              animation: none !important;
+            }
+          }
+        `}
+      </style>
+
+      <div
+        className={`accordion ${className}`}
+        style={accordionStyles}
+        role="presentation"
+        aria-label={ariaLabel}
+      >
+        {items.map(renderAccordionItem)}
+      </div>
+    </>
+  );
+};
+
+export default Accordion;
+
+// Legacy exports for backward compatibility
+export { Accordion as EnhancedAccordion };
+export type { AccordionProps as EnhancedAccordionProps };

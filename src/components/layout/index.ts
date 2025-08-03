@@ -37,3 +37,12 @@ export type {
   DashboardVariant
 } from './EnhancedDashboard';
 
+// Dashboard component
+export { Dashboard } from './Dashboard';
+export type { 
+  DashboardProps,
+  KPICardData,
+  QuickAction,
+  ActivityItem
+} from './Dashboard';
+

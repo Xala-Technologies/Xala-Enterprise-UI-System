@@ -28,11 +28,12 @@ export { Badge, type BadgeProps, type BadgeSize, type BadgeVariant } from './com
 
 // ===== LAYOUT COMPONENTS =====
 export { Container, Grid, GridItem, HStack, PageLayout, Section, Stack, VStack } from './components/layout';
+export { Dashboard, type DashboardProps, type KPICardData, type QuickAction, type ActivityItem } from './components/layout/Dashboard';
 export type { GridItemProps, StackAlign, StackDirection, StackGap, StackJustify, StackProps } from './components/layout';
 export type { ContainerProps, GridProps, LayoutComponentProps, PageLayoutProps, SectionProps } from './types/layout.types';
 
-// ===== ENHANCED LAYOUT COMPONENTS =====
-export { EnhancedDashboard, type EnhancedDashboardProps, type KPICardData, type QuickAction, type ActivityItem } from './components/layout/EnhancedDashboard';
+// ===== ENHANCED LAYOUT COMPONENTS (Legacy) =====
+export { EnhancedDashboard, type EnhancedDashboardProps } from './components/layout/EnhancedDashboard';
 
 // ===== FORM COMPONENTS =====
 export { Form, OrganizationNumberInput, PersonalNumberInput, TextArea } from './components/form';

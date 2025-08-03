@@ -1,0 +1,121 @@
+import React from 'react';
+import { Container, Stack, Typography, Button, Card } from '@xala-technologies/ui-system';
+import { useTokens } from '@xala-technologies/ui-system';
+import { useLocalization } from '../hooks/useLocalization';
+
+export default function HomePage(): JSX.Element {
+  const tokens = useTokens();
+  const { t } = useLocalization();
+
+  const handleGetStarted = (): void => {
+    // Navigate to next page or show modal
+    console.log('Getting started...');
+  };
+
+  return (
+    <Container maxWidth="large" padding={tokens.spacing.xl}>
+      <Stack spacing={tokens.spacing.xl} direction="vertical" align="center">
+        <Stack spacing={tokens.spacing.lg} direction="vertical" align="center">
+          <Typography
+            variant="heading1"
+            color={tokens.colors.text.primary}
+            textAlign="center"
+          >
+            {t('home.welcome', 'Welcome to {{brand}}')}
+          </Typography>
+          
+          <Typography
+            variant="body1"
+            color={tokens.colors.text.secondary}
+            textAlign="center"
+            maxWidth="600px"
+          >
+            {t('home.description', 'Build beautiful, accessible, and compliant applications with our enterprise-grade design system.')}
+          </Typography>
+        </Stack>
+
+        <Card
+          padding={tokens.spacing.xl}
+          borderRadius={tokens.borderRadius.large}
+          backgroundColor={tokens.colors.surface.primary}
+          boxShadow={tokens.shadows.medium}
+        >
+          <Stack spacing={tokens.spacing.lg} direction="vertical" align="center">
+            <Typography
+              variant="heading3"
+              color={tokens.colors.text.primary}
+            >
+              {t('home.features.title', 'Key Features')}
+            </Typography>
+
+            <Stack spacing={tokens.spacing.md} direction="vertical">
+              {{#each features}}
+              <FeatureItem
+                icon="{{this}}"
+                title={t('features.{{this}}.title', '{{toTitleCase this}}')}
+                description={t('features.{{this}}.description', 'Feature description')}
+              />
+              {{/each}}
+            </Stack>
+
+            <Button
+              variant="primary"
+              size="large"
+              onClick={handleGetStarted}
+              ariaLabel={t('home.getStarted.aria', 'Get started with {{brand}}')}
+            >
+              {t('home.getStarted.text', 'Get Started')}
+            </Button>
+          </Stack>
+        </Card>
+      </Stack>
+    </Container>
+  );
+}
+
+interface FeatureItemProps {
+  readonly icon: string;
+  readonly title: string;
+  readonly description: string;
+}
+
+function FeatureItem({ icon, title, description }: FeatureItemProps): JSX.Element {
+  const tokens = useTokens();
+
+  return (
+    <Stack spacing={tokens.spacing.sm} direction="horizontal" align="center">
+      <div
+        style={{
+          width: tokens.spacing.md,
+          height: tokens.spacing.md,
+          backgroundColor: tokens.colors.primary[500],
+          borderRadius: tokens.borderRadius.small,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        aria-hidden="true"
+      >
+        <span style={{ color: tokens.colors.text.inverse, fontSize: '12px' }}>
+          ✓
+        </span>
+      </div>
+      
+      <Stack spacing={tokens.spacing.xs} direction="vertical">
+        <Typography
+          variant="subtitle1"
+          color={tokens.colors.text.primary}
+          fontWeight={tokens.typography.fontWeight.semibold}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="body2"
+          color={tokens.colors.text.secondary}
+        >
+          {description}
+        </Typography>
+      </Stack>
+    </Stack>
+  );
+}
