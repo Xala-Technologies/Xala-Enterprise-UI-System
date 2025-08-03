@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Xala UI System MCP Server
- * Comprehensive component generation server for Xala UI System v5.0.0
+ * Xala UI System MCP Server v6.0
+ * Multi-platform component generation server supporting React, Next.js, Vue, Angular, Svelte, Electron, React Native
+ * v5.0 Semantic Architecture with comprehensive component library
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -20,11 +21,40 @@ import { ComponentConfig, GenerationContext } from './types/index.js';
 // Zod schemas for validation
 const ComponentConfigSchema = z.object({
   name: z.string().min(1),
-  category: z.enum(['layout', 'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template']),
+  category: z.enum([
+    // v6.0 Multi-platform categories
+    'components', 'data-components', 'theme-components', 'layouts', 'providers', 'patterns', 'tools',
+    // Legacy categories
+    'layout', 'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
+  ]),
+  platform: z.enum(['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native']).optional(),
   variant: z.string().optional(),
   size: z.enum(['xs', 'sm', 'md', 'lg', 'xl']).optional(),
   theme: z.enum(['enterprise', 'finance', 'healthcare', 'education', 'ecommerce', 'productivity', 'oslo', 'bergen', 'drammen']).optional(),
-  locale: z.enum(['en', 'no', 'fr', 'ar']).optional(),
+  locale: z.enum(['en', 'nb-NO', 'fr', 'ar']).optional(),
+  platformConfig: z.object({
+    architecture: z.enum(['v5-cva', 'semantic', 'hybrid']).optional(),
+    features: z.object({
+      appRouter: z.boolean().optional(),
+      pagesRouter: z.boolean().optional(),
+      serverComponents: z.boolean().optional(),
+      compositionApi: z.boolean().optional(),
+      scriptSetup: z.boolean().optional(),
+      pinia: z.boolean().optional(),
+      standaloneComponents: z.boolean().optional(),
+      signals: z.boolean().optional(),
+      ngTranslate: z.boolean().optional(),
+      svelteKit: z.boolean().optional(),
+      stores: z.boolean().optional(),
+      mainProcess: z.boolean().optional(),
+      rendererProcess: z.boolean().optional(),
+      nativeApis: z.boolean().optional(),
+      expo: z.boolean().optional(),
+      navigation: z.boolean().optional(),
+    }).optional(),
+    outputPath: z.string().optional(),
+    templateEngine: z.enum(['handlebars', 'ejs']).optional(),
+  }).optional(),
   features: z.object({
     interactive: z.boolean().optional(),
     animated: z.boolean().optional(),
@@ -76,6 +106,9 @@ const GenerationContextSchema = z.object({
   addTests: z.boolean().optional(),
   addStories: z.boolean().optional(),
   addDocs: z.boolean().optional(),
+  platform: z.enum(['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native']).optional(),
+  architecture: z.enum(['v5-cva', 'semantic', 'hybrid']).optional(),
+  templateEngine: z.enum(['handlebars', 'ejs']).optional(),
 });
 
 class XalaUISystemMCPServer {
@@ -87,7 +120,7 @@ class XalaUISystemMCPServer {
     this.server = new Server(
       {
         name: 'xala-ui-system-mcp',
-        version: '1.0.0',
+        version: '6.0.0',
       },
       {
         capabilities: {
@@ -106,8 +139,88 @@ class XalaUISystemMCPServer {
       return {
         tools: [
           {
+            name: 'generate_multi_platform_component',
+            description: 'Generate components for any of the 7 supported platforms (React, Next.js, Vue, Angular, Svelte, Electron, React Native) with v5.0 semantic architecture',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                config: {
+                  type: 'object',
+                  description: 'Multi-platform component configuration',
+                  properties: {
+                    name: { type: 'string', description: 'Component name' },
+                    platform: { 
+                      type: 'string', 
+                      enum: ['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native'],
+                      description: 'Target platform' 
+                    },
+                    category: { 
+                      type: 'string', 
+                      enum: ['components', 'data-components', 'theme-components', 'layouts', 'providers', 'patterns', 'tools'],
+                      description: 'Component category' 
+                    },
+                    platformConfig: {
+                      type: 'object',
+                      description: 'Platform-specific configuration',
+                      properties: {
+                        architecture: { type: 'string', enum: ['v5-cva', 'semantic', 'hybrid'] },
+                        features: { type: 'object', description: 'Platform-specific features' }
+                      }
+                    }
+                  },
+                  required: ['name', 'platform', 'category']
+                }
+              },
+              required: ['config']
+            }
+          },
+          {
+            name: 'generate_all_platforms',
+            description: 'Generate component for all supported platforms simultaneously',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                config: {
+                  type: 'object',
+                  description: 'Component configuration (platform will be ignored)',
+                }
+              },
+              required: ['config']
+            }
+          },
+          {
+            name: 'list_platform_components',
+            description: 'List available components for a specific platform',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                platform: { 
+                  type: 'string', 
+                  enum: ['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native'],
+                  description: 'Platform to list components for' 
+                }
+              },
+              required: ['platform']
+            }
+          },
+          {
+            name: 'get_platform_info',
+            description: 'Get detailed information about a platform including supported features and architecture',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                platform: { 
+                  type: 'string', 
+                  enum: ['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native'],
+                  description: 'Platform to get information for' 
+                }
+              },
+              required: ['platform']
+            }
+          },
+          {
             name: 'generate_component',
-            description: 'Generate a React component using Xala UI System with full TypeScript, accessibility, and localization support',
+            description: 'Generate a React component using Xala UI System with full TypeScript, accessibility, and localization support (Legacy)',
             inputSchema: {
               type: 'object',
               properties: {
@@ -335,6 +448,14 @@ class XalaUISystemMCPServer {
 
       try {
         switch (name) {
+          case 'generate_multi_platform_component':
+            return await this.handleGenerateMultiPlatformComponent(args);
+          case 'generate_all_platforms':
+            return await this.handleGenerateAllPlatforms(args);
+          case 'list_platform_components':
+            return await this.handleListPlatformComponents(args);
+          case 'get_platform_info':
+            return await this.handleGetPlatformInfo(args);
           case 'generate_component':
             return await this.handleGenerateComponent(args);
           case 'generate_layout':
@@ -370,6 +491,199 @@ class XalaUISystemMCPServer {
         };
       }
     });
+  }
+
+  private async handleGenerateMultiPlatformComponent(args: any) {
+    const { config } = args;
+    const validatedConfig = ComponentConfigSchema.parse(config);
+
+    const result = await this.componentGenerator.generateMultiPlatformComponent(validatedConfig);
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: `# Generated Multi-Platform Component: ${validatedConfig.name}
+Platform: **${result.platform}**
+Architecture: **${result.architecture}**
+
+## Component Code
+
+\`\`\`${this.getFileExtension(result.platform)}
+${result.componentCode}
+\`\`\`
+
+## Types
+
+\`\`\`typescript
+${result.typesCode}
+\`\`\`
+
+## Localization Keys
+
+\`\`\`json
+${JSON.stringify(result.localizationKeys, null, 2)}
+\`\`\`
+
+## Dependencies
+
+${result.dependencies.map(dep => `- ${dep}`).join('\n')}
+
+## Files Generated
+
+${result.files.map(file => `- ${file.path} (${file.type})`).join('\n')}
+
+## Platform Features
+- **Architecture**: ${result.architecture}
+- **Localization**: ${this.getLocalizationPattern(result.platform)}
+- **File Extension**: ${this.getFileExtension(result.platform)}
+- **Framework**: ${this.getPlatformFramework(result.platform)}`,
+        },
+      ],
+    };
+  }
+
+  private async handleGenerateAllPlatforms(args: any) {
+    const { config } = args;
+    const validatedConfig = ComponentConfigSchema.parse(config);
+
+    const results = await this.componentGenerator.generateAllPlatforms(validatedConfig);
+    const platforms = Object.keys(results);
+
+    let response = `# Generated Component for All Platforms: ${validatedConfig.name}\n\n`;
+    response += `Generated for **${platforms.length}** platforms: ${platforms.join(', ')}\n\n`;
+
+    for (const [platform, result] of Object.entries(results)) {
+      response += `## ${platform.toUpperCase()}\n\n`;
+      response += `**Architecture**: ${result.architecture}\n`;
+      response += `**Files**: ${result.files.length}\n`;
+      response += `**Dependencies**: ${result.dependencies.length}\n\n`;
+      response += `\`\`\`${this.getFileExtension(platform as any)}
+${result.componentCode.slice(0, 300)}...
+\`\`\`\n\n`;
+    }
+
+    response += `## Summary\n\n`;
+    response += `Total files generated: **${Object.values(results).reduce((sum, result) => sum + result.files.length, 0)}**\n`;
+    response += `Unique dependencies: **${new Set(Object.values(results).flatMap(result => result.dependencies)).size}**\n`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: response,
+        },
+      ],
+    };
+  }
+
+  private async handleListPlatformComponents(args: any) {
+    const { platform } = args;
+    const components = this.componentGenerator.getAvailableComponents(platform);
+    const platformConfig = this.componentGenerator.getPlatformConfig(platform);
+
+    const componentsByCategory = components.reduce((acc, component) => {
+      // Simple categorization based on component name
+      let category = 'components';
+      if (['data-table', 'virtual-list', 'command-palette', 'global-search'].includes(component)) {
+        category = 'data-components';
+      } else if (['theme-switcher', 'theme-selector'].includes(component)) {
+        category = 'theme-components';
+      } else if (['app-shell', 'layout'].includes(component)) {
+        category = 'layouts';
+      } else if (component.includes('provider') || component.includes('boundary')) {
+        category = 'providers';
+      } else if (['render-props', 'hoc-collection', 'component-factory'].includes(component)) {
+        category = 'patterns';
+      } else if (['performance-monitor', 'code-generator'].includes(component)) {
+        category = 'tools';
+      }
+      
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(component);
+      return acc;
+    }, {} as Record<string, string[]>);
+
+    let response = `# Available Components for ${platform.toUpperCase()}\n\n`;
+    response += `**Total Components**: ${components.length}\n`;
+    response += `**Template Path**: ${platformConfig.templatePath}\n`;
+    response += `**File Extension**: ${platformConfig.fileExtension}\n`;
+    response += `**Localization Pattern**: ${platformConfig.localizationPattern}\n\n`;
+
+    for (const [category, categoryComponents] of Object.entries(componentsByCategory)) {
+      response += `## ${category.toUpperCase().replace('-', ' ')}\n\n`;
+      categoryComponents.forEach(component => {
+        response += `- **${component}** - ${this.getComponentDescription(component)}\n`;
+      });
+      response += '\n';
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: response,
+        },
+      ],
+    };
+  }
+
+  private async handleGetPlatformInfo(args: any) {
+    const { platform } = args;
+    const platformConfig = this.componentGenerator.getPlatformConfig(platform);
+    const components = this.componentGenerator.getAvailableComponents(platform);
+
+    const response = `# Platform Information: ${platform.toUpperCase()}
+
+## Overview
+- **Platform**: ${platform}
+- **Architecture**: ${this.getPlatformArchitecture(platform)}
+- **Framework**: ${this.getPlatformFramework(platform)}
+- **File Extension**: ${platformConfig.fileExtension}
+- **Template Path**: ${platformConfig.templatePath}
+- **Localization Pattern**: ${platformConfig.localizationPattern}
+
+## Supported Features
+${this.getPlatformFeatures(platform)}
+
+## Component Library
+- **Total Components**: ${components.length}
+- **Categories**: ${this.getUniqueCategories(components).length}
+
+## Architecture Details
+${this.getArchitectureDetails(platform)}
+
+## Example Usage
+
+\`\`\`json
+{
+  "name": "generate_multi_platform_component",
+  "arguments": {
+    "config": {
+      "name": "UserCard",
+      "platform": "${platform}",
+      "category": "components",
+      "platformConfig": {
+        "architecture": "semantic",
+        "features": ${JSON.stringify(this.getDefaultPlatformFeatures(platform), null, 8)}
+      }
+    }
+  }
+}
+\`\`\`
+
+## Best Practices
+${this.getPlatformBestPractices(platform)}
+`;
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: response,
+        },
+      ],
+    };
   }
 
   private async handleGenerateComponent(args: any) {
@@ -666,10 +980,239 @@ class XalaUISystemMCPServer {
     };
   }
 
+  // Utility methods for multi-platform support
+  private getFileExtension(platform: string): string {
+    const extensions: Record<string, string> = {
+      'react': 'tsx',
+      'nextjs': 'tsx', 
+      'vue': 'vue',
+      'angular': 'typescript',
+      'svelte': 'svelte',
+      'electron': 'tsx',
+      'react-native': 'tsx'
+    };
+    return extensions[platform] || 'tsx';
+  }
+
+  private getLocalizationPattern(platform: string): string {
+    const patterns: Record<string, string> = {
+      'react': 't()',
+      'nextjs': 't()',
+      'vue': '{{ t() }}',
+      'angular': '| translate',
+      'svelte': '{t()}',
+      'electron': '{t()}',
+      'react-native': 't()'
+    };
+    return patterns[platform] || 't()';
+  }
+
+  private getPlatformFramework(platform: string): string {
+    const frameworks: Record<string, string> = {
+      'react': 'React 18+',
+      'nextjs': 'Next.js 13+ with App Router',
+      'vue': 'Vue 3 with Composition API',
+      'angular': 'Angular 17+ Standalone Components',
+      'svelte': 'Svelte 4+ with SvelteKit',
+      'electron': 'Electron 25+ with React',
+      'react-native': 'React Native 0.72+ with Expo'
+    };
+    return frameworks[platform] || 'Unknown';
+  }
+
+  private getPlatformArchitecture(platform: string): string {
+    const architectures: Record<string, string> = {
+      'react': 'v5.0 CVA Semantic',
+      'nextjs': 'v5.0 CVA Semantic with SSR',
+      'vue': 'Composition API with Design Tokens',
+      'angular': 'Standalone Components with CSS Classes',
+      'svelte': 'SvelteKit with Reactive Styling',
+      'electron': 'Desktop Native with React',
+      'react-native': 'Mobile Native with Design Tokens'
+    };
+    return architectures[platform] || 'Standard';
+  }
+
+  private getPlatformFeatures(platform: string): string {
+    const features: Record<string, string[]> = {
+      'react': ['Server Components', 'Hooks', 'CVA Styling', 'TypeScript Strict'],
+      'nextjs': ['App Router', 'Pages Router', 'Server Components', 'SSR/SSG', 'API Routes'],
+      'vue': ['Composition API', 'Script Setup', 'Pinia State', 'Vue Router', 'SFC Templates'],
+      'angular': ['Standalone Components', 'Signals', 'NgTranslate', 'Dependency Injection'],
+      'svelte': ['SvelteKit', 'Stores', 'Reactive Statements', 'Component Scoped CSS'],
+      'electron': ['Main Process', 'Renderer Process', 'Native APIs', 'Window Controls'],
+      'react-native': ['Expo Compatible', 'Navigation', 'Native Modules', 'Platform APIs']
+    };
+    
+    return features[platform]?.map(f => `- ${f}`).join('\n') || '- Standard features';
+  }
+
+  private getComponentDescription(component: string): string {
+    const descriptions: Record<string, string> = {
+      'navbar': 'Navigation bar with responsive design and accessibility',
+      'modal': 'Accessible modal dialog with backdrop and focus management',
+      'sidebar': 'Collapsible sidebar navigation with nested menu support',
+      'header': 'Page header with breadcrumbs and user actions',
+      'form': 'Validated form with error handling and accessibility',
+      'card': 'Content card with various layouts and interactive states',
+      'dashboard': 'Complete dashboard layout with widgets and charts',
+      'data-table': 'Advanced data table with sorting, filtering, and pagination',
+      'virtual-list': 'Performance-optimized virtual list for large datasets',
+      'command-palette': 'Keyboard-driven command interface',
+      'global-search': 'Universal search with autocomplete and filtering',
+      'theme-switcher': 'Toggle between light and dark themes',
+      'theme-selector': 'Dropdown for selecting from multiple themes',
+      'app-shell': 'Main application layout structure',
+      'layout': 'Flexible layout component with responsive breakpoints',
+      'auth-provider': 'Authentication context and state management',
+      'theme-provider': 'Theme context and CSS custom properties',
+      'error-boundary': 'Error handling and fallback UI component',
+      'notification-provider': 'Toast and notification system',
+      'render-props': 'Render props pattern implementation',
+      'hoc-collection': 'Higher-order components for common patterns',
+      'component-factory': 'Dynamic component creation and rendering',
+      'performance-monitor': 'Component performance tracking and metrics',
+      'code-generator': 'Dynamic code generation utilities'
+    };
+    return descriptions[component] || 'Component description not available';
+  }
+
+  private getUniqueCategories(components: string[]): string[] {
+    const categories = new Set<string>();
+    components.forEach(component => {
+      if (['data-table', 'virtual-list', 'command-palette', 'global-search'].includes(component)) {
+        categories.add('data-components');
+      } else if (['theme-switcher', 'theme-selector'].includes(component)) {
+        categories.add('theme-components');
+      } else if (['app-shell', 'layout'].includes(component)) {
+        categories.add('layouts');
+      } else if (component.includes('provider') || component.includes('boundary')) {
+        categories.add('providers');
+      } else if (['render-props', 'hoc-collection', 'component-factory'].includes(component)) {
+        categories.add('patterns');
+      } else if (['performance-monitor', 'code-generator'].includes(component)) {
+        categories.add('tools');
+      } else {
+        categories.add('components');
+      }
+    });
+    return Array.from(categories);
+  }
+
+  private getArchitectureDetails(platform: string): string {
+    const details: Record<string, string> = {
+      'react': `- **v5.0 CVA Architecture**: Class Variance Authority for styling
+- **Zero Raw HTML**: Only semantic components in pages  
+- **Design Tokens**: Semantic props (spacing="lg", variant="hero")
+- **Mandatory Localization**: All text uses t() functions
+- **TypeScript Strict**: Explicit return types and readonly interfaces`,
+
+      'nextjs': `- **App Router Support**: Latest Next.js routing with layouts
+- **Server Components**: RSC support with client boundaries
+- **SSR/SSG**: Server-side rendering and static generation
+- **API Routes**: Built-in API endpoint generation
+- **v5.0 CVA Architecture**: Same as React with server optimizations`,
+
+      'vue': `- **Composition API**: Script setup with reactive composition
+- **Single File Components**: Template, script, and style co-location
+- **Pinia Integration**: Type-safe state management
+- **Vue Router**: Declarative routing with guards
+- **Semantic Architecture**: CSS classes with design tokens`,
+
+      'angular': `- **Standalone Components**: No NgModule dependencies
+- **Angular Signals**: Reactive primitive for state management
+- **Dependency Injection**: Built-in DI container
+- **NgTranslate**: Internationalization with pipe syntax
+- **CSS Classes**: Tailwind-based styling with semantic tokens`,
+
+      'svelte': `- **SvelteKit Ready**: Full-stack framework support
+- **Reactive Statements**: Automatic reactivity with $:
+- **Stores**: Global state management with writable stores
+- **Component Scoped CSS**: Isolated styling with preprocessors
+- **Compile-time Optimizations**: Zero runtime overhead`,
+
+      'electron': `- **Desktop Native**: Cross-platform desktop application
+- **IPC Communication**: Main and renderer process communication
+- **Native APIs**: File system, notifications, system tray
+- **Window Management**: Custom title bar and window controls
+- **React Integration**: Web technologies with native capabilities`,
+
+      'react-native': `- **Mobile Native**: iOS and Android native performance
+- **Expo Compatible**: Development and deployment toolchain
+- **Platform APIs**: Camera, geolocation, push notifications
+- **Native Modules**: Bridge to platform-specific code
+- **Design Tokens**: Mobile-optimized spacing and typography`
+    };
+    
+    return details[platform] || '- Standard architecture patterns';
+  }
+
+  private getDefaultPlatformFeatures(platform: string): Record<string, any> {
+    const defaults: Record<string, Record<string, any>> = {
+      'react': { serverComponents: true },
+      'nextjs': { appRouter: true, serverComponents: true },
+      'vue': { compositionApi: true, scriptSetup: true },
+      'angular': { standaloneComponents: true, signals: true },
+      'svelte': { svelteKit: true, stores: true },
+      'electron': { rendererProcess: true, nativeApis: true },
+      'react-native': { expo: true, navigation: true }
+    };
+    
+    return defaults[platform] || {};
+  }
+
+  private getPlatformBestPractices(platform: string): string {
+    const practices: Record<string, string> = {
+      'react': `- Use functional components with hooks
+- Implement proper error boundaries
+- Optimize with React.memo and useMemo
+- Follow v5.0 CVA architecture patterns
+- Use semantic components only in pages`,
+
+      'nextjs': `- Leverage App Router for new projects
+- Use Server Components for data fetching
+- Implement proper loading and error states
+- Optimize images with next/image
+- Use semantic architecture with server-side rendering`,
+
+      'vue': `- Prefer Composition API over Options API
+- Use script setup for better performance
+- Implement proper TypeScript integration
+- Leverage Vue's reactivity system effectively
+- Use single file components with scoped styles`,
+
+      'angular': `- Use standalone components for better tree-shaking
+- Implement OnPush change detection strategy
+- Use Angular Signals for reactive state
+- Follow Angular style guide conventions
+- Implement proper lazy loading for modules`,
+
+      'svelte': `- Use SvelteKit for full-stack applications
+- Leverage compile-time optimizations
+- Implement proper store patterns
+- Use reactive statements ($:) judiciously
+- Optimize bundle size with tree-shaking`,
+
+      'electron': `- Separate main and renderer process logic
+- Use contextBridge for secure IPC
+- Implement proper security practices
+- Optimize for different operating systems  
+- Handle application lifecycle events`,
+
+      'react-native': `- Use Expo for rapid development
+- Implement proper navigation patterns
+- Optimize for both iOS and Android
+- Use native modules when necessary
+- Follow platform-specific design guidelines`
+    };
+    
+    return practices[platform] || '- Follow standard development practices';
+  }
+
   async run(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Xala UI System MCP Server running on stdio');
+    console.error('Xala UI System MCP Server v6.0 running on stdio');
   }
 }
 

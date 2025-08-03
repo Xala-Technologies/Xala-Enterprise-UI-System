@@ -34,6 +34,7 @@ export class ComponentGenerator {
   private testGenerator: TestGenerator;
   private storyGenerator: StoryGenerator;
   private documentationGenerator: DocumentationGenerator;
+  private multiPlatformGenerator: MultiPlatformGenerator;
 
   constructor() {
     this.layoutGenerator = new LayoutGenerator();
@@ -46,9 +47,16 @@ export class ComponentGenerator {
     this.testGenerator = new TestGenerator();
     this.storyGenerator = new StoryGenerator();
     this.documentationGenerator = new DocumentationGenerator();
+    this.multiPlatformGenerator = new MultiPlatformGenerator();
   }
 
   async generateComponent(config: ComponentConfig): Promise<GeneratedComponent> {
+    // Check if platform is specified for multi-platform generation
+    if (config.platform) {
+      return this.generateMultiPlatformComponent(config);
+    }
+
+    // Legacy single-platform generation
     switch (config.category) {
       case 'layout':
         return this.generateLayout(config as LayoutConfig);
@@ -63,9 +71,32 @@ export class ComponentGenerator {
         return this.generateUIComponent(config);
       case 'navigation':
         return this.generateNavigation(config);
+      // New v6.0 categories
+      case 'components':
+      case 'data-components':
+      case 'theme-components':
+      case 'layouts':
+      case 'providers':
+      case 'patterns':
+      case 'tools':
+        return this.generateMultiPlatformComponent(config);
       default:
         return this.generateUIComponent(config);
     }
+  }
+
+  /**
+   * Generate component for specific platform using v6.0 multi-platform generator
+   */
+  async generateMultiPlatformComponent(config: ComponentConfig): Promise<GeneratedComponent> {
+    return this.multiPlatformGenerator.generateMultiPlatformComponent(config);
+  }
+
+  /**
+   * Generate component for all platforms
+   */
+  async generateAllPlatforms(config: ComponentConfig): Promise<Record<string, GeneratedComponent>> {
+    return this.multiPlatformGenerator.generateAllPlatforms(config);
   }
 
   public generateLayout(config: LayoutConfig): GeneratedComponent {
@@ -99,7 +130,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -134,7 +167,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -169,7 +204,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -204,7 +241,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -239,7 +278,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -274,7 +315,9 @@ export class ComponentGenerator {
       localizationKeys,
       imports,
       dependencies,
-      files
+      files,
+      platform: config.platform || 'react',
+      architecture: config.platformConfig?.architecture || 'v5-cva'
     };
   }
 
@@ -444,5 +487,50 @@ export type ${componentName}Size = '${config.size || 'md'}';`;
     result = await this.generateWithDocumentation(config);
     
     return result;
+  }
+
+  /**
+   * Get available components for a platform
+   */
+  getAvailableComponents(platform: string): string[] {
+    return this.multiPlatformGenerator.getAvailableComponents(platform as any);
+  }
+
+  /**
+   * Get platform configuration
+   */
+  getPlatformConfig(platform: string): any {
+    return this.multiPlatformGenerator.getPlatformConfig(platform as any);
+  }
+
+  /**
+   * Validate if component is available for platform
+   */
+  isComponentAvailable(component: string, platform: string): boolean {
+    return this.multiPlatformGenerator.isComponentAvailable(component, platform as any);
+  }
+
+  /**
+   * Get all supported platforms
+   */
+  getSupportedPlatforms(): string[] {
+    return ['react', 'nextjs', 'vue', 'angular', 'svelte', 'electron', 'react-native'];
+  }
+
+  /**
+   * Get all available component categories
+   */
+  getComponentCategories(): string[] {
+    return [
+      'components',        // UI Components
+      'data-components',   // Data Components  
+      'theme-components',  // Theme Components
+      'layouts',           // Layout Components
+      'providers',         // Provider Components
+      'patterns',          // Advanced Patterns (React/Next.js only)
+      'tools',             // Enterprise Tools
+      // Legacy categories
+      'layout', 'navigation', 'form', 'data-display', 'feedback', 'interactive', 'specialized', 'page-template'
+    ];
   }
 }
