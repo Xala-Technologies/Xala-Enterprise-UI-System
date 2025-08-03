@@ -80,7 +80,7 @@ ${chalk.bold('Documentation:')}
 registerCommands(program);
 
 // Add command middleware for logging and analytics
-program.hook('preAction', (thisCommand, actionCommand) => {
+program.hook('preAction', (_, actionCommand) => {
   const commandPath: string[] = [];
   let cmd: Command | null = actionCommand;
 
@@ -92,7 +92,7 @@ program.hook('preAction', (thisCommand, actionCommand) => {
   logger.debug(`Executing command: ${commandPath.join(' ')}`);
 });
 
-program.hook('postAction', (thisCommand, actionCommand) => {
+program.hook('postAction', () => {
   logger.debug('Command completed successfully');
 });
 
@@ -121,9 +121,6 @@ export async function run(): Promise<void> {
     handleError(error, getExitCode(error));
   }
 }
-
-// Export for testing
-export { program };
 
 // Parse and execute if running as main module
 if (import.meta.url.startsWith('file:')) {
