@@ -1,0 +1,472 @@
+/**
+ * Main Component Generator for Xala UI System
+ */
+
+import type { 
+  ComponentConfig, 
+  GeneratedComponent, 
+  GeneratedFile,
+  LayoutConfig,
+  PageTemplateConfig,
+  FormConfig,
+  DataTableConfig
+} from '../types/index';
+import { LayoutGenerator } from './LayoutGenerator';
+import { PageTemplateGenerator } from './PageTemplateGenerator';
+import { FormGenerator } from './FormGenerator';
+import { DataTableGenerator } from './DataTableGenerator';
+import { NavigationGenerator } from './NavigationGenerator';
+import { UIComponentGenerator } from './UIComponentGenerator';
+import { LocalizationGenerator } from './LocalizationGenerator';
+import { TestGenerator } from './TestGenerator';
+import { StoryGenerator } from './StoryGenerator';
+import { DocumentationGenerator } from './DocumentationGenerator';
+
+export class ComponentGenerator {
+  private layoutGenerator: LayoutGenerator;
+  private pageTemplateGenerator: PageTemplateGenerator;
+  private formGenerator: FormGenerator;
+  private dataTableGenerator: DataTableGenerator;
+  private navigationGenerator: NavigationGenerator;
+  private uiComponentGenerator: UIComponentGenerator;
+  private localizationGenerator: LocalizationGenerator;
+  private testGenerator: TestGenerator;
+  private storyGenerator: StoryGenerator;
+  private documentationGenerator: DocumentationGenerator;
+
+  constructor() {
+    this.layoutGenerator = new LayoutGenerator();
+    this.pageTemplateGenerator = new PageTemplateGenerator();
+    this.formGenerator = new FormGenerator();
+    this.dataTableGenerator = new DataTableGenerator();
+    this.navigationGenerator = new NavigationGenerator();
+    this.uiComponentGenerator = new UIComponentGenerator();
+    this.localizationGenerator = new LocalizationGenerator();
+    this.testGenerator = new TestGenerator();
+    this.storyGenerator = new StoryGenerator();
+    this.documentationGenerator = new DocumentationGenerator();
+  }
+
+  async generateComponent(config: ComponentConfig): Promise<GeneratedComponent> {
+    switch (config.category) {
+      case 'layout':
+        return this.generateLayout(config as LayoutConfig);
+      case 'page-template':
+        return this.generatePageTemplate(config as PageTemplateConfig);
+      case 'form':
+        return this.generateForm(config as FormConfig);
+      case 'data-display':
+        if (config.name.toLowerCase().includes('table')) {
+          return this.generateDataTable(config as DataTableConfig);
+        }
+        return this.generateUIComponent(config);
+      case 'navigation':
+        return this.generateNavigation(config);
+      default:
+        return this.generateUIComponent(config);
+    }
+  }
+
+  public generateLayout(config: LayoutConfig): GeneratedComponent {
+    const componentCode = this.layoutGenerator.generateLayout(config);
+    const typesCode = this.generateTypes(config);
+    const localizationKeys = this.localizationGenerator.generateKeys(config);
+    const imports = this.generateImports(config);
+    const dependencies = this.generateDependencies(config);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `components/layouts/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  public generatePageTemplate(config: PageTemplateConfig): GeneratedComponent {
+    const componentCode = this.pageTemplateGenerator.generatePageTemplate(config);
+    const typesCode = this.generateTypes(config);
+    const localizationKeys = this.localizationGenerator.generateKeys(config);
+    const imports = this.generateImports(config);
+    const dependencies = this.generateDependencies(config);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `pages/${config.template}/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  public generateForm(config: FormConfig): GeneratedComponent {
+    const componentCode = this.formGenerator.generateForm(config);
+    const typesCode = this.generateTypes(config);
+    const localizationKeys = this.localizationGenerator.generateKeys(config);
+    const imports = this.generateImports(config);
+    const dependencies = this.generateDependencies(config);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `components/forms/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  public generateDataTable(config: DataTableConfig): GeneratedComponent {
+    const componentCode = this.dataTableGenerator.generateDataTable(config);
+    const typesCode = this.generateTypes(config as any);
+    const localizationKeys = this.localizationGenerator.generateKeys(config as any);
+    const imports = this.generateImports(config as any);
+    const dependencies = this.generateDependencies(config as any);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `components/tables/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  public generateNavigation(config: ComponentConfig): GeneratedComponent {
+    const componentCode = this.navigationGenerator.generateNavigation(config);
+    const typesCode = this.generateTypes(config);
+    const localizationKeys = this.localizationGenerator.generateKeys(config);
+    const imports = this.generateImports(config);
+    const dependencies = this.generateDependencies(config);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `components/navigation/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  private async generateUIComponent(config: ComponentConfig): Promise<GeneratedComponent> {
+    const componentCode = this.uiComponentGenerator.generateUIComponent(config);
+    const typesCode = this.generateTypes(config);
+    const localizationKeys = this.localizationGenerator.generateKeys(config);
+    const imports = this.generateImports(config);
+    const dependencies = this.generateDependencies(config);
+    
+    const files: GeneratedFile[] = [
+      {
+        path: `components/ui/${this.toPascalCase(config.name)}.tsx`,
+        content: componentCode,
+        type: 'component'
+      },
+      {
+        path: `types/${config.name.toLowerCase()}.types.ts`,
+        content: typesCode,
+        type: 'types'
+      },
+      {
+        path: `locales/en/${config.name.toLowerCase()}.json`,
+        content: JSON.stringify(localizationKeys, null, 2),
+        type: 'locale'
+      }
+    ];
+
+    return {
+      componentCode,
+      typesCode,
+      localizationKeys,
+      imports,
+      dependencies,
+      files
+    };
+  }
+
+  private generateTypes(config: ComponentConfig): string {
+    const componentName = this.toPascalCase(config.name);
+    
+    return `// types/${config.name.toLowerCase()}.types.ts
+/**
+ * Type definitions for ${componentName}
+ * Generated by Xala UI System MCP
+ */
+
+export interface ${componentName}Props {
+  readonly className?: string;
+  readonly children?: React.ReactNode;
+  readonly variant?: '${config.styling.variant}';
+  readonly size?: '${config.size || 'md'}';
+  readonly disabled?: boolean;
+  readonly loading?: boolean;
+  readonly 'data-testid'?: string;
+}
+
+export interface ${componentName}Config {
+  readonly theme: '${config.theme || 'enterprise'}';
+  readonly locale: '${config.locale || 'en'}';
+  readonly accessibility: {
+    readonly level: '${config.accessibility.level}';
+    readonly screenReader: ${config.accessibility.screenReader};
+    readonly keyboardNavigation: ${config.accessibility.keyboardNavigation};
+  };
+}
+
+export type ${componentName}Variant = '${config.styling.variant}';
+export type ${componentName}Size = '${config.size || 'md'}';`;
+  }
+
+  private generateImports(config: ComponentConfig): string[] {
+    const baseImports = [
+      'React',
+      'useTokens',
+      'Typography',
+      'Stack',
+      'Container'
+    ];
+
+    const conditionalImports: string[] = [];
+
+    // Add category-specific imports
+    switch (config.category) {
+      case 'layout':
+        conditionalImports.push('WebLayout', 'AdminLayout', 'DesktopLayout');
+        break;
+      case 'navigation':
+        conditionalImports.push('GlobalSearch', 'ContextMenu', 'ContextMenuContent', 'ContextMenuItem', 'ContextMenuTrigger');
+        break;
+      case 'form':
+        conditionalImports.push('Form', 'Input', 'Button', 'Checkbox', 'Select');
+        break;
+      case 'data-display':
+        conditionalImports.push('DataTable', 'Avatar', 'Badge', 'Card');
+        break;
+      case 'feedback':
+        conditionalImports.push('Alert', 'Progress', 'Skeleton', 'Spinner');
+        break;
+      case 'interactive':
+        conditionalImports.push('Button', 'IconButton', 'Drawer', 'CommandPalette');
+        break;
+    }
+
+    // Add feature-specific imports
+    if (config.features.interactive) {
+      conditionalImports.push('Button', 'IconButton');
+    }
+
+    if (config.features.searchable) {
+      conditionalImports.push('GlobalSearch');
+    }
+
+    if (config.features.tooltips) {
+      conditionalImports.push('Tooltip', 'TooltipContent', 'TooltipTrigger');
+    }
+
+    if (config.features.icons) {
+      conditionalImports.push('lucide-react');
+    }
+
+    if (config.features.badges) {
+      conditionalImports.push('Badge');
+    }
+
+    if (config.features.loading) {
+      conditionalImports.push('Skeleton', 'Spinner');
+    }
+
+    if (config.features.error) {
+      conditionalImports.push('Alert', 'AlertDescription');
+    }
+
+    return [...new Set([...baseImports, ...conditionalImports])];
+  }
+
+  private generateDependencies(config: ComponentConfig): string[] {
+    const baseDeps = [
+      '@xala-technologies/ui-system',
+      'react',
+      'react-i18next'
+    ];
+
+    const conditionalDeps: string[] = [];
+
+    if (config.features.icons) {
+      conditionalDeps.push('lucide-react');
+    }
+
+    if (config.features.animated) {
+      conditionalDeps.push('framer-motion');
+    }
+
+    if (config.features.validation) {
+      conditionalDeps.push('zod', 'react-hook-form');
+    }
+
+    if (config.category === 'form') {
+      conditionalDeps.push('react-hook-form', '@hookform/resolvers');
+    }
+
+    if (config.category === 'data-display' && config.features.sortable) {
+      conditionalDeps.push('@tanstack/react-table');
+    }
+
+    return [...new Set([...baseDeps, ...conditionalDeps])];
+  }
+
+  private toPascalCase(str: string): string {
+    return str
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+        return index === 0 ? word.toLowerCase() : word.toUpperCase();
+      })
+      .replace(/\s+/g, '')
+      .replace(/^./, str => str.toUpperCase());
+  }
+
+  async generateWithTests(config: ComponentConfig): Promise<GeneratedComponent> {
+    const result = await this.generateComponent(config);
+    
+    const testCode = this.testGenerator.generateTest(config);
+    result.testCode = testCode;
+    
+    result.files.push({
+      path: `components/__tests__/${this.toPascalCase(config.name)}.test.tsx`,
+      content: testCode,
+      type: 'test'
+    });
+
+    return result;
+  }
+
+  async generateWithStories(config: ComponentConfig): Promise<GeneratedComponent> {
+    const result = await this.generateComponent(config);
+    
+    const storyCode = this.storyGenerator.generateStory(config);
+    result.storyCode = storyCode;
+    
+    result.files.push({
+      path: `stories/${this.toPascalCase(config.name)}.stories.tsx`,
+      content: storyCode,
+      type: 'story'
+    });
+
+    return result;
+  }
+
+  async generateWithDocumentation(config: ComponentConfig): Promise<GeneratedComponent> {
+    const result = await this.generateComponent(config);
+    
+    const documentationCode = this.documentationGenerator.generateDocumentation(config);
+    result.documentationCode = documentationCode;
+    
+    result.files.push({
+      path: `docs/components/${config.name.toLowerCase()}.md`,
+      content: documentationCode,
+      type: 'docs'
+    });
+
+    return result;
+  }
+
+  async generateComplete(config: ComponentConfig): Promise<GeneratedComponent> {
+    let result = await this.generateComponent(config);
+    result = await this.generateWithTests(config);
+    result = await this.generateWithStories(config);
+    result = await this.generateWithDocumentation(config);
+    
+    return result;
+  }
+}
