@@ -586,7 +586,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                         key={option.value}
                         role="option"
                         aria-selected={isSelected}
-                        aria-disabled={isDisabled}
+                        aria-disabled={isDisabled ? 'true' : 'false'}
                         onClick={() => !isDisabled && handleToggleOption(option)}
                         style={{
                           display: 'flex',

@@ -46,7 +46,7 @@ export interface DropdownContentProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Dropdown item component props interface
  */
-export interface DropdownItemProps extends HTMLAttributes<HTMLDivElement> {
+export interface DropdownItemProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
   readonly children: ReactNode;
   readonly disabled?: boolean;
   readonly onSelect?: (event: Event) => void;
