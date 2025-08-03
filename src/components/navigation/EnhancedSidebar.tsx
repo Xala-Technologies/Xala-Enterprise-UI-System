@@ -1,5 +1,5 @@
 /**
- * @fileoverview Sidebar Component - Enterprise Navigation
+ * @fileoverview Enhanced Sidebar Component - Enterprise Navigation
  * @description Collapsible sidebar navigation with hierarchical menu support and WCAG AAA compliance
  * @version 5.0.0
  * @compliance WCAG AAA, NSM, Enterprise Standards
@@ -32,7 +32,7 @@ export interface SidebarUserProfile {
   readonly status?: 'online' | 'offline' | 'away' | 'busy';
 }
 
-export interface SidebarProps {
+export interface EnhancedSidebarProps {
   readonly navItems: readonly SidebarNavItem[];
   readonly userProfile?: SidebarUserProfile;
   readonly brandName?: string;
@@ -47,10 +47,10 @@ export interface SidebarProps {
 }
 
 // =============================================================================
-// SIDEBAR COMPONENT
+// ENHANCED SIDEBAR COMPONENT
 // =============================================================================
 
-export const Sidebar = ({
+export const EnhancedSidebar = ({
   navItems,
   userProfile,
   brandName = 'Xala Enterprise',
@@ -62,7 +62,7 @@ export const Sidebar = ({
   position = 'fixed',
   className = '',
   ariaLabel = 'Main navigation'
-}: SidebarProps): JSX.Element => {
+}: EnhancedSidebarProps): JSX.Element => {
   const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [focusedItem, setFocusedItem] = useState<string | null>(null);
@@ -419,7 +419,7 @@ export const Sidebar = ({
                 height: '20px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyCenter: 'center'
+                justifyContent: 'center'
               }}
             >
               ◀
@@ -441,8 +441,4 @@ export const Sidebar = ({
   );
 };
 
-export default Sidebar;
-
-// Legacy exports for backward compatibility
-export { Sidebar as EnhancedSidebar };
-export type { SidebarProps as EnhancedSidebarProps };
+export default EnhancedSidebar;

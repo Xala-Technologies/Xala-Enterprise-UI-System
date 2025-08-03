@@ -1,5 +1,5 @@
 /**
- * @fileoverview Footer Component - Enterprise Footer
+ * @fileoverview Enhanced Footer Component - Enterprise Footer
  * @description Multi-column footer with company info, links, and social media with WCAG AAA compliance
  * @version 5.0.0
  * @compliance WCAG AAA, NSM, Enterprise Standards
@@ -60,7 +60,7 @@ export interface NewsletterConfig {
   readonly isLoading?: boolean;
 }
 
-export interface FooterProps {
+export interface EnhancedFooterProps {
   readonly companyInfo: FooterCompanyInfo;
   readonly sections: readonly FooterSection[];
   readonly socialLinks?: readonly SocialLink[];
@@ -73,10 +73,10 @@ export interface FooterProps {
 }
 
 // =============================================================================
-// FOOTER COMPONENT
+// ENHANCED FOOTER COMPONENT
 // =============================================================================
 
-export const Footer = ({
+export const EnhancedFooter = ({
   companyInfo,
   sections,
   socialLinks = [],
@@ -86,7 +86,7 @@ export const Footer = ({
   showBackToTop = true,
   variant = 'default',
   className = ''
-}: FooterProps): JSX.Element => {
+}: EnhancedFooterProps): JSX.Element => {
   const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
   const [newsletterEmail, setNewsletterEmail] = React.useState('');
 
@@ -507,8 +507,4 @@ export const Footer = ({
   );
 };
 
-export default Footer;
-
-// Legacy exports for backward compatibility
-export { Footer as EnhancedFooter };
-export type { FooterProps as EnhancedFooterProps };
+export default EnhancedFooter;

@@ -1,8 +1,8 @@
 /**
  * @fileoverview useTokens Hook - SSR-Safe Design Token Access
  * @description Provides direct access to design tokens from current theme with type safety and SSR compatibility
- * @version 4.6.3
- * @compliance Enterprise Standards, Type-safe, Framework-agnostic, SSR-Safe
+ * @version 5.0.0
+ * @compliance Enterprise Standards, Type-safe, Framework-agnostic, SSR-Safe, Industry Standards
  */
 
 import { useMemo } from 'react';
@@ -13,6 +13,7 @@ import type { ThemeTemplate } from '../tokens/themes/template-loader';
 // Import base templates for fallback values
 import baseDarkTemplate from '../tokens/themes/definitions/base-dark.json' with { type: 'json' };
 import baseLightTemplate from '../tokens/themes/definitions/base-light.json' with { type: 'json' };
+import { designTokens } from '../tokens/design-tokens';
 
 const logger = Logger.create({
   serviceName: 'ui-system-use-tokens',
@@ -151,6 +152,22 @@ export interface DesignTokens {
   branding: BrandingTokens;
   accessibility: AccessibilityTokens;
   responsive: ResponsiveTokens;
+  
+  // Industry standard v5 tokens
+  elevation?: Record<string, string>;
+  borderRadius?: Record<string, string>;
+  componentSizing?: {
+    button: Record<string, string>;
+    input: Record<string, string>;
+    card: Record<string, string>;
+    section: Record<string, string>;
+    navbar: Record<string, string>;
+  };
+  motion?: {
+    duration: Record<string, string>;
+    easing: Record<string, string>;
+    component?: Record<string, any>;
+  };
   
   // Theme metadata
   theme: {
@@ -368,7 +385,23 @@ export interface UseTokensResult {
   branding: BrandingTokens;
   accessibility: AccessibilityTokens;
   responsive: ResponsiveTokens;
-  shadows?: Record<string, string>;
+  
+  // Industry standard v5 accessors
+  elevation?: Record<string, string>;
+  borderRadius?: Record<string, string>;
+  componentSizing?: {
+    button: Record<string, string>;
+    input: Record<string, string>;
+    card: Record<string, string>;
+    section: Record<string, string>;
+    navbar: Record<string, string>;
+  };
+  motion?: {
+    duration: Record<string, string>;
+    easing: Record<string, string>;
+    component?: Record<string, any>;
+  };
+  shadows?: Record<string, string>; // Legacy support
   
   // Utility functions
   getToken: (path: string, fallback?: unknown) => unknown;
@@ -490,7 +523,13 @@ export const useTokens = (): UseTokensResult => {
     branding: tokens.branding,
     accessibility: tokens.accessibility,
     responsive: tokens.responsive,
-    shadows: getToken('shadows') as Record<string, string> | undefined,
+    
+    // Industry standard v5 accessors
+    elevation: getToken('elevation') as Record<string, string> | undefined || designTokens.elevation,
+    borderRadius: getToken('borderRadius') as Record<string, string> | undefined || designTokens.borderRadius,
+    componentSizing: getToken('componentSizing') as DesignTokens['componentSizing'] | undefined || designTokens.componentSizing,
+    motion: getToken('motion') as DesignTokens['motion'] | undefined || designTokens.motion,
+    shadows: getToken('shadows') as Record<string, string> | undefined, // Legacy support
     
     // Utility functions
     getToken,

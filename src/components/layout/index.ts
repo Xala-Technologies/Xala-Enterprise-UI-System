@@ -27,3 +27,13 @@ export { Card } from './Card';
 export { PageLayout } from './PageLayout';
 export { Section } from './Section';
 
+// Enhanced layout components
+export { EnhancedDashboard } from './EnhancedDashboard';
+export type { 
+  EnhancedDashboardProps,
+  DashboardKPI,
+  DashboardAction,
+  DashboardActivityItem,
+  DashboardVariant
+} from './EnhancedDashboard';
+

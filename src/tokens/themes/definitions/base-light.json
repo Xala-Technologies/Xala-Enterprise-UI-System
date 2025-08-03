@@ -95,16 +95,30 @@
     }
   },
   "spacing": {
-    "0": "0",
-    "1": "0.25rem",
-    "2": "0.5rem",
-    "3": "0.75rem",
-    "4": "1rem",
-    "6": "1.5rem",
-    "8": "2rem",
-    "12": "3rem",
-    "16": "4rem",
-    "24": "6rem"
+    "0": "0px",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "7": "28px",
+    "8": "32px",
+    "9": "36px",
+    "10": "40px",
+    "11": "44px",
+    "12": "48px",
+    "13": "52px",
+    "14": "56px",
+    "15": "60px",
+    "16": "64px",
+    "17": "68px",
+    "18": "72px",
+    "19": "76px",
+    "20": "80px",
+    "24": "96px",
+    "32": "128px",
+    "40": "160px"
   },
   "branding": {
     "logo": {
@@ -133,6 +147,68 @@
       "tablet": "768px",
       "desktop": "1024px",
       "wide": "1440px"
+    }
+  },
+  "elevation": {
+    "none": "none",
+    "xs": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    "sm": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+    "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+    "inner": "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)"
+  },
+  "borderRadius": {
+    "none": "0px",
+    "xs": "2px",
+    "sm": "4px",
+    "md": "6px",
+    "lg": "8px",
+    "xl": "12px",
+    "2xl": "16px",
+    "3xl": "24px",
+    "full": "9999px"
+  },
+  "componentSizing": {
+    "button": {
+      "sm": "36px",
+      "md": "44px",
+      "lg": "56px",
+      "xl": "64px"
+    },
+    "input": {
+      "sm": "44px",
+      "md": "56px",
+      "lg": "64px"
+    },
+    "card": {
+      "padding": "32px",
+      "paddingLg": "40px"
+    },
+    "section": {
+      "spacing": "64px",
+      "spacingLg": "80px"
+    },
+    "navbar": {
+      "height": "64px",
+      "heightLg": "80px"
+    }
+  },
+  "motion": {
+    "duration": {
+      "instant": "0ms",
+      "fast": "150ms",
+      "normal": "200ms",
+      "slow": "300ms",
+      "slower": "500ms"
+    },
+    "easing": {
+      "linear": "linear",
+      "ease": "ease",
+      "easeIn": "ease-in",
+      "easeOut": "ease-out",
+      "easeInOut": "ease-in-out"
     }
   }
 }

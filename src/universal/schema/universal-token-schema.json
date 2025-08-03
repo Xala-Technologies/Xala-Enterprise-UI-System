@@ -1,0 +1,745 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://xala.ai/schemas/universal-design-system/v1.0.0",
+  "title": "Universal Design System Token Schema",
+  "description": "Platform-agnostic design token schema for AI-friendly universal design systems",
+  "version": "1.0.0",
+  "type": "object",
+  "required": ["id", "name", "version", "tokens", "components", "composition"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique identifier for the design system theme"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for the theme"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the theme and its intended use"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version of the theme"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["base", "enterprise", "ecommerce", "productivity", "education", "healthcare", "fintech", "saas", "marketing", "dashboard"],
+      "description": "Theme category for AI context understanding"
+    },
+    "mode": {
+      "type": "string",
+      "enum": ["light", "dark", "auto", "high-contrast"],
+      "description": "Theme mode for automatic adaptation"
+    },
+    "aiContext": {
+      "type": "object",
+      "description": "Context information for AI code generation tools",
+      "properties": {
+        "designIntent": {
+          "type": "string",
+          "enum": ["professional", "playful", "minimal", "bold", "elegant", "modern", "classic", "corporate"],
+          "description": "Overall design intent for AI understanding"
+        },
+        "targetPlatforms": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["web", "mobile", "desktop", "tablet", "watch", "tv"]
+          },
+          "description": "Target platforms for this theme"
+        },
+        "useCases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["dashboard", "landing-page", "form", "e-commerce", "blog", "portfolio", "admin", "mobile-app"]
+          },
+          "description": "Primary use cases for AI optimization"
+        },
+        "industryVertical": {
+          "type": "string",
+          "enum": ["technology", "healthcare", "finance", "education", "retail", "government", "nonprofit", "entertainment"],
+          "description": "Industry vertical for context-aware generation"
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "description": "Universal design tokens",
+      "required": ["primitive", "semantic", "component"],
+      "properties": {
+        "primitive": {
+          "$ref": "#/definitions/primitiveTokens"
+        },
+        "semantic": {
+          "$ref": "#/definitions/semanticTokens"
+        },
+        "component": {
+          "$ref": "#/definitions/componentTokens"
+        }
+      }
+    },
+    "components": {
+      "type": "object",
+      "description": "Universal component specifications",
+      "patternProperties": {
+        "^[A-Z][a-zA-Z0-9]*$": {
+          "$ref": "#/definitions/componentSpec"
+        }
+      }
+    },
+    "composition": {
+      "type": "object",
+      "description": "Smart composition patterns for automatic layout generation",
+      "properties": {
+        "layouts": {
+          "$ref": "#/definitions/layoutPatterns"
+        },
+        "patterns": {
+          "$ref": "#/definitions/compositionPatterns"
+        }
+      }
+    },
+    "platformAdapters": {
+      "type": "object",
+      "description": "Platform-specific adaptation rules",
+      "properties": {
+        "web": {
+          "$ref": "#/definitions/webAdapter"
+        },
+        "react": {
+          "$ref": "#/definitions/reactAdapter"
+        },
+        "vue": {
+          "$ref": "#/definitions/vueAdapter"
+        },
+        "angular": {
+          "$ref": "#/definitions/angularAdapter"
+        },
+        "flutter": {
+          "$ref": "#/definitions/flutterAdapter"
+        },
+        "ios": {
+          "$ref": "#/definitions/iosAdapter"
+        },
+        "android": {
+          "$ref": "#/definitions/androidAdapter"
+        }
+      }
+    },
+    "accessibility": {
+      "$ref": "#/definitions/accessibilityConfig"
+    },
+    "compliance": {
+      "$ref": "#/definitions/complianceConfig"
+    }
+  },
+  "definitions": {
+    "primitiveTokens": {
+      "type": "object",
+      "description": "Primitive design tokens - raw values",
+      "properties": {
+        "color": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z][a-zA-Z0-9]*$": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^#[0-9a-fA-F]{6}$"
+                },
+                {
+                  "type": "object",
+                  "patternProperties": {
+                    "^[0-9]{1,4}$": {
+                      "type": "string",
+                      "pattern": "^#[0-9a-fA-F]{6}$"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "patternProperties": {
+            "^[0-9]+$": {
+              "type": "string",
+              "pattern": "^[0-9]+(px|rem|em|%)$"
+            }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "properties": {
+            "fontFamily": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "fontSize": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z0-9]+$": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(px|rem|em)$"
+                }
+              }
+            },
+            "fontWeight": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 900
+                }
+              }
+            },
+            "lineHeight": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "number",
+                  "minimum": 0.8,
+                  "maximum": 3
+                }
+              }
+            }
+          }
+        },
+        "borderRadius": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9]+$": {
+              "type": "string",
+              "pattern": "^[0-9]+(px|rem|em|%)$"
+            }
+          }
+        },
+        "shadow": {
+          "type": "object",
+          "patternProperties": {
+            "^[a-z0-9]+$": {
+              "type": "string"
+            }
+          }
+        },
+        "animation": {
+          "type": "object",
+          "properties": {
+            "duration": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "string",
+                  "pattern": "^[0-9]+ms$"
+                }
+              }
+            },
+            "easing": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z-]+$": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "semanticTokens": {
+      "type": "object",
+      "description": "Semantic design tokens - contextual meanings",
+      "properties": {
+        "color": {
+          "type": "object",
+          "properties": {
+            "brand": {
+              "type": "object",
+              "properties": {
+                "primary": { "type": "string" },
+                "secondary": { "type": "string" },
+                "tertiary": { "type": "string" }
+              }
+            },
+            "background": {
+              "type": "object",
+              "properties": {
+                "default": { "type": "string" },
+                "paper": { "type": "string" },
+                "elevated": { "type": "string" },
+                "overlay": { "type": "string" }
+              }
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "primary": { "type": "string" },
+                "secondary": { "type": "string" },
+                "tertiary": { "type": "string" },
+                "inverse": { "type": "string" },
+                "disabled": { "type": "string" }
+              }
+            },
+            "border": {
+              "type": "object",
+              "properties": {
+                "default": { "type": "string" },
+                "subtle": { "type": "string" },
+                "strong": { "type": "string" },
+                "focus": { "type": "string" }
+              }
+            },
+            "status": {
+              "type": "object",
+              "properties": {
+                "success": { "type": "string" },
+                "warning": { "type": "string" },
+                "error": { "type": "string" },
+                "info": { "type": "string" }
+              }
+            },
+            "interactive": {
+              "type": "object",
+              "properties": {
+                "default": { "type": "string" },
+                "hover": { "type": "string" },
+                "active": { "type": "string" },
+                "disabled": { "type": "string" },
+                "focus": { "type": "string" }
+              }
+            }
+          }
+        },
+        "spacing": {
+          "type": "object",
+          "properties": {
+            "layout": {
+              "type": "object",
+              "properties": {
+                "containerPadding": { "type": "string" },
+                "sectionSpacing": { "type": "string" },
+                "gridGap": { "type": "string" }
+              }
+            },
+            "component": {
+              "type": "object",
+              "properties": {
+                "padding": { "type": "string" },
+                "margin": { "type": "string" },
+                "gap": { "type": "string" }
+              }
+            },
+            "content": {
+              "type": "object",
+              "properties": {
+                "lineSpacing": { "type": "string" },
+                "paragraphSpacing": { "type": "string" }
+              }
+            }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "properties": {
+            "heading": {
+              "type": "object",
+              "properties": {
+                "primary": { "$ref": "#/definitions/typographyStyle" },
+                "secondary": { "$ref": "#/definitions/typographyStyle" }
+              }
+            },
+            "body": {
+              "type": "object",
+              "properties": {
+                "default": { "$ref": "#/definitions/typographyStyle" },
+                "small": { "$ref": "#/definitions/typographyStyle" },
+                "large": { "$ref": "#/definitions/typographyStyle" }
+              }
+            },
+            "ui": {
+              "type": "object",
+              "properties": {
+                "button": { "$ref": "#/definitions/typographyStyle" },
+                "label": { "$ref": "#/definitions/typographyStyle" },
+                "caption": { "$ref": "#/definitions/typographyStyle" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "componentTokens": {
+      "type": "object",
+      "description": "Component-specific design tokens",
+      "patternProperties": {
+        "^[a-z][a-zA-Z0-9]*$": {
+          "type": "object",
+          "properties": {
+            "sizing": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "object",
+                  "properties": {
+                    "height": { "type": "string" },
+                    "width": { "type": "string" },
+                    "padding": { "type": "string" },
+                    "margin": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "variants": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": {
+                  "type": "object",
+                  "properties": {
+                    "background": { "type": "string" },
+                    "color": { "type": "string" },
+                    "border": { "type": "string" },
+                    "borderRadius": { "type": "string" },
+                    "shadow": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "states": {
+              "type": "object",
+              "properties": {
+                "default": { "$ref": "#/definitions/componentState" },
+                "hover": { "$ref": "#/definitions/componentState" },
+                "active": { "$ref": "#/definitions/componentState" },
+                "focus": { "$ref": "#/definitions/componentState" },
+                "disabled": { "$ref": "#/definitions/componentState" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "componentSpec": {
+      "type": "object",
+      "description": "Universal component specification",
+      "required": ["name", "category", "props", "variants", "composition"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][a-zA-Z0-9]*$",
+          "description": "PascalCase component name"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["layout", "form", "navigation", "feedback", "data-display", "overlay", "media"],
+          "description": "Component category for AI understanding"
+        },
+        "description": {
+          "type": "string",
+          "description": "Component description for AI context"
+        },
+        "aiTags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags for AI component discovery and usage"
+        },
+        "props": {
+          "type": "object",
+          "description": "Universal component props",
+          "patternProperties": {
+            "^[a-z][a-zA-Z0-9]*$": {
+              "$ref": "#/definitions/propSpec"
+            }
+          }
+        },
+        "variants": {
+          "type": "object",
+          "description": "Component variants",
+          "patternProperties": {
+            "^[a-z][a-zA-Z0-9]*$": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "default": { "type": "boolean" },
+                "aiRecommended": { "type": "boolean" },
+                "values": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "composition": {
+          "type": "object",
+          "description": "Component composition rules",
+          "properties": {
+            "children": {
+              "type": "object",
+              "properties": {
+                "allowed": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "recommended": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            },
+            "parent": {
+              "type": "object",
+              "properties": {
+                "recommended": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            },
+            "siblings": {
+              "type": "object",
+              "properties": {
+                "worksWellWith": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "accessibility": {
+          "type": "object",
+          "properties": {
+            "role": { "type": "string" },
+            "ariaAttributes": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "keyboardSupport": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "description": { "type": "string" },
+              "useCase": { "type": "string" },
+              "aiOptimized": { "type": "boolean" },
+              "code": {
+                "type": "object",
+                "patternProperties": {
+                  "^[a-z]+$": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "layoutPatterns": {
+      "type": "object",
+      "description": "Smart layout patterns for automatic generation",
+      "patternProperties": {
+        "^[a-z][a-zA-Z0-9]*$": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "aiTags": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "component": { "type": "string" },
+                  "props": { "type": "object" },
+                  "position": { "type": "string" },
+                  "responsive": { "type": "object" }
+                }
+              }
+            },
+            "responsive": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-z]+$": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "compositionPatterns": {
+      "type": "object",
+      "description": "Smart composition patterns",
+      "properties": {
+        "autoLayouts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "trigger": { "type": "string" },
+              "pattern": { "type": "object" }
+            }
+          }
+        },
+        "smartDefaults": {
+          "type": "object",
+          "patternProperties": {
+            "^[A-Z][a-zA-Z0-9]*$": { "type": "object" }
+          }
+        }
+      }
+    },
+    "propSpec": {
+      "type": "object",
+      "required": ["type", "description"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["string", "number", "boolean", "array", "object", "function", "node", "element"]
+        },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "default": {},
+        "aiRecommended": { "type": "boolean" },
+        "values": {
+          "type": "array"
+        },
+        "validation": {
+          "type": "object",
+          "properties": {
+            "min": { "type": "number" },
+            "max": { "type": "number" },
+            "pattern": { "type": "string" }
+          }
+        }
+      }
+    },
+    "componentState": {
+      "type": "object",
+      "properties": {
+        "background": { "type": "string" },
+        "color": { "type": "string" },
+        "border": { "type": "string" },
+        "shadow": { "type": "string" },
+        "transform": { "type": "string" },
+        "opacity": { "type": "number" }
+      }
+    },
+    "typographyStyle": {
+      "type": "object",
+      "properties": {
+        "fontFamily": { "type": "string" },
+        "fontSize": { "type": "string" },
+        "fontWeight": { "type": "integer" },
+        "lineHeight": { "type": "number" },
+        "letterSpacing": { "type": "string" }
+      }
+    },
+    "webAdapter": {
+      "type": "object",
+      "properties": {
+        "cssCustomProperties": { "type": "boolean" },
+        "sassVariables": { "type": "boolean" },
+        "tailwindConfig": { "type": "boolean" }
+      }
+    },
+    "reactAdapter": {
+      "type": "object",
+      "properties": {
+        "styledComponents": { "type": "boolean" },
+        "emotion": { "type": "boolean" },
+        "cssModules": { "type": "boolean" }
+      }
+    },
+    "vueAdapter": {
+      "type": "object",
+      "properties": {
+        "scoped": { "type": "boolean" },
+        "cssVariables": { "type": "boolean" }
+      }
+    },
+    "angularAdapter": {
+      "type": "object",
+      "properties": {
+        "materialTheme": { "type": "boolean" },
+        "scssVariables": { "type": "boolean" }
+      }
+    },
+    "flutterAdapter": {
+      "type": "object",
+      "properties": {
+        "materialTheme": { "type": "boolean" },
+        "cupertinoTheme": { "type": "boolean" }
+      }
+    },
+    "iosAdapter": {
+      "type": "object",
+      "properties": {
+        "uiKitTheme": { "type": "boolean" },
+        "swiftUITheme": { "type": "boolean" }
+      }
+    },
+    "androidAdapter": {
+      "type": "object",
+      "properties": {
+        "materialTheme": { "type": "boolean" },
+        "xmlResources": { "type": "boolean" }
+      }
+    },
+    "accessibilityConfig": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["WCAG_2_1_A", "WCAG_2_1_AA", "WCAG_2_1_AAA", "WCAG_2_2_A", "WCAG_2_2_AA", "WCAG_2_2_AAA"]
+        },
+        "highContrast": { "type": "boolean" },
+        "reducedMotion": { "type": "boolean" },
+        "forceFocus": { "type": "boolean" },
+        "screenReader": { "type": "boolean" }
+      }
+    },
+    "complianceConfig": {
+      "type": "object",
+      "properties": {
+        "standards": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["GDPR", "NSM", "HIPAA", "SOX", "PCI-DSS"]
+          }
+        },
+        "dataClassification": {
+          "type": "string",
+          "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED", "SECRET"]
+        }
+      }
+    }
+  }
+}

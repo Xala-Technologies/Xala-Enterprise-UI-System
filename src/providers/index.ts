@@ -1,10 +1,30 @@
 /**
- * Providers Index
- * Main exports for all UI system providers
+ * @fileoverview Provider System Exports - Industry Standard Architecture
+ * @description Centralized exports for all provider components and hooks
+ * @version 5.0.0
+ * @compliance SSR-Safe, Industry Standards, Enterprise-ready
  */
 
-export { DesignSystemProvider } from './DesignSystemProvider';
-export type { DesignSystemProviderProps } from './DesignSystemProvider';
+// Core Design System Provider
+export {
+  DesignSystemProvider,
+  useDesignSystem,
+  useTheme,
+  useTemplates,
+  type DesignSystemProviderProps,
+} from './DesignSystemProvider';
+
+// Branding System Provider
+export {
+  BrandingProvider,
+  useBranding,
+  useBrandColors,
+  useBrandAssets,
+  useIndustryBranding,
+  type BrandingProviderProps,
+  type BrandConfig,
+  type BrandingContextValue,
+} from './BrandingProvider';
 
 export {
   ResponsiveLayoutProvider,

@@ -31,6 +31,9 @@ export { Container, Grid, GridItem, HStack, PageLayout, Section, Stack, VStack }
 export type { GridItemProps, StackAlign, StackDirection, StackGap, StackJustify, StackProps } from './components/layout';
 export type { ContainerProps, GridProps, LayoutComponentProps, PageLayoutProps, SectionProps } from './types/layout.types';
 
+// ===== ENHANCED LAYOUT COMPONENTS =====
+export { EnhancedDashboard, type EnhancedDashboardProps, type KPICardData, type QuickAction, type ActivityItem } from './components/layout/EnhancedDashboard';
+
 // ===== FORM COMPONENTS =====
 export { Form, OrganizationNumberInput, PersonalNumberInput, TextArea } from './components/form';
 export { Checkbox, CheckboxGroup, Input, Radio, RadioGroup, Select, Slider, Switch, Textarea } from './components/ui';
@@ -64,10 +67,19 @@ export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbS
 export { Pagination, type PaginationProps, type PaginationSize, type PaginationVariant } from './components/ui/pagination';
 export { TabsContent, TabsList, TabsTrigger, type TabsContentProps, type TabsListProps, type TabsOrientation, type TabsTriggerProps } from './components/ui/tabs-individual';
 
+// ===== ENHANCED NAVIGATION COMPONENTS =====
+export { EnhancedSidebar, type EnhancedSidebarProps, type SidebarNavItem, type SidebarUserProfile } from './components/navigation/EnhancedSidebar';
+export { EnhancedFooter, type EnhancedFooterProps, type FooterLink, type FooterSection, type SocialLink, type FooterCompanyInfo, type NewsletterConfig } from './components/navigation/EnhancedFooter';
+
 // ===== INTERACTIVE COMPONENTS =====
 export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, type AccordionContentProps, type AccordionItemData, type AccordionItemProps, type AccordionProps, type AccordionTriggerProps } from './components/ui/accordion';
 export { CommandPalette, type CommandGroup, type CommandItem, type CommandPaletteProps, type CommandPaletteSize, type CommandPaletteTexts, type CommandPaletteVariant } from './components/ui/command-palette';
 export { Drawer, DrawerBody, DrawerFooter, DrawerHeader, type DrawerBodyProps, type DrawerFooterProps, type DrawerHeaderProps, type DrawerOverlayVariant, type DrawerProps, type DrawerSide, type DrawerSize } from './components/ui/drawer';
+
+// ===== ENHANCED INTERACTIVE COMPONENTS =====
+export { EnhancedGlobalSearch, type EnhancedGlobalSearchProps, type SearchSuggestion, type SearchFilter, type SearchResult, type RecentSearch } from './components/interactive/EnhancedGlobalSearch';
+export { EnhancedAccordion, type EnhancedAccordionProps, type AccordionItem } from './components/interactive/EnhancedAccordion';
+export { EnhancedTabs, type EnhancedTabsProps, type TabItem } from './components/interactive/EnhancedTabs';
 
 // ===== SPECIALIZED COMPONENTS =====
 export { Calendar, type CalendarDate, type CalendarProps, type CalendarSize, type CalendarVariant, type NorwegianHoliday } from './components/ui/calendar';

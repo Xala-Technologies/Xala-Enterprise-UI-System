@@ -1,0 +1,703 @@
+{
+  "$schema": "./schema/universal-token-schema.json",
+  "id": "ai-component-specifications",
+  "name": "AI-Friendly Component Specifications",
+  "description": "Universal component specifications optimized for AI code generation tools",
+  "version": "1.0.0",
+  "category": "base",
+  "mode": "light",
+  "aiContext": {
+    "designIntent": "professional",
+    "targetPlatforms": ["web", "mobile", "desktop", "tablet"],
+    "useCases": ["dashboard", "landing-page", "form", "e-commerce", "admin", "mobile-app"],
+    "industryVertical": "technology"
+  },
+  "components": {
+    "Button": {
+      "name": "Button",
+      "category": "form",
+      "description": "Primary action component for user interactions. Always creates professional, accessible buttons with smart defaults.",
+      "aiTags": ["action", "primary", "interactive", "cta", "submit", "click"],
+      "props": {
+        "variant": {
+          "type": "string",
+          "description": "Visual style variant. 'primary' for main actions, 'secondary' for supporting actions, 'outline' for subtle actions",
+          "default": "primary",
+          "aiRecommended": true,
+          "values": ["primary", "secondary", "outline", "ghost", "destructive", "success", "warning", "link"]
+        },
+        "size": {
+          "type": "string", 
+          "description": "Size variant following professional standards. 'md' is optimal for most use cases",
+          "default": "md",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        },
+        "fullWidth": {
+          "type": "boolean",
+          "description": "Whether button should span full width of container. Useful for mobile forms and CTAs",
+          "default": false,
+          "aiRecommended": false
+        },
+        "loading": {
+          "type": "boolean",
+          "description": "Shows loading spinner and disables interaction. Use for async operations",
+          "default": false,
+          "aiRecommended": true
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Disables button interaction and shows disabled styling",
+          "default": false,
+          "aiRecommended": false
+        },
+        "icon": {
+          "type": "node",
+          "description": "Optional icon to display with button text",
+          "required": false,
+          "aiRecommended": true
+        },
+        "iconPosition": {
+          "type": "string",
+          "description": "Position of icon relative to text",
+          "default": "left",
+          "values": ["left", "right"]
+        },
+        "children": {
+          "type": "node",
+          "description": "Button text content. Keep concise and action-oriented",
+          "required": true,
+          "aiRecommended": true
+        },
+        "onClick": {
+          "type": "function",
+          "description": "Click handler function",
+          "required": false,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "variant": {
+          "name": "Visual Style",
+          "description": "Controls the visual appearance and hierarchy",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["primary", "secondary", "outline", "ghost", "destructive", "success", "warning", "link"]
+        },
+        "size": {
+          "name": "Size",
+          "description": "Controls button dimensions following professional standards",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["text", "Icon"],
+          "recommended": ["text"]
+        },
+        "parent": {
+          "recommended": ["Form", "Card", "Container", "ActionBar", "Header", "Modal"]
+        },
+        "siblings": {
+          "worksWellWith": ["Input", "Select", "Textarea", "Checkbox", "Radio"]
+        }
+      },
+      "accessibility": {
+        "role": "button",
+        "ariaAttributes": ["aria-pressed", "aria-expanded", "aria-label", "aria-disabled"],
+        "keyboardSupport": ["Enter", "Space"]
+      },
+      "examples": [
+        {
+          "name": "Primary CTA",
+          "description": "Main call-to-action button",
+          "useCase": "landing-page",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Button variant=\"primary\" size=\"lg\">Get Started</Button>",
+            "vue": "<Button variant=\"primary\" size=\"lg\">Get Started</Button>",
+            "html": "<button class=\"btn-primary btn-lg\">Get Started</button>"
+          }
+        },
+        {
+          "name": "Form Submit",
+          "description": "Form submission button with loading state",
+          "useCase": "form",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Button type=\"submit\" loading={isSubmitting}>Submit</Button>",
+            "vue": "<Button type=\"submit\" :loading=\"isSubmitting\">Submit</Button>",
+            "html": "<button type=\"submit\" class=\"btn-primary\">Submit</button>"
+          }
+        }
+      ]
+    },
+    "Card": {
+      "name": "Card",
+      "category": "layout",
+      "description": "Flexible container component for grouping related content. Automatically creates professional layouts with proper spacing and elevation.",
+      "aiTags": ["container", "content", "layout", "group", "panel", "surface"],
+      "props": {
+        "variant": {
+          "type": "string",
+          "description": "Visual style variant. 'elevated' adds subtle shadow, 'outlined' adds border",
+          "default": "elevated",
+          "aiRecommended": true,
+          "values": ["default", "elevated", "outlined", "filled"]
+        },
+        "padding": {
+          "type": "string",
+          "description": "Internal spacing size. 'lg' provides comfortable spacing for most content",
+          "default": "lg",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        },
+        "interactive": {
+          "type": "boolean",
+          "description": "Whether card responds to hover/focus interactions",
+          "default": false,
+          "aiRecommended": false
+        },
+        "children": {
+          "type": "node",
+          "description": "Card content - can include headers, body content, actions",
+          "required": true,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "variant": {
+          "name": "Visual Style",
+          "description": "Controls card appearance and depth",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["default", "elevated", "outlined", "filled"]
+        },
+        "padding": {
+          "name": "Padding",
+          "description": "Controls internal spacing",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["CardHeader", "CardContent", "CardFooter", "Button", "Text", "Image", "any"],
+          "recommended": ["CardContent"]
+        },
+        "parent": {
+          "recommended": ["Container", "Grid", "Stack", "Section"]
+        },
+        "siblings": {
+          "worksWellWith": ["Card", "Button", "Badge"]
+        }
+      },
+      "accessibility": {
+        "role": "region",
+        "ariaAttributes": ["aria-label", "aria-labelledby"],
+        "keyboardSupport": []
+      },
+      "examples": [
+        {
+          "name": "Content Card",
+          "description": "Basic content container with header and body",
+          "useCase": "dashboard",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Card><CardHeader><Text variant=\"h3\">Title</Text></CardHeader><CardContent><Text>Content goes here</Text></CardContent></Card>",
+            "vue": "<Card><CardHeader><Text variant=\"h3\">Title</Text></CardHeader><CardContent><Text>Content goes here</Text></CardContent></Card>",
+            "html": "<div class=\"card\"><div class=\"card-header\"><h3>Title</h3></div><div class=\"card-content\">Content goes here</div></div>"
+          }
+        }
+      ]
+    },
+    "Input": {
+      "name": "Input",
+      "category": "form",
+      "description": "Text input component with built-in validation states and accessibility. Always creates professional, accessible form inputs.",
+      "aiTags": ["form", "text", "field", "input", "data-entry", "user-input"],
+      "props": {
+        "type": {
+          "type": "string",
+          "description": "HTML input type for appropriate validation and UI",
+          "default": "text",
+          "aiRecommended": true,
+          "values": ["text", "email", "password", "number", "tel", "url", "search"]
+        },
+        "size": {
+          "type": "string",
+          "description": "Size variant following professional standards. 'lg' recommended for better mobile UX",
+          "default": "lg",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg"]
+        },
+        "variant": {
+          "type": "string",
+          "description": "Visual style variant",
+          "default": "outline",
+          "aiRecommended": true,
+          "values": ["outline", "filled", "underline"]
+        },
+        "state": {
+          "type": "string",
+          "description": "Validation state for user feedback",
+          "default": "default",
+          "aiRecommended": true,
+          "values": ["default", "success", "warning", "error"]
+        },
+        "label": {
+          "type": "string",
+          "description": "Accessible label text. Always provide for accessibility",
+          "required": true,
+          "aiRecommended": true
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text for user guidance",
+          "required": false,
+          "aiRecommended": true
+        },
+        "helperText": {
+          "type": "string",
+          "description": "Additional guidance or validation message",
+          "required": false,
+          "aiRecommended": true
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether field is required for validation",
+          "default": false,
+          "aiRecommended": false
+        },
+        "disabled": {
+          "type": "boolean",
+          "description": "Disables input interaction",
+          "default": false,
+          "aiRecommended": false
+        },
+        "value": {
+          "type": "string",
+          "description": "Controlled input value",
+          "required": false,
+          "aiRecommended": true
+        },
+        "onChange": {
+          "type": "function",
+          "description": "Change handler function",
+          "required": false,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "size": {
+          "name": "Size",
+          "description": "Controls input dimensions and touch targets",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg"]
+        },
+        "variant": {
+          "name": "Visual Style",
+          "description": "Controls input appearance",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["outline", "filled", "underline"]
+        },
+        "state": {
+          "name": "Validation State",
+          "description": "Shows validation feedback",
+          "default": false,
+          "aiRecommended": true,
+          "values": ["default", "success", "warning", "error"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": [],
+          "recommended": []
+        },
+        "parent": {
+          "recommended": ["Form", "Card", "Container", "Modal", "FormGroup"]
+        },
+        "siblings": {
+          "worksWellWith": ["Label", "HelperText", "Button", "Select", "Textarea"]
+        }
+      },
+      "accessibility": {
+        "role": "textbox",
+        "ariaAttributes": ["aria-label", "aria-describedby", "aria-invalid", "aria-required"],
+        "keyboardSupport": ["Tab", "Enter", "Escape"]
+      },
+      "examples": [
+        {
+          "name": "Email Input",
+          "description": "Email input field with validation",
+          "useCase": "form",  
+          "aiOptimized": true,
+          "code": {
+            "react": "<Input type=\"email\" label=\"Email Address\" placeholder=\"Enter your email\" required />",
+            "vue": "<Input type=\"email\" label=\"Email Address\" placeholder=\"Enter your email\" :required=\"true\" />",
+            "html": "<div class=\"input-group\"><label for=\"email\">Email Address</label><input type=\"email\" id=\"email\" placeholder=\"Enter your email\" required /></div>"
+          }
+        }
+      ]
+    },
+    "Container": {
+      "name": "Container",
+      "category": "layout",
+      "description": "Responsive layout container with smart max-widths and padding. Automatically centers content and provides consistent margins.",
+      "aiTags": ["layout", "wrapper", "responsive", "center", "max-width", "container"],
+      "props": {
+        "size": {
+          "type": "string",
+          "description": "Maximum width constraint. 'lg' optimal for most content, 'full' for edge-to-edge layouts",
+          "default": "lg",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl", "2xl", "full"]
+        },
+        "padding": {
+          "type": "string",
+          "description": "Internal padding size. 'lg' provides comfortable spacing",
+          "default": "lg",
+          "aiRecommended": true,
+          "values": ["none", "sm", "md", "lg", "xl"]
+        },
+        "center": {
+          "type": "boolean",
+          "description": "Whether to center container horizontally",
+          "default": true,
+          "aiRecommended": true
+        },
+        "children": {
+          "type": "node",
+          "description": "Container content",
+          "required": true,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "size": {
+          "name": "Max Width",
+          "description": "Controls maximum container width",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl", "2xl", "full"]
+        },
+        "padding": {
+          "name": "Padding",
+          "description": "Controls internal spacing",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["none", "sm", "md", "lg", "xl"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["any"],
+          "recommended": ["Section", "Card", "Grid", "Stack"]
+        },
+        "parent": {
+          "recommended": ["body", "main", "Section"]
+        },
+        "siblings": {
+          "worksWellWith": ["Header", "Footer", "Section"]
+        }
+      },
+      "accessibility": {
+        "role": "main",
+        "ariaAttributes": ["aria-label"],
+        "keyboardSupport": []
+      },
+      "examples": [
+        {
+          "name": "Page Container",
+          "description": "Main page content container",
+          "useCase": "landing-page",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Container size=\"lg\"><Section><Text variant=\"h1\">Welcome</Text></Section></Container>",
+            "vue": "<Container size=\"lg\"><Section><Text variant=\"h1\">Welcome</Text></Section></Container>",
+            "html": "<div class=\"container max-w-lg mx-auto px-lg\"><section><h1>Welcome</h1></section></div>"
+          }
+        }
+      ]
+    },
+    "Grid": {
+      "name": "Grid",
+      "category": "layout",
+      "description": "Responsive CSS Grid component with smart defaults. Automatically creates professional grid layouts with proper gaps and responsive behavior.",
+      "aiTags": ["layout", "grid", "responsive", "columns", "rows", "alignment"],
+      "props": {
+        "cols": {
+          "type": "string",
+          "description": "Number of columns. Can be responsive object for different breakpoints",
+          "default": "1",
+          "aiRecommended": true,
+          "values": ["1", "2", "3", "4", "6", "12", "auto", "responsive"]
+        },
+        "gap": {
+          "type": "string",
+          "description": "Gap between grid items. 'lg' provides comfortable spacing",
+          "default": "lg",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        },
+        "align": {
+          "type": "string", 
+          "description": "Vertical alignment of grid items",
+          "default": "start",
+          "aiRecommended": false,
+          "values": ["start", "center", "end", "stretch"]
+        },
+        "justify": {
+          "type": "string",
+          "description": "Horizontal alignment of grid items",
+          "default": "start",
+          "aiRecommended": false,
+          "values": ["start", "center", "end", "stretch"]
+        },
+        "children": {
+          "type": "node",
+          "description": "Grid items - can be any content",
+          "required": true,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "cols": {
+          "name": "Columns",
+          "description": "Number of grid columns",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["1", "2", "3", "4", "6", "12"]
+        },
+        "gap": {
+          "name": "Gap",
+          "description": "Space between grid items",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["GridItem", "Card", "any"],
+          "recommended": ["Card", "GridItem"]
+        },
+        "parent": {
+          "recommended": ["Container", "Section", "Card"]
+        },
+        "siblings": {
+          "worksWellWith": ["Container", "Stack"]
+        }
+      },
+      "accessibility": {
+        "role": "grid",
+        "ariaAttributes": ["aria-label", "aria-rowcount", "aria-colcount"],
+        "keyboardSupport": ["Arrow keys"]
+      },
+      "examples": [
+        {
+          "name": "Card Grid",
+          "description": "Responsive grid of cards",
+          "useCase": "dashboard",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Grid cols={{ base: 1, md: 2, lg: 3 }} gap=\"lg\">{cards.map(card => <Card key={card.id}>{card.content}</Card>)}</Grid>",
+            "vue": "<Grid :cols=\"{ base: 1, md: 2, lg: 3 }\" gap=\"lg\"><Card v-for=\"card in cards\" :key=\"card.id\">{{ card.content }}</Card></Grid>",
+            "html": "<div class=\"grid cols-1 md:cols-2 lg:cols-3 gap-lg\"><!-- Cards here --></div>"
+          }
+        }
+      ]
+    },
+    "Stack": {
+      "name": "Stack",
+      "category": "layout",
+      "description": "Flexible layout component for arranging items vertically or horizontally with consistent spacing. Perfect for forms, lists, and content flows.",
+      "aiTags": ["layout", "flexbox", "vertical", "horizontal", "spacing", "alignment"],
+      "props": {
+        "direction": {
+          "type": "string",
+          "description": "Layout direction. 'vertical' for forms and content, 'horizontal' for button groups",
+          "default": "vertical",
+          "aiRecommended": true,
+          "values": ["vertical", "horizontal"]
+        },
+        "gap": {
+          "type": "string",
+          "description": "Space between stack items. 'md' optimal for forms, 'lg' for content sections",
+          "default": "md",
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        },
+        "align": {
+          "type": "string",
+          "description": "Cross-axis alignment of items",
+          "default": "stretch",
+          "aiRecommended": false,
+          "values": ["start", "center", "end", "stretch"]
+        },
+        "justify": {
+          "type": "string",
+          "description": "Main-axis alignment of items",
+          "default": "start",
+          "aiRecommended": false,
+          "values": ["start", "center", "end", "space-between", "space-around"]
+        },
+        "children": {
+          "type": "node",
+          "description": "Stack items",
+          "required": true,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "direction": {
+          "name": "Direction",
+          "description": "Stack orientation",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["vertical", "horizontal"]
+        },
+        "gap": {
+          "name": "Gap",
+          "description": "Space between items",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["sm", "md", "lg", "xl"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["any"],
+          "recommended": ["Input", "Button", "Card", "Text"]
+        },
+        "parent": {
+          "recommended": ["Card", "Container", "Form", "Modal"]
+        },
+        "siblings": {
+          "worksWellWith": ["Grid", "Container"]
+        }
+      },
+      "accessibility": {
+        "role": "group",
+        "ariaAttributes": ["aria-label"],
+        "keyboardSupport": []
+      },
+      "examples": [
+        {
+          "name": "Form Stack",
+          "description": "Vertical stack for form fields",
+          "useCase": "form",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Stack direction=\"vertical\" gap=\"md\"><Input label=\"Name\" /><Input label=\"Email\" type=\"email\" /><Button type=\"submit\">Submit</Button></Stack>",
+            "vue": "<Stack direction=\"vertical\" gap=\"md\"><Input label=\"Name\" /><Input label=\"Email\" type=\"email\" /><Button type=\"submit\">Submit</Button></Stack>",
+            "html": "<div class=\"stack vertical gap-md\"><input-field label=\"Name\"></input-field><input-field label=\"Email\" type=\"email\"></input-field><button type=\"submit\">Submit</button></div>"
+          }
+        }
+      ]
+    },
+    "Text": {
+      "name": "Text",
+      "category": "data-display",
+      "description": "Semantic text component with typography variants. Automatically applies proper text styling, hierarchy, and accessibility.",
+      "aiTags": ["typography", "text", "heading", "paragraph", "semantic", "content"],
+      "props": {
+        "variant": {
+          "type": "string",
+          "description": "Typography variant for semantic hierarchy. Use h1-h6 for headings, body for paragraphs",
+          "default": "body",
+          "aiRecommended": true,
+          "values": ["h1", "h2", "h3", "h4", "h5", "h6", "body", "bodySmall", "bodyLarge", "caption", "label"]
+        },
+        "color": {
+          "type": "string",
+          "description": "Text color variant",
+          "default": "primary",
+          "aiRecommended": false,
+          "values": ["primary", "secondary", "tertiary", "inverse", "success", "warning", "error", "info"]
+        },
+        "align": {
+          "type": "string",
+          "description": "Text alignment",
+          "default": "left",
+          "aiRecommended": false,
+          "values": ["left", "center", "right", "justify"]
+        },
+        "truncate": {
+          "type": "boolean",
+          "description": "Whether to truncate long text with ellipsis",
+          "default": false,
+          "aiRecommended": false
+        },
+        "children": {
+          "type": "node",
+          "description": "Text content",
+          "required": true,
+          "aiRecommended": true
+        }
+      },
+      "variants": {
+        "variant": {
+          "name": "Typography Variant",
+          "description": "Semantic text styling",
+          "default": true,
+          "aiRecommended": true,
+          "values": ["h1", "h2", "h3", "h4", "h5", "h6", "body", "bodySmall", "bodyLarge", "caption", "label"]
+        },
+        "color": {
+          "name": "Color",
+          "description": "Text color",
+          "default": false,
+          "aiRecommended": false,
+          "values": ["primary", "secondary", "tertiary", "inverse", "success", "warning", "error", "info"]
+        }
+      },
+      "composition": {
+        "children": {
+          "allowed": ["text", "strong", "em", "code"],
+          "recommended": ["text"]
+        },
+        "parent": {
+          "recommended": ["Card", "Container", "Stack", "CardContent"]
+        },
+        "siblings": {
+          "worksWellWith": ["Button", "Badge", "Icon"]
+        }
+      },
+      "accessibility": {
+        "role": "heading",
+        "ariaAttributes": ["aria-level"],
+        "keyboardSupport": []
+      },
+      "examples": [
+        {
+          "name": "Page Heading",
+          "description": "Main page heading",
+          "useCase": "landing-page",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Text variant=\"h1\">Welcome to Our Platform</Text>",
+            "vue": "<Text variant=\"h1\">Welcome to Our Platform</Text>",
+            "html": "<h1 class=\"text-h1\">Welcome to Our Platform</h1>"
+          }
+        },
+        {
+          "name": "Body Text",
+          "description": "Regular content text",
+          "useCase": "dashboard",
+          "aiOptimized": true,
+          "code": {
+            "react": "<Text variant=\"body\">This is the main content of the page.</Text>",
+            "vue": "<Text variant=\"body\">This is the main content of the page.</Text>",
+            "html": "<p class=\"text-body\">This is the main content of the page.</p>"
+          }
+        }
+      ]
+    }
+  }
+}

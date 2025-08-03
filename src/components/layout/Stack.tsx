@@ -11,22 +11,14 @@ import { forwardRef, type HTMLAttributes } from 'react';
 import { useTokens } from '../../hooks/useTokens';
 
 /**
- * Stack variants using class-variance-authority
+ * Stack variants using design tokens through CSS custom properties
+ * Base classes only - spacing handled via tokens
  */
 const stackVariants = cva('flex', {
   variants: {
     direction: {
       vertical: 'flex-col',
       horizontal: 'flex-row',
-    },
-    gap: {
-      none: 'gap-0',
-      xs: 'gap-1',
-      sm: 'gap-2',
-      md: 'gap-4',
-      lg: 'gap-6',
-      xl: 'gap-8',
-      '2xl': 'gap-12',
     },
     align: {
       start: 'items-start',
@@ -50,7 +42,6 @@ const stackVariants = cva('flex', {
   },
   defaultVariants: {
     direction: 'vertical',
-    gap: 'md',
     align: 'stretch',
     justify: 'start',
     wrap: false,
@@ -63,13 +54,13 @@ const stackVariants = cva('flex', {
 type BaseStackVariants = VariantProps<typeof stackVariants>;
 
 /**
- * Stack component props interface with flexible string support
+ * Stack component props interface with enhanced token support
  */
 export interface StackProps extends HTMLAttributes<HTMLDivElement> {
-  /** Stack direction - accepts known values or any string */
+  /** Stack direction */
   readonly direction?: BaseStackVariants['direction'] | string;
-  /** Gap between items - accepts known values or any string */
-  readonly gap?: BaseStackVariants['gap'] | string;
+  /** Gap between items - uses design tokens (0-40) or custom CSS value */
+  readonly gap?: string | number;
   /** Alignment along cross axis */
   readonly align?: BaseStackVariants['align'];
   /** Alignment along main axis */
@@ -85,40 +76,48 @@ export interface StackProps extends HTMLAttributes<HTMLDivElement> {
 // =============================================================================
 
 /**
- * Stack component with token-based styling
+ * Stack component with pure token-based styling
  */
 export const Stack = forwardRef<HTMLDivElement, StackProps>(
-  ({ className, direction, gap, align, justify, wrap, as: Component = 'div', style, ...props }, ref) => {
-    // ✅ Access design tokens for dynamic spacing control
+  ({ className, direction, gap = 4, align, justify, wrap, as: Component = 'div', style, ...props }, ref) => {
+    // ✅ Access design tokens for spacing control
     const { spacing } = useTokens();
     
     const ElementType = Component as React.ElementType;
 
-    // Convert string values to known variants or use as fallback
+    // Normalize direction
     const normalizedDirection =
       direction === 'horizontal' || direction === 'vertical'
         ? (direction as BaseStackVariants['direction'])
         : ('vertical' as const);
 
-    const gapOptions = ['none', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const;
-    const normalizedGap = gap && gapOptions.includes(gap as typeof gapOptions[number])
-      ? (gap as BaseStackVariants['gap'])
-      : ('md' as const);
-
-    // Get dynamic gap styles from tokens when needed
-    const getDynamicGapStyle = (): React.CSSProperties => {
-      // If using a custom gap value (not in predefined options), use tokens
-      if (gap && !gapOptions.includes(gap as typeof gapOptions[number])) {
-        const gapValue = spacing?.[gap as keyof typeof spacing] || gap;
-        return {
-          gap: gapValue,
-        };
+    // Get gap value from tokens or use custom value
+    const getGapValue = (): string => {
+      if (gap === undefined || gap === null) {
+        return spacing?.[4] || '16px'; // Default to spacing[4]
       }
-      return {};
+      
+      // If gap is a number, use it as a spacing token key
+      if (typeof gap === 'number') {
+        return spacing?.[gap as keyof typeof spacing] || `${gap * 4}px`; // Fallback to 4px per unit
+      }
+      
+      // If gap is a string, check if it's a spacing token key first
+      if (typeof gap === 'string') {
+        // Try to use as spacing token key
+        const tokenValue = spacing?.[gap as keyof typeof spacing];
+        if (tokenValue) {
+          return tokenValue;
+        }
+        // Otherwise, use as direct CSS value
+        return gap;
+      }
+      
+      return spacing?.[4] || '16px'; // Safe fallback
     };
 
     const dynamicStyles: React.CSSProperties = {
-      ...getDynamicGapStyle(),
+      gap: getGapValue(),
       ...style,
     };
 
@@ -128,7 +127,6 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
         className={cn(
           stackVariants({
             direction: normalizedDirection,
-            gap: normalizedGap,
             align,
             justify,
             wrap,

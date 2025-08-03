@@ -1,16 +1,17 @@
 'use client'; // ✅ Add this directive at the top
 
 /**
- * @fileoverview SSR-Safe DesignSystemProvider - Production Strategy
+ * @fileoverview SSR-Safe DesignSystemProvider - Industry Standard Implementation
  * @description Truly SSR-safe theme provider with React module resolution safety
- * @version 4.6.3
- * @compliance SSR-Safe, Production-ready, Framework-agnostic
+ * @version 5.0.0
+ * @compliance SSR-Safe, Production-ready, Framework-agnostic, Industry Standards
  */
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Logger } from '../lib/utils/multiplatform-logger';
 import type { ThemeTemplate } from '../tokens/themes/template-loader';
 import { TemplateLoader } from '../utils/templateLoader';
+import { designTokens } from '../tokens/design-tokens';
 
 const logger = Logger.create({
   serviceName: 'ui-system-design-provider',
@@ -261,6 +262,35 @@ export function DesignSystemProvider({
           });
         }
 
+        // Apply industry standard design tokens
+        Object.entries(designTokens.colors.primary).forEach(([key, value]) => {
+          root.style.setProperty(`--ds-color-primary-${key}`, value);
+        });
+        
+        Object.entries(designTokens.spacing).forEach(([key, value]) => {
+          root.style.setProperty(`--ds-spacing-${key}`, value);
+        });
+        
+        Object.entries(designTokens.elevation).forEach(([key, value]) => {
+          if (typeof value === 'string') {
+            root.style.setProperty(`--ds-elevation-${key}`, value);
+          }
+        });
+        
+        Object.entries(designTokens.borderRadius).forEach(([key, value]) => {
+          if (typeof value === 'string') {
+            root.style.setProperty(`--ds-border-radius-${key}`, value);
+          }
+        });
+        
+        Object.entries(designTokens.motion.duration).forEach(([key, value]) => {
+          root.style.setProperty(`--ds-motion-duration-${key}`, value);
+        });
+        
+        Object.entries(designTokens.motion.easing).forEach(([key, value]) => {
+          root.style.setProperty(`--ds-motion-easing-${key}`, value);
+        });
+
         logger.info('CSS custom properties applied', { templateId: template.id });
       } catch (error) {
         logger.error('Failed to apply CSS custom properties', { error });
@@ -331,10 +361,10 @@ export const useDesignSystem = (): DesignSystemContextValue => {
 // =============================================================================
 
 /**
- * Hook for accessing current _theme
+ * Hook for accessing current theme
  */
 export const useTheme = (): {
-  _theme: ThemeTemplate | null;
+  theme: ThemeTemplate | null;
   mode: 'LIGHT' | 'DARK';
   isLoading: boolean;
   setTemplate: (_templateId: string) => Promise<void>;
@@ -343,7 +373,7 @@ export const useTheme = (): {
   const { currentTemplate, isDarkMode, isLoading, setTemplate, toggleDarkMode } = useDesignSystem();
 
   return {
-    _theme: currentTemplate,
+    theme: currentTemplate,
     mode: isDarkMode ? 'DARK' : 'LIGHT',
     isLoading,
     setTemplate,
@@ -370,4 +400,4 @@ export const useTemplates = (): {
   };
 };
 
-logger.info('SSR-safe DesignSystemProvider initialized');
+logger.info('SSR-safe DesignSystemProvider with industry standard tokens initialized');
