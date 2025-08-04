@@ -755,10 +755,50 @@ ${args.includeExamples ? `
 
     const formCode = await formGenerator.generateForm({
       name: args.formName,
+      category: 'form',
       fields: fieldSpecs,
-      layout: args.layout || 'vertical',
-      validation: true,
-      norwegianCompliance: args.norwegianCompliance !== false
+      validation: {
+        realTime: true,
+        showErrors: true,
+        errorPosition: 'inline'
+      },
+      submission: {
+        method: 'POST',
+        endpoint: '/api/submit',
+        successMessage: 'Form submitted successfully',
+        errorMessage: 'Failed to submit form'
+      },
+      features: {
+        icons: false,
+        animated: false,
+        interactive: true,
+        loading: false,
+        error: false,
+        validation: true
+      },
+      styling: {
+        variant: 'default',
+        colorScheme: 'auto',
+        borderRadius: 'md',
+        shadow: 'sm',
+        spacing: 'comfortable'
+      },
+      accessibility: {
+        level: 'AAA',
+        screenReader: true,
+        keyboardNavigation: true,
+        highContrast: false,
+        reducedMotion: false,
+        focusManagement: true,
+        ariaLabels: true
+      },
+      responsive: {
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        mobileFirst: true,
+        adaptiveLayout: true,
+        touchOptimized: true,
+        fluidTypography: true
+      }
     });
 
     return {
@@ -774,9 +814,56 @@ ${args.includeExamples ? `
     
     const layoutCode = await layoutGenerator.generateLayout({
       name: args.layoutName,
-      structure: args.structure,
-      responsive: args.responsive !== false,
-      semanticHTML: args.semanticHTML !== false
+      category: 'layouts',
+      layoutType: args.layoutType || 'web',
+      sections: args.sections || [
+        {
+          name: 'header',
+          component: 'Header',
+          props: {}
+        },
+        {
+          name: 'main',
+          component: 'MainContent',
+          props: {}
+        },
+        {
+          name: 'footer',
+          component: 'Footer',
+          props: {}
+        }
+      ],
+      features: {
+        icons: false,
+        animated: false,
+        interactive: true,
+        loading: false,
+        error: false,
+        validation: false
+      },
+      styling: {
+        variant: 'default',
+        colorScheme: 'auto',
+        borderRadius: 'md',
+        shadow: 'sm',
+        spacing: 'comfortable'
+      },
+      accessibility: {
+        level: 'AAA',
+        screenReader: true,
+        keyboardNavigation: true,
+        highContrast: false,
+        reducedMotion: false,
+        focusManagement: true,
+        ariaLabels: true
+      },
+      responsive: {
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        mobileFirst: true,
+        adaptiveLayout: true,
+        touchOptimized: true,
+        fluidTypography: true
+      }
     });
 
     return {
@@ -791,9 +878,32 @@ ${args.includeExamples ? `
     
     const tableCode = await dataTableGenerator.generateDataTable({
       name: args.tableName,
+      category: 'data-display',
       columns: args.columns,
       features: args.features || {},
-      nsmClassification: args.nsmClassification || 'OPEN'
+      styling: {
+        variant: 'default',
+        colorScheme: 'auto',
+        borderRadius: 'md',
+        shadow: 'sm',
+        spacing: 'comfortable'
+      },
+      accessibility: {
+        level: 'AAA',
+        screenReader: true,
+        keyboardNavigation: true,
+        highContrast: false,
+        reducedMotion: false,
+        focusManagement: true,
+        ariaLabels: true
+      },
+      responsive: {
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        mobileFirst: true,
+        adaptiveLayout: true,
+        touchOptimized: true,
+        fluidTypography: true
+      }
     });
 
     return {
@@ -808,11 +918,40 @@ ${args.includeExamples ? `
     const navigationGenerator = new NavigationGenerator();
     
     const navCode = await navigationGenerator.generateNavigation({
-      type: args.navigationType,
       name: args.name,
-      items: args.items || [],
+      category: 'navigation',
       variant: args.variant,
-      norwegianLocale: args.norwegianLocale !== false
+      features: {
+        icons: false,
+        animated: false,
+        interactive: true,
+        loading: false,
+        error: false,
+        validation: false
+      },
+      styling: {
+        variant: 'default',
+        colorScheme: 'auto',
+        borderRadius: 'md',
+        shadow: 'sm',
+        spacing: 'comfortable'
+      },
+      accessibility: {
+        level: 'AAA',
+        screenReader: true,
+        keyboardNavigation: true,
+        highContrast: false,
+        reducedMotion: false,
+        focusManagement: true,
+        ariaLabels: true
+      },
+      responsive: {
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        mobileFirst: true,
+        adaptiveLayout: true,
+        touchOptimized: true,
+        fluidTypography: true
+      }
     });
 
     return {
@@ -829,7 +968,7 @@ ${args.includeExamples ? `
       throw new Error(`No specification found for component: ${args.componentName}`);
     }
 
-    const testGenerator = new TestGenerator();
+    const testGenerator = new (await import('../generators/TestGenerator.js')).TestGenerator();
     const testCode = await testGenerator.generateTests({
       componentName: args.componentName,
       specification: spec,

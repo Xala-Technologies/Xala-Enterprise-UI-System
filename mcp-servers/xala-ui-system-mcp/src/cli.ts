@@ -7,9 +7,9 @@
 import { program } from 'commander';
 import { writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
-import { ComponentGenerator } from './generators/ComponentGenerator';
-import { TemplateManager } from './templates/TemplateManager';
-import type { ComponentConfig } from './types/index';
+import { ComponentGenerator } from './generators/ComponentGenerator.js';
+import { TemplateManager } from './templates/TemplateManager.js';
+import type { ComponentConfig } from './types/index.js';
 
 const componentGenerator = new ComponentGenerator();
 const templateManager = new TemplateManager();

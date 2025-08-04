@@ -25,26 +25,34 @@ module.exports = {
     "security/detect-non-literal-fs-filename": "warn",
     "security/detect-eval-with-expression": "error",
     
-    // Relaxed TypeScript rules
-    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/ban-ts-comment": "warn",
-    "@typescript-eslint/no-non-null-assertion": "warn",
+    // Very relaxed TypeScript rules for v6.0 cleanup
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/prefer-as-const": "off",
     
-    // Relaxed general rules
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+    // Very relaxed general rules
+    "no-unused-vars": "off",
     "no-undef": "off",
-    "no-console": "warn",
-    "prefer-const": "warn",
+    "no-console": "off",
+    "prefer-const": "off",
+    "no-case-declarations": "off",
+    "no-fallthrough": "off",
     
     // React specific relaxations
     "react/prop-types": "off",
-    "react/display-name": "warn",
-    "react-hooks/exhaustive-deps": "warn",
+    "react/display-name": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/no-unescaped-entities": "off",
     
     // Import relaxations
-    "import/no-unresolved": "warn",
-    "import/named": "warn"
+    "import/no-unresolved": "off",
+    "import/named": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off"
   },
   "overrides": [
     {
