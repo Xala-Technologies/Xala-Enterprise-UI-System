@@ -9,6 +9,7 @@ import React, { forwardRef, type TextareaHTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
 import { useTokens } from '../../hooks/useTokens';
+import { Box } from '../semantic';
 
 // =============================================================================
 // TEXTAREA VARIANTS USING DESIGN TOKENS
@@ -358,7 +359,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] }}>
+      <Box style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] }}>
         {label && (
           <label
             htmlFor={textareaId}
@@ -375,7 +376,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         {textareaElement}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           {displayHelperText && (
             <p
               id={`${textareaId}-helper`}
@@ -391,8 +392,8 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               {maxLength !== undefined && `/${maxLength}`}
             </p>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );

@@ -7,6 +7,7 @@
 
 import React, { forwardRef, type ReactNode } from 'react';
 import { useTokens } from '../../hooks/useTokens';
+import { Box, Text } from '../semantic';
 import {
   Dropdown,
   DropdownTrigger,
@@ -186,11 +187,11 @@ export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps
         style={itemStyles}
         {...props}
       >
-        <span style={contentStyles}>
-          {icon && <span style={iconStyles}>{icon}</span>}
-          <span>{children}</span>
-        </span>
-        {shortcut && <span style={shortcutStyles}>{shortcut}</span>}
+        <Text as="span" style={contentStyles}>
+          {icon && <Text as="span" style={iconStyles}>{icon}</Text>}
+          <Text as="span">{children}</Text>
+        </Text>
+        {shortcut && <Text as="span" style={shortcutStyles}>{shortcut}</Text>}
       </DropdownItem>
     );
   }
@@ -244,9 +245,9 @@ export const DropdownMenuCheckboxItem = forwardRef<HTMLDivElement, DropdownMenuC
         aria-checked={checked}
         {...props}
       >
-        <span style={checkIconStyles}>
+        <Text as="span" style={checkIconStyles}>
           {checked && <CheckIcon />}
-        </span>
+        </Text>
         {children}
       </DropdownItem>
     );
@@ -269,7 +270,7 @@ const RadioGroupContext = React.createContext<{
 export const DropdownMenuRadioGroup: React.FC<DropdownMenuRadioGroupProps> = ({ value, onValueChange, children }) => {
   return (
     <RadioGroupContext.Provider value={{ value, onValueChange }}>
-      <div role="group">{children}</div>
+      <Box role="group">{children}</Box>
     </RadioGroupContext.Provider>
   );
 };
@@ -321,9 +322,9 @@ export const DropdownMenuRadioItem = forwardRef<HTMLDivElement, DropdownMenuRadi
         aria-checked={isChecked}
         {...props}
       >
-        <span style={radioIconStyles}>
+        <Text as="span" style={radioIconStyles}>
           <RadioIcon />
-        </span>
+        </Text>
         {children}
       </DropdownItem>
     );
@@ -372,9 +373,9 @@ export const DropdownMenuSubTrigger = forwardRef<HTMLDivElement, DropdownMenuSub
         {...props}
       >
         {children}
-        <span style={chevronStyles}>
+        <Text as="span" style={chevronStyles}>
           <ChevronRightIcon />
-        </span>
+        </Text>
       </DropdownMenuItem>
     );
   }

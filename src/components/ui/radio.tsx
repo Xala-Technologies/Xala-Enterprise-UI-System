@@ -9,6 +9,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box } from '../semantic';
 
 // =============================================================================
 // RADIO VARIANTS USING DESIGN TOKENS
@@ -21,7 +22,7 @@ const RadioIcon = ({ size }: { size?: 'sm' | 'default' | 'lg' }): React.ReactEle
   const sizeClass = size === 'sm' ? 'h-1 w-1' : size === 'lg' ? 'h-2.5 w-2.5' : 'h-2 w-2';
   
   return (
-    <div className={cn('rounded-full bg-current', sizeClass)} />
+    <Box className={cn('rounded-full bg-current', sizeClass)} />
   );
 };
 
@@ -72,7 +73,7 @@ export interface RadioProps
 export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
   ({ className, variant, size, checked, ...props }, ref) => {
     return (
-      <div className="relative flex items-center">
+      <Box className="relative flex items-center">
         <input
           type="radio"
           className={cn(radioVariants({ variant, size }), className)}
@@ -83,11 +84,11 @@ export const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
         
         {/* Visual indicator */}
         {checked && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <Box className="pointer-events-none absolute inset-0 flex items-center justify-center">
             <RadioIcon size={size || 'default'} />
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

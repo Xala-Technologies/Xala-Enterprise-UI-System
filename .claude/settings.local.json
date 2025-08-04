@@ -72,7 +72,9 @@
       "Bash(rm:*)",
       "Bash(npm test:*)",
       "Bash(cd:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(npm run lint)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

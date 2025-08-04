@@ -114,7 +114,7 @@ const dialogDescriptionVariants = cva(
 /**
  * Dialog component props interface
  */
-export interface DialogProps extends HTMLAttributes<HTMLDivElement> {
+export interface DialogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly open?: boolean;
   readonly children: ReactNode;
 }
@@ -123,7 +123,7 @@ export interface DialogProps extends HTMLAttributes<HTMLDivElement> {
  * Dialog overlay props interface
  */
 export interface DialogOverlayProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogOverlayVariants> {
   readonly open?: boolean;
 }
@@ -132,7 +132,7 @@ export interface DialogOverlayProps
  * Dialog content props interface
  */
 export interface DialogContentProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogContentVariants> {
   readonly open?: boolean;
   readonly children: ReactNode;
@@ -142,7 +142,7 @@ export interface DialogContentProps
  * Dialog header props interface
  */
 export interface DialogHeaderProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogHeaderVariants> {
   readonly children: ReactNode;
 }
@@ -168,7 +168,7 @@ export interface DialogDescriptionProps
 /**
  * Dialog footer props interface
  */
-export interface DialogFooterProps extends HTMLAttributes<HTMLDivElement> {
+export interface DialogFooterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly children: ReactNode;
 }
 
@@ -222,9 +222,9 @@ export const DialogContent = forwardRef<HTMLDivElement, DialogContentProps>(
         ref={ref}
         className={cn(dialogContentVariants({ size }), className)}
         data-state={open ? 'open' : 'closed'}
+        {...props}
         role="dialog"
         aria-modal="true"
-        {...props}
       >
         {children}
       </Box>
@@ -257,13 +257,14 @@ DialogHeader.displayName = 'DialogHeader';
  * Dialog title component with CVA variants
  */
 export const DialogTitle = forwardRef<HTMLHeadingElement, DialogTitleProps>(
-  ({ className, size, children, ...props }, ref): React.ReactElement => {
+  ({ className, size, children, id, style, ...props }, ref): React.ReactElement => {
     return (
       <Heading
         level={2}
         ref={ref}
         className={cn(dialogTitleVariants({ size }), className)}
-        {...props}
+        id={id}
+        style={style}
       >
         {children}
       </Heading>
@@ -277,13 +278,14 @@ DialogTitle.displayName = 'DialogTitle';
  * Dialog description component with CVA variants
  */
 export const DialogDescription = forwardRef<HTMLParagraphElement, DialogDescriptionProps>(
-  ({ className, size, children, ...props }, ref): React.ReactElement => {
+  ({ className, size, children, id, style, ...props }, ref): React.ReactElement => {
     return (
       <Text
         as="p"
         ref={ref}
         className={cn(dialogDescriptionVariants({ size }), className)}
-        {...props}
+        id={id}
+        style={style}
       >
         {children}
       </Text>
@@ -319,16 +321,19 @@ DialogFooter.displayName = 'DialogFooter';
  * Dialog close button component
  */
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ className, children, ...props }, ref): React.ReactElement => {
+  ({ className, children, onClick, disabled, type, id, style, ...props }, ref): React.ReactElement => {
     return (
       <Button
-        as="button"
         ref={ref}
         className={cn(
           'absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
           className
         )}
-        {...props}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+        id={id}
+        style={style}
       >
         {children || (
           <svg

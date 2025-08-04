@@ -237,7 +237,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     };
     
     return (
-      <div
+      <Box
         ref={ref}
         role={decorative ? 'presentation' : 'separator'}
         aria-label={!decorative ? label : undefined}
@@ -250,21 +250,21 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       >
         {/* Left divider line (hidden when label is on the left) */}
         {labelPosition !== 'left' && (
-          <div style={lineStyles} />
+          <Box style={lineStyles} />
         )}
 
         {/* Label */}
-        <div style={labelContainerStyles}>
+        <Box style={labelContainerStyles}>
           <span style={labelStyles}>
             {label}
           </span>
-        </div>
+        </Box>
 
         {/* Right divider line (hidden when label is on the right) */}
         {labelPosition !== 'right' && (
-          <div style={lineStyles} />
+          <Box style={lineStyles} />
         )}
-      </div>
+      </Box>
     );
   }
 );

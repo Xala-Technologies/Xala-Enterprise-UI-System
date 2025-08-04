@@ -148,7 +148,7 @@ const popoverTriggerVariants = cva(
 /**
  * Popover component props interface
  */
-export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
+export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly open?: boolean;
   readonly children: ReactNode;
 }
@@ -156,7 +156,7 @@ export interface PopoverProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * Popover trigger props interface
  */
-export interface PopoverTriggerProps extends HTMLAttributes<HTMLDivElement> {
+export interface PopoverTriggerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly children: ReactNode;
   readonly asChild?: boolean;
 }
@@ -165,7 +165,7 @@ export interface PopoverTriggerProps extends HTMLAttributes<HTMLDivElement> {
  * Popover content props interface
  */
 export interface PopoverContentProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof popoverContentVariants> {
   readonly open?: boolean;
   readonly children: ReactNode;
@@ -176,7 +176,7 @@ export interface PopoverContentProps
  * Popover arrow props interface
  */
 export interface PopoverArrowProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof popoverArrowVariants> {}
 
 /**
@@ -238,9 +238,9 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(
         ref={ref}
         className={cn(popoverContentVariants({ side, align, size }), className)}
         data-state={open ? 'open' : 'closed'}
+        {...props}
         role="dialog"
         aria-modal="false"
-        {...props}
       >
         {showArrow && (
           <PopoverArrow side={side} align={align} />
@@ -274,16 +274,19 @@ PopoverArrow.displayName = 'PopoverArrow';
  * Popover close button component
  */
 export const PopoverClose = forwardRef<HTMLButtonElement, PopoverCloseProps>(
-  ({ className, children, ...props }, ref): React.ReactElement => {
+  ({ className, children, onClick, disabled, type, id, style, ...props }, ref): React.ReactElement => {
     return (
       <Button
-        as="button"
         ref={ref}
         className={cn(
           'absolute right-2 top-2 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none',
           className
         )}
-        {...props}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+        id={id}
+        style={style}
       >
         {children || (
           <svg

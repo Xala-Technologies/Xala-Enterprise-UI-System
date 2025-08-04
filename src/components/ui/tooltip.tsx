@@ -154,14 +154,14 @@ const tooltipTriggerVariants = cva(
 /**
  * Tooltip component props interface
  */
-export interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
+export interface TooltipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly children: ReactNode;
 }
 
 /**
  * Tooltip trigger props interface
  */
-export interface TooltipTriggerProps extends HTMLAttributes<HTMLDivElement> {
+export interface TooltipTriggerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly children: ReactNode;
   readonly asChild?: boolean;
 }
@@ -170,7 +170,7 @@ export interface TooltipTriggerProps extends HTMLAttributes<HTMLDivElement> {
  * Tooltip content props interface
  */
 export interface TooltipContentProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof tooltipContentVariants> {
   readonly children: ReactNode;
   readonly showArrow?: boolean;
@@ -180,7 +180,7 @@ export interface TooltipContentProps
  * Tooltip arrow props interface
  */
 export interface TooltipArrowProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof tooltipArrowVariants> {}
 
 /**
@@ -235,9 +235,9 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       <Box
         ref={ref}
         className={cn(tooltipContentVariants({ side, align, size, delay }), className)}
+        {...props}
         role="tooltip"
         aria-live="polite"
-        {...props}
       >
         {showArrow && (
           <TooltipArrow side={side} align={align} />

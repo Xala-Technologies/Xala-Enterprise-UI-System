@@ -171,7 +171,7 @@ const sheetDescriptionVariants = cva(
 /**
  * Sheet component props interface
  */
-export interface SheetProps extends HTMLAttributes<HTMLDivElement> {
+export interface SheetProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly open?: boolean;
   readonly children: ReactNode;
 }
@@ -180,7 +180,7 @@ export interface SheetProps extends HTMLAttributes<HTMLDivElement> {
  * Sheet overlay props interface
  */
 export interface SheetOverlayProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof sheetOverlayVariants> {
   readonly open?: boolean;
 }
@@ -189,7 +189,7 @@ export interface SheetOverlayProps
  * Sheet content props interface
  */
 export interface SheetContentProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof sheetContentVariants> {
   readonly open?: boolean;
   readonly children: ReactNode;
@@ -199,7 +199,7 @@ export interface SheetContentProps
  * Sheet header props interface
  */
 export interface SheetHeaderProps 
-  extends HTMLAttributes<HTMLDivElement>,
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof sheetHeaderVariants> {
   readonly children: ReactNode;
 }
@@ -225,7 +225,7 @@ export interface SheetDescriptionProps
 /**
  * Sheet footer props interface
  */
-export interface SheetFooterProps extends HTMLAttributes<HTMLDivElement> {
+export interface SheetFooterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   readonly children: ReactNode;
 }
 
@@ -242,9 +242,9 @@ export interface SheetCloseProps extends HTMLAttributes<HTMLButtonElement> {
 export const Sheet = forwardRef<HTMLDivElement, SheetProps>(
   ({ children, ...props }, ref): React.ReactElement => {
     return (
-      <div ref={ref} {...props}>
+      <Box ref={ref} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -257,7 +257,7 @@ Sheet.displayName = 'Sheet';
 export const SheetOverlay = forwardRef<HTMLDivElement, SheetOverlayProps>(
   ({ className, variant, open = false, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(sheetOverlayVariants({ variant }), className)}
         data-state={open ? 'open' : 'closed'}
@@ -275,16 +275,16 @@ SheetOverlay.displayName = 'SheetOverlay';
 export const SheetContent = forwardRef<HTMLDivElement, SheetContentProps>(
   ({ className, side, size, open = false, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(sheetContentVariants({ side, size }), className)}
         data-state={open ? 'open' : 'closed'}
+        {...props}
         role="dialog"
         aria-modal="true"
-        {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -297,13 +297,13 @@ SheetContent.displayName = 'SheetContent';
 export const SheetHeader = forwardRef<HTMLDivElement, SheetHeaderProps>(
   ({ className, size, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(sheetHeaderVariants({ size }), className)}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -314,15 +314,17 @@ SheetHeader.displayName = 'SheetHeader';
  * Sheet title component with CVA variants
  */
 export const SheetTitle = forwardRef<HTMLHeadingElement, SheetTitleProps>(
-  ({ className, size, children, ...props }, ref): React.ReactElement => {
+  ({ className, size, children, id, style, ...props }, ref): React.ReactElement => {
     return (
-      <h2
+      <Heading
+        level={2}
         ref={ref}
         className={cn(sheetTitleVariants({ size }), className)}
-        {...props}
+        id={id}
+        style={style}
       >
         {children}
-      </h2>
+      </Heading>
     );
   }
 );
@@ -333,15 +335,17 @@ SheetTitle.displayName = 'SheetTitle';
  * Sheet description component with CVA variants
  */
 export const SheetDescription = forwardRef<HTMLParagraphElement, SheetDescriptionProps>(
-  ({ className, size, children, ...props }, ref): React.ReactElement => {
+  ({ className, size, children, id, style, ...props }, ref): React.ReactElement => {
     return (
-      <p
+      <Text
+        as="p"
         ref={ref}
         className={cn(sheetDescriptionVariants({ size }), className)}
-        {...props}
+        id={id}
+        style={style}
       >
         {children}
-      </p>
+      </Text>
     );
   }
 );
@@ -354,7 +358,7 @@ SheetDescription.displayName = 'SheetDescription';
 export const SheetFooter = forwardRef<HTMLDivElement, SheetFooterProps>(
   ({ className, children, ...props }, ref): React.ReactElement => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
@@ -363,7 +367,7 @@ export const SheetFooter = forwardRef<HTMLDivElement, SheetFooterProps>(
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -374,15 +378,19 @@ SheetFooter.displayName = 'SheetFooter';
  * Sheet close button component
  */
 export const SheetClose = forwardRef<HTMLButtonElement, SheetCloseProps>(
-  ({ className, children, ...props }, ref): React.ReactElement => {
+  ({ className, children, onClick, disabled, type, id, style, ...props }, ref): React.ReactElement => {
     return (
-      <button
+      <Button
         ref={ref}
         className={cn(
           'absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
           className
         )}
-        {...props}
+        onClick={onClick}
+        disabled={disabled}
+        type={type}
+        id={id}
+        style={style}
       >
         {children || (
           <svg
@@ -400,8 +408,8 @@ export const SheetClose = forwardRef<HTMLButtonElement, SheetCloseProps>(
             />
           </svg>
         )}
-        <span className="sr-only">Close</span>
-      </button>
+        <Text as="span" className="sr-only">Close</Text>
+      </Button>
     );
   }
 );

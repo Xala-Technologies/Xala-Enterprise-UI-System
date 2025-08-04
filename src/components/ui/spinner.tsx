@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box } from '../semantic';
 
 /**
  * Spinner component variants using CVA
@@ -101,7 +102,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
     ref
   ): React.ReactElement => {
     const spinnerElement = (
-      <div
+      <Box
         className={cn(spinnerVariants({ size, variant, speed }))}
         role="status"
         aria-label={label}
@@ -111,14 +112,14 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
 
     if (fullScreen) {
       return (
-        <div
+        <Box
           ref={ref}
           className={cn(spinnerContainerVariants({ fullScreen: true }), className)}
           role="status"
           aria-label={label}
           {...props}
         >
-          <div className="flex flex-col items-center gap-4">
+          <Box className="flex flex-col items-center gap-4">
             {spinnerElement}
             {text && (
               <p className="text-sm text-muted-foreground animate-pulse">
@@ -126,14 +127,14 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
               </p>
             )}
             <span className="sr-only">{label}</span>
-          </div>
-        </div>
+          </Box>
+        </Box>
       );
     }
 
     if (text) {
       return (
-        <div
+        <Box
           ref={ref}
           className={cn("inline-flex items-center gap-2", className)}
           role="status"
@@ -145,12 +146,12 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
             {text}
           </span>
           <span className="sr-only">{label}</span>
-        </div>
+        </Box>
       );
     }
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(spinnerContainerVariants({ fullScreen: false }), className)}
         role="status"
@@ -159,7 +160,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
       >
         {spinnerElement}
         <span className="sr-only">{label}</span>
-      </div>
+      </Box>
     );
   }
 );
@@ -238,7 +239,7 @@ export const DotsSpinner = forwardRef<HTMLDivElement, DotsSpinnerProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           dotsSpinnerVariants({ size }),
@@ -249,26 +250,26 @@ export const DotsSpinner = forwardRef<HTMLDivElement, DotsSpinnerProps>(
         aria-label={label}
         {...props}
       >
-        <div 
+        <Box 
           className={cn(
             dotVariants({ size }),
             "animate-[pulse_1.4s_ease-in-out_infinite]"
           )} 
         />
-        <div 
+        <Box 
           className={cn(
             dotVariants({ size }),
             "animate-[pulse_1.4s_ease-in-out_infinite] [animation-delay:0.2s]"
           )} 
         />
-        <div 
+        <Box 
           className={cn(
             dotVariants({ size }),
             "animate-[pulse_1.4s_ease-in-out_infinite] [animation-delay:0.4s]"
           )} 
         />
         <span className="sr-only">{label}</span>
-      </div>
+      </Box>
     );
   }
 );
@@ -317,14 +318,14 @@ export const PulseSpinner = forwardRef<HTMLDivElement, PulseSpinnerProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn("inline-flex items-center justify-center", className)}
         role="status"
         aria-label={label}
         {...props}
       >
-        <div
+        <Box
           className={cn(
             "rounded-full animate-pulse",
             sizeClasses[size || 'default'],
@@ -332,7 +333,7 @@ export const PulseSpinner = forwardRef<HTMLDivElement, PulseSpinnerProps>(
           )}
         />
         <span className="sr-only">{label}</span>
-      </div>
+      </Box>
     );
   }
 );

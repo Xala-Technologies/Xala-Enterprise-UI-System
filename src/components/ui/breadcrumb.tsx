@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { Box, Text, Link, List, ListItem } from '../semantic';
 
 // =============================================================================
 // CVA VARIANTS
@@ -156,7 +157,8 @@ const EllipsisIcon = (): React.ReactElement => (
 export const BreadcrumbSeparator = forwardRef<HTMLSpanElement, BreadcrumbSeparatorProps>(
   ({ size, children, className, ...props }, ref) => {
     return (
-      <span
+      <Text
+        as="span"
         ref={ref}
         role="presentation"
         aria-hidden="true"
@@ -164,7 +166,7 @@ export const BreadcrumbSeparator = forwardRef<HTMLSpanElement, BreadcrumbSeparat
         {...props}
       >
         {children || <ChevronRightIcon />}
-      </span>
+      </Text>
     );
   }
 );
@@ -225,16 +227,16 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       const isInteractive = !!(item.href || item.onClick) && !item.disabled;
       
       const itemContent = (
-        <div className="flex items-center gap-1">
-          {item.icon && <span className="w-4 h-4 flex-shrink-0">{item.icon}</span>}
-          <span className="truncate">{item.label}</span>
-        </div>
+        <Box className="flex items-center gap-1">
+          {item.icon && <Text as="span" className="w-4 h-4 flex-shrink-0">{item.icon}</Text>}
+          <Text as="span" className="truncate">{item.label}</Text>
+        </Box>
       );
 
       if (item.href && !item.disabled) {
         return (
           <React.Fragment key={`${item.label}-${index}`}>
-            <a
+            <Link
               href={item.href}
               className={cn(
                 breadcrumbItemVariants({ 
@@ -248,7 +250,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               aria-current={isLast ? 'page' : undefined}
             >
               {itemContent}
-            </a>
+            </Link>
             {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
           </React.Fragment>
         );
@@ -257,7 +259,8 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
       if (item.onClick && !item.disabled) {
         return (
           <React.Fragment key={`${item.label}-${index}`}>
-            <button
+            <Text
+              as="button"
               type="button"
               onClick={item.onClick}
               disabled={item.disabled}
@@ -272,7 +275,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               aria-current={isLast ? 'page' : undefined}
             >
               {itemContent}
-            </button>
+            </Text>
             {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
           </React.Fragment>
         );
@@ -280,7 +283,8 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
 
       return (
         <React.Fragment key={`${item.label}-${index}`}>
-          <span
+          <Text
+            as="span"
             className={cn(
               breadcrumbItemVariants({ 
                 variant, 
@@ -291,26 +295,27 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             aria-current={isLast ? 'page' : undefined}
           >
             {itemContent}
-          </span>
+          </Text>
           {!isLast && <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>}
         </React.Fragment>
       );
     };
 
     return (
-      <nav
+      <Box
+        as="nav"
         ref={ref}
         aria-label="Breadcrumb"
         className={cn(breadcrumbVariants({ variant, size }), className)}
         {...props}
       >
-        <ol className="flex items-center gap-1 list-none m-0 p-0">
+        <List className="flex items-center gap-1 list-none m-0 p-0">
           {/* Home Item */}
           {showHome && (
             <>
-              <li>
+              <ListItem>
                 {homeHref ? (
-                  <a
+                  <Link
                     href={homeHref}
                     className={cn(
                       breadcrumbItemVariants({ variant, interactive: true }),
@@ -319,9 +324,10 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
                     aria-label="Home"
                   >
                     {homeIcon || <HomeIcon />}
-                  </a>
+                  </Link>
                 ) : (
-                  <button
+                  <Text
+                    as="button"
                     type="button"
                     onClick={onHomeClick}
                     className={cn(
@@ -331,39 +337,40 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
                     aria-label="Home"
                   >
                     {homeIcon || <HomeIcon />}
-                  </button>
+                  </Text>
                 )}
-              </li>
+              </ListItem>
               {items.length > 0 && (
-                <li>
+                <ListItem>
                   <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
-                </li>
+                </ListItem>
               )}
             </>
           )}
 
           {/* Before Ellipsis Items */}
           {beforeEllipsis.map((item, index) => (
-            <li key={`before-${index}`}>{renderBreadcrumbItem(item, index, false)}</li>
+            <ListItem key={`before-${index}`}>{renderBreadcrumbItem(item, index, false)}</ListItem>
           ))}
 
           {/* Ellipsis */}
           {showEllipsis && (
             <>
-              <li>
+              <ListItem>
                 <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
-              </li>
-              <li>
-                <span
+              </ListItem>
+              <ListItem>
+                <Text
+                  as="span"
                   className="inline-flex items-center text-muted-foreground w-4 h-4"
                   aria-label="More items"
                 >
                   <EllipsisIcon />
-                </span>
-              </li>
-              <li>
+                </Text>
+              </ListItem>
+              <ListItem>
                 <BreadcrumbSeparator size={size}>{separator}</BreadcrumbSeparator>
-              </li>
+              </ListItem>
             </>
           )}
 
@@ -372,7 +379,7 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             const actualIndex = beforeEllipsis.length + index;
             const isLast = index === afterEllipsis.length - 1;
             return (
-              <li key={`after-${index}`}>{renderBreadcrumbItem(item, actualIndex, isLast)}</li>
+              <ListItem key={`after-${index}`}>{renderBreadcrumbItem(item, actualIndex, isLast)}</ListItem>
             );
           })}
 
@@ -380,10 +387,10 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           {!showEllipsis &&
             beforeEllipsis.map((item, index) => {
               const isLast = index === beforeEllipsis.length - 1;
-              return <li key={index}>{renderBreadcrumbItem(item, index, isLast)}</li>;
+              return <ListItem key={index}>{renderBreadcrumbItem(item, index, isLast)}</ListItem>;
             })}
-        </ol>
-      </nav>
+        </List>
+      </Box>
     );
   }
 );

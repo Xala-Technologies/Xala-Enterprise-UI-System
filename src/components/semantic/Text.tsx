@@ -32,7 +32,8 @@ export type TextElement =
   | 'cite'
   | 'q'
   | 'sub'
-  | 'sup';
+  | 'sup'
+  | 'option';
 
 /**
  * Semantic text intents for different use cases

@@ -9,7 +9,7 @@
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { Box, Input } from '../semantic';
+import { Box } from '../semantic';
 
 // =============================================================================
 // CHECKBOX VARIANTS USING DESIGN TOKENS
@@ -94,8 +94,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 
     return (
       <Box className="relative flex items-center">
-        <Input
-          as="input"
+        <input
           type="checkbox"
           className={cn(checkboxVariants({ variant, size }), className)}
           ref={ref}

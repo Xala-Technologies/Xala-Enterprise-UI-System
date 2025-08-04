@@ -8,7 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type TdHTMLAttributes, type ThHTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { Box } from '../semantic';
+import { Box, Text } from '../semantic';
 
 // =============================================================================
 // TABLE VARIANTS USING CVA PATTERN
@@ -205,7 +205,8 @@ export interface TableCaptionProps
 export const Table = forwardRef<HTMLTableElement, TableProps>(
   ({ className, variant, striped, hover, size, ...props }, ref) => (
     <Box className="relative w-full overflow-auto">
-      <table
+      <Box
+        as="table"
         ref={ref}
         className={cn(tableVariants({ variant, striped, hover, size }), className)}
         {...props}
@@ -217,7 +218,8 @@ Table.displayName = 'Table';
 
 export const TableHeader = forwardRef<HTMLTableSectionElement, TableHeaderProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <thead
+    <Box
+      as="thead"
       ref={ref}
       className={cn(tableHeaderVariants({ variant, size }), className)}
       {...props}
@@ -228,7 +230,8 @@ TableHeader.displayName = 'TableHeader';
 
 export const TableBody = forwardRef<HTMLTableSectionElement, TableBodyProps>(
   ({ className, variant, ...props }, ref) => (
-    <tbody
+    <Box
+      as="tbody"
       ref={ref}
       className={cn(tableBodyVariants({ variant }), className)}
       {...props}
@@ -239,7 +242,8 @@ TableBody.displayName = 'TableBody';
 
 export const TableFooter = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tfoot
+    <Box
+      as="tfoot"
       ref={ref}
       className={cn('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0', className)}
       {...props}
@@ -250,7 +254,8 @@ TableFooter.displayName = 'TableFooter';
 
 export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <tr
+    <Box
+      as="tr"
       ref={ref}
       className={cn(tableRowVariants({ variant, size }), className)}
       {...props}
@@ -261,7 +266,8 @@ TableRow.displayName = 'TableRow';
 
 export const TableHead = forwardRef<HTMLTableCellElement, TableHeadProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <th
+    <Text
+      as="th"
       ref={ref}
       className={cn(tableHeadVariants({ variant, size }), className)}
       {...props}
@@ -272,7 +278,8 @@ TableHead.displayName = 'TableHead';
 
 export const TableCell = forwardRef<HTMLTableCellElement, TableCellProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <td
+    <Text
+      as="td"
       ref={ref}
       className={cn(tableCellVariants({ variant, size }), className)}
       {...props}
@@ -283,7 +290,8 @@ TableCell.displayName = 'TableCell';
 
 export const TableCaption = forwardRef<HTMLTableCaptionElement, TableCaptionProps>(
   ({ className, size, ...props }, ref) => (
-    <caption
+    <Text
+      as="caption"
       ref={ref}
       className={cn(tableCaptionVariants({ size }), className)}
       {...props}

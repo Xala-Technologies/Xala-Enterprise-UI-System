@@ -29,7 +29,11 @@ export type SemanticElement =
   | 'figure'
   | 'figcaption'
   | 'details'
-  | 'summary';
+  | 'summary'
+  | 'input'
+  | 'textarea'
+  | 'select'
+  | 'optgroup';
 
 /**
  * Semantic roles for enhanced accessibility
@@ -45,7 +49,9 @@ export type SemanticRole =
   | 'section'
   | 'group'
   | 'presentation'
-  | 'none';
+  | 'none'
+  | 'dialog'
+  | 'tooltip';
 
 // =============================================================================
 // BOX VARIANTS USING CVA AND DESIGN TOKENS
