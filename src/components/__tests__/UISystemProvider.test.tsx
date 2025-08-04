@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview UISystemProvider Component Tests
  * Enterprise-compliant test suite following @xala-technologies/enterprise-standards

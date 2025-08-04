@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * TreeView variant types
@@ -75,7 +75,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
     const containerStyles: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column',
-      gap: spacing[1],
+      gap: '0.25rem',
       ...style,
     };
 
@@ -123,7 +123,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     const handleClick = (): void => {
@@ -144,13 +144,13 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
       const baseStyles: React.CSSProperties = {
         display: 'flex',
         alignItems: 'center',
-        gap: spacing[2],
-        borderRadius: borderRadius.md,
+        gap: '0.5rem',
+        borderRadius: '0.375rem',
         paddingLeft,
-        paddingRight: spacing[2],
-        paddingTop: spacing[1],
-        paddingBottom: spacing[1],
-        fontSize: typography.fontSize.sm,
+        paddingRight: '0.5rem',
+        paddingTop: '0.25rem',
+        paddingBottom: '0.25rem',
+        fontSize: '0.875rem',
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         outline: 'none',
         transition: 'all 150ms ease-in-out',
@@ -167,15 +167,15 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
       if (selected) {
         return {
           ...baseStyles,
-          backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
-          color: colors.accent?.foreground || colors.text?.primary || '#111827',
+          backgroundColor: '#f3f4f6',
+          color: '#111827',
         };
       }
 
       return {
         ...baseStyles,
         backgroundColor: 'transparent',
-        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+        color: '#111827',
       };
     };
 
@@ -186,12 +186,12 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
       justifyContent: 'center',
       width: '16px',
       height: '16px',
-      borderRadius: borderRadius.md,
+      borderRadius: '0.375rem',
       border: 'none',
       backgroundColor: 'transparent',
       cursor: 'pointer',
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
       transition: 'all 150ms ease-in-out',
     };
 
@@ -219,7 +219,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
 
     // Children container styles
     const childrenContainerStyles: React.CSSProperties = {
-      marginLeft: spacing[4],
+      marginLeft: '1rem',
     };
 
     return (
@@ -236,23 +236,23 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
           onClick={handleClick}
           onMouseEnter={(e) => {
             if (!item.disabled && !selected && variant !== 'ghost') {
-              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-              e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+              e.currentTarget.style.backgroundColor = '#f3f4f6';
+              e.currentTarget.style.color = '#111827';
             }
           }}
           onMouseLeave={(e) => {
             if (!item.disabled && !selected) {
               e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+              e.currentTarget.style.color = '#111827';
             }
           }}
           onFocus={(e) => {
             if (!item.disabled) {
-              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+              e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
               e.currentTarget.style.outlineOffset = '2px';
               if (!selected) {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
               }
             }
           }}
@@ -260,7 +260,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
             e.currentTarget.style.outline = 'none';
             if (!item.disabled && !selected) {
               e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+              e.currentTarget.style.color = '#111827';
             }
           }}
           {...props}
@@ -272,7 +272,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
              
               aria-label={expanded ? 'Collapse' : 'Expand'}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';

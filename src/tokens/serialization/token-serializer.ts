@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Token Serialization and Deserialization
  * Handles conversion of tokens between different formats for storage and transmission

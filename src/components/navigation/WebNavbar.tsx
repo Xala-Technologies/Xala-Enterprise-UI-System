@@ -6,9 +6,12 @@
  */
 
 import { cn } from '../../lib/utils/cn';
+import { Box, Text, Heading } from '../../semantic';
+import { cn } from '../../lib/utils/cn';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { forwardRef, type HTMLAttributes } from 'react';
 
 // =============================================================================
 // WEBNAVBAR VARIANTS

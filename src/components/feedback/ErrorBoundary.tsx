@@ -5,6 +5,13 @@
  * @compliance WCAG 2.2 AAA, Norwegian Standards, GDPR, Token-first
  */
 
+// Google Analytics type declaration
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 import React, { Component, type ErrorInfo, type ReactNode } from 'react';
 import { Logger } from '../../lib/utils/multiplatform-logger';
 import { Container } from '../layout/Container';
@@ -58,7 +65,7 @@ const ErrorRecovery = ({
   retryCount 
 }: ErrorRecoveryProps): JSX.Element => {
   return (
-    <Stack direction="horizontal" gap="md" justify="center">
+    <Stack direction="horizontal" gap={4} justify="center">
       <Button
         variant="primary"
         size="lg"
@@ -220,16 +227,16 @@ const ErrorBoundaryFallback = ({
 }: ErrorBoundaryFallbackProps): JSX.Element => {
   return (
     <Container size="md" className={className}>
-      <Stack direction="vertical" gap="xl" align="center">
+      <Stack direction="vertical" gap={8} align="center">
         <Alert
-          variant="error"
+          variant="destructive"
           size="lg"
           role="alert"
           aria-live="assertive"
         >
-          <Stack direction="vertical" gap="md" align="center">
+          <Stack direction="vertical" gap={4} align="center">
             <Text
-              variant="h2"
+              variant="default"
               align="center"
               aria-label={t('errors.title.label')}
             >
@@ -237,7 +244,7 @@ const ErrorBoundaryFallback = ({
             </Text>
             
             <Text
-              variant="body"
+              variant="default"
               align="center"
               color="muted"
             >
@@ -246,7 +253,7 @@ const ErrorBoundaryFallback = ({
             
             {errorId && (
               <Text
-                variant="caption"
+                variant="muted"
                 align="center"
                 color="muted"
                 role="status"

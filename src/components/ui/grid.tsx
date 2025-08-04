@@ -6,9 +6,9 @@
  */
 
 import React, { forwardRef, type ReactNode } from 'react';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // GRID VARIANTS USING DESIGN TOKENS

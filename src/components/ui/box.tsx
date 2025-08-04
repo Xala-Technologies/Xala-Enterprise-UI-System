@@ -165,11 +165,11 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     // Get border radius values
     const borderRadiusMap = {
       none: '0',
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
-      xl: (getToken('borderRadius.xl') as string) || '0.75rem',
-      full: (getToken('borderRadius.full') as string) || '9999px',
+      sm: '0.125rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      full: '9999px',
     };
 
     // Get variant styles
@@ -177,7 +177,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       switch (variant) {
         case 'outline':
           return {
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200]}`,
+            border: `1px solid ${colors.neutral?.[200]}`,
           };
         case 'filled':
           return {
@@ -189,9 +189,9 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           };
         case 'elevated':
           return {
-            backgroundColor: colors.background?.default || '#ffffff',
+            backgroundColor: '#ffffff',
             boxShadow: shadows?.sm || '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200]}`,
+            border: `1px solid ${colors.neutral?.[200]}`,
           };
         default:
           return {};
@@ -202,15 +202,15 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const getPadding = (): string | undefined => {
       switch (size) {
         case 'xs':
-          return spacing[1];
+          return '0.25rem';
         case 'sm':
-          return spacing[2];
+          return '0.5rem';
         case 'md':
-          return spacing[4];
+          return '1rem';
         case 'lg':
-          return spacing[6];
+          return '1.5rem';
         case 'xl':
-          return spacing[8];
+          return '2rem';
         case 'none':
         default:
           return undefined;
@@ -221,15 +221,15 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     const getGapValue = (): string => {
       switch (gap) {
         case 'xs':
-          return spacing[1];
+          return '0.25rem';
         case 'sm':
-          return spacing[2];
+          return '0.5rem';
         case 'md':
-          return spacing[4];
+          return '1rem';
         case 'lg':
-          return spacing[6];
+          return '1.5rem';
         case 'xl':
-          return spacing[8];
+          return '2rem';
         case 'none':
         default:
           return '0';
@@ -329,7 +329,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       display,
       borderRadius: borderRadiusMap[radius],
       padding: getPadding(),
-      fontFamily: typography.fontFamily.sans.join(', '),
+      fontFamily: "Inter, system-ui, sans-serif",
       ...getVariantStyles(),
       ...(display === 'flex' || display === 'inline-flex'
         ? {

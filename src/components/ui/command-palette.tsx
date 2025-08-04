@@ -10,8 +10,6 @@ import {
   Box,
   Text,
   Heading,
-  Button as SemanticButton,
-  Input as SemanticInput,
   List,
   ListItem,
   Link,
@@ -229,14 +227,14 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
 
     // Get border radius
     const borderRadius = {
-      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      lg: '0.5rem',
+      sm: '0.125rem',
+      md: '0.375rem',
     };
 
     // Get shadows
     const shadows = {
-      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
     };
 
     // Variant positioning styles
@@ -289,7 +287,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     // Dialog styles
     const dialogStyles: React.CSSProperties = {
       width: '100%',
-      backgroundColor: colors.background?.default || '#ffffff',
+      backgroundColor: '#ffffff',
       borderRadius: borderRadius.lg,
       border: '1px solid var(--border)',
       boxShadow: shadows.lg,
@@ -304,8 +302,8 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
       borderRadius: borderRadius.md,
       backgroundColor: 'transparent',
       padding: '0 1rem',
-      fontSize: typography.fontSize.sm,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontSize: '0.875rem',
+      color: '#111827',
       outline: 'none',
       border: 'none',
       borderBottom: '1px solid var(--border)',
@@ -321,7 +319,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
         alignItems: 'center',
         borderRadius: borderRadius.sm,
         padding: '0 1rem',
-        fontSize: typography.fontSize.sm,
+        fontSize: '0.875rem',
         outline: 'none',
         transition: 'all 150ms ease-in-out',
         pointerEvents: item.disabled ? 'none' : 'auto',
@@ -333,20 +331,20 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           case 'destructive':
             return {
               ...baseStyles,
-              backgroundColor: colors.danger?.[500] || '#ef4444',
-              color: colors.background?.default || '#ffffff',
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
             };
           case 'success':
             return {
               ...baseStyles,
-              backgroundColor: colors.success?.[500] || '#22c55e',
-              color: colors.background?.default || '#ffffff',
+              backgroundColor: '#22c55e',
+              color: '#ffffff',
             };
           default:
             return {
               ...baseStyles,
-              backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
-              color: colors.accent?.foreground || colors.text?.primary || '#111827',
+              backgroundColor: '#f3f4f6',
+              color: '#111827',
             };
         }
       }
@@ -355,17 +353,17 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
         case 'destructive':
           return {
             ...baseStyles,
-            color: colors.danger?.[500] || '#ef4444',
+            color: '#ef4444',
           };
         case 'success':
           return {
             ...baseStyles,
-            color: colors.success?.[500] || '#22c55e',
+            color: '#22c55e',
           };
         default:
           return {
             ...baseStyles,
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            color: '#111827',
           };
       }
     };

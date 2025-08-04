@@ -6,10 +6,14 @@
  */
 
 import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { Box, Text, Heading } from '../../semantic';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
+import { cn } from '../../../lib/utils/cn';
 import { usePlatform } from '../../../hooks';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { usePlatform } from '../../../hooks';
 
 // =============================================================================
 // SPLIT VIEW VARIANTS

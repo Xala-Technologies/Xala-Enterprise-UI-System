@@ -118,8 +118,8 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     // Get variant styles
     const getVariantStyles = (): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {
-        fontFamily: typography.fontFamily.sans.join(', '),
-        color: colors.text?.primary || colors.neutral?.[900],
+        fontFamily: "Inter, system-ui, sans-serif",
+        color: colors.neutral?.[900],
       };
       
       switch (variant) {
@@ -127,125 +127,125 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
           return {
             ...baseStyles,
             fontSize: typography.fontSize['4xl'],
-            fontWeight: typography.fontWeight.extrabold,
+            fontWeight: '${typography_fontWeight_extrabold}',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[5],
+            lineHeight: '1.25',
+            marginBottom: '1.25rem',
           };
         case 'h2':
           return {
             ...baseStyles,
             fontSize: typography.fontSize['3xl'],
-            fontWeight: typography.fontWeight.semibold,
+            fontWeight: '600',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[4],
-            paddingBottom: spacing[2],
+            lineHeight: '1.25',
+            marginBottom: '1rem',
+            paddingBottom: '0.5rem',
             borderBottomWidth: '1px',
             borderBottomStyle: 'solid',
-            borderBottomColor: colors.border?.default || colors.neutral?.[200],
+            borderBottomColor: colors.neutral?.[200],
           };
         case 'h3':
           return {
             ...baseStyles,
             fontSize: typography.fontSize['2xl'],
-            fontWeight: typography.fontWeight.semibold,
+            fontWeight: '600',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[3],
+            lineHeight: '1.25',
+            marginBottom: '0.75rem',
           };
         case 'h4':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.xl,
-            fontWeight: typography.fontWeight.semibold,
+            fontSize: '1.25rem',
+            fontWeight: '600',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[3],
+            lineHeight: '1.25',
+            marginBottom: '0.75rem',
           };
         case 'h5':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.lg,
-            fontWeight: typography.fontWeight.semibold,
+            fontSize: '1.125rem',
+            fontWeight: '600',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[2],
+            lineHeight: '1.25',
+            marginBottom: '0.5rem',
           };
         case 'h6':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.base,
-            fontWeight: typography.fontWeight.semibold,
+            fontSize: '1rem',
+            fontWeight: '600',
             letterSpacing: typography.letterSpacing?.tight || '-0.025em',
-            lineHeight: typography.lineHeight.tight,
-            marginBottom: spacing[2],
+            lineHeight: '1.25',
+            marginBottom: '0.5rem',
           };
         case 'bodyLarge':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.lg,
-            lineHeight: typography.lineHeight.relaxed,
+            fontSize: '1.125rem',
+            lineHeight: '1.625',
           };
         case 'bodySmall':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.sm,
-            lineHeight: typography.lineHeight.normal,
+            fontSize: '0.875rem',
+            lineHeight: '1.5',
           };
         case 'lead':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.xl,
-            color: colors.text?.secondary || colors.neutral?.[500],
-            lineHeight: typography.lineHeight.relaxed,
+            fontSize: '1.25rem',
+            color: colors.neutral?.[500],
+            lineHeight: '1.625',
           };
         case 'large':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.lg,
-            fontWeight: typography.fontWeight.semibold,
+            fontSize: '1.125rem',
+            fontWeight: '600',
           };
         case 'small':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.medium,
-            lineHeight: typography.lineHeight.none,
+            fontSize: '0.875rem',
+            fontWeight: '500',
+            lineHeight: '1',
           };
         case 'muted':
           return {
             ...baseStyles,
-            fontSize: typography.fontSize.sm,
-            color: colors.text?.secondary || colors.neutral?.[500],
+            fontSize: '0.875rem',
+            color: colors.neutral?.[500],
           };
         case 'code':
           return {
             fontFamily: typography.fontFamily.mono.join(', '),
-            fontSize: typography.fontSize.sm,
-            fontWeight: typography.fontWeight.semibold,
+            fontSize: '0.875rem',
+            fontWeight: '600',
             backgroundColor: colors.background?.subtle || colors.neutral?.[100],
-            color: colors.text?.primary || colors.neutral?.[900],
+            color: colors.neutral?.[900],
             paddingLeft: '0.3rem',
             paddingRight: '0.3rem',
             paddingTop: '0.2rem',
             paddingBottom: '0.2rem',
-            borderRadius: (getToken('borderRadius.md') as string) || '0.375rem',
+            borderRadius: '0.375rem',
           };
         case 'blockquote':
           return {
             ...baseStyles,
             fontStyle: 'italic',
-            marginTop: spacing[6],
-            paddingLeft: spacing[6],
+            marginTop: '1.5rem',
+            paddingLeft: '1.5rem',
             borderLeftWidth: '2px',
             borderLeftStyle: 'solid',
-            borderLeftColor: colors.border?.default || colors.neutral?.[300],
+            borderLeftColor: colors.neutral?.[300],
           };
         default:
           return {
             ...baseStyles,
-            lineHeight: typography.lineHeight.relaxed,
+            lineHeight: '1.625',
           };
       }
     };
@@ -254,13 +254,13 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     const getTextColor = (): string => {
       switch (textColor) {
         case 'muted':
-          return colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+          return '#6b7280';
         case 'primary':
-          return colors.primary?.[500] || '#3b82f6';
+          return '#3b82f6';
         case 'secondary':
           return colors.secondary?.[500] || '#8b5cf6';
         case 'destructive':
-          return colors.danger?.[500] || '#ef4444';
+          return '#ef4444';
         case 'success':
           return colors.success?.[600] || '#16a34a';
         case 'warning':
@@ -268,7 +268,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
         case 'info':
           return colors.info?.[600] || '#2563eb';
         default:
-          return colors.text?.primary || colors.neutral?.[900] || '#111827';
+          return '#111827';
       }
     };
     

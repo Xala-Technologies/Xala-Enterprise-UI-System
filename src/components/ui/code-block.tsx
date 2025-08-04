@@ -10,8 +10,6 @@ import {
   Box,
   Text,
   Heading,
-  Button as SemanticButton,
-  Input as SemanticInput,
   List,
   ListItem,
   Link,
@@ -123,21 +121,21 @@ const CopyButton: React.FC<{
   };
 
   const borderRadius = {
-    md: (getToken('borderRadius.md') as string) || '0.375rem',
+    md: '0.375rem',
   };
 
   const buttonStyles: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: spacing[2],
-    padding: `${spacing[1]} ${spacing[2]}`,
-    fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.medium,
+    gap: '0.5rem',
+    padding: `${'0.25rem'} ${'0.5rem'}`,
+    fontSize: '0.75rem',
+    fontWeight: '500',
     transition: 'all 150ms ease-in-out',
-    backgroundColor: colors.background?.default || '#ffffff',
-    border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-    borderRadius: borderRadius.md,
-    color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    backgroundColor: '#ffffff',
+    border: `1px solid ${'#e5e7eb'}`,
+    borderRadius: '0.375rem',
+    color: '#111827',
     cursor: 'pointer',
     outline: 'none',
   };
@@ -148,13 +146,13 @@ const CopyButton: React.FC<{
       onClick={handleCopy}
       aria-label={copied ? 'Kopiert!' : 'Kopier kode'}
       onMouseEnter={e => {
-        e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+        e.currentTarget.style.backgroundColor = '#f3f4f6';
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+        e.currentTarget.style.backgroundColor = '#ffffff';
       }}
       onFocus={e => {
-        e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+        e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
         e.currentTarget.style.outlineOffset = '2px';
       }}
       onBlur={e => {
@@ -211,21 +209,21 @@ const DownloadButton: React.FC<{
   };
 
   const borderRadius = {
-    md: (getToken('borderRadius.md') as string) || '0.375rem',
+    md: '0.375rem',
   };
 
   const buttonStyles: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    gap: spacing[2],
-    padding: `${spacing[1]} ${spacing[2]}`,
-    fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.medium,
+    gap: '0.5rem',
+    padding: `${'0.25rem'} ${'0.5rem'}`,
+    fontSize: '0.75rem',
+    fontWeight: '500',
     transition: 'all 150ms ease-in-out',
-    backgroundColor: colors.background?.default || '#ffffff',
-    border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-    borderRadius: borderRadius.md,
-    color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+    backgroundColor: '#ffffff',
+    border: `1px solid ${'#e5e7eb'}`,
+    borderRadius: '0.375rem',
+    color: '#111827',
     cursor: 'pointer',
     outline: 'none',
   };
@@ -236,13 +234,13 @@ const DownloadButton: React.FC<{
       onClick={handleDownload}
       aria-label={`Last ned ${filename}`}
       onMouseEnter={e => {
-        e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+        e.currentTarget.style.backgroundColor = '#f3f4f6';
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+        e.currentTarget.style.backgroundColor = '#ffffff';
       }}
       onFocus={e => {
-        e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+        e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
         e.currentTarget.style.outlineOffset = '2px';
       }}
       onBlur={e => {
@@ -325,19 +323,19 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
 
     // Get border radius
     const borderRadius = {
-      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      lg: '0.5rem',
+      md: '0.375rem',
     };
 
     // Size styles
     const getSizeStyles = (): React.CSSProperties => {
       switch (size) {
         case 'sm':
-          return { fontSize: typography.fontSize.xs };
+          return { fontSize: '0.75rem' };
         case 'lg':
-          return { fontSize: typography.fontSize.base };
+          return { fontSize: '1rem' };
         default:
-          return { fontSize: typography.fontSize.sm };
+          return { fontSize: '0.875rem' };
       }
     };
 
@@ -346,13 +344,13 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
       switch (variant) {
         case 'filled':
           return {
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            backgroundColor: '#f3f4f6',
+            border: `1px solid ${'#e5e7eb'}`,
           };
         case 'outline':
           return {
-            backgroundColor: colors.background?.default || '#ffffff',
-            border: `2px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            backgroundColor: '#ffffff',
+            border: `2px solid ${'#e5e7eb'}`,
           };
         case 'ghost':
           return {
@@ -361,8 +359,8 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
           };
         default:
           return {
-            backgroundColor: `${colors.neutral?.[100] || '#f3f4f6'}4D`, // 30% opacity
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            backgroundColor: `${'#f3f4f6'}4D`, // 30% opacity
+            border: `1px solid ${'#e5e7eb'}`,
           };
       }
     };
@@ -387,7 +385,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     const containerStyles: React.CSSProperties = {
       position: 'relative',
       overflow: 'hidden',
-      borderRadius: borderRadius.lg,
+      borderRadius: '0.5rem',
       ...getVariantStyles(),
       ...getSizeStyles(),
       ...getMaxHeightStyles(),
@@ -399,23 +397,23 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: `${spacing[2]} ${spacing[4]}`,
-      borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: `${colors.neutral?.[100] || '#f3f4f6'}80`, // 50% opacity
+      padding: `${'0.5rem'} ${'1rem'}`,
+      borderBottom: `1px solid ${'#e5e7eb'}`,
+      backgroundColor: `${'#f3f4f6'}80`, // 50% opacity
     };
 
     const collapsibleButtonStyles: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
-      gap: spacing[1],
-      padding: `${spacing[1]} ${spacing[2]}`,
-      fontSize: typography.fontSize.xs,
-      fontWeight: typography.fontWeight.medium,
+      gap: '0.25rem',
+      padding: `${'0.25rem'} ${'0.5rem'}`,
+      fontSize: '0.75rem',
+      fontWeight: '500',
       transition: 'all 150ms ease-in-out',
-      backgroundColor: colors.background?.default || '#ffffff',
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      borderRadius: borderRadius.md,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      backgroundColor: '#ffffff',
+      border: `1px solid ${'#e5e7eb'}`,
+      borderRadius: '0.375rem',
+      color: '#111827',
       cursor: 'pointer',
       outline: 'none',
     };
@@ -438,13 +436,13 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
                   onClick={() => setIsCollapsed(!isCollapsed)}
                   aria-label={isCollapsed ? 'Vis kode' : 'Skjul kode'}
                   onMouseEnter={e => {
-                    e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
+                    e.currentTarget.style.backgroundColor = '#f3f4f6';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
+                    e.currentTarget.style.backgroundColor = '#ffffff';
                   }}
                   onFocus={e => {
-                    e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                    e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                     e.currentTarget.style.outlineOffset = '2px';
                   }}
                   onBlur={e => {

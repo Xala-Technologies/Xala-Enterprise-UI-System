@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Hydration Provider v5.0.0 - Token-Based Design System
  * @description Hydration context provider for SSR theme and state synchronization

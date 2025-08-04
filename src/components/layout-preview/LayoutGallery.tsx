@@ -13,8 +13,8 @@ import { type LayoutType } from '../../hooks/useResponsiveLayout';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
+import { Box, Text, Heading } from '../semantic';
 import { Badge } from '../ui/badge';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // LAYOUT GALLERY VARIANTS

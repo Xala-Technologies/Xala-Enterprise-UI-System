@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Layout Inspector v5.0.0 - Token-Based Design System
  * @description Comprehensive layout inspection and debugging tools for development

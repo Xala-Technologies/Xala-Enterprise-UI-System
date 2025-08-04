@@ -92,19 +92,19 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       const opacity = 0.3;
       switch (variant) {
         case 'primary':
-          return `rgba(${hexToRgb(colors.primary?.[500] || '#3b82f6')}, ${opacity})`;
+          return `rgba(${hexToRgb('#3b82f6')}, ${opacity})`;
         case 'secondary':
           return `rgba(${hexToRgb(colors.secondary?.[500] || '#8b5cf6')}, ${opacity})`;
         case 'muted':
-          return `rgba(${hexToRgb(colors.text?.secondary || colors.neutral?.[500] || '#6b7280')}, 0.2)`;
+          return `rgba(${hexToRgb('#6b7280')}, 0.2)`;
         case 'destructive':
-          return `rgba(${hexToRgb(colors.danger?.[500] || '#ef4444')}, ${opacity})`;
+          return `rgba(${hexToRgb('#ef4444')}, ${opacity})`;
         case 'success':
-          return `rgba(${hexToRgb(colors.success?.[500] || '#22c55e')}, ${opacity})`;
+          return `rgba(${hexToRgb('#22c55e')}, ${opacity})`;
         case 'warning':
-          return `rgba(${hexToRgb(colors.warning?.[500] || '#f59e0b')}, ${opacity})`;
+          return `rgba(${hexToRgb('#f59e0b')}, ${opacity})`;
         default:
-          return colors.border?.default || colors.neutral?.[200] || '#e5e7eb';
+          return '#e5e7eb';
       }
     };
 
@@ -205,14 +205,14 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
 
     // Label styles
     const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      fontFamily: typography.fontFamily.sans.join(', '),
-      color: colors.text?.secondary || colors.neutral?.[500],
-      backgroundColor: colors.background?.default || '#ffffff',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      fontFamily: "Inter, system-ui, sans-serif",
+      color: colors.neutral?.[500],
+      backgroundColor: '#ffffff',
       paddingLeft: spacingTokens[2],
       paddingRight: spacingTokens[2],
-      lineHeight: typography.lineHeight.tight,
+      lineHeight: '1.25',
     };
 
     // Label container styles

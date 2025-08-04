@@ -12,8 +12,6 @@ import {
   Box,
   Text,
   Heading,
-  Button as SemanticButton,
-  Input as SemanticInput,
   List,
   ListItem,
   Link,

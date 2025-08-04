@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * useTranslation Hook
  * React hook for accessing translations and locale information

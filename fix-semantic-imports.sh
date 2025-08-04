@@ -1,19 +1,27 @@
 #!/bin/bash
 
-# Fix imports in layout-preview
-sed -i '' "s|from '../../semantic'|from '../semantic'|g" src/components/layout-preview/*.tsx
+echo "Adding semantic imports to components that need them..."
 
-# Fix imports in navigation
-sed -i '' "s|from '../../semantic'|from '../semantic'|g" src/components/navigation/*.tsx
+# Files that use Box but don't import it
+FILES_NEEDING_BOX=(
+  "src/components/layout-preview/LayoutGallery.tsx"
+  "src/components/layout-preview/LayoutPreview.tsx"
+  "src/components/enhanced/ThemeAwareCard.tsx"
+  "src/components/enhanced/ThemeAwareButton.tsx"
+  "src/components/enhanced/ThemeAwareSearch.tsx"
+)
 
-# Fix imports in performance
-sed -i '' "s|from '../../semantic'|from '../semantic'|g" src/components/performance/*.tsx
+for file in "${FILES_NEEDING_BOX[@]}"; do
+  if [ -f "$file" ]; then
+    echo "Processing $file..."
+    # Check if Box is used but not imported
+    if grep -q "Box" "$file" && ! grep -q "import.*Box.*from.*semantic" "$file"; then
+      # Add import after the first import line
+      sed -i '' '/^import/a\
+import { Box, Text, Heading } from "../semantic";
+' "$file"
+    fi
+  fi
+done
 
-# Fix imports in platform subdirectories
-sed -i '' "s|from '../../../semantic'|from '../../semantic'|g" src/components/platform/mobile/*.tsx
-sed -i '' "s|from '../../../semantic'|from '../../semantic'|g" src/components/platform/tablet/*.tsx
-
-# Fix imports in ui/action-bar
-sed -i '' "s|from '../../../semantic'|from '../../semantic'|g" src/components/ui/action-bar/*.tsx
-
-echo "Fixed semantic import paths"
+echo "Fixed semantic imports"

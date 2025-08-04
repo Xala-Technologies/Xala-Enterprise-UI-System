@@ -209,7 +209,6 @@ export {
     Subtitle,
     
     // Button Components (Semantic versions)
-    Button as SemanticButton,
     PrimaryButton,
     SecondaryButton,
     OutlineButton,
@@ -218,7 +217,6 @@ export {
     IconButton as SemanticIconButton,
     
     // Input Components (Semantic versions)
-    Input as SemanticInput,
     SearchInput,
     EmailInput,
     PasswordInput,

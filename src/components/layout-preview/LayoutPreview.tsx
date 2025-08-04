@@ -6,23 +6,36 @@
  */
 
 import React, { useState, useCallback } from 'react';
+import { Box, Text, Heading } from '../../semantic';
+import React, { useState, useCallback } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
+import { cn } from '../../lib/utils/cn';
+import { 
 import { 
   useResponsiveLayout, 
   LayoutSwitcher,
   type LayoutType 
 } from '../../hooks/useResponsiveLayout';
 import { ResponsiveLayoutProvider } from '../../providers/ResponsiveLayoutProvider';
+import { ResponsiveLayoutProvider } from '../../providers/ResponsiveLayoutProvider';
+import { MobileLayout } from '../../layouts/mobile/MobileLayout';
 import { MobileLayout } from '../../layouts/mobile/MobileLayout';
 import { TabletLayout } from '../../layouts/tablet/TabletLayout';
+import { TabletLayout } from '../../layouts/tablet/TabletLayout';
+import { DesktopLayout } from '../../layouts/desktop/DesktopLayout';
 import { DesktopLayout } from '../../layouts/desktop/DesktopLayout';
 import { WebLayout } from '../../layouts/web/WebLayout';
+import { WebLayout } from '../../layouts/web/WebLayout';
+import { AdminLayout } from '../../layouts/admin/AdminLayout';
 import { AdminLayout } from '../../layouts/admin/AdminLayout';
 import { Button } from '../ui/button';
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Typography } from '../ui/typography';
 
 // =============================================================================
 // LAYOUT PREVIEW VARIANTS

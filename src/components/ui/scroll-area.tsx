@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * ScrollArea variant types
@@ -206,7 +206,7 @@ ScrollArea.displayName = 'ScrollArea';
 /**
  * Legacy variant exports for backward compatibility
  */
-export const scrollAreaVariants = {} as any;
-export const scrollAreaViewportVariants = {} as any;
-export const scrollAreaScrollbarVariants = {} as any;
-export const scrollAreaThumbVariants = {} as any;
+export const scrollAreaVariants = {};
+export const scrollAreaViewportVariants = {};
+export const scrollAreaScrollbarVariants = {};
+export const scrollAreaThumbVariants = {};

@@ -131,7 +131,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Size styles
@@ -139,29 +139,29 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       switch (size) {
         case 'sm':
           return {
-            paddingLeft: spacing[3],
-            paddingRight: spacing[3],
-            paddingTop: spacing[2],
-            paddingBottom: spacing[2],
-            fontSize: typography.fontSize.xs,
+            paddingLeft: '0.75rem',
+            paddingRight: '0.75rem',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.5rem',
+            fontSize: '0.75rem',
             minHeight: '80px',
           };
         case 'lg':
           return {
-            paddingLeft: spacing[4],
-            paddingRight: spacing[4],
-            paddingTop: spacing[3],
-            paddingBottom: spacing[3],
-            fontSize: typography.fontSize.base,
+            paddingLeft: '1rem',
+            paddingRight: '1rem',
+            paddingTop: '0.75rem',
+            paddingBottom: '0.75rem',
+            fontSize: '1rem',
             minHeight: '120px',
           };
         default:
           return {
-            paddingLeft: spacing[3],
-            paddingRight: spacing[3],
-            paddingTop: spacing[2],
-            paddingBottom: spacing[2],
-            fontSize: typography.fontSize.sm,
+            paddingLeft: '0.75rem',
+            paddingRight: '0.75rem',
+            paddingTop: '0.5rem',
+            paddingBottom: '0.5rem',
+            fontSize: '0.875rem',
             minHeight: '100px',
           };
       }
@@ -172,23 +172,23 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       switch (actualVariant) {
         case 'destructive':
           return {
-            borderColor: colors.danger?.[500] || '#ef4444',
-            color: colors.danger?.[500] || '#ef4444',
+            borderColor: '#ef4444',
+            color: '#ef4444',
           };
         case 'success':
           return {
-            borderColor: colors.success?.[500] || '#22c55e',
+            borderColor: '#22c55e',
             color: colors.success?.[800] || '#166534',
           };
         case 'warning':
           return {
-            borderColor: colors.warning?.[500] || '#f59e0b',
+            borderColor: '#f59e0b',
             color: colors.warning?.[800] || '#92400e',
           };
         default:
           return {
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            borderColor: '#e5e7eb',
+            color: '#111827',
           };
       }
     };
@@ -219,9 +219,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const textareaStyles: React.CSSProperties = {
       display: 'flex',
       width: '100%',
-      borderRadius: borderRadius.md,
+      borderRadius: '0.375rem',
       border: '1px solid',
-      backgroundColor: colors.background?.default || '#ffffff',
+      backgroundColor: '#ffffff',
       outline: 'none',
       transition: 'all 150ms ease-in-out',
       ...(props.disabled && {
@@ -235,29 +235,29 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     // Placeholder styles
-    const placeholderColor = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+    const placeholderColor = '#6b7280';
 
     // Label styles
     const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      lineHeight: '1',
       color: error || errorText 
-        ? (colors.danger?.[500] || '#ef4444')
+        ? ('#ef4444')
         : success || successText
         ? (colors.success?.[700] || '#15803d')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+        : ('#111827'),
     };
 
     // Helper text styles
     const helperTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
+      fontSize: '0.75rem',
       flex: 1,
       color: error || errorText 
-        ? (colors.danger?.[500] || '#ef4444') 
+        ? ('#ef4444') 
         : success || successText
         ? (colors.success?.[600] || '#16a34a')
-        : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+        : ('#6b7280'),
     };
 
     // Character count styles
@@ -266,20 +266,20 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       const isNearLimit = maxLength !== undefined && currentLength > maxLength * 0.9;
       
       return {
-        fontSize: typography.fontSize.xs,
+        fontSize: '0.75rem',
         marginLeft: 'auto',
         color: isOverLimit 
-          ? (colors.danger?.[500] || '#ef4444')
+          ? ('#ef4444')
           : isNearLimit
           ? (colors.warning?.[600] || '#d97706')
-          : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+          : ('#6b7280'),
       };
     };
 
     // Required indicator styles
     const requiredStyles: React.CSSProperties = {
-      marginLeft: spacing[1],
-      color: colors.danger?.[500] || '#ef4444',
+      marginLeft: '0.25rem',
+      color: '#ef4444',
     };
 
     // Auto-resize handler
@@ -329,16 +329,16 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             if (!props.disabled) {
               switch (actualVariant) {
                 case 'destructive':
-                  e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+                  e.currentTarget.style.outline = `2px solid ${'#ef4444'}`;
                   break;
                 case 'success':
-                  e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+                  e.currentTarget.style.outline = `2px solid ${'#22c55e'}`;
                   break;
                 case 'warning':
-                  e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+                  e.currentTarget.style.outline = `2px solid ${'#f59e0b'}`;
                   break;
                 default:
-                  e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                  e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                   break;
               }
               e.currentTarget.style.outlineOffset = '2px';

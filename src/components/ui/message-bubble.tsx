@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * MessageBubble variant types
@@ -114,22 +113,22 @@ const formatTimestamp = (timestamp: Date | string): string => {
 const ClassificationIndicator: React.FC<{ classification: string }> = ({ classification }) => {
   
   const borderRadius = {
-    md: (getToken('borderRadius.md') as string) || '0.375rem',
+    md: '0.375rem',
   };
 
   const getClassificationStyles = (): React.CSSProperties => {
     switch (classification) {
       case 'ÅPEN':
         return {
-          backgroundColor: `${colors.success?.[500] || '#22c55e'}33`, // 20% opacity
-          color: colors.success?.[600] || '#16a34a',
-          borderColor: `${colors.success?.[500] || '#22c55e'}4D`, // 30% opacity
+          backgroundColor: `${'#22c55e'}33`, // 20% opacity
+          color: '#16a34a',
+          borderColor: `${'#22c55e'}4D`, // 30% opacity
         };
       case 'BEGRENSET':
         return {
-          backgroundColor: `${colors.warning?.[500] || '#f59e0b'}33`, // 20% opacity
-          color: colors.warning?.[600] || '#d97706',
-          borderColor: `${colors.warning?.[500] || '#f59e0b'}4D`, // 30% opacity
+          backgroundColor: `${'#f59e0b'}33`, // 20% opacity
+          color: '#d97706',
+          borderColor: `${'#f59e0b'}4D`, // 30% opacity
         };
       case 'KONFIDENSIELT':
         return {
@@ -139,15 +138,15 @@ const ClassificationIndicator: React.FC<{ classification: string }> = ({ classif
         };
       case 'HEMMELIG':
         return {
-          backgroundColor: `${colors.danger?.[500] || '#ef4444'}33`, // 20% opacity
-          color: colors.danger?.[600] || '#dc2626',
-          borderColor: `${colors.danger?.[500] || '#ef4444'}4D`, // 30% opacity
+          backgroundColor: `${'#ef4444'}33`, // 20% opacity
+          color: '#dc2626',
+          borderColor: `${'#ef4444'}4D`, // 30% opacity
         };
       default:
         return {
-          backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-          borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+          backgroundColor: '#f3f4f6',
+          color: '#6b7280',
+          borderColor: '#e5e7eb',
         };
     }
   };
@@ -155,10 +154,10 @@ const ClassificationIndicator: React.FC<{ classification: string }> = ({ classif
   const indicatorStyles: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
-    padding: `${spacing[1]} ${spacing[2]}`,
-    fontSize: typography.fontSize.xs,
-    fontWeight: typography.fontWeight.medium,
-    borderRadius: borderRadius.md,
+    padding: `${'0.25rem'} ${'0.5rem'}`,
+    fontSize: '0.75rem',
+    fontWeight: '500',
+    borderRadius: '0.375rem',
     border: '1px solid',
     ...getClassificationStyles(),
   };
@@ -204,12 +203,12 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
 
     // Get border radius
     const borderRadius = {
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-      lg: (getToken('borderRadius.lg') as string) || '0.5rem',
-      xl: (getToken('borderRadius.xl') as string) || '0.75rem',
-      '2xl': (getToken('borderRadius.2xl') as string) || '1rem',
-      full: (getToken('borderRadius.full') as string) || '9999px',
+      sm: '0.125rem',
+      md: '0.375rem',
+      lg: '0.5rem',
+      xl: '0.75rem',
+      '2xl': '1rem',
+      full: '9999px',
     };
 
     // Size styles
@@ -218,27 +217,27 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
         case 'sm':
           return {
             bubble: {
-              padding: spacing[2],
-              fontSize: typography.fontSize.sm,
-              gap: spacing[2],
+              padding: '0.5rem',
+              fontSize: '0.875rem',
+              gap: '0.5rem',
             },
             avatar: { width: '24px', height: '24px' },
           };
         case 'lg':
           return {
             bubble: {
-              padding: spacing[6],
-              fontSize: typography.fontSize.lg,
-              gap: spacing[4],
+              padding: '1.5rem',
+              fontSize: '1.125rem',
+              gap: '1rem',
             },
             avatar: { width: '40px', height: '40px' },
           };
         default:
           return {
             bubble: {
-              padding: spacing[4],
-              fontSize: typography.fontSize.base,
-              gap: spacing[3],
+              padding: '1rem',
+              fontSize: '1rem',
+              gap: '0.75rem',
             },
             avatar: { width: '32px', height: '32px' },
           };
@@ -252,18 +251,18 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
           if (messageVariant === 'user') {
             return {
               borderRadius: borderRadius['2xl'],
-              borderBottomRightRadius: borderRadius.md,
+              borderBottomRightRadius: '0.375rem',
             };
           } else {
             return {
               borderRadius: borderRadius['2xl'],
-              borderBottomLeftRadius: borderRadius.md,
+              borderBottomLeftRadius: '0.375rem',
             };
           }
         case 'square':
-          return { borderRadius: borderRadius.md };
+          return { borderRadius: '0.375rem' };
         default:
-          return { borderRadius: borderRadius.lg };
+          return { borderRadius: '0.5rem' };
       }
     };
 
@@ -272,41 +271,41 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
       switch (messageVariant) {
         case 'user':
           return {
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
-            borderColor: `${colors.primary?.[500] || '#3b82f6'}33`, // 20% opacity
+            backgroundColor: '#3b82f6',
+            color: '#ffffff',
+            borderColor: `${'#3b82f6'}33`, // 20% opacity
             marginLeft: 'auto',
             maxWidth: '80%',
           };
         case 'system':
           return {
-            backgroundColor: `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}33`, // 20% opacity
-            color: colors.accent?.foreground || colors.text?.primary || '#111827',
-            borderColor: `${colors.accent?.default || colors.neutral?.[200] || '#e5e7eb'}4D`, // 30% opacity
+            backgroundColor: `${'#f3f4f6'}33`, // 20% opacity
+            color: '#111827',
+            borderColor: `${'#e5e7eb'}4D`, // 30% opacity
             margin: '0 auto',
             maxWidth: '90%',
           };
         case 'error':
           return {
-            backgroundColor: `${colors.danger?.[500] || '#ef4444'}1A`, // 10% opacity
-            color: colors.danger?.[500] || '#ef4444',
-            borderColor: `${colors.danger?.[500] || '#ef4444'}4D`, // 30% opacity
+            backgroundColor: `${'#ef4444'}1A`, // 10% opacity
+            color: '#ef4444',
+            borderColor: `${'#ef4444'}4D`, // 30% opacity
             margin: '0 auto',
             maxWidth: '90%',
           };
         case 'warning':
           return {
-            backgroundColor: `${colors.warning?.[500] || '#f59e0b'}1A`, // 10% opacity
-            color: colors.warning?.[600] || '#d97706',
-            borderColor: `${colors.warning?.[500] || '#f59e0b'}4D`, // 30% opacity
+            backgroundColor: `${'#f59e0b'}1A`, // 10% opacity
+            color: '#d97706',
+            borderColor: `${'#f59e0b'}4D`, // 30% opacity
             margin: '0 auto',
             maxWidth: '90%',
           };
         default: // assistant
           return {
-            backgroundColor: `${colors.neutral?.[100] || '#f3f4f6'}80`, // 50% opacity
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+            backgroundColor: `${'#f3f4f6'}80`, // 50% opacity
+            color: '#111827',
+            borderColor: '#e5e7eb',
             marginRight: 'auto',
             maxWidth: '85%',
           };
@@ -321,18 +320,18 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
         switch (avatarVariant) {
           case 'user':
             return {
-              backgroundColor: `${colors.primary?.[500] || '#3b82f6'}1A`, // 10% opacity
-              borderColor: `${colors.primary?.[500] || '#3b82f6'}33`, // 20% opacity
+              backgroundColor: `${'#3b82f6'}1A`, // 10% opacity
+              borderColor: `${'#3b82f6'}33`, // 20% opacity
             };
           case 'system':
             return {
-              backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-              borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+              backgroundColor: '#f3f4f6',
+              borderColor: '#e5e7eb',
             };
           default: // assistant
             return {
-              backgroundColor: `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}1A`, // 10% opacity
-              borderColor: `${colors.accent?.default || colors.neutral?.[200] || '#e5e7eb'}33`, // 20% opacity
+              backgroundColor: `${'#f3f4f6'}1A`, // 10% opacity
+              borderColor: `${'#e5e7eb'}33`, // 20% opacity
             };
         }
       })();
@@ -354,7 +353,7 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
     const containerStyles: React.CSSProperties = {
       display: 'flex',
       width: '100%',
-      gap: spacing[3],
+      gap: '0.75rem',
       justifyContent: messageVariant === 'user' ? 'flex-end' : 'flex-start',
       ...style,
     };
@@ -369,9 +368,9 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
 
     // Sender name styles
     const senderNameStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-      marginBottom: spacing[1],
+      fontSize: '0.75rem',
+      color: '#6b7280',
+      marginBottom: '0.25rem',
     };
 
     // Message bubble styles
@@ -384,8 +383,8 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
       opacity: effectiveAnimation === 'typing' ? 0.6 : 1,
       animation: effectiveAnimation === 'typing' ? 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : undefined,
       ...(error && {
-        borderColor: colors.danger?.[500] || '#ef4444',
-        backgroundColor: `${colors.danger?.[500] || '#ef4444'}1A`, // 10% opacity
+        borderColor: '#ef4444',
+        backgroundColor: `${'#ef4444'}1A`, // 10% opacity
       }),
       ...sizeStyles.bubble,
       ...shapeStyles,
@@ -402,19 +401,19 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
     const proseStyles: React.CSSProperties = {
       maxWidth: 'none',
       wordBreak: 'break-word',
-      lineHeight: typography.lineHeight.relaxed,
+      lineHeight: '1.625',
     };
 
     // Error message styles
     const errorStyles: React.CSSProperties = {
-      marginTop: spacing[2],
-      fontSize: typography.fontSize.sm,
-      color: colors.danger?.[500] || '#ef4444',
+      marginTop: '0.5rem',
+      fontSize: '0.875rem',
+      color: '#ef4444',
     };
 
     // Retry button styles
     const retryButtonStyles: React.CSSProperties = {
-      marginLeft: spacing[2],
+      marginLeft: '0.5rem',
       textDecoration: 'underline',
       cursor: 'pointer',
       backgroundColor: 'transparent',
@@ -425,18 +424,18 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
 
     // Metadata styles
     const metadataStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
       display: 'flex',
       alignItems: 'center',
-      gap: spacing[2],
-      marginTop: spacing[2],
+      gap: '0.5rem',
+      marginTop: '0.5rem',
     };
 
     // Actions styles
     const actionsStyles: React.CSSProperties = {
       flexShrink: 0,
-      marginLeft: spacing[2],
+      marginLeft: '0.5rem',
     };
 
     // Avatar image styles
@@ -454,11 +453,11 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontSize: typography.fontSize.xs,
-      fontWeight: typography.fontWeight.medium,
+      fontSize: '0.75rem',
+      fontWeight: '500',
       color: messageVariant === 'user' 
-        ? (colors.background?.default || '#ffffff')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+        ? ('#ffffff')
+        : ('#111827'),
     };
 
     return (
@@ -578,6 +577,6 @@ MessageBubble.displayName = 'MessageBubble';
 /**
  * Legacy variant exports for backward compatibility
  */
-export const messageBubbleVariants = {} as any;
-export const messageBubbleAvatarVariants = {} as any;
-export const messageBubbleMetadataVariants = {} as any;
+export const messageBubbleVariants = {};
+export const messageBubbleAvatarVariants = {};
+export const messageBubbleMetadataVariants = {};

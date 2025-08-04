@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * i18n Utility Functions
  * Helper functions for internationalization and localization

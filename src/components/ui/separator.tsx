@@ -77,13 +77,13 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     const getVariantColor = (): string => {
       switch (variant) {
         case 'muted':
-          return colors.background?.subtle || colors.neutral?.[100] || '#f3f4f6';
+          return colors.background?.subtle || '#f3f4f6';
         case 'accent':
-          return colors.accent?.[500] || colors.primary?.[500] || '#3b82f6';
+          return colors.accent?.[500] || '#3b82f6';
         case 'destructive':
-          return `rgba(${hexToRgb(colors.danger?.[500] || '#ef4444')}, 0.2)`;
+          return `rgba(${hexToRgb('#ef4444')}, 0.2)`;
         default:
-          return colors.border?.default || colors.neutral?.[200] || '#e5e7eb';
+          return '#e5e7eb';
       }
     };
     
@@ -143,10 +143,10 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
       };
       
       const labelStyles: React.CSSProperties = {
-        fontSize: typography.fontSize.sm,
-        fontFamily: typography.fontFamily.sans.join(', '),
-        color: colors.text?.secondary || colors.neutral?.[500],
-        backgroundColor: colors.background?.default || '#ffffff',
+        fontSize: '0.875rem',
+        fontFamily: "Inter, system-ui, sans-serif",
+        color: colors.neutral?.[500],
+        backgroundColor: '#ffffff',
         paddingLeft: spacingTokens[3],
         paddingRight: spacingTokens[3],
       };

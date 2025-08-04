@@ -18,8 +18,6 @@ import {
   Box,
   Text,
   Heading,
-  Button as SemanticButton,
-  Input as SemanticInput,
   List,
   ListItem,
   Link,
@@ -243,12 +241,12 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
 
     // Get design tokens
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+      md: '0.375rem',
+      sm: '0.125rem',
     };
 
     const shadows = {
-      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
     };
 
     // Size styles
@@ -257,23 +255,23 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
         case 'sm':
           return {
             height: '32px',
-            paddingLeft: spacing[3],
-            paddingRight: spacing[8],
-            fontSize: typography.fontSize.xs,
+            paddingLeft: '0.75rem',
+            paddingRight: '2rem',
+            fontSize: '0.75rem',
           };
         case 'lg':
           return {
             height: '48px',
-            paddingLeft: spacing[4],
+            paddingLeft: '1rem',
             paddingRight: spacing[10],
-            fontSize: typography.fontSize.base,
+            fontSize: '1rem',
           };
         default:
           return {
             height: '40px',
-            paddingLeft: spacing[3],
+            paddingLeft: '0.75rem',
             paddingRight: spacing[10],
-            fontSize: typography.fontSize.sm,
+            fontSize: '0.875rem',
           };
       }
     };
@@ -283,23 +281,23 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       switch (actualVariant) {
         case 'destructive':
           return {
-            borderColor: colors.danger?.[500] || '#ef4444',
-            color: colors.danger?.[500] || '#ef4444',
+            borderColor: '#ef4444',
+            color: '#ef4444',
           };
         case 'success':
           return {
-            borderColor: colors.success?.[500] || '#22c55e',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            borderColor: '#22c55e',
+            color: '#111827',
           };
         case 'warning':
           return {
-            borderColor: colors.warning?.[500] || '#f59e0b',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            borderColor: '#f59e0b',
+            color: '#111827',
           };
         default:
           return {
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            borderColor: '#e5e7eb',
+            color: '#111827',
           };
       }
     };
@@ -312,9 +310,9 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       display: 'flex',
       width: '100%',
       appearance: 'none',
-      borderRadius: borderRadius.md,
+      borderRadius: '0.375rem',
       border: '1px solid',
-      backgroundColor: colors.background?.default || '#ffffff',
+      backgroundColor: '#ffffff',
       outline: 'none',
       cursor: disabled ? 'not-allowed' : 'text',
       transition: 'all 150ms ease-in-out',
@@ -331,38 +329,38 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       top: '100%',
       left: 0,
       right: 0,
-      marginTop: spacing[1],
+      marginTop: '0.25rem',
       maxHeight: typeof maxHeight === 'number' ? `px` : maxHeight,
       overflowY: 'auto',
-      borderRadius: borderRadius.md,
+      borderRadius: '0.375rem',
       border: `1px solid `,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
+      backgroundColor: '#ffffff',
       boxShadow: shadows.lg,
       zIndex: 50,
     };
 
     // Label styles
     const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      lineHeight: '1',
       color:
         actualVariant === 'destructive'
-          ? colors.danger?.[500] || '#ef4444'
+          ? '#ef4444'
           : actualVariant === 'success'
             ? colors.success?.[600] || '#16a34a'
-            : colors.text?.primary || colors.neutral?.[900] || '#111827',
+            : '#111827',
     };
 
     // Helper text styles
     const helperTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
+      fontSize: '0.75rem',
       color:
         actualVariant === 'destructive'
-          ? colors.danger?.[500] || '#ef4444'
+          ? '#ef4444'
           : actualVariant === 'success'
             ? colors.success?.[600] || '#16a34a'
-            : colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+            : '#6b7280',
     };
 
     // Chevron icon

@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * Timeline orientation types
@@ -138,7 +138,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          gap: spacing[4],
+          gap: '1rem',
           overflowX: 'auto',
         };
       }
@@ -152,11 +152,11 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
 
       switch (variant) {
         case 'compact':
-          return { ...verticalStyles, gap: spacing[2] };
+          return { ...verticalStyles, gap: '0.5rem' };
         case 'spacious':
-          return { ...verticalStyles, gap: spacing[6] };
+          return { ...verticalStyles, gap: '1.5rem' };
         default:
-          return { ...verticalStyles, gap: spacing[4] };
+          return { ...verticalStyles, gap: '1rem' };
       }
     };
 
@@ -210,14 +210,14 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
 
     // Get border radius
     const borderRadius = {
-      full: (getToken('borderRadius.full') as string) || '9999px',
+      full: '9999px',
     };
 
     // Item container styles
     const itemStyles: React.CSSProperties = {
       position: 'relative',
       display: 'flex',
-      paddingBottom: isVertical && position !== 'last' ? spacing[8] : 0,
+      paddingBottom: isVertical && position !== 'last' ? '2rem' : 0,
       flexShrink: orientation === 'horizontal' ? 0 : undefined,
       ...style,
     };
@@ -249,31 +249,31 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
           return {
             borderColor: colors.success?.[600] || '#16a34a',
             backgroundColor: colors.success?.[600] || '#16a34a',
-            color: colors.background?.default || '#ffffff',
+            color: '#ffffff',
           };
         case 'current':
           return {
-            borderColor: colors.primary?.[500] || '#3b82f6',
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
+            borderColor: '#3b82f6',
+            backgroundColor: '#3b82f6',
+            color: '#ffffff',
           };
         case 'pending':
           return {
-            borderColor: colors.neutral?.[300] || '#d1d5db',
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+            borderColor: '#d1d5db',
+            backgroundColor: '#f3f4f6',
+            color: '#6b7280',
           };
         case 'error':
           return {
-            borderColor: colors.danger?.[500] || '#ef4444',
-            backgroundColor: colors.danger?.[500] || '#ef4444',
-            color: colors.background?.default || '#ffffff',
+            borderColor: '#ef4444',
+            backgroundColor: '#ef4444',
+            color: '#ffffff',
           };
         default:
           return {
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
-            backgroundColor: colors.background?.default || '#ffffff',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            borderColor: '#e5e7eb',
+            backgroundColor: '#ffffff',
+            color: '#111827',
           };
       }
     };
@@ -296,40 +296,40 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
 
     // Connecting line styles
     const lineStyles: React.CSSProperties = {
-      backgroundColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+      backgroundColor: '#e5e7eb',
     };
 
     // Content styles
     const contentStyles: React.CSSProperties = {
       flex: 1,
-      marginLeft: isVertical ? spacing[6] : spacing[4],
+      marginLeft: isVertical ? '1.5rem' : '1rem',
     };
 
     // Content container styles
     const contentContainerStyles: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column',
-      gap: spacing[1],
+      gap: '0.25rem',
     };
 
     // Title styles
     const titleStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      lineHeight: '1',
+      color: '#111827',
     };
 
     // Description styles
     const descriptionStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.875rem',
+      color: '#6b7280',
     };
 
     // Timestamp styles
     const timestampStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
     };
 
     // Status badge styles
@@ -338,37 +338,37 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
         display: 'inline-flex',
         alignItems: 'center',
         borderRadius: borderRadius.full,
-        paddingLeft: spacing[2],
-        paddingRight: spacing[2],
-        paddingTop: spacing[1],
-        paddingBottom: spacing[1],
-        fontSize: typography.fontSize.xs,
-        fontWeight: typography.fontWeight.medium,
+        paddingLeft: '0.5rem',
+        paddingRight: '0.5rem',
+        paddingTop: '0.25rem',
+        paddingBottom: '0.25rem',
+        fontSize: '0.75rem',
+        fontWeight: '500',
       };
 
       switch (itemStatus) {
         case 'completed':
           return {
             ...baseStyles,
-            backgroundColor: `${colors.success?.[500] || '#22c55e'}1A`, // 10% opacity
+            backgroundColor: `${'#22c55e'}1A`, // 10% opacity
             color: colors.success?.[700] || '#15803d',
           };
         case 'current':
           return {
             ...baseStyles,
-            backgroundColor: `${colors.primary?.[500] || '#3b82f6'}1A`, // 10% opacity
+            backgroundColor: `${'#3b82f6'}1A`, // 10% opacity
             color: colors.primary?.[600] || '#2563eb',
           };
         case 'pending':
           return {
             ...baseStyles,
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+            backgroundColor: '#f3f4f6',
+            color: '#6b7280',
           };
         case 'error':
           return {
             ...baseStyles,
-            backgroundColor: `${colors.danger?.[500] || '#ef4444'}1A`, // 10% opacity
+            backgroundColor: `${'#ef4444'}1A`, // 10% opacity
             color: colors.danger?.[600] || '#dc2626',
           };
         default:

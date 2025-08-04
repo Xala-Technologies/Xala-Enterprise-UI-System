@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Navigation Component v5.0.0 - Token-Based Design System
  * @description Comprehensive Navigation system using design tokens with SSR compatibility

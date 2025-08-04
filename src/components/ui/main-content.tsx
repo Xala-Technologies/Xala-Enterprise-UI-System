@@ -6,11 +6,11 @@
  */
 
 import React, { forwardRef, type ReactNode } from 'react';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
 import { Typography } from './typography';
 import { Separator } from './separator';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // MAIN CONTENT VARIANTS USING DESIGN TOKENS

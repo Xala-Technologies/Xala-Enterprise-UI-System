@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text } from '../semantic';
 
 /**
  * Pagination variant types
@@ -137,7 +137,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Container styles
@@ -145,22 +145,22 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       const variantColor = (() => {
         switch (variant) {
           case 'primary':
-            return colors.primary?.[500] || '#3b82f6';
+            return '#3b82f6';
           case 'secondary':
-            return colors.neutral?.[100] || '#f3f4f6';
+            return '#f3f4f6';
           default:
-            return colors.text?.primary || colors.neutral?.[900] || '#111827';
+            return '#111827';
         }
       })();
 
       const fontSize = (() => {
         switch (size) {
           case 'sm':
-            return typography.fontSize.sm;
+            return '0.875rem';
           case 'lg':
-            return typography.fontSize.lg;
+            return '1.125rem';
           default:
-            return typography.fontSize.base;
+            return '1rem';
         }
       })();
 
@@ -168,7 +168,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: spacing[1],
+        gap: '0.25rem',
         color: variantColor,
         fontSize,
         ...style,
@@ -185,19 +185,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             return {
               height: '32px',
               width: '32px',
-              fontSize: typography.fontSize.xs,
+              fontSize: '0.75rem',
             };
           case 'lg':
             return {
               height: '40px',
               width: '40px',
-              fontSize: typography.fontSize.base,
+              fontSize: '1rem',
             };
           default:
             return {
               height: '36px',
               width: '36px',
-              fontSize: typography.fontSize.sm,
+              fontSize: '0.875rem',
             };
         }
       })();
@@ -206,7 +206,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: borderRadius.md,
+        borderRadius: '0.375rem',
         transition: 'all 150ms ease-in-out',
         outline: 'none',
         border: 'none',
@@ -222,27 +222,27 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           case 'primary':
             return {
               ...baseStyles,
-              backgroundColor: colors.primary?.[500] || '#3b82f6',
-              color: colors.background?.default || '#ffffff',
+              backgroundColor: '#3b82f6',
+              color: '#ffffff',
             };
           case 'secondary':
             return {
               ...baseStyles,
-              backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-              color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+              backgroundColor: '#f3f4f6',
+              color: '#111827',
             };
           default:
             return {
               ...baseStyles,
-              backgroundColor: colors.primary?.[500] || '#3b82f6',
-              color: colors.background?.default || '#ffffff',
+              backgroundColor: '#3b82f6',
+              color: '#ffffff',
             };
         }
       }
 
       return {
         ...baseStyles,
-        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+        color: '#111827',
       };
     };
 
@@ -253,23 +253,23 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           case 'sm':
             return {
               height: '32px',
-              paddingLeft: spacing[2],
-              paddingRight: spacing[2],
-              fontSize: typography.fontSize.xs,
+              paddingLeft: '0.5rem',
+              paddingRight: '0.5rem',
+              fontSize: '0.75rem',
             };
           case 'lg':
             return {
               height: '40px',
-              paddingLeft: spacing[4],
-              paddingRight: spacing[4],
-              fontSize: typography.fontSize.base,
+              paddingLeft: '1rem',
+              paddingRight: '1rem',
+              fontSize: '1rem',
             };
           default:
             return {
               height: '36px',
-              paddingLeft: spacing[3],
-              paddingRight: spacing[3],
-              fontSize: typography.fontSize.sm,
+              paddingLeft: '0.75rem',
+              paddingRight: '0.75rem',
+              fontSize: '0.875rem',
             };
         }
       })();
@@ -278,7 +278,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: borderRadius.md,
+        borderRadius: '0.375rem',
         transition: 'all 150ms ease-in-out',
         outline: 'none',
         border: 'none',
@@ -286,7 +286,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         pointerEvents: isDisabled ? 'none' : 'auto',
         opacity: isDisabled ? 0.5 : 1,
         backgroundColor: 'transparent',
-        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+        color: '#111827',
         ...sizeProps,
       };
     };
@@ -320,19 +320,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             aria-label="Go to first page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoPrevious)) {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onMouseLeave={(e) => {
               if (!(disabled || !canGoPrevious)) {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onFocus={(e) => {
               if (!(disabled || !canGoPrevious)) {
-                e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                 e.currentTarget.style.outlineOffset = '2px';
               }
             }}
@@ -353,19 +353,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             aria-label="Go to previous page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoPrevious)) {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onMouseLeave={(e) => {
               if (!(disabled || !canGoPrevious)) {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onFocus={(e) => {
               if (!(disabled || !canGoPrevious)) {
-                e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                 e.currentTarget.style.outlineOffset = '2px';
               }
             }}
@@ -395,16 +395,16 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
                 if (!isPageDisabled && !isActive) {
                   switch (variant) {
                     case 'primary':
-                      e.currentTarget.style.backgroundColor = `${colors.primary?.[500] || '#3b82f6'}1A`; // 10% opacity
-                      e.currentTarget.style.color = colors.primary?.[500] || '#3b82f6';
+                      e.currentTarget.style.backgroundColor = `${'#3b82f6'}1A`; // 10% opacity
+                      e.currentTarget.style.color = '#3b82f6';
                       break;
                     case 'secondary':
-                      e.currentTarget.style.backgroundColor = `${colors.neutral?.[100] || '#f3f4f6'}1A`; // 10% opacity
-                      e.currentTarget.style.color = colors.neutral?.[700] || '#374151';
+                      e.currentTarget.style.backgroundColor = `${'#f3f4f6'}1A`; // 10% opacity
+                      e.currentTarget.style.color = '#374151';
                       break;
                     default:
-                      e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                      e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                      e.currentTarget.style.backgroundColor = '#f3f4f6';
+                      e.currentTarget.style.color = '#111827';
                       break;
                   }
                 }
@@ -412,12 +412,12 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
               onMouseLeave={(e) => {
                 if (!isPageDisabled && !isActive) {
                   e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+                  e.currentTarget.style.color = '#111827';
                 }
               }}
               onFocus={(e) => {
                 if (!isPageDisabled) {
-                  e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                  e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                   e.currentTarget.style.outlineOffset = '2px';
                 }
               }}
@@ -439,19 +439,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             aria-label="Go to next page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoNext)) {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onMouseLeave={(e) => {
               if (!(disabled || !canGoNext)) {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onFocus={(e) => {
               if (!(disabled || !canGoNext)) {
-                e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                 e.currentTarget.style.outlineOffset = '2px';
               }
             }}
@@ -472,19 +472,19 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             aria-label="Go to last page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoNext)) {
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onMouseLeave={(e) => {
               if (!(disabled || !canGoNext)) {
                 e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+                e.currentTarget.style.color = '#111827';
               }
             }}
             onFocus={(e) => {
               if (!(disabled || !canGoNext)) {
-                e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
                 e.currentTarget.style.outlineOffset = '2px';
               }
             }}

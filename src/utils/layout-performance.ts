@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Layout Performance Monitor v5.0.0 - Token-Based Design System
  * @description Comprehensive performance monitoring for layout operations and web vitals

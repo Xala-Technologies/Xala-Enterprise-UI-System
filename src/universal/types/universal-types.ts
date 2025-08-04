@@ -834,9 +834,10 @@ export interface GeneratedLayout {
 // EXPORT ALL TYPES
 // =============================================================================
 
-export * from './layout-types';
-export * from './component-types';
-export * from './token-types';
+// These type files will be created separately
+// export * from './layout-types';
+// export * from './component-types';
+// export * from './token-types';
 
 // Type guards for runtime type checking
 export const isUniversalTokenSchema = (obj: any): obj is UniversalTokenSchema => {

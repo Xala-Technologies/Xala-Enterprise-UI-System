@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, useRef, useEffect, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * Dropdown placement types

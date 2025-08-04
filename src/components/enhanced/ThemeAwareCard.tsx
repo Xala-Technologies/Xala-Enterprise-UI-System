@@ -8,6 +8,7 @@
 import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
+import { Box } from '../semantic';
 
 // =============================================================================
 // ENHANCED CARD VARIANTS
@@ -124,9 +125,9 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
       }
     };
 
-    const handleClick = (): void => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
       if (onClick && !loading && !error) {
-        onClick();
+        onClick(e);
       }
     };
 

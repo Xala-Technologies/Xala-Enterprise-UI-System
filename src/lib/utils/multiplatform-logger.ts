@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * @fileoverview Multiplatform Logger Implementation
  * @description Enterprise-grade logging that works on Web, Mobile (React Native), and Desktop (Electron)
@@ -102,19 +103,19 @@ class MultiplatformLogger implements ILogger {
 
     switch (level) {
       case 'debug':
-        // eslint-disable-next-line no-console
+         
         console.debug(formattedMessage);
         break;
       case 'info':
-        // eslint-disable-next-line no-console
+         
         console.info(formattedMessage);
         break;
       case 'warn':
-        // eslint-disable-next-line no-console
+         
         console.warn(formattedMessage);
         break;
       case 'error':
-        // eslint-disable-next-line no-console
+         
         console.error(formattedMessage);
         break;
     }

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * I18n Provider
  * React context provider for internationalization

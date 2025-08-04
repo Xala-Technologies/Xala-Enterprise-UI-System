@@ -6,7 +6,7 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 import { cn } from '../../lib/utils/cn';
 
 // =============================================================================

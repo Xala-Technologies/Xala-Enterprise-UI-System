@@ -913,10 +913,10 @@ export class SmartCompositionEngine {
 
   private getResponsiveBreakpoints(layout: LayoutStructure): ResponsiveConfig {
     return {
-      mobile: '320px',
-      tablet: '768px',
-      desktop: '1024px',
-      wide: '1440px'
+      mobile: { minWidth: '320px' },
+      tablet: { minWidth: '768px' },
+      desktop: { minWidth: '1024px' },
+      wide: { minWidth: '1440px' }
     };
   }
 

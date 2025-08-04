@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * IconButton variant types
@@ -60,8 +60,8 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
-      full: (getToken('borderRadius.full') as string) || '9999px',
+      md: '0.375rem',
+      full: '9999px',
     };
 
     // Size styles
@@ -84,7 +84,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         case 'round':
           return { borderRadius: borderRadius.full };
         default:
-          return { borderRadius: borderRadius.md };
+          return { borderRadius: '0.375rem' };
       }
     };
 
@@ -93,36 +93,36 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       switch (variant) {
         case 'destructive':
           return {
-            backgroundColor: colors.danger?.[500] || '#ef4444',
-            color: colors.background?.default || '#ffffff',
+            backgroundColor: '#ef4444',
+            color: '#ffffff',
           };
         case 'outline':
           return {
-            backgroundColor: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            backgroundColor: '#ffffff',
+            border: `1px solid ${'#e5e7eb'}`,
+            color: '#111827',
           };
         case 'secondary':
           return {
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            backgroundColor: '#f3f4f6',
+            color: '#111827',
           };
         case 'ghost':
           return {
             backgroundColor: 'transparent',
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+            color: '#111827',
           };
         case 'link':
           return {
             backgroundColor: 'transparent',
-            color: colors.primary?.[500] || '#3b82f6',
+            color: '#3b82f6',
             textDecoration: 'underline',
             textUnderlineOffset: '4px',
           };
         default:
           return {
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: colors.background?.default || '#ffffff',
+            backgroundColor: '#3b82f6',
+            color: '#ffffff',
           };
       }
     };
@@ -167,24 +167,24 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
           if (!isDisabled) {
             switch (variant) {
               case 'destructive':
-                e.currentTarget.style.backgroundColor = `${colors.danger?.[500] || '#ef4444'}E6`; // 90% opacity
+                e.currentTarget.style.backgroundColor = `${'#ef4444'}E6`; // 90% opacity
                 break;
               case 'outline':
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
                 break;
               case 'secondary':
-                e.currentTarget.style.backgroundColor = `${colors.neutral?.[100] || '#f3f4f6'}CC`; // 80% opacity
+                e.currentTarget.style.backgroundColor = `${'#f3f4f6'}CC`; // 80% opacity
                 break;
               case 'ghost':
-                e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.color = '#111827';
                 break;
               case 'link':
                 e.currentTarget.style.textDecoration = 'underline';
                 break;
               default:
-                e.currentTarget.style.backgroundColor = `${colors.primary?.[500] || '#3b82f6'}E6`; // 90% opacity
+                e.currentTarget.style.backgroundColor = `${'#3b82f6'}E6`; // 90% opacity
                 break;
             }
           }
@@ -201,7 +201,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         }}
         onFocus={(e) => {
           if (!isDisabled) {
-            e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+            e.currentTarget.style.outline = `2px solid ${'#3b82f6'}`;
             e.currentTarget.style.outlineOffset = '2px';
           }
         }}

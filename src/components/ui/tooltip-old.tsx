@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput } from '../semantic';
 
 /**
  * Tooltip side types
@@ -56,7 +56,7 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Container styles
@@ -73,28 +73,28 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           return {
             bottom: '100%',
             left: '50%',
-            marginBottom: spacing[2],
+            marginBottom: '0.5rem',
             transform: 'translateX(-50%)',
           };
         case 'bottom':
           return {
             top: '100%',
             left: '50%',
-            marginTop: spacing[2],
+            marginTop: '0.5rem',
             transform: 'translateX(-50%)',
           };
         case 'left':
           return {
             right: '100%',
             top: '50%',
-            marginRight: spacing[2],
+            marginRight: '0.5rem',
             transform: 'translateY(-50%)',
           };
         case 'right':
           return {
             left: '100%',
             top: '50%',
-            marginLeft: spacing[2],
+            marginLeft: '0.5rem',
             transform: 'translateY(-50%)',
           };
         default:
@@ -107,15 +107,15 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       position: 'absolute',
       zIndex: 50,
       overflow: 'hidden',
-      borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
+      borderRadius: '0.375rem',
+      border: `1px solid ${'#e5e7eb'}`,
+      backgroundColor: '#ffffff',
+      paddingLeft: '0.75rem',
+      paddingRight: '0.75rem',
       paddingTop: spacing[1.5],
       paddingBottom: spacing[1.5],
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontSize: '0.75rem',
+      color: '#111827',
       boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
       opacity: 0,
       visibility: 'hidden',
@@ -183,7 +183,7 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Position styles based on side
@@ -193,28 +193,28 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           return {
             bottom: '100%',
             left: '50%',
-            marginBottom: spacing[2],
+            marginBottom: '0.5rem',
             transform: 'translateX(-50%)',
           };
         case 'bottom':
           return {
             top: '100%',
             left: '50%',
-            marginTop: spacing[2],
+            marginTop: '0.5rem',
             transform: 'translateX(-50%)',
           };
         case 'left':
           return {
             right: '100%',
             top: '50%',
-            marginRight: spacing[2],
+            marginRight: '0.5rem',
             transform: 'translateY(-50%)',
           };
         case 'right':
           return {
             left: '100%',
             top: '50%',
-            marginLeft: spacing[2],
+            marginLeft: '0.5rem',
             transform: 'translateY(-50%)',
           };
         default:
@@ -226,15 +226,15 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
       position: 'absolute',
       zIndex: 50,
       overflow: 'hidden',
-      borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
+      borderRadius: '0.375rem',
+      border: `1px solid ${'#e5e7eb'}`,
+      backgroundColor: '#ffffff',
+      paddingLeft: '0.75rem',
+      paddingRight: '0.75rem',
       paddingTop: spacing[1.5],
       paddingBottom: spacing[1.5],
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontSize: '0.75rem',
+      color: '#111827',
       boxShadow: shadows?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
       maxWidth: '200px',
       wordWrap: 'break-word',

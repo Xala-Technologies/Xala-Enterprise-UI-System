@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { Box, Text } from '../semantic';
 
 /**
  * TimePicker variant types
@@ -76,7 +76,7 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Size styles
@@ -85,17 +85,17 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         case 'sm':
           return {
             height: '32px',
-            fontSize: typography.fontSize.xs,
+            fontSize: '0.75rem',
           };
         case 'lg':
           return {
             height: '48px',
-            fontSize: typography.fontSize.base,
+            fontSize: '1rem',
           };
         default: // md
           return {
             height: '40px',
-            fontSize: typography.fontSize.sm,
+            fontSize: '0.875rem',
           };
       }
     };
@@ -106,16 +106,16 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
         case 'outline':
           return {
             border: '2px solid',
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+            borderColor: '#e5e7eb',
           };
         case 'filled':
           return {
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            borderColor: colors.neutral?.[100] || '#f3f4f6',
+            backgroundColor: '#f3f4f6',
+            borderColor: '#f3f4f6',
           };
         default:
           return {
-            borderColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+            borderColor: '#e5e7eb',
           };
       }
     };
@@ -125,15 +125,15 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
       switch (currentState) {
         case 'error':
           return {
-            borderColor: colors.danger?.[500] || '#ef4444',
+            borderColor: '#ef4444',
           };
         case 'success':
           return {
-            borderColor: colors.success?.[500] || '#22c55e',
+            borderColor: '#22c55e',
           };
         case 'warning':
           return {
-            borderColor: colors.warning?.[500] || '#f59e0b',
+            borderColor: '#f59e0b',
           };
         default:
           return {};
@@ -148,16 +148,16 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     const inputStyles: React.CSSProperties = {
       display: 'flex',
       width: '100%',
-      borderRadius: borderRadius.md,
+      borderRadius: '0.375rem',
       border: '1px solid',
       backgroundColor: variant === 'filled' 
-        ? (colors.neutral?.[100] || '#f3f4f6')
-        : (colors.background?.default || '#ffffff'),
-      paddingLeft: spacing[3],
-      paddingRight: spacing[3],
-      paddingTop: spacing[2],
-      paddingBottom: spacing[2],
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+        ? ('#f3f4f6')
+        : ('#ffffff'),
+      paddingLeft: '0.75rem',
+      paddingRight: '0.75rem',
+      paddingTop: '0.5rem',
+      paddingBottom: '0.5rem',
+      color: '#111827',
       outline: 'none',
       transition: 'all 150ms ease-in-out',
       ...(props.disabled && {
@@ -172,40 +172,40 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
 
     // Label styles
     const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      lineHeight: '1',
       color: hasError 
-        ? (colors.danger?.[500] || '#ef4444')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+        ? ('#ef4444')
+        : ('#111827'),
     };
 
     // Helper text styles
     const helperTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
     };
 
     // Error text styles
     const errorTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.danger?.[500] || '#ef4444',
+      fontSize: '0.75rem',
+      color: '#ef4444',
     };
 
     // Format hint styles
     const formatHintStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
     };
 
     // Required indicator styles
     const requiredStyles: React.CSSProperties = {
-      marginLeft: spacing[1],
-      color: colors.danger?.[500] || '#ef4444',
+      marginLeft: '0.25rem',
+      color: '#ef4444',
     };
 
     // Placeholder color
-    const placeholderColor = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
+    const placeholderColor = '#6b7280';
 
     return (
       <Box>
