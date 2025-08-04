@@ -39,8 +39,7 @@ export interface CompactThemeSwitcherContainerProps extends Omit<CompactThemeSwi
 export const ThemeManagerContainer = (props: ThemeManagerContainerProps): JSX.Element => {
   // Container manages state using hooks
   const { theme, setTheme, availableThemes } = useTheme();
-  const tokens = useTokens();
-  const [isExpanded, setIsExpanded] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
   const [selectedTransition, setSelectedTransition] = useState<keyof typeof THEME_TRANSITION_CLASSES>('smooth');
   const [isTransitioning, setIsTransitioning] = useState(false);
 

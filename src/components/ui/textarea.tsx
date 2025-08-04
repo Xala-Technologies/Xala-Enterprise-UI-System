@@ -8,7 +8,6 @@
 import React, { forwardRef, type TextareaHTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { Box } from '../semantic';
 
 // =============================================================================
@@ -114,8 +113,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     // Generate ID if not provided and label exists
     const textareaId =
       id || (label ? `textarea-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
@@ -320,7 +318,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           id={textareaId}
           ref={ref}
           className={cn(textareaVariants({ variant: actualVariant, size, resize: autoResize ? 'none' : resize }), className)}
-          style={textareaStyles}
+         
           aria-invalid={error || !!errorText}
           aria-describedby={displayHelperText || showCount ? `${textareaId}-helper` : undefined}
           aria-required={required}
@@ -359,38 +357,38 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }
 
     return (
-      <Box style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5] }}>
+      <Box>
         {label && (
-          <label
+          <Text as="label"
             htmlFor={textareaId}
-            style={labelStyles}
+           
           >
             {label}
             {required && (
-              <span style={requiredStyles} aria-label="required">
+              <Text as="span" aria-label="required">
                 *
-              </span>
+              </Text>
             )}
-          </label>
+          </Text>
         )}
 
         {textareaElement}
 
-        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Box>
           {displayHelperText && (
-            <p
+            <Text
               id={`${textareaId}-helper`}
-              style={helperTextStyles}
+             
             >
               {displayHelperText}
-            </p>
+            </Text>
           )}
 
           {showCount && (
-            <p style={getCharCountStyles()}>
+            <Text>
               {currentLength}
               {maxLength !== undefined && `/${maxLength}`}
-            </p>
+            </Text>
           )}
         </Box>
       </Box>

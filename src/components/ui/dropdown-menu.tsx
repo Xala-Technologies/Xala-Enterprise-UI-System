@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 import { Box, Text } from '../semantic';
 import {
   Dropdown,
@@ -101,8 +100,7 @@ export interface DropdownMenuSubTriggerProps extends DropdownMenuItemProps {
  */
 export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
   ({ trigger, items, groups, align = 'start', sideOffset = 4, width, ...dropdownProps }, ref): React.ReactElement => {
-    const { spacing } = useTokens();
-
+    
     const renderItems = (menuItems: DropdownMenuItemData[]): ReactNode[] => {
       return menuItems.map((item) => (
         <DropdownMenuItem
@@ -123,7 +121,7 @@ export const DropdownMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
     return (
       <Dropdown ref={ref} {...dropdownProps}>
         <DropdownTrigger>{trigger}</DropdownTrigger>
-        <DropdownContent align={align} sideOffset={sideOffset} style={contentStyle}>
+        <DropdownContent align={align} sideOffset={sideOffset}>
           {items && renderItems(items)}
           {groups && groups.map((group, index) => (
             <React.Fragment key={group.id}>
@@ -145,8 +143,7 @@ DropdownMenu.displayName = 'DropdownMenu';
  */
 export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps>(
   ({ icon, shortcut, destructive = false, children, className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
-
+    
     const itemStyles: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
@@ -184,14 +181,14 @@ export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps
       <DropdownItem
         ref={ref}
         className={className}
-        style={itemStyles}
+       
         {...props}
       >
-        <Text as="span" style={contentStyles}>
-          {icon && <Text as="span" style={iconStyles}>{icon}</Text>}
+        <Text as="span">
+          {icon && <Text as="span">{icon}</Text>}
           <Text as="span">{children}</Text>
         </Text>
-        {shortcut && <Text as="span" style={shortcutStyles}>{shortcut}</Text>}
+        {shortcut && <Text as="span">{shortcut}</Text>}
       </DropdownItem>
     );
   }
@@ -204,8 +201,7 @@ DropdownMenuItem.displayName = 'DropdownMenuItem';
  */
 export const DropdownMenuCheckboxItem = forwardRef<HTMLDivElement, DropdownMenuCheckboxItemProps>(
   ({ checked = false, onCheckedChange, children, className, style, onSelect, ...props }, ref): React.ReactElement => {
-    const { colors, spacing } = useTokens();
-
+    
     const handleSelect = (event: Event): void => {
       onCheckedChange?.(!checked);
       onSelect?.(event);
@@ -239,13 +235,13 @@ export const DropdownMenuCheckboxItem = forwardRef<HTMLDivElement, DropdownMenuC
       <DropdownItem
         ref={ref}
         className={className}
-        style={style}
+       
         onSelect={handleSelect}
         role="menuitemcheckbox"
         aria-checked={checked}
         {...props}
       >
-        <Text as="span" style={checkIconStyles}>
+        <Text as="span">
           {checked && <CheckIcon />}
         </Text>
         {children}
@@ -283,8 +279,7 @@ DropdownMenuRadioGroup.displayName = 'DropdownMenuRadioGroup';
 export const DropdownMenuRadioItem = forwardRef<HTMLDivElement, DropdownMenuRadioItemProps>(
   ({ value, children, className, style, onSelect, ...props }, ref): React.ReactElement => {
     const { value: groupValue, onValueChange } = React.useContext(RadioGroupContext);
-    const { spacing } = useTokens();
-    const isChecked = groupValue === value;
+        const isChecked = groupValue === value;
 
     const handleSelect = (event: Event): void => {
       onValueChange?.(value);
@@ -316,13 +311,13 @@ export const DropdownMenuRadioItem = forwardRef<HTMLDivElement, DropdownMenuRadi
       <DropdownItem
         ref={ref}
         className={className}
-        style={style}
+       
         onSelect={handleSelect}
         role="menuitemradio"
         aria-checked={isChecked}
         {...props}
       >
-        <Text as="span" style={radioIconStyles}>
+        <Text as="span">
           <RadioIcon />
         </Text>
         {children}
@@ -338,8 +333,7 @@ DropdownMenuRadioItem.displayName = 'DropdownMenuRadioItem';
  */
 export const DropdownMenuSubTrigger = forwardRef<HTMLDivElement, DropdownMenuSubTriggerProps>(
   ({ children, className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing } = useTokens();
-
+    
     const chevronStyles: React.CSSProperties = {
       marginLeft: 'auto',
       display: 'flex',
@@ -368,12 +362,12 @@ export const DropdownMenuSubTrigger = forwardRef<HTMLDivElement, DropdownMenuSub
       <DropdownMenuItem
         ref={ref}
         className={className}
-        style={style}
+       
         closeOnSelect={false}
         {...props}
       >
         {children}
-        <Text as="span" style={chevronStyles}>
+        <Text as="span">
           <ChevronRightIcon />
         </Text>
       </DropdownMenuItem>

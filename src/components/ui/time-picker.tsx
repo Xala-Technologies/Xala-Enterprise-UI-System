@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * TimePicker variant types
@@ -69,8 +69,7 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     const inputId = props.id || 'time-picker';
     const hasError = Boolean(error) || state === 'error';
     const currentState = hasError ? 'error' : state;
@@ -209,29 +208,21 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
     const placeholderColor = colors.text?.secondary || colors.neutral?.[500] || '#6b7280';
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[2] }}>
+      <Box>
         {label && (
-          <label htmlFor={inputId} style={labelStyles}>
+          <Text as="label" htmlFor={inputId}>
             {label}
-            {required && <span style={requiredStyles}>*</span>}
-          </label>
+            {required && <Text as="span">*</Text>}
+          </Text>
         )}
 
-        <>
-          {/* CSS for placeholder styling */}
-          <style dangerouslySetInnerHTML={{
-            __html: `
-              #${inputId}::placeholder {
-                color: ${placeholderColor};
-              }
-            `
-          }} />
+        <Box>
           <input
             ref={ref}
             type="time"
             id={inputId}
             className={className}
-            style={inputStyles}
+           
             placeholder={placeholder}
             step={props.step || 300} // 5 minute steps by default
             aria-invalid={hasError}
@@ -242,16 +233,16 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
               if (!props.disabled) {
                 switch (currentState) {
                   case 'error':
-                    e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+                    e.currentTarget.style.outline = '2px solid var(--destructive)';
                     break;
                   case 'success':
-                    e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+                    e.currentTarget.style.outline = '2px solid var(--success)';
                     break;
                   case 'warning':
-                    e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+                    e.currentTarget.style.outline = '2px solid var(--warning)';
                     break;
                   default:
-                    e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                    e.currentTarget.style.outline = '2px solid var(--primary)';
                     break;
                 }
                 e.currentTarget.style.outlineOffset = '2px';
@@ -262,28 +253,28 @@ export const TimePicker = forwardRef<HTMLInputElement, TimePickerProps>(
             }}
             {...props}
           />
-        </>
+        </Box>
 
         {showFormatHint && !error && !helperText && (
-          <p style={formatHintStyles}>
+          <Text>
             {use24Hour
               ? 'Format: tt:mm (24-timers format)'
               : 'Format: tt:mm AM/PM (12-timers format)'}
-          </p>
+          </Text>
         )}
 
         {helperText && !error && (
-          <p id={`${inputId}-helper`} style={helperTextStyles}>
+          <Text id={-helper}>
             {helperText}
-          </p>
+          </Text>
         )}
 
         {error && (
-          <p id={`${inputId}-error`} style={errorTextStyles}>
+          <Text id={-error}>
             {error}
-          </p>
+          </Text>
         )}
-      </div>
+      </Box>
     );
   }
 );

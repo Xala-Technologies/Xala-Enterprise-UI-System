@@ -8,9 +8,9 @@
 import React, { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
-import { useTokens } from '../../../hooks/useTokens';
 import { ActionButton } from './ActionButton';
 import type { ActionBarProps, ActionConfig } from './types';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
 
 // =============================================================================
 // ACTION BAR VARIANTS
@@ -79,8 +79,7 @@ const useActionBarStyles = (
   position: ActionBarProps['position'],
   customStyle?: React.CSSProperties
 ) => {
-  const { colors, spacing } = useTokens();
-
+  
   return React.useMemo((): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
       display: 'inline-flex',
@@ -252,14 +251,14 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
     }, [size, showLabels, showTooltips, disabled, loading]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           actionBarVariants({ variant, size, orientation, rounded, position }),
           !visibilityManager.isVisible && 'opacity-0 pointer-events-none',
           className
         )}
-        style={actionBarStyles}
+       
         role="toolbar"
         aria-label={ariaLabel}
         aria-orientation={orientation}
@@ -270,7 +269,7 @@ export const ActionBar = forwardRef<HTMLDivElement, ActionBarProps>(
         {...props}
       >
         {visibleActions.map(renderActionButton)}
-      </div>
+      </Box>
     );
   }
 );

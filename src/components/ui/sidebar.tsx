@@ -6,7 +6,8 @@
  */
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { cn } from '../../lib/utils/cn';
 
 // =============================================================================
 // INTERFACES
@@ -63,19 +64,18 @@ export const Sidebar = ({
   className = '',
   ariaLabel = 'Main navigation'
 }: SidebarProps): JSX.Element => {
-  const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [focusedItem, setFocusedItem] = useState<string | null>(null);
 
   // Calculate width based on token system
   const sidebarWidth = useMemo(() => {
     const widthMap = {
-      compact: componentSizing?.navbar?.compact || '200px',
-      standard: componentSizing?.navbar?.standard || '240px',
-      wide: componentSizing?.navbar?.wide || '320px',
+      compact: '200px',
+      standard: '240px',
+      wide: '320px',
     };
     return isCollapsed ? '64px' : widthMap[width];
-  }, [width, isCollapsed, componentSizing]);
+  }, [width, isCollapsed]);
 
   // Handle item expansion
   const handleItemToggle = useCallback((itemId: string) => {
@@ -122,21 +122,16 @@ export const Sidebar = ({
     onCollapseToggle?.(!isCollapsed);
   }, [isCollapsed, onCollapseToggle]);
 
-  // Generate styles based on tokens
-  const sidebarStyles = useMemo(() => {
-    const baseStyle = {
-      width: sidebarWidth,
-      backgroundColor: variant === 'elevated' 
-        ? colors.background?.elevated 
-        : colors.background?.paper,
-      borderColor: colors.border?.default,
-      boxShadow: variant === 'elevated' ? elevation?.md : 'none',
-      borderRadius: variant === 'minimal' ? '0' : borderRadius?.lg,
-      transition: `width ${motion?.duration?.normal || '200ms'} ${motion?.easing?.ease || 'ease'}`,
-    };
-
-    return baseStyle;
-  }, [sidebarWidth, variant, colors, elevation, borderRadius, motion]);
+  // Generate sidebar classes
+  const sidebarClasses = useMemo(() => {
+    const baseClasses = [
+      'transition-width duration-200 ease-in-out',
+      variant === 'elevated' ? 'bg-card shadow-md' : 'bg-background',
+      variant === 'minimal' ? 'rounded-none' : 'rounded-lg',
+      'border border-border'
+    ];
+    return baseClasses.join(' ');
+  }, [variant]);
 
   // Render navigation item
   const renderNavItem = useCallback((item: SidebarNavItem, level: number = 0) => {
@@ -144,38 +139,25 @@ export const Sidebar = ({
     const hasChildren = Boolean(item.children?.length);
     const isFocused = focusedItem === item.id;
 
-    const itemStyles = {
-      paddingLeft: isCollapsed ? spacing[2] : `${8 + (level * 16)}px`,
-      paddingRight: spacing[3],
-      paddingTop: spacing[2],
-      paddingBottom: spacing[2],
-      minHeight: componentSizing?.button?.md || '44px',
-      backgroundColor: item.isActive 
-        ? colors.primary?.[100] || colors.background?.elevated
-        : isFocused 
-        ? colors.background?.elevated 
-        : 'transparent',
-      borderRadius: borderRadius?.md,
-      color: item.isActive 
-        ? colors.primary?.[700] || colors.text?.primary
-        : item.isDisabled 
-        ? colors.text?.muted 
-        : colors.text?.primary,
-      cursor: item.isDisabled ? 'not-allowed' : 'pointer',
-      opacity: item.isDisabled ? 0.5 : 1,
-      transition: `all ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`,
-    };
+    const itemClasses = cn(
+      'min-h-[44px] rounded-md transition-all duration-150 ease-in-out cursor-pointer',
+      isCollapsed ? 'px-2' : `pl-[${8 + (level * 16)}px] pr-3`,
+      'py-2',
+      item.isActive && 'bg-primary/10 text-primary-700',
+      isFocused && !item.isActive && 'bg-muted/50',
+      item.isDisabled && 'opacity-50 cursor-not-allowed text-muted-foreground',
+      !item.isActive && !item.isDisabled && 'text-foreground'
+    );
 
     return (
-      <li key={item.id} role="none">
-        <div
+      <ListItem key={item.id} role="none">
+        <Box
           role={hasChildren ? 'button' : item.href ? 'link' : 'menuitem'}
           tabIndex={item.isDisabled ? -1 : 0}
           aria-expanded={hasChildren ? isExpanded : undefined}
           aria-disabled={item.isDisabled}
           aria-current={item.isActive ? 'page' : undefined}
-          style={itemStyles}
-          className="flex items-center justify-between cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className={cn(itemClasses, "flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2")}
           onClick={() => {
             if (item.isDisabled) return;
             if (hasChildren) {
@@ -188,95 +170,63 @@ export const Sidebar = ({
           onFocus={() => setFocusedItem(item.id)}
           onBlur={() => setFocusedItem(null)}
         >
-          <div className="flex items-center flex-1 min-w-0">
+          <Box className="flex items-center flex-1 min-w-0">
             {item.icon && (
-              <div 
-                className="flex-shrink-0"
-                style={{ 
-                  marginRight: isCollapsed ? '0' : spacing[3],
-                  width: '20px',
-                  height: '20px'
-                }}
+              <Box 
+                className="flex-shrink-0 w-5 h-5 mr-3"
                 aria-hidden="true"
               >
                 {item.icon}
-              </div>
+              </Box>
             )}
             
             {!isCollapsed && (
-              <span 
-                className="flex-1 truncate"
-                style={{ 
-                  fontSize: typography.fontSize?.sm || '0.875rem',
-                  fontWeight: item.isActive ? 600 : 400,
-                  lineHeight: typography.lineHeight?.tight || 1.25
-                }}
+              <Text as="span" 
+                className="flex-1 truncate text-sm font-medium"
               >
                 {item.label}
-              </span>
+              </Text>
             )}
-          </div>
+          </Box>
 
-          <div className="flex items-center space-x-2">
+          <Box className="flex items-center space-x-2">
             {!isCollapsed && item.badge && (
-              <span
-                className="inline-flex items-center justify-center text-xs font-medium rounded-full"
-                style={{
-                  minWidth: '20px',
-                  height: '20px',
-                  paddingLeft: spacing[1],
-                  paddingRight: spacing[1],
-                  backgroundColor: colors.primary?.[500] || '#3b82f6',
-                  color: 'white',
-                  fontSize: typography.fontSize?.xs || '0.75rem'
-                }}
+              <Text as="span"
+                className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 text-xs font-medium bg-primary text-white rounded-full"
                 aria-label={`${item.badge} notifications`}
               >
                 {item.badge}
-              </span>
+              </Text>
             )}
 
             {!isCollapsed && hasChildren && (
-              <div
-                style={{
-                  transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-                  transition: `transform ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`,
-                  width: '16px',
-                  height: '16px'
-                }}
+              <Box
+                className="w-4 h-4 transition-transform"
+                style={{ transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}
                 aria-hidden="true"
               >
                 ▶
-              </div>
+              </Box>
             )}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Render children */}
         {hasChildren && isExpanded && !isCollapsed && (
-          <ul
+          <List variant="unordered"
             role="group"
             aria-labelledby={item.id}
-            style={{
-              marginTop: spacing[1],
-              marginLeft: spacing[2]
-            }}
+            className="mt-1 ml-2"
           >
             {item.children?.map(childItem => renderNavItem(childItem, level + 1))}
-          </ul>
+          </List>
         )}
-      </li>
+      </ListItem>
     );
   }, [
     expandedItems, 
     focusedItem, 
-    isCollapsed, 
-    spacing, 
-    componentSizing, 
-    colors, 
-    borderRadius, 
-    motion, 
-    typography,
+    isCollapsed,
     handleItemToggle,
     handleKeyDown
   ]);
@@ -286,158 +236,121 @@ export const Sidebar = ({
     if (!userProfile || isCollapsed) return null;
 
     const statusColors = {
-      online: colors.status?.success || '#10b981',
-      offline: colors.text?.muted || '#6b7280',
-      away: colors.status?.warning || '#f59e0b',
-      busy: colors.status?.error || '#ef4444',
+      online: 'bg-green-500',
+      offline: 'bg-gray-500',
+      away: 'bg-yellow-500',
+      busy: 'bg-red-500',
     };
 
     return (
-      <div
-        className="border-t p-4"
-        style={{
-          borderColor: colors.border?.muted,
-          backgroundColor: colors.background?.paper
-        }}
+      <Box
+        className="border-t border-border p-4 bg-background"
       >
-        <div className="flex items-center space-x-3">
-          <div className="relative flex-shrink-0">
+        <Box className="flex items-center space-x-3">
+          <Box className="relative flex-shrink-0">
             {userProfile.avatar ? (
               <img
                 src={userProfile.avatar}
                 alt={`${userProfile.name}'s avatar`}
-                className="rounded-full object-cover"
-                style={{ width: '40px', height: '40px' }}
+                className="rounded-full object-cover w-10 h-10"
               />
             ) : (
-              <div
-                className="rounded-full flex items-center justify-center"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  backgroundColor: colors.primary?.[500] || '#3b82f6',
-                  color: 'white',
-                  fontSize: typography.fontSize?.sm || '0.875rem',
-                  fontWeight: 600
-                }}
+              <Box
+                className="rounded-full flex items-center justify-center w-10 h-10 bg-primary text-white text-sm font-semibold"
               >
                 {userProfile.name.charAt(0).toUpperCase()}
-              </div>
+              </Box>
             )}
             
             {userProfile.status && (
-              <div
-                className="absolute -bottom-1 -right-1 rounded-full border-2 border-white"
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  backgroundColor: statusColors[userProfile.status]
-                }}
+              <Box
+                className={cn(
+                  "absolute -bottom-1 -right-1 rounded-full border-2 border-white w-3 h-3",
+                  statusColors[userProfile.status]
+                )}
                 aria-label={`Status: ${userProfile.status}`}
               />
             )}
-          </div>
+          </Box>
 
-          <div className="flex-1 min-w-0">
-            <p
-              className="font-medium truncate"
-              style={{
-                color: colors.text?.primary,
-                fontSize: typography.fontSize?.sm || '0.875rem'
-              }}
+          <Box className="flex-1 min-w-0">
+            <Text
+              className="font-medium truncate text-sm text-foreground"
             >
               {userProfile.name}
-            </p>
-            <p
-              className="truncate"
-              style={{
-                color: colors.text?.muted,
-                fontSize: typography.fontSize?.xs || '0.75rem'
-              }}
+            </Text>
+            <Text
+              className="truncate text-xs text-muted-foreground"
             >
               {userProfile.role || userProfile.email}
-            </p>
-          </div>
-        </div>
-      </div>
+            </Text>
+          </Box>
+        </Box>
+      </Box>
     );
-  }, [userProfile, isCollapsed, colors, typography]);
+  }, [userProfile, isCollapsed]);
 
   return (
-    <aside
-      className={`flex flex-col ${position === 'fixed' ? 'fixed left-0 top-0 h-full' : 'h-full'} border-r ${className}`}
-      style={sidebarStyles}
+    <Box as="aside"
+      className={cn(
+        'flex flex-col border-r',
+        position === 'fixed' ? 'fixed left-0 top-0 h-full' : 'h-full',
+        sidebarClasses,
+        className
+      )}
+      style={{ width: sidebarWidth }}
       role="navigation"
       aria-label={ariaLabel}
     >
       {/* Brand/Header Section */}
-      <div
-        className="flex items-center justify-between p-4 border-b"
-        style={{
-          borderColor: colors.border?.muted,
-          minHeight: componentSizing?.navbar?.height || '64px'
-        }}
+      <Box
+        className="flex items-center justify-between p-4 border-b border-border min-h-[64px]"
       >
-        <div className="flex items-center space-x-3 min-w-0 flex-1">
+        <Box className="flex items-center space-x-3 min-w-0 flex-1">
           {brandLogo && (
-            <div className="flex-shrink-0" style={{ width: '32px', height: '32px' }}>
+            <Box className="flex-shrink-0 w-8 h-8">
               {brandLogo}
-            </div>
+            </Box>
           )}
           
           {!isCollapsed && (
-            <h1
-              className="font-bold truncate"
-              style={{
-                color: colors.text?.primary,
-                fontSize: typography.fontSize?.lg || '1.125rem'
-              }}
+            <Heading level={1}
+              className="font-bold truncate text-lg text-foreground"
             >
               {brandName}
-            </h1>
+            </Heading>
           )}
-        </div>
+        </Box>
 
         {onCollapseToggle && (
-          <button
+          <Text
+            as="button"
             type="button"
             onClick={handleCollapseToggle}
             className="p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            style={{
-              color: colors.text?.secondary,
-              minWidth: '36px',
-              minHeight: '36px'
-            }}
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             aria-expanded={!isCollapsed}
           >
-            <div
-              style={{
-                transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
-                transition: `transform ${motion?.duration?.normal || '200ms'} ${motion?.easing?.ease || 'ease'}`,
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyCenter: 'center'
-              }}
+            <Box
+              className="w-5 h-5 flex items-center justify-center transition-transform"
+              style={{ transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)' }}
             >
               ◀
-            </div>
-          </button>
+            </Box>
+          </Text>
         )}
-      </div>
+      </Box>
 
       {/* Navigation Section */}
-      <nav className="flex-1 overflow-y-auto p-2" role="menubar">
-        <ul role="menu" className="space-y-1">
+      <Box as="nav" className="flex-1 overflow-y-auto p-2" role="menubar">
+        <List variant="unordered" role="menu" className="space-y-1">
           {navItems.map(item => renderNavItem(item))}
-        </ul>
-      </nav>
+        </List>
+      </Box>
 
       {/* User Profile Section */}
       {renderUserProfile()}
-    </aside>
+    </Box>
   );
 };
 

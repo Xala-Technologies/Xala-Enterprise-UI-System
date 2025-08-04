@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Command palette variant types
@@ -145,7 +145,7 @@ const filterGroups = (
  * Search icon component
  */
 const SearchIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
@@ -158,37 +158,18 @@ const SearchIcon = (): React.ReactElement => (
  * Keyboard shortcut component
  */
 const KeyboardShortcut: React.FC<{ keys: string[] }> = ({ keys }): React.ReactElement => {
-  const { colors, spacing, typography } = useTokens();
-  
+    
   return (
-    <div style={{ 
-      marginLeft: 'auto',
-      display: 'flex',
-      gap: spacing[1],
-    }}>
+    <Box>
       {keys.map((key, index) => (
-        <kbd
+        <Text as="kbd"
           key={index}
-          style={{
-            pointerEvents: 'none',
-            height: '20px',
-            userSelect: 'none',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: spacing[1],
-            borderRadius: '4px',
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            padding: `0 ${spacing[1.5]}`,
-            fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
-            fontSize: typography.fontSize.xs,
-            fontWeight: typography.fontWeight.medium,
-            color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-          }}
+          className="font-mono text-xs font-medium text-muted-foreground"
         >
           {key}
-        </kbd>
+        </Text>
       ))}
-    </div>
+    </Box>
   );
 };
 
@@ -217,8 +198,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     // Merge default texts with user provided texts
     const texts: CommandPaletteTexts = {
       ...defaultTexts,
@@ -296,7 +276,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
       display: 'flex',
       alignItems: 'flex-start',
       justifyContent: 'center',
-      backgroundColor: `${colors.background?.default || '#ffffff'}CC`, // 80% opacity
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
       backdropFilter: 'blur(4px)',
       ...getVariantPositioning(),
       ...style,
@@ -307,7 +287,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
       width: '100%',
       backgroundColor: colors.background?.default || '#ffffff',
       borderRadius: borderRadius.lg,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      border: '1px solid var(--border)',
       boxShadow: shadows.lg,
       ...getSizeStyles(),
     };
@@ -319,12 +299,12 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
       width: '100%',
       borderRadius: borderRadius.md,
       backgroundColor: 'transparent',
-      padding: `${spacing[3]} ${spacing[3]}`,
+      padding: '0 1rem',
       fontSize: typography.fontSize.sm,
       color: colors.text?.primary || colors.neutral?.[900] || '#111827',
       outline: 'none',
       border: 'none',
-      borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      borderBottom: '1px solid var(--border)',
     };
 
     // Command item styles
@@ -336,7 +316,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
         userSelect: 'none',
         alignItems: 'center',
         borderRadius: borderRadius.sm,
-        padding: `${spacing[2]} ${spacing[3]}`,
+        padding: '0 1rem',
         fontSize: typography.fontSize.sm,
         outline: 'none',
         transition: 'all 150ms ease-in-out',
@@ -410,80 +390,62 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     }
 
     return (
-      <div
+      <Box
         className={className}
-        style={overlayStyles}
+       
         data-state={isOpen ? 'open' : 'closed'}
         onKeyDown={handleKeyDown}
         {...props}
       >
         {/* Overlay */}
-        <div 
-          style={{ position: 'fixed', inset: 0 }} 
+        <Box 
+          
           onClick={handleOverlayClick} 
           aria-hidden="true" 
         />
 
         {/* Command dialog */}
-        <div
+        <Box
           ref={ref}
-          style={dialogStyles}
+         
           data-state={isOpen ? 'open' : 'closed'}
           role="dialog"
           aria-modal="true"
           aria-label={texts.ariaLabel}
         >
           {/* Search input */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            padding: `0 ${spacing[3]}`,
-          }}>
+          <Box>
             <SearchIcon />
-            <input
-              style={inputStyles}
+            <SemanticInput
+             
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={e => onSearchChange?.(e.target.value)}
               autoFocus
             />
-          </div>
+          </Box>
 
           {/* Results */}
-          <div style={{
-            maxHeight: '20rem',
-            overflowY: 'auto',
-            padding: spacing[2],
-          }}>
+          <Box>
             {totalResults === 0 ? (
-              <div style={{
-                paddingTop: spacing[6],
-                paddingBottom: spacing[6],
-                textAlign: 'center',
-                fontSize: typography.fontSize.sm,
-                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-              }}>
+              <Box>
                 {noResultsMessage}
-              </div>
+              </Box>
             ) : (
               <>
                 {/* Grouped items */}
                 {hasGroups &&
                   filteredGroups.map(group => (
-                    <div key={group.id} style={{ marginBottom: spacing[2] }}>
-                      <div style={{
-                        padding: `${spacing[1.5]} ${spacing[3]}`,
-                        fontSize: typography.fontSize.xs,
-                        fontWeight: typography.fontWeight.medium,
-                        color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                      }}>
+                    <Box key={group.id}>
+                      <Box className="px-3 py-1 text-xs font-medium text-muted-foreground"
+                      >
                         {group.label}
-                      </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
+                      </Box>
+                      <Box>
                         {group.items.map(item => (
-                          <div
+                          <Box
                             key={item.id}
-                            style={getItemStyles(item, false)}
+                           
                             data-selected={false}
                             data-disabled={item.disabled}
                             onClick={() => handleItemSelect(item)}
@@ -503,42 +465,34 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
                             }}
                           >
                             {item.icon && (
-                              <span style={{
-                                marginRight: spacing[2],
-                                height: '16px',
-                                width: '16px',
-                                flexShrink: 0,
-                              }}>{item.icon}</span>
+                              <Text as="span">{item.icon}</Text>
                             )}
-                            <div style={{ flex: 1 }}>
-                              <div style={{ fontWeight: typography.fontWeight.medium }}>
+                            <Box>
+                              <Box>
                                 {item.label}
-                              </div>
+                              </Box>
                               {item.description && (
-                                <div style={{
-                                  fontSize: typography.fontSize.xs,
-                                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                                }}>
+                                <Box>
                                   {item.description}
-                                </div>
+                                </Box>
                               )}
-                            </div>
+                            </Box>
                             {showShortcuts && item.shortcut && (
                               <KeyboardShortcut keys={item.shortcut} />
                             )}
-                          </div>
+                          </Box>
                         ))}
-                      </div>
-                    </div>
+                      </Box>
+                    </Box>
                   ))}
 
                 {/* Flat items */}
                 {hasItems && !hasGroups && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: spacing[1] }}>
+                  <Box>
                     {filteredItems.map(item => (
-                      <div
+                      <Box
                         key={item.id}
-                        style={getItemStyles(item, false)}
+                       
                         data-selected={false}
                         data-disabled={item.disabled}
                         onClick={() => handleItemSelect(item)}
@@ -558,85 +512,47 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
                         }}
                       >
                         {item.icon && (
-                          <span style={{
-                            marginRight: spacing[2],
-                            height: '16px',
-                            width: '16px',
-                            flexShrink: 0,
-                          }}>{item.icon}</span>
+                          <Text as="span">{item.icon}</Text>
                         )}
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: typography.fontWeight.medium }}>
+                        <Box>
+                          <Box>
                             {item.label}
-                          </div>
+                          </Box>
                           {item.description && (
-                            <div style={{
-                              fontSize: typography.fontSize.xs,
-                              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                            }}>
+                            <Box>
                               {item.description}
-                            </div>
+                            </Box>
                           )}
-                        </div>
+                        </Box>
                         {showShortcuts && item.shortcut && (
                           <KeyboardShortcut keys={item.shortcut} />
                         )}
-                      </div>
+                      </Box>
                     ))}
-                  </div>
+                  </Box>
                 )}
               </>
             )}
-          </div>
+          </Box>
 
           {/* Footer */}
-          <div style={{
-            borderTop: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-            padding: `${spacing[2]} ${spacing[3]}`,
-          }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: typography.fontSize.xs,
-              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-            }}>
-              <span>{texts.keyboardHint.pressText}</span>
-              <kbd style={{
-                margin: `0 ${spacing[1]}`,
-                height: '20px',
-                userSelect: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: spacing[1],
-                borderRadius: '4px',
-                backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-                padding: `0 ${spacing[1.5]}`,
-                fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
-                fontWeight: typography.fontWeight.medium,
-              }}>
+          <Box>
+            <Box>
+              <Text as="span">{texts.keyboardHint.pressText}</Text>
+              <Text as="kbd" className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
+              >
                 Enter
-              </kbd>
-              <span>{texts.keyboardHint.selectText}</span>
-              <kbd style={{
-                margin: `0 ${spacing[1]}`,
-                height: '20px',
-                userSelect: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: spacing[1],
-                borderRadius: '4px',
-                backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-                padding: `0 ${spacing[1.5]}`,
-                fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
-                fontWeight: typography.fontWeight.medium,
-              }}>
+              </Text>
+              <Text as="span">{texts.keyboardHint.selectText}</Text>
+              <Text as="kbd" className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
+              >
                 Esc
-              </kbd>
-              <span>{texts.keyboardHint.closeText}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+              </Text>
+              <Text as="span">{texts.keyboardHint.closeText}</Text>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
     );
   }
 );

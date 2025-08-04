@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * MessageBubble variant types
@@ -112,8 +112,7 @@ const formatTimestamp = (timestamp: Date | string): string => {
  * Classification indicator component
  */
 const ClassificationIndicator: React.FC<{ classification: string }> = ({ classification }) => {
-  const { colors, spacing, typography, getToken } = useTokens();
-
+  
   const borderRadius = {
     md: (getToken('borderRadius.md') as string) || '0.375rem',
   };
@@ -165,9 +164,9 @@ const ClassificationIndicator: React.FC<{ classification: string }> = ({ classif
   };
 
   return (
-    <span style={indicatorStyles}>
+    <Text as="span">
       {classification}
-    </span>
+    </Text>
   );
 };
 
@@ -198,8 +197,7 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     // Determine variant from sender role if not explicitly set
     const messageVariant = variant || (sender?.role === 'user' ? 'user' : 'assistant');
     const effectiveAnimation = isLoading ? 'typing' : animation;
@@ -464,18 +462,18 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={containerStyles}
+       
         {...props}
       >
         {/* Avatar (left side for assistant, hidden for user) */}
         {showAvatar && messageVariant !== 'user' && (
-          <div style={{ flexShrink: 0 }}>
+          <Box>
             {avatar || (
-              <div
-                style={getAvatarStyles(messageVariant as 'user' | 'assistant' | 'system')}
+              <Box
+               
                 role="img"
                 aria-label={`${sender?.name || 'Assistant'} avatar`}
               >
@@ -483,37 +481,37 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
                   <img
                     src={sender.avatar}
                     alt={sender.name}
-                    style={avatarImageStyles}
+                   
                   />
                 ) : (
-                  <div style={avatarTextStyles}>
+                  <Box>
                     {sender?.name?.[0]?.toUpperCase() || 'A'}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
 
         {/* Message content */}
-        <div style={messageContentStyles}>
+        <Box>
           {/* Sender name (if shown) */}
-          {sender?.name && <div style={senderNameStyles}>{sender.name}</div>}
+          {sender?.name && <Box>{sender.name}</Box>}
 
           {/* Message bubble */}
-          <div style={bubbleStyles}>
-            <div style={contentAreaStyles}>
+          <Box>
+            <Box>
               {/* Message content */}
-              <div style={proseStyles}>{content}</div>
+              <Box>{content}</Box>
 
               {/* Error message */}
               {error && (
-                <div style={errorStyles}>
+                <Box>
                   {error}
                   {onRetry && (
-                    <button 
+                    <Text as="button" 
                       onClick={onRetry} 
-                      style={retryButtonStyles}
+                     
                       onMouseEnter={(e) => {
                         e.currentTarget.style.textDecoration = 'none';
                       }}
@@ -522,36 +520,36 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
                       }}
                     >
                       Prøv igjen
-                    </button>
+                    </Text>
                   )}
-                </div>
+                </Box>
               )}
 
               {/* Message metadata */}
               {(metadata || showTimestamp) && (
-                <div style={metadataStyles}>
-                  {showTimestamp && timestamp && <span>{formatTimestamp(timestamp)}</span>}
-                  {metadata?.tokens && <span>{metadata.tokens} tokens</span>}
-                  {metadata?.model && <span>{metadata.model}</span>}
-                  {metadata?.status && <span style={{ textTransform: 'capitalize' }}>{metadata.status}</span>}
+                <Box>
+                  {showTimestamp && timestamp && <Text as="span">{formatTimestamp(timestamp)}</Text>}
+                  {metadata?.tokens && <Text as="span">{metadata.tokens} tokens</Text>}
+                  {metadata?.model && <Text as="span">{metadata.model}</Text>}
+                  {metadata?.status && <Text as="span">{metadata.status}</Text>}
                   {metadata?.classification && (
                     <ClassificationIndicator classification={metadata.classification} />
                   )}
-                </div>
+                </Box>
               )}
-            </div>
+            </Box>
 
             {/* Actions */}
-            {actions && <div style={actionsStyles}>{actions}</div>}
-          </div>
-        </div>
+            {actions && <Box>{actions}</Box>}
+          </Box>
+        </Box>
 
         {/* Avatar (right side for user) */}
         {showAvatar && messageVariant === 'user' && (
-          <div style={{ flexShrink: 0 }}>
+          <Box>
             {avatar || (
-              <div
-                style={getAvatarStyles('user')}
+              <Box
+               
                 role="img"
                 aria-label={`${sender?.name || 'User'} avatar`}
               >
@@ -559,18 +557,18 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
                   <img
                     src={sender.avatar}
                     alt={sender.name}
-                    style={avatarImageStyles}
+                   
                   />
                 ) : (
-                  <div style={avatarTextStyles}>
+                  <Box>
                     {sender?.name?.[0]?.toUpperCase() || 'U'}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

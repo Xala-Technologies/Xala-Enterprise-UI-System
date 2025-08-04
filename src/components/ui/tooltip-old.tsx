@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Tooltip side types
@@ -49,10 +49,9 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken, shadows } = useTokens();
-
+    
     if (disabled || !content) {
-      return <div ref={ref} className={className} style={style}>{children}</div>;
+      return <Box ref={ref} className={className}>{children}</Box>;
     }
 
     // Get border radius
@@ -127,10 +126,10 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     };
 
     return (
-      <div 
+      <Box 
         ref={ref} 
         className={className} 
-        style={containerStyles}
+       
         onMouseEnter={(e) => {
           const tooltip = e.currentTarget.querySelector('[role="tooltip"]') as HTMLElement;
           if (tooltip) {
@@ -162,14 +161,14 @@ export const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         {...props}
       >
         {children}
-        <div
-          style={tooltipStyles}
+        <Box
+         
           role="tooltip"
           aria-live="polite"
         >
           {content}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );
@@ -181,8 +180,7 @@ Tooltip.displayName = 'Tooltip';
  */
 export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
   ({ content, side = 'top', className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography, getToken, shadows } = useTokens();
-
+    
     // Get border radius
     const borderRadius = {
       md: (getToken('borderRadius.md') as string) || '0.375rem',
@@ -245,9 +243,9 @@ export const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
     };
 
     return (
-      <div ref={ref} className={className} style={contentStyles} role="tooltip" {...props}>
+      <Box ref={ref} className={className} role="tooltip" {...props}>
         {content}
-      </div>
+      </Box>
     );
   }
 );
@@ -265,9 +263,9 @@ export const TooltipTrigger = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivE
     };
 
     return (
-      <div ref={ref} className={className} style={triggerStyles} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );

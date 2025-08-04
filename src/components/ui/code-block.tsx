@@ -6,7 +6,8 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { cn } from '../../lib/utils/cn';
 
 /**
  * CodeBlock variant types
@@ -98,8 +99,7 @@ const CopyButton: React.FC<{
   code: string;
   onCopy?: (code: string) => void;
 }> = ({ code, onCopy }) => {
-  const { colors, spacing, typography, getToken } = useTokens();
-  const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState(false);
 
   const handleCopy = async (): Promise<void> => {
     try {
@@ -133,9 +133,9 @@ const CopyButton: React.FC<{
   };
 
   return (
-    <button
+    <Text as="button"
       onClick={handleCopy}
-      style={buttonStyles}
+     
       aria-label={copied ? 'Kopiert!' : 'Kopier kode'}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
@@ -153,14 +153,14 @@ const CopyButton: React.FC<{
     >
       {copied ? (
         <>
-          <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
           Kopiert!
         </>
       ) : (
         <>
-          <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -171,7 +171,7 @@ const CopyButton: React.FC<{
           Kopier
         </>
       )}
-    </button>
+    </Text>
   );
 };
 
@@ -183,8 +183,7 @@ const DownloadButton: React.FC<{
   filename: string;
   onDownload?: (code: string, filename: string) => void;
 }> = ({ code, filename, onDownload }) => {
-  const { colors, spacing, typography, getToken } = useTokens();
-
+  
   const handleDownload = (): void => {
     try {
       const blob = new Blob([code], { type: 'text/plain' });
@@ -223,9 +222,9 @@ const DownloadButton: React.FC<{
   };
 
   return (
-    <button
+    <Text as="button"
       onClick={handleDownload}
-      style={buttonStyles}
+     
       aria-label={`Last ned ${filename}`}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
@@ -241,7 +240,7 @@ const DownloadButton: React.FC<{
         e.currentTarget.style.outline = 'none';
       }}
     >
-      <svg style={{ width: '12px', height: '12px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -250,7 +249,7 @@ const DownloadButton: React.FC<{
         />
       </svg>
       Last ned
-    </button>
+    </Text>
   );
 };
 
@@ -261,40 +260,21 @@ const LineNumbers: React.FC<{
   lines: number;
   highlightLines?: number[];
 }> = ({ lines, highlightLines = [] }) => {
-  const { colors, spacing, typography } = useTokens();
-  
+    
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-      userSelect: 'none',
-      paddingRight: spacing[4],
-      borderRight: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-    }}>
+    <Box className="flex flex-col text-right pr-4 select-none">
       {Array.from({ length: lines }, (_, i) => (
-        <span
+        <Text as="span"
           key={i + 1}
-          style={{
-            minHeight: '1.25rem',
-            lineHeight: '1.25',
-            paddingLeft: spacing[2],
-            paddingRight: spacing[2],
-            paddingTop: 0,
-            paddingBottom: 0,
-            backgroundColor: highlightLines.includes(i + 1) 
-              ? `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}33` 
-              : 'transparent',
-            color: highlightLines.includes(i + 1) 
-              ? (colors.accent?.foreground || colors.text?.primary || '#111827')
-              : 'inherit',
-          }}
+          className={cn(
+            "px-2 leading-relaxed",
+            highlightLines.includes(i + 1) && "bg-accent text-accent-foreground"
+          )}
         >
           {i + 1}
-        </span>
+        </Text>
       ))}
-    </div>
+    </Box>
   );
 };
 
@@ -327,8 +307,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     },
     ref
   ) => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+        const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
     
     const languageInfo = languageConfig[language] || languageConfig.text;
     const displayFilename = filename || `code${languageInfo.extension}`;
@@ -433,40 +412,32 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={containerStyles}
+       
         {...props}
       >
         {/* Header */}
         {(showLanguage || showCopy || showDownload || filename || header || collapsible) && (
-          <div style={headerStyles}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[3] }}>
+          <Box>
+            <Box>
               {filename && (
-                <span style={{
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.medium,
-                  color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-                }}>{filename}</span>
+                <Text as="span">{filename}</Text>
               )}
               {showLanguage && !filename && (
-                <span style={{
-                  fontSize: typography.fontSize.xs,
-                  fontWeight: typography.fontWeight.medium,
-                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                }}>
+                <Text as="span">
                   {languageInfo.label}
-                </span>
+                </Text>
               )}
               {header}
-            </div>
+            </Box>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: spacing[2] }}>
+            <Box>
               {collapsible && (
-                <button
+                <Text as="button"
                   onClick={() => setIsCollapsed(!isCollapsed)}
-                  style={collapsibleButtonStyles}
+                 
                   aria-label={isCollapsed ? 'Vis kode' : 'Skjul kode'}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
@@ -483,12 +454,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
                   }}
                 >
                   <svg
-                    style={{
-                      width: '12px',
-                      height: '12px',
-                      transition: 'transform 150ms ease-in-out',
-                      transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
-                    }}
+                   
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -501,7 +467,7 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
                     />
                   </svg>
                   {isCollapsed ? 'Vis' : 'Skjul'}
-                </button>
+                </Text>
               )}
 
               {showDownload && (
@@ -509,70 +475,41 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
               )}
 
               {showCopy && <CopyButton code={code} onCopy={onCopy} />}
-            </div>
-          </div>
+            </Box>
+          </Box>
         )}
 
         {/* Code content */}
         {!isCollapsed && (
-          <div style={{ position: 'relative' }}>
-            <div style={{
-              overflow: 'auto',
-              ...(maxHeight !== 'none' && {
-                scrollbarWidth: 'thin',
-                scrollbarColor: `${colors.border?.default || '#e5e7eb'} ${colors.background?.default || '#ffffff'}`,
-              }),
-            }}>
-              <div style={{ display: 'flex' }}>
+          <Box className="relative">
+            <Box className="overflow-x-auto bg-background">
+              <Box className="inline-block min-w-full">
                 {/* Line numbers */}
                 {showLineNumbers && (
                   <LineNumbers lines={lineCount} highlightLines={highlightLines} />
                 )}
 
                 {/* Code */}
-                <pre style={{
-                  flex: 1,
-                  padding: spacing[4],
-                  margin: 0,
-                  backgroundColor: 'transparent',
-                  color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-                  fontFamily: typography.fontFamily.mono?.join(', ') || 'ui-monospace, SFMono-Regular, Consolas, monospace',
-                  lineHeight: typography.lineHeight.relaxed,
-                  overflow: wrap ? 'visible' : 'auto',
-                  whiteSpace: wrap ? 'pre-wrap' : 'pre',
-                  wordBreak: wrap ? 'break-word' : 'normal',
-                }}>
-                  <code style={{ display: 'block' }}>
+                <pre className="whitespace-pre font-mono text-sm">
+                  <Text as="code" className="block">
                     {codeLines.map((line, index) => (
-                      <span
+                      <Text as="span"
                         key={index}
-                        style={{
-                          display: 'block',
-                          minHeight: '1.25rem',
-                          backgroundColor: highlightLines.includes(index + 1) 
-                            ? `${colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'}1A` // 10% opacity
-                            : 'transparent',
-                          padding: highlightLines.includes(index + 1) 
-                            ? `0 ${spacing[2]}` 
-                            : '0',
-                          margin: highlightLines.includes(index + 1) 
-                            ? `0 -${spacing[2]}` 
-                            : '0',
-                          borderRadius: highlightLines.includes(index + 1) 
-                            ? borderRadius.md 
-                            : '0',
-                        }}
+                        className={cn(
+                          "block",
+                          highlightLines.includes(index + 1) && "bg-accent/10 px-2 -mx-2 rounded-md"
+                        )}
                       >
                         {line || '\n'}
-                      </span>
+                      </Text>
                     ))}
-                  </code>
+                  </Text>
                 </pre>
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

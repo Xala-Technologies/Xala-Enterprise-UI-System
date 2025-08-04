@@ -8,7 +8,7 @@
 import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // WEBNAVBAR VARIANTS
@@ -136,8 +136,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
     ref
   ): React.ReactElement => {
     // ✅ Access design tokens for dynamic styling
-    const { spacing, elevation, responsive, motion, borderRadius } = useTokens();
-
+    
     // Get container constraints based on maxWidth
     const getContainerStyles = (): React.CSSProperties => {
       // Handle responsive breakpoints safely
@@ -195,7 +194,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
     };
 
     return (
-      <nav
+      <Box as="nav"
         ref={ref}
         className={cn(
           webNavbarVariants({
@@ -206,57 +205,54 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
           }),
           className
         )}
-        style={dynamicStyles}
+       
         role="navigation"
         aria-label={ariaLabel}
         {...props}
       >
         {/* Container for max-width control */}
-        <div
+        <Box
           className="flex items-center justify-between w-full"
-          style={getContainerStyles()}
+         
         >
           {/* Logo Section */}
           {logo && (
-            <div
+            <Box
               className="flex items-center flex-shrink-0"
-              style={{ marginRight: spacing?.[4] || '1rem' }}
+             
             >
               {logo}
-            </div>
+            </Box>
           )}
 
           {/* Navigation Section */}
           {navigation && (
-            <div
+            <Box
               className="hidden md:flex items-center flex-1"
-              style={{ 
-                marginLeft: spacing?.[6] || '1.5rem',
-                marginRight: spacing?.[6] || '1.5rem',
-              }}
+             
             >
               {navigation}
-            </div>
+            </Box>
           )}
 
           {/* Search Section */}
           {searchComponent && (
-            <div
+            <Box
               className="hidden sm:flex items-center flex-1 max-w-md"
-              style={{ marginRight: spacing?.[4] || '1rem' }}
+             
             >
               {searchComponent}
-            </div>
+            </Box>
           )}
 
           {/* Actions Section */}
           {actions && (
-            <div className="flex items-center flex-shrink-0">
+            <Box className="flex items-center flex-shrink-0">
               {actions}
-            </div>
+            </Box>
           )}
-        </div>
-      </nav>
+        </Box>
+      </Box>
     );
   }
 );
@@ -303,7 +299,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
           ref={ref}
           logo={logo}
           actions={
-            <div className="flex items-center gap-2">
+            <Box className="flex items-center gap-2">
               {actions}
               {/* Mobile menu button */}
               <button
@@ -323,7 +319,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
                 onClick={onMobileMenuToggle}
                 className="min-w-[2.75rem] min-h-[2.75rem]"
               >
-                <span className="sr-only">Open main menu</span>
+                <Text as="span" className="sr-only">Open main menu</Text>
                 {/* Hamburger icon */}
                 <svg
                   className="h-6 w-6"
@@ -344,14 +340,14 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
                   />
                 </svg>
               </button>
-            </div>
+            </Box>
           }
           {...props}
         />
 
         {/* Mobile menu overlay */}
         {mobileMenuOpen && mobileMenuContent && (
-          <div
+          <Box
             id="mobile-menu"
             className={cn(
               'md:hidden',
@@ -362,7 +358,7 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
             className="p-4"
           >
             {mobileMenuContent}
-          </div>
+          </Box>
         )}
       </>
     );

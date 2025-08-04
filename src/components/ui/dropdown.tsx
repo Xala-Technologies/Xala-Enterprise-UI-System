@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, useRef, useEffect, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Dropdown placement types
@@ -134,9 +134,9 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
     return (
       <DropdownContext.Provider value={contextValue}>
-        <div ref={ref} className={className} style={style} {...props}>
+        <Box ref={ref} className={className} {...props}>
           {children}
-        </div>
+        </Box>
       </DropdownContext.Provider>
     );
   }
@@ -173,10 +173,10 @@ export const DropdownTrigger = forwardRef<HTMLDivElement, DropdownTriggerProps>(
     };
 
     return (
-      <div
+      <Box
         ref={triggerRef}
         className={className}
-        style={triggerStyles}
+       
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         role="button"
@@ -186,7 +186,7 @@ export const DropdownTrigger = forwardRef<HTMLDivElement, DropdownTriggerProps>(
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -199,8 +199,7 @@ DropdownTrigger.displayName = 'DropdownTrigger';
 export const DropdownContent = forwardRef<HTMLDivElement, DropdownContentProps>(
   ({ children, align = 'center', sideOffset = 4, alignOffset = 0, avoidCollisions = true, collisionPadding = 8, className, style, ...props }, ref): React.ReactElement => {
     const { isOpen, setIsOpen, triggerRef, contentRef, placement } = useDropdownContext();
-    const { colors, spacing, typography, getToken } = useTokens();
-    const [position, setPosition] = useState({ top: 0, left: 0 });
+        const [position, setPosition] = useState({ top: 0, left: 0 });
 
     useEffect(() => {
       if (!isOpen || !triggerRef.current) return;
@@ -303,11 +302,11 @@ export const DropdownContent = forwardRef<HTMLDivElement, DropdownContentProps>(
 
     // Get design tokens
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
     
     const shadows = {
-      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
     };
 
     const contentStyles: React.CSSProperties = {
@@ -318,10 +317,10 @@ export const DropdownContent = forwardRef<HTMLDivElement, DropdownContentProps>(
       minWidth: '12rem',
       overflow: 'hidden',
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      padding: spacing[1],
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      border: '1px solid var(--border)',
+      backgroundColor: '#ffffff',
+      padding: '0.25rem',
+      color: '#111827',
       boxShadow: shadows.lg,
       transform: align === 'center' ? 'translateX(-50%)' : undefined,
       ...style,
@@ -329,16 +328,16 @@ export const DropdownContent = forwardRef<HTMLDivElement, DropdownContentProps>(
 
     return (
       <>
-        <div
+        <Box
           ref={contentRef}
           className={className}
-          style={contentStyles}
+         
           role="menu"
           aria-orientation="vertical"
           {...props}
         >
           {children}
-        </div>
+        </Box>
       </>
     );
   }
@@ -352,8 +351,7 @@ DropdownContent.displayName = 'DropdownContent';
 export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
   ({ children, disabled = false, onSelect, closeOnSelect = true, className, style, onClick, ...props }, ref): React.ReactElement => {
     const { setIsOpen } = useDropdownContext();
-    const { colors, spacing, typography, getToken } = useTokens();
-
+    
     const handleClick = (event: React.MouseEvent<HTMLDivElement>): void => {
       if (disabled) return;
       
@@ -376,7 +374,7 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
 
     // Get border radius
     const borderRadius = {
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+      sm: '0.125rem',
     };
 
     const itemStyles: React.CSSProperties = {
@@ -386,56 +384,56 @@ export const DropdownItem = forwardRef<HTMLDivElement, DropdownItemProps>(
       userSelect: 'none',
       alignItems: 'center',
       borderRadius: borderRadius.sm,
-      padding: `${spacing[1.5]} ${spacing[2]}`,
-      fontSize: typography.fontSize.sm,
+      padding: '0.5rem 0.75rem',
+      fontSize: '0.875rem',
       outline: 'none',
       transition: 'all 150ms ease-in-out',
       opacity: disabled ? 0.5 : 1,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      color: '#111827',
       ...style,
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         role="menuitem"
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled}
         className={className}
-        style={itemStyles}
+       
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         onMouseEnter={(e) => {
           if (!disabled) {
-            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.color = '#111827';
           }
         }}
-        onMouseLeave={(e) => {
+            onMouseLeave={(e) => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            e.currentTarget.style.color = '#111827';
           }
         }}
         onFocus={(e) => {
           if (!disabled) {
-            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
-            e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.color = '#111827';
+            e.currentTarget.style.outline = '2px solid var(--primary)';
             e.currentTarget.style.outlineOffset = '-2px';
           }
         }}
         onBlur={(e) => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            e.currentTarget.style.color = '#111827';
             e.currentTarget.style.outline = 'none';
           }
         }}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -447,21 +445,20 @@ DropdownItem.displayName = 'DropdownItem';
  */
 export const DropdownSeparator = forwardRef<HTMLDivElement, DropdownSeparatorProps>(
   ({ className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing } = useTokens();
-
+    
     const separatorStyles: React.CSSProperties = {
       height: '1px',
-      margin: `${spacing[1]} -${spacing[1]}`,
-      backgroundColor: colors.border?.default || colors.neutral?.[200] || '#e5e7eb',
+      margin: '0.25rem 0',
+      backgroundColor: '#e5e7eb',
       ...style,
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         role="separator"
         className={className}
-        style={separatorStyles}
+       
         {...props}
       />
     );
@@ -475,25 +472,24 @@ DropdownSeparator.displayName = 'DropdownSeparator';
  */
 export const DropdownLabel = forwardRef<HTMLDivElement, DropdownLabelProps>(
   ({ children, className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
-
+    
     const labelStyles: React.CSSProperties = {
-      padding: `${spacing[1.5]} ${spacing[2]}`,
-      fontSize: typography.fontSize.xs,
-      fontWeight: typography.fontWeight.semibold,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      padding: '0.5rem 0.75rem',
+      fontSize: '0.75rem',
+      fontWeight: '600',
+      color: '#6b7280',
       ...style,
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={labelStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );

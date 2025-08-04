@@ -8,7 +8,7 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // GRID VARIANTS USING DESIGN TOKENS
@@ -412,7 +412,7 @@ export const GridItem = forwardRef<HTMLDivElement, GridItemProps>(
     }, [area, debugStyles, style]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           gridItemVariants({
@@ -427,11 +427,11 @@ export const GridItem = forwardRef<HTMLDivElement, GridItemProps>(
           }),
           className
         )}
-        style={itemStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -453,14 +453,14 @@ export const GridArea = forwardRef<HTMLDivElement, GridAreaProps>(
     const debugStyles = useDebugStyles(debug);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(gridAreaVariants({ area }), className)}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -493,8 +493,7 @@ export const ResponsiveGrid = forwardRef<HTMLDivElement, ResponsiveGridProps>(
     children,
     ...props
   }, ref) => {
-    const { spacing } = useTokens();
-    const responsiveClasses = useResponsiveGrid(cols);
+        const responsiveClasses = useResponsiveGrid(cols);
     const debugStyles = useDebugStyles(debug);
 
     const gridStyles = React.useMemo((): React.CSSProperties => {
@@ -522,7 +521,7 @@ export const ResponsiveGrid = forwardRef<HTMLDivElement, ResponsiveGridProps>(
     ]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           gridVariants({
@@ -538,11 +537,11 @@ export const ResponsiveGrid = forwardRef<HTMLDivElement, ResponsiveGridProps>(
           responsiveClasses,
           className
         )}
-        style={gridStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -581,8 +580,7 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
     children,
     ...props
   }, ref) => {
-    const { spacing } = useTokens();
-    const debugStyles = useDebugStyles(debug);
+        const debugStyles = useDebugStyles(debug);
 
     const gridStyles = React.useMemo((): React.CSSProperties => {
       const styles: React.CSSProperties = { ...debugStyles, ...style };
@@ -609,7 +607,7 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
     ]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           gridVariants({
@@ -625,11 +623,11 @@ export const Grid = forwardRef<HTMLDivElement, GridProps>(
           responsive && 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6',
           className
         )}
-        style={gridStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );

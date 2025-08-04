@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Calendar variant types
@@ -194,7 +194,7 @@ const getWeekNumber = (date: Date): number => {
  * Navigation icons
  */
 const ChevronLeftIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -204,7 +204,7 @@ const ChevronLeftIcon = (): React.ReactElement => (
 );
 
 const ChevronRightIcon = (): React.ReactElement => (
-  <svg viewBox="0 0 20 20" fill="currentColor" style={{ height: '16px', width: '16px' }}>
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -237,8 +237,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     const monthNames = getNorwegianMonthNames();
     const dayNames = getNorwegianDayNames();
     const currentYear = currentMonth.getFullYear();
@@ -255,12 +254,12 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
     
     // Get shadows
     const shadows = {
-      lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+      lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
     };
 
     // Size styles
@@ -268,18 +267,18 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       switch (size) {
         case 'sm':
           return { 
-            fontSize: typography.fontSize.xs,
-            padding: spacing[2],
+            fontSize: '0.75rem',
+            padding: '0.5rem',
           };
         case 'lg':
           return { 
-            fontSize: typography.fontSize.base,
-            padding: spacing[4],
+            fontSize: '1rem',
+            padding: '1rem',
           };
         default:
           return { 
-            fontSize: typography.fontSize.sm,
-            padding: spacing[4],
+            fontSize: '0.875rem',
+            padding: '1rem',
           };
       }
     };
@@ -289,7 +288,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       switch (variant) {
         case 'compact':
           return {
-            padding: spacing[2],
+            padding: '0.5rem',
           };
         case 'elevated':
           return {
@@ -303,10 +302,10 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     // Calendar container styles
     const calendarStyles: React.CSSProperties = {
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.default || '#ffffff',
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-      fontFamily: typography.fontFamily.sans.join(', '),
+      border: '1px solid #e5e7eb',
+      backgroundColor: '#ffffff',
+      color: '#111827',
+      fontFamily: 'Inter, system-ui, sans-serif',
       ...getSizeStyles(),
       ...getVariantStyles(),
       ...style,
@@ -341,7 +340,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: size === 'sm' ? typography.fontSize.xs : typography.fontSize.sm,
+        fontSize: size === 'sm' ? '0.75rem' : '0.875rem',
         transition: 'all 150ms ease-in-out',
         border: 'none',
         cursor: calendarDate.isDisabled ? 'not-allowed' : 'pointer',
@@ -352,7 +351,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       if (calendarDate.isDisabled) {
         return {
           ...baseStyles,
-          color: `${colors.text?.secondary || colors.neutral?.[500] || '#6b7280'}30`,
+          color: '#9ca3af',
           cursor: 'not-allowed',
         };
       }
@@ -360,50 +359,50 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       if (calendarDate.isSelected) {
         return {
           ...baseStyles,
-          backgroundColor: colors.primary?.[500] || '#3b82f6',
-          color: colors.background?.default || '#ffffff',
+          backgroundColor: '#3b82f6',
+          color: '#ffffff',
         };
       }
 
       if (calendarDate.isToday) {
         return {
           ...baseStyles,
-          backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
-          color: colors.accent?.foreground || colors.text?.primary || '#111827',
-          fontWeight: typography.fontWeight.medium,
+          backgroundColor: '#f3f4f6',
+          color: '#111827',
+          fontWeight: '500',
         };
       }
 
       if (calendarDate.isOtherMonth) {
         return {
           ...baseStyles,
-          color: `${colors.text?.secondary || colors.neutral?.[500] || '#6b7280'}50`,
+          color: '#d1d5db'
         };
       }
 
       if (calendarDate.isHoliday) {
         return {
           ...baseStyles,
-          color: colors.danger?.[500] || '#ef4444',
-          fontWeight: typography.fontWeight.medium,
+          color: '#ef4444',
+          fontWeight: '500',
         };
       }
 
       if (calendarDate.isWeekend) {
         return {
           ...baseStyles,
-          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+          color: '#6b7280',
         };
       }
 
       return {
         ...baseStyles,
-        color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+        color: '#111827',
       };
     };
 
     const buttonStyles: React.CSSProperties = {
-      padding: spacing[1],
+      padding: '0.25rem',
       borderRadius: borderRadius.md,
       backgroundColor: 'transparent',
       border: 'none',
@@ -415,94 +414,66 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={calendarStyles}
+       
         role="application"
         aria-label="Kalender"
         {...props}
       >
         {/* Header */}
-        <div style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'space-between',
-          marginBottom: spacing[4],
-        }}>
-          <button
+        <Box>
+          <Text as="button"
             onClick={handlePrevMonth}
-            style={buttonStyles}
+           
             aria-label="Forrige måned"
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+              e.currentTarget.style.backgroundColor = 'var(--accent)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
             <ChevronLeftIcon />
-          </button>
+          </Text>
 
-          <h2 style={{
-            fontWeight: typography.fontWeight.semibold,
-            color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-          }}>
+          <Heading level={2}>
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
-          </h2>
+          </Heading>
 
-          <button
+          <Text as="button"
             onClick={handleNextMonth}
-            style={buttonStyles}
+           
             aria-label="Neste måned"
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+              e.currentTarget.style.backgroundColor = 'var(--accent)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
             <ChevronRightIcon />
-          </button>
-        </div>
+          </Text>
+        </Box>
 
         {/* Days grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: showWeekNumbers ? 'auto repeat(7, 1fr)' : 'repeat(7, 1fr)',
-          gap: spacing[1],
-        }}>
+        <Box>
           {/* Week number header */}
           {showWeekNumbers && (
-            <div style={{
-              height: dayCellSize,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: typography.fontSize.xs,
-              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-              fontWeight: typography.fontWeight.medium,
-            }}>
+            <Box>
               Uke
-            </div>
+            </Box>
           )}
 
           {/* Day headers */}
           {dayNames.map(day => (
-            <div
+            <Box
               key={day}
-              style={{
-                height: dayCellSize,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: typography.fontSize.xs,
-                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                fontWeight: typography.fontWeight.medium,
-              }}
+             
             >
               {day}
-            </div>
+            </Box>
           ))}
 
           {/* Calendar days */}
@@ -514,30 +485,23 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
               <React.Fragment key={calendarDate.date.toISOString()}>
                 {/* Week number */}
                 {showWeekNumbers && isStartOfWeek && (
-                  <div style={{
-                    height: dayCellSize,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: typography.fontSize.xs,
-                    color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                  }}>
+                  <Box>
                     {getWeekNumber(calendarDate.date)}
-                  </div>
+                  </Box>
                 )}
 
                 {/* Day cell */}
                 {shouldShow ? (
-                  <button
+                  <Text as="button"
                     onClick={() => handleDateClick(calendarDate)}
                     disabled={calendarDate.isDisabled}
                     style={getDayStyles(calendarDate)}
-                    aria-label={`${calendarDate.day}. ${monthNames[calendarDate.month]} ${calendarDate.year}${calendarDate.holidayName ? ` - ${calendarDate.holidayName}` : ''}`}
+                    aria-label={`${calendarDate.day}${calendarDate.holidayName ? `: ${calendarDate.holidayName}` : ''}`}
                     title={calendarDate.holidayName}
                     onMouseEnter={(e) => {
                       if (!calendarDate.isDisabled && !calendarDate.isSelected) {
-                        e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-                        e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+                        e.currentTarget.style.backgroundColor = 'var(--accent)';
+                        e.currentTarget.style.color = 'var(--accent-foreground)';
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -548,7 +512,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                       }
                     }}
                     onFocus={(e) => {
-                      e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+                      e.currentTarget.style.outline = '2px solid var(--primary)';
                       e.currentTarget.style.outlineOffset = '2px';
                     }}
                     onBlur={(e) => {
@@ -556,53 +520,31 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
                     }}
                   >
                     {calendarDate.day}
-                  </button>
+                  </Text>
                 ) : (
-                  <div style={{ height: dayCellSize, width: dayCellSize }} />
+                  <Box />
                 )}
               </React.Fragment>
             );
           })}
-        </div>
+        </Box>
 
         {/* Legend */}
-        <div style={{
-          marginTop: spacing[4],
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: spacing[2],
-          fontSize: typography.fontSize.xs,
-          color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
-            <div style={{
-              height: '12px',
-              width: '12px',
-              borderRadius: '2px',
-              backgroundColor: colors.primary?.[500] || '#3b82f6',
-            }} />
-            <span>Valgt</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
-            <div style={{
-              height: '12px',
-              width: '12px',
-              borderRadius: '2px',
-              backgroundColor: colors.accent?.default || colors.neutral?.[100] || '#f3f4f6',
-            }} />
-            <span>I dag</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing[1] }}>
-            <div style={{
-              height: '12px',
-              width: '12px',
-              borderRadius: '2px',
-              backgroundColor: colors.danger?.[500] || '#ef4444',
-            }} />
-            <span>Helligdag</span>
-          </div>
-        </div>
-      </div>
+        <Box>
+          <Box>
+            <Box />
+            <Text as="span">Valgt</Text>
+          </Box>
+          <Box>
+            <Box />
+            <Text as="span">I dag</Text>
+          </Box>
+          <Box>
+            <Box />
+            <Text as="span">Helligdag</Text>
+          </Box>
+        </Box>
+      </Box>
     );
   }
 );

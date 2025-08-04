@@ -6,7 +6,8 @@
  */
 
 import React, { forwardRef, useState, useRef, useEffect, useMemo, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { cn } from '../../lib/utils/cn';
 
 /**
  * MultiSelect option interface
@@ -114,8 +115,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const [isOpen, setIsOpen] = useState(false);
+        const [isOpen, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [selectedValues, setSelectedValues] = useState<string[]>(value ?? defaultValue ?? []);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -124,7 +124,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Generate ID if not provided
-    const multiSelectId = id || (label ? `multiselect-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+    const multiSelectId = id || (label ? `multiselect-` : undefined);
 
     // Determine actual variant based on state
     const actualVariant = error || errorText ? 'destructive' : success || successText ? 'success' : variant;
@@ -345,10 +345,10 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       left: 0,
       right: 0,
       marginTop: spacing[1],
-      maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+      maxHeight: typeof maxHeight === 'number' ? `px` : maxHeight,
       overflowY: 'auto',
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      border: `1px solid `,
       backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
       boxShadow: shadows.lg,
       zIndex: 50,
@@ -381,7 +381,7 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
       display: 'inline-flex',
       alignItems: 'center',
       gap: spacing[1],
-      padding: `${spacing[0.5]} ${spacing[2]}`,
+      padding: ` `,
       backgroundColor: colors.primary?.[100] || '#dbeafe',
       color: colors.primary?.[700] || '#1d4ed8',
       borderRadius: borderRadius.full,
@@ -392,21 +392,21 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     const renderSelectedDisplay = (): ReactNode => {
       if (selectedValues.length === 0) {
         return (
-          <span style={{ color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280' }}>
+          <Text as="span">
             {placeholder}
-          </span>
+          </Text>
         );
       }
 
       switch (displayMode) {
         case 'counter':
-          return <span>{selectedValues.length} selected</span>;
+          return <Text as="span">{selectedValues.length} selected</Text>;
         case 'list':
-          return <span>{selectedOptions.map(opt => opt.label).join(', ')}</span>;
+          return <Text as="span">{selectedOptions.map(opt => opt.label).join(', ')}</Text>;
         case 'chips':
         default:
           return selectedOptions.map(option => (
-            <span key={option.value} style={chipStyles}>
+            <Text as="span" key={option.value}>
               {option.label}
               {!disabled && (
                 <button
@@ -415,14 +415,6 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                     e.stopPropagation();
                     handleRemoveChip(option.value);
                   }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: 0,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
                   aria-label={`Remove ${option.label}`}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
@@ -430,46 +422,33 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                   </svg>
                 </button>
               )}
-            </span>
+            </Text>
           ));
       }
     };
 
     const multiSelectElement = (
-      <div ref={containerRef} style={{ position: 'relative' }}>
-        <div
+      <Box ref={containerRef}>
+        <Box
           onClick={() => !disabled && setIsOpen(!isOpen)}
-          style={containerStyles}
+         
           role="button"
           tabIndex={disabled ? -1 : 0}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
-          aria-controls={`${multiSelectId}-listbox`}
+          aria-controls={-listbox}
           aria-invalid={error || !!errorText}
-          aria-describedby={displayHelperText ? `${multiSelectId}-helper` : undefined}
+          aria-describedby={displayHelperText ? `-helper` : undefined}
           aria-required={required}
         >
-          <div style={{ flex: 1, display: 'flex', flexWrap: 'wrap', gap: spacing[1] }}>
+          <Box>
             {renderSelectedDisplay()}
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '20px',
-              height: '20px',
-              flexShrink: 0,
-              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-            }}
+          </Box>
+          <Box
+           
           >
             <svg
-              style={{
-                height: '16px',
-                width: '16px',
-                transition: 'transform 150ms ease-in-out',
-                transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}
+             
               viewBox="0 0 20 20"
               fill="currentColor"
               aria-hidden="true"
@@ -480,18 +459,18 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 clipRule="evenodd"
               />
             </svg>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {isOpen && (
-          <div
+          <Box
             ref={listRef}
-            id={`${multiSelectId}-listbox`}
+            id={-listbox}
             role="listbox"
             aria-multiselectable="true"
-            style={dropdownStyles}
+           
           >
-            <div style={{ padding: spacing[2] }}>
+            <Box>
               <input
                 ref={inputRef}
                 type="text"
@@ -499,162 +478,105 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={searchPlaceholder}
-                style={{
-                  width: '100%',
-                  padding: spacing[2],
-                  borderRadius: borderRadius.sm,
-                  border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-                  backgroundColor: colors.background?.default || '#ffffff',
-                  fontSize: typography.fontSize.sm,
-                  outline: 'none',
-                }}
+                className="w-full p-2 bg-background text-sm outline-none"
               />
-            </div>
+            </Box>
 
             {showSelectAll && filteredOptions.length > 0 && (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  padding: `${spacing[1]} ${spacing[3]}`,
-                  borderBottom: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-                }}
-              >
+              <Box className="px-3 py-2 border-b border-border">
                 <button
                   type="button"
                   onClick={handleSelectAll}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: spacing[1],
-                    cursor: 'pointer',
-                    color: colors.primary?.[600] || '#2563eb',
-                    fontSize: typography.fontSize.sm,
-                  }}
+                  className="text-sm font-medium hover:underline"
                 >
                   {selectAllLabel}
                 </button>
                 <button
                   type="button"
                   onClick={handleClearAll}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: spacing[1],
-                    cursor: 'pointer',
-                    color: colors.primary?.[600] || '#2563eb',
-                    fontSize: typography.fontSize.sm,
-                  }}
+                  className="text-sm font-medium hover:underline"
                 >
                   {clearAllLabel}
                 </button>
-              </div>
+              </Box>
             )}
 
             {filteredOptions.length === 0 ? (
-              <div
-                style={{
-                  padding: spacing[3],
-                  textAlign: 'center',
-                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                  fontSize: typography.fontSize.sm,
-                }}
+              <Box
+               
               >
                 {emptyMessage}
-              </div>
+              </Box>
             ) : (
               Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
-                <div key={groupName}>
+                <Box key={groupName}>
                   {groupName && (
-                    <div
-                      style={{
-                        padding: `${spacing[1.5]} ${spacing[3]}`,
-                        fontSize: typography.fontSize.xs,
-                        fontWeight: typography.fontWeight.semibold,
-                        color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                      }}
+                    <Box className="px-3 py-1 text-xs font-semibold text-muted-foreground"
                     >
                       {groupName}
-                    </div>
+                    </Box>
                   )}
                   {groupOptions.map((option) => {
                     const isSelected = selectedValues.includes(option.value);
                     const isDisabled = option.disabled || (max && selectedValues.length >= max && !isSelected);
 
                     return (
-                      <div
+                      <Box
                         key={option.value}
                         role="option"
                         aria-selected={isSelected}
                         aria-disabled={isDisabled ? 'true' : 'false'}
                         onClick={() => !isDisabled && handleToggleOption(option)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: spacing[2],
-                          padding: `${spacing[2]} ${spacing[3]}`,
-                          cursor: isDisabled ? 'not-allowed' : 'pointer',
-                          opacity: isDisabled ? 0.5 : 1,
-                          backgroundColor: 'transparent',
-                          color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-                          fontSize: typography.fontSize.sm,
-                          transition: 'background-color 150ms ease-in-out',
-                        }}
+                        className={cn(
+                          "px-3 py-2 text-sm cursor-pointer transition-colors hover:bg-accent",
+                          isDisabled && "cursor-not-allowed opacity-50",
+                          isSelected && "bg-accent/50 font-medium"
+                        )}
                         onMouseEnter={(e) => {
                           if (!isDisabled) {
-                            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
+                            e.currentTarget.style.backgroundColor = 'var(--accent)';
                           }
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = 'transparent';
                         }}
                       >
-                        <div
-                          style={{
-                            width: '16px',
-                            height: '16px',
-                            borderRadius: borderRadius.sm,
-                            border: `2px solid ${isSelected ? colors.primary?.[600] || '#2563eb' : colors.border?.default || colors.neutral?.[300] || '#d1d5db'}`,
-                            backgroundColor: isSelected ? colors.primary?.[600] || '#2563eb' : 'transparent',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                          }}
+                        <Box
+                          className={cn(
+                            "w-4 h-4 border rounded flex items-center justify-center flex-shrink-0",
+                            isSelected ? "bg-primary border-primary" : "border-border"
+                          )}
                         >
                           {isSelected && (
                             <svg width="10" height="8" viewBox="0 0 10 8" fill="white">
                               <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           )}
-                        </div>
+                        </Box>
                         {option.icon && (
-                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '16px', height: '16px' }}>
+                          <Text as="span">
                             {option.icon}
-                          </span>
+                          </Text>
                         )}
-                        <div style={{ flex: 1 }}>
-                          <div>{option.label}</div>
+                        <Box>
+                          <Box>{option.label}</Box>
                           {option.description && (
-                            <div
-                              style={{
-                                fontSize: typography.fontSize.xs,
-                                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                              }}
+                            <Box
+                             
                             >
                               {option.description}
-                            </div>
+                            </Box>
                           )}
-                        </div>
-                      </div>
+                        </Box>
+                      </Box>
                     );
                   })}
-                </div>
+                </Box>
               ))
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
 
     if (!label && !displayHelperText) {
@@ -662,26 +584,26 @@ export const MultiSelect = forwardRef<HTMLDivElement, MultiSelectProps>(
     }
 
     return (
-      <div ref={ref} className={className} style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5], ...style }} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {label && (
-          <label htmlFor={multiSelectId} style={labelStyles}>
+          <Text as="label" htmlFor={multiSelectId}>
             {label}
             {required && (
-              <span style={{ marginLeft: spacing[1], color: colors.danger?.[500] || '#ef4444' }} aria-label="required">
+              <Text as="span" aria-label="required">
                 *
-              </span>
+              </Text>
             )}
-          </label>
+          </Text>
         )}
 
         {multiSelectElement}
 
         {displayHelperText && (
-          <p id={`${multiSelectId}-helper`} style={helperTextStyles}>
+          <Text id={`${multiSelectId}-helper`}>
             {displayHelperText}
-          </p>
+          </Text>
         )}
-      </div>
+      </Box>
     );
   }
 );

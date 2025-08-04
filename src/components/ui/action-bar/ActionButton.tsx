@@ -8,8 +8,8 @@
 import React, { forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
-import { useTokens } from '../../../hooks/useTokens';
 import type { ActionConfig } from './types';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
 
 // =============================================================================
 // ACTION BUTTON VARIANTS
@@ -92,8 +92,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing } = useTokens();
-
+    
     // Handle loading state
     const isDisabled = disabled || loading;
 
@@ -188,7 +187,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
       <button
         ref={ref}
         className={cn(actionButtonVariants({ variant, size, shape }), className)}
-        style={dynamicStyles}
+       
         disabled={isDisabled}
         onClick={onClick}
         title={tooltipText}
@@ -198,23 +197,19 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
       >
         {loading ? (
           <>
-            <div style={spinnerStyles} aria-hidden="true" />
-            {showLabel && <span style={{ visibility: 'hidden' }}>{label}</span>}
+            <Box aria-hidden="true" />
+            {showLabel && <Text as="span">{label}</Text>}
           </>
         ) : (
           <>
             {icon && (
-              <span 
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  marginRight: showLabel ? spacing?.[2] || '0.5rem' : 0,
-                }}
+              <Text as="span" 
+               
               >
                 {icon}
-              </span>
+              </Text>
             )}
-            {showLabel && label && <span>{label}</span>}
+            {showLabel && label && <Text as="span">{label}</Text>}
           </>
         )}
       </button>

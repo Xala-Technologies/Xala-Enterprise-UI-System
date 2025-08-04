@@ -8,6 +8,7 @@
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../utils/cn';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Drawer overlay variants using CVA
@@ -264,8 +265,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, getToken } = useTokens();
-
+    
     const handleOverlayClick = (): void => {
       if (closeOnOverlayClick && onClose) {
         onClose();
@@ -422,8 +422,8 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     return (
       <>
         {/* Overlay */}
-        <div
-          style={getOverlayStyles()}
+        <Box
+         
           data-state={isOpen ? 'open' : 'closed'}
           onClick={handleOverlayClick}
           onKeyDown={handleKeyDown}
@@ -431,10 +431,10 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         />
 
         {/* Drawer content */}
-        <div
+        <Box
           ref={ref}
           className={className}
-          style={contentStyles}
+         
           data-state={isOpen ? 'open' : 'closed'}
           role="dialog"
           aria-modal="true"
@@ -444,9 +444,9 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
         >
           {/* Close button */}
           {showCloseButton && onClose && (
-            <button
+            <Text as="button"
               onClick={onClose}
-              style={closeButtonStyles}
+             
               aria-label="Lukk"
               onMouseEnter={(e) => {
                 e.currentTarget.style.opacity = '1';
@@ -463,11 +463,11 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               }}
             >
               <CloseIcon />
-            </button>
+            </Text>
           )}
 
           {children}
-        </div>
+        </Box>
       </>
     );
   }
@@ -483,8 +483,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     { title, description, size = 'default', children, className, style, ...props },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography } = useTokens();
-
+    
     // Size styles
     const getSizeStyles = (): React.CSSProperties => {
       switch (size) {
@@ -521,14 +520,14 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     };
 
     return (
-      <div ref={ref} className={className} style={headerStyles} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {children || (
           <>
-            {title && <h2 style={titleStyles}>{title}</h2>}
-            {description && <p style={descriptionStyles}>{description}</p>}
+            {title && <Heading level={2}>{title}</Heading>}
+            {description && <Text>{description}</Text>}
           </>
         )}
-      </div>
+      </Box>
     );
   }
 );
@@ -547,9 +546,9 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
     };
 
     return (
-      <div ref={ref} className={className} style={bodyStyles} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -561,8 +560,7 @@ DrawerBody.displayName = 'DrawerBody';
  */
 export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
   ({ children, className, style, ...props }, ref): React.ReactElement => {
-    const { spacing } = useTokens();
-
+    
     const footerStyles: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column-reverse',
@@ -573,9 +571,9 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
     };
 
     return (
-      <div ref={ref} className={className} style={footerStyles} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {children}
-      </div>
+      </Box>
     );
   }
 );

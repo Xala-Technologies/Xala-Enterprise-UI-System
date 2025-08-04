@@ -8,8 +8,8 @@
 import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, useState, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 import { airbnbAestheticTokens } from '../../tokens/airbnb-aesthetic-tokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // AIRBNB CARD VARIANTS
@@ -174,8 +174,7 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
     const [imageError, setImageError] = useState(false);
     
     // ✅ Access design tokens
-    const { spacing } = useTokens();
-    
+        
     // Get dynamic styling from Airbnb tokens
     const cardStyles: React.CSSProperties = {
       borderRadius: airbnbAestheticTokens.borderRadius.component.card,
@@ -215,7 +214,7 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           airbnbCardVariants({
@@ -226,7 +225,7 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
           loading && 'animate-pulse',
           className
         )}
-        style={{ ...cardStyles, ...hoverStyles }}
+       
         onClick={handleClick}
         onMouseEnter={(e) => {
           if (interactive && !loading) {
@@ -242,16 +241,16 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
       >
         {/* Image Section */}
         {image && (
-          <div className="relative mb-3">
-            <div 
+          <Box className="relative mb-3">
+            <Box 
               className={cn(
                 'relative overflow-hidden bg-neutral-100',
                 getAspectRatioClass()
               )}
-              style={{ borderRadius: airbnbAestheticTokens.borderRadius.component.image }}
+             
             >
               {loading ? (
-                <div className="w-full h-full bg-neutral-200 animate-pulse" />
+                <Box className="w-full h-full bg-neutral-200 animate-pulse" />
               ) : (
                 <>
                   <img
@@ -270,25 +269,25 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
                   
                   {/* Image placeholder while loading */}
                   {!isImageLoaded && !imageError && (
-                    <div className="absolute inset-0 bg-neutral-200 animate-pulse flex items-center justify-center">
-                      <div className="w-8 h-8 border-2 border-neutral-300 border-t-neutral-500 rounded-full animate-spin" />
-                    </div>
+                    <Box className="absolute inset-0 bg-neutral-200 animate-pulse flex items-center justify-center">
+                      <Box className="w-8 h-8 border-2 border-neutral-300 border-t-neutral-500 rounded-full animate-spin" />
+                    </Box>
                   )}
                   
                   {/* Error state */}
                   {imageError && (
-                    <div className="absolute inset-0 bg-neutral-100 flex items-center justify-center">
-                      <div className="text-neutral-400 text-center">
+                    <Box className="absolute inset-0 bg-neutral-100 flex items-center justify-center">
+                      <Box className="text-neutral-400 text-center">
                         <svg className="w-8 h-8 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                         </svg>
-                        <span className="text-xs">Image not available</span>
-                      </div>
-                    </div>
+                        <Text as="span" className="text-xs">Image not available</Text>
+                      </Box>
+                    </Box>
                   )}
                 </>
               )}
-            </div>
+            </Box>
             
             {/* Favorite Button */}
             {showFavorite && !loading && (
@@ -323,9 +322,9 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
             
             {/* Badges */}
             {badges && badges.length > 0 && !loading && (
-              <div className="absolute top-3 left-3 flex flex-col gap-1">
+              <Box className="absolute top-3 left-3 flex flex-col gap-1">
                 {badges.map((badge, index) => (
-                  <span
+                  <Text as="span"
                     key={index}
                     className={cn(
                       'px-2 py-1 text-xs font-medium rounded-md',
@@ -336,82 +335,73 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
                     )}
                   >
                     {badge.text}
-                  </span>
+                  </Text>
                 ))}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
         
         {/* Content Section */}
-        <div style={{ padding: `0 ${spacing?.[2] || '8px'}` }}>
+        <Box className="p-4">
           {/* Rating */}
           {rating && !loading && (
-            <div className="flex items-center gap-1 mb-1">
+            <Box className="flex items-center gap-1 mb-1">
               <svg className="w-3 h-3 text-neutral-800 fill-current" viewBox="0 0 20 20">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
               </svg>
-              <span className="text-sm font-medium text-neutral-800">
+              <Text as="span" className="text-sm font-medium text-neutral-800">
                 {rating.score.toFixed(1)}
-              </span>
+              </Text>
               {rating.count && (
-                <span className="text-sm text-neutral-500">
+                <Text as="span" className="text-sm text-neutral-500">
                   ({rating.count})
-                </span>
+                </Text>
               )}
-            </div>
+            </Box>
           )}
           
           {/* Title and Subtitle */}
           {loading ? (
-            <div className="space-y-2 mb-3">
-              <div className="h-4 bg-neutral-200 rounded animate-pulse" />
-              <div className="h-3 bg-neutral-200 rounded w-3/4 animate-pulse" />
-            </div>
+            <Box className="space-y-2 mb-3">
+              <Box className="h-4 bg-neutral-200 rounded animate-pulse" />
+              <Box className="h-3 bg-neutral-200 rounded w-3/4 animate-pulse" />
+            </Box>
           ) : (
             <>
               {title && (
-                <h3 
+                <Heading level={3} 
                   className="font-medium text-neutral-800 mb-1 line-clamp-2"
-                  style={{ 
-                    fontSize: airbnbAestheticTokens.typography.fontSize.base,
-                    lineHeight: airbnbAestheticTokens.typography.lineHeight.snug,
-                  }}
+                 
                 >
                   {title}
-                </h3>
+                </Heading>
               )}
               
               {subtitle && (
-                <p 
+                <Text 
                   className="text-neutral-600 mb-2 line-clamp-1"
-                  style={{ 
-                    fontSize: airbnbAestheticTokens.typography.fontSize.sm,
-                    lineHeight: airbnbAestheticTokens.typography.lineHeight.normal,
-                  }}
+                 
                 >
                   {subtitle}
-                </p>
+                </Text>
               )}
             </>
           )}
           
           {/* Description */}
           {description && !loading && (
-            <p 
+            <Text 
               className="text-neutral-600 mb-3 line-clamp-2"
-              style={{ 
-                fontSize: airbnbAestheticTokens.typography.fontSize.sm,
-                lineHeight: airbnbAestheticTokens.typography.lineHeight.normal,
-              }}
+             
             >
               {description}
-            </p>
+            </Text>
           )}
           
           {/* Host Info */}
           {host && !loading && (
-            <div className="flex items-center gap-2 mb-3">
+            <Box className="flex items-center gap-2 mb-3">
               {host.avatar ? (
                 <img
                   src={host.avatar}
@@ -419,49 +409,49 @@ export const AirbnbCard = forwardRef<HTMLDivElement, AirbnbCardProps>(
                   className="w-6 h-6 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-6 h-6 rounded-full bg-neutral-300 flex items-center justify-center">
-                  <span className="text-xs text-neutral-600 font-medium">
+                <Box className="w-6 h-6 rounded-full bg-neutral-300 flex items-center justify-center">
+                  <Text as="span" className="text-xs text-neutral-600 font-medium">
                     {host.name.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+                  </Text>
+                </Box>
               )}
-              <span className="text-sm text-neutral-600">
+              <Text as="span" className="text-sm text-neutral-600">
                 Hosted by {host.name}
-              </span>
+              </Text>
               {host.isSuperhost && (
-                <span className="text-xs bg-neutral-100 text-neutral-700 px-1.5 py-0.5 rounded font-medium">
+                <Text as="span" className="text-xs bg-neutral-100 text-neutral-700 px-1.5 py-0.5 rounded font-medium">
                   Superhost
-                </span>
+                </Text>
               )}
-            </div>
+            </Box>
           )}
           
           {/* Price */}
           {price && !loading && (
-            <div className="flex items-baseline gap-1">
-              <span 
+            <Box className="flex items-baseline gap-1">
+              <Text as="span" 
                 className="font-semibold text-neutral-800"
-                style={{ fontSize: airbnbAestheticTokens.typography.fontSize.base }}
+               
               >
                 {price.currency || '$'}{price.amount}
-              </span>
+              </Text>
               {price.period && (
-                <span 
+                <Text as="span" 
                   className="text-neutral-600"
-                  style={{ fontSize: airbnbAestheticTokens.typography.fontSize.sm }}
+                 
                 >
                   {price.period}
-                </span>
+                </Text>
               )}
-            </div>
+            </Box>
           )}
           
           {/* Loading price */}
           {loading && (
-            <div className="h-4 bg-neutral-200 rounded w-1/3 animate-pulse" />
+            <Box className="h-4 bg-neutral-200 rounded w-1/3 animate-pulse" />
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );

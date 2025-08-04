@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * TreeView variant types
@@ -56,8 +56,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
     { data, selectedId, expandedIds = [], onSelect, onExpand, className, style, ...props },
     ref
   ): React.ReactElement => {
-    const { spacing } = useTokens();
-    const [internalExpanded, setInternalExpanded] = useState<string[]>(expandedIds);
+        const [internalExpanded, setInternalExpanded] = useState<string[]>(expandedIds);
 
     const handleToggle = (id: string): void => {
       const newExpanded = internalExpanded.includes(id)
@@ -81,7 +80,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
     };
 
     return (
-      <div ref={ref} role="tree" className={className} style={containerStyles} {...props}>
+      <Box ref={ref} role="tree" className={className} {...props}>
         {data.map(item => (
           <TreeViewItem
             key={item.id}
@@ -93,7 +92,7 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(
             onToggle={handleToggle}
           />
         ))}
-      </div>
+      </Box>
     );
   }
 );
@@ -119,8 +118,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const hasChildren = item.children && item.children.length > 0;
+        const hasChildren = item.children && item.children.length > 0;
     const paddingLeft = level * 16 + 8;
 
     // Get border radius
@@ -225,8 +223,8 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
     };
 
     return (
-      <div ref={ref} style={style}>
-        <div
+      <Box ref={ref}>
+        <Box
           role="treeitem"
           tabIndex={item.disabled ? -1 : 0}
           aria-selected={selected}
@@ -234,7 +232,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
           data-selected={selected}
           data-disabled={item.disabled}
           className={className}
-          style={getItemStyles()}
+         
           onClick={handleClick}
           onMouseEnter={(e) => {
             if (!item.disabled && !selected && variant !== 'ghost') {
@@ -271,7 +269,7 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
             <button
               type="button"
               onClick={handleToggleClick}
-              style={toggleButtonStyles}
+             
               aria-label={expanded ? 'Collapse' : 'Expand'}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
@@ -283,16 +281,16 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
               {expanded ? '▼' : '▶'}
             </button>
           ) : (
-            <div style={spacerStyles} />
+            <Box />
           )}
 
-          {item.icon && <span style={iconStyles}>{item.icon}</span>}
+          {item.icon && <Text as="span">{item.icon}</Text>}
 
-          <span style={labelStyles}>{item.label}</span>
-        </div>
+          <Text as="span">{item.label}</Text>
+        </Box>
 
         {hasChildren && expanded && (
-          <div style={childrenContainerStyles}>
+          <Box>
             {item.children?.map(child => (
               <TreeViewItem
                 key={child.id}
@@ -305,9 +303,9 @@ export const TreeViewItem = forwardRef<HTMLDivElement, TreeViewItemProps>(
                 variant={variant}
               />
             ))}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

@@ -8,9 +8,9 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { Typography } from './typography';
 import { Separator } from './separator';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // MAIN CONTENT VARIANTS USING DESIGN TOKENS
@@ -151,14 +151,14 @@ export const MainContentHeader = forwardRef<HTMLDivElement, MainContentHeaderPro
   ({ title, subtitle, actions, showDivider = false, sticky, className, children, ...props }, ref) => {
     return (
       <>
-        <div 
+        <Box 
           ref={ref} 
           className={cn(mainContentHeaderVariants({ sticky }), className)} 
           {...props}
         >
           {/* Title and subtitle */}
           {(title || subtitle) && (
-            <div className="flex-1 min-w-0">
+            <Box className="flex-1 min-w-0">
               {title && (
                 <Typography 
                   variant="h2" 
@@ -175,19 +175,19 @@ export const MainContentHeader = forwardRef<HTMLDivElement, MainContentHeaderPro
                   {subtitle}
                 </Typography>
               )}
-            </div>
+            </Box>
           )}
 
           {/* Custom header content */}
-          {children && <div className="flex-1">{children}</div>}
+          {children && <Box className="flex-1">{children}</Box>}
 
           {/* Actions */}
           {actions && (
-            <div className="flex items-center gap-2 ml-4">
+            <Box className="flex items-center gap-2 ml-4">
               {actions}
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
         
         {/* Divider */}
         {showDivider && !sticky && <Separator className="mb-6" />}
@@ -221,14 +221,14 @@ export const MainContentSection = forwardRef<HTMLDivElement, MainContentSectionP
     }, [collapsible]);
 
     return (
-      <section ref={ref} className={cn('space-y-4', className)} {...props}>
+      <Box as="section" ref={ref} className={cn('space-y-4', className)} {...props}>
         {/* Section header */}
         {(title || description || actions) && (
-          <div className="flex items-start justify-between gap-4">
+          <Box className="flex items-start justify-between gap-4">
             {/* Title and description */}
-            <div className="flex-1 min-w-0">
+            <Box className="flex-1 min-w-0">
               {title && (
-                <div className="flex items-center gap-2">
+                <Box className="flex items-center gap-2">
                   <Typography 
                     variant="h4" 
                     className="text-foreground font-medium"
@@ -236,7 +236,7 @@ export const MainContentSection = forwardRef<HTMLDivElement, MainContentSectionP
                     {title}
                   </Typography>
                   {collapsible && (
-                    <button
+                    <Text as="button"
                       onClick={toggleCollapse}
                       className="text-muted-foreground hover:text-foreground transition-colors"
                       aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
@@ -249,9 +249,9 @@ export const MainContentSection = forwardRef<HTMLDivElement, MainContentSectionP
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
-                    </button>
+                    </Text>
                   )}
-                </div>
+                </Box>
               )}
               {description && (
                 <Typography 
@@ -261,24 +261,24 @@ export const MainContentSection = forwardRef<HTMLDivElement, MainContentSectionP
                   {description}
                 </Typography>
               )}
-            </div>
+            </Box>
 
             {/* Actions */}
             {actions && (
-              <div className="flex items-center gap-2">
+              <Box className="flex items-center gap-2">
                 {actions}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
         )}
 
         {/* Section content */}
         {!isCollapsed && children && (
-          <div className="space-y-4">
+          <Box className="space-y-4">
             {children}
-          </div>
+          </Box>
         )}
-      </section>
+      </Box>
     );
   }
 );
@@ -296,14 +296,14 @@ const LoadingState: React.FC<{ content?: ReactNode }> = ({ content }) => {
   if (content) return <>{content}</>;
   
   return (
-    <div className="flex items-center justify-center py-12">
-      <div className="flex items-center gap-3">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
+    <Box className="flex items-center justify-center py-12">
+      <Box className="flex items-center gap-3">
+        <Box className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
         <Typography variant="body" className="text-muted-foreground">
           Loading...
         </Typography>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
@@ -319,21 +319,21 @@ const ErrorState: React.FC<{ error: string | Error; content?: ReactNode }> = ({
   const errorMessage = error instanceof Error ? error.message : error;
   
   return (
-    <div className="flex items-center justify-center py-12">
-      <div className="text-center space-y-2 max-w-md">
-        <div className="text-destructive">
+    <Box className="flex items-center justify-center py-12">
+      <Box className="text-center space-y-2 max-w-md">
+        <Box className="text-destructive">
           <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-        </div>
+        </Box>
         <Typography variant="h4" className="text-foreground font-medium">
           Something went wrong
         </Typography>
         <Typography variant="body" className="text-muted-foreground">
           {errorMessage}
         </Typography>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
@@ -344,21 +344,21 @@ const EmptyState: React.FC<{ content?: ReactNode }> = ({ content }) => {
   if (content) return <>{content}</>;
   
   return (
-    <div className="flex items-center justify-center py-12">
-      <div className="text-center space-y-2 max-w-md">
-        <div className="text-muted-foreground">
+    <Box className="flex items-center justify-center py-12">
+      <Box className="text-center space-y-2 max-w-md">
+        <Box className="text-muted-foreground">
           <svg className="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
           </svg>
-        </div>
+        </Box>
         <Typography variant="h4" className="text-foreground font-medium">
           No content found
         </Typography>
         <Typography variant="body" className="text-muted-foreground">
           There's nothing to display here yet.
         </Typography>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
@@ -397,8 +397,7 @@ export const MainContent = forwardRef<HTMLElement, MainContentProps>(
     },
     ref
   ) => {
-    const { colors, spacing: tokenSpacing } = useTokens();
-
+    
     // Custom styles for token-based theming
     const mainContentStyles = React.useMemo((): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {};
@@ -440,7 +439,7 @@ export const MainContent = forwardRef<HTMLElement, MainContentProps>(
           responsive && 'px-4 sm:px-6 lg:px-8',
           className
         )}
-        style={mainContentStyles}
+       
         {...props}
       >
         {/* Header */}
@@ -455,12 +454,12 @@ export const MainContent = forwardRef<HTMLElement, MainContentProps>(
         )}
 
         {/* Content */}
-        <div className={cn(
+        <Box className={cn(
           'flex-1',
           (title || subtitle || actions) && !stickyHeader && 'space-y-6'
         )}>
           {renderContent()}
-        </div>
+        </Box>
       </Component>
     );
   }

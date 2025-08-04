@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * ContextMenu component props interface
@@ -80,17 +80,17 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     };
 
     return (
-      <div ref={ref} className={className} style={containerStyles} {...props}>
-        <div onContextMenu={handleContextMenu}>{children}</div>
+      <Box ref={ref} className={className} {...props}>
+        <Box onContextMenu={handleContextMenu}>{children}</Box>
         {isVisible && (
           <>
-            <div style={overlayStyles} onClick={handleClose} />
-            <div style={menuStyles}>
+            <Box onClick={handleClose} />
+            <Box>
               {content}
-            </div>
+            </Box>
           </>
         )}
-      </div>
+      </Box>
     );
   }
 );
@@ -108,15 +108,15 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerP
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         onContextMenu={onContextMenu}
         className={className}
-        style={triggerStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -128,17 +128,16 @@ ContextMenuTrigger.displayName = 'ContextMenuTrigger';
  */
 export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
   ({ children, visible = false, x = 0, y = 0, className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     if (!visible) return <></>;
 
     // Get border radius and shadows
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
     
     const shadows = {
-      md: (getToken('shadows.md') as string) || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+      md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
     };
 
     const contentStyles: React.CSSProperties = {
@@ -149,10 +148,10 @@ export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentP
       minWidth: '8rem',
       overflow: 'hidden',
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
-      backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
-      padding: spacing[1],
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      border: '1px solid #e5e7eb',
+      backgroundColor: '#ffffff',
+      padding: '0.25rem',
+      color: '#111827',
       boxShadow: shadows.md,
       // Animation would typically be handled by CSS animations in a real implementation
       animation: 'fadeIn 150ms ease-out, scaleIn 150ms ease-out',
@@ -160,15 +159,15 @@ export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentP
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={contentStyles}
+       
         role="menu"
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -180,8 +179,7 @@ ContextMenuContent.displayName = 'ContextMenuContent';
  */
 export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
   ({ children, disabled = false, onSelect, className, style, ...props }, ref): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    
+        
     const handleClick = (): void => {
       if (!disabled) {
         onSelect?.();
@@ -190,7 +188,7 @@ export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
 
     // Get border radius
     const borderRadius = {
-      sm: (getToken('borderRadius.sm') as string) || '0.125rem',
+      sm: '0.125rem',
     };
 
     const itemStyles: React.CSSProperties = {
@@ -200,52 +198,52 @@ export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
       userSelect: 'none',
       alignItems: 'center',
       borderRadius: borderRadius.sm,
-      padding: `${spacing[1.5]} ${spacing[2]}`,
-      fontSize: typography.fontSize.sm,
+      padding: '0.5rem 0.75rem',
+      fontSize: '0.875rem',
       outline: 'none',
       transition: 'all 150ms ease-in-out',
       pointerEvents: disabled ? 'none' : 'auto',
       opacity: disabled ? 0.5 : 1,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      color: '#111827',
       ...style,
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         role="menuitem"
         data-disabled={disabled}
         className={className}
-        style={itemStyles}
+       
         onClick={handleClick}
         onMouseEnter={(e) => {
           if (!disabled) {
-            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.color = '#111827';
           }
         }}
-        onMouseLeave={(e) => {
+            onMouseLeave={(e) => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            e.currentTarget.style.color = '#111827';
           }
         }}
         onFocus={(e) => {
           if (!disabled) {
-            e.currentTarget.style.backgroundColor = colors.accent?.default || colors.neutral?.[100] || '#f3f4f6';
-            e.currentTarget.style.color = colors.accent?.foreground || colors.text?.primary || '#111827';
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.color = '#111827';
           }
         }}
-        onBlur={(e) => {
+            onBlur={(e) => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
-            e.currentTarget.style.color = colors.text?.primary || colors.neutral?.[900] || '#111827';
+            e.currentTarget.style.color = '#111827';
           }
         }}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );

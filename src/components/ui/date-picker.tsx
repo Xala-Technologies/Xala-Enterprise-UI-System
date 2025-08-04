@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * DatePicker variant types
@@ -66,14 +66,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const inputId = props.id || 'date-picker';
+        const inputId = props.id || 'date-picker';
     const hasError = Boolean(error) || state === 'error';
     const currentState = hasError ? 'error' : state;
 
     // Get border radius
     const borderRadius = {
-      md: (getToken('borderRadius.md') as string) || '0.375rem',
+      md: '0.375rem',
     };
 
     // Size styles
@@ -82,20 +81,20 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         case 'sm':
           return {
             height: '32px',
-            padding: `0 ${spacing[2]}`,
-            fontSize: typography.fontSize.xs,
+            padding: '0.5rem 0.75rem',
+            fontSize: '0.75rem',
           };
         case 'lg':
           return {
             height: '48px',
-            padding: `0 ${spacing[4]}`,
-            fontSize: typography.fontSize.base,
+            padding: '0.75rem 1rem',
+            fontSize: '1rem',
           };
         default:
           return {
             height: '40px',
-            padding: `0 ${spacing[3]}`,
-            fontSize: typography.fontSize.sm,
+            padding: '0.625rem 0.875rem',
+            fontSize: '0.875rem',
           };
       }
     };
@@ -105,18 +104,18 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       switch (variant) {
         case 'outline':
           return {
-            backgroundColor: colors.background?.default || '#ffffff',
-            border: `2px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            backgroundColor: '#ffffff',
+            border: '2px solid #e5e7eb'
           };
         case 'filled':
           return {
-            backgroundColor: colors.neutral?.[100] || '#f3f4f6',
-            border: `1px solid ${colors.neutral?.[100] || '#f3f4f6'}`,
+            backgroundColor: '#f3f4f6',
+            border: '1px solid transparent'
           };
         default:
           return {
-            backgroundColor: colors.background?.default || '#ffffff',
-            border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+            backgroundColor: '#ffffff',
+            border: '1px solid #e5e7eb'
           };
       }
     };
@@ -126,15 +125,15 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       switch (currentState) {
         case 'error':
           return {
-            borderColor: colors.danger?.[500] || '#ef4444',
+            borderColor: '#ef4444',
           };
         case 'success':
           return {
-            borderColor: colors.success?.[500] || '#22c55e',
+            borderColor: '#22c55e',
           };
         case 'warning':
           return {
-            borderColor: colors.warning?.[500] || '#f59e0b',
+            borderColor: '#f59e0b',
           };
         default:
           return {};
@@ -145,7 +144,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     const containerStyles: React.CSSProperties = {
       display: 'flex',
       flexDirection: 'column',
-      gap: spacing[2],
+      gap: '0.5rem',
       ...style,
     };
 
@@ -154,9 +153,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       display: 'flex',
       width: '100%',
       borderRadius: borderRadius.md,
-      fontFamily: typography.fontFamily.sans.join(', '),
-      fontWeight: typography.fontWeight.normal,
-      color: colors.text?.primary || colors.neutral?.[900] || '#111827',
+      fontFamily: 'Inter, system-ui, sans-serif',
+      fontWeight: '400',
+      color: '#111827',
       transition: 'all 150ms ease-in-out',
       outline: 'none',
       ...getSizeStyles(),
@@ -166,49 +165,49 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
     // Label styles
     const labelStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.sm,
-      fontWeight: typography.fontWeight.medium,
-      lineHeight: typography.lineHeight.none,
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      lineHeight: '1',
       color: hasError 
-        ? colors.danger?.[500] || '#ef4444'
-        : colors.text?.primary || colors.neutral?.[900] || '#111827',
+        ? '#ef4444'
+        : '#111827',
     };
 
     // Required indicator styles
     const requiredStyles: React.CSSProperties = {
-      marginLeft: spacing[1],
-      color: colors.danger?.[500] || '#ef4444',
+      marginLeft: '0.25rem',
+      color: '#ef4444',
     };
 
     // Helper text styles
     const helperTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
+      fontSize: '0.75rem',
+      color: '#6b7280',
     };
 
     // Error text styles
     const errorTextStyles: React.CSSProperties = {
-      fontSize: typography.fontSize.xs,
-      color: colors.danger?.[500] || '#ef4444',
+      fontSize: '0.75rem',
+      color: '#ef4444',
     };
 
     return (
-      <div className={className} style={containerStyles}>
+      <Box className={className}>
         {label && (
-          <label
+          <Text as="label"
             htmlFor={inputId}
-            style={labelStyles}
+           
           >
             {label}
-            {required && <span style={requiredStyles}>*</span>}
-          </label>
+            {required && <Text as="span">*</Text>}
+          </Text>
         )}
 
         <input
           ref={ref}
           type="date"
           id={inputId}
-          style={inputStyles}
+         
           placeholder={placeholder}
           aria-invalid={hasError}
           aria-describedby={
@@ -216,13 +215,13 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           }
           onFocus={(e) => {
             if (currentState === 'error') {
-              e.currentTarget.style.outline = `2px solid ${colors.danger?.[500] || '#ef4444'}`;
+              e.currentTarget.style.outline = `2px solid #ef4444`;
             } else if (currentState === 'success') {
-              e.currentTarget.style.outline = `2px solid ${colors.success?.[500] || '#22c55e'}`;
+              e.currentTarget.style.outline = `2px solid #ef4444`;
             } else if (currentState === 'warning') {
-              e.currentTarget.style.outline = `2px solid ${colors.warning?.[500] || '#f59e0b'}`;
+              e.currentTarget.style.outline = `2px solid #ef4444`;
             } else {
-              e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
+              e.currentTarget.style.outline = `2px solid #ef4444`;
             }
             e.currentTarget.style.outlineOffset = '2px';
           }}
@@ -233,21 +232,21 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         />
 
         {showFormatHint && !error && !helperText && (
-          <p style={helperTextStyles}>Format: dd.mm.åååå (norsk datoformat)</p>
+          <Text>Format: dd.mm.åååå (norsk datoformat)</Text>
         )}
 
         {helperText && !error && (
-          <p id={`${inputId}-helper`} style={helperTextStyles}>
+          <Text id={`${inputId}-helper`}>
             {helperText}
-          </p>
+          </Text>
         )}
 
         {error && (
-          <p id={`${inputId}-error`} style={errorTextStyles}>
+          <Text id={`${inputId}-error`}>
             {error}
-          </p>
+          </Text>
         )}
-      </div>
+      </Box>
     );
   }
 );

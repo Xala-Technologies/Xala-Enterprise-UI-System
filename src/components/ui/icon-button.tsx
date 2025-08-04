@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * IconButton variant types
@@ -56,8 +56,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, getToken } = useTokens();
-    const isDisabled = disabled || loading;
+        const isDisabled = disabled || loading;
 
     // Get border radius
     const borderRadius = {
@@ -157,10 +156,10 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     };
 
     return (
-      <button
+      <Text as="button"
         ref={ref}
         className={className}
-        style={buttonStyles}
+       
         aria-label={label}
         title={tooltip || label}
         disabled={isDisabled}
@@ -212,11 +211,11 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         {...props}
       >
         {loading ? (
-          <div style={spinnerStyles} />
+          <Box />
         ) : (
           icon
         )}
-      </button>
+      </Text>
     );
   }
 );

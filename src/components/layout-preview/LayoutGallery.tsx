@@ -8,13 +8,13 @@
 import React, { useState } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { LayoutPreview, LayoutThumbnail, type LayoutPreviewConfig } from './LayoutPreview';
 import { type LayoutType } from '../../hooks/useResponsiveLayout';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
 import { Badge } from '../ui/badge';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // LAYOUT GALLERY VARIANTS
@@ -119,8 +119,7 @@ export const LayoutCard: React.FC<LayoutCardProps> = ({
   showPreview = true,
   previewSize = 'md',
 }) => {
-  const { colors } = useTokens();
-  const [isHovered, setIsHovered] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
   const cardStyles = React.useMemo((): React.CSSProperties => ({
     borderColor: selected ? colors.primary?.[500] || '#3b82f6' : undefined,
@@ -152,30 +151,30 @@ export const LayoutCard: React.FC<LayoutCardProps> = ({
         'hover:shadow-lg',
         selected && 'ring-2 ring-primary'
       )}
-      style={cardStyles}
+     
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Preview */}
       {showPreview && (
-        <div className="p-4 pb-0">
+        <Box className="p-4 pb-0">
           <LayoutThumbnail
             config={config}
             selected={selected}
             size={previewSize}
           />
-        </div>
+        </Box>
       )}
 
       {/* Content */}
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
+      <Box className="p-4">
+        <Box className="flex items-start justify-between mb-2">
           <Typography variant="h4">{config.label}</Typography>
           <Badge variant="secondary" className="text-xs">
             {config.type}
           </Badge>
-        </div>
+        </Box>
 
         {config.description && (
           <Typography variant="bodySmall" className="text-muted-foreground mb-3">
@@ -184,21 +183,21 @@ export const LayoutCard: React.FC<LayoutCardProps> = ({
         )}
 
         {/* Features */}
-        <div className="space-y-2">
+        <Box className="space-y-2">
           <Typography variant="small" className="font-medium text-muted-foreground uppercase tracking-wide">
             Features
           </Typography>
-          <div className="flex flex-wrap gap-1">
+          <Box className="flex flex-wrap gap-1">
             {getLayoutFeatures(config.type).map((feature) => (
               <Badge key={feature} variant="outline" className="text-xs">
                 {feature}
               </Badge>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {/* Action button */}
-        <div className="mt-4 pt-3 border-t border-border">
+        <Box className="mt-4 pt-3 border-t border-border">
           <Button
             variant="outline"
             size="sm"
@@ -210,8 +209,8 @@ export const LayoutCard: React.FC<LayoutCardProps> = ({
           >
             View Layout
           </Button>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Card>
   );
 };
@@ -224,16 +223,16 @@ export const LayoutComparison: React.FC<LayoutComparisonProps> = ({
   view = 'side-by-side',
 }) => {
   return (
-    <div className={cn(
+    <Box className={cn(
       'space-y-6',
       view === 'side-by-side' && 'lg:grid lg:grid-cols-2 lg:gap-6 lg:space-y-0'
     )}>
       {layouts.map((config) => (
-        <div key={config.type} className="space-y-4">
-          <div className="flex items-center justify-between">
+        <Box key={config.type} className="space-y-4">
+          <Box className="flex items-center justify-between">
             <Typography variant="h3">{config.label}</Typography>
             <Badge variant="secondary">{config.type}</Badge>
-          </div>
+          </Box>
           
           <LayoutPreview
             layouts={[config]}
@@ -248,9 +247,9 @@ export const LayoutComparison: React.FC<LayoutComparisonProps> = ({
               {config.description}
             </Typography>
           )}
-        </div>
+        </Box>
       ))}
-    </div>
+    </Box>
   );
 };
 
@@ -274,7 +273,7 @@ const LayoutGalleryFilters: React.FC<{
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <Box className="flex flex-wrap gap-2">
       <Typography variant="bodySmall" className="font-medium mr-2">
         Filter by type:
       </Typography>
@@ -298,7 +297,7 @@ const LayoutGalleryFilters: React.FC<{
           Clear
         </Button>
       )}
-    </div>
+    </Box>
   );
 };
 
@@ -356,15 +355,15 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
     };
 
     return (
-      <div ref={ref} className={cn(layoutGalleryVariants({ view: currentView }), className)} {...props}>
+      <Box ref={ref} className={cn(layoutGalleryVariants({ view: currentView }), className)} {...props}>
         {/* Header */}
-        <div className="flex flex-col gap-4 mb-6">
-          <div className="flex items-center justify-between">
+        <Box className="flex flex-col gap-4 mb-6">
+          <Box className="flex items-center justify-between">
             <Typography variant="h2">Layout Gallery</Typography>
             
-            <div className="flex items-center gap-2">
+            <Box className="flex items-center gap-2">
               {/* View switcher */}
-              <div className="flex items-center border border-border rounded-md">
+              <Box className="flex items-center border border-border rounded-md">
                 <Button
                   variant={currentView === 'grid' ? 'primary' : 'ghost'}
                   size="sm"
@@ -389,13 +388,13 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
                 >
                   Compare
                 </Button>
-              </div>
-            </div>
-          </div>
+              </Box>
+            </Box>
+          </Box>
 
           {/* Search */}
           {showSearch && (
-            <div className="max-w-md">
+            <Box className="max-w-md">
               <input
                 type="text"
                 placeholder="Search layouts..."
@@ -403,7 +402,7 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full px-3 py-2 border border-border rounded-md"
               />
-            </div>
+            </Box>
           )}
 
           {/* Filters */}
@@ -417,11 +416,11 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
 
           {/* Comparison controls */}
           {currentView === 'comparison' && (
-            <div className="flex items-center gap-4 p-4 bg-muted/50 rounded-md">
+            <Box className="flex items-center gap-4 p-4 bg-muted/50 rounded-md">
               <Typography variant="bodySmall" className="font-medium">
                 Select layouts to compare ({selectedForComparison.length}/4):
               </Typography>
-              <div className="flex flex-wrap gap-2">
+              <Box className="flex flex-wrap gap-2">
                 {layouts.map((config) => (
                   <Button
                     key={config.type}
@@ -434,10 +433,10 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
                     {config.label}
                   </Button>
                 ))}
-              </div>
-            </div>
+              </Box>
+            </Box>
           )}
-        </div>
+        </Box>
 
         {/* Content */}
         {currentView === 'comparison' ? (
@@ -446,7 +445,7 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
             view="side-by-side"
           />
         ) : (
-          <div className={cn(
+          <Box className={cn(
             currentView === 'grid' && layoutGridVariants({ columns }),
             currentView === 'list' && 'space-y-4'
           )}>
@@ -463,21 +462,21 @@ export const LayoutGallery = React.forwardRef<HTMLDivElement, LayoutGalleryProps
                 previewSize={columns > 3 ? 'sm' : 'md'}
               />
             ))}
-          </div>
+          </Box>
         )}
 
         {/* Empty state */}
         {filteredLayouts.length === 0 && (
-          <div className="text-center py-12">
+          <Box className="text-center py-12">
             <Typography variant="h3" className="mb-2 text-muted-foreground">
               No layouts found
             </Typography>
             <Typography variant="bodySmall" className="text-muted-foreground">
               Try adjusting your filters or search query.
             </Typography>
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

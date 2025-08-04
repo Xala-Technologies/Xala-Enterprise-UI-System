@@ -6,7 +6,8 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import { cn } from '../../lib/utils/cn';
 
 // =============================================================================
 // INTERFACES
@@ -87,8 +88,7 @@ export const Footer = ({
   variant = 'default',
   className = ''
 }: FooterProps): JSX.Element => {
-  const { colors, spacing, typography, elevation, borderRadius, componentSizing, motion } = useTokens();
-  const [newsletterEmail, setNewsletterEmail] = React.useState('');
+    const [newsletterEmail, setNewsletterEmail] = React.useState('');
 
   // Handle back to top
   const handleBackToTop = useCallback(() => {
@@ -111,156 +111,122 @@ export const Footer = ({
   const footerStyles = useMemo(() => {
     const baseStyle = {
       backgroundColor: variant === 'dark' 
-        ? colors.background?.default 
-        : colors.background?.paper,
-      borderColor: colors.border?.default,
+        ? '#000000' 
+        : '#ffffff',
+      borderColor: '#e5e7eb',
       color: variant === 'dark' 
-        ? colors.text?.primary 
-        : colors.text?.primary,
+        ? '#ffffff' 
+        : '#111827',
     };
 
     if (variant === 'minimal') {
       return {
         ...baseStyle,
-        borderTop: `1px solid ${colors.border?.muted}`,
-        padding: `${spacing[8]} 0`,
+        borderTop: '1px solid var(--border)',
+        padding: '1rem',
       };
     }
 
     return {
       ...baseStyle,
-      borderTop: `1px solid ${colors.border?.default}`,
-      boxShadow: variant === 'default' ? elevation?.sm : 'none',
+      borderTop: '1px solid #e5e7eb',
+      boxShadow: variant === 'default' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
     };
   }, [variant, colors, spacing, elevation]);
 
   // Render footer section
   const renderSection = useCallback((section: FooterSection) => (
-    <div key={section.id} className="space-y-4">
-      <h3
+    <Box key={section.id} className="space-y-4">
+      <Heading level={3}
         className="font-semibold"
-        style={{
-          color: colors.text?.primary,
-          fontSize: typography.fontSize?.base || '1rem',
-          lineHeight: typography.lineHeight?.tight || 1.25
-        }}
+       
       >
         {section.title}
-      </h3>
-      <ul className="space-y-3" role="list">
+      </Heading>
+      <List variant="unordered" className="space-y-3" role="list">
         {section.links.map(link => (
-          <li key={link.id}>
-            <a
+          <ListItem key={link.id}>
+            <Link
               href={link.href}
               target={link.target || (link.isExternal ? '_blank' : '_self')}
               rel={link.isExternal ? 'noopener noreferrer' : undefined}
               className="inline-flex items-center space-x-2 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              style={{
-                color: colors.text?.secondary,
-                fontSize: typography.fontSize?.sm || '0.875rem',
-                transition: `color ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`
-              }}
             >
               {link.icon && (
-                <span aria-hidden="true" style={{ width: '16px', height: '16px' }}>
+                <Text as="span" aria-hidden="true">
                   {link.icon}
-                </span>
+                </Text>
               )}
-              <span>{link.label}</span>
+              <Text as="span">{link.label}</Text>
               {link.isExternal && (
-                <span
+                <Text as="span"
                   aria-label="(opens in new tab)"
-                  style={{
-                    fontSize: typography.fontSize?.xs || '0.75rem',
-                    color: colors.text?.muted
-                  }}
                 >
                   ↗
-                </span>
+                </Text>
               )}
-            </a>
-          </li>
+            </Link>
+          </ListItem>
         ))}
-      </ul>
-    </div>
-  ), [colors, typography, motion]);
+      </List>
+    </Box>
+  ), []);
 
   // Render social links
   const renderSocialLinks = useCallback(() => {
     if (socialLinks.length === 0) return null;
 
     return (
-      <div className="space-y-4">
-        <h3
+      <Box className="space-y-4">
+        <Heading level={3}
           className="font-semibold"
-          style={{
-            color: colors.text?.primary,
-            fontSize: typography.fontSize?.base || '1rem'
-          }}
         >
           Follow Us
-        </h3>
-        <div className="flex space-x-4">
+        </Heading>
+        <Box className="flex space-x-4">
           {socialLinks.map(social => (
-            <a
+            <Link
               key={social.id}
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-              style={{
-                color: colors.text?.muted,
-                transition: `all ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`,
-                minWidth: '40px',
-                minHeight: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              aria-label={social.ariaLabel || `Follow us on ${social.platform}`}
+              className="p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 min-w-[40px] min-h-[40px] flex items-center justify-center transition-all"
+              aria-label={social.ariaLabel || social.platform}
             >
               {social.icon}
-            </a>
+            </Link>
           ))}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
-  }, [socialLinks, colors, typography, motion]);
+  }, [socialLinks]);
 
   // Render newsletter signup
   const renderNewsletter = useCallback(() => {
     if (!newsletter) return null;
 
     return (
-      <div className="space-y-4">
-        <div>
-          <h3
+      <Box className="space-y-4">
+        <Box>
+          <Heading level={3}
             className="font-semibold"
-            style={{
-              color: colors.text?.primary,
-              fontSize: typography.fontSize?.base || '1rem'
-            }}
           >
             {newsletter.title || 'Newsletter'}
-          </h3>
+          </Heading>
           {newsletter.description && (
-            <p
+            <Text
               className="mt-2"
-              style={{
-                color: colors.text?.secondary,
-                fontSize: typography.fontSize?.sm || '0.875rem'
-              }}
             >
               {newsletter.description}
-            </p>
+            </Text>
           )}
-        </div>
+        </Box>
         
         <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-          <div>
-            <label htmlFor="newsletter-email" className="sr-only">
+          <Box>
+            <Text as="label" htmlFor="newsletter-email" className="sr-only">
               Email address
-            </label>
+            </Text>
             <input
               id="newsletter-email"
               type="email"
@@ -270,56 +236,37 @@ export const Footer = ({
               required
               disabled={newsletter.isLoading}
               className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              style={{
-                backgroundColor: colors.background?.default,
-                borderColor: colors.border?.default,
-                color: colors.text?.primary,
-                fontSize: typography.fontSize?.sm || '0.875rem',
-                minHeight: componentSizing?.input?.md || '48px'
-              }}
             />
-          </div>
+          </Box>
           
           <button
             type="submit"
             disabled={newsletter.isLoading || !newsletterEmail.trim()}
-            className="w-full px-4 py-3 font-medium rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              backgroundColor: colors.primary?.[500] || '#3b82f6',
-              color: 'white',
-              minHeight: componentSizing?.button?.md || '44px',
-              transition: `opacity ${motion?.duration?.fast || '150ms'} ${motion?.easing?.ease || 'ease'}`
-            }}
+            className="w-full px-4 py-3 font-medium rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-primary text-white transition-all"
           >
             {newsletter.isLoading ? (
-              <div className="flex items-center justify-center space-x-2">
-                <div
-                  className="animate-spin rounded-full border-2 border-white border-t-transparent"
-                  style={{ width: '16px', height: '16px' }}
+              <Box className="flex items-center justify-center space-x-2">
+                <Box
+                  className="animate-spin rounded-full border-2 border-white border-t-transparent w-4 h-4"
                 />
-                <span>Subscribing...</span>
-              </div>
+                <Text as="span">Subscribing...</Text>
+              </Box>
             ) : (
               newsletter.buttonText || 'Subscribe'
             )}
           </button>
         </form>
-      </div>
+      </Box>
     );
   }, [
     newsletter, 
-    newsletterEmail, 
-    colors, 
-    typography, 
-    componentSizing, 
-    motion,
+    newsletterEmail,
     handleNewsletterSubmit
   ]);
 
   return (
-    <footer
-      className={`relative ${className}`}
-      style={footerStyles}
+    <Box as="footer"
+      className={cn("relative", className)}
       role="contentinfo"
     >
       {/* Back to Top Button */}
@@ -327,183 +274,136 @@ export const Footer = ({
         <button
           type="button"
           onClick={handleBackToTop}
-          className="absolute -top-6 right-8 p-3 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          style={{
-            backgroundColor: colors.primary?.[500] || '#3b82f6',
-            color: 'white',
-            minWidth: '48px',
-            minHeight: '48px',
-            transition: `all ${motion?.duration?.normal || '200ms'} ${motion?.easing?.ease || 'ease'}`
-          }}
+          className="absolute -top-6 right-8 p-3 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 bg-primary text-white transition-all"
           aria-label="Back to top"
         >
           ↑
         </button>
       )}
 
-      <div
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-        style={{ padding: `${spacing[12]} ${spacing[4]} ${spacing[8]}` }}
+      <Box
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12"
       >
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-12">
+        <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8 lg:gap-12">
           {/* Company Info */}
-          <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center space-x-3">
+          <Box className="lg:col-span-2 space-y-4">
+            <Box className="flex items-center space-x-3">
               {companyInfo.logo && (
-                <div style={{ width: '40px', height: '40px' }}>
+                <Box>
                   {companyInfo.logo}
-                </div>
+                </Box>
               )}
-              <h2
+              <Heading level={2}
                 className="font-bold"
-                style={{
-                  color: colors.text?.primary,
-                  fontSize: typography.fontSize?.xl || '1.25rem'
-                }}
               >
                 {companyInfo.name}
-              </h2>
-            </div>
+              </Heading>
+            </Box>
 
             {companyInfo.description && (
-              <p
-                style={{
-                  color: colors.text?.secondary,
-                  fontSize: typography.fontSize?.sm || '0.875rem',
-                  lineHeight: typography.lineHeight?.relaxed || 1.625
-                }}
+              <Text
               >
                 {companyInfo.description}
-              </p>
+              </Text>
             )}
 
             {/* Contact Information */}
             {(companyInfo.address || companyInfo.contact) && (
-              <div className="space-y-2">
+              <Box className="space-y-2">
                 {companyInfo.address && (
                   <address
                     className="not-italic"
-                    style={{
-                      color: colors.text?.secondary,
-                      fontSize: typography.fontSize?.sm || '0.875rem'
-                    }}
                   >
                     {companyInfo.address.street && (
-                      <div>{companyInfo.address.street}</div>
+                      <Box>{companyInfo.address.street}</Box>
                     )}
                     {(companyInfo.address.city || companyInfo.address.postalCode) && (
-                      <div>
+                      <Box>
                         {companyInfo.address.city}
-                        {companyInfo.address.postalCode && ` ${companyInfo.address.postalCode}`}
-                      </div>
+                        {companyInfo.address.postalCode && `, ${companyInfo.address.postalCode}`}
+                      </Box>
                     )}
                     {companyInfo.address.country && (
-                      <div>{companyInfo.address.country}</div>
+                      <Box>{companyInfo.address.country}</Box>
                     )}
                   </address>
                 )}
 
                 {companyInfo.contact && (
-                  <div className="space-y-1">
+                  <Box className="space-y-1">
                     {companyInfo.contact.phone && (
-                      <a
+                      <Link
                         href={`tel:${companyInfo.contact.phone.replace(/\s/g, '')}`}
                         className="block hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        style={{
-                          color: colors.text?.secondary,
-                          fontSize: typography.fontSize?.sm || '0.875rem'
-                        }}
                       >
                         {companyInfo.contact.phone}
-                      </a>
+                      </Link>
                     )}
                     {companyInfo.contact.email && (
-                      <a
+                      <Link
                         href={`mailto:${companyInfo.contact.email}`}
                         className="block hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                        style={{
-                          color: colors.text?.secondary,
-                          fontSize: typography.fontSize?.sm || '0.875rem'
-                        }}
                       >
                         {companyInfo.contact.email}
-                      </a>
+                      </Link>
                     )}
-                  </div>
+                  </Box>
                 )}
-              </div>
+              </Box>
             )}
-          </div>
+          </Box>
 
           {/* Footer Sections */}
           {sections.map(renderSection)}
 
           {/* Newsletter or Social Links */}
           {(newsletter || socialLinks.length > 0) && (
-            <div className="space-y-8">
+            <Box className="space-y-8">
               {renderNewsletter()}
               {renderSocialLinks()}
-            </div>
+            </Box>
           )}
-        </div>
+        </Box>
 
         {/* Bottom Section */}
-        <div
-          className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 pt-8"
-          style={{
-            marginTop: spacing[8],
-            paddingTop: spacing[8],
-            borderTop: `1px solid ${colors.border?.muted}`
-          }}
+        <Box
+          className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0 pt-8 border-t border-border"
         >
           {/* Copyright */}
-          <p
-            style={{
-              color: colors.text?.muted,
-              fontSize: typography.fontSize?.sm || '0.875rem'
-            }}
-          >
+          <Text className="text-sm text-muted-foreground">
             {copyrightText || `© ${new Date().getFullYear()} ${companyInfo.name}. All rights reserved.`}
-          </p>
+          </Text>
 
           {/* Legal Links */}
           {legalLinks.length > 0 && (
-            <nav
+            <Box as="nav"
               className="flex flex-wrap space-x-6"
               aria-label="Legal navigation"
             >
               {legalLinks.map((link, index) => (
                 <React.Fragment key={link.id}>
-                  <a
+                  <Link
                     href={link.href}
                     target={link.target || (link.isExternal ? '_blank' : '_self')}
                     rel={link.isExternal ? 'noopener noreferrer' : undefined}
                     className="hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    style={{
-                      color: colors.text?.muted,
-                      fontSize: typography.fontSize?.sm || '0.875rem'
-                    }}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                   {index < legalLinks.length - 1 && (
-                    <span
-                      style={{
-                        color: colors.border?.default,
-                        fontSize: typography.fontSize?.sm || '0.875rem'
-                      }}
+                    <Text as="span"
                     >
                       •
-                    </span>
+                    </Text>
                   )}
                 </React.Fragment>
               ))}
-            </nav>
+            </Box>
           )}
-        </div>
-      </div>
-    </footer>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

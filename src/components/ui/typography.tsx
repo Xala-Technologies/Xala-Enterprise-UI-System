@@ -8,7 +8,6 @@
 import React, { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 
 // =============================================================================
 // TYPOGRAPHY VARIANTS USING DESIGN TOKENS
@@ -115,8 +114,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
     },
     ref
   ) => {
-    const { colors, typography, spacing, getToken } = useTokens();
-    
+        
     // Get variant styles
     const getVariantStyles = (): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {
@@ -291,7 +289,7 @@ export const Typography = forwardRef<HTMLElement, TypographyProps>(
       <Component
         ref={ref}
         className={cn(typographyVariants({ variant, align, truncate }), className)}
-        style={typographyStyles}
+       
         {...props}
       />
     );

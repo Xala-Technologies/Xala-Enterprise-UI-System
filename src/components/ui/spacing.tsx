@@ -8,7 +8,7 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // SPACING VARIANTS USING DESIGN TOKENS
@@ -575,17 +575,17 @@ export const PaddingBox = forwardRef<HTMLDivElement, PaddingBoxProps>(
     const debugStyles = useDebugStyles(debug);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           paddingVariants({ p, px, py, pt, pr, pb, pl }),
           className
         )}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -613,17 +613,17 @@ export const MarginBox = forwardRef<HTMLDivElement, MarginBoxProps>(
     const debugStyles = useDebugStyles(debug);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           marginVariants({ m, mx, my, mt, mr, mb, ml }),
           className
         )}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -685,14 +685,14 @@ export const Stack = forwardRef<HTMLDivElement, StackProps>(
     );
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(stackClasses, className)}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -732,14 +732,14 @@ export const Inline = forwardRef<HTMLDivElement, InlineProps>(
     );
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(inlineClasses, className)}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -765,8 +765,7 @@ export const Spacer = forwardRef<HTMLDivElement, SpacerProps>(
     style,
     ...props
   }, ref) => {
-    const { spacing: tokenSpacing } = useTokens();
-    const debugStyles = useDebugStyles(debug);
+        const debugStyles = useDebugStyles(debug);
     const customSpacingStyles = useCustomSpacing(customSpacing);
 
     const spacerStyles = React.useMemo((): React.CSSProperties => {
@@ -778,13 +777,13 @@ export const Spacer = forwardRef<HTMLDivElement, SpacerProps>(
     }, [debugStyles, customSpacingStyles, style]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           spacerVariants({ size, direction, visible }),
           className
         )}
-        style={spacerStyles}
+       
         aria-hidden="true"
         {...props}
       />

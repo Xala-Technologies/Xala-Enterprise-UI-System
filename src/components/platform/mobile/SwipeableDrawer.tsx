@@ -8,9 +8,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
-import { useTokens } from '../../../hooks/useTokens';
 import { useTouchGestures, type SwipeEvent } from '../../../hooks/useTouchGestures';
 import { usePlatform } from '../../../hooks';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
 
 // =============================================================================
 // SWIPEABLE DRAWER VARIANTS
@@ -224,8 +224,7 @@ export const SwipeableDrawer = React.forwardRef<HTMLDivElement, SwipeableDrawerP
     },
     ref
   ) => {
-    const { colors, spacing, getToken } = useTokens();
-    const { platform } = usePlatform();
+        const { platform } = usePlatform();
     const {
       drawerRef,
       isDragging,
@@ -329,8 +328,8 @@ export const SwipeableDrawer = React.forwardRef<HTMLDivElement, SwipeableDrawerP
       <>
         {/* Overlay */}
         {open && (
-          <div
-            style={overlayStyles}
+          <Box
+           
             onClick={closeOnOverlayClick ? onClose : undefined}
             aria-hidden="true"
           />
@@ -338,22 +337,22 @@ export const SwipeableDrawer = React.forwardRef<HTMLDivElement, SwipeableDrawerP
 
         {/* Edge swipe area for opening */}
         {!open && swipeToOpen && platform === 'mobile' && (
-          <div
+          <Box
             ref={gestureRef as React.RefObject<HTMLDivElement>}
-            style={edgeSwipeStyles}
+           
             aria-hidden="true"
           />
         )}
 
         {/* Drawer */}
-        <div
+        <Box
           ref={drawerRef}
           className={cn(
             swipeableDrawerVariants({ side, size, open }),
             isDragging && 'transition-none',
             className
           )}
-          style={drawerStyles}
+         
           role="dialog"
           aria-modal="true"
           aria-label="Mobile drawer"
@@ -361,12 +360,12 @@ export const SwipeableDrawer = React.forwardRef<HTMLDivElement, SwipeableDrawerP
         >
           {/* Handle indicator */}
           {showHandle && (
-            <div style={handleStyles} aria-hidden="true" />
+            <Box aria-hidden="true" />
           )}
 
           {/* Content */}
           {children}
-        </div>
+        </Box>
       </>
     );
   }

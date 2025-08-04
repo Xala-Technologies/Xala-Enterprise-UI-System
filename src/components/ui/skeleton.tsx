@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 import { Box } from '../semantic';
 import { cn } from '../../lib/utils/cn';
 
@@ -93,8 +92,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
     },
     ref
   ) => {
-    const { colors, spacing: spacingTokens, getToken } = useTokens();
-    
+        
     // Get border radius values
     const borderRadius = {
       md: (getToken('borderRadius.md') as string) || '0.375rem',
@@ -165,14 +163,11 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
         <Box
           ref={ref}
           className={className}
-          style={{
-            ...baseSkeletonStyles,
-            ...style,
-          }}
+         
           aria-hidden="true"
           {...props}
         >
-          {shimmer && <Box style={shimmerStyles} />}
+          {shimmer && <Box />}
         </Box>
       );
     }
@@ -182,9 +177,7 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
       <Box
         ref={ref}
         className={className}
-        style={{
-          ...style,
-        }}
+       
         aria-hidden="true"
         {...props}
       >
@@ -195,14 +188,9 @@ export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
           return (
             <Box
               key={index}
-              style={{
-                ...baseSkeletonStyles,
-                width: lineWidth,
-                height: lineHeight,
-                marginBottom: index < lines - 1 ? spacing : 0,
-              }}
+             
             >
-              {shimmer && <Box style={shimmerStyles} />}
+              {shimmer && <Box />}
             </Box>
           );
         })}
@@ -296,7 +284,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
       <Box 
         ref={ref} 
         className={cn("p-4", className)}
-        style={style}
+       
         aria-hidden="true" 
         {...props}
       >

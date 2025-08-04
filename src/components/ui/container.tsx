@@ -8,7 +8,7 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // CONTAINER VARIANTS USING DESIGN TOKENS
@@ -324,7 +324,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
           fullWidth && 'relative',
           className
         )}
-        style={sectionStyles}
+       
         {...props}
       >
         {children}
@@ -372,17 +372,17 @@ export const Wrapper = forwardRef<HTMLDivElement, WrapperProps>(
     }, [width, height, minWidth, minHeight, maxWidth, maxHeight, debugStyles, style]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           wrapperVariants({ display, position, overflow, zIndex }),
           className
         )}
-        style={wrapperStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -442,14 +442,14 @@ export const FlexContainer = forwardRef<HTMLDivElement, FlexContainerProps>(
     );
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(flexClasses, className)}
-        style={{ ...debugStyles, ...style }}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -483,7 +483,7 @@ export const CenteredContainer = forwardRef<HTMLDivElement, CenteredContainerPro
     }, [vertical, minHeight, debugStyles, style]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           'w-full mx-auto',
@@ -506,11 +506,11 @@ export const CenteredContainer = forwardRef<HTMLDivElement, CenteredContainerPro
           vertical && 'flex items-center justify-center',
           className
         )}
-        style={centeredStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -541,8 +541,7 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
     children,
     ...props
   }, ref) => {
-    const { spacing } = useTokens();
-    const debugStyles = useDebugStyles(debug);
+        const debugStyles = useDebugStyles(debug);
     const responsiveClasses = useResponsiveContainer(responsive, breakout);
 
     const containerStyles = React.useMemo((): React.CSSProperties => {
@@ -560,18 +559,18 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
     }, [maxWidth, center, debugStyles, style]);
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(
           containerVariants({ size, padding, paddingY, variant, breakout }),
           responsive && responsiveClasses,
           className
         )}
-        style={containerStyles}
+       
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -690,12 +689,12 @@ export const ContainerComposition = {
       className="min-h-screen"
       {...props}
     >
-      <div className="w-64 flex-shrink-0">
+      <Box className="w-64 flex-shrink-0">
         {sidebar}
-      </div>
-      <div className="flex-1 min-w-0">
+      </Box>
+      <Box className="flex-1 min-w-0">
         {main}
-      </div>
+      </Box>
     </FlexContainer>
   ),
 
@@ -721,12 +720,12 @@ export const ContainerComposition = {
         gap="lg"
         {...props}
       >
-        <div className={cn(leftFlex, 'min-w-0')}>
+        <Box className={cn(leftFlex, 'min-w-0')}>
           {left}
-        </div>
-        <div className={cn(rightFlex, 'min-w-0')}>
+        </Box>
+        <Box className={cn(rightFlex, 'min-w-0')}>
           {right}
-        </div>
+        </Box>
       </FlexContainer>
     );
   },

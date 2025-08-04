@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * ScrollArea variant types
@@ -62,8 +62,7 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, getToken } = useTokens();
-
+    
     // Get border radius
     const borderRadius = {
       md: (getToken('borderRadius.md') as string) || '0.375rem',
@@ -187,16 +186,16 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(
     return (
       <>
         <style dangerouslySetInnerHTML={{ __html: scrollbarCSS }} />
-        <div
+        <Box
           ref={ref}
           className={`scroll-area-webkit ${className || ''}`}
-          style={containerStyles}
+         
           {...props}
         >
-          <div style={viewportStyles}>
+          <Box>
             {children}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </>
     );
   }

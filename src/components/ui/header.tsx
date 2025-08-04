@@ -8,9 +8,9 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { Typography } from './typography';
 import { Button } from './button';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // HEADER VARIANTS USING DESIGN TOKENS
@@ -145,13 +145,13 @@ export interface HeaderLogoProps extends React.HTMLAttributes<HTMLDivElement> {
 export const HeaderSection = forwardRef<HTMLDivElement, HeaderSectionProps>(
   ({ children, align, gap, className, ...props }, ref) => {
     return (
-      <div
+      <Box
         ref={ref}
         className={cn(headerSectionVariants({ align, gap }), className)}
         {...props}
       >
         {children}
-      </div>
+      </Box>
     );
   }
 );
@@ -171,7 +171,7 @@ export const HeaderTitle = forwardRef<HTMLDivElement, HeaderTitleProps>(
     };
 
     return (
-      <div ref={ref} className={cn('flex flex-col', className)} {...props}>
+      <Box ref={ref} className={cn('flex flex-col', className)} {...props}>
         <Typography variant={titleSizes[size]} className="font-semibold">
           {title}
         </Typography>
@@ -180,7 +180,7 @@ export const HeaderTitle = forwardRef<HTMLDivElement, HeaderTitleProps>(
             {subtitle}
           </Typography>
         )}
-      </div>
+      </Box>
     );
   }
 );
@@ -192,15 +192,14 @@ HeaderTitle.displayName = 'HeaderTitle';
  */
 export const HeaderLogo = forwardRef<HTMLDivElement, HeaderLogoProps>(
   ({ src, alt, size = 32, children, className, ...props }, ref) => {
-    const { spacing } = useTokens();
-
+    
     const logoStyles = React.useMemo((): React.CSSProperties => ({
       height: typeof size === 'number' ? `${size}px` : size,
       width: 'auto',
     }), [size]);
 
     return (
-      <div 
+      <Box 
         ref={ref} 
         className={cn('flex items-center gap-3', className)} 
         {...props}
@@ -209,15 +208,15 @@ export const HeaderLogo = forwardRef<HTMLDivElement, HeaderLogoProps>(
           <img
             src={src}
             alt={alt || 'Logo'}
-            style={logoStyles}
+           
             className="object-contain"
           />
         ) : children ? (
-          <div className="flex items-center" style={{ minHeight: logoStyles.height }}>
+          <Box className="flex items-center">
             {children}
-          </div>
+          </Box>
         ) : null}
-      </div>
+      </Box>
     );
   }
 );
@@ -256,8 +255,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
     },
     ref
   ) => {
-    const { colors, spacing, getToken } = useTokens();
-
+    
     // Custom styles for token-based theming
     const headerStyles = React.useMemo((): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {
@@ -305,7 +303,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
 
     return (
       <>
-        <header
+        <Box as="header"
           ref={ref}
           role="banner"
           className={cn(
@@ -313,7 +311,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
             responsive && 'min-w-0', // Allow shrinking
             className
           )}
-          style={headerStyles}
+         
           {...props}
         >
           {children ? (
@@ -321,36 +319,36 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
           ) : (
             <>
               {/* Left Section */}
-              <div className="flex items-center min-w-0 flex-shrink-0">
+              <Box className="flex items-center min-w-0 flex-shrink-0">
                 {renderLeftSection()}
-              </div>
+              </Box>
 
               {/* Center Section */}
               {renderCenterSection() && (
-                <div className="flex items-center justify-center flex-1 min-w-0">
+                <Box className="flex items-center justify-center flex-1 min-w-0">
                   <HeaderSection align="center" gap="md">
                     {renderCenterSection()}
                   </HeaderSection>
-                </div>
+                </Box>
               )}
 
               {/* Right Section */}
               {renderRightSection() && (
-                <div className="flex items-center min-w-0 flex-shrink-0 ml-auto">
+                <Box className="flex items-center min-w-0 flex-shrink-0 ml-auto">
                   <HeaderSection align="end" gap="sm">
                     {renderRightSection()}
                   </HeaderSection>
-                </div>
+                </Box>
               )}
             </>
           )}
-        </header>
+        </Box>
 
         {/* Divider */}
         {showDivider && (
-          <div 
+          <Box 
             className="w-full border-b border-border"
-            style={{ borderColor: colors.border?.default || '#e2e8f0' }}
+           
           />
         )}
       </>

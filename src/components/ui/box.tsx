@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 
 /**
  * Box variant types
@@ -146,8 +145,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     },
     ref
   ) => {
-    const { colors, spacing, typography, shadows, getToken } = useTokens();
-    
+        
     // Get border radius values
     const borderRadiusMap = {
       none: '0',
@@ -342,7 +340,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       <Component
         ref={ref}
         className={className}
-        style={boxStyles}
+       
         {...props}
       >
         {children}

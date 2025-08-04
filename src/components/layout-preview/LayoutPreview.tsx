@@ -8,7 +8,6 @@
 import React, { useState, useCallback } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { useTokens } from '../../hooks/useTokens';
 import { 
   useResponsiveLayout, 
   LayoutSwitcher,
@@ -23,6 +22,7 @@ import { AdminLayout } from '../../layouts/admin/AdminLayout';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // LAYOUT PREVIEW VARIANTS
@@ -134,24 +134,24 @@ export interface LayoutThumbnailProps {
 
 const defaultSampleContent = {
   header: (
-    <div className="bg-primary text-primary-foreground p-4">
+    <Box className="bg-primary text-primary-foreground p-4">
       <Typography variant="h3">Header Content</Typography>
-    </div>
+    </Box>
   ),
   sidebar: (
-    <div className="p-4 space-y-2">
+    <Box className="p-4 space-y-2">
       <Typography variant="h4">Navigation</Typography>
-      <div className="space-y-1">
-        <div className="p-2 bg-accent rounded">Dashboard</div>
-        <div className="p-2 hover:bg-accent rounded">Analytics</div>
-        <div className="p-2 hover:bg-accent rounded">Settings</div>
-      </div>
-    </div>
+      <Box className="space-y-1">
+        <Box className="p-2 bg-accent rounded">Dashboard</Box>
+        <Box className="p-2 hover:bg-accent rounded">Analytics</Box>
+        <Box className="p-2 hover:bg-accent rounded">Settings</Box>
+      </Box>
+    </Box>
   ),
   main: (
-    <div className="p-6 space-y-6">
+    <Box className="p-6 space-y-6">
       <Typography variant="h2">Main Content Area</Typography>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <Box className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <Card key={i} className="p-4">
             <Typography variant="h4">Card {i}</Typography>
@@ -160,15 +160,15 @@ const defaultSampleContent = {
             </Typography>
           </Card>
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   ),
   footer: (
-    <div className="bg-muted p-4 text-center">
+    <Box className="bg-muted p-4 text-center">
       <Typography variant="bodySmall" className="text-muted-foreground">
         © 2024 Layout Preview System
       </Typography>
-    </div>
+    </Box>
   ),
 };
 
@@ -218,8 +218,7 @@ export const LayoutThumbnail: React.FC<LayoutThumbnailProps> = ({
   onClick,
   size = 'md',
 }) => {
-  const { colors, spacing } = useTokens();
-
+  
   const sizeClasses = {
     sm: 'w-24 h-16',
     md: 'w-32 h-20',
@@ -233,44 +232,44 @@ export const LayoutThumbnail: React.FC<LayoutThumbnailProps> = ({
   }), [colors, selected]);
 
   return (
-    <div className="flex flex-col items-center gap-2">
-      <div
+    <Box className="flex flex-col items-center gap-2">
+      <Box
         className={cn(
           'border rounded-md cursor-pointer transition-all duration-200',
           'hover:shadow-md',
           sizeClasses[size]
         )}
-        style={thumbnailStyles}
+       
         onClick={onClick}
         role="button"
         tabIndex={0}
         aria-label={`Select ${config.label}`}
       >
-        <div className="w-full h-full p-1 relative overflow-hidden">
+        <Box className="w-full h-full p-1 relative overflow-hidden">
           {/* Simplified layout representation */}
-          <div className="w-full h-full flex flex-col">
+          <Box className="w-full h-full flex flex-col">
             {/* Header */}
-            <div className="h-2 bg-primary/20 rounded-sm mb-1" />
+            <Box className="h-2 bg-primary/20 rounded-sm mb-1" />
             
-            <div className="flex flex-1 gap-1">
+            <Box className="flex flex-1 gap-1">
               {/* Sidebar */}
               {(config.type === 'desktop' || config.type === 'admin') && (
-                <div className="w-3 bg-accent/30 rounded-sm" />
+                <Box className="w-3 bg-accent/30 rounded-sm" />
               )}
               
               {/* Main content */}
-              <div className="flex-1 bg-muted/50 rounded-sm" />
-            </div>
+              <Box className="flex-1 bg-muted/50 rounded-sm" />
+            </Box>
             
             {/* Footer */}
             {config.type === 'web' && (
-              <div className="h-1 bg-muted/70 rounded-sm mt-1" />
+              <Box className="h-1 bg-muted/70 rounded-sm mt-1" />
             )}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
       
-      <div className="text-center">
+      <Box className="text-center">
         <Typography variant="bodySmall" className="font-medium">
           {config.label}
         </Typography>
@@ -279,8 +278,8 @@ export const LayoutThumbnail: React.FC<LayoutThumbnailProps> = ({
             {config.description}
           </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
@@ -305,8 +304,8 @@ const LayoutPreviewControls: React.FC<{
   onToggleMode,
 }) => {
   return (
-    <div className="flex items-center justify-between w-full">
-      <div className="flex items-center gap-4">
+    <Box className="flex items-center justify-between w-full">
+      <Box className="flex items-center gap-4">
         <Typography variant="bodySmall" className="font-medium">
           Layout:
         </Typography>
@@ -316,9 +315,9 @@ const LayoutPreviewControls: React.FC<{
           onChange={onLayoutChange}
           showLabels
         />
-      </div>
+      </Box>
       
-      <div className="flex items-center gap-2">
+      <Box className="flex items-center gap-2">
         <Button
           variant="outline"
           size="sm"
@@ -336,8 +335,8 @@ const LayoutPreviewControls: React.FC<{
         >
           {mode === 'interactive' ? 'Interactive' : 'Preview'}
         </Button>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
@@ -351,7 +350,7 @@ const LayoutInfo: React.FC<{
   if (!show) return null;
 
   return (
-    <div className="absolute top-4 right-4 z-10 max-w-xs">
+    <Box className="absolute top-4 right-4 z-10 max-w-xs">
       <Card className="p-4 shadow-lg">
         <Typography variant="h4" className="mb-2">
           {config.label}
@@ -362,50 +361,50 @@ const LayoutInfo: React.FC<{
           </Typography>
         )}
         
-        <div className="mt-3 space-y-1">
+        <Box className="mt-3 space-y-1">
           <Typography variant="small" className="font-medium">
             Features:
           </Typography>
-          <ul className="text-xs text-muted-foreground space-y-1">
+          <List variant="unordered" className="text-xs text-muted-foreground space-y-1">
             {config.type === 'mobile' && (
               <>
-                <li>• Touch gestures</li>
-                <li>• Swipeable drawer</li>
-                <li>• Bottom navigation</li>
+                <ListItem>• Touch gestures</ListItem>
+                <ListItem>• Swipeable drawer</ListItem>
+                <ListItem>• Bottom navigation</ListItem>
               </>
             )}
             {config.type === 'tablet' && (
               <>
-                <li>• Split view layouts</li>
-                <li>• Resizable panes</li>
-                <li>• Master-detail patterns</li>
+                <ListItem>• Split view layouts</ListItem>
+                <ListItem>• Resizable panes</ListItem>
+                <ListItem>• Master-detail patterns</ListItem>
               </>
             )}
             {config.type === 'desktop' && (
               <>
-                <li>• Keyboard shortcuts</li>
-                <li>• Resizable sidebar</li>
-                <li>• Multi-window support</li>
+                <ListItem>• Keyboard shortcuts</ListItem>
+                <ListItem>• Resizable sidebar</ListItem>
+                <ListItem>• Multi-window support</ListItem>
               </>
             )}
             {config.type === 'web' && (
               <>
-                <li>• SEO optimization</li>
-                <li>• Performance features</li>
-                <li>• Responsive design</li>
+                <ListItem>• SEO optimization</ListItem>
+                <ListItem>• Performance features</ListItem>
+                <ListItem>• Responsive design</ListItem>
               </>
             )}
             {config.type === 'admin' && (
               <>
-                <li>• Dashboard widgets</li>
-                <li>• Data visualization</li>
-                <li>• User management</li>
+                <ListItem>• Dashboard widgets</ListItem>
+                <ListItem>• Data visualization</ListItem>
+                <ListItem>• User management</ListItem>
               </>
             )}
-          </ul>
-        </div>
+          </List>
+        </Box>
       </Card>
-    </div>
+    </Box>
   );
 };
 
@@ -434,8 +433,7 @@ export const LayoutPreview = React.forwardRef<HTMLDivElement, LayoutPreviewProps
     const [currentLayout, setCurrentLayout] = useState<LayoutType>(initialLayout);
     const [showLayoutInfo, setShowLayoutInfo] = useState(showInfo);
     const [previewMode, setPreviewMode] = useState<'preview' | 'interactive'>(modeProp || 'preview');
-    const { colors } = useTokens();
-
+    
     // Find current layout config
     const currentConfig = layouts.find(l => l.type === currentLayout) || layouts[0];
 
@@ -480,15 +478,15 @@ export const LayoutPreview = React.forwardRef<HTMLDivElement, LayoutPreviewProps
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={cn('flex flex-col', className)}
-        style={style}
+       
         {...props}
       >
         {/* Controls */}
         {showControls && controlsPosition === 'top' && (
-          <div className={layoutControlsVariants({ position: 'top' })}>
+          <Box className={layoutControlsVariants({ position: 'top' })}>
             <LayoutPreviewControls
               layouts={layouts}
               currentLayout={currentLayout}
@@ -498,26 +496,26 @@ export const LayoutPreview = React.forwardRef<HTMLDivElement, LayoutPreviewProps
               mode={previewMode}
               onToggleMode={() => setPreviewMode(prev => prev === 'preview' ? 'interactive' : 'preview')}
             />
-          </div>
+          </Box>
         )}
 
         {/* Preview Area */}
-        <div className="flex-1 relative">
-          <div className={cn(layoutPreviewVariants({ size, mode: previewMode }))}>
+        <Box className="flex-1 relative">
+          <Box className={cn(layoutPreviewVariants({ size, mode: previewMode }))}>
             <ResponsiveLayoutProvider forceLayout={currentLayout}>
               <LayoutComponent {...(currentConfig.props || {})}>
                 {renderLayoutContent()}
               </LayoutComponent>
             </ResponsiveLayoutProvider>
-          </div>
+          </Box>
 
           {/* Layout info overlay */}
           <LayoutInfo config={currentConfig} show={showLayoutInfo} />
-        </div>
+        </Box>
 
         {/* Bottom controls */}
         {showControls && controlsPosition === 'bottom' && (
-          <div className={layoutControlsVariants({ position: 'bottom' })}>
+          <Box className={layoutControlsVariants({ position: 'bottom' })}>
             <LayoutPreviewControls
               layouts={layouts}
               currentLayout={currentLayout}
@@ -527,9 +525,9 @@ export const LayoutPreview = React.forwardRef<HTMLDivElement, LayoutPreviewProps
               mode={previewMode}
               onToggleMode={() => setPreviewMode(prev => prev === 'preview' ? 'interactive' : 'preview')}
             />
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
   }
 );

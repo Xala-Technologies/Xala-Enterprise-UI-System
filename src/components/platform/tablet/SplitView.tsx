@@ -8,8 +8,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
-import { useTokens } from '../../../hooks/useTokens';
 import { usePlatform } from '../../../hooks';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
 
 // =============================================================================
 // SPLIT VIEW VARIANTS
@@ -216,8 +216,7 @@ export const SplitView = React.forwardRef<HTMLDivElement, SplitViewProps>(
     },
     ref
   ) => {
-    const { colors, spacing, getToken } = useTokens();
-    const { platform } = usePlatform();
+        const { platform } = usePlatform();
     const { split, isResizing, containerRef, handleMouseDown } = useSplitResize({
       orientation: orientation || 'horizontal',
       initialSplit: collapsed ? (collapsedPane === 'primary' ? 0 : 100) : initialSplit,
@@ -294,24 +293,24 @@ export const SplitView = React.forwardRef<HTMLDivElement, SplitViewProps>(
     }), [orientation, minSize, collapsed, collapsedPane]);
 
     return (
-      <div
+      <Box
         ref={containerRef}
         className={cn(splitViewVariants({ orientation, variant }), className)}
-        style={style}
+       
         {...props}
       >
         {/* Primary pane */}
-        <div
+        <Box
           className={cn(splitPaneVariants({ variant: paneVariant, padding: panePadding }))}
-          style={primaryPaneStyles}
+         
         >
           {primaryPane}
-        </div>
+        </Box>
 
         {/* Divider */}
         {showDivider && !collapsed && (
-          <div
-            style={dividerStyles}
+          <Box
+           
             onMouseDown={resizable ? handleMouseDown : undefined}
             role="separator"
             aria-orientation={orientation as 'horizontal' | 'vertical'}
@@ -320,19 +319,19 @@ export const SplitView = React.forwardRef<HTMLDivElement, SplitViewProps>(
             aria-valuemax={100}
           >
             {resizable && (
-              <div style={dividerHandleStyles} aria-hidden="true" />
+              <Box aria-hidden="true" />
             )}
-          </div>
+          </Box>
         )}
 
         {/* Secondary pane */}
-        <div
+        <Box
           className={cn(splitPaneVariants({ variant: paneVariant, padding: panePadding }))}
-          style={secondaryPaneStyles}
+         
         >
           {secondaryPane}
-        </div>
-      </div>
+        </Box>
+      </Box>
     );
   }
 );
@@ -390,7 +389,7 @@ export const SplitViewComposition = {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
-      <div className="relative h-full">
+      <Box className="relative h-full">
         {collapsible && (
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -414,7 +413,7 @@ export const SplitViewComposition = {
           collapsedPane="secondary"
           {...props}
         />
-      </div>
+      </Box>
     );
   },
 };

@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 import { Box } from '../semantic';
 
 /**
@@ -81,8 +80,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     },
     ref
   ) => {
-    const { colors, spacing: spacingTokens, typography, getToken } = useTokens();
-    // Get variant color with opacity
+        // Get variant color with opacity
     const getVariantColor = (): string => {
       const opacity = 0.3;
       switch (variant) {
@@ -168,10 +166,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
           className={className}
-          style={{
-            ...baseDividerStyles,
-            ...style,
-          }}
+         
           {...props}
         />
       );
@@ -186,10 +181,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
           className={className}
-          style={{
-            ...baseDividerStyles,
-            ...style,
-          }}
+         
           {...props}
         />
       );
@@ -242,27 +234,24 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
         role={decorative ? 'presentation' : 'separator'}
         aria-label={!decorative ? label : undefined}
         className={className}
-        style={{
-          ...containerStyles,
-          ...style,
-        }}
+       
         {...props}
       >
         {/* Left divider line (hidden when label is on the left) */}
         {labelPosition !== 'left' && (
-          <Box style={lineStyles} />
+          <Box />
         )}
 
         {/* Label */}
-        <Box style={labelContainerStyles}>
-          <span style={labelStyles}>
+        <Box>
+          <Text as="span">
             {label}
-          </span>
+          </Text>
         </Box>
 
         {/* Right divider line (hidden when label is on the right) */}
         {labelPosition !== 'right' && (
-          <Box style={lineStyles} />
+          <Box />
         )}
       </Box>
     );

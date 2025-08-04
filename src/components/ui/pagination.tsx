@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Pagination variant types
@@ -56,7 +56,7 @@ const getVisiblePages = (currentPage: number, totalPages: number, maxVisible: nu
  * Chevron Left Icon
  */
 const ChevronLeftIcon = (): React.ReactElement => (
-  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
@@ -69,7 +69,7 @@ const ChevronLeftIcon = (): React.ReactElement => (
  * Chevron Right Icon
  */
 const ChevronRightIcon = (): React.ReactElement => (
-  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
@@ -82,7 +82,7 @@ const ChevronRightIcon = (): React.ReactElement => (
  * Double Chevron Left Icon
  */
 const DoubleChevronLeftIcon = (): React.ReactElement => (
-  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
@@ -95,7 +95,7 @@ const DoubleChevronLeftIcon = (): React.ReactElement => (
  * Double Chevron Right Icon
  */
 const DoubleChevronRightIcon = (): React.ReactElement => (
-  <svg style={{ height: '16px', width: '16px' }} viewBox="0 0 20 20" fill="currentColor">
+  <svg viewBox="0 0 20 20" fill="currentColor">
     <path
       fillRule="evenodd"
       d="M10.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 10-1.414 1.414L14.586 10l-4.293 4.293a1 1 0 000 1.414zm-6 0a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 0 000 1.414z"
@@ -125,8 +125,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const visiblePages = getVisiblePages(currentPage, totalPages, maxVisible);
+        const visiblePages = getVisiblePages(currentPage, totalPages, maxVisible);
     const canGoPrevious = currentPage > 1;
     const canGoNext = currentPage < totalPages;
 
@@ -294,30 +293,30 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
 
     if (totalPages <= 1) {
       return (
-        <div
+        <Box
           ref={ref}
           className={className}
-          style={getContainerStyles()}
+         
           {...props}
         />
       );
     }
 
     return (
-      <nav
+      <Box as="nav"
         ref={ref}
         role="navigation"
         aria-label="Pagination"
         className={className}
-        style={getContainerStyles()}
+       
         {...props}
       >
         {/* First Page */}
         {showFirstLast && currentPage > 2 && (
-          <button
+          <Text as="button"
             onClick={() => handlePageClick(1)}
             disabled={disabled || !canGoPrevious}
-            style={getNavButtonStyles(disabled || !canGoPrevious)}
+           
             aria-label="Go to first page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoPrevious)) {
@@ -342,15 +341,15 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             }}
           >
             <DoubleChevronLeftIcon />
-          </button>
+          </Text>
         )}
 
         {/* Previous Page */}
         {showPrevNext && (
-          <button
+          <Text as="button"
             onClick={() => handlePageClick(currentPage - 1)}
             disabled={disabled || !canGoPrevious}
-            style={getNavButtonStyles(disabled || !canGoPrevious)}
+           
             aria-label="Go to previous page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoPrevious)) {
@@ -375,7 +374,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             }}
           >
             <ChevronLeftIcon />
-          </button>
+          </Text>
         )}
 
         {/* Page Numbers */}
@@ -384,12 +383,12 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           const isPageDisabled = disabled;
           
           return (
-            <button
+            <Text as="button"
               key={page}
               onClick={() => handlePageClick(page)}
               disabled={isPageDisabled}
               data-active={isActive}
-              style={getPageItemStyles(page, isActive)}
+             
               aria-label={`Go to page ${page}`}
               aria-current={isActive ? 'page' : undefined}
               onMouseEnter={(e) => {
@@ -427,16 +426,16 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
               }}
             >
               {page}
-            </button>
+            </Text>
           );
         })}
 
         {/* Next Page */}
         {showPrevNext && (
-          <button
+          <Text as="button"
             onClick={() => handlePageClick(currentPage + 1)}
             disabled={disabled || !canGoNext}
-            style={getNavButtonStyles(disabled || !canGoNext)}
+           
             aria-label="Go to next page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoNext)) {
@@ -461,15 +460,15 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             }}
           >
             <ChevronRightIcon />
-          </button>
+          </Text>
         )}
 
         {/* Last Page */}
         {showFirstLast && currentPage < totalPages - 1 && (
-          <button
+          <Text as="button"
             onClick={() => handlePageClick(totalPages)}
             disabled={disabled || !canGoNext}
-            style={getNavButtonStyles(disabled || !canGoNext)}
+           
             aria-label="Go to last page"
             onMouseEnter={(e) => {
               if (!(disabled || !canGoNext)) {
@@ -494,9 +493,9 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             }}
           >
             <DoubleChevronRightIcon />
-          </button>
+          </Text>
         )}
-      </nav>
+      </Box>
     );
   }
 );

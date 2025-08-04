@@ -6,7 +6,6 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { useTokens } from '../../hooks/useTokens';
 import { Box } from '../semantic';
 
 /**
@@ -73,8 +72,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
     },
     ref
   ) => {
-    const { colors, spacing: spacingTokens, typography } = useTokens();
-    
+        
     // Get variant color
     const getVariantColor = (): string => {
       switch (variant) {
@@ -163,27 +161,24 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
         <Box
           ref={ref}
           className={className}
-          style={{
-            ...containerStyles,
-            ...style,
-          }}
+         
           {...props}
         >
           {labelPosition !== 'start' && (
             <Box
-              style={lineStyles}
+             
               role={decorative ? 'presentation' : 'separator'}
               aria-orientation={orientation}
             />
           )}
 
-          <span style={labelStyles}>
+          <Text as="span">
             {label}
-          </span>
+          </Text>
 
           {labelPosition !== 'end' && (
             <Box
-              style={lineStyles}
+             
               role={decorative ? 'presentation' : 'separator'}
               aria-orientation={orientation}
             />
@@ -197,10 +192,7 @@ export const Separator = forwardRef<HTMLDivElement, SeparatorProps>(
       <Box
         ref={ref}
         className={className}
-        style={{
-          ...separatorStyles,
-          ...style,
-        }}
+       
         role={decorative ? 'presentation' : 'separator'}
         aria-orientation={orientation}
         {...props}

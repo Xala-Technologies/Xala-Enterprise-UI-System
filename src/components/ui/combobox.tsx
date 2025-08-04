@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, useState, useRef, useEffect, useMemo, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Combobox option interface
@@ -101,8 +101,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const [isOpen, setIsOpen] = useState(false);
+        const [isOpen, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [selectedValue, setSelectedValue] = useState(value ?? defaultValue ?? '');
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -111,7 +110,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Generate ID if not provided
-    const comboboxId = id || (label ? `combobox-${label.toLowerCase().replace(/\s+/g, '-')}` : undefined);
+    const comboboxId = id || (label ? `combobox-` : undefined);
 
     // Determine actual variant based on state
     const actualVariant = error || errorText ? 'destructive' : success || successText ? 'success' : variant;
@@ -317,10 +316,10 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       left: 0,
       right: 0,
       marginTop: spacing[1],
-      maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+      maxHeight: typeof maxHeight === 'number' ? `px` : maxHeight,
       overflowY: 'auto',
       borderRadius: borderRadius.md,
-      border: `1px solid ${colors.border?.default || colors.neutral?.[200] || '#e5e7eb'}`,
+      border: `1px solid `,
       backgroundColor: colors.background?.paper || colors.background?.default || '#ffffff',
       boxShadow: shadows.lg,
       zIndex: 50,
@@ -351,12 +350,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     // Chevron icon
     const ChevronIcon = (): React.ReactElement => (
       <svg
-        style={{
-          height: '16px',
-          width: '16px',
-          transition: 'transform 150ms ease-in-out',
-          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-        }}
+       
         viewBox="0 0 20 20"
         fill="currentColor"
         aria-hidden="true"
@@ -370,8 +364,8 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     );
 
     const comboboxElement = (
-      <div ref={containerRef} style={{ position: 'relative' }}>
-        <div style={{ position: 'relative' }}>
+      <Box ref={containerRef}>
+        <Box>
           <input
             ref={inputRef}
             id={comboboxId}
@@ -389,58 +383,37 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
             onKeyDown={handleKeyDown}
             placeholder={isOpen ? searchPlaceholder : placeholder}
             disabled={disabled}
-            style={inputStyles}
+           
           />
-          <div
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '100%',
-              width: sizeStyles.height,
-              pointerEvents: 'none',
-              color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-            }}
+          <Box
+           
           >
             <ChevronIcon />
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {isOpen && (
-          <div
+          <Box
             ref={listRef}
             id={`${comboboxId}-listbox`}
             role="listbox"
-            style={dropdownStyles}
+           
           >
             {filteredOptions.length === 0 ? (
-              <div
-                style={{
-                  padding: spacing[3],
-                  textAlign: 'center',
-                  color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                  fontSize: typography.fontSize.sm,
-                }}
+              <Box
+               
               >
                 {emptyMessage}
-              </div>
+              </Box>
             ) : (
               Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
-                <div key={groupName}>
+                <Box key={groupName}>
                   {groupName && (
-                    <div
-                      style={{
-                        padding: `${spacing[1.5]} ${spacing[3]}`,
-                        fontSize: typography.fontSize.xs,
-                        fontWeight: typography.fontWeight.semibold,
-                        color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                      }}
+                    <Box
+                      className="px-3 py-1 text-xs font-semibold text-muted-foreground"
                     >
                       {groupName}
-                    </div>
+                    </Box>
                   )}
                   {groupOptions.map((option, index) => {
                     const globalIndex = filteredOptions.indexOf(option);
@@ -448,49 +421,38 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
                     const isSelected = option.value === selectedValue;
 
                     return (
-                      <div
+                      <Box
                         key={option.value}
                         role="option"
                         aria-selected={isSelected}
                         aria-disabled={option.disabled}
                         onClick={() => !option.disabled && handleSelect(option)}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: spacing[2],
-                          padding: `${spacing[2]} ${spacing[3]}`,
-                          cursor: option.disabled ? 'not-allowed' : 'pointer',
-                          opacity: option.disabled ? 0.5 : 1,
-                          backgroundColor: isHighlighted
-                            ? colors.accent?.default || colors.neutral?.[100] || '#f3f4f6'
-                            : 'transparent',
-                          color: colors.text?.primary || colors.neutral?.[900] || '#111827',
-                          fontSize: typography.fontSize.sm,
-                          transition: 'background-color 150ms ease-in-out',
-                        }}
+                        className={cn(
+                          "px-3 py-2 text-sm cursor-pointer transition-colors",
+                          isHighlighted && "bg-accent",
+                          isSelected && "font-medium",
+                          option.disabled && "cursor-not-allowed opacity-50"
+                        )}
                         onMouseEnter={() => !option.disabled && setHighlightedIndex(globalIndex)}
                       >
                         {option.icon && (
-                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '16px', height: '16px' }}>
+                          <Text as="span">
                             {option.icon}
-                          </span>
+                          </Text>
                         )}
-                        <div style={{ flex: 1 }}>
-                          <div>{option.label}</div>
+                        <Box>
+                          <Box>{option.label}</Box>
                           {option.description && (
-                            <div
-                              style={{
-                                fontSize: typography.fontSize.xs,
-                                color: colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
-                              }}
+                            <Box
+                             
                             >
                               {option.description}
-                            </div>
+                            </Box>
                           )}
-                        </div>
+                        </Box>
                         {isSelected && (
                           <svg
-                            style={{ height: '16px', width: '16px' }}
+                           
                             viewBox="0 0 20 20"
                             fill="currentColor"
                           >
@@ -501,15 +463,15 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
                             />
                           </svg>
                         )}
-                      </div>
+                      </Box>
                     );
                   })}
-                </div>
+                </Box>
               ))
             )}
-          </div>
+          </Box>
         )}
-      </div>
+      </Box>
     );
 
     if (!label && !displayHelperText) {
@@ -517,26 +479,26 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     }
 
     return (
-      <div ref={ref} className={className} style={{ display: 'flex', flexDirection: 'column', gap: spacing[1.5], ...style }} {...props}>
+      <Box ref={ref} className={className} {...props}>
         {label && (
-          <label htmlFor={comboboxId} style={labelStyles}>
+          <Text as="label" htmlFor={comboboxId}>
             {label}
             {required && (
-              <span style={{ marginLeft: spacing[1], color: colors.danger?.[500] || '#ef4444' }} aria-label="required">
+              <Text as="span" aria-label="required">
                 *
-              </span>
+              </Text>
             )}
-          </label>
+          </Text>
         )}
 
         {comboboxElement}
 
         {displayHelperText && (
-          <p id={`${comboboxId}-helper`} style={helperTextStyles}>
+          <Text id={`${comboboxId}-helper`}>
             {displayHelperText}
-          </p>
+          </Text>
         )}
-      </div>
+      </Box>
     );
   }
 );

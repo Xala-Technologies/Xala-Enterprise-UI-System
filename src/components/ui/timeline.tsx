@@ -6,7 +6,7 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { useTokens } from '../../hooks/useTokens';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 /**
  * Timeline orientation types
@@ -125,8 +125,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
     },
     ref
   ): React.ReactElement => {
-    const { spacing } = useTokens();
-
+    
     // Container styles
     const getContainerStyles = (): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {
@@ -162,10 +161,10 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={{ ...getContainerStyles(), ...style }}
+       
         role="list"
         aria-label="Timeline"
         {...props}
@@ -181,7 +180,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
             position={index === 0 ? 'first' : index === items.length - 1 ? 'last' : 'middle'}
           />
         ))}
-      </div>
+      </Box>
     );
   }
 );
@@ -206,8 +205,7 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
     },
     ref
   ): React.ReactElement => {
-    const { colors, spacing, typography, getToken } = useTokens();
-    const isVertical = orientation === 'vertical';
+        const isVertical = orientation === 'vertical';
     const itemStatus = item.status || status;
 
     // Get border radius
@@ -379,90 +377,70 @@ export const TimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
     };
 
     return (
-      <div
+      <Box
         ref={ref}
         className={className}
-        style={itemStyles}
+       
         role="listitem"
         {...props}
       >
         {/* Timeline dot and line */}
-        <div style={dotContainerStyles}>
+        <Box>
           {/* Connecting line (before dot) */}
           {isVertical && position !== 'first' && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: '-32px',
-                height: '32px',
-                width: '2px',
-                ...lineStyles,
-              }}
+            <Box 
+             
             />
           )}
 
           {/* Timeline dot */}
-          <div style={dotStyles}>
+          <Box>
             {item.icon && (
-              <span style={{ fontSize: typography.fontSize.xs }}>
+              <Text as="span">
                 {item.icon}
-              </span>
+              </Text>
             )}
-          </div>
+          </Box>
 
           {/* Connecting line (after dot) */}
           {isVertical && showLine && position !== 'last' && (
-            <div 
-              style={{
-                position: 'absolute',
-                top: '24px',
-                height: '32px',
-                width: '2px',
-                ...lineStyles,
-              }}
+            <Box 
+             
             />
           )}
 
           {/* Horizontal connecting line */}
           {!isVertical && showLine && position !== 'last' && (
-            <div 
-              style={{
-                position: 'absolute',
-                left: '24px',
-                top: '50%',
-                height: '2px',
-                width: '32px',
-                transform: 'translateY(-50%)',
-                ...lineStyles,
-              }}
+            <Box 
+             
             />
           )}
-        </div>
+        </Box>
 
         {/* Content */}
-        <div style={contentStyles}>
-          <div style={contentContainerStyles}>
-            <h4 style={titleStyles}>{item.title}</h4>
+        <Box>
+          <Box>
+            <Heading level={4}>{item.title}</Heading>
 
             {item.description && (
-              <p style={descriptionStyles}>{item.description}</p>
+              <Text>{item.description}</Text>
             )}
 
             {item.timestamp && (
-              <time style={timestampStyles}>
+              <time>
                 {formatTimestamp(item.timestamp)}
               </time>
             )}
 
             {/* Status indicator */}
             {itemStatus && itemStatus !== 'default' && (
-              <div style={getStatusBadgeStyles()}>
+              <Box>
                 {itemStatus.charAt(0).toUpperCase() + itemStatus.slice(1)}
-              </div>
+              </Box>
             )}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     );
   }
 );
