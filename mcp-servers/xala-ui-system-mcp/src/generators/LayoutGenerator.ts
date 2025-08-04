@@ -537,7 +537,7 @@ export function ${componentName}({
   /**
    * Generate layout using Container, Grid, and Stack specifications (async version for MCP tools)
    */
-  public async generateLayout(config: {
+  public async generateAdvancedLayout(config: {
     name: string;
     structure: {
       container?: any;

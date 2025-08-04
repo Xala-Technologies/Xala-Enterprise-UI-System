@@ -40,7 +40,9 @@
     "**/*.spec.ts",
     "**/*.spec.tsx",
     "**/_archived/**",
+    "**/_problematic/**",
     "**/*.bak",
-    "src/examples/**"
+    "src/examples/**",
+    "_archived/**"
   ]
 } 

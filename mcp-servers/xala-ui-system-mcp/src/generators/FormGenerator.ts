@@ -94,7 +94,7 @@ export function ${name}({ onSubmit, onCancel }: ${name}Props): JSX.Element {
   /**
    * Generate a complete form using form component specifications (async version for MCP tools)
    */
-  public async generateForm(config: {
+  public async generateAdvancedForm(config: {
     name: string;
     fields: Array<{
       component: string;

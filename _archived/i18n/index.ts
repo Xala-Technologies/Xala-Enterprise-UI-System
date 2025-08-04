@@ -15,7 +15,6 @@
 export {
   SUPPORTED_LOCALES,
   RTL_LOCALES,
-  DEFAULT_LOCALE,
   LOCALE_METADATA,
   LOCALE_RESOURCES,
   isRTLLocale,
@@ -23,10 +22,15 @@ export {
   isSupportedLocale,
   getClosestSupportedLocale,
   getBrowserLocale,
-  type SupportedLocale,
   type LocaleMetadata,
   type TranslationKey
 } from './locales';
+
+// Import from types
+export { 
+  type SupportedLocale,
+  DEFAULT_LOCALE 
+} from '../types/i18n.types';
 
 // Export utility functions
 export {

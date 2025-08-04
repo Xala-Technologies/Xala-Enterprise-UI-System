@@ -85,7 +85,7 @@ export function ${name}({
   /**
    * Generate a data table using the DataTable specification (async version for MCP tools)
    */
-  public async generateDataTable(config: {
+  public async generateAdvancedDataTable(config: {
     name: string;
     columns: Array<{
       key: string;
@@ -107,23 +107,23 @@ export function ${name}({
     
     const tableCode = `
 /**
- * Generated Data Table: ${name}
- * NSM Classification: ${nsmClassification}
- * Features: ${Object.entries(features).filter([k, v] => v).map([k, v] => k).join(', ')}
+ * Generated Data Table: \${name}
+ * NSM Classification: \${nsmClassification}
+ * Features: \${Object.entries(features).filter(([k, v]) => v).map(([k, v]) => k).join(', ')}
  */
 
 import React, { useState, useMemo } from 'react';
 import { DataTable, Button, Stack, Badge } from '@xala-technologies/ui-system';
 import { t } from '@xala-technologies/ui-system/i18n';
 
-interface ${name}Props {
+interface \${name}Props {
   readonly data: Array<Record<string, any>>;
   readonly loading?: boolean;
   readonly onRowSelect?: (rows: Array<Record<string, any>>) => void;
   readonly onRowAction?: (action: string, row: Record<string, any>) => void;
 }
 
-export const ${name}: React.FC<${name}Props> = ({
+export const \${name}: React.FC<\${name}Props> = ({
   data,
   loading = false,
   onRowSelect,
@@ -302,7 +302,7 @@ ${columns.map(col => `
   );
 };
 
-${name}.displayName = '${name}';
+\${name}.displayName = '\${name}';
 `;
 
     return tableCode;

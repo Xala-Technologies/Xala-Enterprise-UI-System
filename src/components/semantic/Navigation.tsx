@@ -11,7 +11,7 @@ import { cn } from '../../lib/utils/cn';
 
 export type NavigationIntent = 'primary' | 'secondary' | 'sidebar' | 'footer' | 'breadcrumb';
 
-export interface NavigationProps extends BoxProps {
+export interface NavigationProps extends React.HTMLAttributes<HTMLElement> {
   readonly intent?: NavigationIntent;
   readonly vertical?: boolean;
 }
@@ -26,9 +26,8 @@ export interface NavigationItemProps {
 
 export const Navigation = forwardRef<HTMLElement, NavigationProps>(
   ({ intent = 'primary', vertical = false, className, ...props }, ref) => (
-    <Box
+    <nav
       ref={ref}
-      as="nav"
       className={cn(
         'flex gap-2',
         vertical ? 'flex-col' : 'flex-row items-center',
@@ -64,16 +63,21 @@ export const NavigationItem = forwardRef<HTMLElement, NavigationItemProps>(
     }
 
     return (
-      <Button
+      <button
         ref={ref as any}
-        variant={isActive ? 'default' : 'ghost'}
-        size="sm"
+        className={cn(
+          'px-3 py-2 rounded-md text-sm transition-colors',
+          isActive 
+            ? 'bg-primary text-primary-foreground' 
+            : 'text-muted-foreground hover:text-foreground hover:bg-muted',
+          disabled && 'opacity-50 pointer-events-none'
+        )}
         disabled={disabled}
         onClick={onClick}
         {...props}
       >
         {children}
-      </Button>
+      </button>
     );
   }
 );

@@ -54,7 +54,65 @@ export {
   type AlertVariant
 } from './alert';
 
-// Re-export semantic components for convenience
+// Additional UI components
+export {
+  Badge,
+  type BadgeProps
+} from './badge';
+
+export {
+  Tooltip,
+  type TooltipProps
+} from './tooltip';
+
+export {
+  Avatar,
+  type AvatarProps
+} from './avatar';
+
+export {
+  Skeleton,
+  type SkeletonProps
+} from './skeleton';
+
+export {
+  Spinner,
+  type SpinnerProps
+} from './spinner';
+
+export {
+  Progress,
+  type ProgressProps
+} from './progress';
+
+export {
+  Separator,
+  type SeparatorProps
+} from './separator';
+
+export {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  type DialogProps,
+  type DialogContentProps
+} from './dialog';
+
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  type TabsProps,
+  type TabsListProps,
+  type TabsTriggerProps,
+  type TabsContentProps
+} from './tabs';
+
+// Re-export essential semantic components for convenience
 export {
   Box,
   Text,
@@ -63,11 +121,15 @@ export {
   List,
   ListItem,
   Link,
+  Image,
+  Toast,
   type BoxProps,
   type TextProps,
   type HeadingProps,
   type ContainerProps,
   type ListProps,
   type ListItemProps,
-  type LinkProps
+  type LinkProps,
+  type ImageProps,
+  type ToastProps,
 } from '../semantic';

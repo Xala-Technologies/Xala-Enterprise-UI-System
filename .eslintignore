@@ -1,8 +1,17 @@
+# Archived directories (CRITICAL - ignore all archived files)
+**/_archived/
+**/_archived/**
+**/_problematic/
+**/_problematic/**
+_archived/
+_archived/**
+
 # Ignore test files temporarily
 **/*.test.ts
 **/*.test.tsx
 **/*.spec.ts
 **/*.spec.tsx
+tests/
 
 # Ignore generated files
 dist/

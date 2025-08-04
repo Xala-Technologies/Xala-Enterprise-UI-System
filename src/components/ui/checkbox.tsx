@@ -5,7 +5,7 @@
  */
 
 import React, { forwardRef } from 'react';
-import { Box } from '../semantic/Box';
+import { cn } from '../../lib/utils/cn';
 
 export type CheckboxSize = 'sm' | 'md' | 'lg';
 export type CheckboxVariant = 'default' | 'primary';
@@ -17,15 +17,22 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, className, ...props }, ref) => (
+  ({ label, className, size, variant, ...props }, ref) => (
     <label className="inline-flex items-center gap-2">
       <input
         ref={ref}
         type="checkbox"
-        className={className}
+        className={cn(
+          'rounded border-input focus:ring-2 focus:ring-primary',
+          size === 'sm' && 'h-3 w-3',
+          size === 'md' && 'h-4 w-4',
+          size === 'lg' && 'h-5 w-5',
+          variant === 'primary' && 'accent-primary',
+          className
+        )}
         {...props}
       />
-      {label && <span>{label}</span>}
+      {label && <span className="text-sm">{label}</span>}
     </label>
   )
 );
@@ -51,7 +58,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   onChange,
   name 
 }) => (
-  <Box display="flex" direction="col" gap="sm">
+  <div className="flex flex-col gap-2">
     {options.map(option => (
       <Checkbox
         key={option.value}
@@ -71,7 +78,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
         }}
       />
     ))}
-  </Box>
+  </div>
 );
 
 CheckboxGroup.displayName = 'CheckboxGroup';

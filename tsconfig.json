@@ -52,6 +52,9 @@
     "**/*.test.ts",
     "**/*.test.tsx",
     "**/*.spec.ts",
-    "**/*.spec.tsx"
+    "**/*.spec.tsx",
+    "**/_archived/**",
+    "**/_problematic/**",
+    "_archived/**"
   ]
 }
