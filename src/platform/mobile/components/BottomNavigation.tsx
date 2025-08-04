@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocalization } from '../../../localization/hooks/useLocalization';
+import { useLocalization } from '../../../hooks/useLocalization';
 
 // BottomNavigation - Norwegian government-compliant mobile bottom navigation component
 interface BottomNavigationItem {

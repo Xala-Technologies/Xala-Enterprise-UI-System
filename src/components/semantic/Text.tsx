@@ -353,7 +353,7 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         attributes.dir = dir;
       }
       
-      if (dateTime && (Component === 'time' || intent === 'time')) {
+      if (dateTime && (Component === 'time' || (intent as string) === 'time')) {
         attributes.dateTime = dateTime;
       }
       
@@ -374,11 +374,11 @@ export const Text = forwardRef<HTMLElement, TextProps>(
         ref={ref as any}
         className={cn(
           textVariants({
-            size: intentConfig.size || size,
-            weight: intentConfig.weight || weight,
+            size: (intentConfig.size || size) as any,
+            weight: (intentConfig.weight || weight) as any,
             variant: intentConfig.variant || variant,
             align,
-            leading: intentConfig.leading || leading,
+            leading: (intentConfig.leading || leading) as any,
             tracking,
             decoration,
             transform,

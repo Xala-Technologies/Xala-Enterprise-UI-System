@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button } from '../../../components/action-feedback/Button';
+import { Button } from '../../../components/ui/button';
 import { Logger } from '../../../lib/utils/multiplatform-logger';
 import type { DesktopSidebarProps } from '../../../types/platform.types';
 

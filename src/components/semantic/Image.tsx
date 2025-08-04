@@ -147,7 +147,7 @@ const imageVariants = cva(
 // =============================================================================
 
 export interface ImageProps
-  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'size'>,
+  extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'size' | 'loading'>,
     VariantProps<typeof imageVariants> {
   /** Image semantic intent */
   readonly intent?: ImageIntent;
@@ -442,7 +442,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
         src={currentSrc}
         srcSet={srcSet}
         sizes={sizes}
-        loading={finalPriority ? 'eager' : finalLazy ? 'lazy' : 'eager'}
+        loading={finalPriority ? 'eager' : (finalLazy || false) ? 'lazy' : 'eager'}
         className={cn(
           imageVariants({
             variant: finalVariant,
@@ -451,7 +451,7 @@ export const Image = forwardRef<HTMLImageElement, ImageProps>(
             position,
             size: finalSize,
             interactive: finalInteractive,
-            loading: loadingState === 'loading',
+            loading: (loadingState as string) === 'loading',
           }),
           className
         )}

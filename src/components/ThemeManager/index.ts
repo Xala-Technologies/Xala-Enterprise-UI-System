@@ -7,9 +7,7 @@ export {
 // Container components (with state management)
 export { 
   ThemeManagerContainer as ThemeManager,
-  CompactThemeSwitcherContainer as CompactThemeSwitcher,
-  PureThemeManager,
-  PureCompactThemeSwitcher
+  CompactThemeSwitcherContainer as CompactThemeSwitcher
 } from './ThemeManagerContainer';
 
 // CSS-only theme utilities

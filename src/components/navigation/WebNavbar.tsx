@@ -6,11 +6,8 @@
  */
 
 import { cn } from '../../lib/utils/cn';
-import { Box, Text, Heading } from '../../semantic';
-import { cn } from '../../lib/utils/cn';
+import { Box, Text, Heading } from '../semantic';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { forwardRef, type HTMLAttributes } from 'react';
 import { forwardRef, type HTMLAttributes } from 'react';
 
 // =============================================================================
@@ -134,7 +131,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
       centerContent = false,
       'aria-label': ariaLabel = 'Main navigation',
       style,
-      ...props
+      ...restProps
     },
     ref
   ): React.ReactElement => {
@@ -209,9 +206,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
           className
         )}
        
-        role="navigation"
         aria-label={ariaLabel}
-        {...props}
       >
         {/* Container for max-width control */}
         <Box
@@ -320,7 +315,6 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
                 aria-expanded={mobileMenuOpen}
                 aria-label="Toggle mobile menu"
                 onClick={onMobileMenuToggle}
-                className="min-w-[2.75rem] min-h-[2.75rem]"
               >
                 <Text as="span" className="sr-only">Open main menu</Text>
                 {/* Hamburger icon */}
@@ -358,7 +352,6 @@ export const MobileWebNavbar = forwardRef<HTMLElement, MobileWebNavbarProps>(
               'bg-background border-b border-border',
               'shadow-lg z-40'
             )}
-            className="p-4"
           >
             {mobileMenuContent}
           </Box>

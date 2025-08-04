@@ -134,7 +134,7 @@ export const EnhancedCard = forwardRef<HTMLDivElement, EnhancedCardProps>(
     const handleKeyDown = (e: React.KeyboardEvent): void => {
       if (onClick && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
-        handleClick();
+        handleClick(e as any);
       }
     };
 

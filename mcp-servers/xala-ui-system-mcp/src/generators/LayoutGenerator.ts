@@ -533,4 +533,83 @@ export function ${componentName}({
       .replace(/\s+/g, '')
       .replace(/^./, str => str.toUpperCase());
   }
+
+  /**
+   * Generate layout using Container, Grid, and Stack specifications (async version for MCP tools)
+   */
+  public async generateLayout(config: {
+    name: string;
+    structure: {
+      container?: any;
+      grid?: any;
+      stacks?: any[];
+    };
+    responsive: boolean;
+    semanticHTML: boolean;
+  }): Promise<string> {
+    const { name, structure, responsive, semanticHTML } = config;
+    
+    const layoutCode = `
+/**
+ * Generated Layout: ${name}
+ * Responsive: ${responsive}
+ * Semantic HTML: ${semanticHTML}
+ */
+
+import React from 'react';
+import { Container, Grid, Stack } from '@xala-technologies/ui-system';
+import { t } from '@xala-technologies/ui-system/i18n';
+
+interface ${name}Props {
+  readonly children?: React.ReactNode;
+  readonly className?: string;
+}
+
+export const ${name}: React.FC<${name}Props> = ({
+  children,
+  className
+}) => {
+  return (
+    <${semanticHTML ? 'main' : 'div'} className={className}>
+      <Container 
+        ${structure.container ? `size="${structure.container.size || 'full'}"` : 'size="full"'}
+        ${structure.container ? `padding="${structure.container.padding || 'lg'}"` : 'padding="lg"'}
+      >
+        ${structure.grid ? `
+        <Grid
+          columns={${structure.grid.columns || 12}}
+          gap="${structure.grid.gap || 'md'}"
+          ${responsive ? 'responsive' : ''}
+        >
+          ${structure.stacks?.map((stack, index) => `
+          <Stack
+            direction="${stack.direction || 'vertical'}"
+            gap="${stack.gap || 'md'}"
+            align="${stack.align || 'start'}"
+            justify="${stack.justify || 'start'}"
+            className="grid-item"
+          >
+            {/* Stack ${index + 1} content */}
+          </Stack>
+          `).join('') || ''}
+        </Grid>
+        ` : `
+        <Stack
+          direction="vertical"
+          gap="lg"
+          className="layout-main"
+        >
+          {children}
+        </Stack>
+        `}
+      </Container>
+    </${semanticHTML ? 'main' : 'div'}>
+  );
+};
+
+${name}.displayName = '${name}';
+`;
+
+    return layoutCode;
+  }
 }

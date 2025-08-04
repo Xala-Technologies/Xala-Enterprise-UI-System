@@ -83,7 +83,7 @@ export type {
 export {
   ThemeProvider,
   ThemeScript,
-  useTheme,
+  // useTheme exported above
   themeUtils,
   withTheme,
   getServerSideTheme,

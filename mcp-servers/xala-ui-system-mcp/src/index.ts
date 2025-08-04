@@ -17,6 +17,7 @@ import { z } from 'zod';
 import { ComponentGenerator } from './generators/ComponentGenerator.js';
 import { TemplateManager } from './templates/TemplateManager.js';
 import { ComponentConfig, GenerationContext } from './types/index.js';
+import specificationTools, { specificationToolHandlers } from './tools/specification-tools.js';
 
 // Zod schemas for validation
 const ComponentConfigSchema = z.object({
@@ -139,6 +140,8 @@ class XalaUISystemMCPServer {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
         tools: [
+          // Specification-based tools
+          ...specificationTools.tools,
           {
             name: 'generate_multi_platform_component',
             description: 'Generate components for any of the 7 supported platforms (React, Next.js, Vue, Angular, Svelte, Electron, React Native) with v5.0 semantic architecture',
@@ -448,6 +451,19 @@ class XalaUISystemMCPServer {
       const { name, arguments: args } = request.params;
 
       try {
+        // Handle specification-based tools first
+        if (specificationToolHandlers[name as keyof typeof specificationToolHandlers]) {
+          const result = await specificationToolHandlers[name as keyof typeof specificationToolHandlers](args);
+          return {
+            content: [
+              {
+                type: 'text',
+                text: typeof result === 'string' ? result : JSON.stringify(result, null, 2),
+              },
+            ],
+          };
+        }
+
         switch (name) {
           case 'generate_multi_platform_component':
             return await this.handleGenerateMultiPlatformComponent(args);

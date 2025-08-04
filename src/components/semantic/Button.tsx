@@ -269,7 +269,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const isSuccess = loadingState === 'success';
     const isError = loadingState === 'error';
     const isDisabled = disabled || isLoading;
-    const isIconOnly = iconPosition === 'only' || (!children && icon);
+    const isIconOnly = iconPosition === 'only' || (!children && !!icon);
 
     // Enhanced accessibility attributes
     const getAccessibilityAttributes = () => {
@@ -311,7 +311,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       if (isLoading) {
         return (
           <>
-            <LoadingSpinner size={size} />
+            <LoadingSpinner size={size || 'md'} />
             {!isIconOnly && (
               <span className="sr-only md:not-sr-only">
                 {loadingText || 'Loading...'}
@@ -325,7 +325,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       if (isSuccess) {
         return (
           <>
-            {successIcon || <CheckIcon size={size} />}
+            {successIcon || <CheckIcon size={size || 'md'} />}
             {!isIconOnly && (
               <span className="sr-only md:not-sr-only">
                 Success
@@ -339,7 +339,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       if (isError) {
         return (
           <>
-            {errorIcon || <ErrorIcon size={size} />}
+            {errorIcon || <ErrorIcon size={size || 'md'} />}
             {!isIconOnly && (
               <span className="sr-only md:not-sr-only">
                 Error

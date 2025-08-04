@@ -83,11 +83,11 @@ export const ThemeManagerContainer = (props: ThemeManagerContainerProps): JSX.El
   // Convert tokens to expected format for pure component
   const normalizedTokens = useMemo(() => ({
     colors: {
-      primary: tokens.colors.primary || { 500: '#3b82f6' },
-      secondary: tokens.colors.secondary,
-      neutral: tokens.colors.neutral || { 50: '#f8fafc', 500: '#64748b' },
+      primary: { 500: '#3b82f6' },
+      secondary: { 500: '#8b5cf6' },
+      neutral: { 50: '#f8fafc', 500: '#64748b' },
     },
-  }), [tokens]);
+  }), []);
 
   return (
     <ThemeManager

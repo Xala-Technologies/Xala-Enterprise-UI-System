@@ -928,4 +928,65 @@ export type ${componentName}Platform = '${platform}';`;
     const platformConfig = this.platformConfigs[platform];
     return platformConfig?.availableComponents.includes(component as any) || false;
   }
+
+  /**
+   * Generate component from JSON specification
+   */
+  public async generateFromSpecification(
+    spec: any,
+    options: {
+      platform?: SupportedPlatform;
+      variant?: string;
+      customProps?: Record<string, any>;
+      includeTests?: boolean;
+      includeStories?: boolean;
+      includeDocs?: boolean;
+    }
+  ): Promise<{ files: GeneratedFile[] }> {
+    const platform = options.platform || 'react';
+    const config: ComponentConfig = {
+      name: spec.metadata.name,
+      category: spec.metadata.category || 'components',
+      componentName: spec.metadata.name,
+      props: options.customProps || {},
+      variants: spec.variants?.simple || {},
+      outputPath: './generated',
+      includeTypes: true,
+      includeTests: options.includeTests || false,
+      includeStories: options.includeStories || false,
+      includeDocs: options.includeDocs || false,
+      styling: {
+        variant: options.variant || 'default'
+      },
+      size: 'md',
+      theme: 'enterprise',
+      locale: 'nb-NO',
+      features: {
+        icons: false,
+        animated: false
+      },
+      accessibility: {
+        enabled: true,
+        level: 'AAA',
+        screenReader: true,
+        keyboardNavigation: true
+      },
+      localization: {
+        enabled: true,
+        defaultLocale: 'nb-NO',
+        supportedLocales: ['nb-NO', 'en-US']
+      },
+      compliance: {
+        norwegian: true,
+        nsmClassification: spec.compliance?.norwegian?.nsmClassification || 'OPEN'
+      }
+    };
+
+    // Generate the component
+    const result = await this.generateComponent(config, platform);
+    
+    return {
+      files: result.files
+    };
+  }
 }

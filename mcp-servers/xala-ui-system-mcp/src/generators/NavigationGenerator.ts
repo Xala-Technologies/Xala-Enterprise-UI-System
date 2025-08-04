@@ -57,4 +57,69 @@ export function ${name}({ items = [], onItemClick }: ${name}Props): JSX.Element 
   );
 }`;
   }
+
+  /**
+   * Generate navigation using WebNavbar, Sidebar, Tabs, or Breadcrumb specifications (async version for MCP tools)
+   */
+  public async generateNavigation(config: {
+    type: 'WebNavbar' | 'Sidebar' | 'Tabs' | 'Breadcrumb' | 'Pagination';
+    name: string;
+    items: any[];
+    variant?: string;
+    norwegianLocale: boolean;
+  }): Promise<string> {
+    const { type, name, items, variant, norwegianLocale } = config;
+    
+    const navCode = `
+/**
+ * Generated Navigation: ${name}
+ * Type: ${type}
+ * Norwegian Locale: ${norwegianLocale}
+ */
+
+import React from 'react';
+import { ${type}, Button, Stack } from '@xala-technologies/ui-system';
+import { t } from '@xala-technologies/ui-system/i18n';
+
+interface ${name}Props {
+  readonly items?: Array<{
+    key: string;
+    label: string;
+    href?: string;
+    icon?: string;
+    active?: boolean;
+    children?: Array<any>;
+  }>;
+  readonly onItemClick?: (key: string) => void;
+  readonly className?: string;
+}
+
+export const ${name}: React.FC<${name}Props> = ({
+  items = [],
+  onItemClick,
+  className
+}) => {
+  const handleItemClick = (key: string) => {
+    onItemClick?.(key);
+  };
+
+  return (
+    <${type}
+      className={className}
+      ${variant ? `variant="${variant}"` : ''}
+      items={items.map(item => ({
+        ...item,
+        label: t(\`${name.toLowerCase()}.\${item.key}\`, { defaultValue: item.label }),
+        onClick: () => handleItemClick(item.key)
+      }))}
+      aria-label={t('${name.toLowerCase()}.navigationLabel')}
+    />
+  );
+};
+
+${name}.displayName = '${name}';
+`;
+
+    return navCode;
+  }
 }

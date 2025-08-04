@@ -1,348 +1,73 @@
 /**
- * Shadcn-ui components index
- * Exports all UI components with design tokens and CSS variables
+ * @fileoverview UI Components Index v6.0.0
+ * @description Clean export of essential UI components
+ * @version 6.0.0
  */
 
-// Button components
+// Core components that wrap semantic components
 export { Button, type ButtonProps } from './button';
-export { IconButton, type IconButtonProps, type IconButtonShape, type IconButtonSize, type IconButtonVariant } from './icon-button';
+export { Input, type InputProps } from './input';
+export { 
+  Card, 
+  CardHeader, 
+  CardContent, 
+  CardFooter,
+  type CardProps,
+  type CardHeaderProps,
+  type CardContentProps,
+  type CardFooterProps
+} from './card';
 
 // Form components
-export { Checkbox, CheckboxGroup, type CheckboxGroupProps, type CheckboxOption, type CheckboxProps, type CheckboxSize, type CheckboxVariant } from './checkbox';
-export { Input, type InputProps } from './input';
-export { Radio, RadioGroup, type RadioGroupProps, type RadioOption, type RadioProps, type RadioSize, type RadioVariant } from './radio';
-export { Select, type SelectOption, type SelectProps, type SelectSize, type SelectVariant } from './select';
-export { Slider, type SliderProps, type SliderSize, type SliderVariant } from './slider';
-export { Switch, type SwitchProps, type SwitchSize, type SwitchVariant } from './switch';
-export { Textarea, type TextareaProps, type TextareaResize, type TextareaSize, type TextareaVariant } from './textarea';
+export {
+  Checkbox,
+  CheckboxGroup,
+  type CheckboxProps,
+  type CheckboxGroupProps,
+  type CheckboxOption,
+  type CheckboxSize,
+  type CheckboxVariant
+} from './checkbox';
 
-// Data display components
-export { Avatar, type AvatarProps } from './avatar';
-export { Badge, type BadgeProps, type BadgeSize, type BadgeVariant } from './badge';
-export { Divider, type DividerOrientation, type DividerProps, type DividerSize, type DividerStyle, type DividerVariant } from './divider';
-export { Blockquote, Code, Heading, Text, Typography, type TypographyAlign, type TypographyColor, type TypographyProps, type TypographyVariant } from './typography';
+export {
+  Select,
+  type SelectProps,
+  type SelectOption,
+  type SelectSize,
+  type SelectVariant
+} from './select';
+
+export {
+  Textarea,
+  type TextareaProps,
+  type TextareaSize,
+  type TextareaVariant,
+  type TextareaResize
+} from './textarea';
 
 // Feedback components
-export { Alert, AlertDescription, AlertTitle, type AlertProps, type AlertVariant } from './alert';
-export { CircularProgress, Progress, type CircularProgressProps, type ProgressProps, type ProgressSize, type ProgressVariant } from './progress';
-export { Tooltip, TooltipContent, TooltipTrigger, TooltipArrow, type TooltipContentProps, type TooltipProps, type TooltipTriggerProps, type TooltipArrowProps } from './tooltip';
+export {
+  Alert,
+  AlertTitle,
+  AlertDescription,
+  type AlertProps,
+  type AlertVariant
+} from './alert';
 
-// Layout components
-export { Card, CardContent, CardFooter, CardHeader, type CardContentProps, type CardFooterProps, type CardHeaderProps, type CardProps } from './card';
-export { 
-  Header, 
-  HeaderSection, 
-  HeaderTitle, 
-  HeaderLogo, 
-  HeaderComposition,
-  headerVariants,
-  headerSectionVariants,
-  type HeaderProps, 
-  type HeaderSectionProps, 
-  type HeaderTitleProps, 
-  type HeaderLogoProps,
-  type HeaderVariant,
-  type HeaderSectionVariant
-} from './header';
+// Re-export semantic components for convenience
 export {
-  Sidebar,
-  SidebarHeader,
-  SidebarSection,
-  SidebarItem,
-  SidebarComposition,
-  sidebarVariants,
-  sidebarOverlayVariants,
-  sidebarContentVariants,
-  type SidebarProps,
-  type SidebarHeaderProps,
-  type SidebarSectionProps,
-  type SidebarItemProps,
-  type SidebarVariant,
-  type SidebarOverlayVariant,
-  type SidebarContentVariant
-} from './sidebar';
-export {
-  Footer,
-  FooterSectionComponent,
-  FooterComposition,
-  footerVariants,
-  footerSectionVariants,
-  type FooterProps,
-  type FooterSection,
-  type FooterLink,
-  type SocialLink,
-  type NewsletterProps,
-  type FooterSectionComponentProps,
-  type FooterVariant,
-  type FooterSectionVariant
-} from './footer';
-export {
-  MainContent,
-  MainContentHeader,
-  MainContentSection,
-  MainContentComposition,
-  mainContentVariants,
-  mainContentHeaderVariants,
-  type MainContentProps,
-  type MainContentHeaderProps,
-  type MainContentSectionProps,
-  type MainContentVariant,
-  type MainContentHeaderVariant
-} from './main-content';
-
-// Navigation components
-export { Breadcrumb, type BreadcrumbItem, type BreadcrumbProps, type BreadcrumbSize, type BreadcrumbVariant } from './breadcrumb';
-export { Pagination, type PaginationProps, type PaginationSize, type PaginationVariant } from './pagination';
-export {
-  Navigation,
-  NavigationItem,
-  NavigationGroup,
-  NavigationLink,
-  NavigationComposition,
-  navigationVariants,
-  navigationItemVariants,
-  navigationGroupVariants,
-  navigationLinkVariants,
-  type NavigationProps,
-  type NavigationItemProps,
-  type NavigationGroupProps,
-  type NavigationLinkProps,
-  type NavigationItemData,
-  type NavigationVariant,
-  type NavigationItemVariant,
-  type NavigationGroupVariant,
-  type NavigationLinkVariant
-} from './navigation';
-export {
-  Grid,
-  GridItem,
-  GridArea,
-  ResponsiveGrid,
-  GridComposition,
-  gridVariants,
-  gridItemVariants,
-  gridAreaVariants,
-  type GridProps,
-  type GridItemProps,
-  type GridAreaProps,
-  type ResponsiveGridProps,
-  type GridVariant,
-  type GridItemVariant,
-  type GridAreaVariant
-} from './grid';
-export {
+  Box,
+  Text,
+  Heading,
   Container,
-  Section,
-  Wrapper,
-  FlexContainer,
-  CenteredContainer,
-  ContainerComposition,
-  containerVariants,
-  sectionVariants,
-  wrapperVariants,
+  List,
+  ListItem,
+  Link,
+  type BoxProps,
+  type TextProps,
+  type HeadingProps,
   type ContainerProps,
-  type SectionProps,
-  type WrapperProps,
-  type FlexContainerProps,
-  type CenteredContainerProps,
-  type ContainerVariant,
-  type SectionVariant,
-  type WrapperVariant
-} from './container';
-export {
-  Spacer,
-  PaddingBox,
-  MarginBox,
-  Stack,
-  Inline,
-  SpacingComposition,
-  spacerVariants,
-  paddingVariants,
-  marginVariants,
-  type SpacerProps,
-  type PaddingBoxProps,
-  type MarginBoxProps,
-  type StackProps,
-  type InlineProps,
-  type SpacerVariant,
-  type PaddingVariant,
-  type MarginVariant
-} from './spacing';
-
-// Loading components
-export {
-    Skeleton, SkeletonAvatar, SkeletonButton, SkeletonCard, SkeletonText, type SkeletonAvatarProps, type SkeletonButtonProps, type SkeletonCardProps, type SkeletonProps, type SkeletonTextProps
-} from './skeleton';
-export {
-    Spinner, DotsSpinner, PulseSpinner, type SpinnerProps, type DotsSpinnerProps, type PulseSpinnerProps
-} from './spinner';
-
-// Accordion components
-export {
-    Accordion, AccordionContent, AccordionItem, AccordionTrigger, type AccordionContentProps, type AccordionItemData, type AccordionItemProps, type AccordionProps, type AccordionTriggerProps
-} from './accordion';
-
-// Individual Tabs components (shadcn-ui style)
-export { TabsContent, TabsList, TabsTrigger, type TabsContentProps, type TabsListProps, type TabsOrientation, type TabsTriggerProps } from './tabs-individual';
-
-// Command Palette
-export { CommandPalette, type CommandGroup, type CommandItem, type CommandPaletteProps, type CommandPaletteSize, type CommandPaletteTexts, type CommandPaletteVariant } from './command-palette';
-
-// Legacy Drawer (being replaced by Sheet)
-export {
-    Drawer, DrawerBody, DrawerFooter, DrawerHeader, type DrawerBodyProps, type DrawerFooterProps, type DrawerHeaderProps, type DrawerProps
-} from './drawer';
-
-// Calendar
-export { Calendar, type CalendarDate, type CalendarProps, type CalendarSize, type CalendarVariant, type NorwegianHoliday } from './calendar';
-
-// Tree View
-export { TreeView, TreeViewItem, type TreeViewData, type TreeViewItemProps, type TreeViewProps } from './tree-view';
-
-// Context Menu
-export {
-    ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger, type ContextMenuContentProps, type ContextMenuItemProps, type ContextMenuProps, type ContextMenuTriggerProps
-} from './context-menu';
-
-// Dropdown components
-export {
-    Dropdown,
-    DropdownTrigger,
-    DropdownContent,
-    DropdownItem,
-    DropdownSeparator,
-    DropdownLabel,
-    type DropdownProps,
-    type DropdownTriggerProps,
-    type DropdownContentProps,
-    type DropdownItemProps,
-    type DropdownSeparatorProps,
-    type DropdownLabelProps,
-    type DropdownPlacement,
-    type DropdownVariant,
-    type DropdownSize
-} from './dropdown';
-
-export {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuCheckboxItem,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSubTrigger,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    type DropdownMenuProps,
-    type DropdownMenuItemProps,
-    type DropdownMenuCheckboxItemProps,
-    type DropdownMenuRadioGroupProps,
-    type DropdownMenuRadioItemProps,
-    type DropdownMenuSubTriggerProps,
-    type DropdownMenuItemData,
-    type DropdownMenuGroup
-} from './dropdown-menu';
-
-export {
-    Combobox,
-    type ComboboxProps,
-    type ComboboxOption,
-    type ComboboxVariant,
-    type ComboboxSize
-} from './combobox';
-
-export {
-    MultiSelect,
-    type MultiSelectProps,
-    type MultiSelectOption,
-    type MultiSelectVariant,
-    type MultiSelectSize,
-    type MultiSelectDisplayMode
-} from './multi-select';
-
-// Timeline
-export { Timeline, TimelineItem, type TimelineItemData, type TimelineItemProps, type TimelineProps } from './timeline';
-
-// Date & Time Pickers
-export { DatePicker, type DatePickerProps } from './date-picker';
-export { TimePicker, type TimePickerProps } from './time-picker';
-
-// Chat Interface Components
-export {
-    ActionBar,
-    defaultActions, 
-    type ActionBarProps,
-    type ActionBarVariant, 
-    type ActionBarSize, 
-    type ActionBarOrientation, 
-    type ActionBarVisibility, 
-    type ActionBarPosition, 
-    type ActionBarRounded,
-    type ActionButtonVariant, 
-    type ActionButtonSize, 
-    type ActionButtonShape,
-    type ActionConfig,
-    type ActionType
-} from './action-bar';
-export { Box, type BoxProps } from './box';
-export {
-    CodeBlock, languageConfig, type CodeBlockProps
-} from './code-block';
-export {
-    MessageBubble, messageBubbleAvatarVariants,
-    messageBubbleMetadataVariants, messageBubbleVariants, type MessageBubbleProps
-} from './message-bubble';
-export { ScrollArea, scrollAreaVariants, type ScrollAreaProps } from './scroll-area';
-export { Separator, type SeparatorProps } from './separator';
-
-// Overlay components (CVA Pattern)
-export {
-    Dialog,
-    DialogOverlay,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogFooter,
-    DialogClose,
-    type DialogProps,
-    type DialogOverlayProps,
-    type DialogContentProps,
-    type DialogHeaderProps,
-    type DialogTitleProps,
-    type DialogDescriptionProps,
-    type DialogFooterProps,
-    type DialogCloseProps
-} from './dialog';
-
-export {
-    Sheet,
-    SheetOverlay,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-    SheetFooter,
-    SheetClose,
-    type SheetProps,
-    type SheetOverlayProps,
-    type SheetContentProps,
-    type SheetHeaderProps,
-    type SheetTitleProps,
-    type SheetDescriptionProps,
-    type SheetFooterProps,
-    type SheetCloseProps
-} from './sheet';
-
-export {
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    PopoverArrow,
-    PopoverClose,
-    type PopoverProps,
-    type PopoverTriggerProps,
-    type PopoverContentProps,
-    type PopoverArrowProps,
-    type PopoverCloseProps
-} from './popover';
-
+  type ListProps,
+  type ListItemProps,
+  type LinkProps
+} from '../semantic';

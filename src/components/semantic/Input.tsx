@@ -143,7 +143,7 @@ const helperTextVariants = cva(
 // =============================================================================
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'>,
     VariantProps<typeof inputVariants> {
   /** Input semantic intent */
   readonly intent?: InputIntent;

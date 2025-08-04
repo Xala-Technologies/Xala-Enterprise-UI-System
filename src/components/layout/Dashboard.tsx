@@ -209,7 +209,7 @@ const KPICard = forwardRef<
 
   return (
     <CardElement
-      ref={ref}
+      ref={ref as any}
       className={cn(
         kpiCardVariants({ variant: color, size }),
         onClick && 'cursor-pointer hover:scale-[1.02] transition-transform focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
