@@ -25,7 +25,14 @@ export type BoxRadius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | 'full';
 /**
  * Box display types
  */
-export type BoxDisplay = 'block' | 'flex' | 'inline' | 'inline-block' | 'inline-flex' | 'grid' | 'hidden';
+export type BoxDisplay =
+  | 'block'
+  | 'flex'
+  | 'inline'
+  | 'inline-block'
+  | 'inline-flex'
+  | 'grid'
+  | 'hidden';
 
 /**
  * Box flex types
@@ -60,7 +67,17 @@ export type BoxWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
 /**
  * Box overflow types
  */
-export type BoxOverflow = 'visible' | 'hidden' | 'scroll' | 'auto' | 'x-hidden' | 'y-hidden' | 'x-scroll' | 'y-scroll' | 'x-auto' | 'y-auto';
+export type BoxOverflow =
+  | 'visible'
+  | 'hidden'
+  | 'scroll'
+  | 'auto'
+  | 'x-hidden'
+  | 'y-hidden'
+  | 'x-scroll'
+  | 'y-scroll'
+  | 'x-auto'
+  | 'y-auto';
 
 /**
  * Box position types
@@ -145,7 +162,6 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     },
     ref
   ) => {
-        
     // Get border radius values
     const borderRadiusMap = {
       none: '0',
@@ -155,7 +171,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       xl: (getToken('borderRadius.xl') as string) || '0.75rem',
       full: (getToken('borderRadius.full') as string) || '9999px',
     };
-    
+
     // Get variant styles
     const getVariantStyles = (): React.CSSProperties => {
       switch (variant) {
@@ -181,7 +197,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return {};
       }
     };
-    
+
     // Get padding based on size
     const getPadding = (): string | undefined => {
       switch (size) {
@@ -200,7 +216,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return undefined;
       }
     };
-    
+
     // Get gap value
     const getGapValue = (): string => {
       switch (gap) {
@@ -219,7 +235,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return '0';
       }
     };
-    
+
     // Get flex direction value
     const getFlexDirection = (): React.CSSProperties['flexDirection'] => {
       switch (direction) {
@@ -233,7 +249,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return 'row';
       }
     };
-    
+
     // Get justify content value
     const getJustifyContent = (): React.CSSProperties['justifyContent'] => {
       switch (justify) {
@@ -251,7 +267,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return 'flex-start';
       }
     };
-    
+
     // Get align items value
     const getAlignItems = (): React.CSSProperties['alignItems'] => {
       switch (align) {
@@ -267,7 +283,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return 'flex-start';
       }
     };
-    
+
     // Get overflow values
     const getOverflowStyles = (): React.CSSProperties => {
       switch (overflow) {
@@ -293,7 +309,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
           return { overflow: 'visible' };
       }
     };
-    
+
     // Get flex value
     const getFlexValue = (): string | number => {
       switch (flex) {
@@ -315,17 +331,21 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
       padding: getPadding(),
       fontFamily: typography.fontFamily.sans.join(', '),
       ...getVariantStyles(),
-      ...(display === 'flex' || display === 'inline-flex' ? {
-        flexDirection: getFlexDirection(),
-        justifyContent: getJustifyContent(),
-        alignItems: getAlignItems(),
-        gap: getGapValue(),
-        flexWrap: wrap,
-        flex: getFlexValue(),
-      } : {}),
-      ...(display === 'grid' ? {
-        gap: getGapValue(),
-      } : {}),
+      ...(display === 'flex' || display === 'inline-flex'
+        ? {
+            flexDirection: getFlexDirection(),
+            justifyContent: getJustifyContent(),
+            alignItems: getAlignItems(),
+            gap: getGapValue(),
+            flexWrap: wrap,
+            flex: getFlexValue(),
+          }
+        : {}),
+      ...(display === 'grid'
+        ? {
+            gap: getGapValue(),
+          }
+        : {}),
       ...getOverflowStyles(),
       ...(w && { width: w }),
       ...(h && { height: h }),
@@ -337,12 +357,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(
     };
 
     return (
-      <Component
-        ref={ref}
-        className={className}
-       
-        {...props}
-      >
+      <Component ref={ref} className={className} {...props}>
         {children}
       </Component>
     );

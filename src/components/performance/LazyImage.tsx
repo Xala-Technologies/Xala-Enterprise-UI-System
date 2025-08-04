@@ -366,4 +366,4 @@ export type ImageSkeletonVariant = VariantProps<typeof imageSkeletonVariants>;
 
 // Import useCallback
 import { useCallback } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';

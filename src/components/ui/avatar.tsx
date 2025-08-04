@@ -101,7 +101,7 @@ export type UserStatus = 'online' | 'offline' | 'away' | 'busy';
 /**
  * Avatar props interface
  */
-export interface AvatarProps 
+export interface AvatarProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarVariants> {
   /** Image source URL */
@@ -125,32 +125,32 @@ export interface AvatarProps
  */
 function getInitials(name: string): string {
   if (!name) return '';
-  
+
   const words = name.trim().split(/\s+/);
   if (words.length === 1) {
     return words[0].charAt(0).toUpperCase();
   }
-  
+
   return (words[0].charAt(0) + words[words.length - 1].charAt(0)).toUpperCase();
 }
 
 /**
  * Status indicator component
  */
-function StatusIndicator({ 
-  status, 
-  size, 
-  className 
-}: { 
-  status: UserStatus; 
-  size: AvatarSize; 
+function StatusIndicator({
+  status,
+  size,
+  className,
+}: {
+  status: UserStatus;
+  size: AvatarSize;
   className?: string;
 }): React.ReactElement {
   return (
-    <Text 
+    <Text
       as="span"
       className={cn(statusIndicatorVariants({ status, size }), className)}
-      aria-label={`Status: ${status}`} 
+      aria-label={`Status: ${status}`}
     />
   );
 }
@@ -158,96 +158,83 @@ function StatusIndicator({
 /**
  * AvatarImage component for displaying images
  */
-export const AvatarImage = forwardRef<
-  HTMLImageElement,
-  React.ImgHTMLAttributes<HTMLImageElement>
->(({ className, ...props }, ref) => (
-  <Image
-    ref={ref}
-    className={cn('aspect-square h-full w-full object-cover', className)}
-    {...props}
-  />
-));
+export const AvatarImage = forwardRef<HTMLImageElement, React.ImgHTMLAttributes<HTMLImageElement>>(
+  ({ className, ...props }, ref) => (
+    <Image
+      ref={ref}
+      className={cn('aspect-square h-full w-full object-cover', className)}
+      {...props}
+    />
+  )
+);
 AvatarImage.displayName = 'AvatarImage';
 
 /**
  * AvatarFallback component for fallback content
  */
-export const AvatarFallback = forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <Box
-    ref={ref}
-    className={cn(
-      'flex h-full w-full items-center justify-center',
-      className
-    )}
-    {...props}
-  />
-));
+export const AvatarFallback = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <Box
+      ref={ref}
+      className={cn('flex h-full w-full items-center justify-center', className)}
+      {...props}
+    />
+  )
+);
 AvatarFallback.displayName = 'AvatarFallback';
 
 /**
  * Avatar component
  */
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({
-    size = 'md',
-    variant = 'default',
-    shape = 'circle',
-    bordered = false,
-    src,
-    alt,
-    name,
-    fallback,
-    showBorder,
-    status,
-    showFallback = false,
-    className,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      size = 'md',
+      variant = 'default',
+      shape = 'circle',
+      bordered = false,
+      src,
+      alt,
+      name,
+      fallback,
+      showBorder,
+      status,
+      showFallback = false,
+      className,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const shouldShowImage = src && !showFallback;
     const initials = name ? getInitials(name) : '';
     const fallbackContent = fallback || initials || '?';
-    
+
     // Use showBorder prop to override bordered variant
     const actualBordered = showBorder !== undefined ? showBorder : bordered;
-    
+
     return (
-      <Box 
-        ref={ref} 
+      <Box
+        ref={ref}
         className={cn(
-          avatarVariants({ 
-            size, 
-            variant, 
-            shape, 
-            bordered: actualBordered 
-          }), 
+          avatarVariants({
+            size,
+            variant,
+            shape,
+            bordered: actualBordered,
+          }),
           className
-        )} 
+        )}
         {...props}
       >
         {children || (
           <>
             {shouldShowImage ? (
-              <AvatarImage
-                src={src}
-                alt={alt || name || 'Avatar'}
-                loading="lazy"
-              />
+              <AvatarImage src={src} alt={alt || name || 'Avatar'} loading="lazy" />
             ) : (
-              <AvatarFallback>
-                {fallbackContent}
-              </AvatarFallback>
+              <AvatarFallback>{fallbackContent}</AvatarFallback>
             )}
-            {status && (
-              <StatusIndicator 
-                status={status} 
-                size={size} 
-              />
-            )}
+            {status && <StatusIndicator status={status} size={size} />}
           </>
         )}
       </Box>

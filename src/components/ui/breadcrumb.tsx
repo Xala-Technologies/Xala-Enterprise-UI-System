@@ -14,27 +14,24 @@ import { Box, Text, Link, List, ListItem } from '../semantic';
 // CVA VARIANTS
 // =============================================================================
 
-const breadcrumbVariants = cva(
-  'flex items-center font-sans',
-  {
-    variants: {
-      variant: {
-        default: 'text-muted-foreground',
-        primary: 'text-primary/80',
-        secondary: 'text-secondary/80',
-      },
-      size: {
-        sm: 'text-xs gap-1',
-        default: 'text-sm gap-2',
-        lg: 'text-base gap-3',
-      },
+const breadcrumbVariants = cva('flex items-center font-sans', {
+  variants: {
+    variant: {
+      default: 'text-muted-foreground',
+      primary: 'text-primary/80',
+      secondary: 'text-secondary/80',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
+    size: {
+      sm: 'text-xs gap-1',
+      default: 'text-sm gap-2',
+      lg: 'text-base gap-3',
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
 const breadcrumbItemVariants = cva(
   [
@@ -95,7 +92,7 @@ export interface BreadcrumbItem {
   readonly disabled?: boolean;
 }
 
-export interface BreadcrumbProps 
+export interface BreadcrumbProps
   extends HTMLAttributes<HTMLElement>,
     VariantProps<typeof breadcrumbVariants> {
   /** Breadcrumb items */
@@ -114,7 +111,7 @@ export interface BreadcrumbProps
   readonly onHomeClick?: () => void;
 }
 
-export interface BreadcrumbSeparatorProps 
+export interface BreadcrumbSeparatorProps
   extends HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof breadcrumbSeparatorVariants> {
   readonly children?: ReactNode;
@@ -198,7 +195,11 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     const getTruncatedItems = (
       items: BreadcrumbItem[],
       maxItems: number
-    ): { beforeEllipsis: BreadcrumbItem[]; afterEllipsis: BreadcrumbItem[]; showEllipsis: boolean } => {
+    ): {
+      beforeEllipsis: BreadcrumbItem[];
+      afterEllipsis: BreadcrumbItem[];
+      showEllipsis: boolean;
+    } => {
       if (items.length <= maxItems) {
         return { beforeEllipsis: items, afterEllipsis: [], showEllipsis: false };
       }
@@ -225,11 +226,17 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
     ): React.ReactElement => {
       const ItemComponent = item.href ? 'a' : 'button';
       const isInteractive = !!(item.href || item.onClick) && !item.disabled;
-      
+
       const itemContent = (
         <Box className="flex items-center gap-1">
-          {item.icon && <Text as="span" className="w-4 h-4 flex-shrink-0">{item.icon}</Text>}
-          <Text as="span" className="truncate">{item.label}</Text>
+          {item.icon && (
+            <Text as="span" className="w-4 h-4 flex-shrink-0">
+              {item.icon}
+            </Text>
+          )}
+          <Text as="span" className="truncate">
+            {item.label}
+          </Text>
         </Box>
       );
 
@@ -239,10 +246,10 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             <Link
               href={item.href}
               className={cn(
-                breadcrumbItemVariants({ 
-                  variant, 
+                breadcrumbItemVariants({
+                  variant,
                   state: isLast ? 'current' : 'default',
-                  interactive: isInteractive 
+                  interactive: isInteractive,
                 }),
                 'px-1 py-0.5 -mx-1 -my-0.5'
               )}
@@ -265,10 +272,10 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
               onClick={item.onClick}
               disabled={item.disabled}
               className={cn(
-                breadcrumbItemVariants({ 
-                  variant, 
+                breadcrumbItemVariants({
+                  variant,
                   state: item.disabled ? 'disabled' : isLast ? 'current' : 'default',
-                  interactive: isInteractive 
+                  interactive: isInteractive,
                 }),
                 'px-1 py-0.5 -mx-1 -my-0.5 border-none bg-transparent'
               )}
@@ -286,10 +293,10 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
           <Text
             as="span"
             className={cn(
-              breadcrumbItemVariants({ 
-                variant, 
+              breadcrumbItemVariants({
+                variant,
                 state: item.disabled ? 'disabled' : isLast ? 'current' : 'default',
-                interactive: false 
+                interactive: false,
               })
             )}
             aria-current={isLast ? 'page' : undefined}
@@ -379,7 +386,9 @@ export const Breadcrumb = forwardRef<HTMLElement, BreadcrumbProps>(
             const actualIndex = beforeEllipsis.length + index;
             const isLast = index === afterEllipsis.length - 1;
             return (
-              <ListItem key={`after-${index}`}>{renderBreadcrumbItem(item, actualIndex, isLast)}</ListItem>
+              <ListItem key={`after-${index}`}>
+                {renderBreadcrumbItem(item, actualIndex, isLast)}
+              </ListItem>
             );
           })}
 

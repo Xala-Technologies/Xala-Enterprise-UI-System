@@ -6,7 +6,16 @@
  */
 
 import React, { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 /**
  * Command palette variant types
@@ -158,14 +167,10 @@ const SearchIcon = (): React.ReactElement => (
  * Keyboard shortcut component
  */
 const KeyboardShortcut: React.FC<{ keys: string[] }> = ({ keys }): React.ReactElement => {
-    
   return (
     <Box>
       {keys.map((key, index) => (
-        <Text as="kbd"
-          key={index}
-          className="font-mono text-xs font-medium text-muted-foreground"
-        >
+        <Text as="kbd" key={index} className="font-mono text-xs font-medium text-muted-foreground">
           {key}
         </Text>
       ))}
@@ -198,7 +203,6 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     },
     ref
   ): React.ReactElement => {
-        
     // Merge default texts with user provided texts
     const texts: CommandPaletteTexts = {
       ...defaultTexts,
@@ -392,22 +396,16 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
     return (
       <Box
         className={className}
-       
         data-state={isOpen ? 'open' : 'closed'}
         onKeyDown={handleKeyDown}
         {...props}
       >
         {/* Overlay */}
-        <Box 
-          
-          onClick={handleOverlayClick} 
-          aria-hidden="true" 
-        />
+        <Box onClick={handleOverlayClick} aria-hidden="true" />
 
         {/* Command dialog */}
         <Box
           ref={ref}
-         
           data-state={isOpen ? 'open' : 'closed'}
           role="dialog"
           aria-modal="true"
@@ -417,7 +415,6 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           <Box>
             <SearchIcon />
             <SemanticInput
-             
               placeholder={searchPlaceholder}
               value={searchValue}
               onChange={e => onSearchChange?.(e.target.value)}
@@ -428,54 +425,44 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           {/* Results */}
           <Box>
             {totalResults === 0 ? (
-              <Box>
-                {noResultsMessage}
-              </Box>
+              <Box>{noResultsMessage}</Box>
             ) : (
               <>
                 {/* Grouped items */}
                 {hasGroups &&
                   filteredGroups.map(group => (
                     <Box key={group.id}>
-                      <Box className="px-3 py-1 text-xs font-medium text-muted-foreground"
-                      >
+                      <Box className="px-3 py-1 text-xs font-medium text-muted-foreground">
                         {group.label}
                       </Box>
                       <Box>
                         {group.items.map(item => (
                           <Box
                             key={item.id}
-                           
                             data-selected={false}
                             data-disabled={item.disabled}
                             onClick={() => handleItemSelect(item)}
-                            onMouseEnter={(e) => {
+                            onMouseEnter={e => {
                               if (!item.disabled) {
                                 const hoverStyles = getItemStyles(item, true);
-                                e.currentTarget.style.backgroundColor = hoverStyles.backgroundColor || 'transparent';
+                                e.currentTarget.style.backgroundColor =
+                                  hoverStyles.backgroundColor || 'transparent';
                                 e.currentTarget.style.color = hoverStyles.color || 'inherit';
                               }
                             }}
-                            onMouseLeave={(e) => {
+                            onMouseLeave={e => {
                               if (!item.disabled) {
                                 const normalStyles = getItemStyles(item, false);
-                                e.currentTarget.style.backgroundColor = normalStyles.backgroundColor || 'transparent';
+                                e.currentTarget.style.backgroundColor =
+                                  normalStyles.backgroundColor || 'transparent';
                                 e.currentTarget.style.color = normalStyles.color || 'inherit';
                               }
                             }}
                           >
-                            {item.icon && (
-                              <Text as="span">{item.icon}</Text>
-                            )}
+                            {item.icon && <Text as="span">{item.icon}</Text>}
                             <Box>
-                              <Box>
-                                {item.label}
-                              </Box>
-                              {item.description && (
-                                <Box>
-                                  {item.description}
-                                </Box>
-                              )}
+                              <Box>{item.label}</Box>
+                              {item.description && <Box>{item.description}</Box>}
                             </Box>
                             {showShortcuts && item.shortcut && (
                               <KeyboardShortcut keys={item.shortcut} />
@@ -492,37 +479,30 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
                     {filteredItems.map(item => (
                       <Box
                         key={item.id}
-                       
                         data-selected={false}
                         data-disabled={item.disabled}
                         onClick={() => handleItemSelect(item)}
-                        onMouseEnter={(e) => {
+                        onMouseEnter={e => {
                           if (!item.disabled) {
                             const hoverStyles = getItemStyles(item, true);
-                            e.currentTarget.style.backgroundColor = hoverStyles.backgroundColor || 'transparent';
+                            e.currentTarget.style.backgroundColor =
+                              hoverStyles.backgroundColor || 'transparent';
                             e.currentTarget.style.color = hoverStyles.color || 'inherit';
                           }
                         }}
-                        onMouseLeave={(e) => {
+                        onMouseLeave={e => {
                           if (!item.disabled) {
                             const normalStyles = getItemStyles(item, false);
-                            e.currentTarget.style.backgroundColor = normalStyles.backgroundColor || 'transparent';
+                            e.currentTarget.style.backgroundColor =
+                              normalStyles.backgroundColor || 'transparent';
                             e.currentTarget.style.color = normalStyles.color || 'inherit';
                           }
                         }}
                       >
-                        {item.icon && (
-                          <Text as="span">{item.icon}</Text>
-                        )}
+                        {item.icon && <Text as="span">{item.icon}</Text>}
                         <Box>
-                          <Box>
-                            {item.label}
-                          </Box>
-                          {item.description && (
-                            <Box>
-                              {item.description}
-                            </Box>
-                          )}
+                          <Box>{item.label}</Box>
+                          {item.description && <Box>{item.description}</Box>}
                         </Box>
                         {showShortcuts && item.shortcut && (
                           <KeyboardShortcut keys={item.shortcut} />
@@ -539,12 +519,16 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(
           <Box>
             <Box>
               <Text as="span">{texts.keyboardHint.pressText}</Text>
-              <Text as="kbd" className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
+              <Text
+                as="kbd"
+                className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
               >
                 Enter
               </Text>
               <Text as="span">{texts.keyboardHint.selectText}</Text>
-              <Text as="kbd" className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
+              <Text
+                as="kbd"
+                className="inline-flex items-center gap-1 h-5 px-1.5 font-mono font-medium text-xs bg-muted rounded"
               >
                 Esc
               </Text>

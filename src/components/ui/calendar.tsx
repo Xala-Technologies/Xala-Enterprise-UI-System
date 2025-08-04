@@ -6,7 +6,16 @@
  */
 
 import React, { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 /**
  * Calendar variant types
@@ -237,7 +246,6 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     },
     ref
   ): React.ReactElement => {
-        
     const monthNames = getNorwegianMonthNames();
     const dayNames = getNorwegianDayNames();
     const currentYear = currentMonth.getFullYear();
@@ -256,7 +264,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     const borderRadius = {
       md: '0.375rem',
     };
-    
+
     // Get shadows
     const shadows = {
       lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
@@ -266,17 +274,17 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     const getSizeStyles = (): React.CSSProperties => {
       switch (size) {
         case 'sm':
-          return { 
+          return {
             fontSize: '0.75rem',
             padding: '0.5rem',
           };
         case 'lg':
-          return { 
+          return {
             fontSize: '1rem',
             padding: '1rem',
           };
         default:
-          return { 
+          return {
             fontSize: '0.875rem',
             padding: '1rem',
           };
@@ -376,7 +384,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
       if (calendarDate.isOtherMonth) {
         return {
           ...baseStyles,
-          color: '#d1d5db'
+          color: '#d1d5db',
         };
       }
 
@@ -414,24 +422,17 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
     };
 
     return (
-      <Box
-        ref={ref}
-        className={className}
-       
-        role="application"
-        aria-label="Kalender"
-        {...props}
-      >
+      <Box ref={ref} className={className} role="application" aria-label="Kalender" {...props}>
         {/* Header */}
         <Box>
-          <Text as="button"
+          <Text
+            as="button"
             onClick={handlePrevMonth}
-           
             aria-label="Forrige måned"
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = 'var(--accent)';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
@@ -442,14 +443,14 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </Heading>
 
-          <Text as="button"
+          <Text
+            as="button"
             onClick={handleNextMonth}
-           
             aria-label="Neste måned"
-            onMouseEnter={(e) => {
+            onMouseEnter={e => {
               e.currentTarget.style.backgroundColor = 'var(--accent)';
             }}
-            onMouseLeave={(e) => {
+            onMouseLeave={e => {
               e.currentTarget.style.backgroundColor = 'transparent';
             }}
           >
@@ -460,20 +461,11 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
         {/* Days grid */}
         <Box>
           {/* Week number header */}
-          {showWeekNumbers && (
-            <Box>
-              Uke
-            </Box>
-          )}
+          {showWeekNumbers && <Box>Uke</Box>}
 
           {/* Day headers */}
           {dayNames.map(day => (
-            <Box
-              key={day}
-             
-            >
-              {day}
-            </Box>
+            <Box key={day}>{day}</Box>
           ))}
 
           {/* Calendar days */}
@@ -484,38 +476,36 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
             return (
               <React.Fragment key={calendarDate.date.toISOString()}>
                 {/* Week number */}
-                {showWeekNumbers && isStartOfWeek && (
-                  <Box>
-                    {getWeekNumber(calendarDate.date)}
-                  </Box>
-                )}
+                {showWeekNumbers && isStartOfWeek && <Box>{getWeekNumber(calendarDate.date)}</Box>}
 
                 {/* Day cell */}
                 {shouldShow ? (
-                  <Text as="button"
+                  <Text
+                    as="button"
                     onClick={() => handleDateClick(calendarDate)}
                     disabled={calendarDate.isDisabled}
                     style={getDayStyles(calendarDate)}
                     aria-label={`${calendarDate.day}${calendarDate.holidayName ? `: ${calendarDate.holidayName}` : ''}`}
                     title={calendarDate.holidayName}
-                    onMouseEnter={(e) => {
+                    onMouseEnter={e => {
                       if (!calendarDate.isDisabled && !calendarDate.isSelected) {
                         e.currentTarget.style.backgroundColor = 'var(--accent)';
                         e.currentTarget.style.color = 'var(--accent-foreground)';
                       }
                     }}
-                    onMouseLeave={(e) => {
+                    onMouseLeave={e => {
                       if (!calendarDate.isDisabled && !calendarDate.isSelected) {
                         const styles = getDayStyles(calendarDate);
-                        e.currentTarget.style.backgroundColor = styles.backgroundColor || 'transparent';
+                        e.currentTarget.style.backgroundColor =
+                          styles.backgroundColor || 'transparent';
                         e.currentTarget.style.color = styles.color || 'inherit';
                       }
                     }}
-                    onFocus={(e) => {
+                    onFocus={e => {
                       e.currentTarget.style.outline = '2px solid var(--primary)';
                       e.currentTarget.style.outlineOffset = '2px';
                     }}
-                    onBlur={(e) => {
+                    onBlur={e => {
                       e.currentTarget.style.outline = 'none';
                     }}
                   >

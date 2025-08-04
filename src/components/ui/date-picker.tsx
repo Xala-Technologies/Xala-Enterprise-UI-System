@@ -6,7 +6,16 @@
  */
 
 import React, { forwardRef, type InputHTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 /**
  * DatePicker variant types
@@ -26,7 +35,8 @@ export type DatePickerState = 'default' | 'error' | 'success' | 'warning';
 /**
  * DatePicker props interface
  */
-export interface DatePickerProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
+export interface DatePickerProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   /** Label for the date picker */
   readonly label?: string;
   /** Error message to display */
@@ -66,7 +76,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     },
     ref
   ): React.ReactElement => {
-        const inputId = props.id || 'date-picker';
+    const inputId = props.id || 'date-picker';
     const hasError = Boolean(error) || state === 'error';
     const currentState = hasError ? 'error' : state;
 
@@ -105,17 +115,17 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
         case 'outline':
           return {
             backgroundColor: '#ffffff',
-            border: '2px solid #e5e7eb'
+            border: '2px solid #e5e7eb',
           };
         case 'filled':
           return {
             backgroundColor: '#f3f4f6',
-            border: '1px solid transparent'
+            border: '1px solid transparent',
           };
         default:
           return {
             backgroundColor: '#ffffff',
-            border: '1px solid #e5e7eb'
+            border: '1px solid #e5e7eb',
           };
       }
     };
@@ -168,9 +178,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       fontSize: '0.875rem',
       fontWeight: '500',
       lineHeight: '1',
-      color: hasError 
-        ? '#ef4444'
-        : '#111827',
+      color: hasError ? '#ef4444' : '#111827',
     };
 
     // Required indicator styles
@@ -194,10 +202,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     return (
       <Box className={className}>
         {label && (
-          <Text as="label"
-            htmlFor={inputId}
-           
-          >
+          <Text as="label" htmlFor={inputId}>
             {label}
             {required && <Text as="span">*</Text>}
           </Text>
@@ -207,13 +212,12 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           ref={ref}
           type="date"
           id={inputId}
-         
           placeholder={placeholder}
           aria-invalid={hasError}
           aria-describedby={
             error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
           }
-          onFocus={(e) => {
+          onFocus={e => {
             if (currentState === 'error') {
               e.currentTarget.style.outline = `2px solid #ef4444`;
             } else if (currentState === 'success') {
@@ -225,7 +229,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             }
             e.currentTarget.style.outlineOffset = '2px';
           }}
-          onBlur={(e) => {
+          onBlur={e => {
             e.currentTarget.style.outline = 'none';
           }}
           {...props}
@@ -235,17 +239,9 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
           <Text>Format: dd.mm.åååå (norsk datoformat)</Text>
         )}
 
-        {helperText && !error && (
-          <Text id={`${inputId}-helper`}>
-            {helperText}
-          </Text>
-        )}
+        {helperText && !error && <Text id={`${inputId}-helper`}>{helperText}</Text>}
 
-        {error && (
-          <Text id={`${inputId}-error`}>
-            {error}
-          </Text>
-        )}
+        {error && <Text id={`${inputId}-error`}>{error}</Text>}
       </Box>
     );
   }

@@ -8,7 +8,7 @@
 import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // WEBNAVBAR VARIANTS
@@ -140,7 +140,7 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
     // Get container constraints based on maxWidth
     const getContainerStyles = (): React.CSSProperties => {
       // Handle responsive breakpoints safely
-      const breakpoints = responsive?.breakpoints || {
+      const breakpoints = {
         mobile: '320px',
         tablet: '768px', 
         desktop: '1024px',
@@ -167,21 +167,21 @@ export const WebNavbar = forwardRef<HTMLElement, WebNavbarProps>(
     // Dynamic styling based on variant and tokens
     const getDynamicStyles = (): React.CSSProperties => {
       const baseStyles: React.CSSProperties = {
-        borderRadius: borderRadius?.sm || '4px',
-        transition: `all ${motion?.duration?.normal || '200ms'} ${motion?.easing?.easeOut || 'ease-out'}`,
+        borderRadius: '4px',
+        transition: `all 200ms ease-out`,
       };
 
       switch (variant) {
         case 'elevated':
           return {
             ...baseStyles,
-            boxShadow: elevation?.navbar?.scrolled || elevation?.md || '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
           };
         case 'floating':
           return {
             ...baseStyles,
-            boxShadow: elevation?.navbar?.floating || elevation?.lg || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-            borderRadius: borderRadius?.lg || '8px',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+            borderRadius: '8px',
           };
         default:
           return baseStyles;

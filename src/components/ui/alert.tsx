@@ -22,7 +22,8 @@ const alertVariants = cva(
     variants: {
       variant: {
         default: 'bg-background text-foreground border-border',
-        destructive: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
+        destructive:
+          'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
         success: 'border-success/50 text-success dark:border-success [&>svg]:text-success',
         warning: 'border-warning/50 text-warning dark:border-warning [&>svg]:text-warning',
         info: 'border-info/50 text-info dark:border-info [&>svg]:text-info',
@@ -42,7 +43,7 @@ export type AlertVariant = 'default' | 'destructive' | 'success' | 'warning' | '
 /**
  * Alert component props interface
  */
-export interface AlertProps 
+export interface AlertProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof alertVariants> {
   variant?: AlertVariant;
@@ -55,14 +56,9 @@ export interface AlertProps
 export const Alert = forwardRef<HTMLDivElement, AlertProps>(
   ({ variant = 'default', className, children, ...props }, ref) => {
     const { t } = useTranslation();
-    
+
     return (
-      <Box 
-        ref={ref} 
-        role="alert" 
-        className={cn(alertVariants({ variant }), className)} 
-        {...props}
-      >
+      <Box ref={ref} role="alert" className={cn(alertVariants({ variant }), className)} {...props}>
         {children}
       </Box>
     );
@@ -84,10 +80,10 @@ export interface AlertTitleProps extends HTMLAttributes<HTMLHeadingElement> {
 export const AlertTitle = forwardRef<HTMLHeadingElement, AlertTitleProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <Heading 
+      <Heading
         as="h5"
-        ref={ref} 
-        className={cn('mb-1 font-medium leading-none tracking-tight', className)} 
+        ref={ref}
+        className={cn('mb-1 font-medium leading-none tracking-tight', className)}
         {...props}
       >
         {children}
@@ -111,10 +107,10 @@ export interface AlertDescriptionProps extends HTMLAttributes<HTMLDivElement> {
 export const AlertDescription = forwardRef<HTMLDivElement, AlertDescriptionProps>(
   ({ className, children, ...props }, ref) => {
     return (
-      <Text 
+      <Text
         as="div"
-        ref={ref} 
-        className={cn('text-sm [&_p]:leading-relaxed', className)} 
+        ref={ref}
+        className={cn('text-sm [&_p]:leading-relaxed', className)}
         {...props}
       >
         {children}

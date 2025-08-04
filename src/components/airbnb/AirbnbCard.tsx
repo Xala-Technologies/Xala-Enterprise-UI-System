@@ -9,7 +9,7 @@ import { cn } from '../../lib/utils/cn';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { forwardRef, useState, type HTMLAttributes } from 'react';
 import { airbnbAestheticTokens } from '../../tokens/airbnb-aesthetic-tokens';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // AIRBNB CARD VARIANTS

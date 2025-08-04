@@ -10,7 +10,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
 import { useTouchGestures, type SwipeEvent } from '../../../hooks/useTouchGestures';
 import { usePlatform } from '../../../hooks';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // SWIPEABLE DRAWER VARIANTS

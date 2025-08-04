@@ -9,7 +9,7 @@ export type { ContainerProps } from './Container';
 
 // Stack components
 export { HStack, Stack, VStack } from './Stack';
-export type { StackAlign, StackDirection, StackGap, StackJustify, StackProps } from './Stack';
+export type { StackProps } from './Stack';
 
 // Grid components
 export { Grid, GridItem } from './Grid';
@@ -27,15 +27,15 @@ export { Card } from './Card';
 export { PageLayout } from './PageLayout';
 export { Section } from './Section';
 
-// Enhanced layout components
-export { EnhancedDashboard } from './EnhancedDashboard';
-export type { 
-  EnhancedDashboardProps,
-  DashboardKPI,
-  DashboardAction,
-  DashboardActivityItem,
-  DashboardVariant
-} from './EnhancedDashboard';
+// Enhanced layout components - commented out until implemented
+// export { EnhancedDashboard } from './EnhancedDashboard';
+// export type { 
+//   EnhancedDashboardProps,
+//   DashboardKPI,
+//   DashboardAction,
+//   DashboardActivityItem,
+//   DashboardVariant
+// } from './EnhancedDashboard';
 
 // Dashboard component
 export { Dashboard } from './Dashboard';

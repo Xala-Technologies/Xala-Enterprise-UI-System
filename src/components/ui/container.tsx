@@ -8,7 +8,16 @@
 import React, { forwardRef, type ReactNode } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils/cn';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 // =============================================================================
 // CONTAINER VARIANTS USING DESIGN TOKENS
@@ -18,11 +27,7 @@ import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, L
  * Container variants following CVA pattern
  */
 const containerVariants = cva(
-  [
-    'w-full mx-auto',
-    'transition-all duration-200',
-    'motion-reduce:transition-none',
-  ],
+  ['w-full mx-auto', 'transition-all duration-200', 'motion-reduce:transition-none'],
   {
     variants: {
       size: {
@@ -88,11 +93,7 @@ const containerVariants = cva(
 );
 
 const sectionVariants = cva(
-  [
-    'w-full',
-    'transition-all duration-200',
-    'motion-reduce:transition-none',
-  ],
+  ['w-full', 'transition-all duration-200', 'motion-reduce:transition-none'],
   {
     variants: {
       variant: {
@@ -126,59 +127,53 @@ const sectionVariants = cva(
   }
 );
 
-const wrapperVariants = cva(
-  [
-    'transition-all duration-200',
-    'motion-reduce:transition-none',
-  ],
-  {
-    variants: {
-      display: {
-        block: 'block',
-        'inline-block': 'inline-block',
-        flex: 'flex',
-        'inline-flex': 'inline-flex',
-        grid: 'grid',
-        'inline-grid': 'inline-grid',
-      },
-      position: {
-        static: 'static',
-        relative: 'relative',
-        absolute: 'absolute',
-        fixed: 'fixed',
-        sticky: 'sticky',
-      },
-      overflow: {
-        visible: 'overflow-visible',
-        hidden: 'overflow-hidden',
-        scroll: 'overflow-auto',
-        'scroll-x': 'overflow-x-auto overflow-y-hidden',
-        'scroll-y': 'overflow-y-auto overflow-x-hidden',
-      },
-      zIndex: {
-        0: 'z-0',
-        10: 'z-10',
-        20: 'z-20',
-        30: 'z-30',
-        40: 'z-40',
-        50: 'z-50',
-        auto: 'z-auto',
-      },
+const wrapperVariants = cva(['transition-all duration-200', 'motion-reduce:transition-none'], {
+  variants: {
+    display: {
+      block: 'block',
+      'inline-block': 'inline-block',
+      flex: 'flex',
+      'inline-flex': 'inline-flex',
+      grid: 'grid',
+      'inline-grid': 'inline-grid',
     },
-    defaultVariants: {
-      display: 'block',
-      position: 'static',
-      overflow: 'visible',
-      zIndex: 'auto',
+    position: {
+      static: 'static',
+      relative: 'relative',
+      absolute: 'absolute',
+      fixed: 'fixed',
+      sticky: 'sticky',
     },
-  }
-);
+    overflow: {
+      visible: 'overflow-visible',
+      hidden: 'overflow-hidden',
+      scroll: 'overflow-auto',
+      'scroll-x': 'overflow-x-auto overflow-y-hidden',
+      'scroll-y': 'overflow-y-auto overflow-x-hidden',
+    },
+    zIndex: {
+      0: 'z-0',
+      10: 'z-10',
+      20: 'z-20',
+      30: 'z-30',
+      40: 'z-40',
+      50: 'z-50',
+      auto: 'z-auto',
+    },
+  },
+  defaultVariants: {
+    display: 'block',
+    position: 'static',
+    overflow: 'visible',
+    zIndex: 'auto',
+  },
+});
 
 // =============================================================================
 // CONTAINER INTERFACES
 // =============================================================================
 
-export interface ContainerProps 
+export interface ContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof containerVariants> {
   /** Center content horizontally */
@@ -191,7 +186,7 @@ export interface ContainerProps
   readonly debug?: boolean;
 }
 
-export interface SectionProps 
+export interface SectionProps
   extends React.HTMLAttributes<HTMLElement>,
     VariantProps<typeof sectionVariants> {
   /** Section element to use */
@@ -202,7 +197,7 @@ export interface SectionProps
   readonly debug?: boolean;
 }
 
-export interface WrapperProps 
+export interface WrapperProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof wrapperVariants> {
   /** Custom dimensions */
@@ -252,7 +247,7 @@ export interface CenteredContainerProps extends React.HTMLAttributes<HTMLDivElem
 const useDebugStyles = (debug: boolean) => {
   return React.useMemo((): React.CSSProperties => {
     if (!debug) return {};
-    
+
     return {
       outline: '2px dashed rgba(59, 130, 246, 0.5)',
       backgroundColor: 'rgba(59, 130, 246, 0.05)',
@@ -267,17 +262,17 @@ const useDebugStyles = (debug: boolean) => {
 const useResponsiveContainer = (responsive: boolean, breakout: ContainerProps['breakout']) => {
   return React.useMemo(() => {
     if (!responsive) return '';
-    
+
     const classes: string[] = [];
-    
+
     // Add responsive padding
     classes.push('px-4 sm:px-6 lg:px-8');
-    
+
     // Add responsive max-width if not using breakout
     if (!breakout || breakout === 'none') {
       classes.push('max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-7xl');
     }
-    
+
     return classes.join(' ');
   }, [responsive, breakout]);
 };
@@ -290,29 +285,32 @@ const useResponsiveContainer = (responsive: boolean, breakout: ContainerProps['b
  * Section Component
  */
 export const Section = forwardRef<HTMLElement, SectionProps>(
-  ({
-    as: Component = 'section',
-    variant,
-    spacing,
-    width,
-    fullWidth = false,
-    debug = false,
-    className,
-    style,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      as: Component = 'section',
+      variant,
+      spacing,
+      width,
+      fullWidth = false,
+      debug = false,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const debugStyles = useDebugStyles(debug);
 
     const sectionStyles = React.useMemo((): React.CSSProperties => {
       const styles: React.CSSProperties = { ...debugStyles, ...style };
-      
+
       if (fullWidth) {
         styles.width = '100vw';
         styles.marginLeft = '50%';
         styles.transform = 'translateX(-50%)';
       }
-      
+
       return styles;
     }, [fullWidth, debugStyles, style]);
 
@@ -324,7 +322,6 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
           fullWidth && 'relative',
           className
         )}
-       
         {...props}
       >
         {children}
@@ -339,46 +336,45 @@ Section.displayName = 'Section';
  * Wrapper Component
  */
 export const Wrapper = forwardRef<HTMLDivElement, WrapperProps>(
-  ({
-    display,
-    position,
-    overflow,
-    zIndex,
-    width,
-    height,
-    minWidth,
-    minHeight,
-    maxWidth,
-    maxHeight,
-    debug = false,
-    className,
-    style,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      display,
+      position,
+      overflow,
+      zIndex,
+      width,
+      height,
+      minWidth,
+      minHeight,
+      maxWidth,
+      maxHeight,
+      debug = false,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const debugStyles = useDebugStyles(debug);
 
     const wrapperStyles = React.useMemo((): React.CSSProperties => {
       const styles: React.CSSProperties = { ...debugStyles, ...style };
-      
+
       if (width) styles.width = width;
       if (height) styles.height = height;
       if (minWidth) styles.minWidth = minWidth;
       if (minHeight) styles.minHeight = minHeight;
       if (maxWidth) styles.maxWidth = maxWidth;
       if (maxHeight) styles.maxHeight = maxHeight;
-      
+
       return styles;
     }, [width, height, minWidth, minHeight, maxWidth, maxHeight, debugStyles, style]);
 
     return (
       <Box
         ref={ref}
-        className={cn(
-          wrapperVariants({ display, position, overflow, zIndex }),
-          className
-        )}
-       
+        className={cn(wrapperVariants({ display, position, overflow, zIndex }), className)}
         {...props}
       >
         {children}
@@ -393,18 +389,21 @@ Wrapper.displayName = 'Wrapper';
  * Flex Container Component
  */
 export const FlexContainer = forwardRef<HTMLDivElement, FlexContainerProps>(
-  ({
-    direction = 'row',
-    wrap = 'nowrap',
-    justify = 'start',
-    align = 'stretch',
-    gap = 'md',
-    debug = false,
-    className,
-    style,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      direction = 'row',
+      wrap = 'nowrap',
+      justify = 'start',
+      align = 'stretch',
+      gap = 'md',
+      debug = false,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const debugStyles = useDebugStyles(debug);
 
     const flexClasses = cn(
@@ -438,16 +437,11 @@ export const FlexContainer = forwardRef<HTMLDivElement, FlexContainerProps>(
       gap === 'md' && 'gap-4',
       gap === 'lg' && 'gap-6',
       gap === 'xl' && 'gap-8',
-      gap === '2xl' && 'gap-12',
+      gap === '2xl' && 'gap-12'
     );
 
     return (
-      <Box
-        ref={ref}
-        className={cn(flexClasses, className)}
-       
-        {...props}
-      >
+      <Box ref={ref} className={cn(flexClasses, className)} {...props}>
         {children}
       </Box>
     );
@@ -460,25 +454,28 @@ FlexContainer.displayName = 'FlexContainer';
  * Centered Container Component
  */
 export const CenteredContainer = forwardRef<HTMLDivElement, CenteredContainerProps>(
-  ({
-    maxWidth = '7xl',
-    vertical = false,
-    minHeight = '100vh',
-    debug = false,
-    className,
-    style,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      maxWidth = '7xl',
+      vertical = false,
+      minHeight = '100vh',
+      debug = false,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const debugStyles = useDebugStyles(debug);
 
     const centeredStyles = React.useMemo((): React.CSSProperties => {
       const styles: React.CSSProperties = { ...debugStyles, ...style };
-      
+
       if (vertical) {
         styles.minHeight = minHeight;
       }
-      
+
       return styles;
     }, [vertical, minHeight, debugStyles, style]);
 
@@ -506,7 +503,6 @@ export const CenteredContainer = forwardRef<HTMLDivElement, CenteredContainerPro
           vertical && 'flex items-center justify-center',
           className
         )}
-       
         {...props}
       >
         {children}
@@ -526,35 +522,38 @@ CenteredContainer.displayName = 'CenteredContainer';
  * Provides comprehensive container layouts for applications
  */
 export const Container = forwardRef<HTMLDivElement, ContainerProps>(
-  ({
-    size,
-    padding,
-    paddingY,
-    variant,
-    breakout,
-    center = false,
-    responsive = false,
-    maxWidth,
-    debug = false,
-    className,
-    style,
-    children,
-    ...props
-  }, ref) => {
-        const debugStyles = useDebugStyles(debug);
+  (
+    {
+      size,
+      padding,
+      paddingY,
+      variant,
+      breakout,
+      center = false,
+      responsive = false,
+      maxWidth,
+      debug = false,
+      className,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const debugStyles = useDebugStyles(debug);
     const responsiveClasses = useResponsiveContainer(responsive, breakout);
 
     const containerStyles = React.useMemo((): React.CSSProperties => {
       const styles: React.CSSProperties = { ...debugStyles, ...style };
-      
+
       if (maxWidth) {
         styles.maxWidth = maxWidth;
       }
-      
+
       if (center) {
         styles.textAlign = 'center';
       }
-      
+
       return styles;
     }, [maxWidth, center, debugStyles, style]);
 
@@ -566,7 +565,6 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
           responsive && responsiveClasses,
           className
         )}
-       
         {...props}
       >
         {children}
@@ -588,16 +586,11 @@ export const ContainerComposition = {
   /**
    * Page container
    */
-  Page: ({ 
-    children, 
-    ...props 
+  Page: ({
+    children,
+    ...props
   }: Omit<ContainerProps, 'size' | 'padding'> & { children: ReactNode }) => (
-    <Container
-      size="7xl"
-      padding="md"
-      responsive
-      {...props}
-    >
+    <Container size="7xl" padding="md" responsive {...props}>
       {children}
     </Container>
   ),
@@ -605,17 +598,11 @@ export const ContainerComposition = {
   /**
    * Article container
    */
-  Article: ({ 
-    children, 
-    ...props 
+  Article: ({
+    children,
+    ...props
   }: Omit<ContainerProps, 'size' | 'padding'> & { children: ReactNode }) => (
-    <Container
-      size="4xl"
-      padding="lg"
-      paddingY="xl"
-      center
-      {...props}
-    >
+    <Container size="4xl" padding="lg" paddingY="xl" center {...props}>
       {children}
     </Container>
   ),
@@ -623,16 +610,11 @@ export const ContainerComposition = {
   /**
    * Card container
    */
-  Card: ({ 
-    children, 
-    ...props 
+  Card: ({
+    children,
+    ...props
   }: Omit<ContainerProps, 'variant' | 'padding'> & { children: ReactNode }) => (
-    <Container
-      variant="card"
-      padding="lg"
-      paddingY="lg"
-      {...props}
-    >
+    <Container variant="card" padding="lg" paddingY="lg" {...props}>
       {children}
     </Container>
   ),
@@ -640,16 +622,11 @@ export const ContainerComposition = {
   /**
    * Hero section container
    */
-  Hero: ({ 
-    children, 
-    ...props 
+  Hero: ({
+    children,
+    ...props
   }: Omit<SectionProps, 'spacing' | 'variant'> & { children: ReactNode }) => (
-    <Section
-      spacing="3xl"
-      variant="default"
-      width="full"
-      {...props}
-    >
+    <Section spacing="3xl" variant="default" width="full" {...props}>
       <Container size="7xl" padding="md" center>
         {children}
       </Container>
@@ -659,15 +636,8 @@ export const ContainerComposition = {
   /**
    * Content section
    */
-  Content: ({ 
-    children, 
-    ...props 
-  }: Omit<SectionProps, 'spacing'> & { children: ReactNode }) => (
-    <Section
-      spacing="xl"
-      width="container"
-      {...props}
-    >
+  Content: ({ children, ...props }: Omit<SectionProps, 'spacing'> & { children: ReactNode }) => (
+    <Section spacing="xl" width="container" {...props}>
       {children}
     </Section>
   ),
@@ -675,57 +645,58 @@ export const ContainerComposition = {
   /**
    * Sidebar layout
    */
-  Sidebar: ({ 
-    sidebar, 
-    main, 
-    ...props 
+  Sidebar: ({
+    sidebar,
+    main,
+    ...props
   }: Omit<FlexContainerProps, 'direction'> & {
     sidebar: ReactNode;
     main: ReactNode;
   }) => (
-    <FlexContainer
-      direction="row"
-      gap="lg"
-      className="min-h-screen"
-      {...props}
-    >
-      <Box className="w-64 flex-shrink-0">
-        {sidebar}
-      </Box>
-      <Box className="flex-1 min-w-0">
-        {main}
-      </Box>
+    <FlexContainer direction="row" gap="lg" className="min-h-screen" {...props}>
+      <Box className="w-64 flex-shrink-0">{sidebar}</Box>
+      <Box className="flex-1 min-w-0">{main}</Box>
     </FlexContainer>
   ),
 
   /**
    * Split layout
    */
-  Split: ({ 
-    left, 
-    right, 
+  Split: ({
+    left,
+    right,
     ratio = '1:1',
-    ...props 
+    ...props
   }: Omit<FlexContainerProps, 'direction'> & {
     left: ReactNode;
     right: ReactNode;
     ratio?: '1:1' | '1:2' | '2:1' | '1:3' | '3:1';
   }) => {
-    const leftFlex = ratio === '1:2' ? 'flex-1' : ratio === '2:1' ? 'flex-2' : ratio === '1:3' ? 'flex-1' : ratio === '3:1' ? 'flex-3' : 'flex-1';
-    const rightFlex = ratio === '1:2' ? 'flex-2' : ratio === '2:1' ? 'flex-1' : ratio === '1:3' ? 'flex-3' : ratio === '3:1' ? 'flex-1' : 'flex-1';
-    
+    const leftFlex =
+      ratio === '1:2'
+        ? 'flex-1'
+        : ratio === '2:1'
+          ? 'flex-2'
+          : ratio === '1:3'
+            ? 'flex-1'
+            : ratio === '3:1'
+              ? 'flex-3'
+              : 'flex-1';
+    const rightFlex =
+      ratio === '1:2'
+        ? 'flex-2'
+        : ratio === '2:1'
+          ? 'flex-1'
+          : ratio === '1:3'
+            ? 'flex-3'
+            : ratio === '3:1'
+              ? 'flex-1'
+              : 'flex-1';
+
     return (
-      <FlexContainer
-        direction="row"
-        gap="lg"
-        {...props}
-      >
-        <Box className={cn(leftFlex, 'min-w-0')}>
-          {left}
-        </Box>
-        <Box className={cn(rightFlex, 'min-w-0')}>
-          {right}
-        </Box>
+      <FlexContainer direction="row" gap="lg" {...props}>
+        <Box className={cn(leftFlex, 'min-w-0')}>{left}</Box>
+        <Box className={cn(rightFlex, 'min-w-0')}>{right}</Box>
       </FlexContainer>
     );
   },

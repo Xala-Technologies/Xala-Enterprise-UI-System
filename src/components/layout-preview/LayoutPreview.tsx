@@ -22,7 +22,7 @@ import { AdminLayout } from '../../layouts/admin/AdminLayout';
 import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // LAYOUT PREVIEW VARIANTS
@@ -226,10 +226,10 @@ export const LayoutThumbnail: React.FC<LayoutThumbnailProps> = ({
   };
 
   const thumbnailStyles = React.useMemo((): React.CSSProperties => ({
-    backgroundColor: colors.background?.default || '#ffffff',
-    borderColor: selected ? colors.primary?.[500] || '#3b82f6' : colors.border?.default || '#e2e8f0',
+    backgroundColor: '#ffffff',
+    borderColor: selected ? '#3b82f6' : '#e2e8f0',
     borderWidth: selected ? '2px' : '1px',
-  }), [colors, selected]);
+  }), [selected]);
 
   return (
     <Box className="flex flex-col items-center gap-2">

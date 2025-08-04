@@ -16,7 +16,14 @@ export type DividerOrientation = 'horizontal' | 'vertical';
 /**
  * Divider variant types
  */
-export type DividerVariant = 'default' | 'primary' | 'secondary' | 'muted' | 'destructive' | 'success' | 'warning';
+export type DividerVariant =
+  | 'default'
+  | 'primary'
+  | 'secondary'
+  | 'muted'
+  | 'destructive'
+  | 'success'
+  | 'warning';
 
 /**
  * Divider size types
@@ -80,7 +87,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
     },
     ref
   ) => {
-        // Get variant color with opacity
+    // Get variant color with opacity
     const getVariantColor = (): string => {
       const opacity = 0.3;
       switch (variant) {
@@ -100,7 +107,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           return colors.border?.default || colors.neutral?.[200] || '#e5e7eb';
       }
     };
-    
+
     // Get border width based on size
     const getBorderWidth = (): string => {
       switch (size) {
@@ -112,7 +119,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           return '1px';
       }
     };
-    
+
     // Get spacing values
     const getSpacingValue = (): string => {
       switch (spacing) {
@@ -137,27 +144,29 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       borderStyle: borderStyle,
       boxSizing: 'border-box',
       display: 'block',
-      ...(orientation === 'horizontal' ? {
-        width: '100%',
-        height: 0,
-        borderTopWidth: getBorderWidth(),
-        borderBottomWidth: 0,
-        borderLeftWidth: 0,
-        borderRightWidth: 0,
-        marginTop: getSpacingValue(),
-        marginBottom: getSpacingValue(),
-      } : {
-        width: 0,
-        height: '100%',
-        borderLeftWidth: getBorderWidth(),
-        borderTopWidth: 0,
-        borderBottomWidth: 0,
-        borderRightWidth: 0,
-        marginLeft: getSpacingValue(),
-        marginRight: getSpacingValue(),
-      }),
+      ...(orientation === 'horizontal'
+        ? {
+            width: '100%',
+            height: 0,
+            borderTopWidth: getBorderWidth(),
+            borderBottomWidth: 0,
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+            marginTop: getSpacingValue(),
+            marginBottom: getSpacingValue(),
+          }
+        : {
+            width: 0,
+            height: '100%',
+            borderLeftWidth: getBorderWidth(),
+            borderTopWidth: 0,
+            borderBottomWidth: 0,
+            borderRightWidth: 0,
+            marginLeft: getSpacingValue(),
+            marginRight: getSpacingValue(),
+          }),
     };
-    
+
     // Simple divider without label
     if (!label) {
       return (
@@ -166,7 +175,6 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
           className={className}
-         
           {...props}
         />
       );
@@ -181,7 +189,6 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           role={decorative ? 'presentation' : 'separator'}
           aria-orientation={orientation || undefined}
           className={className}
-         
           {...props}
         />
       );
@@ -195,7 +202,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       marginBottom: getSpacingValue(),
       width: '100%',
     };
-    
+
     // Label styles
     const labelStyles: React.CSSProperties = {
       fontSize: typography.fontSize.sm,
@@ -207,15 +214,25 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       paddingRight: spacingTokens[2],
       lineHeight: typography.lineHeight.tight,
     };
-    
+
     // Label container styles
     const labelContainerStyles: React.CSSProperties = {
       display: 'flex',
       justifyContent: labelPosition,
-      paddingLeft: labelPosition === 'center' ? spacingTokens[3] : labelPosition === 'right' ? spacingTokens[3] : 0,
-      paddingRight: labelPosition === 'center' ? spacingTokens[3] : labelPosition === 'left' ? spacingTokens[3] : 0,
+      paddingLeft:
+        labelPosition === 'center'
+          ? spacingTokens[3]
+          : labelPosition === 'right'
+            ? spacingTokens[3]
+            : 0,
+      paddingRight:
+        labelPosition === 'center'
+          ? spacingTokens[3]
+          : labelPosition === 'left'
+            ? spacingTokens[3]
+            : 0,
     };
-    
+
     // Line segment styles
     const lineStyles: React.CSSProperties = {
       flex: 1,
@@ -227,32 +244,25 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
       borderLeftWidth: 0,
       borderRightWidth: 0,
     };
-    
+
     return (
       <Box
         ref={ref}
         role={decorative ? 'presentation' : 'separator'}
         aria-label={!decorative ? label : undefined}
         className={className}
-       
         {...props}
       >
         {/* Left divider line (hidden when label is on the left) */}
-        {labelPosition !== 'left' && (
-          <Box />
-        )}
+        {labelPosition !== 'left' && <Box />}
 
         {/* Label */}
         <Box>
-          <Text as="span">
-            {label}
-          </Text>
+          <Text as="span">{label}</Text>
         </Box>
 
         {/* Right divider line (hidden when label is on the right) */}
-        {labelPosition !== 'right' && (
-          <Box />
-        )}
+        {labelPosition !== 'right' && <Box />}
       </Box>
     );
   }

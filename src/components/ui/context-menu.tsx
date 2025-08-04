@@ -6,7 +6,16 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 /**
  * ContextMenu component props interface
@@ -85,9 +94,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         {isVisible && (
           <>
             <Box onClick={handleClose} />
-            <Box>
-              {content}
-            </Box>
+            <Box>{content}</Box>
           </>
         )}
       </Box>
@@ -108,13 +115,7 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ContextMenuTriggerP
     };
 
     return (
-      <Box
-        ref={ref}
-        onContextMenu={onContextMenu}
-        className={className}
-       
-        {...props}
-      >
+      <Box ref={ref} onContextMenu={onContextMenu} className={className} {...props}>
         {children}
       </Box>
     );
@@ -127,15 +128,17 @@ ContextMenuTrigger.displayName = 'ContextMenuTrigger';
  * Enhanced ContextMenuContent component
  */
 export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentProps>(
-  ({ children, visible = false, x = 0, y = 0, className, style, ...props }, ref): React.ReactElement => {
-        
+  (
+    { children, visible = false, x = 0, y = 0, className, style, ...props },
+    ref
+  ): React.ReactElement => {
     if (!visible) return <></>;
 
     // Get border radius and shadows
     const borderRadius = {
       md: '0.375rem',
     };
-    
+
     const shadows = {
       md: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
     };
@@ -159,13 +162,7 @@ export const ContextMenuContent = forwardRef<HTMLDivElement, ContextMenuContentP
     };
 
     return (
-      <Box
-        ref={ref}
-        className={className}
-       
-        role="menu"
-        {...props}
-      >
+      <Box ref={ref} className={className} role="menu" {...props}>
         {children}
       </Box>
     );
@@ -178,8 +175,10 @@ ContextMenuContent.displayName = 'ContextMenuContent';
  * Enhanced ContextMenuItem component
  */
 export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
-  ({ children, disabled = false, onSelect, className, style, ...props }, ref): React.ReactElement => {
-        
+  (
+    { children, disabled = false, onSelect, className, style, ...props },
+    ref
+  ): React.ReactElement => {
     const handleClick = (): void => {
       if (!disabled) {
         onSelect?.();
@@ -214,27 +213,26 @@ export const ContextMenuItem = forwardRef<HTMLDivElement, ContextMenuItemProps>(
         role="menuitem"
         data-disabled={disabled}
         className={className}
-       
         onClick={handleClick}
-        onMouseEnter={(e) => {
+        onMouseEnter={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = '#f3f4f6';
             e.currentTarget.style.color = '#111827';
           }
         }}
-            onMouseLeave={(e) => {
+        onMouseLeave={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
             e.currentTarget.style.color = '#111827';
           }
         }}
-        onFocus={(e) => {
+        onFocus={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = '#f3f4f6';
             e.currentTarget.style.color = '#111827';
           }
         }}
-            onBlur={(e) => {
+        onBlur={e => {
           if (!disabled) {
             e.currentTarget.style.backgroundColor = 'transparent';
             e.currentTarget.style.color = '#111827';

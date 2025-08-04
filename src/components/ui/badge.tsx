@@ -23,9 +23,12 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground border-transparent hover:bg-primary/90',
-        secondary: 'bg-secondary text-secondary-foreground border-transparent hover:bg-secondary/80',
-        destructive: 'bg-destructive text-destructive-foreground border-transparent hover:bg-destructive/90',
-        outline: 'bg-transparent text-foreground border-border hover:bg-accent hover:text-accent-foreground',
+        secondary:
+          'bg-secondary text-secondary-foreground border-transparent hover:bg-secondary/80',
+        destructive:
+          'bg-destructive text-destructive-foreground border-transparent hover:bg-destructive/90',
+        outline:
+          'bg-transparent text-foreground border-border hover:bg-accent hover:text-accent-foreground',
         success: 'bg-green-500 text-white border-transparent hover:bg-green-600',
         warning: 'bg-amber-500 text-white border-transparent hover:bg-amber-600',
         info: 'bg-blue-500 text-white border-transparent hover:bg-blue-600',
@@ -47,7 +50,14 @@ const badgeVariants = cva(
 /**
  * Badge variant types
  */
-export type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline' | 'success' | 'warning' | 'info';
+export type BadgeVariant =
+  | 'default'
+  | 'secondary'
+  | 'destructive'
+  | 'outline'
+  | 'success'
+  | 'warning'
+  | 'info';
 
 /**
  * Badge size types
@@ -70,11 +80,7 @@ export interface BadgeProps
 export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
   ({ variant = 'default', size = 'default', className, children, ...props }, ref) => {
     return (
-      <Box 
-        ref={ref} 
-        className={cn(badgeVariants({ variant, size }), className)} 
-        {...props}
-      >
+      <Box ref={ref} className={cn(badgeVariants({ variant, size }), className)} {...props}>
         {children}
       </Box>
     );

@@ -9,7 +9,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
 import { usePlatform } from '../../../hooks';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // SPLIT VIEW VARIANTS

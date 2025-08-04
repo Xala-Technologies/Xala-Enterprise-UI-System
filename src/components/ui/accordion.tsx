@@ -13,45 +13,39 @@ import { cva, type VariantProps } from 'class-variance-authority';
 // CVA VARIANTS
 // =============================================================================
 
-const accordionVariants = cva(
-  'space-y-0 bg-background',
-  {
-    variants: {
-      variant: {
-        default: 'bg-background',
-        bordered: 'border border-border rounded-lg overflow-hidden',
-        elevated: 'border border-border rounded-lg shadow-sm',
-        minimal: 'bg-transparent',
-      },
-      size: {
-        sm: 'text-sm',
-        md: 'text-base',
-        lg: 'text-lg',
-      },
+const accordionVariants = cva('space-y-0 bg-background', {
+  variants: {
+    variant: {
+      default: 'bg-background',
+      bordered: 'border border-border rounded-lg overflow-hidden',
+      elevated: 'border border-border rounded-lg shadow-sm',
+      minimal: 'bg-transparent',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'md',
+    size: {
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+});
 
-const accordionItemVariants = cva(
-  'border-b border-border last:border-b-0',
-  {
-    variants: {
-      variant: {
-        default: 'border-b border-border',
-        bordered: 'border-0',
-        elevated: 'border-0',
-        minimal: 'border-b border-border/50',
-      },
+const accordionItemVariants = cva('border-b border-border last:border-b-0', {
+  variants: {
+    variant: {
+      default: 'border-b border-border',
+      bordered: 'border-0',
+      elevated: 'border-0',
+      minimal: 'border-b border-border/50',
     },
-    defaultVariants: {
-      variant: 'default',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
 const accordionTriggerVariants = cva(
   'flex w-full items-center justify-between py-4 px-6 font-medium transition-all hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed [&[data-state=open]>svg]:rotate-180',
@@ -153,11 +147,7 @@ export interface AccordionItemData extends AccordionItem {}
 
 export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   ({ className, variant, size, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(accordionVariants({ variant, size }), className)}
-      {...props}
-    />
+    <div ref={ref} className={cn(accordionVariants({ variant, size }), className)} {...props} />
   )
 );
 
@@ -165,11 +155,7 @@ Accordion.displayName = 'Accordion';
 
 export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(
   ({ className, variant, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn(accordionItemVariants({ variant }), className)}
-      {...props}
-    />
+    <div ref={ref} className={cn(accordionItemVariants({ variant }), className)} {...props} />
   )
 );
 
@@ -191,12 +177,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M19 9l-7 7-7-7"
-        />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
       </svg>
     </button>
   )
@@ -231,15 +212,10 @@ interface SimpleAccordionProps
 }
 
 export const SimpleAccordion = forwardRef<HTMLDivElement, SimpleAccordionProps>(
-  ({ 
-    className, 
-    variant, 
-    size, 
-    items, 
-    allowMultiple = false, 
-    defaultExpanded = [],
-    ...props 
-  }, ref) => {
+  (
+    { className, variant, size, items, allowMultiple = false, defaultExpanded = [], ...props },
+    ref
+  ) => {
     return (
       <Accordion
         ref={ref}
@@ -250,12 +226,8 @@ export const SimpleAccordion = forwardRef<HTMLDivElement, SimpleAccordionProps>(
         defaultValue={allowMultiple ? defaultExpanded : defaultExpanded[0]}
         {...props}
       >
-        {items.map((item) => (
-          <AccordionItem 
-            key={item.id} 
-            value={item.id} 
-            variant={variant}
-          >
+        {items.map(item => (
+          <AccordionItem key={item.id} value={item.id} variant={variant}>
             <AccordionTrigger
               variant={variant}
               size={size}
@@ -264,9 +236,7 @@ export const SimpleAccordion = forwardRef<HTMLDivElement, SimpleAccordionProps>(
             >
               <div className="flex items-center space-x-3 flex-1 min-w-0">
                 {item.icon && (
-                  <div className="flex-shrink-0 text-muted-foreground">
-                    {item.icon}
-                  </div>
+                  <div className="flex-shrink-0 text-muted-foreground">{item.icon}</div>
                 )}
                 <span className="truncate">{item.title}</span>
                 {item.badge && (
@@ -293,11 +263,11 @@ export { SimpleAccordion as EnhancedAccordion };
 export type { SimpleAccordionProps as EnhancedAccordionProps };
 
 // CVA variants for external use
-export { 
-  accordionVariants, 
-  accordionItemVariants, 
-  accordionTriggerVariants, 
-  accordionContentVariants 
+export {
+  accordionVariants,
+  accordionItemVariants,
+  accordionTriggerVariants,
+  accordionContentVariants,
 };
 
 export default Accordion;

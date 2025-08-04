@@ -14,7 +14,7 @@ import { Button } from '../ui/button';
 import { Card } from '../ui/card';
 import { Typography } from '../ui/typography';
 import { Badge } from '../ui/badge';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
 
 // =============================================================================
 // LAYOUT GALLERY VARIANTS
@@ -122,10 +122,10 @@ export const LayoutCard: React.FC<LayoutCardProps> = ({
     const [isHovered, setIsHovered] = useState(false);
 
   const cardStyles = React.useMemo((): React.CSSProperties => ({
-    borderColor: selected ? colors.primary?.[500] || '#3b82f6' : undefined,
+    borderColor: selected ? '#3b82f6' : undefined,
     transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
     transition: 'all 200ms ease-in-out',
-  }), [colors, selected, isHovered]);
+  }), [selected, isHovered]);
 
   const getLayoutFeatures = (type: LayoutType): string[] => {
     switch (type) {

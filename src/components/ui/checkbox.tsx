@@ -51,10 +51,14 @@ const checkboxVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:bg-primary',
-        destructive: 'border-destructive data-[state=checked]:bg-destructive data-[state=indeterminate]:bg-destructive',
-        success: 'border-success data-[state=checked]:bg-success data-[state=indeterminate]:bg-success',
-        warning: 'border-warning data-[state=checked]:bg-warning data-[state=indeterminate]:bg-warning',
+        default:
+          'border-primary data-[state=checked]:bg-primary data-[state=indeterminate]:bg-primary',
+        destructive:
+          'border-destructive data-[state=checked]:bg-destructive data-[state=indeterminate]:bg-destructive',
+        success:
+          'border-success data-[state=checked]:bg-success data-[state=indeterminate]:bg-success',
+        warning:
+          'border-warning data-[state=checked]:bg-warning data-[state=indeterminate]:bg-warning',
       },
       size: {
         sm: 'h-3 w-3',
@@ -102,14 +106,10 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           data-state={state}
           {...props}
         />
-        
+
         {/* Visual indicator overlay */}
         <Box className="pointer-events-none absolute inset-0 flex items-center justify-center text-current">
-          {indeterminate ? (
-            <IndeterminateIcon />
-          ) : checked ? (
-            <CheckIcon />
-          ) : null}
+          {indeterminate ? <IndeterminateIcon /> : checked ? <CheckIcon /> : null}
         </Box>
       </Box>
     );
@@ -117,4 +117,3 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
 );
 
 Checkbox.displayName = 'Checkbox';
-

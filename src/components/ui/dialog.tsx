@@ -57,59 +57,50 @@ const dialogContentVariants = cva(
 /**
  * Dialog header variants
  */
-const dialogHeaderVariants = cva(
-  'flex flex-col space-y-1.5 text-center sm:text-left',
-  {
-    variants: {
-      size: {
-        sm: 'mb-3',
-        md: 'mb-4',
-        lg: 'mb-6',
-      },
+const dialogHeaderVariants = cva('flex flex-col space-y-1.5 text-center sm:text-left', {
+  variants: {
+    size: {
+      sm: 'mb-3',
+      md: 'mb-4',
+      lg: 'mb-6',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 /**
  * Dialog title variants
  */
-const dialogTitleVariants = cva(
-  'text-lg font-semibold leading-none tracking-tight',
-  {
-    variants: {
-      size: {
-        sm: 'text-base',
-        md: 'text-lg',
-        lg: 'text-xl',
-      },
+const dialogTitleVariants = cva('text-lg font-semibold leading-none tracking-tight', {
+  variants: {
+    size: {
+      sm: 'text-base',
+      md: 'text-lg',
+      lg: 'text-xl',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 /**
  * Dialog description variants
  */
-const dialogDescriptionVariants = cva(
-  'text-sm text-muted-foreground',
-  {
-    variants: {
-      size: {
-        sm: 'text-xs',
-        md: 'text-sm',
-        lg: 'text-base',
-      },
+const dialogDescriptionVariants = cva('text-sm text-muted-foreground', {
+  variants: {
+    size: {
+      sm: 'text-xs',
+      md: 'text-sm',
+      lg: 'text-base',
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 /**
  * Dialog component props interface
@@ -122,7 +113,7 @@ export interface DialogProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'
 /**
  * Dialog overlay props interface
  */
-export interface DialogOverlayProps 
+export interface DialogOverlayProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogOverlayVariants> {
   readonly open?: boolean;
@@ -131,7 +122,7 @@ export interface DialogOverlayProps
 /**
  * Dialog content props interface
  */
-export interface DialogContentProps 
+export interface DialogContentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogContentVariants> {
   readonly open?: boolean;
@@ -141,7 +132,7 @@ export interface DialogContentProps
 /**
  * Dialog header props interface
  */
-export interface DialogHeaderProps 
+export interface DialogHeaderProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
     VariantProps<typeof dialogHeaderVariants> {
   readonly children: ReactNode;
@@ -150,7 +141,7 @@ export interface DialogHeaderProps
 /**
  * Dialog title props interface
  */
-export interface DialogTitleProps 
+export interface DialogTitleProps
   extends HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof dialogTitleVariants> {
   readonly children: ReactNode;
@@ -159,7 +150,7 @@ export interface DialogTitleProps
 /**
  * Dialog description props interface
  */
-export interface DialogDescriptionProps 
+export interface DialogDescriptionProps
   extends HTMLAttributes<HTMLParagraphElement>,
     VariantProps<typeof dialogDescriptionVariants> {
   readonly children: ReactNode;
@@ -240,11 +231,7 @@ DialogContent.displayName = 'DialogContent';
 export const DialogHeader = forwardRef<HTMLDivElement, DialogHeaderProps>(
   ({ className, size, children, ...props }, ref): React.ReactElement => {
     return (
-      <Box
-        ref={ref}
-        className={cn(dialogHeaderVariants({ size }), className)}
-        {...props}
-      >
+      <Box ref={ref} className={cn(dialogHeaderVariants({ size }), className)} {...props}>
         {children}
       </Box>
     );
@@ -303,10 +290,7 @@ export const DialogFooter = forwardRef<HTMLDivElement, DialogFooterProps>(
     return (
       <Box
         ref={ref}
-        className={cn(
-          'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
-          className
-        )}
+        className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
         {...props}
       >
         {children}
@@ -321,7 +305,10 @@ DialogFooter.displayName = 'DialogFooter';
  * Dialog close button component
  */
 export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
-  ({ className, children, onClick, disabled, type, id, style, ...props }, ref): React.ReactElement => {
+  (
+    { className, children, onClick, disabled, type, id, style, ...props },
+    ref
+  ): React.ReactElement => {
     return (
       <Button
         ref={ref}
@@ -351,7 +338,9 @@ export const DialogClose = forwardRef<HTMLButtonElement, DialogCloseProps>(
             />
           </svg>
         )}
-        <Text as="span" className="sr-only">Close</Text>
+        <Text as="span" className="sr-only">
+          Close
+        </Text>
       </Button>
     );
   }

@@ -6,7 +6,16 @@
  */
 
 import React, { forwardRef, useState, type HTMLAttributes } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 import { cn } from '../../lib/utils/cn';
 
 /**
@@ -55,7 +64,8 @@ const languageConfig = {
 /**
  * CodeBlock Props interface
  */
-export interface CodeBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onCopy'> {
+export interface CodeBlockProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onCopy'> {
   /** Code content to display */
   readonly code: string;
   /** Programming language for syntax highlighting */
@@ -99,7 +109,7 @@ const CopyButton: React.FC<{
   code: string;
   onCopy?: (code: string) => void;
 }> = ({ code, onCopy }) => {
-    const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = async (): Promise<void> => {
     try {
@@ -133,21 +143,21 @@ const CopyButton: React.FC<{
   };
 
   return (
-    <Text as="button"
+    <Text
+      as="button"
       onClick={handleCopy}
-     
       aria-label={copied ? 'Kopiert!' : 'Kopier kode'}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
       }}
-      onFocus={(e) => {
+      onFocus={e => {
         e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
         e.currentTarget.style.outlineOffset = '2px';
       }}
-      onBlur={(e) => {
+      onBlur={e => {
         e.currentTarget.style.outline = 'none';
       }}
     >
@@ -183,7 +193,6 @@ const DownloadButton: React.FC<{
   filename: string;
   onDownload?: (code: string, filename: string) => void;
 }> = ({ code, filename, onDownload }) => {
-  
   const handleDownload = (): void => {
     try {
       const blob = new Blob([code], { type: 'text/plain' });
@@ -222,21 +231,21 @@ const DownloadButton: React.FC<{
   };
 
   return (
-    <Text as="button"
+    <Text
+      as="button"
       onClick={handleDownload}
-     
       aria-label={`Last ned ${filename}`}
-      onMouseEnter={(e) => {
+      onMouseEnter={e => {
         e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
       }}
-      onMouseLeave={(e) => {
+      onMouseLeave={e => {
         e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
       }}
-      onFocus={(e) => {
+      onFocus={e => {
         e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
         e.currentTarget.style.outlineOffset = '2px';
       }}
-      onBlur={(e) => {
+      onBlur={e => {
         e.currentTarget.style.outline = 'none';
       }}
     >
@@ -260,15 +269,15 @@ const LineNumbers: React.FC<{
   lines: number;
   highlightLines?: number[];
 }> = ({ lines, highlightLines = [] }) => {
-    
   return (
     <Box className="flex flex-col text-right pr-4 select-none">
       {Array.from({ length: lines }, (_, i) => (
-        <Text as="span"
+        <Text
+          as="span"
           key={i + 1}
           className={cn(
-            "px-2 leading-relaxed",
-            highlightLines.includes(i + 1) && "bg-accent text-accent-foreground"
+            'px-2 leading-relaxed',
+            highlightLines.includes(i + 1) && 'bg-accent text-accent-foreground'
           )}
         >
           {i + 1}
@@ -307,8 +316,8 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     },
     ref
   ) => {
-        const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
-    
+    const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
+
     const languageInfo = languageConfig[language] || languageConfig.text;
     const displayFilename = filename || `code${languageInfo.extension}`;
     const codeLines = code.split('\n');
@@ -412,53 +421,37 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
     };
 
     return (
-      <Box
-        ref={ref}
-        className={className}
-       
-        {...props}
-      >
+      <Box ref={ref} className={className} {...props}>
         {/* Header */}
         {(showLanguage || showCopy || showDownload || filename || header || collapsible) && (
           <Box>
             <Box>
-              {filename && (
-                <Text as="span">{filename}</Text>
-              )}
-              {showLanguage && !filename && (
-                <Text as="span">
-                  {languageInfo.label}
-                </Text>
-              )}
+              {filename && <Text as="span">{filename}</Text>}
+              {showLanguage && !filename && <Text as="span">{languageInfo.label}</Text>}
               {header}
             </Box>
 
             <Box>
               {collapsible && (
-                <Text as="button"
+                <Text
+                  as="button"
                   onClick={() => setIsCollapsed(!isCollapsed)}
-                 
                   aria-label={isCollapsed ? 'Vis kode' : 'Skjul kode'}
-                  onMouseEnter={(e) => {
+                  onMouseEnter={e => {
                     e.currentTarget.style.backgroundColor = colors.neutral?.[100] || '#f3f4f6';
                   }}
-                  onMouseLeave={(e) => {
+                  onMouseLeave={e => {
                     e.currentTarget.style.backgroundColor = colors.background?.default || '#ffffff';
                   }}
-                  onFocus={(e) => {
+                  onFocus={e => {
                     e.currentTarget.style.outline = `2px solid ${colors.primary?.[500] || '#3b82f6'}`;
                     e.currentTarget.style.outlineOffset = '2px';
                   }}
-                  onBlur={(e) => {
+                  onBlur={e => {
                     e.currentTarget.style.outline = 'none';
                   }}
                 >
-                  <svg
-                   
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -493,11 +486,12 @@ export const CodeBlock = forwardRef<HTMLDivElement, CodeBlockProps>(
                 <pre className="whitespace-pre font-mono text-sm">
                   <Text as="code" className="block">
                     {codeLines.map((line, index) => (
-                      <Text as="span"
+                      <Text
+                        as="span"
                         key={index}
                         className={cn(
-                          "block",
-                          highlightLines.includes(index + 1) && "bg-accent/10 px-2 -mx-2 rounded-md"
+                          'block',
+                          highlightLines.includes(index + 1) && 'bg-accent/10 px-2 -mx-2 rounded-md'
                         )}
                       >
                         {line || '\n'}

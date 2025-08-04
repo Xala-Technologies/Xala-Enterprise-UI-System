@@ -5,8 +5,25 @@
  * @compliance SSR-Safe, Framework-agnostic, Production-ready
  */
 
-import React, { forwardRef, useState, useRef, useEffect, useMemo, type HTMLAttributes, type ReactNode } from 'react';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../semantic';
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
+import {
+  Box,
+  Text,
+  Heading,
+  Button as SemanticButton,
+  Input as SemanticInput,
+  List,
+  ListItem,
+  Link,
+} from '../semantic';
 
 /**
  * Combobox option interface
@@ -101,7 +118,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     },
     ref
   ): React.ReactElement => {
-        const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [selectedValue, setSelectedValue] = useState(value ?? defaultValue ?? '');
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
@@ -113,7 +130,8 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
     const comboboxId = id || (label ? `combobox-` : undefined);
 
     // Determine actual variant based on state
-    const actualVariant = error || errorText ? 'destructive' : success || successText ? 'success' : variant;
+    const actualVariant =
+      error || errorText ? 'destructive' : success || successText ? 'success' : variant;
 
     // Helper text to display
     const displayHelperText = errorText || successText || helperText;
@@ -172,15 +190,13 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
           if (!isOpen) {
             setIsOpen(true);
           } else {
-            setHighlightedIndex(prev => 
-              prev < filteredOptions.length - 1 ? prev + 1 : prev
-            );
+            setHighlightedIndex(prev => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
           }
           break;
         case 'ArrowUp':
           event.preventDefault();
           if (isOpen) {
-            setHighlightedIndex(prev => prev > 0 ? prev - 1 : 0);
+            setHighlightedIndex(prev => (prev > 0 ? prev - 1 : 0));
           }
           break;
         case 'Enter':
@@ -230,7 +246,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       md: (getToken('borderRadius.md') as string) || '0.375rem',
       sm: (getToken('borderRadius.sm') as string) || '0.125rem',
     };
-    
+
     const shadows = {
       lg: (getToken('shadows.lg') as string) || '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
     };
@@ -330,31 +346,28 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
       fontSize: typography.fontSize.sm,
       fontWeight: typography.fontWeight.medium,
       lineHeight: typography.lineHeight.none,
-      color: actualVariant === 'destructive' 
-        ? (colors.danger?.[500] || '#ef4444')
-        : actualVariant === 'success'
-        ? (colors.success?.[600] || '#16a34a')
-        : (colors.text?.primary || colors.neutral?.[900] || '#111827'),
+      color:
+        actualVariant === 'destructive'
+          ? colors.danger?.[500] || '#ef4444'
+          : actualVariant === 'success'
+            ? colors.success?.[600] || '#16a34a'
+            : colors.text?.primary || colors.neutral?.[900] || '#111827',
     };
 
     // Helper text styles
     const helperTextStyles: React.CSSProperties = {
       fontSize: typography.fontSize.xs,
-      color: actualVariant === 'destructive' 
-        ? (colors.danger?.[500] || '#ef4444') 
-        : actualVariant === 'success'
-        ? (colors.success?.[600] || '#16a34a')
-        : (colors.text?.secondary || colors.neutral?.[500] || '#6b7280'),
+      color:
+        actualVariant === 'destructive'
+          ? colors.danger?.[500] || '#ef4444'
+          : actualVariant === 'success'
+            ? colors.success?.[600] || '#16a34a'
+            : colors.text?.secondary || colors.neutral?.[500] || '#6b7280',
     };
 
     // Chevron icon
     const ChevronIcon = (): React.ReactElement => (
-      <svg
-       
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
+      <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
         <path
           fillRule="evenodd"
           d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -383,35 +396,21 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
             onKeyDown={handleKeyDown}
             placeholder={isOpen ? searchPlaceholder : placeholder}
             disabled={disabled}
-           
           />
-          <Box
-           
-          >
+          <Box>
             <ChevronIcon />
           </Box>
         </Box>
 
         {isOpen && (
-          <Box
-            ref={listRef}
-            id={`${comboboxId}-listbox`}
-            role="listbox"
-           
-          >
+          <Box ref={listRef} id={`${comboboxId}-listbox`} role="listbox">
             {filteredOptions.length === 0 ? (
-              <Box
-               
-              >
-                {emptyMessage}
-              </Box>
+              <Box>{emptyMessage}</Box>
             ) : (
               Object.entries(groupedOptions).map(([groupName, groupOptions]) => (
                 <Box key={groupName}>
                   {groupName && (
-                    <Box
-                      className="px-3 py-1 text-xs font-semibold text-muted-foreground"
-                    >
+                    <Box className="px-3 py-1 text-xs font-semibold text-muted-foreground">
                       {groupName}
                     </Box>
                   )}
@@ -428,34 +427,20 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
                         aria-disabled={option.disabled}
                         onClick={() => !option.disabled && handleSelect(option)}
                         className={cn(
-                          "px-3 py-2 text-sm cursor-pointer transition-colors",
-                          isHighlighted && "bg-accent",
-                          isSelected && "font-medium",
-                          option.disabled && "cursor-not-allowed opacity-50"
+                          'px-3 py-2 text-sm cursor-pointer transition-colors',
+                          isHighlighted && 'bg-accent',
+                          isSelected && 'font-medium',
+                          option.disabled && 'cursor-not-allowed opacity-50'
                         )}
                         onMouseEnter={() => !option.disabled && setHighlightedIndex(globalIndex)}
                       >
-                        {option.icon && (
-                          <Text as="span">
-                            {option.icon}
-                          </Text>
-                        )}
+                        {option.icon && <Text as="span">{option.icon}</Text>}
                         <Box>
                           <Box>{option.label}</Box>
-                          {option.description && (
-                            <Box
-                             
-                            >
-                              {option.description}
-                            </Box>
-                          )}
+                          {option.description && <Box>{option.description}</Box>}
                         </Box>
                         {isSelected && (
-                          <svg
-                           
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
+                          <svg viewBox="0 0 20 20" fill="currentColor">
                             <path
                               fillRule="evenodd"
                               d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -493,11 +478,7 @@ export const Combobox = forwardRef<HTMLDivElement, ComboboxProps>(
 
         {comboboxElement}
 
-        {displayHelperText && (
-          <Text id={`${comboboxId}-helper`}>
-            {displayHelperText}
-          </Text>
-        )}
+        {displayHelperText && <Text id={`${comboboxId}-helper`}>{displayHelperText}</Text>}
       </Box>
     );
   }

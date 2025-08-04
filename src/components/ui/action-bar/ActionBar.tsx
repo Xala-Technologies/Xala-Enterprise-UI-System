@@ -10,7 +10,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../../lib/utils/cn';
 import { ActionButton } from './ActionButton';
 import type { ActionBarProps, ActionConfig } from './types';
-import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../../semantic';
+import { Box, Text, Heading, Button as SemanticButton, Input as SemanticInput, List, ListItem, Link } from '../../semantic';
 
 // =============================================================================
 // ACTION BAR VARIANTS

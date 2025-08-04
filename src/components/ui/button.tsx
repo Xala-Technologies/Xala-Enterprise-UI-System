@@ -73,12 +73,12 @@ export interface ButtonProps
 // LOADING SPINNER COMPONENT
 // =============================================================================
 
-const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = ({ 
-  size = 'md' 
+const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = ({
+  size = 'md',
 }) => {
   const spinnerSizeClass = {
     sm: 'h-3.5 w-3.5',
-    md: 'h-4 w-4', 
+    md: 'h-4 w-4',
     lg: 'h-4.5 w-4.5',
     xl: 'h-5 w-5',
     icon: 'h-4 w-4',
@@ -101,19 +101,22 @@ const LoadingSpinner: React.FC<{ size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon' }> = 
 // =============================================================================
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({
-    className,
-    variant = 'primary',
-    size = 'md',
-    fullWidth = false,
-    loading = false,
-    loadingText,
-    icon,
-    iconPosition = 'left',
-    disabled,
-    children,
-    ...props
-  }, ref) => {
+  (
+    {
+      className,
+      variant = 'primary',
+      size = 'md',
+      fullWidth = false,
+      loading = false,
+      loadingText,
+      icon,
+      iconPosition = 'left',
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const { t } = useTranslation();
     const isDisabled = disabled || loading;
 
@@ -122,10 +125,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return (
           <>
             <LoadingSpinner size={size || undefined} />
-            <Text 
-              as="span" 
-              className={loading ? 'sr-only' : undefined}
-            >
+            <Text as="span" className={loading ? 'sr-only' : undefined}>
               {loadingText || t('components.button.loading')}
             </Text>
           </>
@@ -135,7 +135,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       if (icon && iconPosition === 'left') {
         return (
           <>
-            <Text as="span" className="flex items-center">{icon}</Text>
+            <Text as="span" className="flex items-center">
+              {icon}
+            </Text>
             <Text as="span">{children}</Text>
           </>
         );
@@ -145,7 +147,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         return (
           <>
             <Text as="span">{children}</Text>
-            <Text as="span" className="flex items-center">{icon}</Text>
+            <Text as="span" className="flex items-center">
+              {icon}
+            </Text>
           </>
         );
       }
