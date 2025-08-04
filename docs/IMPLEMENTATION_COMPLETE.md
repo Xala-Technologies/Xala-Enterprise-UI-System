@@ -133,10 +133,10 @@ import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalBo
       {/* Form content */}
     </ModalBody>
     <ModalFooter>
-      <Button variant="outline" onClick={() => setIsOpen(false)}>
+      <Button intent="outline" onClick={() => setIsOpen(false)}>
         Cancel
       </Button>
-      <Button variant="primary">Save Changes</Button>
+      <Button intent="primary">Save Changes</Button>
     </ModalFooter>
   </ModalContent>
 </Modal>
@@ -149,7 +149,7 @@ import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription, ModalBo
   description="This action cannot be undone."
   confirmText="Delete"
   cancelText="Cancel"
-  variant="destructive"
+  intent="destructive"
   onConfirm={handleDelete}
 />
 ```
@@ -278,7 +278,7 @@ import { Pagination, SimplePagination } from '@xala-technologies/ui-system';
       validateFormat={true}
     />
     
-    <Button variant="primary" type="submit">
+    <Button intent="primary" type="submit">
       Lagre
     </Button>
   </Form>
@@ -295,7 +295,7 @@ import { Pagination, SimplePagination } from '@xala-technologies/ui-system';
   description="Er du sikker på at du vil slette denne brukeren? Denne handlingen kan ikke angres."
   confirmText="Slett"
   cancelText="Avbryt"
-  variant="destructive"
+  intent="destructive"
   onConfirm={async () => {
     await deleteUser(userId);
     toast.success('Bruker slettet');

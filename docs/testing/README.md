@@ -1,8 +1,8 @@
 # UI System - Testing Guide
 
-## 🧪 Comprehensive Testing Strategy v5.0
+## 🧪 Comprehensive Testing Strategy v6.3.0
 
-This guide provides testing patterns, best practices, and examples for applications built with the **Xala Universal Design System v5.0**, ensuring **Norwegian compliance**, **accessibility standards**, and **production quality**.
+This guide provides testing patterns, best practices, and examples for applications built with the **Xala Universal Design System v6.3.0**, ensuring **Norwegian compliance**, **accessibility standards**, and **production quality**.
 
 ---
 
@@ -152,7 +152,7 @@ describe('Button Component', () => {
     
     variants.forEach(variant => {
       const { unmount } = renderWithProvider(
-        <Button variant={variant}>Test</Button>
+        <Button intent={variant}>Test</Button>
       );
       
       const button = screen.getByRole('button');
@@ -549,11 +549,11 @@ export const Primary: Story = {
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-      <Button variant="primary">Primary</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="destructive">Destructive</Button>
+      <Button intent="primary">Primary</Button>
+      <Button intent="secondary">Secondary</Button>
+      <Button intent="outline">Outline</Button>
+      <Button intent="ghost">Ghost</Button>
+      <Button intent="destructive">Destructive</Button>
     </div>
   ),
   parameters: {

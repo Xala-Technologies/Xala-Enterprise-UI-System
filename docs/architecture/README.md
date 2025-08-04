@@ -1,8 +1,8 @@
 # UI System - Architecture Guide
 
-## 🏗️ Universal Design System v5.0 Architecture
+## 🏗️ Universal Design System v6.3.0 Architecture
 
-The Xala Universal Design System v5.0 implements a **production-ready, SSR-first architecture** with token-based design, Norwegian compliance, and enterprise-scale performance optimizations.
+The Xala Universal Design System v6.3.0 implements a **production-ready, SSR-first architecture** with token-based design, Norwegian compliance, and enterprise-scale performance optimizations.
 
 ## 🎯 Core Design Principles
 
@@ -611,7 +611,7 @@ export const Platform = {
 ```json
 {
   "name": "@xala-technologies/ui-system",
-  "version": "5.0.0",
+  "version": "6.3.0",
   "type": "module",
   "sideEffects": [
     "*.css",
@@ -783,14 +783,14 @@ export class UISystemErrorBoundary extends Component<
 
 // Default error fallback
 const DefaultErrorFallback = ({ error }: ErrorBoundaryState) => (
-  <Alert variant="destructive" className="m-4">
+  <Alert intent="destructive" className="m-4">
     <AlertTriangle className="h-4 w-4" />
     <AlertTitle>Something went wrong</AlertTitle>
     <AlertDescription>
       {error?.message || 'An unexpected error occurred'}
     </AlertDescription>
     <Button 
-      variant="outline" 
+      intent="outline" 
       onClick={() => window.location.reload()}
       className="mt-2"
     >
@@ -845,7 +845,7 @@ describe('Button Component', () => {
   // Accessibility testing
   it('meets WCAG 2.2 AAA standards', async () => {
     const { container } = render(
-      <Button variant="primary">Test Button</Button>
+      <Button intent="primary">Test Button</Button>
     );
     
     const results = await axe(container);
@@ -890,7 +890,7 @@ describe('Button Component', () => {
     const variants = ['primary', 'secondary', 'outline'] as const;
     
     variants.forEach(variant => {
-      const { container } = render(<Button variant={variant}>Test</Button>);
+      const { container } = render(<Button intent={variant}>Test</Button>);
       const button = container.querySelector('button');
       
       expect(button).toHaveClass(expect.stringContaining(variant));

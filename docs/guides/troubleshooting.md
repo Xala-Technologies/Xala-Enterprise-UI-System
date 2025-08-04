@@ -2,7 +2,7 @@
 
 ## 🚨 Common Issues & Solutions
 
-The Xala Universal Design System v5.0 troubleshooting guide helps developers resolve common issues with setup, configuration, and usage of the enterprise-grade component library.
+The Xala Universal Design System v6.3.0 troubleshooting guide helps developers resolve common issues with setup, configuration, and usage of the enterprise-grade component library.
 
 ## 🩺 Quick Diagnostic Checklist
 
@@ -217,7 +217,7 @@ Could not find a declaration file for module '@xala-technologies/ui-system'
 3. **Verify CVA Variant Usage**
    ```tsx
    // ✅ CORRECT: Use predefined variants
-   <Button variant="primary" size="lg">Primary Button</Button>
+   <Button intent="primary" size="lg">Primary Button</Button>
    <Card variant="elevated" padding="lg">Card Content</Card>
    
    // ❌ INCORRECT: Custom styling
@@ -371,7 +371,7 @@ Invalid personal number format
    ```tsx
    // ✅ CORRECT: Comprehensive accessibility
    <Button
-     variant="primary"
+     intent="primary"
      aria-label="Save document to server"
      aria-describedby="save-help"
    >
@@ -383,7 +383,7 @@ Invalid personal number format
    
    // Icon-only buttons
    <Button
-     variant="outline"
+     intent="outline"
      size="icon"
      aria-label="Delete item"
    >
@@ -715,7 +715,7 @@ Module parse failed: Unexpected character '@'
    
    describe('Button Component', () => {
      it('renders with correct variant classes', () => {
-       render(<Button variant="primary" size="lg">Test Button</Button>);
+       render(<Button intent="primary" size="lg">Test Button</Button>);
        
        const button = screen.getByRole('button');
        expect(button).toHaveClass('bg-primary', 'text-primary-foreground', 'h-11');
@@ -723,7 +723,7 @@ Module parse failed: Unexpected character '@'
      
      it('applies custom className alongside CVA classes', () => {
        render(
-         <Button variant="secondary" className="custom-class">
+         <Button intent="secondary" className="custom-class">
            Custom Button
          </Button>
        );
@@ -742,7 +742,7 @@ Module parse failed: Unexpected character '@'
    
    test('Button meets WCAG 2.2 AAA standards', async () => {
      const { container } = render(
-       <Button variant="primary" aria-label="Accessible button">
+       <Button intent="primary" aria-label="Accessible button">
          Test Button
        </Button>
      );
@@ -771,7 +771,7 @@ Module parse failed: Unexpected character '@'
      return (
        <Stack direction="vertical" gap="lg">
          <Card variant="elevated">
-           <Button variant="primary">SSR Safe</Button>
+           <Button intent="primary">SSR Safe</Button>
          </Card>
        </Stack>
      );
@@ -791,10 +791,10 @@ Module parse failed: Unexpected character '@'
      }, []);
      
      if (!isClient) {
-       return <Button variant="outline">Loading...</Button>;
+       return <Button intent="outline">Loading...</Button>;
      }
      
-     return <Button variant="primary">Client Feature</Button>;
+     return <Button intent="primary">Client Feature</Button>;
    }
    ```
 
@@ -871,7 +871,7 @@ When reporting issues, include:
    function IssueReproduction() {
      return (
        <UISystemProvider>
-         <Button variant="primary">Not working as expected</Button>
+         <Button intent="primary">Not working as expected</Button>
        </UISystemProvider>
      );
    }

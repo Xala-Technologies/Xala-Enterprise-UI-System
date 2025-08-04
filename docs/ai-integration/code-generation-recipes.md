@@ -37,7 +37,7 @@ You are an expert frontend developer using the Xala Universal Design System. Whe
 5. **Professional styling defaults**:
    - Container: `size="lg"` and `padding="xl"`
    - Cards: `variant="elevated"` with `padding="lg"`
-   - Buttons: `variant="primary"` for main actions, `variant="outline"` for secondary
+   - Button intent="outline"` for secondary
    - Spacing: Use `gap="lg"` for sections, `gap="md"` for related items
 
 Available components: Button, Card, Container, Stack, Grid, Text, Input, Select, Textarea, Alert, Modal, Badge, Avatar, Skeleton, and more.
@@ -81,7 +81,7 @@ export const MyComponent = ({
         )}
         {onAction && (
           <Button 
-            variant="primary" 
+            intent="primary" 
             onClick={onAction}
             loading={loading}
             disabled={loading}
@@ -124,7 +124,7 @@ const AdminDashboard = () => (
             <Text variant="h3">Dashboard</Text>
           </Stack>
           {/* User menu */}
-          <Button variant="ghost" icon={<UserIcon />}>Profile</Button>
+          <Button intent="ghost" icon={<UserIcon />}>Profile</Button>
         </Stack>
       </Container>
     </header>
@@ -184,8 +184,8 @@ const LandingPage = () => (
           </Stack>
           
           <Stack direction="horizontal" gap="md">
-            <Button variant="primary" size="xl">Start Free Trial</Button>
-            <Button variant="outline" size="xl">Watch Demo</Button>
+            <Button intent="primary" size="xl">Start Free Trial</Button>
+            <Button intent="outline" size="xl">Watch Demo</Button>
           </Stack>
         </Stack>
       </Container>
@@ -245,14 +245,14 @@ const ContactForm = () => {
               {/* Navigation */}
               <Stack direction="horizontal" justify="space-between">
                 <Button 
-                  variant="outline"
+                  intent="outline"
                   disabled={currentStep === 1}
                   onClick={() => setCurrentStep(prev => prev - 1)}
                 >
                   Previous
                 </Button>
                 <Button 
-                  variant="primary"
+                  intent="primary"
                   loading={isSubmitting}
                   onClick={() => setCurrentStep(prev => prev + 1)}
                 >
@@ -293,9 +293,9 @@ const MobileScreen = () => (
       align="center"
       className="p-4 border-b border-border"
     >
-      <Button variant="ghost" size="sm" icon={<ArrowLeftIcon />} />
+      <Button intent="ghost" size="sm" icon={<ArrowLeftIcon />} />
       <Text variant="h3">Mobile Screen</Text>
-      <Button variant="ghost" size="sm" icon={<MoreIcon />} />
+      <Button intent="ghost" size="sm" icon={<MoreIcon />} />
     </Stack>
     
     {/* Content */}
@@ -310,7 +310,7 @@ const MobileScreen = () => (
                   <Text variant="h4">{item.name}</Text>
                   <Text variant="body" color="secondary">{item.description}</Text>
                 </Stack>
-                <Button variant="outline" size="sm">View</Button>
+                <Button intent="outline" size="sm">View</Button>
               </Stack>
             </Card>
           ))}
@@ -320,7 +320,7 @@ const MobileScreen = () => (
     
     {/* FAB */}
     <Button 
-      variant="primary" 
+      intent="primary" 
       icon={<PlusIcon />}
       className="absolute bottom-20 right-4 rounded-full w-14 h-14"
     />
@@ -642,7 +642,7 @@ const ResponsiveLayout = () => (
                     {item.description}
                   </Text>
                   <Button 
-                    variant="primary" 
+                    intent="primary" 
                     size={{ base: "lg", lg: "md" }}
                     fullWidth={{ base: true, sm: false }}
                   >

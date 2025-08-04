@@ -1,8 +1,8 @@
 # UI System - Localization & Internationalization
 
-## 🌍 Multi-Language Support v5.0
+## 🌍 Multi-Language Support v6.3.0
 
-The Xala Universal Design System v5.0 provides comprehensive internationalization (i18n) support with built-in **Norwegian government compliance**, **RTL language support**, and **WCAG 2.2 AAA accessibility** for all supported languages.
+The Xala Universal Design System v6.3.0 provides comprehensive internationalization (i18n) support with built-in **Norwegian government compliance**, **RTL language support**, and **WCAG 2.2 AAA accessibility** for all supported languages.
 
 ## 🗣️ Supported Languages
 
@@ -54,7 +54,7 @@ function LocalizedComponent() {
       <Text variant="h1">{t('welcome.title')}</Text>
       <Text variant="body">{t('welcome.description')}</Text>
       
-      <Button variant="primary">
+      <Button intent="primary">
         {t('actions.getStarted')}
       </Button>
       
@@ -317,10 +317,10 @@ function RTLComponent() {
         gap="md" 
         justify={isRTL ? 'start' : 'end'} // Adjust alignment for RTL
       >
-        <Button variant="outline">
+        <Button intent="outline">
           {t('actions.cancel')}
         </Button>
-        <Button variant="primary">
+        <Button intent="primary">
           {t('actions.save')}
         </Button>
       </Stack>
@@ -462,7 +462,7 @@ function LanguageSwitcher() {
             </Stack>
           )
         }))}
-        variant="outline"
+        intent="outline"
         size="sm"
       />
     </Stack>
@@ -724,12 +724,12 @@ function PersonalDataForm() {
 
 ```typescript
 // ✅ GOOD: All text localized
-<Button variant="primary">
+<Button intent="primary">
   {t('actions.save')}
 </Button>
 
 // ❌ BAD: Hard-coded English text
-<Button variant="primary">
+<Button intent="primary">
   Save
 </Button>
 ```

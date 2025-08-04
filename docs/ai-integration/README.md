@@ -1,8 +1,14 @@
 # AI Integration - Coding Assistant Documentation
 
-## 🤖 AI-Powered Development with Xala UI System v5.0
+## 🤖 AI-Powered Development with Xala UI System v6.3.0
 
-This documentation provides comprehensive guidance for AI coding assistants (Claude, GPT, Copilot, etc.) to generate high-quality, compliant code using the **Xala Universal Design System v5.0**.
+This documentation provides comprehensive guidance for AI coding assistants (Claude, GPT, Copilot, etc.) to generate high-quality, compliant code using the **Xala Universal Design System v6.3.0**.
+
+### 📚 New in v6.3.0: Comprehensive Storybook Documentation
+- **200+ Interactive Stories**: Complete component examples with live preview
+- **Norwegian Compliance Examples**: Government forms, NSM classification, GDPR patterns
+- **AI Learning Resource**: Perfect reference for understanding component usage
+- **Accessibility Testing**: Integrated WCAG AAA validation in Storybook
 
 ---
 
@@ -182,7 +188,7 @@ function RegistrationForm() {
           required
         />
         
-        <Button variant="primary" type="submit" className="w-full">
+        <Button intent="primary" type="submit" className="w-full">
           {t('form.submit')}
         </Button>
       </Stack>
@@ -205,17 +211,17 @@ function Navigation() {
       <Logo size="md" />
       
       <Stack direction="horizontal" gap="md" align="center">
-        <Button variant="ghost">{t('nav.home')}</Button>
-        <Button variant="ghost">{t('nav.products')}</Button>
-        <Button variant="ghost">{t('nav.about')}</Button>
-        <Button variant="ghost">{t('nav.contact')}</Button>
+        <Button intent="ghost">{t('nav.home')}</Button>
+        <Button intent="ghost">{t('nav.products')}</Button>
+        <Button intent="ghost">{t('nav.about')}</Button>
+        <Button intent="ghost">{t('nav.contact')}</Button>
       </Stack>
       
       <Stack direction="horizontal" gap="sm">
-        <Button variant="outline" size="sm">
+        <Button intent="outline" size="sm">
           {t('auth.login')}
         </Button>
-        <Button variant="primary" size="sm">
+        <Button intent="primary" size="sm">
           {t('auth.signup')}
         </Button>
       </Stack>
@@ -505,7 +511,7 @@ function UserProfileCard({ user }) {
         <Stack direction="vertical" gap="sm" className="flex-1">
           <Stack direction="horizontal" gap="sm" align="center">
             <Text variant="h3">{user.name}</Text>
-            <Badge variant="secondary">{t(`user.role.${user.role}`)}</Badge>
+            <Badge intent="secondary">{t(`user.role.${user.role}`)}</Badge>
           </Stack>
           
           <Text variant="body" color="muted-foreground">
@@ -538,7 +544,7 @@ function ContactForm() {
         <Text variant="h2">{t('contact.form.title')}</Text>
         
         {errors.general && (
-          <Alert variant="destructive">
+          <Alert intent="destructive">
             <Text variant="body">{errors.general}</Text>
           </Alert>
         )}
@@ -571,7 +577,7 @@ function ContactForm() {
             required
           />
           
-          <Button variant="primary" type="submit" className="w-full">
+          <Button intent="primary" type="submit" className="w-full">
             {t('form.submit')}
           </Button>
         </Stack>
@@ -714,4 +720,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 ---
 
-*AI Integration Guide v2.0 - Comprehensive guidance for AI-powered development with the Xala Universal Design System v5.0*
+*AI Integration Guide v2.0 - Comprehensive guidance for AI-powered development with the Xala Universal Design System v6.3.0*

@@ -14,22 +14,25 @@ Essential for data collection and user input.
 
 ```typescript
 interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'success' | 'warning' | 'link';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  intent?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'success' | 'warning' | 'info' | 'link';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'icon';
   fullWidth?: boolean;
-  loading?: boolean;
+  loadingState?: 'idle' | 'loading' | 'success' | 'error';
   disabled?: boolean;
   icon?: ReactNode;
-  iconPosition?: 'left' | 'right';
+  iconPosition?: 'left' | 'right' | 'only';
   children: ReactNode;
   onClick?: () => void;
+  // Norwegian compliance props
+  nsmLevel?: 'OPEN' | 'RESTRICTED' | 'CONFIDENTIAL' | 'SECRET';
+  lang?: string;
 }
 ```
 
 **AI Generation Patterns**:
-- **Primary Actions**: `<Button variant="primary" size="lg">Get Started</Button>`
+- **Primary Actions**: `<Button intent="primary" size="lg">Get Started</Button>`
 - **Form Submission**: `<Button type="submit" loading={isSubmitting}>Submit</Button>`
-- **Destructive Actions**: `<Button variant="destructive">Delete Account</Button>`
+- **Destructive Actions**: `<Button intent="destructive">Delete Account</Button>`
 - **With Icons**: `<Button icon={<PlusIcon />}>Add Item</Button>`
 
 **Smart Defaults**:
@@ -255,7 +258,7 @@ const LoginForm = () => (
         <Input type="email" label="Email" placeholder="Enter your email" required />
         <Input type="password" label="Password" placeholder="Enter your password" required />
       </Stack>
-      <Button variant="primary" size="lg" fullWidth type="submit">
+      <Button intent="primary" size="lg" fullWidth type="submit">
         Sign In
       </Button>
     </Stack>
@@ -270,8 +273,8 @@ const DashboardHeader = () => (
     <Stack direction="horizontal" justify="space-between" align="center">
       <Text variant="h1">Dashboard</Text>
       <Stack direction="horizontal" gap="sm">
-        <Button variant="outline" icon={<RefreshIcon />}>Refresh</Button>
-        <Button variant="primary" icon={<PlusIcon />}>Add New</Button>
+        <Button intent="outline" icon={<RefreshIcon />}>Refresh</Button>
+        <Button intent="primary" icon={<PlusIcon />}>Add New</Button>
       </Stack>
     </Stack>
   </Container>
@@ -291,7 +294,7 @@ const ProductGrid = ({ products }) => (
             <Text variant="body" color="secondary">{product.description}</Text>
             <Stack direction="horizontal" justify="space-between" align="center">
               <Text variant="h3">${product.price}</Text>
-              <Button variant="primary" size="sm">Add to Cart</Button>
+              <Button intent="primary" size="sm">Add to Cart</Button>
             </Stack>
           </Stack>
         </Card>
@@ -394,7 +397,7 @@ const AccessibleForm = () => (
       />
       <Button 
         type="submit" 
-        variant="primary" 
+        intent="primary" 
         size="lg"
         aria-describedby="submit-help"
       >

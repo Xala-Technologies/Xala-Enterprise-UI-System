@@ -1,8 +1,8 @@
 # UI System - Component Library
 
-## 🎯 Universal Design System v5.0 Components
+## 🎯 Universal Design System v6.3.0 Components
 
-The Xala Universal Design System v5.0 provides a comprehensive, enterprise-grade component library built with **Class Variance Authority (CVA)** for consistent styling, **SSR-first architecture**, and **Norwegian compliance** (NSM, GDPR, WCAG 2.2 AAA) built-in.
+The Xala Universal Design System v6.3.0 provides a comprehensive, enterprise-grade component library built with **Class Variance Authority (CVA)** for consistent styling, **SSR-first architecture**, and **Norwegian compliance** (NSM, GDPR, WCAG 2.2 AAA) built-in.
 
 ## 🏗️ CVA-Based Architecture
 
@@ -93,13 +93,13 @@ Essential components for user input and data collection.
 import { Button } from '@xala-technologies/ui-system';
 
 // Basic usage with variants
-<Button variant="primary" size="lg">Get Started</Button>
-<Button variant="outline" size="md">Learn More</Button>
-<Button variant="destructive" size="sm">Delete</Button>
+<Button intent="primary" size="lg">Get Started</Button>
+<Button intent="outline" size="md">Learn More</Button>
+<Button intent="destructive" size="sm">Delete</Button>
 
 // Advanced usage with loading and icons
 <Button 
-  variant="primary" 
+  intent="primary" 
   loading={isSubmitting}
   icon={<PlusIcon />}
   iconPosition="left"
@@ -133,7 +133,7 @@ import { Input } from '@xala-technologies/ui-system';
 <Input 
   type="email" 
   placeholder="Enter your email" 
-  variant="outline"
+  intent="outline"
   size="lg"
 />
 
@@ -148,7 +148,7 @@ import { Input } from '@xala-technologies/ui-system';
 // Norwegian personal number input
 <PersonalNumberInput 
   placeholder="11 digits" 
-  variant="outline"
+  intent="outline"
   required
 />
 ```
@@ -168,7 +168,7 @@ import { Select } from '@xala-technologies/ui-system';
     { value: 'fr-FR', label: 'Français' }
   ]}
   placeholder="Velg språk / Choose language"
-  variant="outline"
+  intent="outline"
   searchable
 />
 ```
@@ -180,7 +180,7 @@ import { TextArea } from '@xala-technologies/ui-system';
 <TextArea
   placeholder="Skriv din melding her..."
   rows={4}
-  variant="outline"
+  intent="outline"
   maxLength={500}
 />
 ```
@@ -219,8 +219,8 @@ import { Stack } from '@xala-technologies/ui-system';
 
 // Horizontal button group
 <Stack direction="horizontal" gap="md" justify="end">
-  <Button variant="outline">Cancel</Button>
-  <Button variant="primary">Save</Button>
+  <Button intent="outline">Cancel</Button>
+  <Button intent="primary">Save</Button>
 </Stack>
 ```
 
@@ -271,7 +271,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@xala-tech
     <p>Feature description goes here.</p>
   </CardContent>
   <CardFooter>
-    <Button variant="primary">Learn More</Button>
+    <Button intent="primary">Learn More</Button>
   </CardFooter>
 </Card>
 
@@ -316,11 +316,11 @@ import { Badge } from '@xala-technologies/ui-system';
 // Status badges
 <Badge variant="success">Active</Badge>
 <Badge variant="warning">Pending</Badge>
-<Badge variant="destructive">Error</Badge>
-<Badge variant="secondary">Draft</Badge>
+<Badge intent="destructive">Error</Badge>
+<Badge intent="secondary">Draft</Badge>
 
 // Norwegian classification badges
-<Badge variant="outline" className="border-red-500 text-red-700">
+<Badge intent="outline" className="border-red-500 text-red-700">
   KONFIDENSIELT
 </Badge>
 ```
@@ -342,7 +342,7 @@ import { DataTable } from '@xala-technologies/ui-system';
     { key: 'name', title: 'Name', sortable: true },
     { key: 'email', title: 'Email', sortable: true },
     { key: 'role', title: 'Role', 
-      render: (user) => <Badge variant="secondary">{user.role}</Badge> 
+      render: (user) => <Badge intent="secondary">{user.role}</Badge> 
     },
     { key: 'status', title: 'Status',
       render: (user) => (
@@ -400,7 +400,7 @@ import { Alert, AlertTitle, AlertDescription } from '@xala-technologies/ui-syste
   <AlertDescription>
     Your changes have been saved successfully.
   </AlertDescription>
-  <Button variant="outline" size="sm" className="ml-auto">
+  <Button intent="outline" size="sm" className="ml-auto">
     View Details
   </Button>
 </Alert>
@@ -441,10 +441,10 @@ import { Modal, ModalContent, ModalHeader, ModalTitle, ModalDescription } from '
     </ModalHeader>
     
     <div className="flex justify-end gap-2 mt-6">
-      <Button variant="outline" onClick={() => setIsOpen(false)}>
+      <Button intent="outline" onClick={() => setIsOpen(false)}>
         Cancel
       </Button>
-      <Button variant="destructive" onClick={handleDelete}>
+      <Button intent="destructive" onClick={handleDelete}>
         Delete
       </Button>
     </div>
@@ -515,7 +515,7 @@ import { PersonalNumberInput } from '@xala-technologies/ui-system';
   placeholder="11 siffer"
   gdprCompliant={true}
   auditTrail={true}
-  variant="outline"
+  intent="outline"
 />
 ```
 
@@ -525,7 +525,7 @@ import { OrganizationNumberInput } from '@xala-technologies/ui-system';
 
 <OrganizationNumberInput
   placeholder="9 siffer"
-  variant="outline"
+  intent="outline"
   validateFormat={true}
 />
 ```
@@ -587,7 +587,7 @@ function CustomFeatureCard({ title, description, icon }: Props) {
         <Text variant="body" color="muted" align="center">
           {description}
         </Text>
-        <Button variant="outline" size="sm">
+        <Button intent="outline" size="sm">
           Learn More
         </Button>
       </Stack>
@@ -683,7 +683,7 @@ describe('Button Component', () => {
   it('renders with correct variant classes', () => {
     render(
       <UISystemProvider>
-        <Button variant="primary">Test Button</Button>
+        <Button intent="primary">Test Button</Button>
       </UISystemProvider>
     );
 
@@ -713,7 +713,7 @@ expect.extend(toHaveNoViolations);
 test('Button meets WCAG 2.2 AAA standards', async () => {
   const { container } = render(
     <UISystemProvider>
-      <Button variant="primary">Accessible Button</Button>
+      <Button intent="primary">Accessible Button</Button>
     </UISystemProvider>
   );
 

@@ -1,8 +1,8 @@
-# Getting Started - Xala Universal Design System v5.0
+# Getting Started - Xala Universal Design System v6.3.0
 
 ## 🚀 5-Minute Quick Start
 
-Get up and running with the Xala Universal Design System v5.0 in just 5 minutes.
+Get up and running with the Xala Universal Design System v6.3.0 in just 5 minutes.
 
 ---
 
@@ -112,7 +112,7 @@ import { Button } from '@xala-technologies/ui-system';
 
 function MyFirstComponent() {
   return (
-    <Button variant="primary" size="lg">
+    <Button intent="primary" size="lg">
       Kom i gang
     </Button>
   );
@@ -141,10 +141,10 @@ function WelcomeCard() {
           {t('welcome.description')}
         </Text>
         <Stack direction="horizontal" gap="md">
-          <Button variant="primary" size="lg">
+          <Button intent="primary" size="lg">
             {t('actions.getStarted')}
           </Button>
-          <Button variant="outline" size="lg">
+          <Button intent="outline" size="lg">
             {t('actions.learnMore')}
           </Button>
         </Stack>
@@ -288,7 +288,7 @@ function ThemeToggle() {
 
   return (
     <Button 
-      variant="outline" 
+      intent="outline" 
       onClick={() => setColorMode(colorMode === 'light' ? 'dark' : 'light')}
     >
       {colorMode === 'light' ? '🌙' : '☀️'}
@@ -426,7 +426,7 @@ function ContactForm() {
             required
           />
           
-          <Button variant="primary" type="submit" className="w-full">
+          <Button intent="primary" type="submit" className="w-full">
             Send melding
           </Button>
         </Stack>
@@ -516,7 +516,7 @@ function GoodExample() {
     <Card variant="elevated" padding="lg">
       <Stack direction="vertical" gap="md">
         <Text variant="h1">Title</Text>
-        <Button variant="primary">Click</Button>
+        <Button intent="primary">Click</Button>
       </Stack>
     </Card>
   );
@@ -571,4 +571,4 @@ function GoodExample() {
 
 ---
 
-*Getting Started Guide v2.0 - Quick setup for the Xala Universal Design System v5.0*
+*Getting Started Guide v2.0 - Quick setup for the Xala Universal Design System v6.3.0*

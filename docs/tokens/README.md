@@ -1,8 +1,8 @@
 # UI System - Design Token System
 
-## 🎨 Token-Based Design System v5.0
+## 🎨 Token-Based Design System v6.3.0
 
-The Xala Universal Design System v5.0 uses a sophisticated **token-based architecture** that ensures consistency, scalability, and easy theming across all components and platforms. Our design tokens provide a single source of truth for all design decisions.
+The Xala Universal Design System v6.3.0 uses a sophisticated **token-based architecture** that ensures consistency, scalability, and easy theming across all components and platforms. Our design tokens provide a single source of truth for all design decisions.
 
 ## 🏗️ Token Architecture
 

@@ -1,8 +1,15 @@
-# Xala Universal Design System v5.0 - Developer Documentation
+# Xala Universal Design System v6.3.0 - Developer Documentation
 
 ## 🎯 For Developers & AI Coding Agents
 
-This documentation provides comprehensive guidance for building enterprise-grade applications with the **Xala Universal Design System v5.0** - a Norwegian-compliant, CVA-powered component library with SSR-first architecture and WCAG 2.2 AAA accessibility.
+This documentation provides comprehensive guidance for building enterprise-grade applications with the **Xala Universal Design System v6.3.0** - a Norwegian-compliant, CVA-powered component library with SSR-first architecture, comprehensive Storybook documentation, and WCAG 2.2 AAA accessibility.
+
+### ✨ What's New in v6.3.0
+- **Complete Storybook Integration**: 200+ interactive component stories with Norwegian compliance examples
+- **TypeScript Build Fixes**: Resolved all compilation errors for production readiness  
+- **Enhanced Button System**: Semantic Button components with `intent` prop architecture
+- **Icon Compatibility**: Full lucide-react integration with React 18 type safety
+- **Production Ready**: Zero build errors, full SSR compatibility verified
 
 ---
 
@@ -36,7 +43,7 @@ function App() {
           <Text variant="body" align="center">
             Enterprise-grade UI system med norsk compliance.
           </Text>
-          <Button variant="primary" size="lg">
+          <Button intent="primary" size="lg">
             Kom i gang
           </Button>
         </Stack>
@@ -213,7 +220,7 @@ const tokens = {
 // WCAG 2.2 AAA Accessibility
 <Button 
   aria-label={t('a11y.button.save.document')} 
-  variant="primary"
+  intent="primary"
 >
   {t('actions.save')}
 </Button>
@@ -249,7 +256,7 @@ function ProductCard({ product }) {
         <Text variant="body" color="muted-foreground">
           {product.description}
         </Text>
-        <Button variant="primary" size="sm">
+        <Button intent="primary" size="sm">
           {t('actions.addToCart')}
         </Button>
       </Stack>
@@ -437,7 +444,7 @@ ComponentName.displayName = 'ComponentName';
     type="email"
     required
   />
-  <Button variant="primary" type="submit">
+  <Button intent="primary" type="submit">
     {t('form.submit')}
   </Button>
 </Stack>
@@ -446,7 +453,7 @@ ComponentName.displayName = 'ComponentName';
 <Stack direction="horizontal" gap="md" align="center">
   <Logo />
   <Navigation />
-  <Button variant="outline" size="sm">
+  <Button intent="outline" size="sm">
     {t('auth.login')}
   </Button>
 </Stack>
@@ -520,8 +527,8 @@ ComponentName.displayName = 'ComponentName';
 
 ---
 
-*Xala Universal Design System v5.0 - Enterprise-grade UI system with Norwegian compliance*
+*Xala Universal Design System v6.3.0 - Enterprise-grade UI system with Norwegian compliance*
 
 **Last Updated**: August 2024  
-**Documentation Version**: 3.0  
-**System Version**: 5.0.0
+**Documentation Version**: 3.1  
+**System Version**: 6.3.0

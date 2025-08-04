@@ -1,8 +1,8 @@
 # UI System - SSR Implementation Guide
 
-## 🚀 Server-Side Rendering with v5.0
+## 🚀 Server-Side Rendering with v6.3.0
 
-The Xala Universal Design System v5.0 provides production-ready patterns for deploying in Server-Side Rendering (SSR) environments with **zero hydration mismatches** and **CVA-based architecture**.
+The Xala Universal Design System v6.3.0 provides production-ready patterns for deploying in Server-Side Rendering (SSR) environments with **zero hydration mismatches** and **CVA-based architecture**.
 
 ## ⚡ Quick Start - SSR Implementation
 
@@ -62,7 +62,7 @@ export default function HomePage() {
             <Text variant="body" align="center">
               Start din reise med vår enterprise-grade UI-system.
             </Text>
-            <Button variant="primary" size="lg">
+            <Button intent="primary" size="lg">
               Kom i gang
             </Button>
           </Stack>
@@ -298,7 +298,7 @@ export function LocaleSwitcher() {
       onValueChange={setLocale}
       options={localeOptions}
       placeholder="Velg språk"
-      variant="outline"
+      intent="outline"
     />
   );
 }
@@ -315,7 +315,7 @@ The CVA-based architecture provides superior performance:
 import { Button, Card, Stack } from '@xala-technologies/ui-system';
 
 // Components generate static CSS classes
-<Button variant="primary" size="lg">
+<Button intent="primary" size="lg">
   // Generates: "bg-primary text-primary-foreground h-11 px-8"
   // No runtime calculations!
 </Button>
@@ -419,13 +419,13 @@ export class UISystemErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <Alert variant="destructive" className="m-4">
+        <Alert intent="destructive" className="m-4">
           <AlertTitle>UI System Error</AlertTitle>
           <AlertDescription>
             {this.state.error?.message || 'An unexpected error occurred'}
           </AlertDescription>
           <Button 
-            variant="outline" 
+            intent="outline" 
             onClick={() => window.location.reload()}
             className="mt-2"
           >
@@ -537,7 +537,7 @@ describe('SSR Compatibility', () => {
   test('components render without hydration errors', () => {
     const { getByText } = render(
       <UISystemProvider theme="light" locale="nb-NO">
-        <Button variant="primary">Test Button</Button>
+        <Button intent="primary">Test Button</Button>
       </UISystemProvider>
     );
 
@@ -547,13 +547,13 @@ describe('SSR Compatibility', () => {
   test('maintains consistent server/client rendering', () => {
     const serverMarkup = render(
       <UISystemProvider theme="light">
-        <Button variant="primary" size="lg">SSR Test</Button>
+        <Button intent="primary" size="lg">SSR Test</Button>
       </UISystemProvider>
     );
 
     const clientMarkup = render(
       <UISystemProvider theme="light">
-        <Button variant="primary" size="lg">SSR Test</Button>
+        <Button intent="primary" size="lg">SSR Test</Button>
       </UISystemProvider>
     );
 
@@ -572,7 +572,7 @@ import { Button } from '@xala-technologies/ui-system';
 describe('CVA SSR Compatibility', () => {
   test('applies correct variant classes during SSR', () => {
     const { container } = render(
-      <Button variant="primary" size="lg">CVA Test</Button>
+      <Button intent="primary" size="lg">CVA Test</Button>
     );
 
     const button = container.querySelector('button');
@@ -581,7 +581,7 @@ describe('CVA SSR Compatibility', () => {
 
   test('handles compound variants correctly', () => {
     const { container } = render(
-      <Button variant="outline" size="sm">Compound Test</Button>
+      <Button intent="outline" size="sm">Compound Test</Button>
     );
 
     const button = container.querySelector('button');
@@ -709,12 +709,12 @@ module.exports = {
 **Solution**: Ensure consistent props and avoid client-only values
 ```typescript
 // ✅ CORRECT: Consistent server/client rendering
-<Button variant="primary" size="lg">
+<Button intent="primary" size="lg">
   Consistent Button
 </Button>
 
 // ❌ INCORRECT: Dynamic client-only values
-<Button variant={Math.random() > 0.5 ? 'primary' : 'secondary'}>
+<Button intent={Math.random() > 0.5 ? 'primary' : 'secondary'}>
   Random Button
 </Button>
 ```

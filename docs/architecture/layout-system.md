@@ -1,8 +1,8 @@
 # UI System - Layout System
 
-## 🏗️ Enterprise Layout Architecture v5.0
+## 🏗️ Enterprise Layout Architecture v6.3.0
 
-The Xala Universal Design System v5.0 provides a comprehensive, **token-driven layout system** for building accessible, responsive, and maintainable UIs with **CVA-based components**, **Norwegian compliance**, and **platform-specific optimizations**.
+The Xala Universal Design System v6.3.0 provides a comprehensive, **token-driven layout system** for building accessible, responsive, and maintainable UIs with **CVA-based components**, **Norwegian compliance**, and **platform-specific optimizations**.
 
 ## 📐 Layout Philosophy
 
@@ -83,8 +83,8 @@ function StackExamples() {
       
       {/* Horizontal button group */}
       <Stack direction="horizontal" gap="md" justify="end" align="center">
-        <Button variant="outline">Cancel</Button>
-        <Button variant="primary">Save</Button>
+        <Button intent="outline">Cancel</Button>
+        <Button intent="primary">Save</Button>
       </Stack>
       
       {/* Responsive stack */}
@@ -178,7 +178,7 @@ function LandingPage() {
             <Text variant="h1" align="center">
               Velkommen til vårt system
             </Text>
-            <Button variant="secondary" size="lg">
+            <Button intent="secondary" size="lg">
               Kom i gang
             </Button>
           </Stack>
@@ -302,7 +302,7 @@ function MarketingPage() {
           <Stack direction="horizontal" justify="space-between" align="center">
             <Logo variant="light" />
             <WebNavigation />
-            <Button variant="primary">Get Started</Button>
+            <Button intent="primary">Get Started</Button>
           </Stack>
         </Container>
       </WebsiteLayout.Header>
@@ -319,8 +319,8 @@ function MarketingPage() {
                 Build accessible, compliant applications with Norwegian government standards.
               </Text>
               <Stack direction="horizontal" gap="md">
-                <Button variant="primary" size="lg">Start Building</Button>
-                <Button variant="outline" size="lg">View Docs</Button>
+                <Button intent="primary" size="lg">Start Building</Button>
+                <Button intent="outline" size="lg">View Docs</Button>
               </Stack>
             </Stack>
           </Container>
@@ -383,18 +383,18 @@ function LoginPage() {
                   <Input
                     type="email"
                     placeholder="E-postadresse"
-                    variant="outline"
+                    intent="outline"
                     size="lg"
                   />
                   <Input
                     type="password"
                     placeholder="Passord"
-                    variant="outline"
+                    intent="outline"
                     size="lg"
                   />
                 </Stack>
                 
-                <Button variant="primary" size="lg" className="w-full">
+                <Button intent="primary" size="lg" className="w-full">
                   Logg inn
                 </Button>
                 
@@ -402,7 +402,7 @@ function LoginPage() {
                   <Text variant="body-small" color="muted-foreground">
                     Har du ikke konto?
                   </Text>
-                  <Button variant="link" size="sm">
+                  <Button intent="link" size="sm">
                     Registrer deg
                   </Button>
                 </Stack>
@@ -415,11 +415,11 @@ function LoginPage() {
       <AuthLayout.Footer>
         <Container size="sm">
           <Stack direction="horizontal" justify="center" gap="md">
-            <Button variant="link" size="sm">Personvern</Button>
+            <Button intent="link" size="sm">Personvern</Button>
             <Separator orientation="vertical" />
-            <Button variant="link" size="sm">Vilkår</Button>
+            <Button intent="link" size="sm">Vilkår</Button>
             <Separator orientation="vertical" />
-            <Button variant="link" size="sm">Support</Button>
+            <Button intent="link" size="sm">Support</Button>
           </Stack>
         </Container>
       </AuthLayout.Footer>
@@ -548,7 +548,7 @@ function ClassifiedDocumentLayout({
           <header className="border-b pb-4">
             <Stack direction="horizontal" justify="space-between" align="center">
               <Text variant="h1">Klassifisert Dokument</Text>
-              <Badge variant="outline" className="border-red-500 text-red-700">
+              <Badge intent="outline" className="border-red-500 text-red-700">
                 {classification}
               </Badge>
             </Stack>

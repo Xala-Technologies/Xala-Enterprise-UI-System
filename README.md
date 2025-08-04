@@ -1,6 +1,6 @@
-# Xala Universal Design System v5.0.0
+# Xala Universal Design System v6.3.0
 
-> **AI-Native, Universal Design System - Build Professional Applications Across All Platforms in Minutes**
+> **Enterprise-Grade UI System with Comprehensive Storybook Documentation - Production-Ready Components with Norwegian Compliance**
 
 [![npm version](https://badge.fury.io/js/%40xala-technologies%2Fui-system.svg)](https://badge.fury.io/js/%40xala-technologies%2Fui-system)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)

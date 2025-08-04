@@ -1,8 +1,8 @@
 # UI System - Theming & Customization
 
-## 🎨 Advanced Theming System v5.0
+## 🎨 Advanced Theming System v6.3.0
 
-The Xala Universal Design System v5.0 provides a powerful, **token-driven theming system** with **dynamic theme switching**, **SSR support**, **Norwegian compliance**, and **brand customization** capabilities while maintaining **WCAG 2.2 AAA accessibility**.
+The Xala Universal Design System v6.3.0 provides a powerful, **token-driven theming system** with **dynamic theme switching**, **SSR support**, **Norwegian compliance**, and **brand customization** capabilities while maintaining **WCAG 2.2 AAA accessibility**.
 
 ---
 
@@ -401,7 +401,7 @@ const customButton = cva(
 );
 
 // Use in component
-<Button variant="brand" size="lg">
+<Button intent="brand" size="lg">
   Brand Action
 </Button>
 ```
@@ -463,7 +463,7 @@ function AdvancedThemeControls() {
       />
       
       {/* Reset to defaults */}
-      <Button variant="outline" onClick={resetTheme}>
+      <Button intent="outline" onClick={resetTheme}>
         Reset Theme
       </Button>
     </div>

@@ -1,7 +1,7 @@
 /**
- * @fileoverview Storybook Preview Configuration - Enterprise UI System v6.0.0
+ * @fileoverview Storybook Preview Configuration - Enterprise UI System v6.3.0
  * @description Global Storybook setup with design tokens, themes, and accessibility
- * @version 6.0.0
+ * @version 6.3.0
  * @compliance WCAG AAA, Norwegian Standards, SSR-Safe
  */
 

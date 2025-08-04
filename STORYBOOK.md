@@ -1,8 +1,8 @@
-# Storybook Documentation - Xala Enterprise UI System
+# Storybook Documentation - Xala Enterprise UI System v6.3.0
 
 ## Overview
 
-The Xala Enterprise UI System includes comprehensive Storybook documentation with interactive component examples, Norwegian compliance patterns, and enterprise-grade use cases.
+The Xala Enterprise UI System includes comprehensive Storybook documentation with interactive component examples, Norwegian compliance patterns, and enterprise-grade use cases. Version 6.3.0 includes full TypeScript compatibility and production-ready components.
 
 ## Quick Start
 
@@ -176,11 +176,11 @@ const meta: Meta<typeof Component> = {
     }
   },
   argTypes: {
-    // Define controls for props
-    variant: {
+    // Define controls for props (Button example)
+    intent: {
       control: { type: 'select' },
-      options: ['primary', 'secondary'],
-      description: 'Visual variant',
+      options: ['primary', 'secondary', 'outline', 'ghost', 'destructive'],
+      description: 'Button semantic intent',
       table: {
         category: 'Design',
         defaultValue: { summary: 'primary' }
@@ -189,7 +189,7 @@ const meta: Meta<typeof Component> = {
   },
   args: {
     // Default prop values
-    variant: 'primary'
+    intent: 'primary'
   },
   tags: ['autodocs']
 } satisfies Meta<typeof Component>;

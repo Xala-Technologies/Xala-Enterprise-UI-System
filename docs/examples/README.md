@@ -2,7 +2,7 @@
 
 ## 🎯 Real-World Implementation Examples
 
-This section provides comprehensive, production-ready examples using the **Xala Universal Design System v5.0** with proper **Norwegian compliance**, **CVA architecture**, and **accessibility standards**.
+This section provides comprehensive, production-ready examples using the **Xala Universal Design System v6.3.0** with proper **Norwegian compliance**, **CVA architecture**, and **accessibility standards**.
 
 ---
 
@@ -57,7 +57,7 @@ function MetricCard({ title, value, change, trend }) {
         
         <Text variant="h2">{formatNumber(value)}</Text>
         
-        <Button variant="ghost" size="sm">
+        <Button intent="ghost" size="sm">
           {t('dashboard.viewDetails')}
         </Button>
       </Stack>
@@ -89,7 +89,7 @@ function PersonalDataForm() {
         required
       />
       
-      <Button variant="primary" type="submit">
+      <Button intent="primary" type="submit">
         {t('form.submit')}
       </Button>
     </Stack>
@@ -109,7 +109,7 @@ function UserTable({ users }) {
     <Stack direction="vertical" gap="lg">
       <Stack direction="horizontal" gap="md" justify="space-between">
         <Text variant="h2">{t('users.title')}</Text>
-        <Button variant="primary">
+        <Button intent="primary">
           {t('users.addNew')}
         </Button>
       </Stack>
@@ -152,10 +152,10 @@ function UserTable({ users }) {
             header: t('users.table.actions'),
             render: (_, user) => (
               <Stack direction="horizontal" gap="sm">
-                <Button variant="ghost" size="sm">
+                <Button intent="ghost" size="sm">
                   {t('actions.edit')}
                 </Button>
-                <Button variant="ghost" size="sm">
+                <Button intent="ghost" size="sm">
                   {t('actions.delete')}
                 </Button>
               </Stack>
@@ -183,7 +183,7 @@ function Navigation() {
       <Stack direction="vertical" gap="md" padding="md">
         <Stack direction="horizontal" justify="space-between" align="center">
           <Logo size="sm" />
-          <Button variant="ghost" size="sm" aria-label={t('nav.toggleMenu')}>
+          <Button intent="ghost" size="sm" aria-label={t('nav.toggleMenu')}>
             ☰
           </Button>
         </Stack>
@@ -196,17 +196,17 @@ function Navigation() {
       <Logo size="md" />
       
       <Stack direction="horizontal" gap="md">
-        <Button variant="ghost">{t('nav.home')}</Button>
-        <Button variant="ghost">{t('nav.products')}</Button>
-        <Button variant="ghost">{t('nav.about')}</Button>
-        <Button variant="ghost">{t('nav.contact')}</Button>
+        <Button intent="ghost">{t('nav.home')}</Button>
+        <Button intent="ghost">{t('nav.products')}</Button>
+        <Button intent="ghost">{t('nav.about')}</Button>
+        <Button intent="ghost">{t('nav.contact')}</Button>
       </Stack>
       
       <Stack direction="horizontal" gap="sm">
-        <Button variant="outline" size="sm">
+        <Button intent="outline" size="sm">
           {t('auth.login')}
         </Button>
-        <Button variant="primary" size="sm">
+        <Button intent="primary" size="sm">
           {t('auth.signup')}
         </Button>
       </Stack>
@@ -247,7 +247,7 @@ function ThemedFeatureCard({ feature }) {
           </Text>
         </Stack>
         
-        <Button variant="primary">
+        <Button intent="primary">
           {t(`features.${feature.key}.action`)}
         </Button>
       </Stack>
@@ -300,7 +300,7 @@ function GovernmentServiceCard({ service, classification = 'ÅPEN' }) {
             <Text variant="caption" color="muted-foreground">
               {t('services.processingTime')}: {service.processingTime}
             </Text>
-            <Button variant="primary" size="sm">
+            <Button intent="primary" size="sm">
               {t('services.startApplication')}
             </Button>
           </Stack>
@@ -341,7 +341,7 @@ function AccessibleContactForm() {
         </Text>
         
         {errors.form && (
-          <Alert variant="destructive" role="alert">
+          <Alert intent="destructive" role="alert">
             <Text variant="body">{errors.form}</Text>
           </Alert>
         )}
@@ -412,7 +412,7 @@ function AccessibleContactForm() {
         </fieldset>
         
         <Button 
-          variant="primary" 
+          intent="primary" 
           type="submit" 
           disabled={!isValid}
           className="w-full"
