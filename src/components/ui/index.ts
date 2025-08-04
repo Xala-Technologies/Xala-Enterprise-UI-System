@@ -133,3 +133,40 @@ export {
   type ImageProps,
   type ToastProps,
 } from '../semantic';
+
+// New components for v6.0
+export { 
+  DataTable, 
+  type DataTableProps,
+  type DataTableColumn,
+  type DataTablePagination 
+} from './data-table';
+
+export { 
+  ClassificationIndicator,
+  ClassificationBanner,
+  type ClassificationIndicatorProps,
+  type ClassificationBannerProps
+} from './classification-indicator';
+
+export { 
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalDescription,
+  ModalBody,
+  ModalFooter,
+  ModalTrigger,
+  ConfirmModal,
+  type ModalProps,
+  type ModalContentProps,
+  type ConfirmModalProps
+} from './modal';
+
+export { 
+  Pagination,
+  SimplePagination,
+  type PaginationProps,
+  type SimplePaginationProps
+} from './pagination';

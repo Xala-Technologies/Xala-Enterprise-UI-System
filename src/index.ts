@@ -168,6 +168,38 @@ export {
   AlertDescription,
   type AlertProps,
   type AlertVariant,
+  
+  // Data display components
+  DataTable,
+  type DataTableProps,
+  type DataTableColumn,
+  type DataTablePagination,
+  
+  // Norwegian compliance components
+  ClassificationIndicator,
+  ClassificationBanner,
+  type ClassificationIndicatorProps,
+  type ClassificationBannerProps,
+  
+  // Modal components
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalTitle,
+  ModalDescription,
+  ModalBody,
+  ModalFooter,
+  ModalTrigger,
+  ConfirmModal,
+  type ModalProps,
+  type ModalContentProps,
+  type ConfirmModalProps,
+  
+  // Pagination components
+  Pagination,
+  SimplePagination,
+  type PaginationProps,
+  type SimplePaginationProps,
 } from './components/ui';
 
 // ===== LAYOUT COMPONENTS =====
@@ -240,11 +272,43 @@ export {
   type WebLayoutProps,
 } from './layouts/web/WebLayout';
 
+// ===== FORM COMPONENTS =====
+export {
+  // Norwegian compliance inputs
+  OrganizationNumberInput,
+  type OrganizationNumberInputProps,
+  PersonalNumberInput,
+  type PersonalNumberInputProps,
+  
+  // Form components
+  Form,
+  type FormProps,
+  TextArea,
+  type TextAreaProps,
+} from './components/form';
+
+// ===== NAVIGATION COMPONENTS =====
+export {
+  // Navigation bar
+  WebNavbar,
+  MobileWebNavbar,
+  type WebNavbarProps,
+  type MobileWebNavbarProps,
+  type WebNavbarVariant,
+} from './components/navigation';
+
 // ===== PROVIDERS =====
+export { 
+  UISystemProvider, 
+  useUISystem,
+  type UISystemProviderProps 
+} from './providers/UISystemProvider';
 export { ThemeProvider, type ThemeProviderProps } from './providers/ThemeProvider';
 export { DesignSystemProvider, type DesignSystemProviderProps } from './providers/DesignSystemProvider';
 export { BrandingProvider, type BrandingProviderProps } from './providers/BrandingProvider';
 export { ResponsiveLayoutProvider, type ResponsiveLayoutProviderProps } from './providers/ResponsiveLayoutProvider';
+export { SSRProvider, type SSRProviderProps } from './providers/SSRProvider';
+export { HydrationProvider, type HydrationProviderProps } from './providers/HydrationProvider';
 
 // ===== HOOKS ===== (Temporarily removed for clean build)
 
