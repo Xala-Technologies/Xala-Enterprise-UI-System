@@ -41,49 +41,49 @@
       }
     },
     "./components": {
+      "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js",
-      "require": "./dist/components/index.js",
-      "types": "./dist/components/index.d.ts"
+      "require": "./dist/components/index.js"
     },
     "./components/ui": {
+      "types": "./dist/components/ui/index.d.ts",
       "import": "./dist/components/ui/index.js",
-      "require": "./dist/components/ui/index.js",
-      "types": "./dist/components/ui/index.d.ts"
+      "require": "./dist/components/ui/index.js"
     },
     "./providers": {
+      "types": "./dist/providers/index.d.ts",
       "import": "./dist/providers/index.js",
-      "require": "./dist/providers/index.js",
-      "types": "./dist/providers/index.d.ts"
+      "require": "./dist/providers/index.js"
     },
     "./providers/DesignSystemProvider": {
+      "types": "./dist/providers/DesignSystemProvider.d.ts",
       "import": "./dist/providers/DesignSystemProvider.js",
-      "require": "./dist/providers/DesignSystemProvider.js",
-      "types": "./dist/providers/DesignSystemProvider.d.ts"
+      "require": "./dist/providers/DesignSystemProvider.js"
     },
     "./layouts": {
+      "types": "./dist/layouts/index.d.ts",
       "import": "./dist/layouts/index.js",
-      "require": "./dist/layouts/index.js",
-      "types": "./dist/layouts/index.d.ts"
+      "require": "./dist/layouts/index.js"
     },
     "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts"
+      "require": "./dist/hooks/index.js"
     },
     "./utils": {
+      "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
-      "require": "./dist/utils/index.js",
-      "types": "./dist/utils/index.d.ts"
+      "require": "./dist/utils/index.js"
     },
     "./templates": {
+      "types": "./dist/utils/templateLoader.d.ts",
       "import": "./dist/utils/templateLoader.js",
-      "require": "./dist/utils/templateLoader.js",
-      "types": "./dist/utils/templateLoader.d.ts"
+      "require": "./dist/utils/templateLoader.js"
     },
     "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
       "import": "./dist/tokens/index.js",
-      "require": "./dist/tokens/index.js",
-      "types": "./dist/tokens/index.d.ts"
+      "require": "./dist/tokens/index.js"
     },
     "./tailwind.preset": "./tailwind.preset.js",
     "./tailwind.config": "./tailwind.config.js",
@@ -100,8 +100,7 @@
   "scripts": {
     "dev": "echo 'Use pnpm build for development builds'",
     "build": "pnpm run clean && pnpm run build:ts && pnpm run fix:imports && pnpm run build:css && pnpm run postbuild",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+
     "build:watch": "pnpm run build:ts --watch",
     "postbuild": "node scripts/fix-ssr-compatibility.cjs",
     "build:ts": "tsc --project tsconfig.build.json",
@@ -135,32 +134,29 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
-    "@jest/types": "^29.6.3",
-    "@storybook/addon-a11y": "^8.4.7",
-    "@storybook/addon-actions": "^8.4.7",
-    "@storybook/addon-backgrounds": "^8.4.7",
-    "@storybook/addon-controls": "^8.4.7",
-    "@storybook/addon-docs": "^8.4.7",
-    "@storybook/addon-essentials": "^8.4.7",
-    "@storybook/addon-viewport": "^8.4.7",
-    "@storybook/react": "^8.4.7",
-    "@storybook/react-vite": "^8.4.7",
-    "@storybook/theming": "^8.4.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.9.1",
-    "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.14.0",
     "@typescript-eslint/parser": "^8.14.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.1.0",
     "eslint": "^9.15.0",
+
     "globals": "^15.12.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "postcss": "^8.5.6",
+    "postcss-custom-properties": "^14.0.6",
+    "postcss-import": "^16.1.1",
+    "postcss-nesting": "^13.0.2",
     "rimraf": "^6.0.1",
-    "storybook": "^8.4.7",
+
+    "tailwindcss": "^4.1.11",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.14.0",
@@ -169,9 +165,10 @@
   "dependencies": {
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
-    "lucide-react": "^0.447.0"
+    "lucide-react": "^0.447.0",
+    "tailwind-merge": "^3.3.1",
+    "type-fest": "^4.41.0"
   },
-  "optionalDependencies": {},
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"

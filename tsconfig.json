@@ -1,5 +1,4 @@
 {
-  "extends": "./node_modules/@xala-technologies/enterprise-standards/configs/typescript/base.json",
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",

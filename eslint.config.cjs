@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 /**
  * @fileoverview ESLint Configuration - Enterprise Standards Compliant
  * @description Modern ESLint configuration using the new flat config format

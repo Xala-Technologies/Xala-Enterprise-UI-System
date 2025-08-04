@@ -46,8 +46,7 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        require('tailwindcss'),
-        require('autoprefixer'),
+        // Note: PostCSS plugins will be loaded from postcss.config.js
       ],
     },
   },
