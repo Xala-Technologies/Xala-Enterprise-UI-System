@@ -5,6 +5,69 @@ All notable changes to `@xala-technologies/ui-system` will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.0] - 2025-08-04
+
+### 📚 Documentation Consolidation & AI Integration Enhancement
+
+#### **Comprehensive Documentation Restructure**
+- **MERGED** `docs/` and `docs-v2/` directories into unified documentation structure
+- **FOCUSED** exclusively on UI System components, tokens, theming, and semantic patterns
+- **REMOVED** all CLI and MCP server references (moved to separate repositories)
+- **STREAMLINED** for developers and AI coding agents with clear compliance rules
+
+#### **New Documentation Architecture**
+```
+docs/
+├── README.md                    # Main developer & AI agent guide
+├── components/                  # Complete component library (100+ components)
+├── tokens/                     # Three-layer token system documentation
+├── theming/                    # Advanced theming & customization
+├── architecture/               # CVA architecture & SSR patterns
+├── guides/                     # Developer guides (getting started, troubleshooting)
+├── ai-integration/             # Comprehensive AI assistant documentation
+├── examples/                   # Real-world implementation examples
+└── testing/                    # Production-ready testing patterns
+```
+
+#### **AI Coding Assistant Integration**
+- **COMPREHENSIVE** AI guidelines with mandatory compliance rules
+- **TEMPLATE-BASED** code generation patterns for consistent output
+- **NORWEGIAN COMPLIANCE** integration for NSM, GDPR, WCAG 2.2 AAA
+- **COMPONENT SPECIFICATIONS** machine-readable for AI agents
+- **ERROR PREVENTION** guides with common TypeScript pitfalls
+
+#### **Enhanced Developer Experience**
+- **5-MINUTE QUICK START** guide for immediate productivity
+- **PRODUCTION-READY EXAMPLES** for real-world implementation patterns
+- **COMPREHENSIVE TESTING** guide with 95%+ coverage requirements
+- **TROUBLESHOOTING** documentation for common issues and solutions
+
+#### **Key Documentation Features**
+- **Zero Tolerance Rules** for AI agents (no raw HTML, no hardcoded colors, etc.)
+- **CVA Component Templates** for consistent architecture patterns
+- **Norwegian Government Themes** with official color palettes and compliance
+- **Accessibility Testing** patterns with WCAG 2.2 AAA validation
+- **Performance Benchmarks** and optimization strategies
+
+### ✨ Added
+- Unified documentation structure focused on UI System development
+- Comprehensive AI coding assistant guidelines and templates
+- Real-world implementation examples and patterns
+- Production-ready testing strategies and utilities
+- Advanced theming documentation with Norwegian government compliance
+
+### 🔄 Changed
+- Consolidated all documentation into single `docs/` directory
+- Restructured content for better developer and AI agent accessibility
+- Updated all references to focus exclusively on UI System components
+
+### 🗑️ Removed
+- Duplicate documentation from old `docs/` and `docs-v2/` directories
+- CLI and MCP server documentation (moved to separate repositories)
+- Outdated migration and implementation reports
+
+---
+
 ## [6.0.0] - 2025-08-04
 
 ### 🎉 Major Release - Enterprise Semantic Architecture v6.0.0 FINAL

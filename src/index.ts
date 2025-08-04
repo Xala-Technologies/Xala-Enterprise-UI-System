@@ -31,6 +31,7 @@ export {
   
   // Text components
   Text,
+  Text as Typography, // Alias for external compatibility
   type TextProps,
   
   // Heading components
@@ -168,6 +169,76 @@ export {
   type AlertProps,
   type AlertVariant,
 } from './components/ui';
+
+// ===== LAYOUT COMPONENTS =====
+export {
+  // Grid system
+  Grid,
+  GridItem,
+  type GridProps,
+  type GridItemProps,
+  type GridCols,
+  type GridGap,
+  type GridItemSpan,
+  type GridItemStart,
+  
+  // Stack system
+  Stack,
+  HStack,
+  VStack,
+  type StackProps,
+  
+  // Dashboard layouts
+  Dashboard,
+  type DashboardProps,
+  type KPICardData,
+  type QuickAction,
+  type ActivityItem,
+  
+  // Page layouts
+  PageLayout,
+  
+  // Legacy layout components (maintained for compatibility)
+  Card as LayoutCard,
+  Section as LayoutSection,
+} from './components/layout';
+
+// ===== SPECIALIZED LAYOUTS =====
+export {
+  // Base layouts
+  BaseLayout,
+  type BaseLayoutProps,
+} from './layouts/BaseLayout';
+
+export {
+  // Admin layouts
+  AdminLayout,
+  type AdminLayoutProps,
+} from './layouts/admin/AdminLayout';
+
+export {
+  // Desktop layout
+  DesktopLayout,
+  type DesktopLayoutProps,
+} from './layouts/desktop/DesktopLayout';
+
+export {
+  // Mobile layout  
+  MobileLayout,
+  type MobileLayoutProps,
+} from './layouts/mobile/MobileLayout';
+
+export {
+  // Tablet layout
+  TabletLayout,
+  type TabletLayoutProps,
+} from './layouts/tablet/TabletLayout';
+
+export {
+  // Web layout
+  WebLayout,
+  type WebLayoutProps,
+} from './layouts/web/WebLayout';
 
 // ===== PROVIDERS =====
 export { ThemeProvider, type ThemeProviderProps } from './providers/ThemeProvider';
