@@ -5,8 +5,10 @@
  */
 
 import { program } from 'commander';
-import { writeFileSync, mkdirSync, existsSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
+import { execSync } from 'child_process';
+import { totalmem, freemem } from 'os';
 import { ComponentGenerator } from './generators/ComponentGenerator.js';
 import { TemplateManager } from './templates/TemplateManager.js';
 import type { ComponentConfig } from './types/index.js';
@@ -281,8 +283,8 @@ program
         config = JSON.parse(configInput);
       } else {
         // File path
-        const fs = require('fs');
-        const configContent = fs.readFileSync(configInput, 'utf8');
+        // fs is already imported
+        const configContent = readFileSync(configInput, 'utf8');
         config = JSON.parse(configContent);
       }
       
@@ -324,7 +326,7 @@ program
     
     // Check npm version
     try {
-      const { execSync } = require('child_process');
+      // execSync is already imported
       const npmVersion = execSync('npm --version', { encoding: 'utf8' }).trim();
       console.log(`✅ npm version: ${npmVersion}`);
     } catch (error) {
@@ -333,7 +335,7 @@ program
     
     // Check TypeScript
     try {
-      const { execSync } = require('child_process');
+      // execSync is already imported
       const tsVersion = execSync('npx tsc --version', { encoding: 'utf8' }).trim();
       console.log(`✅ TypeScript: ${tsVersion}`);
     } catch (error) {
@@ -341,8 +343,8 @@ program
     }
     
     // Check available memory
-    const totalMemory = Math.round(require('os').totalmem() / 1024 / 1024 / 1024);
-    const freeMemory = Math.round(require('os').freemem() / 1024 / 1024 / 1024);
+    const totalMemory = Math.round(totalmem() / 1024 / 1024 / 1024);
+    const freeMemory = Math.round(freemem() / 1024 / 1024 / 1024);
     
     console.log(`💾 Memory: ${freeMemory}GB free / ${totalMemory}GB total`);
     

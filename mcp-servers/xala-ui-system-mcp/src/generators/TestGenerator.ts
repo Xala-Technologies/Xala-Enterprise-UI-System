@@ -11,7 +11,7 @@ export class TestGenerator {
     return `
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ${name} } from './${name}';
+import { ${name} } from './${name}.js';
 
 describe('${name}', () => {
   it('renders without crashing', () => {

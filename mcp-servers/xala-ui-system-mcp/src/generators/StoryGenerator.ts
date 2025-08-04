@@ -10,7 +10,7 @@ export class StoryGenerator {
     
     return `
 import type { Meta, StoryObj } from '@storybook/react';
-import { ${name} } from './${name}';
+import { ${name} } from './${name}.js';
 
 const meta: Meta<typeof ${name}> = {
   title: '${this.getCategoryTitle(category)}/${name}',

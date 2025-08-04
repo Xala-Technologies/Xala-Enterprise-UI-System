@@ -7,8 +7,13 @@
 
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as handlebars from 'handlebars';
+import handlebars from 'handlebars';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import type { ComponentConfig } from '../types/index.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Component specification interface based on schema
 interface ComponentSpecification {
@@ -521,7 +526,7 @@ A ${category} component built with Xala UI System v5.0.0.
 ## Usage
 
 \`\`\`tsx
-import { ${name} } from './components/${name}';
+import { ${name} } from './components/${name}.js';
 
 function App() {
   return (

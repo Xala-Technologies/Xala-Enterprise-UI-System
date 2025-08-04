@@ -12,10 +12,10 @@ import type {
   PlatformTemplateConfig,
   ComponentTemplate
 } from '../types/index';
-import { LocalizationGenerator } from './LocalizationGenerator';
-import { TestGenerator } from './TestGenerator';
-import { StoryGenerator } from './StoryGenerator';
-import { DocumentationGenerator } from './DocumentationGenerator';
+import { LocalizationGenerator } from './LocalizationGenerator.js';
+import { TestGenerator } from './TestGenerator.js';
+import { StoryGenerator } from './StoryGenerator.js';
+import { DocumentationGenerator } from './DocumentationGenerator.js';
 
 // Helper to convert string array to ComponentTemplate array
 const ALL_COMPONENTS: ComponentTemplate[] = [
