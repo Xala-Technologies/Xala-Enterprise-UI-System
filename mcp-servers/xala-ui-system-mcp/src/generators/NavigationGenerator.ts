@@ -61,7 +61,7 @@ export function ${name}({ items = [], onItemClick }: ${name}Props): JSX.Element 
   /**
    * Generate navigation using WebNavbar, Sidebar, Tabs, or Breadcrumb specifications (async version for MCP tools)
    */
-  public async generateNavigation(config: {
+  public async generateAdvancedNavigation(config: {
     type: 'WebNavbar' | 'Sidebar' | 'Tabs' | 'Breadcrumb' | 'Pagination';
     name: string;
     items: any[];

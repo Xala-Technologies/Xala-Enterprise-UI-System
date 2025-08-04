@@ -947,43 +947,46 @@ export type ${componentName}Platform = '${platform}';`;
     const config: ComponentConfig = {
       name: spec.metadata.name,
       category: spec.metadata.category || 'components',
-      componentName: spec.metadata.name,
-      props: options.customProps || {},
-      variants: spec.variants?.simple || {},
-      outputPath: './generated',
-      includeTypes: true,
-      includeTests: options.includeTests || false,
-      includeStories: options.includeStories || false,
-      includeDocs: options.includeDocs || false,
-      styling: {
-        variant: options.variant || 'default'
-      },
+      platform: platform,
+      variant: options.variant || 'default',
       size: 'md',
       theme: 'enterprise',
       locale: 'nb-NO',
       features: {
         icons: false,
-        animated: false
+        animated: false,
+        interactive: true,
+        loading: false,
+        error: false,
+        validation: false
+      },
+      styling: {
+        variant: (options.variant as 'default' | 'outline' | 'ghost' | 'destructive' | 'secondary') || 'default',
+        colorScheme: 'auto',
+        borderRadius: 'md',
+        shadow: 'sm',
+        spacing: 'comfortable'
       },
       accessibility: {
-        enabled: true,
-        level: 'AAA',
+        level: 'AAA' as const,
         screenReader: true,
-        keyboardNavigation: true
+        keyboardNavigation: true,
+        highContrast: false,
+        reducedMotion: false,
+        focusManagement: true,
+        ariaLabels: true
       },
-      localization: {
-        enabled: true,
-        defaultLocale: 'nb-NO',
-        supportedLocales: ['nb-NO', 'en-US']
-      },
-      compliance: {
-        norwegian: true,
-        nsmClassification: spec.compliance?.norwegian?.nsmClassification || 'OPEN'
+      responsive: {
+        breakpoints: ['mobile', 'tablet', 'desktop'],
+        mobileFirst: true,
+        fluidTypography: true,
+        adaptiveLayout: true,
+        touchOptimized: true
       }
     };
 
     // Generate the component
-    const result = await this.generateComponent(config, platform);
+    const result = await this.generateMultiPlatformComponent(config);
     
     return {
       files: result.files
