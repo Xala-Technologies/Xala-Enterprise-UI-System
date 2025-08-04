@@ -196,9 +196,8 @@ export class MultiPlatformGenerator {
 
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Container, Section, Heading, Text } from '@xala-technologies/ui-system';
+import { Container, Section, Typography, cn } from '@xala-technologies/ui-system';
 import { t } from '@xala-technologies/ui-system/i18n';
-import { cn } from '@xala-technologies/ui-system/utils';
 
 // v5.0 CVA Architecture - No hooks in presentational components
 const ${templateName}Variants = cva(
@@ -486,9 +485,8 @@ export class ${componentName}Component {
 
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Container, Section, Heading } from '@xala-technologies/ui-system';
+import { Container, Section, Typography, cn } from '@xala-technologies/ui-system';
 import { t } from '@xala-technologies/ui-system/i18n';
-import { cn } from '@xala-technologies/ui-system/utils';
 
 // Electron-specific styling with native window controls
 const ${templateName}Variants = cva(

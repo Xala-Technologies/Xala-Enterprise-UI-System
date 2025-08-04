@@ -181,8 +181,42 @@ export { ResponsiveLayoutProvider, type ResponsiveLayoutProviderProps } from './
 // Export basic design tokens without conflicts
 
 // ===== UTILITIES =====
+// Core styling utilities
 export { cn } from './lib/utils/cn';
 export { classNames } from './utils/classNames';
+
+// Platform and responsive utilities
+export { 
+  getPlatformType, 
+  getDeviceType, 
+  isTouchDevice,
+  supportsHover,
+  prefersReducedMotion,
+  prefersDarkMode,
+  getScreenDimensions,
+  getOrientation,
+  type PlatformType,
+  type DeviceType 
+} from './utils/platform';
+
+// Object and data utilities
+export {
+  mergeDeep,
+  deepClone
+} from './utils/objects';
+
+// Validation utilities
+export {
+  createSuccessResult,
+  createFailureResult,
+  type ValidationResult
+} from './lib/utils/validation';
+
+// SSR utilities
+export {
+  isServer,
+  canUseDOM
+} from './utils/ssr';
 
 // ===== TYPES =====
 export type * from './types';

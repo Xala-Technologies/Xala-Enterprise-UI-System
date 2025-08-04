@@ -1,6 +1,6 @@
 /**
- * @fileoverview TestButton Component - CVA Design System Compliant
- * @description TestButton component using CVA pattern with semantic tokens
+ * @fileoverview TestButton2 Component - CVA Design System Compliant
+ * @description TestButton2 component using CVA pattern with semantic tokens
  * @version 5.0.0
  * @compliance CVA-based, SSR-safe, Framework-agnostic, Token-based
  */
@@ -11,10 +11,10 @@ import { Container, Button, cn } from '@xala-technologies/ui-system';
 
 
 // =============================================================================
-// TESTBUTTON VARIANTS USING CVA
+// TESTBUTTON2 VARIANTS USING CVA
 // =============================================================================
 
-const testbuttonVariants = cva(
+const testbutton2Variants = cva(
   // Base classes using semantic tokens
   'relative inline-flex items-center justify-center gap-2 rounded-lg border bg-card text-card-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer hover:bg-accent',
   {
@@ -44,12 +44,12 @@ const testbuttonVariants = cva(
 );
 
 // =============================================================================
-// TESTBUTTON COMPONENT INTERFACE
+// TESTBUTTON2 COMPONENT INTERFACE
 // =============================================================================
 
-export interface TestButtonProps
+export interface TestButton2Props
   extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof testbuttonVariants> {
+    VariantProps<typeof testbutton2Variants> {
   readonly children?: React.ReactNode;
   readonly loading?: boolean;
   readonly disabled?: boolean;
@@ -60,10 +60,10 @@ export interface TestButtonProps
 }
 
 // =============================================================================
-// TESTBUTTON COMPONENT
+// TESTBUTTON2 COMPONENT
 // =============================================================================
 
-export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
+export const TestButton2 = React.forwardRef<HTMLElement, TestButton2Props>(
   ({
     className,
     variant = 'default',
@@ -85,7 +85,7 @@ export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
         as={semanticElement}
         intent={intent}
         variant={variant}
-        className={cn(testbuttonVariants({ variant, size }), className)}
+        className={cn(testbutton2Variants({ variant, size }), className)}
         ref={ref}
         data-testid={testId}
         data-nsm-level={nsmLevel}
@@ -101,4 +101,4 @@ export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
   }
 );
 
-TestButton.displayName = 'TestButton';
+TestButton2.displayName = 'TestButton2';

@@ -1,20 +1,21 @@
 /**
- * @fileoverview TestButton Component - CVA Design System Compliant
- * @description TestButton component using CVA pattern with semantic tokens
+ * @fileoverview TestCard Component - CVA Design System Compliant
+ * @description TestCard component using CVA pattern with semantic tokens
  * @version 5.0.0
  * @compliance CVA-based, SSR-safe, Framework-agnostic, Token-based
  */
 
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Container, Button, cn } from '@xala-technologies/ui-system';
+import { cn } from '@xala-technologies/ui-system/utils';
+import { Box, Button, Link } from '@xala-technologies/ui-system/semantic';
 
 
 // =============================================================================
-// TESTBUTTON VARIANTS USING CVA
+// TESTCARD VARIANTS USING CVA
 // =============================================================================
 
-const testbuttonVariants = cva(
+const testcardVariants = cva(
   // Base classes using semantic tokens
   'relative inline-flex items-center justify-center gap-2 rounded-lg border bg-card text-card-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer hover:bg-accent',
   {
@@ -44,12 +45,12 @@ const testbuttonVariants = cva(
 );
 
 // =============================================================================
-// TESTBUTTON COMPONENT INTERFACE
+// TESTCARD COMPONENT INTERFACE
 // =============================================================================
 
-export interface TestButtonProps
+export interface TestCardProps
   extends React.HTMLAttributes<HTMLElement>,
-    VariantProps<typeof testbuttonVariants> {
+    VariantProps<typeof testcardVariants> {
   readonly children?: React.ReactNode;
   readonly loading?: boolean;
   readonly disabled?: boolean;
@@ -60,10 +61,10 @@ export interface TestButtonProps
 }
 
 // =============================================================================
-// TESTBUTTON COMPONENT
+// TESTCARD COMPONENT
 // =============================================================================
 
-export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
+export const TestCard = React.forwardRef<HTMLElement, TestCardProps>(
   ({
     className,
     variant = 'default',
@@ -85,7 +86,7 @@ export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
         as={semanticElement}
         intent={intent}
         variant={variant}
-        className={cn(testbuttonVariants({ variant, size }), className)}
+        className={cn(testcardVariants({ variant, size }), className)}
         ref={ref}
         data-testid={testId}
         data-nsm-level={nsmLevel}
@@ -101,4 +102,4 @@ export const TestButton = React.forwardRef<HTMLElement, TestButtonProps>(
   }
 );
 
-TestButton.displayName = 'TestButton';
+TestCard.displayName = 'TestCard';

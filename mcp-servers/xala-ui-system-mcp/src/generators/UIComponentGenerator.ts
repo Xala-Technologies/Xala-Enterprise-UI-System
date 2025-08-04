@@ -19,8 +19,7 @@ export class UIComponentGenerator {
 
 import React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@xala-technologies/ui-system/utils';
-import { ${this.getSemanticImports(config)} } from '@xala-technologies/ui-system/semantic';
+import { ${this.getSemanticImports(config)}, cn } from '@xala-technologies/ui-system';
 ${config.features.icons ? "import { Loader2 } from 'lucide-react';" : ''}
 
 // =============================================================================
@@ -223,27 +222,27 @@ ${componentName}.displayName = '${componentName}';
   }
 
   private getSemanticImports(config: ComponentConfig): string {
-    const imports = ['Box'];
+    const imports = ['Container']; // Use Container instead of Box
     
     // Add category-specific semantic components
     switch (config.category) {
       case 'layouts':
-        imports.push('Container', 'Section', 'Main', 'Header', 'Footer');
+        imports.push('Stack', 'Grid', 'Section', 'Header', 'Footer');
         break;
       case 'interactive':
-        imports.push('Button', 'Link');
+        imports.push('Button');
         break;
       case 'form':
-        imports.push('Input', 'Label', 'Button');
+        imports.push('Input', 'Button', 'Form');
         break;
       case 'navigation':
-        imports.push('Navigation', 'Breadcrumb', 'Nav');
+        imports.push('Navigation', 'Breadcrumb');
         break;
       case 'feedback':
-        imports.push('Toast');
+        imports.push('Alert');
         break;
       case 'data-display':
-        imports.push('Text', 'Heading', 'List');
+        imports.push('Typography', 'Card', 'DataTable');
         break;
     }
     
@@ -258,15 +257,15 @@ ${componentName}.displayName = '${componentName}';
       case 'interactive':
         return 'Button';
       case 'form':
-        return 'Box';
+        return 'Container';
       case 'navigation':
         return 'Navigation';
       case 'feedback':
-        return 'Toast';
+        return 'Alert';
       case 'data-display':
-        return 'Box';
+        return 'Container';
       default:
-        return 'Box';
+        return 'Container';
     }
   }
 
