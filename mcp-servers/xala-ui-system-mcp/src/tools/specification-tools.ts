@@ -14,6 +14,8 @@ import { NavigationGenerator } from '../generators/NavigationGenerator.js';
 import { DocumentationGenerator } from '../generators/DocumentationGenerator.js';
 import { MultiPlatformGenerator } from '../generators/MultiPlatformGenerator.js';
 import { UIComponentGenerator } from '../generators/UIComponentGenerator.js';
+import { ProjectAnalyzer } from './project-analysis-tools.js';
+import { CliIntegrationManager, PREDEFINED_WORKFLOWS } from './cli-integration-tools.js';
 
 /**
  * Interface for specification-based generation
@@ -479,6 +481,157 @@ export function getSpecificationTools(): Tool[] {
           }
         },
         required: ['bundleName', 'components', 'platform']
+      }
+    },
+    // ===== NEW ADVANCED TOOLS =====
+    {
+      name: 'analyze_project',
+      description: 'Analyze existing project structure and generate migration strategy',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          projectPath: {
+            type: 'string',
+            description: 'Path to project to analyze'
+          },
+          generateReport: {
+            type: 'boolean',
+            description: 'Generate detailed migration report',
+            default: true
+          }
+        },
+        required: ['projectPath']
+      }
+    },
+    {
+      name: 'create_project',
+      description: 'Create new project with Xala UI System integration',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          projectName: {
+            type: 'string',
+            description: 'Name of the new project'
+          },
+          framework: {
+            type: 'string',
+            enum: ['nextjs', 'react', 'vue', 'angular', 'svelte'],
+            description: 'Framework to use'
+          },
+          template: {
+            type: 'string',
+            description: 'Project template',
+            default: 'default'
+          },
+          features: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Features to include (auth, database, etc.)'
+          },
+          packageManager: {
+            type: 'string',
+            enum: ['npm', 'yarn', 'pnpm'],
+            description: 'Package manager to use',
+            default: 'npm'
+          }
+        },
+        required: ['projectName', 'framework']
+      }
+    },
+    {
+      name: 'generate_page',
+      description: 'Generate complete page with components using CLI integration',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          pageName: {
+            type: 'string',
+            description: 'Name of the page to generate'
+          },
+          pageType: {
+            type: 'string',
+            enum: ['dashboard', 'landing', 'auth', 'settings'],
+            description: 'Type of page to generate'
+          },
+          options: {
+            type: 'object',
+            description: 'Additional page options'
+          }
+        },
+        required: ['pageName', 'pageType']
+      }
+    },
+    {
+      name: 'execute_migration',
+      description: 'Execute migration steps for existing project',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          projectPath: {
+            type: 'string',
+            description: 'Path to project to migrate'
+          },
+          migrationPlan: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'List of migration steps to execute'
+          }
+        },
+        required: ['projectPath', 'migrationPlan']
+      }
+    },
+    {
+      name: 'setup_dev_environment',
+      description: 'Set up complete development environment with testing, linting, and pre-commit hooks',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          projectPath: {
+            type: 'string',
+            description: 'Path to project'
+          }
+        },
+        required: ['projectPath']
+      }
+    },
+    {
+      name: 'execute_workflow',
+      description: 'Execute predefined development workflow',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          workflowName: {
+            type: 'string',
+            description: 'Name of workflow to execute'
+          },
+          parameters: {
+            type: 'object',
+            description: 'Workflow parameters'
+          }
+        },
+        required: ['workflowName']
+      }
+    },
+    {
+      name: 'list_workflows',
+      description: 'List available predefined workflows',
+      inputSchema: {
+        type: 'object',
+        properties: {}
+      }
+    },
+    {
+      name: 'generate_migration_strategy',
+      description: 'Generate detailed migration strategy for existing project',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          projectPath: {
+            type: 'string',
+            description: 'Path to project to analyze'
+          }
+        },
+        required: ['projectPath']
       }
     }
   ];
@@ -1046,10 +1199,141 @@ ${args.includeExamples ? `
       bundleName: args.bundleName,
       platform: args.platform,
       components: args.components,
-      files: bundleFiles,
-      optimization: args.optimization || {}
+      files: bundleFiles
+    };
+  },
+
+  // ===== NEW ADVANCED TOOLS =====
+  
+  analyze_project: async (args: any) => {
+    const analyzer = new ProjectAnalyzer();
+    const analysis = await analyzer.analyzeProject(args.projectPath);
+    
+    if (args.generateReport) {
+      const report = analyzer.generateMigrationReport(analysis);
+      return {
+        success: true,
+        analysis,
+        report,
+        projectPath: args.projectPath
+      };
+    }
+    
+    return {
+      success: true,
+      analysis,
+      projectPath: args.projectPath
+    };
+  },
+
+  create_project: async (args: any) => {
+    const cliManager = new CliIntegrationManager();
+    const result = await cliManager.createProject({
+      name: args.projectName,
+      framework: args.framework,
+      template: args.template,
+      features: args.features || [],
+      packageManager: args.packageManager || 'npm'
+    });
+    
+    return {
+      success: result.success,
+      output: result.output,
+      error: result.error,
+      generatedFiles: result.generatedFiles,
+      projectName: args.projectName
+    };
+  },
+
+  generate_page: async (args: any) => {
+    const cliManager = new CliIntegrationManager();
+    const result = await cliManager.generatePage(
+      args.pageName,
+      args.pageType,
+      args.options || {}
+    );
+    
+    return {
+      success: result.success,
+      output: result.output,
+      error: result.error,
+      generatedFiles: result.generatedFiles,
+      pageName: args.pageName,
+      pageType: args.pageType
+    };
+  },
+
+  execute_migration: async (args: any) => {
+    const cliManager = new CliIntegrationManager();
+    const result = await cliManager.executeMigration(
+      args.projectPath,
+      args.migrationPlan
+    );
+    
+    return {
+      success: result.success,
+      output: result.output,
+      error: result.error,
+      generatedFiles: result.generatedFiles,
+      migratedComponents: args.migrationPlan.length
+    };
+  },
+
+  setup_dev_environment: async (args: any) => {
+    const cliManager = new CliIntegrationManager();
+    const result = await cliManager.setupDevEnvironment(args.projectPath);
+    
+    return {
+      success: result.success,
+      output: result.output,
+      error: result.error,
+      generatedFiles: result.generatedFiles,
+      projectPath: args.projectPath
+    };
+  },
+
+  execute_workflow: async (args: any) => {
+    const cliManager = new CliIntegrationManager();
+    const result = await cliManager.executeWorkflow(
+      args.workflowName,
+      args.parameters || {}
+    );
+    
+    return {
+      success: result.success,
+      output: result.output,
+      error: result.error,
+      generatedFiles: result.generatedFiles,
+      workflowName: args.workflowName
+    };
+  },
+
+  list_workflows: async (args: any) => {
+    return {
+      success: true,
+      workflows: Object.entries(PREDEFINED_WORKFLOWS).map(([key, workflow]) => ({
+        name: key,
+        displayName: workflow.name,
+        description: workflow.description,
+        steps: workflow.steps
+      }))
+    };
+  },
+
+  generate_migration_strategy: async (args: any) => {
+    const analyzer = new ProjectAnalyzer();
+    const analysis = await analyzer.analyzeProject(args.projectPath);
+    
+    return {
+      success: true,
+      strategy: analysis.migrationStrategy,
+      components: analysis.components.length,
+      estimatedEffort: analysis.estimatedEffort,
+      recommendations: analysis.recommendations,
+      risks: analysis.risks
     };
   }
+
 };
 
 // Export for use in main MCP server

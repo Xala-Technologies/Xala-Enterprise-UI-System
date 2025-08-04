@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/xala-cli",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Universal Design System CLI - The primary interface for working with Xala design system across all platforms",
   "type": "module",
   "main": "dist/index.js",

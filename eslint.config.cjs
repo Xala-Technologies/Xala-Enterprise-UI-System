@@ -217,6 +217,8 @@ module.exports = [
       'tests/**/*',
       'cli/**/*',
       'scripts/**/*',
+      'mcp-servers/**/*',
+      'debug-render.js',
       'tailwind.config.js',
       'tailwind.preset.js',
       '**/*.test.ts',
@@ -229,6 +231,8 @@ module.exports = [
       'scripts/**/*.js',
       'scripts/**/*.cjs',
       'scripts/xala-scaffold/**/*',
+      '**/_archived/**',
+      '**/_problematic/**',
     ],
   },
 ];

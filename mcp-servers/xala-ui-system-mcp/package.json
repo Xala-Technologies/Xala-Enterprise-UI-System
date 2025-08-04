@@ -59,6 +59,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@xala-technologies/ui-system": "^5.0.0",
+    "@xala-technologies/xala-cli": "^2.0.0",
     "commander": "^12.1.0",
     "fs-extra": "^11.0.0",
     "glob": "^11.0.3",
