@@ -21,7 +21,7 @@ const logger = Logger.create({
 /**
  * Theme categories (Prisma enum compatible)
  */
-/* eslint-disable no-unused-vars */
+ 
 export enum ThemeCategory {
   BASE = 'base',
   MUNICIPAL = 'municipal',

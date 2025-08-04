@@ -67,7 +67,7 @@ const logger = Logger.create({
 
 export class TokenValidator {
   private config: TokenValidationConfig;
-  // eslint-disable-next-line no-unused-vars
+   
   private validationRules: Map<string, (value: TokenValue) => TokenValidationError[]>;
 
   constructor(config: Partial<TokenValidationConfig> = {}) {
@@ -353,7 +353,7 @@ export class TokenValidator {
     Object.entries(semanticTokens.color || {}).forEach(([category, colors]) => {
       if (typeof colors === 'object' && colors !== null) {
          
-        // eslint-disable-next-line no-unused-vars
+         
         Object.entries(colors).forEach(([name, _value]) => {
           classes.push(`.text-${category}-${name} { color: var(${options.prefix}-color-${category}-${name}); }`);
           classes.push(`.bg-${category}-${name} { background-color: var(${options.prefix}-color-${category}-${name}); }`);
@@ -366,7 +366,7 @@ export class TokenValidator {
     Object.entries(semanticTokens.spacing || {}).forEach(([category, spacing]) => {
       if (typeof spacing === 'object' && spacing !== null) {
          
-        // eslint-disable-next-line no-unused-vars
+         
         Object.entries(spacing).forEach(([name, _value]) => {
           classes.push(`.m-${category}-${name} { margin: var(${options.prefix}-spacing-${category}-${name}); }`);
           classes.push(`.p-${category}-${name} { padding: var(${options.prefix}-spacing-${category}-${name}); }`);

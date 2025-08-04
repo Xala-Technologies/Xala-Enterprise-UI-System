@@ -10,19 +10,19 @@ import type {
   PageTemplateConfig,
   FormConfig,
   DataTableConfig
-} from '../types/index';
-import { LayoutGenerator } from './LayoutGenerator';
-import { PageTemplateGenerator } from './PageTemplateGenerator';
-import { FormGenerator } from './FormGenerator';
-import { DataTableGenerator } from './DataTableGenerator';
-import { NavigationGenerator } from './NavigationGenerator';
-import { UIComponentGenerator } from './UIComponentGenerator';
-import { LocalizationGenerator } from './LocalizationGenerator';
-import { TestGenerator } from './TestGenerator';
-import { StoryGenerator } from './StoryGenerator';
-import { DocumentationGenerator } from './DocumentationGenerator';
-import { MultiPlatformGenerator } from './MultiPlatformGenerator';
-import { CliTemplateGenerator } from './CliTemplateGenerator';
+} from '../types/index.js';
+import { LayoutGenerator } from './LayoutGenerator.js';
+import { PageTemplateGenerator } from './PageTemplateGenerator.js';
+import { FormGenerator } from './FormGenerator.js';
+import { DataTableGenerator } from './DataTableGenerator.js';
+import { NavigationGenerator } from './NavigationGenerator.js';
+import { UIComponentGenerator } from './UIComponentGenerator.js';
+import { LocalizationGenerator } from './LocalizationGenerator.js';
+import { TestGenerator } from './TestGenerator.js';
+import { StoryGenerator } from './StoryGenerator.js';
+import { DocumentationGenerator } from './DocumentationGenerator.js';
+import { MultiPlatformGenerator } from './MultiPlatformGenerator.js';
+import { CliTemplateGenerator } from './CliTemplateGenerator.js';
 
 export class ComponentGenerator {
   private layoutGenerator: LayoutGenerator;

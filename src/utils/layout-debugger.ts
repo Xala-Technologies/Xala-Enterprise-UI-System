@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * @fileoverview Layout Debugger v5.0.0 - Token-Based Design System
  * @description Comprehensive layout debugging utilities with visual overlays and runtime inspection

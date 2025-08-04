@@ -47,7 +47,7 @@ export interface ButtonProps extends ActionFeedbackComponentProps {
     confirmationMessage?: string;
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
-  // eslint-disable-next-line no-unused-vars
+   
   onClick?: (_event: React.MouseEvent<HTMLButtonElement>) => void;
   onConfirm?: () => void;
   onCancel?: () => void;
@@ -163,7 +163,7 @@ export interface ToastProps extends ActionFeedbackComponentProps {
   /** Called when toast opens */
   onOpen?: () => void;
   /** Called when an action button is clicked */
-  // eslint-disable-next-line no-unused-vars
+   
   onActionClick?: (_action: { labelKey: string; handler: () => void }) => void;
 }
 
@@ -191,7 +191,7 @@ export interface AlertProps extends ActionFeedbackComponentProps {
     requiresAcknowledgment?: boolean;
   };
   onClose?: () => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onAction?: (_action: AlertAction) => void;
 }
 
@@ -278,7 +278,7 @@ export interface NotificationProps extends ActionFeedbackComponentProps {
     priority?: 'low' | 'medium' | 'high' | 'critical';
   };
   onClose?: () => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onAction?: (_action: NotificationAction) => void;
 }
 

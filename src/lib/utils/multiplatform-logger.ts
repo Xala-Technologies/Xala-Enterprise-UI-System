@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
+ 
 /**
  * @fileoverview Multiplatform Logger Implementation
  * @description Enterprise-grade logging that works on Web, Mobile (React Native), and Desktop (Electron)
  * @compliance Enterprise Standards, Cross-Platform Compatibility
  */
 
-/* eslint-disable no-unused-vars */
+ 
 
 /**
  * Logger configuration interface

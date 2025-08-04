@@ -9,7 +9,7 @@
  * - Norwegian municipal and postal code validation
  */
 
-/* eslint-disable no-unused-vars */
+ 
 
 export interface NorwegianCompliance {
   readonly classification?: 'ÅPEN' | 'BEGRENSET' | 'KONFIDENSIELT' | 'HEMMELIG';

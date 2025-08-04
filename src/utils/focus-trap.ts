@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * @fileoverview Focus Trap Utilities v5.0.0 - Token-Based Design System
  * @description Comprehensive focus management and accessibility utilities for modal dialogs and complex UI

@@ -39,11 +39,11 @@ interface SelectProps {
     sortOrder?: 'alphabetical' | 'code' | 'population';
     filterByRegion?: string;
   };
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_event: React.ChangeEvent<HTMLSelectElement>) => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onBlur?: (_event: React.FocusEvent<HTMLSelectElement>) => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onFocus?: (_event: React.FocusEvent<HTMLSelectElement>) => void;
   style?: React.CSSProperties;
   'aria-describedby'?: string;

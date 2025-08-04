@@ -142,7 +142,7 @@ export const keyboardNavigation = {
     items: HTMLElement[], 
     currentIndex: number, 
     direction: 'horizontal' | 'vertical' = 'horizontal'
-  // eslint-disable-next-line no-unused-vars
+   
   ): ((_e: KeyboardEvent) => void) => {
     const isHorizontal = direction === 'horizontal';
     

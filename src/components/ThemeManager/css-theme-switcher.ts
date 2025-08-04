@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * CSS-Only Theme Switcher
  * Pure implementation for theme switching using CSS variables and data attributes

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * UiProvider Component
  * Core provider for Xala UI System v5.0.0 that manages:

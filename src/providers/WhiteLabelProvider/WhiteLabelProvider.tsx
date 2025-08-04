@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * WhiteLabelProvider
  * Enables white-label customization of the UI system

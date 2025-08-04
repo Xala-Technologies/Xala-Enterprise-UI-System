@@ -190,7 +190,7 @@ export class SemanticTokenSystem {
    * Validate WCAG compliance
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   validateWCAGCompliance(_foreground: string, _background: string): boolean {
     // Simplified WCAG validation - can be enhanced
     return true;

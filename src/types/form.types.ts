@@ -23,7 +23,7 @@ export interface FormComponentProps extends ComponentProps {
 // Form container props
 export interface FormProps extends ComponentProps {
   children?: React.ReactNode; // Form content
-  // eslint-disable-next-line no-unused-vars
+   
   onSubmit?: (_event: React.FormEvent<HTMLFormElement>) => void;
   noValidate?: boolean;
   autoComplete?: 'on' | 'off';
@@ -42,17 +42,17 @@ export interface InputProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
   onChange?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _value: string,
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   onBlur?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   onFocus?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   maxLength?: number;
@@ -63,7 +63,7 @@ export interface InputProps extends FormComponentProps {
   size?: 'sm' | 'md' | 'lg';
   hasError?: boolean;
   validation?: {
-    // eslint-disable-next-line no-unused-vars
+     
     custom?: (_value: string) => string | null;
     debounceMs?: number;
   };
@@ -85,11 +85,11 @@ export interface TextAreaProps extends FormComponentProps {
   defaultValue?: string;
   onChange?: (value: string, event?: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   onFocus?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   rows?: number;
@@ -107,14 +107,14 @@ export interface SelectProps extends FormComponentProps {
   value?: string | string[];
   defaultValue?: string | string[];
    
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_value: string | string[], _event: React.ChangeEvent<HTMLSelectElement>) => void;
   onBlur?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   onFocus?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   multiple?: boolean;
@@ -137,7 +137,7 @@ export interface CheckboxProps extends FormComponentProps {
   checked?: boolean;
   defaultChecked?: boolean;
    
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_checked: boolean, _event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   indeterminate?: boolean;
@@ -151,7 +151,7 @@ export interface RadioProps extends FormComponentProps {
   checked?: boolean;
   defaultChecked?: boolean;
    
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_checked: boolean, _event: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   name: string; // Required for radio groups
@@ -165,9 +165,9 @@ export interface RadioGroupProps extends FormComponentProps {
   value?: string;
   defaultValue?: string;
   onChange?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _value: string,
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   options: RadioOption[];
@@ -189,17 +189,17 @@ export interface PersonalNumberInputProps extends FormComponentProps {
   defaultValue?: string;
    
    
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_value: string, _isValid: boolean, _event: React.ChangeEvent<HTMLInputElement>) => void;
    
-  // eslint-disable-next-line no-unused-vars
+   
   onValidationChange?: (_isValid: boolean, _errors: string[]) => void;
   onBlur?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   onFocus?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   variant?: 'default' | 'outlined' | 'filled';
@@ -222,18 +222,18 @@ export interface OrganizationNumberInputProps extends FormComponentProps {
   defaultValue?: string;
    
    
-  // eslint-disable-next-line no-unused-vars
+   
   onChange?: (_value: string, _isValid: boolean, _event: React.ChangeEvent<HTMLInputElement>) => void;
    
    
-  // eslint-disable-next-line no-unused-vars
+   
   onValidationChange?: (_isValid: boolean, _errors: string[], orgData?: OrganizationData) => void;
   onBlur?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   onFocus?: (
-    // eslint-disable-next-line no-unused-vars
+     
     _event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => void;
   variant?: 'default' | 'outlined' | 'filled';

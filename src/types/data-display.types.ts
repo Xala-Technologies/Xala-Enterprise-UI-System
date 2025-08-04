@@ -3,7 +3,7 @@
  * Enterprise-grade data display and table type definitions
  */
 
-/* eslint-disable no-unused-vars */
+ 
 
 import type React from 'react';
 

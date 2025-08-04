@@ -25,7 +25,7 @@ interface PersonalNumberValidationResult {
 // Placeholder validation functions (replace with actual validation package)
 const validatePersonalNumber = (
   value: string,
-  // eslint-disable-next-line no-unused-vars
+   
   _validation: PersonalNumberInputProps['validation']
 ): PersonalNumberValidationResult => {
   const digits = value.replace(/\D/g, '');
@@ -53,7 +53,7 @@ const validatePersonalNumber = (
 
 const formatPersonalNumber = (
   value: string,
-  // eslint-disable-next-line no-unused-vars
+   
   _displayFormat: PersonalNumberInputProps['displayFormat']
 ): string => {
   // Remove all non-digits

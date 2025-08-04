@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * @fileoverview Semantic Component Compliance Validator v5.0.0
  * @description Validates semantic component usage and compliance with standards

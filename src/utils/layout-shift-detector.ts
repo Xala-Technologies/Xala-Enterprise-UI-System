@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+ 
 /**
  * @fileoverview Layout Shift Detector v5.0.0 - Token-Based Design System
  * @description Advanced Cumulative Layout Shift (CLS) detection and prevention system

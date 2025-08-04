@@ -27,7 +27,7 @@ export interface UISystemService {
    * Register a component in the system
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   registerComponent(_name: string, _component: unknown): ValidationResult<void>;
 
   /**
@@ -54,14 +54,14 @@ export interface ComponentFactory {
    * Create a component instance
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   createComponent<T>(_name: string, _props: unknown): ValidationResult<T>;
 
   /**
    * Register a component type
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   registerComponentType(_name: string, _factory: ComponentFactoryFunction): ValidationResult<void>;
 
   /**
@@ -73,7 +73,7 @@ export interface ComponentFactory {
 /**
  * Component factory function type
  */
-// eslint-disable-next-line no-unused-vars
+ 
 export type ComponentFactoryFunction = (_props: unknown) => ValidationResult<unknown>;
 
 /**
@@ -88,13 +88,13 @@ export interface ThemeManager {
   /**
    * Set current theme
    */
-  // eslint-disable-next-line no-unused-vars
+   
   setTheme(_themeName: string): ValidationResult<void>;
 
   /**
    * Register a new theme
    */
-  // eslint-disable-next-line no-unused-vars
+   
   registerTheme(_theme: unknown): ValidationResult<void>;
 
   /**
@@ -105,7 +105,7 @@ export interface ThemeManager {
   /**
    * Validate theme accessibility
    */
-  // eslint-disable-next-line no-unused-vars
+   
   validateThemeAccessibility(_themeName: string): ValidationResult<boolean>;
 }
 
@@ -116,19 +116,19 @@ export interface AccessibilityService {
   /**
    * Validate component accessibility
    */
-  // eslint-disable-next-line no-unused-vars
+   
   validateComponentAccessibility(_component: unknown): ValidationResult<boolean>;
 
   /**
    * Get accessibility violations
    */
-  // eslint-disable-next-line no-unused-vars
+   
   getAccessibilityViolations(_component: unknown): readonly string[];
 
   /**
    * Check WCAG compliance level
    */
-  // eslint-disable-next-line no-unused-vars
+   
   checkWCAGCompliance(_level: 'A' | 'AA' | 'AAA'): ValidationResult<boolean>;
 
   /**
@@ -160,7 +160,7 @@ export interface PerformanceMonitor {
    * Log performance metric
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   logMetric(_name: string, _value: number): void;
 
   /**
@@ -176,19 +176,19 @@ export interface AuditTrailService {
   /**
    * Log an audit trail entry
    */
-  // eslint-disable-next-line no-unused-vars
+   
   logEntry(_entry: AuditTrailEntry): ValidationResult<void>;
 
   /**
    * Get audit trail entries
    */
-  // eslint-disable-next-line no-unused-vars
+   
   getEntries(filter?: AuditTrailFilter): readonly AuditTrailEntry[];
 
   /**
    * Export audit trail
    */
-  // eslint-disable-next-line no-unused-vars
+   
   exportAuditTrail(_format: 'json' | 'csv'): ValidationResult<string>;
 
   /**
@@ -215,14 +215,14 @@ export interface ConfigurationService {
   /**
    * Get configuration value
    */
-  // eslint-disable-next-line no-unused-vars
+   
   getValue<T>(_key: string): T | undefined;
 
   /**
    * Set configuration value
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   setValue<T>(_key: string, _value: T): ValidationResult<void>;
 
   /**
@@ -233,7 +233,7 @@ export interface ConfigurationService {
   /**
    * Load configuration from source
    */
-  // eslint-disable-next-line no-unused-vars
+   
   loadConfiguration(_source: string): ValidationResult<void>;
 
   /**
@@ -250,7 +250,7 @@ export interface EventPublisher {
    * Publish an event
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   publish<T>(_eventName: string, _data: T): void;
 
   /**
@@ -258,7 +258,7 @@ export interface EventPublisher {
    */
    
    
-  // eslint-disable-next-line no-unused-vars
+   
   subscribe<T>(_eventName: string, _handler: (_data: T) => void): () => void;
 
   /**
@@ -266,7 +266,7 @@ export interface EventPublisher {
    */
    
    
-  // eslint-disable-next-line no-unused-vars
+   
   unsubscribe(_eventName: string, _handler: (_data: unknown) => void): void;
 }
 
@@ -282,14 +282,14 @@ export interface LocalizationService {
   /**
    * Set current locale
    */
-  // eslint-disable-next-line no-unused-vars
+   
   setLocale(_locale: string): ValidationResult<void>;
 
   /**
    * Translate a key
    */
    
-  // eslint-disable-next-line no-unused-vars
+   
   translate(_key: string, params?: Record<string, string>): string;
 
   /**
@@ -300,6 +300,6 @@ export interface LocalizationService {
   /**
    * Validate locale support
    */
-  // eslint-disable-next-line no-unused-vars
+   
   validateLocale(_locale: string): ValidationResult<boolean>;
 }
