@@ -1,6 +1,6 @@
 {
   "name": "@xala-technologies/ui-system",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "SSR-safe, production-ready UI system with comprehensive Storybook documentation and Norwegian compliance",
   "keywords": [
     "ui-system",
@@ -168,7 +168,8 @@
   },
   "dependencies": {
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.0.0"
+    "clsx": "^2.0.0",
+    "lucide-react": "^0.447.0"
   },
   "optionalDependencies": {},
   "engines": {

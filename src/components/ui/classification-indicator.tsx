@@ -5,7 +5,8 @@
  */
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef } from 'react';
+import * as React from 'react';
+import { forwardRef } from 'react';
 import { cn } from '../../lib/utils/cn';
 import { Shield, AlertTriangle, Lock, Eye } from 'lucide-react';
 
@@ -80,18 +81,22 @@ export const ClassificationIndicator = forwardRef<HTMLDivElement, Classification
   }, ref) => {
     // Get the appropriate icon for the classification level
     const getIcon = () => {
-      switch (level) {
-        case 'ÅPEN':
-          return <Eye className="h-3.5 w-3.5" />;
-        case 'BEGRENSET':
-          return <Shield className="h-3.5 w-3.5" />;
-        case 'KONFIDENSIELT':
-          return <AlertTriangle className="h-3.5 w-3.5" />;
-        case 'HEMMELIG':
-          return <Lock className="h-3.5 w-3.5" />;
-        default:
-          return <Shield className="h-3.5 w-3.5" />;
-      }
+      const IconComponent = (() => {
+        switch (level) {
+          case 'ÅPEN':
+            return Eye;
+          case 'BEGRENSET':
+            return Shield;
+          case 'KONFIDENSIELT':
+            return AlertTriangle;
+          case 'HEMMELIG':
+            return Lock;
+          default:
+            return Shield;
+        }
+      })();
+      
+      return React.createElement(IconComponent as any, { className: "h-3.5 w-3.5" });
     };
 
     // Get the label based on locale

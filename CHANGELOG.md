@@ -5,6 +5,33 @@ All notable changes to `@xala-technologies/ui-system` will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.3.0] - 2025-08-04
+
+### 🔧 Bug Fixes & Compatibility
+
+#### **TypeScript Build Fixes**
+- **FIXED** Button component prop mismatch issues (variant → intent)
+- **FIXED** lucide-react icon compatibility with React 18 types
+- **RESOLVED** TypeScript compilation errors in 4 critical files
+- **UPDATED** Icon rendering to use React.createElement for type safety
+
+#### **Component Updates**
+- **Modal Component**: Updated Button usage to use `intent` prop
+- **DataTable Component**: Fixed Button prop names and icon rendering
+- **Pagination Component**: Corrected Button props and Select implementation
+- **ClassificationIndicator**: Fixed icon TypeScript compatibility
+
+#### **Dependencies**
+- **ADDED** lucide-react@^0.447.0 for icon support
+- **VERIFIED** Build pipeline succeeds with 0 TypeScript errors
+
+### ✅ Build Status
+- **TypeScript Compilation**: SUCCESS
+- **SSR Compatibility**: VERIFIED
+- **Production Build**: READY
+
+---
+
 ## [6.2.0] - 2025-08-04
 
 ### 📚 Comprehensive Storybook Integration

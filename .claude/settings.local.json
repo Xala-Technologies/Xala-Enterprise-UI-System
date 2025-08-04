@@ -76,6 +76,7 @@
       "Bash(npm run lint)",
       "Bash(git commit:*)",
       "Bash(cd:*)",
+      "Bash(cd:*)",
       "Bash(cd:*)"
     ],
     "deny": []

@@ -5,11 +5,11 @@
  */
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useMemo } from 'react';
+import * as React from 'react';
+import { forwardRef, useMemo } from 'react';
 import { cn } from '../../lib/utils/cn';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, MoreHorizontal } from 'lucide-react';
 import { Button } from './button';
-import { Select } from './select';
 
 const paginationVariants = cva(
   'flex items-center gap-2',
@@ -213,11 +213,11 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
         {/* Page size selector */}
         {showPageSize && onPageSizeChange && (
           <div className="flex items-center gap-2">
-            <Select
+            <select
               value={String(pageSize)}
-              onValueChange={(value) => onPageSizeChange(Number(value))}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
               disabled={disabled}
-              className="w-20"
+              className="w-20 border border-input rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-primary focus:border-primary"
               aria-label="Items per page"
             >
               {pageSizeOptions.map((option) => (
@@ -225,7 +225,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
                   {option}
                 </option>
               ))}
-            </Select>
+            </select>
             <span className="text-sm text-muted-foreground">
               {t('perPage')}
             </span>
@@ -244,25 +244,25 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
           {/* First page button */}
           {showFirstLast && (
             <Button
-              variant="outline"
+              intent="outline"
               size="icon"
               onClick={() => handlePageChange(1)}
               disabled={currentPage === 1 || disabled}
               aria-label={t('first')}
             >
-              <ChevronsLeft className="h-4 w-4" />
+              {React.createElement(ChevronsLeft as any, { className: "h-4 w-4" })}
             </Button>
           )}
 
           {/* Previous page button */}
           <Button
-            variant="outline"
+            intent="outline"
             size={size === 'sm' ? 'sm' : 'icon'}
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1 || disabled}
             aria-label={t('previous')}
           >
-            <ChevronLeft className="h-4 w-4" />
+            {React.createElement(ChevronLeft as any, { className: "h-4 w-4" })}
             {size !== 'sm' && <span className="ml-1 hidden sm:inline">{t('previous')}</span>}
           </Button>
 
@@ -276,7 +276,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
                       key={`ellipsis-${index}`}
                       className="flex h-9 w-9 items-center justify-center"
                     >
-                      <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                      {React.createElement(MoreHorizontal as any, { className: "h-4 w-4 text-muted-foreground" })}
                     </span>
                   );
                 }
@@ -285,7 +285,7 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
                 return (
                   <Button
                     key={pageNum}
-                    variant={currentPage === pageNum ? 'default' : 'outline'}
+                    intent={currentPage === pageNum ? 'primary' : 'outline'}
                     size="icon"
                     onClick={() => handlePageChange(pageNum)}
                     disabled={disabled}
@@ -308,26 +308,26 @@ export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
 
           {/* Next page button */}
           <Button
-            variant="outline"
+            intent="outline"
             size={size === 'sm' ? 'sm' : 'icon'}
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages || disabled}
             aria-label={t('next')}
           >
             {size !== 'sm' && <span className="mr-1 hidden sm:inline">{t('next')}</span>}
-            <ChevronRight className="h-4 w-4" />
+            {React.createElement(ChevronRight as any, { className: "h-4 w-4" })}
           </Button>
 
           {/* Last page button */}
           {showFirstLast && (
             <Button
-              variant="outline"
+              intent="outline"
               size="icon"
               onClick={() => handlePageChange(totalPages)}
               disabled={currentPage === totalPages || disabled}
               aria-label={t('last')}
             >
-              <ChevronsRight className="h-4 w-4" />
+              {React.createElement(ChevronsRight as any, { className: "h-4 w-4" })}
             </Button>
           )}
         </div>
@@ -387,12 +387,12 @@ export const SimplePagination = forwardRef<HTMLDivElement, SimplePaginationProps
     return (
       <div ref={ref} className="flex items-center gap-4" {...props}>
         <Button
-          variant="outline"
+          intent="outline"
           size="sm"
           onClick={onPrevious}
           disabled={!hasPrevious || disabled}
         >
-          <ChevronLeft className="h-4 w-4 mr-1" />
+          {React.createElement(ChevronLeft as any, { className: "h-4 w-4 mr-1" })}
           {t('previous')}
         </Button>
         
@@ -403,13 +403,13 @@ export const SimplePagination = forwardRef<HTMLDivElement, SimplePaginationProps
         )}
         
         <Button
-          variant="outline"
+          intent="outline"
           size="sm"
           onClick={onNext}
           disabled={!hasNext || disabled}
         >
           {t('next')}
-          <ChevronRight className="h-4 w-4 ml-1" />
+          {React.createElement(ChevronRight as any, { className: "h-4 w-4 ml-1" })}
         </Button>
       </div>
     );

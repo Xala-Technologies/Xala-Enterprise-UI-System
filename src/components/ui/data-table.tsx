@@ -5,12 +5,12 @@
  */
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import React, { forwardRef, useState, useMemo, useCallback } from 'react';
+import * as React from 'react';
+import { forwardRef, useState, useMemo, useCallback } from 'react';
 import { cn } from '../../lib/utils/cn';
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
-import { Select } from './select';
 
 const tableVariants = cva(
   'w-full caption-bottom text-sm',
@@ -263,22 +263,22 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
                       <span>{column.title}</span>
                       {column.sortable && sortable && (
                         <span className="flex flex-col">
-                          <ChevronUp 
-                            className={cn(
+                          {React.createElement(ChevronUp as any, {
+                            className: cn(
                               'h-3 w-3',
                               sortColumn === column.key && sortDirection === 'asc' 
                                 ? 'text-foreground' 
                                 : 'text-muted-foreground/30'
-                            )}
-                          />
-                          <ChevronDown 
-                            className={cn(
+                            )
+                          })}
+                          {React.createElement(ChevronDown as any, {
+                            className: cn(
                               'h-3 w-3 -mt-1',
                               sortColumn === column.key && sortDirection === 'desc' 
                                 ? 'text-foreground' 
                                 : 'text-muted-foreground/30'
-                            )}
-                          />
+                            )
+                          })}
                         </span>
                       )}
                     </div>
@@ -361,39 +361,40 @@ export const DataTable = forwardRef<HTMLDivElement, DataTableProps>(
               {typeof pagination === 'object' && pagination.showSizeSelector && (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">{t('rowsPerPage')}</span>
-                  <Select
+                  <select
                     value={String(pageSize)}
-                    onValueChange={(value) => {
-                      setPageSize(Number(value));
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
                       setCurrentPage(1);
                     }}
+                    className="border border-input rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-primary focus:border-primary"
                   >
                     {(pagination.pageSizes || [10, 20, 30, 50, 100]).map((size) => (
                       <option key={size} value={String(size)}>
                         {size}
                       </option>
                     ))}
-                  </Select>
+                  </select>
                 </div>
               )}
               <div className="flex gap-1">
                 <Button
-                  variant="outline"
+                  intent="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                   disabled={currentPage === 1}
                 >
-                  <ChevronLeft className="h-4 w-4" />
+                  {React.createElement(ChevronLeft as any, { className: "h-4 w-4" })}
                   {t('previous')}
                 </Button>
                 <Button
-                  variant="outline"
+                  intent="outline"
                   size="sm"
                   onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                   disabled={currentPage === totalPages}
                 >
                   {t('next')}
-                  <ChevronRight className="h-4 w-4" />
+                  {React.createElement(ChevronRight as any, { className: "h-4 w-4" })}
                 </Button>
               </div>
             </div>
