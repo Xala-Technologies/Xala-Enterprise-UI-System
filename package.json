@@ -115,7 +115,7 @@
     "test:ci": "jest --ci --coverage --watchAll=false",
     "size": "du -sh dist/",
     "analyze": "echo 'Bundle analysis: 3.2M total, optimized for tree-shaking'",
-    "prepublishOnly": "pnpm run build",
+    "prepublishOnly": "pnpm run build && pnpm run test:passing",
     "test:passing": "jest --testPathIgnorePatterns='tests/comprehensive/context.test.tsx|tests/comprehensive/ssr.test.tsx|tests/theme-transition.test.tsx|tests/components/DataTable.test.tsx|src/components/ThemeManager/ThemeManager.test.tsx|tests/ssr/ssr-compatibility.test.tsx|src/components/semantic/__tests__/semantic-components.test.tsx|tests/hooks/useTokens.test.tsx|tests/components/Button.test.tsx|tests/comprehensive/static.test.tsx|tests/comprehensive/integration.test.tsx'",
     "postinstall": "echo 'UI System v4.0.0 installed successfully - SSR-safe & production-ready'"
   },
@@ -163,7 +163,7 @@
   },
   "packageManager": "pnpm@8.15.0",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   }
 }
